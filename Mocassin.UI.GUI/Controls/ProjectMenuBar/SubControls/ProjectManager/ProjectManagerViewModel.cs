@@ -131,6 +131,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager
                 PushWarningMessage("Aborted due to null or white space creation path!");
                 return;
             }
+
             if (File.Exists(filePath))
             {
                 PushErrorMessage(new FileNotFoundException("Requested file already exists!", filePath));
@@ -195,7 +196,12 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager
                 ForceCloseProjectLibrary(newProjectLibrary);
                 ProjectControl.ChangeOpenProjectLibrary(null);
                 OpenDatabaseFilePath = "";
-                exception = new InvalidOperationException("Internal error on project loading!", e);
+                var message = e switch
+                {
+                    NullReferenceException _ => $"Null references in [{filePath}] detected. Project is either corrupt or deprecated.",
+                    _ => $"Unknown error while loading [{filePath}]"
+                };
+                exception = new InvalidOperationException(message);
             }
 
             return exception == null;

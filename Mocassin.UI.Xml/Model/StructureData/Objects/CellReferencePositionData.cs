@@ -17,7 +17,7 @@ namespace Mocassin.UI.Xml.StructureModel
         private double a;
         private double b;
         private double c;
-        private ModelObjectReference<ParticleSet> occupation;
+        private ModelObjectReference<ParticleSet> occupation = new ModelObjectReference<ParticleSet>();
         private PositionStability stability = PositionStability.Stable;
 
         /// <summary>

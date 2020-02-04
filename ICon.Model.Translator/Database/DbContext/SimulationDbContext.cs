@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Mocassin.Framework.SQLiteCore;
 using Mocassin.Model.Translator.Database.Entities.Other.Meta;
@@ -60,11 +58,35 @@ namespace Mocassin.Model.Translator
 
         /// <inheritdoc cref="ISimulationLibrary.SaveChanges" />
         public override int SaveChanges()
-        {        
-            using (var marshalService = new MarshalService())
+        {
+            using var marshalService = new MarshalService();
+            PerformActionOnInteropEntities(a => a.ChangePropertyStatesToBinaries(marshalService));
+            return base.SaveChanges();
+        }
+
+        /// <inheritdoc />
+        public void SetJournalMode(DbJournalMode journalMode)
+        {
+            var connection = Database.GetDbConnection();
+            try
             {
-                PerformActionOnInteropEntities(a => a.ChangePropertyStatesToBinaries(marshalService));
-                return base.SaveChanges();
+                connection.Open();
+                using var command = connection.CreateCommand();
+                command.CommandText = journalMode switch
+                {
+                    DbJournalMode.Delete => "pragma journal_mode=delete",
+                    DbJournalMode.Truncate => "pragma journal_mode=truncate",
+                    DbJournalMode.Persist => "pragma journal_mode=persist",
+                    DbJournalMode.Memory => "pragma journal_mode=memory",
+                    DbJournalMode.Wal => "pragma journal_mode=wal",
+                    DbJournalMode.Off => "pragma journal_mode=off",
+                    _ => throw new ArgumentOutOfRangeException(nameof(journalMode), journalMode, null)
+                };
+                command.ExecuteNonQuery();
+            }
+            finally
+            {
+                connection.Close();
             }
         }
 
@@ -79,7 +101,7 @@ namespace Mocassin.Model.Translator
                 if (!typeof(InteropEntityBase).IsAssignableFrom(propertyInfo.PropertyType.GetGenericArguments()[0])) continue;
 
                 var dbSet = propertyInfo.GetValue(this);
-                var local = dbSet?.GetType().GetProperty("Local")?.GetValue(dbSet) 
+                var local = dbSet?.GetType().GetProperty("Local")?.GetValue(dbSet)
                             ?? throw new InvalidOperationException("Could not get local view of interop entity database set");
 
                 foreach (var item in (IEnumerable<InteropEntityBase>) local) action(item);

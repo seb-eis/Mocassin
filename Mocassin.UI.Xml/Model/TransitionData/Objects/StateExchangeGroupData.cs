@@ -13,7 +13,7 @@ namespace Mocassin.UI.Xml.TransitionModel
     [XmlRoot]
     public class StateExchangeGroupData : ModelDataObject
     {
-        private ObservableCollection<ModelObjectReference<StateExchangePair>> stateExchangePairs;
+        private ObservableCollection<ModelObjectReference<StateExchangePair>> stateExchangePairs = new ObservableCollection<ModelObjectReference<StateExchangePair>>();
 
         /// <summary>
         ///     Get or set the list of state exchange pairs contained in the exchange group
@@ -23,14 +23,6 @@ namespace Mocassin.UI.Xml.TransitionModel
         {
             get => stateExchangePairs;
             set => SetProperty(ref stateExchangePairs, value);
-        }
-
-        /// <summary>
-        ///     Creates new <see cref="StateExchangeGroupData" /> with empty component lists
-        /// </summary>
-        public StateExchangeGroupData()
-        {
-            StateExchangePairs = new ObservableCollection<ModelObjectReference<StateExchangePair>>();
         }
 
         /// <inheritdoc />

@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Reactive.Disposables;
-using Remotion.Linq.Clauses;
 
 namespace Mocassin.Framework.Extensions
 {
@@ -99,7 +97,8 @@ namespace Mocassin.Framework.Extensions
 
         /// <summary>
         ///     Causes a one way synchronization of an <see cref="IList{T}" /> to an <see cref="ObservableCollection{T}" />
-        ///     observable. Returns a <see cref="IDisposable" /> to cancel the synchronization. Only content is synchronized, not content order
+        ///     observable. Returns a <see cref="IDisposable" /> to cancel the synchronization. Only content is synchronized, not
+        ///     content order
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="observer"></param>
@@ -156,7 +155,8 @@ namespace Mocassin.Framework.Extensions
         }
 
         /// <summary>
-        ///     Disposes all disposables of a <see cref="ICollection{T}"/> of <see cref="IDisposable"/> and clears then clears the collection
+        ///     Disposes all disposables of a <see cref="ICollection{T}" /> of <see cref="IDisposable" /> and clears then clears
+        ///     the collection
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="collection"></param>
@@ -167,7 +167,8 @@ namespace Mocassin.Framework.Extensions
         }
 
         /// <summary>
-        ///     Disposes all disposables of a <see cref="ObservableCollection{T}"/> of <see cref="IDisposable"/> and clears then clears the collection
+        ///     Disposes all disposables of a <see cref="ObservableCollection{T}" /> of <see cref="IDisposable" /> and clears then
+        ///     clears the collection
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="collection"></param>

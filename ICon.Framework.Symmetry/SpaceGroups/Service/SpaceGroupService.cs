@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using Mocassin.Framework.Collections;
 using Mocassin.Framework.Exceptions;
@@ -86,7 +87,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         }
 
         /// <inheritdoc />
-        public bool TryLoadGroup(Predicate<ISpaceGroup> searchPredicate)
+        public bool TryLoadGroup(Expression<Func<SpaceGroupEntity, bool>> searchPredicate)
         {
             if (!HasDbConnection) return false;
 
@@ -94,12 +95,11 @@ namespace Mocassin.Symmetry.SpaceGroups
             using (var context = ContextProvider.CreateContext())
             {
                 newGroup = context.SpaceGroups
-                    .Where(a => searchPredicate(a))
+                    .Where(searchPredicate)
                     .Include(g => g.BaseSymmetryOperations)
                     .SingleOrDefault();
 
-                if (LoadedGroup == null)
-                    LoadedGroup = newGroup;
+                if (LoadedGroup == null) LoadedGroup = newGroup;
 
                 if (newGroup != null && !newGroup.GetGroupEntry().Equals(LoadedGroup.GetGroupEntry()))
                 {
@@ -116,11 +116,8 @@ namespace Mocassin.Symmetry.SpaceGroups
         public bool TryLoadGroup(SpaceGroupEntry groupEntry)
         {
             if (!HasDbConnection) return false;
-
             if (groupEntry == null) throw new ArgumentNullException(nameof(groupEntry));
-
             if (LoadedGroup != null && groupEntry.Equals(LoadedGroup.GetGroupEntry())) return true;
-
             return TryLoadGroup(group => group.Index == groupEntry.Index && group.Specifier == groupEntry.Specifier);
         }
 
@@ -128,7 +125,14 @@ namespace Mocassin.Symmetry.SpaceGroups
         public void LoadGroup(ISpaceGroup spaceGroup)
         {
             if (spaceGroup == null) throw new ArgumentNullException(nameof(spaceGroup));
-            if (LoadedGroup != spaceGroup) LoadedGroup = spaceGroup;
+            if (!HasDbConnection)
+            {
+                if (LoadedGroup != spaceGroup) LoadedGroup = spaceGroup;
+                return;
+            }
+
+            if (!TryLoadGroup(new SpaceGroupEntry(spaceGroup)))
+                throw new InvalidOperationException("The services has a DB context which does not contain the requested group!");
         }
 
         /// <inheritdoc />

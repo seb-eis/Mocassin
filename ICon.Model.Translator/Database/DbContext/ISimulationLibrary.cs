@@ -5,7 +5,7 @@ using Mocassin.Model.Translator.Database.Entities.Other.Meta;
 namespace Mocassin.Model.Translator
 {
     /// <summary>
-    ///     Provides an interface for accessing simulation libraries
+    ///     Provides an interface for accessing simulation libraries based on SQLite3
     /// </summary>
     public interface ISimulationLibrary : IDisposable
     {
@@ -79,5 +79,11 @@ namespace Mocassin.Model.Translator
         /// </summary>
         /// <returns></returns>
         int SaveChanges();
+
+        /// <summary>
+        ///     Sets the <see cref="DbJournalMode"/>
+        /// </summary>
+        /// <param name="journalMode"></param>
+        void SetJournalMode(DbJournalMode journalMode);
     }
 }

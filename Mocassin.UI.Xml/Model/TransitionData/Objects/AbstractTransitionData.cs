@@ -22,8 +22,8 @@ namespace Mocassin.UI.Xml.TransitionModel
         public static readonly Regex ConnectorRegex = new Regex($"{ConnectorType.Static.ToString()}|{ConnectorType.Dynamic.ToString()}");
 
         private bool isAssociation;
-        private ObservableCollection<ModelObjectReference<StateExchangeGroup>> stateExchangeGroups;
-        private string connectorString;
+        private ObservableCollection<ModelObjectReference<StateExchangeGroup>> stateExchangeGroups = new ObservableCollection<ModelObjectReference<StateExchangeGroup>>();
+        private string connectorString = ConnectorType.Dynamic.ToString();
 
         /// <summary>
         ///     Get or set the association/dissociation flag that enables this behavior
@@ -53,16 +53,6 @@ namespace Mocassin.UI.Xml.TransitionModel
         {
             get => connectorString;
             set => SetProperty(ref connectorString, value);
-        }
-
-        /// <summary>
-        ///     Creates new default <see cref="AbstractTransitionData" /> with empty component lists
-        /// </summary>
-        public AbstractTransitionData()
-        {
-            StateExchangeGroups = new ObservableCollection<ModelObjectReference<StateExchangeGroup>>();
-            ConnectorString = ConnectorType.Dynamic.ToString();
-            Name = "New Abstract Transition";
         }
 
         /// <inheritdoc />

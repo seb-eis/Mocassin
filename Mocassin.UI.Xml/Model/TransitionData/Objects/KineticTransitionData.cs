@@ -13,8 +13,8 @@ namespace Mocassin.UI.Xml.TransitionModel
     [XmlRoot]
     public class KineticTransitionData : ModelDataObject
     {
-        private ModelObjectReference<AbstractTransition> abstractTransition;
-        private ObservableCollection<VectorData3D> pathVectors;
+        private ModelObjectReference<AbstractTransition> abstractTransition = new ModelObjectReference<AbstractTransition>();
+        private ObservableCollection<VectorData3D> pathVectors = new ObservableCollection<VectorData3D>();
 
         /// <summary>
         ///     Get or set the abstract transition key for the transition logic
@@ -34,14 +34,6 @@ namespace Mocassin.UI.Xml.TransitionModel
         {
             get => pathVectors;
             set => SetProperty(ref pathVectors, value);
-        }
-
-        /// <summary>
-        ///     Creates new <see cref="KineticTransitionData" /> wit empty component lists
-        /// </summary>
-        public KineticTransitionData()
-        {
-            PathVectors = new ObservableCollection<VectorData3D>();
         }
 
         /// <inheritdoc />

@@ -1,8 +1,6 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Xml.Serialization;
 using Mocassin.Model.Basic;
-using Newtonsoft.Json;
 
 namespace Mocassin.UI.Xml.Base
 {

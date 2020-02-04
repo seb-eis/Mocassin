@@ -157,10 +157,14 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
                 BuildStatus = LibraryBuildStatus.SavingLibraryContents;
                 try
                 {
+                    AddConsoleMessage("Changing database journal mode to WAL.");
+                    BuildSimulationLibrary.SetJournalMode(DbJournalMode.Wal);
                     BuildSimulationLibrary.SaveChanges();
                     AddConsoleMessage("Reloading meta information table.");
                     JobMetaDataCollectionControlViewModel.Clear();
                     JobMetaDataCollectionControlViewModel.AddItems(BuildSimulationLibrary.JobMetaData.Local);
+                    AddConsoleMessage("Changing database journal mode to DELETE.");
+                    BuildSimulationLibrary.SetJournalMode(DbJournalMode.Delete);
                 }
                 catch (Exception exception)
                 {
@@ -243,6 +247,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
                 JobMetaDataCollectionControlViewModel.Clear();
                 JobMetaDataCollectionControlViewModel.AddItems(BuildSimulationLibrary.JobMetaData.Local);
                 AddConsoleMessage($"Successfully created at [{(IsManualLibrarySaving ? "MEMORY" : BuildTargetFilePath)}]");
+                if (IsManualLibrarySaving) return;
+                AddConsoleMessage("Changing database journal mode to DELETE.");
+                BuildSimulationLibrary.SetJournalMode(DbJournalMode.Delete);
             }
             else
                 AddConsoleMessage($"Creation failed! ({(cancellationToken.IsCancellationRequested ? "Cancelled" : "Error")})");

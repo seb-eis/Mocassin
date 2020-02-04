@@ -19,6 +19,8 @@ namespace Mocassin.UI.Xml.Base
         IComparable,
         IDuplicable<ModelObjectReference<T>> where T : ModelObject, new()
     {
+
+
         private ModelDataObject target;
         private string key;
 
@@ -59,11 +61,6 @@ namespace Mocassin.UI.Xml.Base
             }
         }
 
-        /// <inheritdoc />
-        public ModelObjectReference()
-        {
-        }
-
         /// <summary>
         ///     Creates new <see cref="ModelObjectReference{T}" /> that targets the passed graph
         /// </summary>
@@ -71,6 +68,12 @@ namespace Mocassin.UI.Xml.Base
         public ModelObjectReference(ModelDataObject targetGraph)
         {
             Target = targetGraph ?? throw new ArgumentNullException(nameof(targetGraph));
+        }
+
+        /// <inheritdoc />
+        public ModelObjectReference()
+        {
+
         }
 
         /// <summary>

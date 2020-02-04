@@ -12,8 +12,8 @@ namespace Mocassin.UI.Xml.TransitionModel
     [XmlRoot]
     public class StateExchangePairData : ModelDataObject
     {
-        private ModelObjectReference<Particle> donorParticle;
-        private ModelObjectReference<Particle> acceptorParticle;
+        private ModelObjectReference<Particle> donorParticle = new ModelObjectReference<Particle>();
+        private ModelObjectReference<Particle> acceptorParticle = new ModelObjectReference<Particle>();
 
         /// <summary>
         ///     Get or set the donor state particle key

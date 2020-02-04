@@ -13,7 +13,7 @@ namespace Mocassin.UI.Xml.ParticleModel
     [XmlRoot]
     public class ParticleSetData : ModelDataObject
     {
-        private ObservableCollection<ModelObjectReference<Particle>> particles;
+        private ObservableCollection<ModelObjectReference<Particle>> particles = new ObservableCollection<ModelObjectReference<Particle>>();
 
         /// <summary>
         ///     List of particles contained in the set
@@ -23,14 +23,6 @@ namespace Mocassin.UI.Xml.ParticleModel
         {
             get => particles;
             set => SetProperty(ref particles, value);
-        }
-
-        /// <summary>
-        ///     creates new <see cref="ParticleSetData" /> with empty component lists
-        /// </summary>
-        public ParticleSetData()
-        {
-            Particles = new ObservableCollection<ModelObjectReference<Particle>>();
         }
 
         /// <inheritdoc />

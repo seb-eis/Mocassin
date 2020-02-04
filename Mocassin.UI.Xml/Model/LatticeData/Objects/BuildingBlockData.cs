@@ -14,7 +14,7 @@ namespace Mocassin.UI.Xml.LatticeModel
     [XmlRoot]
     public class BuildingBlockData : ModelDataObject
     {
-        private ObservableCollection<ModelObjectReference<Particle>> particleList;
+        private ObservableCollection<ModelObjectReference<Particle>> particleList = new ObservableCollection<ModelObjectReference<Particle>>();
 
         /// <summary>
         ///     List of particles which define the building block
@@ -24,11 +24,6 @@ namespace Mocassin.UI.Xml.LatticeModel
         {
             get => particleList;
             set => SetProperty(ref particleList, value);
-        }
-
-        public BuildingBlockData()
-        {
-            ParticleList = new ObservableCollection<ModelObjectReference<Particle>>();
         }
 
         /// <inheritdoc />

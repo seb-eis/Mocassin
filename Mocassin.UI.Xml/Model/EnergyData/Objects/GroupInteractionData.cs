@@ -14,8 +14,8 @@ namespace Mocassin.UI.Xml.EnergyModel
     [XmlRoot]
     public class GroupInteractionData : ModelDataObject
     {
-        private ModelObjectReference<CellReferencePosition> centerCellReferencePosition;
-        private ObservableCollection<VectorData3D> groupGeometry;
+        private ModelObjectReference<CellReferencePosition> centerCellReferencePosition = new ModelObjectReference<CellReferencePosition>();
+        private ObservableCollection<VectorData3D> groupGeometry = new ObservableCollection<VectorData3D>();
 
         /// <summary>
         ///     Get or set the key of the center unit cell position
@@ -35,14 +35,6 @@ namespace Mocassin.UI.Xml.EnergyModel
         {
             get => groupGeometry;
             set => SetProperty(ref groupGeometry, value);
-        }
-
-        /// <summary>
-        ///     Creates new <see cref="GroupInteractionData" /> with empty component lists
-        /// </summary>
-        public GroupInteractionData()
-        {
-            GroupGeometry = new ObservableCollection<VectorData3D>();
         }
 
         /// <inheritdoc />

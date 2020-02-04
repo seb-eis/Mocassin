@@ -109,19 +109,19 @@ namespace Mocassin.UI.Xml.ProjectBuilding
         {
             BuildStatusEvent.OnNext(LibraryBuildStatus.BuildProcessStarted);
             CancellationToken = cancellationToken;
-            if (CancelRequested() || !TryPrepareLibraryContext(filePath, out var libraryContext))
+            if (CheckCancel() || !TryPrepareLibraryContext(filePath, out var libraryContext))
                 return null;
-            if (CancelRequested() || !TryPrepareModelProject(simulationDbBuildTemplate.ProjectModelData, modelProject))
+            if (CheckCancel() || !TryPrepareModelProject(simulationDbBuildTemplate.ProjectModelData, modelProject))
                 return null;
-            if (CancelRequested() || !TryPrepareModelCustomization(modelProject, simulationDbBuildTemplate.ProjectCustomizationTemplate))
+            if (CheckCancel() || !TryPrepareModelCustomization(modelProject, simulationDbBuildTemplate.ProjectCustomizationTemplate))
                 return null;
-            if (CancelRequested() || !TryBuildModelContext(modelProject, out var modelContext))
+            if (CheckCancel() || !TryBuildModelContext(modelProject, out var modelContext))
                 return null;
-            if (CancelRequested() || !TryBuildLibraryContent(modelContext, simulationDbBuildTemplate.ProjectJobSetTemplate, out var jobPackageModels))
+            if (CheckCancel() || !TryBuildLibraryContent(modelContext, simulationDbBuildTemplate.ProjectJobSetTemplate, out var jobPackageModels))
                 return null;
-            if (CancelRequested() || !TryAddBuildMetaData(jobPackageModels, simulationDbBuildTemplate))
+            if (CheckCancel() || !TryAddBuildMetaData(jobPackageModels, simulationDbBuildTemplate))
                 return null;
-            if (CancelRequested() || !TryAddContentsToLibrary(libraryContext, jobPackageModels))
+            if (CheckCancel() || !TryAddContentsToLibrary(libraryContext, jobPackageModels))
                 return null;
 
             BuildStatusEvent.OnNext(LibraryBuildStatus.BuildProcessCompleted);
@@ -132,7 +132,7 @@ namespace Mocassin.UI.Xml.ProjectBuilding
         ///     Checks if cancellation is requested and changes the <see cref="LibraryBuildStatus" /> flag if required
         /// </summary>
         /// <returns></returns>
-        private bool CancelRequested()
+        private bool CheckCancel()
         {
             if (!CancellationToken.IsCancellationRequested) return false;
             BuildStatusEvent.OnNext(LibraryBuildStatus.Cancel);

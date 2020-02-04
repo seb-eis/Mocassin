@@ -13,9 +13,9 @@ namespace Mocassin.UI.Xml.LatticeModel
     [XmlRoot]
     public class DopingAbstractData : ModelDataObject
     {
-        private ModelObjectReference<Particle> dopable;
-        private ModelObjectReference<Particle> dopant;
-        private ModelObjectReference<CellReferencePosition> cellReferencePosition;
+        private ModelObjectReference<Particle> dopable = new ModelObjectReference<Particle>();
+        private ModelObjectReference<Particle> dopant = new ModelObjectReference<Particle>();
+        private ModelObjectReference<CellReferencePosition> cellReferencePosition = new ModelObjectReference<CellReferencePosition>();
 
         /// <summary>
         ///     Particle that is replaced by dopant

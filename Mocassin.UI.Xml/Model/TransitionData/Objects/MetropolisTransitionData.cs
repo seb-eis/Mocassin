@@ -13,9 +13,9 @@ namespace Mocassin.UI.Xml.TransitionModel
     [XmlRoot]
     public class MetropolisTransitionData : ModelDataObject, IEquatable<MetropolisTransitionData>
     {
-        private ModelObjectReference<AbstractTransition> abstractTransition;
-        private ModelObjectReference<CellReferencePosition> firstCellReferencePosition;
-        private ModelObjectReference<CellReferencePosition> secondCellReferencePosition;
+        private ModelObjectReference<AbstractTransition> abstractTransition = new ModelObjectReference<AbstractTransition>();
+        private ModelObjectReference<CellReferencePosition> firstCellReferencePosition = new ModelObjectReference<CellReferencePosition>();
+        private ModelObjectReference<CellReferencePosition> secondCellReferencePosition = new ModelObjectReference<CellReferencePosition>();
 
         /// <summary>
         ///     Get or set the abstract transition key for the transition logic

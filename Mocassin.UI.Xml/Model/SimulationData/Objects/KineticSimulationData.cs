@@ -18,7 +18,7 @@ namespace Mocassin.UI.Xml.SimulationModel
         private double normalizationProbability = 1.0;
         private double electricFieldMagnitude = 10e6;
         private VectorData3D electricFieldVector = new VectorData3D {A = 1};
-        private ObservableCollection<ModelObjectReference<KineticTransition>> transitions;
+        private ObservableCollection<ModelObjectReference<KineticTransition>> transitions = new ObservableCollection<ModelObjectReference<KineticTransition>>();
 
         /// <summary>
         ///     Get or set the pre-run mcsp for normalization and relaxation of the lattice
@@ -68,14 +68,6 @@ namespace Mocassin.UI.Xml.SimulationModel
         {
             get => transitions;
             set => SetProperty(ref transitions, value);
-        }
-
-        /// <summary>
-        ///     Creates new <see cref="KineticSimulationData" /> with empty component lists
-        /// </summary>
-        public KineticSimulationData()
-        {
-            Transitions = new ObservableCollection<ModelObjectReference<KineticTransition>>();
         }
 
         /// <inheritdoc />

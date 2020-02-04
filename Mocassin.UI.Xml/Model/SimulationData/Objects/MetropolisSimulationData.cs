@@ -17,7 +17,7 @@ namespace Mocassin.UI.Xml.SimulationModel
         private int breakSampleLength = 1000;
         private int breakSampleIntervalMcs = 100;
         private int resultSampleMcs = 200;
-        private ObservableCollection<ModelObjectReference<MetropolisTransition>> transitions;
+        private ObservableCollection<ModelObjectReference<MetropolisTransition>> transitions = new ObservableCollection<ModelObjectReference<MetropolisTransition>>();
 
         /// <summary>
         ///     Get or set the relative break tolerance value
@@ -67,14 +67,6 @@ namespace Mocassin.UI.Xml.SimulationModel
         {
             get => transitions;
             set => SetProperty(ref transitions, value);
-        }
-
-        /// <summary>
-        ///     Creates new <see cref="MetropolisSimulationData" /> with empty component lists
-        /// </summary>
-        public MetropolisSimulationData()
-        {
-            Transitions = new ObservableCollection<ModelObjectReference<MetropolisTransition>>();
         }
 
         /// <inheritdoc />

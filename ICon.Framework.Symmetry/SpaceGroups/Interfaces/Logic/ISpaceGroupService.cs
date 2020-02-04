@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using Mocassin.Framework.Collections;
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Symmetry.CrystalSystems;
@@ -133,9 +134,9 @@ namespace Mocassin.Symmetry.SpaceGroups
         ///     Tries to load a space group into the service using the provided search function (Returns false if no match is
         ///     found)
         /// </summary>
-        /// <param name="searchPredicate"></param>
+        /// <param name="searchExpression"></param>
         /// <returns></returns>
-        bool TryLoadGroup(Predicate<ISpaceGroup> searchPredicate);
+        bool TryLoadGroup(Expression<Func<SpaceGroupEntity, bool>> searchExpression);
 
         /// <summary>
         ///     Tries to load a space group into the service that matches the provided space group identifier (Returns false if no
