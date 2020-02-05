@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Mocassin.Framework.Random;
 using Mocassin.Mathematics.Extensions;
 using Mocassin.Model.ModelProject;
 using Mocassin.Model.Particles;
@@ -18,7 +19,7 @@ namespace Mocassin.Model.Lattices
         /// <summary>
         ///     Get the <see cref="IBuildingBlock" /> that supplies the default config
         /// </summary>
-        private IBuildingBlock BaseBuildingBlock { get; }
+        private IBuildingBlock DefaultBlock { get; }
 
         /// <summary>
         ///     Get the <see cref="IUnitCellProvider{T1}" /> of <see cref="ICellReferencePosition" /> that supplies the cell
@@ -32,10 +33,10 @@ namespace Mocassin.Model.Lattices
         private IUnitCell<ICellReferencePosition> UnitCell { get; }
 
         /// <summary>
-        ///     Get a list of integer tuples that contains all positions index and affiliated wyckoff index values for unit cell
+        ///     Get an array of integer tuples that contains all positions index and affiliated wyckoff index values for unit cell
         ///     entries that can be doped
         /// </summary>
-        private List<(int PositionIndex, int WyckoffIndex)> DopingApplicationSequence { get; }
+        private (int PositionIndex, int WyckoffIndex)[] DopingApplicationSequence { get; }
 
         /// <summary>
         ///     Get the parent <see cref="IModelProject" /> of the lattice source
@@ -56,10 +57,10 @@ namespace Mocassin.Model.Lattices
         public DopedLatticeSource(IModelProject modelProject, IBuildingBlock baseBuildingBlock)
         {
             ModelProject = modelProject ?? throw new ArgumentNullException(nameof(modelProject));
-            BaseBuildingBlock = baseBuildingBlock ?? throw new ArgumentNullException(nameof(baseBuildingBlock));
+            DefaultBlock = baseBuildingBlock ?? throw new ArgumentNullException(nameof(baseBuildingBlock));
             UnitCellProvider = modelProject.GetManager<IStructureManager>().QueryPort.Query(x => x.GetFullUnitCellProvider());
             UnitCell = UnitCellProvider.GetUnitCell(0, 0, 0);
-            DopingApplicationSequence = MakeDopingApplicationSequence();
+            DopingApplicationSequence = MakeDopingApplicationSequence().ToArray();
         }
 
         /// <inheritdoc />
@@ -69,13 +70,18 @@ namespace Mocassin.Model.Lattices
             var result = CreateEmptyLattice(a, b, c);
             var populationTable = CreateDopedPopulationTable(dopingDictionary, a, b, c);
             ApplyPopulationTableToLattice(result, populationTable, rng);
-            return result.AsArray();
+            return result;
         }
 
         /// <inheritdoc />
-        public void PopulateByteLattice(VectorI3 sizeVector, IDictionary<IDoping, double> dopingDictionary, Random rng, IByteArray4D target)
+        public void PopulateByteLattice(IDictionary<IDoping, double> dopingDictionary, Random rng, byte[,,,] target)
         {
-            throw new NotImplementedException();
+            if (target.GetLength(3) != UnitCell.EntryCount)
+                throw new InvalidOperationException("Dimension 3 of provided array does not match the unit cell size.");
+
+            var (a, b, c) = (target.GetLength(0), target.GetLength(1), target.GetLength(2));
+            var populationTable = CreateDopedPopulationTable(dopingDictionary, a, b, c);
+            ApplyPopulationTableToLattice(target, populationTable, rng);
         }
 
         /// <summary>
@@ -102,7 +108,7 @@ namespace Mocassin.Model.Lattices
         /// <param name="lattice"></param>
         /// <param name="populationTable"></param>
         /// <param name="rng"></param>
-        public void ApplyPopulationTableToLattice(IByteArray4D lattice, int[,] populationTable, Random rng)
+        public void ApplyPopulationTableToLattice(byte[,,,] lattice, int[,] populationTable, Random rng)
         {
             var (sizeA, sizeB, sizeC) = (lattice.GetLength(0), lattice.GetLength(1), lattice.GetLength(2));
             var countTable = PopulationTableToPopulationCountSet(populationTable);
@@ -115,7 +121,7 @@ namespace Mocassin.Model.Lattices
                     {
                         foreach (var (positionIndex, wyckoffIndex) in DopingApplicationSequence)
                         {
-                            var particle = SelectOccupationParticle(populationTable, countTable, wyckoffIndex, rng);
+                            var particle = RollNextOccupationByte(populationTable, countTable, wyckoffIndex, rng);
                             lattice[a, b, c, positionIndex] = particle;
                         }
                     }
@@ -151,21 +157,19 @@ namespace Mocassin.Model.Lattices
         /// <param name="wyckoffIndex"></param>
         /// <param name="rng"></param>
         /// <returns></returns>
-        public byte SelectOccupationParticle(int[,] populationTable, int[] countTable, int wyckoffIndex, Random rng)
+        public byte RollNextOccupationByte(int[,] populationTable, int[] countTable, int wyckoffIndex, Random rng)
         {
             var random = rng.Next(countTable[wyckoffIndex]);
-            for (var i = 1; i < byte.MaxValue; i++)
+            for (byte i = 1; i < byte.MaxValue; i++)
             {
-                var localCount = populationTable[wyckoffIndex, i];
-                if (random >= localCount)
+                var localPopulation = populationTable[wyckoffIndex, i];
+                if (random < localPopulation)
                 {
-                    random -= localCount;
-                    continue;
+                    countTable[wyckoffIndex]--;
+                    populationTable[wyckoffIndex, i]--;
+                    return i;
                 }
-
-                countTable[wyckoffIndex]--;
-                populationTable[wyckoffIndex, i]--;
-                return (byte) i;
+                random -= localPopulation;
             }
 
             throw new InvalidOperationException("Selection failure, the doping is not valid.");
@@ -179,9 +183,9 @@ namespace Mocassin.Model.Lattices
         /// <param name="b"></param>
         /// <param name="c"></param>
         /// <returns></returns>
-        public IByteArray4D CreateEmptyLattice(int a, int b, int c)
+        public byte[,,,] CreateEmptyLattice(int a, int b, int c)
         {
-            return new ByteArray4D(new byte[a, b, c, UnitCellProvider.VectorEncoder.PositionCount]);
+            return new byte[a, b, c, UnitCellProvider.VectorEncoder.PositionCount];
         }
 
         /// <summary>
@@ -199,11 +203,11 @@ namespace Mocassin.Model.Lattices
             var result = new int[wyckoffCount, particleCount];
 
             var cellCount = a * b * c;
-            for (var i = 0; i < BaseBuildingBlock.CellEntries.Count; i++)
+            for (var i = 0; i < DefaultBlock.CellEntries.Count; i++)
             {
                 var wyckoff = UnitCell[i].Entry;
                 if (wyckoff.Stability == PositionStability.Unstable) continue;
-                result[wyckoff.Index, BaseBuildingBlock.CellEntries[i].Index] += cellCount;
+                result[wyckoff.Index, DefaultBlock.CellEntries[i].Index] += cellCount;
             }
 
             return result;

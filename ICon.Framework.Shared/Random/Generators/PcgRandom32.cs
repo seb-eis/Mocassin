@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Security.Cryptography;
 
@@ -14,7 +14,6 @@ namespace Mocassin.Framework.Random
     /// <summary>
     ///     Implementation of the PCG family 32 bit minimal random number generator
     /// </summary>
-    [DataContract(Name = "PcgRandom32")]
     public sealed class PcgRandom32 : System.Random
     {
         /// <summary>
@@ -30,7 +29,7 @@ namespace Mocassin.Framework.Random
         /// <summary>
         ///     The factor used to create a random double from a random uint
         /// </summary>
-        public const double SampleStepping = 1.0 / uint.MaxValue;
+        public const double DoubleStepping = 1.0 / uint.MaxValue;
 
         /// <summary>
         ///     The increase value of the generator
@@ -85,6 +84,7 @@ namespace Mocassin.Framework.Random
         ///     Get the next random 32 bit unsigned integer
         /// </summary>
         /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public uint NextUnsigned()
         {
             unchecked
@@ -144,7 +144,7 @@ namespace Mocassin.Framework.Random
         /// <inheritdoc />
         public override double NextDouble()
         {
-            return NextUnsigned() * SampleStepping;
+            return NextUnsigned() * DoubleStepping;
         }
 
         /// <summary>

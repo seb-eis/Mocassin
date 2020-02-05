@@ -19,12 +19,12 @@ namespace Mocassin.Model.Lattices
         byte[,,,] BuildByteLattice(VectorI3 sizeVector, IDictionary<IDoping, double> dopingDictionary, Random rng);
 
         /// <summary>
-        ///     Populates a <see cref="IByteArray4D"/> with a new lattice
+        ///     Generates a 4D lattice that encodes each particle as a byte on an existing byte[,,,] object
         /// </summary>
-        /// <param name="sizeVector"></param>
         /// <param name="dopingDictionary"></param>
         /// <param name="rng"></param>
+        /// <param name="target"></param>
         /// <returns></returns>
-        void PopulateByteLattice(VectorI3 sizeVector, IDictionary<IDoping, double> dopingDictionary, Random rng, IByteArray4D target);
+        void PopulateByteLattice(IDictionary<IDoping, double> dopingDictionary, Random rng, byte[,,,] target);
     }
 }
