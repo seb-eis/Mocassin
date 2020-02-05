@@ -8,11 +8,6 @@ namespace Mocassin.Model.Translator
     public class EnergyTableEntity : InteropArray<double>
     {
         /// <inheritdoc />
-        public EnergyTableEntity()
-        {
-        }
-
-        /// <inheritdoc />
         public EnergyTableEntity(double[,] array)
             : base(array)
         {

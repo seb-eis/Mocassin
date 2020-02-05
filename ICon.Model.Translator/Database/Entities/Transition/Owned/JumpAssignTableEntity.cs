@@ -6,11 +6,6 @@
     public class JumpAssignTableEntity : InteropArray<int>
     {
         /// <inheritdoc />
-        public JumpAssignTableEntity()
-        {
-        }
-
-        /// <inheritdoc />
         public JumpAssignTableEntity(int[,,] array)
             : base(array)
         {

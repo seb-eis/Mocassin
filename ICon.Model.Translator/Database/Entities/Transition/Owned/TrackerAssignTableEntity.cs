@@ -6,11 +6,6 @@
     public class TrackerAssignTableEntity : InteropArray<int>
     {
         /// <inheritdoc />
-        public TrackerAssignTableEntity()
-        {
-        }
-
-        /// <inheritdoc />
         public TrackerAssignTableEntity(int[,] array)
             : base(array)
         {

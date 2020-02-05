@@ -11,11 +11,6 @@
         public static readonly EnergyBackgroundEntity Empty = new EnergyBackgroundEntity(new double[0, 0, 0, 0, 0]);
 
         /// <inheritdoc />
-        public EnergyBackgroundEntity()
-        {
-        }
-
-        /// <inheritdoc />
         public EnergyBackgroundEntity(double[,,,,] array)
             : base(array)
         {

@@ -6,11 +6,6 @@
     public class JumpCountTableEntity : InteropArray<int>
     {
         /// <inheritdoc />
-        public JumpCountTableEntity()
-        {
-        }
-
-        /// <inheritdoc />
         public JumpCountTableEntity(int[,] array)
             : base(array)
         {

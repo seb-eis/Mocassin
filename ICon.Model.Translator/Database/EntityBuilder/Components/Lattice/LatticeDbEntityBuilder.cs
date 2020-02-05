@@ -88,32 +88,29 @@ namespace Mocassin.Model.Translator.EntityBuilder
         private void CountNumberOfMobiles(LatticeEntity latticeEntity, ref CLatticeInfo latticeInfo, ISimulationModel simulationModel)
         {
             var positionIndexToMobilityTypesSet = simulationModel.SimulationEncodingModel.PositionIndexToMobilityTypesSet;
-            for (var atomIndex = 0; atomIndex < latticeEntity.Length;)
+            var (positionIndex, maxPositionIndex) = (0, latticeInfo.SizeVector.D - 1);
+            foreach (var elementIndex in (byte[,,,]) latticeEntity.InternalArray)
             {
-                for (var positionIndex = 0; positionIndex < latticeInfo.SizeVector.D; positionIndex++)
+                var mobilityTypes = positionIndexToMobilityTypesSet[positionIndex];
+                switch (mobilityTypes[elementIndex])
                 {
-                    var mobilityTypes = positionIndexToMobilityTypesSet[positionIndex];
-                    var elementIndex = latticeEntity.Values[atomIndex];
-                    atomIndex++;
+                    case MobilityType.Immobile:
+                        break;
 
-                    switch (mobilityTypes[elementIndex])
-                    {
-                        case MobilityType.Immobile:
-                            break;
+                    case MobilityType.Mobile:
+                        latticeInfo.NumberOfMobiles++;
+                        break;
 
-                        case MobilityType.Mobile:
-                            latticeInfo.NumberOfMobiles++;
-                            break;
+                    case MobilityType.Selectable:
+                        latticeInfo.NumberOfMobiles++;
+                        latticeInfo.NumberOfSelectAtoms++;
+                        break;
 
-                        case MobilityType.Selectable:
-                            latticeInfo.NumberOfMobiles++;
-                            latticeInfo.NumberOfSelectAtoms++;
-                            break;
-
-                        default:
-                            throw new ArgumentOutOfRangeException();
-                    }
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
+
+                positionIndex = positionIndex == maxPositionIndex ? 0 : positionIndex + 1;
             }
         }
     }
