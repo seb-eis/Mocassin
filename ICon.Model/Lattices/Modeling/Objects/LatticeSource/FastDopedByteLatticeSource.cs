@@ -12,12 +12,12 @@ using Moccasin.Mathematics.ValueTypes;
 namespace Mocassin.Model.Lattices
 {
     /// <summary>
-    ///     Provides a fast <see cref="IDopedByteLatticeSource"/>
+    ///     Provides a fast <see cref="IDopedByteLatticeSource" />
     /// </summary>
     public class FastDopedByteLatticeSource : IDopedByteLatticeSource
     {
         /// <summary>
-        ///     Get the <see cref="ArrayPool{T}"/> for linear <see cref="byte"/> buffers
+        ///     Get the <see cref="ArrayPool{T}" /> for linear <see cref="byte" /> buffers
         /// </summary>
         private ArrayPool<byte> BufferPool { get; }
 
@@ -38,7 +38,8 @@ namespace Mocassin.Model.Lattices
         private IUnitCell<ICellReferencePosition> UnitCell { get; }
 
         /// <summary>
-        ///     Get an array of integer tuples that contains all positions index and affiliated reference index values for unit cell
+        ///     Get an array of integer tuples that contains all positions index and affiliated reference index values for unit
+        ///     cell
         ///     entries that can be doped
         /// </summary>
         private (int PositionIndex, int ReferenceIndex)[] DopingTargets { get; }
@@ -87,19 +88,21 @@ namespace Mocassin.Model.Lattices
             if (target.GetLength(3) != UnitCell.EntryCount)
                 throw new InvalidOperationException("Dimension 3 of provided array does not match the unit cell size.");
 
+            Array.Clear(target, 0, target.Length);
             var (a, b, c) = (target.GetLength(0), target.GetLength(1), target.GetLength(2));
             var populationTable = CreateDopedPopulationTable(dopingDictionary, a, b, c);
             ApplyPopulationTableToLattice(target, populationTable, rng);
         }
 
         /// <summary>
-        ///     Creates the doping application sequence that defines a set of position index and reference index pairs that define the
+        ///     Creates the doping application sequence that defines a set of position index and reference index pairs that define
+        ///     the
         ///     doping affected entries of the unit cell
         /// </summary>
         /// <returns></returns>
         private List<(int PositionIndex, int ReferenceIndex)> CreateDopingTargetList()
         {
-            var result = new List<(int,int)>();
+            var result = new List<(int, int)>();
             for (var i = 0; i < UnitCell.EntryCount; i++)
             {
                 var wyckoff = UnitCell[i].Entry;
@@ -131,6 +134,7 @@ namespace Mocassin.Model.Lattices
                     buffer[offset + positionIndex] = particle;
                 }
             }
+
             Buffer.BlockCopy(buffer, 0, lattice, 0, bufferSize);
             BufferPool.Return(buffer);
             if (countTable.Any(x => x != 0)) throw new InvalidOperationException("Count table is not zeroed out. Doping is invalid.");
@@ -144,10 +148,11 @@ namespace Mocassin.Model.Lattices
         /// <returns></returns>
         public int[] PopulationTableToPopulationCountSet(int[,] populationTable)
         {
-            var result = new int[populationTable.GetLength(0)];
-            for (var i = 1; i < populationTable.GetLength(1); i++)
+            var (length0, length1) = (populationTable.GetLength(0), populationTable.GetLength(1));
+            var result = new int[length0];
+            for (var i = 1; i < length1; i++)
             {
-                for (var j = 0; j < result.Length; j++) result[j] += populationTable[j, i];
+                for (var j = 0; j < length0; j++) result[j] += populationTable[j, i];
             }
 
             return result;
@@ -174,6 +179,7 @@ namespace Mocassin.Model.Lattices
                     populationTable[wyckoffIndex, i]--;
                     return i;
                 }
+
                 random -= localPopulation;
             }
 
@@ -279,7 +285,8 @@ namespace Mocassin.Model.Lattices
             var rawPrimary = (int) (originalCount * doping.Value);
             return !doping.Key.UseCounterDoping
                 ? (rawPrimary, 0)
-                : FloorDopingPopulations(rawPrimary, doping.Key.PrimaryDoping.GetChargeDelta(), doping.Key.CounterDoping.GetChargeDelta(), ChargeBalanceTolerance);
+                : FloorDopingPopulations(rawPrimary, doping.Key.PrimaryDoping.GetChargeDelta(), doping.Key.CounterDoping.GetChargeDelta(),
+                    ChargeBalanceTolerance);
         }
 
         /// <summary>
