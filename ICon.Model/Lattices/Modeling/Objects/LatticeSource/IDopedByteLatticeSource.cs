@@ -5,9 +5,9 @@ using Moccasin.Mathematics.ValueTypes;
 namespace Mocassin.Model.Lattices
 {
     /// <summary>
-    ///     General interface for systems that create 4D lattices based on doping information
+    ///     Represents a source for doped byte[,,,] based 4D lattices based on <see cref="IDoping"/> information
     /// </summary>
-    public interface IDopedLatticeSource
+    public interface IDopedByteLatticeSource
     {
         /// <summary>
         ///     Generates a 4D lattice that encodes each particle as a byte
@@ -16,7 +16,7 @@ namespace Mocassin.Model.Lattices
         /// <param name="dopingDictionary"></param>
         /// <param name="rng"></param>
         /// <returns></returns>
-        byte[,,,] BuildByteLattice(VectorI3 sizeVector, IDictionary<IDoping, double> dopingDictionary, Random rng);
+        byte[,,,] CreateLattice(VectorI3 sizeVector, IDictionary<IDoping, double> dopingDictionary, Random rng);
 
         /// <summary>
         ///     Generates a 4D lattice that encodes each particle as a byte on an existing byte[,,,] object
@@ -25,6 +25,6 @@ namespace Mocassin.Model.Lattices
         /// <param name="rng"></param>
         /// <param name="target"></param>
         /// <returns></returns>
-        void PopulateByteLattice(IDictionary<IDoping, double> dopingDictionary, Random rng, byte[,,,] target);
+        void PopulateLattice(IDictionary<IDoping, double> dopingDictionary, Random rng, byte[,,,] target);
     }
 }

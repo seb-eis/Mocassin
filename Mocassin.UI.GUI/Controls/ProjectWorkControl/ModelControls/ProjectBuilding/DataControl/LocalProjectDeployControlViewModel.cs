@@ -198,12 +198,16 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
         /// <returns></returns>
         private RelayCommand GetCancelBuildCommand()
         {
-            bool CanExecute()
+            void Cancel()
+            {
+                BuildCancellationTokenSource.Cancel();
+            }
+            bool CanCancel()
             {
                 return BuildCancellationTokenSource != null && !BuildCancellationTokenSource.IsCancellationRequested;
             }
 
-            return new RelayCommand(() => BuildCancellationTokenSource.Cancel(), CanExecute);
+            return new RelayCommand(Cancel, CanCancel);
         }
 
         /// <summary>
@@ -252,8 +256,10 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
                 BuildSimulationLibrary.SetJournalMode(DbJournalMode.Delete);
             }
             else
-                AddConsoleMessage($"Creation failed! ({(cancellationToken.IsCancellationRequested ? "Cancelled" : "Error")})");
-
+            {
+                AddConsoleMessage($"Creation failed, collecting garbage! ({(cancellationToken.IsCancellationRequested ? "Cancelled" : "Error")})");
+                GC.Collect();
+            }
             BuildCancellationTokenSource.Dispose();
             BuildCancellationTokenSource = null;
         }

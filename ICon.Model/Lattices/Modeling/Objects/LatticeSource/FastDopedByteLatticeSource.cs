@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
-using Mocassin.Framework.Random;
 using Mocassin.Mathematics.Extensions;
 using Mocassin.Model.ModelProject;
 using Mocassin.Model.Particles;
@@ -12,10 +12,15 @@ using Moccasin.Mathematics.ValueTypes;
 namespace Mocassin.Model.Lattices
 {
     /// <summary>
-    ///     Basic implementation of a provider system for doped lattices using one base <see cref="IBuildingBlock" />
+    ///     Provides a fast <see cref="IDopedByteLatticeSource"/>
     /// </summary>
-    public class DopedLatticeSource : IDopedLatticeSource
+    public class FastDopedByteLatticeSource : IDopedByteLatticeSource
     {
+        /// <summary>
+        ///     Get the <see cref="ArrayPool{T}"/> for linear <see cref="byte"/> buffers
+        /// </summary>
+        private ArrayPool<byte> BufferPool { get; }
+
         /// <summary>
         ///     Get the <see cref="IBuildingBlock" /> that supplies the default config
         /// </summary>
@@ -33,38 +38,41 @@ namespace Mocassin.Model.Lattices
         private IUnitCell<ICellReferencePosition> UnitCell { get; }
 
         /// <summary>
-        ///     Get an array of integer tuples that contains all positions index and affiliated wyckoff index values for unit cell
+        ///     Get an array of integer tuples that contains all positions index and affiliated reference index values for unit cell
         ///     entries that can be doped
         /// </summary>
-        private (int PositionIndex, int WyckoffIndex)[] DopingApplicationSequence { get; }
+        private (int PositionIndex, int ReferenceIndex)[] DopingTargets { get; }
 
         /// <summary>
         ///     Get the parent <see cref="IModelProject" /> of the lattice source
         /// </summary>
-        public IModelProject ModelProject { get; }
+        private IModelProject ModelProject { get; }
 
         /// <summary>
-        ///     Get or set the charge balance tolerance for population calculation
+        ///     Get the charge balance tolerance for population calculation
         /// </summary>
-        public double ChargeBalanceTolerance { get; set; }
+        public double ChargeBalanceTolerance { get; }
 
         /// <summary>
-        ///     Creates a new <see cref="DopedLatticeSource" /> by <see cref="IModelProject" /> and base
-        ///     <see cref="IBuildingBlock" />
+        ///     Creates a new <see cref="FastDopedByteLatticeSource" /> by <see cref="IModelProject" /> and base
+        ///     <see cref="IBuildingBlock" /> with optional charge balance tolerance
         /// </summary>
         /// <param name="modelProject"></param>
         /// <param name="baseBuildingBlock"></param>
-        public DopedLatticeSource(IModelProject modelProject, IBuildingBlock baseBuildingBlock)
+        /// <param name="chargeBalanceTolerance"></param>
+        public FastDopedByteLatticeSource(IModelProject modelProject, IBuildingBlock baseBuildingBlock, double chargeBalanceTolerance = 1.0e-6)
         {
+            ChargeBalanceTolerance = chargeBalanceTolerance;
             ModelProject = modelProject ?? throw new ArgumentNullException(nameof(modelProject));
             DefaultBlock = baseBuildingBlock ?? throw new ArgumentNullException(nameof(baseBuildingBlock));
             UnitCellProvider = modelProject.GetManager<IStructureManager>().QueryPort.Query(x => x.GetFullUnitCellProvider());
             UnitCell = UnitCellProvider.GetUnitCell(0, 0, 0);
-            DopingApplicationSequence = MakeDopingApplicationSequence().ToArray();
+            DopingTargets = CreateDopingTargetList().ToArray();
+            BufferPool = ArrayPool<byte>.Create();
         }
 
         /// <inheritdoc />
-        public byte[,,,] BuildByteLattice(VectorI3 sizeVector, IDictionary<IDoping, double> dopingDictionary, Random rng)
+        public byte[,,,] CreateLattice(VectorI3 sizeVector, IDictionary<IDoping, double> dopingDictionary, Random rng)
         {
             var (a, b, c) = (sizeVector.A, sizeVector.B, sizeVector.C);
             var result = CreateEmptyLattice(a, b, c);
@@ -74,7 +82,7 @@ namespace Mocassin.Model.Lattices
         }
 
         /// <inheritdoc />
-        public void PopulateByteLattice(IDictionary<IDoping, double> dopingDictionary, Random rng, byte[,,,] target)
+        public void PopulateLattice(IDictionary<IDoping, double> dopingDictionary, Random rng, byte[,,,] target)
         {
             if (target.GetLength(3) != UnitCell.EntryCount)
                 throw new InvalidOperationException("Dimension 3 of provided array does not match the unit cell size.");
@@ -85,13 +93,13 @@ namespace Mocassin.Model.Lattices
         }
 
         /// <summary>
-        ///     Creates the doping application sequence that defines a set of position index wyckoff index tuples that define the
+        ///     Creates the doping application sequence that defines a set of position index and reference index pairs that define the
         ///     doping affected entries of the unit cell
         /// </summary>
         /// <returns></returns>
-        private List<(int PositionIndex, int WyckoffIndex)> MakeDopingApplicationSequence()
+        private List<(int PositionIndex, int ReferenceIndex)> CreateDopingTargetList()
         {
-            var result = new List<(int, int)>();
+            var result = new List<(int,int)>();
             for (var i = 0; i < UnitCell.EntryCount; i++)
             {
                 var wyckoff = UnitCell[i].Entry;
@@ -110,24 +118,21 @@ namespace Mocassin.Model.Lattices
         /// <param name="rng"></param>
         public void ApplyPopulationTableToLattice(byte[,,,] lattice, int[,] populationTable, Random rng)
         {
-            var (sizeA, sizeB, sizeC) = (lattice.GetLength(0), lattice.GetLength(1), lattice.GetLength(2));
+            var (sizeA, sizeB, sizeC, sizeD) = (lattice.GetLength(0), lattice.GetLength(1), lattice.GetLength(2), lattice.GetLength(3));
             var countTable = PopulationTableToPopulationCountSet(populationTable);
 
-            for (var a = 0; a < sizeA; a++)
+            var bufferSize = sizeA * sizeB * sizeC * sizeD;
+            var buffer = BufferPool.Rent(bufferSize);
+            for (var offset = 0; offset < bufferSize; offset += sizeD)
             {
-                for (var b = 0; b < sizeB; b++)
+                foreach (var (positionIndex, referenceIndex) in DopingTargets)
                 {
-                    for (var c = 0; c < sizeC; c++)
-                    {
-                        foreach (var (positionIndex, wyckoffIndex) in DopingApplicationSequence)
-                        {
-                            var particle = RollNextOccupationByte(populationTable, countTable, wyckoffIndex, rng);
-                            lattice[a, b, c, positionIndex] = particle;
-                        }
-                    }
+                    var particle = RollNextOccupationByte(populationTable, countTable, referenceIndex, rng);
+                    buffer[offset + positionIndex] = particle;
                 }
             }
-
+            Buffer.BlockCopy(buffer, 0, lattice, 0, bufferSize);
+            BufferPool.Return(buffer);
             if (countTable.Any(x => x != 0)) throw new InvalidOperationException("Count table is not zeroed out. Doping is invalid.");
         }
 
@@ -274,8 +279,7 @@ namespace Mocassin.Model.Lattices
             var rawPrimary = (int) (originalCount * doping.Value);
             return !doping.Key.UseCounterDoping
                 ? (rawPrimary, 0)
-                : FloorDopingPopulations(rawPrimary, doping.Key.PrimaryDoping.GetChargeDelta(), doping.Key.CounterDoping.GetChargeDelta(),
-                    ChargeBalanceTolerance);
+                : FloorDopingPopulations(rawPrimary, doping.Key.PrimaryDoping.GetChargeDelta(), doping.Key.CounterDoping.GetChargeDelta(), ChargeBalanceTolerance);
         }
 
         /// <summary>

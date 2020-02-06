@@ -14,6 +14,7 @@ namespace Mocassin.Model.Translator
         /// <summary>
         ///     Get the wrapped <see cref="Array"/>
         /// </summary>
+        [NotMapped]
         public Array InternalArray { get; private set; }
 
         /// <summary>

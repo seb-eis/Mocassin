@@ -27,21 +27,21 @@ namespace Mocassin.Model.Lattices
         }
 
 
-	    /// <summary>
-	    /// Get provider for generating a lattice with the model data
-	    /// </summary>
-	    /// <returns></returns>
-	    public IDopedLatticeSource GetLatticeCreationProvider()
+        /// <inheritdoc />
+        public IDopedByteLatticeSource GetDefaultByteLatticeSource()
 	    {
-		    return GetResultFromCache(CreateLatticeProvider);
+		    return GetResultFromCache(CreateDefaultLatticeSource);
 	    }
 
+        /// <summary>
+        ///     Creates the default thread safe <see cref="IDopedByteLatticeSource"/>
+        /// </summary>
+        /// <returns></returns>
 		[CacheMethodResult]
-	    protected IDopedLatticeSource CreateLatticeProvider()
+	    protected IDopedByteLatticeSource CreateDefaultLatticeSource()
 	    {
-			//return new LatticeCreationProvider(ModelProject);
             var baseBlock = ModelProject.GetManager<ILatticeManager>().QueryPort.Query(x => x.GetBuildingBlocks().First());
-            return new DopedLatticeSource(ModelProject, baseBlock);
+            return new FastDopedByteLatticeSource(ModelProject, baseBlock);
 	    }
 
     }
