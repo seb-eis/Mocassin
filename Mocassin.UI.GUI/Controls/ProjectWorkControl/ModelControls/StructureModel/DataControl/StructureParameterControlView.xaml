@@ -170,12 +170,11 @@
           </DataGrid.RowHeaderTemplate>
 
           <DataGrid.Columns>
-            <DataGridTextColumn Binding="{Binding Index, Mode=OneTime}" Header="Group Number" />
-            <DataGridTextColumn Binding="{Binding Literal, Mode=OneTime}" Header="Name" />
-            <DataGridTextColumn Binding="{Binding Specifier, Mode=OneTime}" Header="Info" />
-            <DataGridTextColumn
-              Binding="{Binding CrystalSystemIndex, Mode=OneTime, Converter={converter:Int32ToEnumConverter}, ConverterParameter={x:Type crystalSystems:CrystalSystemId}}"
-              Header="Crystal System" />
+            <DataGridTextColumn Binding="{Binding InternationalIndex, Mode=OneTime}" Header="Group Number" />
+            <DataGridTextColumn Binding="{Binding MauguinNotation, Mode=OneTime}" Header="Mauguin" />
+            <DataGridTextColumn Binding="{Binding CrystalType, Mode=OneTime}" Header="Crystal Type" />
+            <DataGridTextColumn Binding="{Binding VariationName, Mode=OneTime}" Header="Variation Name" />
+            <DataGridTextColumn Binding="{Binding CrystalVariation, Mode=OneTime}" Header="Variation Type" />
 
           </DataGrid.Columns>
         </DataGrid>
@@ -194,14 +193,14 @@
               <DataGridTextColumn.HeaderTemplate>
                 <DataTemplate>
                   <TextBlock DataContext="{Binding ElementName=SpaceGroupDataGrid, Path=DataContext.SelectedSpaceGroup}">
-                    <Run Text="{Binding Index, Mode=OneTime, StringFormat={}#{0}}"/>
+                    <Run Text="{Binding InternationalIndex, Mode=OneTime, StringFormat={}#{0}}"/>
                     <Run Text="&#x2794;" />
-                    <Run Text="{Binding Literal, Mode=OneTime}" />
+                    <Run Text="{Binding MauguinNotation, Mode=OneTime}" />
                     <Run Text="&#x2794;" />
                     <Run
-                      Text="{Binding CrystalSystemIndex, Mode=OneTime, Converter={converter:Int32ToEnumConverter}, ConverterParameter={x:Type crystalSystems:CrystalSystemId}}" />
+                      Text="{Binding CrystalType, Mode=OneTime, Converter={converter:Int32ToEnumConverter}, ConverterParameter={x:Type crystalSystems:CrystalSystemType}}" />
                     <Run Text="&#x2794;" />
-                    <Run Text="{Binding Specifier, Mode=OneTime}" />
+                    <Run Text="{Binding VariationName, Mode=OneTime}" />
                     <Run Text="&#x2794;" />
                     <Run Text="{Binding Operations.Count, Mode=OneTime, StringFormat={}#Op. {0}}" />
                   </TextBlock>

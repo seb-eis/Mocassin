@@ -3,11 +3,18 @@
 namespace Mocassin.Model.Basic
 {
     /// <summary>
-    ///     Enum that is used to specify the type of validation performed
+    ///     Enum that is used to specify the type of validation that is performed
     /// </summary>
     public enum ValidationType
     {
+        /// <summary>
+        ///     The validation handles an indexed model object
+        /// </summary>
         Object,
+
+        /// <summary>
+        ///     The validation handles a unique model parameter
+        /// </summary>
         Parameter
     }
 

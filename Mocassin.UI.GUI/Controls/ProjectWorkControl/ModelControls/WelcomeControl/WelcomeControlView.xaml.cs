@@ -7,6 +7,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.WelcomeContr
     /// </summary>
     public partial class WelcomeControlView : UserControl
     {
+        /// <inheritdoc />
         public WelcomeControlView()
         {
             InitializeComponent();

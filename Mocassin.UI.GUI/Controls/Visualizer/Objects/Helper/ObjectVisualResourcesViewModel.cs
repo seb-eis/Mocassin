@@ -128,7 +128,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
             return category switch
             {
                 VisualObjectCategory.Unknown => (Colors.Gray, 1.0, 1.0),
-                VisualObjectCategory.Frame => (Colors.Black, 1.0, 0),
+                VisualObjectCategory.LineGrid => (Colors.Black, 1.0, 0),
                 VisualObjectCategory.Sphere => (Colors.Gray, .5, .5),
                 VisualObjectCategory.DoubleArrow => (Colors.Gray, .2, .5),
                 VisualObjectCategory.Line => (Colors.Transparent, 2.0, 0),

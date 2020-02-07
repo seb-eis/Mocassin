@@ -8,33 +8,6 @@ using Mocassin.Mathematics.ValueTypes;
 namespace Mocassin.Symmetry.CrystalSystems
 {
     /// <summary>
-    ///     Enum that identifies specific variations of crystal systems e.g. hexagonal axes for trigonal type
-    /// </summary>
-    public enum CrystalVariation : byte
-    {
-        None = 0,
-        UniqueAxisA = 1,
-        UniqueAxisB = 2,
-        UniqueAxisC = 3,
-        HexagonalAxes = 4,
-        RhombohedralAxes = 5
-    }
-
-    /// <summary>
-    ///     Enum to identify the 7 crystal systems by increasing symmetry
-    /// </summary>
-    public enum CrystalSystemId : byte
-    {
-        Triclinic = 0,
-        Monoclinic = 1,
-        Orthorhombic = 2,
-        Tetragonal = 3,
-        Trigonal = 4,
-        Hexagonal = 5,
-        Cubic = 6
-    }
-
-    /// <summary>
     ///     Abstract crystal system class that defines and handles validations and coordinate system creation of the crystal
     ///     systems
     /// </summary>
@@ -43,12 +16,12 @@ namespace Mocassin.Symmetry.CrystalSystems
         /// <summary>
         ///     Identifies the specific variation of the system (Majority of systems does not have a specific variation)
         /// </summary>
-        public CrystalVariation Variation { get; internal set; }
+        public CrystalSystemVariation SystemVariation { get; internal set; }
 
         /// <summary>
         ///     The crystal system ID (0 to 6)
         /// </summary>
-        public CrystalSystemId SystemId { get; internal set; }
+        public CrystalSystemType SystemType { get; internal set; }
 
         /// <summary>
         ///     The crystal system literal name
@@ -61,67 +34,66 @@ namespace Mocassin.Symmetry.CrystalSystems
         public bool IsReady { get; internal set; }
 
         /// <summary>
-        ///     The constraint for the crystal parameters
+        ///     The <see cref="NumericConstraint"/> for the crystal parameters
         /// </summary>
         public NumericConstraint ParameterConstraint { get; internal set; }
 
         /// <summary>
-        ///     The basic double constraint for vector lengths, vector entries, calculations and other not further specified
-        ///     potentially constraint double values in the crystal system
+        ///     The basic <see cref="NumericConstraint"/> for vector lengths, vector entries and calculations
         /// </summary>
         public NumericConstraint BasicConstraint { get; internal set; }
 
         /// <summary>
-        ///     Constraint for the angle alpha
+        ///     The <see cref="NumericConstraint"/> for the angle alpha
         /// </summary>
         public NumericConstraint AlphaConstraint { get; internal set; }
 
         /// <summary>
-        ///     Constraint for the angle beta
+        ///     The <see cref="NumericConstraint"/> for the angle beta
         /// </summary>
         public NumericConstraint BetaConstraint { get; internal set; }
 
         /// <summary>
-        ///     Constraint for the angle gamma
+        ///     The <see cref="NumericConstraint"/> for the angle gamma
         /// </summary>
         public NumericConstraint GammaConstraint { get; internal set; }
 
         /// <summary>
-        ///     Lattice parameter in A direction (Value and flag if value is fixed by crystal system)
+        ///     The <see cref="CrystalParameter"/> for the A direction
         /// </summary>
-        public (double Value, bool Fixed) ParamA { get; internal set; }
+        public CrystalParameter ParamA { get; internal set; }
 
         /// <summary>
-        ///     Lattice parameter in B direction (Value and flag if value is fixed by crystal system)
+        ///     The <see cref="CrystalParameter"/> for the B direction
         /// </summary>
-        public (double Value, bool Fixed) ParamB { get; internal set; }
+        public CrystalParameter ParamB { get; internal set; }
 
         /// <summary>
-        ///     Lattice parameter in C direction (Value and flag if value is fixed by crystal system)
+        ///     The <see cref="CrystalParameter"/> for the C direction
         /// </summary>
-        public (double Value, bool Fixed) ParamC { get; internal set; }
+        public CrystalParameter ParamC { get; internal set; }
 
         /// <summary>
-        ///     Lattice angle alpha in radian (Value and flag if value is fixed by crystal system)
+        ///     The <see cref="CrystalParameter"/> for the Alpha angle in radian
         /// </summary>
-        public (double Value, bool Fixed) Alpha { get; internal set; }
+        public CrystalParameter Alpha { get; internal set; }
 
         /// <summary>
-        ///     Lattice angle beta in radian (Value and flag if value is fixed by crystal system)
+        ///     The <see cref="CrystalParameter"/> for the Beta angle in radian
         /// </summary>
-        public (double Value, bool Fixed) Beta { get; internal set; }
+        public CrystalParameter Beta { get; internal set; }
 
         /// <summary>
-        ///     Lattice angle gamma in radian (Value and flag if value is fixed by crystal system)
+        ///     The <see cref="CrystalParameter"/> for the Gamma angle in radian
         /// </summary>
-        public (double Value, bool Fixed) Gamma { get; internal set; }
+        public CrystalParameter Gamma { get; internal set; }
 
         /// <summary>
         ///     Sets the parameters if they pass the constraints of the system, else returns false
         /// </summary>
         /// <param name="paramSet"></param>
         /// <returns></returns>
-        public bool TrySetParameters(CrystalParameterSet paramSet)
+        public bool TrySetParameterValues(CrystalParameterSet paramSet)
         {
             ApplyParameterDependencies(paramSet);
             if (!ValidateAngleConditions(paramSet.Alpha, paramSet.Beta, paramSet.Gamma))
@@ -130,27 +102,27 @@ namespace Mocassin.Symmetry.CrystalSystems
             if (!ValidateParameterConstraintCondition(paramSet.ParamA, paramSet.ParamB, paramSet.ParamC))
                 return false;
 
-            SetParameters(paramSet);
+            SetParameterValues(paramSet);
             return true;
         }
 
         /// <summary>
-        ///     Sets the parameters and angles from a parameter set without checking the validity
+        ///     Sets the parameters and angles from a <see cref="CrystalParameterSet"/> without checking the validity
         /// </summary>
         /// <param name="paramSet"></param>
-        protected void SetParameters(CrystalParameterSet paramSet)
+        protected void SetParameterValues(CrystalParameterSet paramSet)
         {
-            ParamA = (paramSet.ParamA, ParamA.Fixed);
-            ParamB = (paramSet.ParamB, ParamB.Fixed);
-            ParamC = (paramSet.ParamC, ParamC.Fixed);
-            Alpha = (paramSet.Alpha, Alpha.Fixed);
-            Beta = (paramSet.Beta, Beta.Fixed);
-            Gamma = (paramSet.Gamma, Gamma.Fixed);
+            ParamA = ParamA.ChangeValue(paramSet.ParamA);
+            ParamB = ParamB.ChangeValue(paramSet.ParamB);
+            ParamC = ParamC.ChangeValue(paramSet.ParamC);
+            Alpha = Alpha.ChangeValue(paramSet.Alpha);
+            Beta = Beta.ChangeValue(paramSet.Beta);
+            Gamma = Gamma.ChangeValue(paramSet.Gamma);
             IsReady = true;
         }
 
         /// <summary>
-        ///     Creates a fractional coordinate system from the crytsal system parameters
+        ///     Creates a fractional coordinate system from the crystal system parameters
         /// </summary>
         /// <returns></returns>
         public FractionalCoordinateSystem3D CreateCoordinateSystem()

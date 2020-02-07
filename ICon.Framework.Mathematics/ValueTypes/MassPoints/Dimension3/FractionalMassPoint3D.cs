@@ -10,6 +10,7 @@
         /// </summary>
         public double Mass { get; }
 
+        /// <inheritdoc />
         public Fractional3D Vector { get; }
 
         /// <inheritdoc />

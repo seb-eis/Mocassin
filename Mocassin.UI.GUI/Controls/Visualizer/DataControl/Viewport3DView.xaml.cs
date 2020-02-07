@@ -17,11 +17,13 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         /// </summary>
         private static PropertyInfo DefaultColorPropertyInfo { get; }
 
+        /// <inheritdoc />
         static Viewport3DView()
         {
             DefaultColorPropertyInfo = typeof(Colors).GetProperties().First(x => x.Name == "Transparent");
         }
 
+        /// <inheritdoc />
         public Viewport3DView()
         {
             InitializeComponent();

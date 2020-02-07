@@ -8,6 +8,7 @@ namespace Mocassin.UI.GUI
     /// </summary>
     public partial class StartupWindow : Window, IDisposable
     {
+        /// <inheritdoc />
         public StartupWindow()
         {
             InitializeComponent();

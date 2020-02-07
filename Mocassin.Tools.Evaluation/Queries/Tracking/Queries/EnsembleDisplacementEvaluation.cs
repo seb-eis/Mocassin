@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using Mocassin.Mathematics.Comparers;
+using Mocassin.Mathematics.Comparer;
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Particles;
 using Mocassin.Tools.Evaluation.Context;

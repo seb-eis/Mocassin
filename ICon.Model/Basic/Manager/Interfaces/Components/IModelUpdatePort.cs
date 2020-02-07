@@ -20,7 +20,6 @@
         /// <summary>
         ///     Disconnects from event port if this specific port exists
         /// </summary>
-        /// <typeparam name="T1"></typeparam>
         /// <param name="eventPort"></param>
         void Disconnect(IModelEventPort eventPort);
     }

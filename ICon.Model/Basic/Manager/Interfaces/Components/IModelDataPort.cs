@@ -18,6 +18,7 @@ namespace Mocassin.Model.Basic
         ///     Serialize the data as a data contract with the specified settings to the provided stream
         /// </summary>
         /// <param name="stream"></param>
+        /// <param name="settings"></param>
         void WriteDataContract(Stream stream, DataContractSerializerSettings settings);
 
         /// <summary>

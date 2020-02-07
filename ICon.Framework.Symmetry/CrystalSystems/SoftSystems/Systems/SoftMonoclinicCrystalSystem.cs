@@ -13,19 +13,19 @@ namespace Mocassin.Symmetry.CrystalSystems
         /// <inheritdoc />
         public override void ApplyParameterDependencies(CrystalParameterSet paramSet)
         {
-            switch (Variation)
+            switch (SystemVariation)
             {
-                case CrystalVariation.UniqueAxisA:
+                case CrystalSystemVariation.UniqueAxisA:
                     paramSet.Beta = Beta.Value;
                     paramSet.Gamma = Gamma.Value;
                     return;
 
-                case CrystalVariation.UniqueAxisB:
+                case CrystalSystemVariation.UniqueAxisB:
                     paramSet.Alpha = Alpha.Value;
                     paramSet.Gamma = Gamma.Value;
                     return;
 
-                case CrystalVariation.UniqueAxisC:
+                case CrystalSystemVariation.UniqueAxisC:
                     paramSet.Alpha = Alpha.Value;
                     paramSet.Beta = Beta.Value;
                     return;
@@ -38,15 +38,15 @@ namespace Mocassin.Symmetry.CrystalSystems
         /// <inheritdoc />
         public override bool ValidateSoftAngleCondition(double alpha, double beta, double gamma)
         {
-            switch (Variation)
+            switch (SystemVariation)
             {
-                case CrystalVariation.UniqueAxisA:
+                case CrystalSystemVariation.UniqueAxisA:
                     return MocassinMath.Radian90.CountMatches(BasicConstraint.Comparer, beta, gamma) == 2;
 
-                case CrystalVariation.UniqueAxisB:
+                case CrystalSystemVariation.UniqueAxisB:
                     return MocassinMath.Radian90.CountMatches(BasicConstraint.Comparer, alpha, gamma) == 2;
 
-                case CrystalVariation.UniqueAxisC:
+                case CrystalSystemVariation.UniqueAxisC:
                     return MocassinMath.Radian90.CountMatches(BasicConstraint.Comparer, alpha, beta) == 2;
 
                 default:

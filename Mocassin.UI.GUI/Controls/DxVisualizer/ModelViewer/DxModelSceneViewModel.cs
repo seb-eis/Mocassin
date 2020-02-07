@@ -11,7 +11,7 @@ using HelixToolkit.Wpf.SharpDX.Model;
 using HelixToolkit.Wpf.SharpDX.Model.Scene;
 using Mocassin.Framework.Collections;
 using Mocassin.Framework.Extensions;
-using Mocassin.Mathematics.Comparers;
+using Mocassin.Mathematics.Comparer;
 using Mocassin.Mathematics.Coordinates;
 using Mocassin.Mathematics.Extensions;
 using Mocassin.Mathematics.ValueTypes;
@@ -434,7 +434,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         {
             return dataObject switch
             {
-                StructureInfoData _ => VisualObjectCategory.Frame,
+                StructureInfoData _ => VisualObjectCategory.LineGrid,
                 KineticTransitionData _ => VisualObjectCategory.DoubleArrow,
                 CellReferencePositionData _ => VisualObjectCategory.Sphere,
                 PairEnergySetData _ => VisualObjectCategory.Cylinder,

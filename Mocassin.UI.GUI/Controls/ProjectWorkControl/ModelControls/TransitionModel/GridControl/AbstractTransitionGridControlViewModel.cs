@@ -5,6 +5,9 @@ using Mocassin.UI.Xml.TransitionModel;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionModel.GridControl
 {
+    /// <summary>
+    ///     A <see cref="CollectionControlViewModel{T}"/> implementation for <see cref="AbstractTransitionData"/>
+    /// </summary>
     public class AbstractTransitionGridControlViewModel : CollectionControlViewModel<AbstractTransitionData>,
         IContentSupplier<MocassinProject>
     {

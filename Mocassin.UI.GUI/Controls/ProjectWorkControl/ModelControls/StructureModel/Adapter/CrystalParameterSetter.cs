@@ -25,32 +25,32 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureMod
         /// <summary>
         ///     Get a boolean flag if <see cref="Alpha" /> is read only
         /// </summary>
-        public bool IsReadOnlyAlpha => CrystalSystem.Alpha.Fixed;
+        public bool IsReadOnlyAlpha => CrystalSystem.Alpha.IsContextImmutable;
 
         /// <summary>
         ///     Get a boolean flag if <see cref="Beta" /> is read only
         /// </summary>
-        public bool IsReadOnlyBeta => CrystalSystem.Beta.Fixed;
+        public bool IsReadOnlyBeta => CrystalSystem.Beta.IsContextImmutable;
 
         /// <summary>
         ///     Get a boolean flag if <see cref="Gamma" /> is read only
         /// </summary>
-        public bool IsReadOnlyGamma => CrystalSystem.Gamma.Fixed;
+        public bool IsReadOnlyGamma => CrystalSystem.Gamma.IsContextImmutable;
 
         /// <summary>
         ///     Get a boolean flag if <see cref="ParamA" /> is read only
         /// </summary>
-        public bool IsReadOnlyParamA => CrystalSystem.ParamA.Fixed;
+        public bool IsReadOnlyParamA => CrystalSystem.ParamA.IsContextImmutable;
 
         /// <summary>
         ///     Get a boolean flag if <see cref="ParamB" /> is read only
         /// </summary>
-        public bool IsReadOnlyParamB => CrystalSystem.ParamB.Fixed;
+        public bool IsReadOnlyParamB => CrystalSystem.ParamB.IsContextImmutable;
 
         /// <summary>
         ///     Get a boolean flag if <see cref="ParamC" /> is read only
         /// </summary>
-        public bool IsReadOnlyParamC => CrystalSystem.ParamC.Fixed;
+        public bool IsReadOnlyParamC => CrystalSystem.ParamC.IsContextImmutable;
 
 
         /// <summary>
@@ -159,7 +159,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureMod
         /// <summary>
         ///     Corrects the current <see cref="CellParametersData" /> using the internal constraints
         /// </summary>
-        private void CorrectParameterGraph()
+        private void CorrectParameterData()
         {
             var correctedSet = GetCorrectedParameterSet(ParametersData.GetParameterSet());
             ParametersData.PopulateFrom(correctedSet);
@@ -181,7 +181,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureMod
         /// </summary>
         private void OnParameterChanged()
         {
-            CorrectParameterGraph();
+            CorrectParameterData();
             OnPropertyChanged(nameof(ParamA));
             OnPropertyChanged(nameof(ParamB));
             OnPropertyChanged(nameof(ParamC));

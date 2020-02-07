@@ -9,7 +9,7 @@ namespace Mocassin.Framework.Xml
     /// <summary>
     ///     Static class that contains methods for using <see cref="DataContractSerializer" /> in a convenient way
     /// </summary>
-    public static class DataContractConverter
+    public static class DataContractConvert
     {
         /// <summary>
         ///     Serializes the passed <see cref="object" /> using the <see cref="DataContractSerializer" /> and provided
@@ -21,13 +21,11 @@ namespace Mocassin.Framework.Xml
         /// <returns></returns>
         public static string Serialize(object obj, Encoding encoding, DataContractSerializer serializer)
         {
-            encoding = encoding ?? Encoding.UTF8;
-            using (var memoryStream = new MemoryStream())
-            {
-                serializer = serializer ?? new DataContractSerializer(obj.GetType());
-                serializer.WriteObject(memoryStream, obj);
-                return encoding.GetString(memoryStream.ToArray());
-            }
+            encoding ??= Encoding.UTF8;
+            using var memoryStream = new MemoryStream();
+            serializer ??= new DataContractSerializer(obj.GetType());
+            serializer.WriteObject(memoryStream, obj);
+            return encoding.GetString(memoryStream.ToArray());
         }
 
         /// <summary>
@@ -46,7 +44,7 @@ namespace Mocassin.Framework.Xml
         }
 
         /// <summary>
-        ///     Deserializes an object of type <see cref="T" /> using the <see cref="DataContractSerializer" /> and provided
+        ///     Deserializes an object using the <see cref="DataContractSerializer" /> and provided
         ///     <see cref="Encoding" /> from a string, null defaults to UTF8 and default serializer
         /// </summary>
         /// <param name="xml"></param>
@@ -55,17 +53,15 @@ namespace Mocassin.Framework.Xml
         /// <returns></returns>
         public static T Deserialize<T>(string xml, Encoding encoding, DataContractSerializer serializer)
         {
-            encoding = encoding ?? Encoding.UTF8;
-            using (var memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(xml)))
-            {
-                var reader = XmlDictionaryReader.CreateTextReader(memoryStream, encoding, new XmlDictionaryReaderQuotas(), null);
-                serializer = serializer ?? new DataContractSerializer(typeof(T));
-                return (T) serializer.ReadObject(reader);
-            }
+            encoding ??= Encoding.UTF8;
+            using var memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(xml));
+            var reader = XmlDictionaryReader.CreateTextReader(memoryStream, encoding, new XmlDictionaryReaderQuotas(), null);
+            serializer ??= new DataContractSerializer(typeof(T));
+            return (T) serializer.ReadObject(reader);
         }
 
         /// <summary>
-        ///     Deserializes an object of type <see cref="T" /> using the <see cref="DataContractSerializer" /> and provided
+        ///     Deserializes an object using the <see cref="DataContractSerializer" /> and provided
         ///     <see cref="Encoding" /> from a file path, null defaults to UTF8 and default serializer
         /// </summary>
         /// <param name="filePath"></param>

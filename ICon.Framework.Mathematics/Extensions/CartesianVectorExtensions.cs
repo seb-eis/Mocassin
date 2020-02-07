@@ -48,7 +48,6 @@ namespace Mocassin.Mathematics.Extensions
         /// <summary>
         ///     Fixes all almost zeros to zero utilizing the provided double comparer
         /// </summary>
-        /// <typeparam name="T1"></typeparam>
         /// <param name="vector"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>

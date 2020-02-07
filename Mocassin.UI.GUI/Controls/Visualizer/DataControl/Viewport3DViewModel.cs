@@ -569,7 +569,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         /// <summary>
         ///     Get a set of <see cref="Transform3D" /> to the passed target <see cref="Point3D" /> from the origin (0,0,0)
         /// </summary>
-        /// <param name="target"></param>
+        /// <param name="targets"></param>
         /// <param name="freeze"></param>
         /// <returns></returns>
         public IList<Transform3D> GetOriginOffsetTransforms(IList<Point3D> targets, bool freeze = true)

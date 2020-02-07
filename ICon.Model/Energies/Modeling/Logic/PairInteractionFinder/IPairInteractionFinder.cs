@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Mocassin.Mathematics.Comparers;
+using Mocassin.Mathematics.Comparer;
 using Mocassin.Model.Structures;
 using Mocassin.Symmetry.Analysis;
 using Mocassin.Symmetry.SpaceGroups;

@@ -21,6 +21,10 @@ namespace Mocassin.Framework.Async
         /// <inheritdoc />
         public bool IsCompleted => CheckStatus();
 
+        /// <summary>
+        ///     Creates a new <see cref="ObservableAwaiter"/> using the provided <see cref="Func{TResult}"/> completion check
+        /// </summary>
+        /// <param name="checkStatus"></param>
         protected ObservableAwaiter(Func<bool> checkStatus)
         {
             CheckStatus = checkStatus;

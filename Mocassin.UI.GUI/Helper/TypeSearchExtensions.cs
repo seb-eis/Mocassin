@@ -10,8 +10,7 @@ namespace Mocassin.UI.GUI.Helper
     public static class TypeSearchExtensions
     {
         /// <summary>
-        ///     Searches a set of <see cref="Type" /> for attributes of type <see cref="TAttribute" /> and retruns the affiliated
-        ///     <see cref="KeyValuePair{TKey,TValue}" /> set
+        ///     Searches a set of <see cref="Type" /> for attributed types and returns the affiliated <see cref="KeyValuePair{TKey,TValue}" /> set
         /// </summary>
         /// <typeparam name="TAttribute"></typeparam>
         /// <param name="types"></param>
@@ -21,14 +20,13 @@ namespace Mocassin.UI.GUI.Helper
         {
             foreach (var type in types)
             {
-                if (type.GetCustomAttribute<TAttribute>() is TAttribute attribute)
+                if (type.GetCustomAttribute<TAttribute>() is { } attribute)
                     yield return new KeyValuePair<Type, TAttribute>(type, attribute);
             }
         }
 
         /// <summary>
-        ///     Searches a set of <see cref="Type" /> for attributes of type <see cref="TAttribute" /> and returns the affiliated
-        ///     <see cref="KeyValuePair{TKey,TValue}" /> set
+        ///     Searches an <see cref="Assembly" /> for attributed types and returns the affiliated <see cref="KeyValuePair{TKey,TValue}" /> set
         /// </summary>
         /// <typeparam name="TAttribute"></typeparam>
         /// <param name="assembly"></param>
@@ -43,7 +41,8 @@ namespace Mocassin.UI.GUI.Helper
         }
 
         /// <summary>
-        ///     Searches an assembly for <see cref="Type" /> with <see cref="TAttribute" />, creates instances and returns the set
+        ///     Searches an assembly for <see cref="Type" /> for <see cref="Attribute" /> marked instances, creates instances and
+        ///     returns the set
         ///     of <see cref="KeyValuePair{TKey,TValue}" /> of instances and attributes
         /// </summary>
         /// <typeparam name="TObj"></typeparam>

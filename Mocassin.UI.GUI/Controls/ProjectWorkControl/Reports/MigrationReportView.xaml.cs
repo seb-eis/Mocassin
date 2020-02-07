@@ -7,6 +7,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.Reports
     /// </summary>
     public partial class MigrationReportView : UserControl
     {
+        /// <inheritdoc />
         public MigrationReportView()
         {
             InitializeComponent();

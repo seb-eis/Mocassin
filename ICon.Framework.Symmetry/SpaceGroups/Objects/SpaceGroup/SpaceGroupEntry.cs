@@ -61,7 +61,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// </summary>
         /// <param name="group"></param>
         public SpaceGroupEntry(ISpaceGroup group)
-            : this(group.Index, group.Literal, group.Specifier)
+            : this(group.InternationalIndex, group.MauguinNotation, group.VariationName)
         {
             if (group == null)
                 throw new ArgumentNullException(nameof(group));

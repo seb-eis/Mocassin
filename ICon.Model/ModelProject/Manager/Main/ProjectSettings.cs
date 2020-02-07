@@ -188,7 +188,7 @@ namespace Mocassin.Model.ModelProject
         /// <param name="additionalAssemblies"></param>
         public string Serialize(IEnumerable<Assembly> additionalAssemblies = null)
         {
-            return DataContractConverter.Serialize(this, null, GetDefaultSerializer(additionalAssemblies));
+            return DataContractConvert.Serialize(this, null, GetDefaultSerializer(additionalAssemblies));
         }
 
         /// <summary>
@@ -199,7 +199,7 @@ namespace Mocassin.Model.ModelProject
         /// <param name="additionalAssemblies"></param>
         public void Serialize(string filePath, IEnumerable<Assembly> additionalAssemblies = null)
         {
-            DataContractConverter.Serialize(this, filePath, null, GetDefaultSerializer(additionalAssemblies));
+            DataContractConvert.Serialize(this, filePath, null, GetDefaultSerializer(additionalAssemblies));
         }
 
         /// <summary>
@@ -212,7 +212,7 @@ namespace Mocassin.Model.ModelProject
         /// <returns></returns>
         public static ProjectSettings Deserialize(string filePath, IEnumerable<Assembly> additionalAssemblies = null)
         {
-            return DataContractConverter.DeserializeFromFile<ProjectSettings>(filePath, null, GetDefaultSerializer(additionalAssemblies));
+            return DataContractConvert.DeserializeFromFile<ProjectSettings>(filePath, null, GetDefaultSerializer(additionalAssemblies));
         }
 
         /// <summary>

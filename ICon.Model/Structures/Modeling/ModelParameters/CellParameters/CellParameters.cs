@@ -1,4 +1,4 @@
-﻿using Mocassin.Mathematics.Comparers;
+﻿using Mocassin.Mathematics.Comparer;
 using Mocassin.Mathematics.Extensions;
 using Mocassin.Model.Basic;
 using Mocassin.Symmetry.CrystalSystems;

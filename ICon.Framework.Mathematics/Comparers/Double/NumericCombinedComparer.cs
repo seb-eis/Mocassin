@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Mocassin.Mathematics.Comparers
+namespace Mocassin.Mathematics.Comparer
 {
     /// <summary>
     ///     A <see cref="NumericComparer"/> that is build from one zero safe comparer and a main comparer

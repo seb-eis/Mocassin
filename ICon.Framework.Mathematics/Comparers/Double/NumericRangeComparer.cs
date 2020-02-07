@@ -1,7 +1,7 @@
 ﻿using System;
 using Mocassin.Mathematics.Extensions;
 
-namespace Mocassin.Mathematics.Comparers
+namespace Mocassin.Mathematics.Comparer
 {
     /// <summary>
     ///     Double range comparer class that performs almost equal comparisons with an absolut range tolerance

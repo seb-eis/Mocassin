@@ -7,33 +7,29 @@ using System.Xml.Serialization;
 namespace Mocassin.Framework.Xml
 {
     /// <summary>
-    ///     Abstract base class for implementations of the XmlStreamService
+    ///     Abstract base class for implementations Xml stream services
     /// </summary>
     public abstract class XmlStreamService
     {
         /// <summary>
-        ///     Creates a new default XmlReader from the provided stream
+        ///     Creates a new default <see cref="XmlReader" /> from the provided stream
         /// </summary>
         /// <param name="stream"></param>
         /// <returns></returns>
-        public virtual XmlReader NewDefaultReader(Stream stream)
+        public virtual XmlReader CreateDefaultReader(Stream stream)
         {
-            if (stream == null)
-                throw new ArgumentNullException(nameof(stream));
-
+            if (stream == null) throw new ArgumentNullException(nameof(stream));
             return XmlReader.Create(stream, GetDefaultReaderSettings());
         }
 
         /// <summary>
-        ///     Creates a new default XmlWrite from the provided file stream
+        ///     Creates a new default <see cref="XmlWriter" /> from the provided file stream
         /// </summary>
         /// <param name="stream"></param>
         /// <returns></returns>
-        public virtual XmlWriter NewDefaultWriter(Stream stream)
+        public virtual XmlWriter CreateDefaultWriter(Stream stream)
         {
-            if (stream == null)
-                throw new ArgumentNullException(nameof(stream));
-
+            if (stream == null) throw new ArgumentNullException(nameof(stream));
             return XmlWriter.Create(stream, GetDefaultWriterSettings());
         }
 
@@ -177,13 +173,15 @@ namespace Mocassin.Framework.Xml
                 Console.WriteLine(exception);
                 return null;
             }
+
             return encoding.GetString(stream.ToArray());
         }
 
         /// <summary>
-        /// Deserializes an xml representation into an object of the specified type without further formatting options
+        ///     Deserializes an xml representation into an object of the specified type without further formatting options
         /// </summary>
         /// <param name="xml"></param>
+        /// <param name="type"></param>
         /// <param name="eventHandlers"></param>
         /// <returns></returns>
         public static object Deserialize(string xml, Type type, XmlEventHandlers eventHandlers = null)
@@ -218,7 +216,7 @@ namespace Mocassin.Framework.Xml
         /// <returns></returns>
         public bool TrySerialize(Stream stream, T1 obj, out Exception exception)
         {
-            using (var writer = NewDefaultWriter(stream))
+            using (var writer = CreateDefaultWriter(stream))
             {
                 try
                 {
@@ -257,10 +255,8 @@ namespace Mocassin.Framework.Xml
         /// <returns></returns>
         public bool TrySerialize(string filepath, T1 obj, out Exception exception)
         {
-            using (var stream = new FileStream(filepath, FileMode.Create))
-            {
-                return TrySerialize(stream, obj, out exception);
-            }
+            using var stream = new FileStream(filepath, FileMode.Create);
+            return TrySerialize(stream, obj, out exception);
         }
 
         /// <summary>
@@ -275,12 +271,12 @@ namespace Mocassin.Framework.Xml
         public bool TryDeserialize(FileStream stream, XmlEventHandlers handlers, out T1 obj, out Exception exception)
         {
             exception = default;
-            using var reader = NewDefaultReader(stream);
+            using var reader = CreateDefaultReader(stream);
             try
             {
                 var serializer = GetSerializer(typeof(T1), handlers);
                 var result = serializer.Deserialize(reader);
-                obj = (T1)result;
+                obj = (T1) result;
                 return true;
             }
             catch (Exception e)

@@ -42,6 +42,7 @@ namespace Mocassin.Framework.Operations
         /// <inheritdoc />
         public IConflictReport ConflictReport { get; set; }
 
+        /// <inheritdoc />
         public DateTime TimeStamp { get; }
 
         /// <summary>

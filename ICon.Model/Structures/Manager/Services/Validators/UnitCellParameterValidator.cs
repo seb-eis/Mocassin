@@ -34,7 +34,7 @@ namespace Mocassin.Model.Structures.Validators
         /// <param name="report"></param>
         private void AddCrystalSystemCompatibilityValidation(ICellParameters parameters, ValidationReport report)
         {
-            var crystalSystem = ModelProject.CrystalSystemService.CrystalSystem;
+            var crystalSystem = ModelProject.CrystalSystemService.ActiveCrystalSystem;
             if (!crystalSystem.ValidateAngleConditions(parameters.Alpha, parameters.Beta, parameters.Gamma))
             {
                 var message = new WarningMessage(this, "Cell angle validation failure");

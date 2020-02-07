@@ -58,7 +58,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
             using var validator = new ModelValidatorViewModel(project.ProjectModelData, ProjectControl);
             var status = validator.TryCreateCustomization(out var customization);
 
-            if (status != ModelValidationStatus.NoErrorsDetected)
+            if (status != ModelValidationStatus.NoErrors)
             {
                 ShowErrorMessageBox(status);
                 return;

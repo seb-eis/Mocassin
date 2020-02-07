@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Runtime.InteropServices.ComTypes;
 using Mocassin.Framework.Extensions;
-using Mocassin.Mathematics.Comparers;
+using Mocassin.Mathematics.Comparer;
 using Mocassin.Mathematics.Constraints;
 using Mocassin.Mathematics.Permutation;
 using Mocassin.Model.Particles;

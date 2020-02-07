@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Mocassin.Framework.Extensions;
-using Mocassin.Mathematics.Comparers;
+using Mocassin.Mathematics.Comparer;
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.UI.Xml.Base;
 using Mocassin.UI.Xml.Customization;

@@ -1,5 +1,5 @@
 ﻿using System;
-using Mocassin.Mathematics.Comparers;
+using Mocassin.Mathematics.Comparer;
 using Mocassin.Mathematics.Extensions;
 using Mocassin.Mathematics.Solver;
 using Mocassin.Mathematics.ValueTypes;

@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Mocassin.Mathematics.Extensions;
 using Mocassin.Mathematics.ValueTypes;
 
-namespace Mocassin.Mathematics.Comparers
+namespace Mocassin.Mathematics.Comparer
 {
     /// <summary>
     ///     Generic comparator object for structs that implement IVector3D, automatically provides generic comparisons for any
@@ -93,10 +92,10 @@ namespace Mocassin.Mathematics.Comparers
         /// <returns></returns>
         int IComparer<IVector3D>.Compare(IVector3D x, IVector3D y)
         {
-            if (x == null) 
+            if (x == null)
                 throw new ArgumentNullException(nameof(x));
 
-            if (y == null) 
+            if (y == null)
                 throw new ArgumentNullException(nameof(y));
 
             var compareA = ValueComparer.Compare(x.Coordinates.A, y.Coordinates.A);
@@ -104,7 +103,7 @@ namespace Mocassin.Mathematics.Comparers
                 return compareA;
 
             var compareB = ValueComparer.Compare(x.Coordinates.B, y.Coordinates.B);
-            return compareB == 0 
+            return compareB == 0
                 ? ValueComparer.Compare(x.Coordinates.C, y.Coordinates.C)
                 : compareB;
         }
@@ -116,6 +115,7 @@ namespace Mocassin.Mathematics.Comparers
         where T1 : struct, IVector3D
         where T2 : struct, IVector3D
     {
+        /// <inheritdoc />
         public VectorComparer3D(NumericComparer comparer)
             : base(comparer)
         {
@@ -141,12 +141,12 @@ namespace Mocassin.Mathematics.Comparers
         public int Compare(T1 x, T2 y)
         {
             var compareA = ValueComparer.Compare(x.Coordinates.A, y.Coordinates.A);
-            if (compareA != 0) 
+            if (compareA != 0)
                 return compareA;
 
             var compareB = ValueComparer.Compare(x.Coordinates.B, y.Coordinates.B);
-            return compareB == 0 
-                ? ValueComparer.Compare(x.Coordinates.C, y.Coordinates.C) 
+            return compareB == 0
+                ? ValueComparer.Compare(x.Coordinates.C, y.Coordinates.C)
                 : compareB;
         }
     }

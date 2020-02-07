@@ -11,7 +11,7 @@ namespace Mocassin.Model.Energies
         /// <summary>
         ///     The particle pair that identifies the energy entry
         /// </summary>
-        [UseTrackedData(ReferenceLevel = ReferenceLevel.Content)]
+        [UseTrackedData(ReferenceCorrectionLevel = ReferenceCorrectionLevel.IgnoreTopLevel)]
         public ParticlePair ParticlePair { get; }
 
         /// <summary>

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -48,9 +47,8 @@ namespace Mocassin.Framework.SQLiteCore
         }
 
         /// <summary>
-        ///     Creates a new <see cref="DbContext" /> of type <see cref="TContext" /> using the provided file path and ensures
-        ///     that the
-        ///     database is created if requested (Note: No overwrite warning is provided!)
+        ///     Creates a new generic <see cref="DbContext" /> of using the provided file path and ensures
+        ///     that the database is drop-created if requested (Note: No overwrite warning is provided!)
         /// </summary>
         /// <param name="filePath"></param>
         /// <param name="dropCreate"></param>
@@ -79,15 +77,12 @@ namespace Mocassin.Framework.SQLiteCore
         /// </summary>
         public void DetachAllEntities()
         {
-            foreach (var entityEntry in ChangeTracker.Entries().ToList())
-            {
-                entityEntry.State = EntityState.Detached;
-            }
+            foreach (var entityEntry in ChangeTracker.Entries().ToList()) entityEntry.State = EntityState.Detached;
         }
 
         /// <summary>
-        ///     Creates a new <see cref="DbContext" /> of type <see cref="TContext" /> for the provided database filepath and
-        ///     returns a <see cref="ReadOnlyDbContext" />
+        ///     Creates a new generic <see cref="DbContext" /> for the provided database filepath and returns a
+        ///     <see cref="ReadOnlyDbContext" /> wrapper for it
         /// </summary>
         /// <param name="filePath"></param>
         /// <returns></returns>

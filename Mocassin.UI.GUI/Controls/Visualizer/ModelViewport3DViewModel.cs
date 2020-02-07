@@ -254,7 +254,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
 
             var objectCategory = dataObject switch
             {
-                StructureInfoData _ => VisualObjectCategory.Frame,
+                StructureInfoData _ => VisualObjectCategory.LineGrid,
                 KineticTransitionData _ => VisualObjectCategory.DoubleArrow,
                 CellReferencePositionData _ => VisualObjectCategory.Sphere,
                 PairEnergySetData _ => VisualObjectCategory.Line,
@@ -379,7 +379,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         /// <summary>
         ///     Creates the <see cref="ModelVisual3D" /> collection for a <see cref="CellReferencePositionData" /> visualization asynchronously
         /// </summary>
-        /// <param name="positionDatah"></param>
+        /// <param name="referencePositionData"></param>
         /// <returns></returns>
         private async Task<IReadOnlyList<ModelVisual3D>> CreatePositionVisualsAsync(CellReferencePositionData referencePositionData)
         {
@@ -422,7 +422,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         ///     Creates a single <see cref="PointsVisual3D" /> point cloud objects for a <see cref="CellReferencePositionData" />
         ///     visualization
         /// </summary>
-        /// <param name="positionDatah"></param>
+        /// <param name="referencePositionData"></param>
         /// <returns></returns>
         private PointsVisual3D CreatePositionVisualPointCloud(CellReferencePositionData referencePositionData)
         {

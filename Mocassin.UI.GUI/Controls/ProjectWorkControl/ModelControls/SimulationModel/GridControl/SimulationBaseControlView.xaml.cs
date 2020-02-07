@@ -7,6 +7,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.SimulationMo
     /// </summary>
     public partial class SimulationBaseControlView : UserControl
     {
+        /// <inheritdoc />
         public SimulationBaseControlView()
         {
             InitializeComponent();

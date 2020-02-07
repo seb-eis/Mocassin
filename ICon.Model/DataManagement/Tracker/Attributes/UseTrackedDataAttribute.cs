@@ -3,13 +3,19 @@
 namespace Mocassin.Model.Basic
 {
     /// <summary>
-    ///     Defines the type of linking action performed. Use 'Content' reference level if only the content of the object or
-    ///     list of objects requires linking and not the objects itself
+    ///     Defines the level of reference correction for properties marked with <see cref="UseTrackedDataAttribute"/>
     /// </summary>
-    public enum ReferenceLevel
+    public enum ReferenceCorrectionLevel
     {
-        Value,
-        Content
+        /// <summary>
+        ///     Defines a full correction where also the property or list content itself is replaced if required
+        /// </summary>
+        Full,
+
+        /// <summary>
+        ///     Defines a content only correction where the property or list content itself is not replaced, only the properties on these instances
+        /// </summary>
+        IgnoreTopLevel
     }
 
     /// <summary>
@@ -23,6 +29,6 @@ namespace Mocassin.Model.Basic
         ///     Flags that marks the performed level of resolving (Default: Property itself is resolvable or implements non-generic
         ///     IList)
         /// </summary>
-        public ReferenceLevel ReferenceLevel { get; set; }
+        public ReferenceCorrectionLevel ReferenceCorrectionLevel { get; set; }
     }
 }

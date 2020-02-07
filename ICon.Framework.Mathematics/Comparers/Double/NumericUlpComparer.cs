@@ -1,7 +1,7 @@
 ﻿using System;
 using Mocassin.Mathematics.Extensions;
 
-namespace Mocassin.Mathematics.Comparers
+namespace Mocassin.Mathematics.Comparer
 {
     /// <summary>
     ///     Double comparer class that performs almost equal comparisons using the ULP integer conversion principle of the IEEE

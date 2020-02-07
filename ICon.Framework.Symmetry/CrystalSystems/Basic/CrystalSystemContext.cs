@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Mocassin.Framework.Collections;
 
 namespace Mocassin.Symmetry.CrystalSystems
 {
@@ -11,39 +10,19 @@ namespace Mocassin.Symmetry.CrystalSystems
     public abstract class CrystalSystemContext
     {
         /// <summary>
-        ///     Access to the settings dictionary defined by the implementing class
+        ///     Get the settings dictionary that maps <see cref="CrystalSystemIdentification"/> to <see cref="CrystalSystemDefinition"/> instances
         /// </summary>
-        protected abstract Dictionary<(int SystemID, string VariationName), CrystalSystemSetting> SettingsDictionary { get; set; }
+        protected abstract Dictionary<CrystalSystemIdentification, CrystalSystemDefinition> SettingsDictionary { get; }
 
         /// <summary>
-        ///     Constructor, reconstructs the static dictionary on first call
+        ///     Tries to find a <see cref="CrystalSystemDefinition"/> by a <see cref="CrystalSystemIdentification"/>
         /// </summary>
-        internal CrystalSystemContext()
-        {
-            SettingsDictionary = SettingsDictionary ?? CreateDictionary();
-        }
-
-        /// <summary>
-        ///     Tries to find the requested setting in the dictionary, returns false if not found
-        /// </summary>
-        /// <param name="systemId"></param>
-        /// <param name="variation"></param>
-        /// <param name="setting"></param>
+        /// <param name="identification"></param>
+        /// <param name="definition"></param>
         /// <returns></returns>
-        public bool TryGetSetting(int systemId, string variation, out CrystalSystemSetting setting)
+        public bool TryGetSetting(CrystalSystemIdentification identification, out CrystalSystemDefinition definition)
         {
-            return SettingsDictionary.TryGetValue((systemId, variation), out setting);
-        }
-
-        /// <summary>
-        ///     Searches the dictionary using the provided expression, returns null if nothing is found ore throws an exception if
-        ///     more than one matches the condition
-        /// </summary>
-        /// <param name="where"></param>
-        /// <returns></returns>
-        public CrystalSystemSetting FindSetting(Func<KeyValuePair<(int SystemID, string VariationName), CrystalSystemSetting>, bool> where)
-        {
-            return FindSettings(where).SingleOrDefault();
+            return SettingsDictionary.TryGetValue(identification, out definition);
         }
 
         /// <summary>
@@ -52,10 +31,20 @@ namespace Mocassin.Symmetry.CrystalSystems
         /// </summary>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public KeyValuePair<(int SystemID, string VariationName), CrystalSystemSetting> FindSettingEntry(
-            Func<KeyValuePair<(int SystemID, string VariationName), CrystalSystemSetting>, bool> predicate)
+        public CrystalSystemDefinition FindSetting(Func<KeyValuePair<CrystalSystemIdentification, CrystalSystemDefinition>, bool> predicate)
         {
-            return FindSettingEntries(predicate).SingleOrDefault();
+            return SettingsDictionary.Single(predicate).Value;
+        }
+
+        /// <summary>
+        ///     Searches the dictionary using the provided expression, returns null if nothing is found ore throws an exception if
+        ///     more than one matches the condition
+        /// </summary>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
+        public KeyValuePair<CrystalSystemIdentification, CrystalSystemDefinition> FindSettingEntry(Func<KeyValuePair<CrystalSystemIdentification, CrystalSystemDefinition>, bool> predicate)
+        {
+            return SettingsDictionary.Single(predicate);
         }
 
         /// <summary>
@@ -63,8 +52,7 @@ namespace Mocassin.Symmetry.CrystalSystems
         /// </summary>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public IEnumerable<CrystalSystemSetting> FindSettings(
-            Func<KeyValuePair<(int SystemID, string VariationName), CrystalSystemSetting>, bool> predicate)
+        public IEnumerable<CrystalSystemDefinition> FindSettings(Func<KeyValuePair<CrystalSystemIdentification, CrystalSystemDefinition>, bool> predicate)
         {
             return SettingsDictionary.Where(predicate).Select(keyPair => keyPair.Value);
         }
@@ -74,8 +62,7 @@ namespace Mocassin.Symmetry.CrystalSystems
         /// </summary>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public IEnumerable<KeyValuePair<(int, string), CrystalSystemSetting>> FindSettingEntries(
-            Func<KeyValuePair<(int SystemID, string VariationName), CrystalSystemSetting>, bool> predicate)
+        public IEnumerable<KeyValuePair<CrystalSystemIdentification, CrystalSystemDefinition>> FindSettingEntries(Func<KeyValuePair<CrystalSystemIdentification, CrystalSystemDefinition>, bool> predicate)
         {
             return SettingsDictionary.Where(predicate);
         }
@@ -85,9 +72,9 @@ namespace Mocassin.Symmetry.CrystalSystems
         ///     Creates the static dictionary based upon the settings defined in the implementing class
         /// </summary>
         /// <returns></returns>
-        public Dictionary<(int SystemID, string VariationName), CrystalSystemSetting> CreateDictionary()
+        public Dictionary<CrystalSystemIdentification, CrystalSystemDefinition> CreateSystemDictionary()
         {
-            var dictionary = new Dictionary<(int SystemID, string VariationName), CrystalSystemSetting>(new TupleComparer<int, string>());
+            var dictionary = new Dictionary<CrystalSystemIdentification, CrystalSystemDefinition>();
 
             AddTriclinicSettings(dictionary);
             AddMonoclinicSettings(dictionary);
@@ -114,43 +101,43 @@ namespace Mocassin.Symmetry.CrystalSystems
         ///     Adds all triclinic settings defined in the implementing context
         /// </summary>
         /// <param name="dictionary"></param>
-        protected abstract void AddTriclinicSettings(Dictionary<(int SystemID, string VariationName), CrystalSystemSetting> dictionary);
+        protected abstract void AddTriclinicSettings(Dictionary<CrystalSystemIdentification, CrystalSystemDefinition>  dictionary);
 
         /// <summary>
         ///     Adds all monoclinic settings defined in the implementing context
         /// </summary>
         /// <param name="dictionary"></param>
-        protected abstract void AddMonoclinicSettings(Dictionary<(int SystemID, string VariationName), CrystalSystemSetting> dictionary);
+        protected abstract void AddMonoclinicSettings(Dictionary<CrystalSystemIdentification, CrystalSystemDefinition>  dictionary);
 
         /// <summary>
         ///     Adds all orthorhombric settings defined in the implementing context
         /// </summary>
         /// <param name="dictionary"></param>
-        protected abstract void AddOrthorhombicSettings(Dictionary<(int SystemID, string VariationName), CrystalSystemSetting> dictionary);
+        protected abstract void AddOrthorhombicSettings(Dictionary<CrystalSystemIdentification, CrystalSystemDefinition>  dictionary);
 
         /// <summary>
         ///     Adds all tetragonal settings defined in the implementing context
         /// </summary>
         /// <param name="dictionary"></param>
-        protected abstract void AddTetragonalSettings(Dictionary<(int SystemID, string VariationName), CrystalSystemSetting> dictionary);
+        protected abstract void AddTetragonalSettings(Dictionary<CrystalSystemIdentification, CrystalSystemDefinition>  dictionary);
 
         /// <summary>
         ///     Adds all trigonal settings defined in the implementing context
         /// </summary>
         /// <param name="dictionary"></param>
-        protected abstract void AddTrigonalSettings(Dictionary<(int SystemID, string VariationName), CrystalSystemSetting> dictionary);
+        protected abstract void AddTrigonalSettings(Dictionary<CrystalSystemIdentification, CrystalSystemDefinition>  dictionary);
 
         /// <summary>
         ///     Adds all hexagonal settings defined in the implementing context
         /// </summary>
         /// <param name="dictionary"></param>
-        protected abstract void AddHexagonalSettings(Dictionary<(int SystemID, string VariationName), CrystalSystemSetting> dictionary);
+        protected abstract void AddHexagonalSettings(Dictionary<CrystalSystemIdentification, CrystalSystemDefinition>  dictionary);
 
         /// <summary>
         ///     Adds all cubic settings defined in the implementing context
         /// </summary>
         /// <param name="dictionary"></param>
-        protected abstract void AddCubicSettings(Dictionary<(int SystemID, string VariationName), CrystalSystemSetting> dictionary);
+        protected abstract void AddCubicSettings(Dictionary<CrystalSystemIdentification, CrystalSystemDefinition>  dictionary);
 
         /// <summary>
         ///     Factory function for a specific crystal system type

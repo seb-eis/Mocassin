@@ -14,16 +14,35 @@ using Mocassin.UI.Xml.Model;
 namespace Mocassin.UI.GUI.Logic.Validation
 {
     /// <summary>
-    ///     Enumeration for model validation status
+    ///     Flags for model validation status information
     /// </summary>
     [Flags]
     public enum ModelValidationStatus
     {
-        NoErrorsDetected = 0,
-        FatalException = 1,
+        /// <summary>
+        ///     Signals no errors
+        /// </summary>
+        NoErrors = 0,
+
+        /// <summary>
+        ///     Signals a fatal exception
+        /// </summary>
+        CaughtException = 1,
+
+        /// <summary>
+        ///     Signals that the model is not ready for validation
+        /// </summary>
         ModelNotReady = 1 << 1,
+
+        /// <summary>
+        ///     Signals that the model was rejected
+        /// </summary>
         ModelRejected = 1 << 2,
-        CustomizationNotCreatable = 1 << 3
+
+        /// <summary>
+        ///     Signals that the customization template could not be created
+        /// </summary>
+        CustomizationTemplateBuildFailure = 1 << 3
     }
 
     /// <summary>
@@ -171,7 +190,7 @@ namespace Mocassin.UI.GUI.Logic.Validation
 
             if (!TryPushModelInput(ModelProject, inputObjects, out var reports))
             {
-                ModelValidationStatusChangedEvent.OnNext(ModelValidationStatus.FatalException);
+                ModelValidationStatusChangedEvent.OnNext(ModelValidationStatus.CaughtException);
                 IsValidating = false;
                 return;
             }
@@ -186,12 +205,12 @@ namespace Mocassin.UI.GUI.Logic.Validation
 
             if (!TryGenerateModelCustomization(ModelProject, out var customization))
             {
-                ModelValidationStatusChangedEvent.OnNext(ModelValidationStatus.CustomizationNotCreatable);
+                ModelValidationStatusChangedEvent.OnNext(ModelValidationStatus.CustomizationTemplateBuildFailure);
                 IsValidating = false;
                 return;
             }
 
-            ModelValidationStatusChangedEvent.OnNext(ModelValidationStatus.NoErrorsDetected);
+            ModelValidationStatusChangedEvent.OnNext(ModelValidationStatus.NoErrors);
             IsValidating = false;
         }
 
@@ -206,13 +225,13 @@ namespace Mocassin.UI.GUI.Logic.Validation
             customization = null;
             if (!TryPrepareModelInput(out var inputObjects)) return ModelValidationStatus.ModelNotReady;
 
-            if (!TryPushModelInput(ModelProject, inputObjects, out var reports)) return ModelValidationStatus.FatalException;
+            if (!TryPushModelInput(ModelProject, inputObjects, out var reports)) return ModelValidationStatus.CaughtException;
 
             if (reports.Any(x => !x.IsGood)) return ModelValidationStatus.ModelRejected;
 
             return !TryGenerateModelCustomization(ModelProject, out customization)
-                ? ModelValidationStatus.CustomizationNotCreatable
-                : ModelValidationStatus.NoErrorsDetected;
+                ? ModelValidationStatus.CustomizationTemplateBuildFailure
+                : ModelValidationStatus.NoErrors;
         }
 
         /// <summary>

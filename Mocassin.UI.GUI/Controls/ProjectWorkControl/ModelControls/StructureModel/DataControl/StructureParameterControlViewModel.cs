@@ -16,7 +16,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureMod
     /// </summary>
     public class StructureParameterControlViewModel : ProjectGraphControlViewModel
     {
-        private static IList<ISpaceGroup> spaceGroups;
+        private static IList<ISpaceGroup> CachedGroups { get; set; }
         private StructureModelData structureModelData;
         private ISpaceGroup selectedSpaceGroup;
         private CrystalParameterSetter parameterSetter;
@@ -84,9 +84,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureMod
         public StructureParameterControlViewModel(IMocassinProjectControl projectControl)
             : base(projectControl)
         {
-            spaceGroups = spaceGroups ?? projectControl?.ServiceModelProject.SpaceGroupService.GetFullGroupList();
+            CachedGroups ??= projectControl?.ServiceModelProject.SpaceGroupService.GetFullGroupList();
             SpaceGroupService = new SpaceGroupService(ProjectControl.ServiceModelProject.GeometryNumeric.RangeComparer);
-            SpaceGroups = spaceGroups;
+            SpaceGroups = CachedGroups;
         }
 
         /// <inheritdoc />
@@ -108,15 +108,14 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureMod
             if (spaceGroupEntry != null)
             {
                 return SpaceGroups.SingleOrDefault(x => x.GetGroupEntry().Equals(spaceGroupEntry))
-                       ?? SpaceGroups.First(x => x.Index == 1);
+                       ?? SpaceGroups.First(x => x.InternationalIndex == 1);
             }
 
-            return SpaceGroups.First(x => x.Index == 1);
+            return SpaceGroups.First(x => x.InternationalIndex == 1);
         }
 
         /// <summary>
-        ///     Creates a <see cref="CrystalParameterSetter" /> for the current <see cref="MocassinProject" /> using the
-        ///     provided <see cref="ISpaceGroup" />
+        ///     Creates a <see cref="CrystalParameterSetter" /> for the current <see cref="MocassinProject" /> using the provided <see cref="ISpaceGroup" />
         /// </summary>
         /// <param name="spaceGroup"></param>
         /// <returns></returns>

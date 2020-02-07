@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Mocassin.Framework.Extensions;
 using Mocassin.Framework.Operations;
-using Mocassin.Mathematics.Comparers;
+using Mocassin.Mathematics.Comparer;
 using Mocassin.Mathematics.Constraints;
 using Mocassin.Mathematics.Extensions;
 using Mocassin.Model.Basic;

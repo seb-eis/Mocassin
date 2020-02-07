@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Mocassin.Framework.Collections;
-using Mocassin.Mathematics.Comparers;
+using Mocassin.Mathematics.Comparer;
 using Mocassin.Mathematics.Constraints;
 using Mocassin.Mathematics.Coordinates;
 using Mocassin.Mathematics.ValueTypes;

@@ -4,15 +4,16 @@ using Mocassin.Symmetry.SpaceGroups;
 
 namespace Mocassin.Symmetry.CrystalSystems
 {
+    /// <inheritdoc />
     public class CrystalSystemService : ICrystalSystemService
     {
         /// <summary>
-        ///     The crystal system provide for loading
+        ///     The <see cref="ICrystalSystemSource" /> that supplies <see cref="CrystalSystem" /> instances
         /// </summary>
         private ICrystalSystemSource CrystalSystemSource { get; }
 
         /// <inheritdoc />
-        public CrystalSystem CrystalSystem { get; protected set; }
+        public CrystalSystem ActiveCrystalSystem { get; protected set; }
 
         /// <inheritdoc />
         public IVectorTransformer VectorTransformer { get; protected set; }
@@ -31,13 +32,13 @@ namespace Mocassin.Symmetry.CrystalSystems
         {
             CrystalSystemSource = crystalSystemSource ?? throw new ArgumentNullException(nameof(crystalSystemSource));
             ToleranceRange = toleranceRange;
-            CrystalSystem = GetDefaultSystem();
+            ActiveCrystalSystem = GetDefaultSystem();
         }
 
         /// <inheritdoc />
         public bool TrySetParameters(CrystalParameterSet parameterSet)
         {
-            if (!CrystalSystem.TrySetParameters(parameterSet))
+            if (!ActiveCrystalSystem.TrySetParameterValues(parameterSet))
                 return false;
 
             UpdateVectorTransformer();
@@ -50,34 +51,27 @@ namespace Mocassin.Symmetry.CrystalSystems
         /// <returns></returns>
         public CrystalSystem GetDefaultSystem()
         {
-            return CrystalSystemSource.Create(0, "None");
+            return CrystalSystemSource.GetSystem(CrystalSystemIdentification.Triclinic);
         }
 
         /// <inheritdoc />
         public bool LoadNewSystem(ISpaceGroup group)
         {
-            if (group == null)
-                throw new ArgumentNullException(nameof(group));
-
-            return LoadIfDifferentSystem(CrystalSystemSource.Create(group));
+            if (group == null) throw new ArgumentNullException(nameof(group));
+            return LoadIfDifferentSystem(CrystalSystemSource.GetSystem(group));
         }
 
         /// <inheritdoc />
         public CrystalSystem GetSystem(ISpaceGroup group)
         {
-            if (group == null)
-                throw new ArgumentNullException(nameof(group));
-
-            return CrystalSystemSource.Create(group);
+            if (group == null) throw new ArgumentNullException(nameof(group));
+            return CrystalSystemSource.GetSystem(group);
         }
 
         /// <inheritdoc />
-        public bool LoadNewSystem(int systemIndex, string variationName)
+        public bool LoadNewSystem(CrystalSystemIdentification systemIdentification)
         {
-            if (variationName == null)
-                throw new ArgumentNullException(nameof(variationName));
-
-            return LoadIfDifferentSystem(CrystalSystemSource.Create(systemIndex, variationName));
+            return LoadIfDifferentSystem(CrystalSystemSource.GetSystem(systemIdentification));
         }
 
         /// <summary>
@@ -87,10 +81,10 @@ namespace Mocassin.Symmetry.CrystalSystems
         /// <returns></returns>
         protected bool LoadIfDifferentSystem(CrystalSystem newSystem)
         {
-            if (newSystem.SystemId == CrystalSystem.SystemId && newSystem.Variation == CrystalSystem.Variation)
+            if (newSystem.SystemType == ActiveCrystalSystem.SystemType && newSystem.SystemVariation == ActiveCrystalSystem.SystemVariation)
                 return false;
 
-            CrystalSystem = newSystem;
+            ActiveCrystalSystem = newSystem;
             return true;
         }
 
@@ -100,7 +94,7 @@ namespace Mocassin.Symmetry.CrystalSystems
         /// <returns></returns>
         public IVectorTransformer CreateVectorTransformer()
         {
-            return new VectorTransformer(CrystalSystem.CreateCoordinateSystem(),
+            return new VectorTransformer(ActiveCrystalSystem.CreateCoordinateSystem(),
                 SphericalCoordinateSystem3D.CreateIsoSystem(ToleranceRange));
         }
 
@@ -113,16 +107,16 @@ namespace Mocassin.Symmetry.CrystalSystems
         }
 
         /// <inheritdoc />
-        public CrystalParameterSet GetCurrentParameterSet()
+        public CrystalParameterSet CopyCurrentParameterSet()
         {
             return new CrystalParameterSet
             {
-                ParamA = CrystalSystem.ParamA.Value,
-                ParamB = CrystalSystem.ParamB.Value,
-                ParamC = CrystalSystem.ParamC.Value,
-                Alpha = CrystalSystem.Alpha.Value,
-                Beta = CrystalSystem.Beta.Value,
-                Gamma = CrystalSystem.Gamma.Value
+                ParamA = ActiveCrystalSystem.ParamA.Value,
+                ParamB = ActiveCrystalSystem.ParamB.Value,
+                ParamC = ActiveCrystalSystem.ParamC.Value,
+                Alpha = ActiveCrystalSystem.Alpha.Value,
+                Beta = ActiveCrystalSystem.Beta.Value,
+                Gamma = ActiveCrystalSystem.Gamma.Value
             };
         }
     }

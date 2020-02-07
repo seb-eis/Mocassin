@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Mocassin.Mathematics.Comparers;
+using Mocassin.Mathematics.Comparer;
 
 // ReSharper disable CompareOfFloatsByEqualityOperator
 

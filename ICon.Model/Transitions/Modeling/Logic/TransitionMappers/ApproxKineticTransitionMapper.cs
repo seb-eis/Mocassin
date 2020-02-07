@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Linq;
 using Mocassin.Framework.Collections;
 using Mocassin.Framework.Extensions;
-using Mocassin.Mathematics.Comparers;
+using Mocassin.Mathematics.Comparer;
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Symmetry.Analysis;
 

@@ -34,7 +34,7 @@ namespace Mocassin.Model.Structures.ConflictHandling
         {
             if (ModelProject.CrystalSystemService.TrySetParameters(parameters.AsParameterSet()))
             {
-                parameters.ParameterSet = ModelProject.CrystalSystemService.GetCurrentParameterSet();
+                parameters.ParameterSet = ModelProject.CrystalSystemService.CopyCurrentParameterSet();
                 var detail0 = $"The change in the {parameters.GetParameterName()} was passed to the crystal system provider system";
                 report.Warnings.Add(ModelMessageSource.CreateConflictHandlingWarning(this, detail0));
             }

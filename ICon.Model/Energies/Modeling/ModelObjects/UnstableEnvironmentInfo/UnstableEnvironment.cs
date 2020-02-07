@@ -18,7 +18,7 @@ namespace Mocassin.Model.Energies
         /// <summary>
         ///     The set of defined interaction filters of the unstable environment (Can be empty)
         /// </summary>
-        [UseTrackedData(ReferenceLevel = ReferenceLevel.Content)]
+        [UseTrackedData(ReferenceCorrectionLevel = ReferenceCorrectionLevel.IgnoreTopLevel)]
         public List<AsymmetricInteractionFilter> InteractionFilters { get; set; }
 
         /// <summary>

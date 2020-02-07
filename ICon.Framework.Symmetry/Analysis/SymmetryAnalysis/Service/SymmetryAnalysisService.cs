@@ -6,6 +6,7 @@ using Mocassin.Mathematics.ValueTypes;
 
 namespace Mocassin.Symmetry.Analysis
 {
+    /// <inheritdoc />
     public class SymmetryAnalysisService : ISymmetryAnalysisService
     {
         /// <summary>

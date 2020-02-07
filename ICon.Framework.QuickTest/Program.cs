@@ -10,7 +10,7 @@ using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Mocassin.Framework.Extensions;
 using Mocassin.Framework.SQLiteCore;
-using Mocassin.Mathematics.Comparers;
+using Mocassin.Mathematics.Comparer;
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.DataManagement;
 using Mocassin.Model.ModelProject;

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Xml.Serialization;
-using Newtonsoft.Json;
+using Mocassin.Symmetry.CrystalSystems;
 
 namespace Mocassin.Symmetry.SpaceGroups
 {
@@ -15,37 +15,34 @@ namespace Mocassin.Symmetry.SpaceGroups
     public class SpaceGroupEntity : ISpaceGroup, IEquatable<SpaceGroupEntity>
     {
         /// <summary>
-        ///     Get the <see cref="IReadOnlyList{T}"/> of <see cref="ISymmetryOperation"/> where orientation flipping operations are at the end
+        ///     Get the <see cref="IReadOnlyList{T}" /> of <see cref="ISymmetryOperation" /> where orientation flipping operations
+        ///     are at the end
         /// </summary>
         private IReadOnlyList<ISymmetryOperation> OrderedOperations { get; set; }
 
         /// <inheritdoc />
-        [XmlAttribute("Literal")]
         [Column("Literal")]
-        public string Literal { get; set; }
+        public string MauguinNotation { get; set; }
 
         /// <inheritdoc />
-        [XmlAttribute("Specifier")]
         [Column("Specifier")]
-        public string Specifier { get; set; }
+        public string VariationName { get; set; }
 
         /// <inheritdoc />
-        [XmlAttribute("GroupID")]
         [Column("GroupID")]
-        public int Index { get; set; }
+        public int InternationalIndex { get; set; }
 
         /// <inheritdoc />
-        [XmlAttribute("SpecifierID")]
         [Column("SpecifierID")]
-        public int SpecifierIndex { get; set; }
+        public CrystalSystemVariation CrystalVariation { get; set; }
 
         /// <inheritdoc />
-        [XmlAttribute("SystemId")]
         [Column("SystemId")]
-        public int CrystalSystemIndex { get; set; }
+        public CrystalSystemType CrystalType { get; set; }
 
         /// <inheritdoc />
-        public IReadOnlyList<ISymmetryOperation> Operations => OrderedOperations ??= BaseSymmetryOperations.OrderBy(x => x.FlipsOrientation).ToList().AsReadOnly();
+        public IReadOnlyList<ISymmetryOperation> Operations =>
+            OrderedOperations ??= BaseSymmetryOperations.OrderBy(x => x.FlipsOrientation).ToList().AsReadOnly();
 
         /// <inheritdoc />
         public IEnumerable<string> OperationLiterals => BaseSymmetryOperations?.Select(x => x.Literal);
@@ -70,8 +67,8 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// </summary>
         public SpaceGroupEntity()
         {
-            Literal = "";
-            Specifier = "None";
+            MauguinNotation = "";
+            VariationName = "None";
             BaseSymmetryOperations = new List<SymmetryOperationEntity>();
         }
 
@@ -87,18 +84,18 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// <inheritdoc />
         public bool Equals(SpaceGroupEntity other)
         {
-            return other != null 
-                 && (Literal == other.Literal
-                 && Specifier == other.Specifier
-                 && Index == other.Index
-                 && SpecifierIndex == other.SpecifierIndex
-                 && CrystalSystemIndex == other.CrystalSystemIndex);
+            return other != null
+                   && MauguinNotation == other.MauguinNotation
+                   && VariationName == other.VariationName
+                   && InternationalIndex == other.InternationalIndex
+                   && CrystalVariation == other.CrystalVariation
+                   && CrystalType == other.CrystalType;
         }
 
         /// <inheritdoc />
         public SpaceGroupEntry GetGroupEntry()
         {
-            return new SpaceGroupEntry(Index, Literal, Specifier);
+            return new SpaceGroupEntry(InternationalIndex, MauguinNotation, VariationName);
         }
 
         /// <summary>
@@ -108,10 +105,8 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// <returns></returns>
         public int CompareTo(ISpaceGroup other)
         {
-            var indexCompare = Index.CompareTo(other.Index);
-            return indexCompare == 0 
-                ? SpecifierIndex.CompareTo(other.SpecifierIndex)
-                : indexCompare;
+            var indexCompare = InternationalIndex.CompareTo(other.InternationalIndex);
+            return indexCompare == 0 ? CrystalVariation.CompareTo(other.CrystalVariation) : indexCompare;
         }
     }
 }

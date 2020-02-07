@@ -1,6 +1,6 @@
 ﻿using System;
 using Mocassin.Mathematics.Extensions;
-using Mocassin.Mathematics.Comparers;
+using Mocassin.Mathematics.Comparer;
 using Mocassin.Mathematics.Constraints;
 using Mocassin.Mathematics.ValueTypes;
 

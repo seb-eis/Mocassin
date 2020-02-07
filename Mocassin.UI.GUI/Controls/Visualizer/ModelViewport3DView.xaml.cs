@@ -7,6 +7,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
     /// </summary>
     public partial class ModelViewport3DView : UserControl
     {
+        /// <inheritdoc />
         public ModelViewport3DView()
         {
             InitializeComponent();

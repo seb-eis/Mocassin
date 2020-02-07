@@ -7,6 +7,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureMod
     /// </summary>
     public partial class StructureParameterControlView : UserControl
     {
+        /// <inheritdoc />
         public StructureParameterControlView()
         {
             InitializeComponent();

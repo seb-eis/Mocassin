@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 using System.Net;
 using System.Text.RegularExpressions;
 using Mocassin.Framework.SQLiteCore;
-using Mocassin.Mathematics.Comparers;
+using Mocassin.Mathematics.Comparer;
 using Mocassin.Tools.Evaluation.PlotData;
 using Mocassin.Tools.Evaluation.Queries.Base;
 

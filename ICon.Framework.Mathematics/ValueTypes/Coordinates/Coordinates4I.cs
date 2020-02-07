@@ -36,6 +36,7 @@ namespace Mocassin.Mathematics.ValueTypes
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <param name="c"></param>
+        /// <param name="d"></param>
         public Coordinates4I(int a, int b, int c, int d)
         {
             A = a;

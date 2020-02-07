@@ -43,14 +43,14 @@ namespace Mocassin.Model.Structures.ConflictHandling
 
             if (!ModelProject.CrystalSystemService.TrySetParameters(oldParameters.ParameterSet))
             {
-                OverwriteCellParameters(ModelProject.CrystalSystemService.CrystalSystem.GetDefaultParameterSet());
+                OverwriteCellParameters(ModelProject.CrystalSystemService.ActiveCrystalSystem.GetDefaultParameterSet());
 
                 const string detail0 = "The original cell parameters are no longer compatible with the new space group";
                 const string detail1 = "Conflict resolved by loading a default parameter set for the new crystal system";
                 report.Warnings.Add(ModelMessageSource.CreateContentResetWarning(this, detail0, detail1));
             }
 
-            oldParameters.ParameterSet = ModelProject.CrystalSystemService.GetCurrentParameterSet();
+            oldParameters.ParameterSet = ModelProject.CrystalSystemService.CopyCurrentParameterSet();
         }
 
         /// <summary>

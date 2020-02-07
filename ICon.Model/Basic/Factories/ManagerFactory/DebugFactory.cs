@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Mocassin.Mathematics.ValueTypes;
-using Mocassin.Model.DataManagement;
+﻿using Mocassin.Model.DataManagement;
 using Mocassin.Model.Energies;
 using Mocassin.Model.Lattices;
-using Mocassin.Model.Particles;
 using Mocassin.Model.ModelProject;
+using Mocassin.Model.Particles;
 using Mocassin.Model.Simulations;
 using Mocassin.Model.Structures;
 using Mocassin.Model.Transitions;
-using Mocassin.Symmetry.CrystalSystems;
-using Mocassin.Symmetry.SpaceGroups;
 
 namespace Mocassin.Model.Basic
 {
+    /// <summary>
+    ///     Defines a static helper class for generating <see cref="ManagerPackage"/> instances
+    /// </summary>
     public static class ManagerFactory
     {
         /// <summary>
@@ -28,7 +25,7 @@ namespace Mocassin.Model.Basic
             /// <param name="settings"></param>
             /// <returns></returns>
             public static ManagerPackage CreateProjectServicesSystem(ProjectSettings settings)
-            {            
+            {
                 return new ManagerPackage
                 {
                     ModelProject = ModelProject.ModelProject.Create(settings ?? ProjectSettings.CreateDefault())

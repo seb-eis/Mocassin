@@ -2,7 +2,7 @@
 using System.Linq;
 using Mocassin.Framework.Extensions;
 using Mocassin.Framework.Operations;
-using Mocassin.Mathematics.Comparers;
+using Mocassin.Mathematics.Comparer;
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Basic;
 using Mocassin.Model.ModelProject;

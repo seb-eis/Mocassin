@@ -13,16 +13,16 @@ namespace Mocassin.Symmetry.CrystalSystems
         /// <inheritdoc />
         public override void ApplyParameterDependencies(CrystalParameterSet paramSet)
         {
-            switch (Variation)
+            switch (SystemVariation)
             {
-                case CrystalVariation.HexagonalAxes:
+                case CrystalSystemVariation.HexagonalAxes:
                     paramSet.ParamB = paramSet.ParamA;
                     paramSet.Alpha = Alpha.Value;
                     paramSet.Beta = Beta.Value;
                     paramSet.Gamma = Gamma.Value;
                     return;
 
-                case CrystalVariation.RhombohedralAxes:
+                case CrystalSystemVariation.RhombohedralAxes:
                     paramSet.ParamB = paramSet.ParamA;
                     paramSet.ParamC = paramSet.ParamA;
                     paramSet.Beta = paramSet.Alpha;
@@ -38,15 +38,15 @@ namespace Mocassin.Symmetry.CrystalSystems
         public override bool ValidateSoftAngleCondition(double alpha, double beta, double gamma)
         {
             var isValid = true;
-            switch (Variation)
+            switch (SystemVariation)
             {
-                case CrystalVariation.HexagonalAxes:
+                case CrystalSystemVariation.HexagonalAxes:
                     isValid &= BasicConstraint.Comparer.Equals(alpha, MocassinMath.Radian90);
                     isValid &= BasicConstraint.Comparer.Equals(beta, MocassinMath.Radian90);
                     isValid &= BasicConstraint.Comparer.Equals(gamma, MocassinMath.Radian120);
                     return isValid;
 
-                case CrystalVariation.RhombohedralAxes:
+                case CrystalSystemVariation.RhombohedralAxes:
                     isValid = alpha.CountMatches(BasicConstraint.Comparer, beta, gamma) == 2;
                     return isValid;
 
@@ -58,12 +58,12 @@ namespace Mocassin.Symmetry.CrystalSystems
         /// <inheritdoc />
         public override bool ValidateSoftParameterCondition(double paramA, double paramB, double paramC)
         {
-            switch (Variation)
+            switch (SystemVariation)
             {
-                case CrystalVariation.HexagonalAxes:
+                case CrystalSystemVariation.HexagonalAxes:
                     return BasicConstraint.Comparer.Equals(paramA, paramB);
 
-                case CrystalVariation.RhombohedralAxes:
+                case CrystalSystemVariation.RhombohedralAxes:
                     return paramA.CountMatches(BasicConstraint.Comparer, paramB, paramC) == 2;
 
                 default:
@@ -74,12 +74,12 @@ namespace Mocassin.Symmetry.CrystalSystems
         /// <inheritdoc />
         public override CrystalParameterSet GetDefaultParameterSet()
         {
-            switch (Variation)
+            switch (SystemVariation)
             {
-                case CrystalVariation.HexagonalAxes:
+                case CrystalSystemVariation.HexagonalAxes:
                     return new CrystalParameterSet(1.0, 1.0, 1.0, MocassinMath.Radian90, MocassinMath.Radian90, MocassinMath.Radian120);
 
-                case CrystalVariation.RhombohedralAxes:
+                case CrystalSystemVariation.RhombohedralAxes:
                     return new CrystalParameterSet(1.0, 1.0, 1.0, MocassinMath.Radian90, MocassinMath.Radian90, MocassinMath.Radian90);
 
                 default:

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Symmetry.CrystalSystems;
 
 namespace Mocassin.Symmetry.SpaceGroups
 {
@@ -10,38 +10,38 @@ namespace Mocassin.Symmetry.SpaceGroups
     public interface ISpaceGroup : IComparable<ISpaceGroup>
     {
         /// <summary>
-        ///     The index of the space group
+        ///     The index of the space group in the international space group tables
         /// </summary>
-        int Index { get; }
+        int InternationalIndex { get; }
 
         /// <summary>
-        ///     The literal description of the space group
+        ///     The Mauguin notation <see cref="string"/> of the group
         /// </summary>
-        string Literal { get; }
+        string MauguinNotation { get; }
 
         /// <summary>
-        ///     The specifier description of the group if multiple versions exist
+        ///     The name of the <see cref="CrystalSystemVariation" />
         /// </summary>
-        string Specifier { get; }
+        string VariationName { get; }
 
         /// <summary>
-        ///     The index of the specifier
+        ///     The <see cref="CrystalSystemVariation" /> of the group
         /// </summary>
-        int SpecifierIndex { get; }
+        CrystalSystemVariation CrystalVariation { get; }
 
         /// <summary>
-        ///     The index of the crystal system affiliated with the group (0 to 6)
+        ///     The <see cref="CrystalSystemType" /> of the group
         /// </summary>
-        int CrystalSystemIndex { get; }
+        CrystalSystemType CrystalType { get; }
 
         /// <summary>
-        ///     Gets the sequence of <see cref="ISymmetryOperation"/> operations defined in the <see cref="ISpaceGroup"/>
+        ///     Gets the sequence of <see cref="ISymmetryOperation" /> operations defined in the <see cref="ISpaceGroup" />
         /// </summary>
         /// <returns></returns>
         IReadOnlyList<ISymmetryOperation> Operations { get; }
 
         /// <summary>
-        ///     Get a <see cref="IEnumerable{T}"/> of the operation strings
+        ///     Get a <see cref="IEnumerable{T}" /> of the operation strings
         /// </summary>
         IEnumerable<string> OperationLiterals { get; }
 

@@ -12,6 +12,7 @@ namespace Mocassin.Framework.Provider
     /// <remarks> No void specific implementation exists, use null reference as input for this case </remarks>
     public class ExternalProvider<TOut, TIn> : IExternalProvider<TOut, TIn>
     {
+        /// <inheritdoc />
         public bool IsLoaded { get; protected set; }
 
         /// <summary>

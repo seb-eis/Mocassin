@@ -14,13 +14,13 @@ namespace Mocassin.Model.Energies
         /// <summary>
         ///     The list of interaction filters for stable environments
         /// </summary>
-        [UseTrackedData(ReferenceLevel = ReferenceLevel.Content)]
+        [UseTrackedData(ReferenceCorrectionLevel = ReferenceCorrectionLevel.IgnoreTopLevel)]
         public List<SymmetricInteractionFilter> InteractionFilters { get; set; }
 
         /// <summary>
         ///     Get or set the list of defect energy entries
         /// </summary>
-        [UseTrackedData(ReferenceLevel = ReferenceLevel.Content)]
+        [UseTrackedData(ReferenceCorrectionLevel = ReferenceCorrectionLevel.IgnoreTopLevel)]
         public List<DefectEnergy> DefectEnergies { get; set; }
 
         /// <inheritdoc />

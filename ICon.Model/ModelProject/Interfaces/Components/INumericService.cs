@@ -1,4 +1,4 @@
-﻿using Mocassin.Mathematics.Comparers;
+﻿using Mocassin.Mathematics.Comparer;
 
 namespace Mocassin.Model.ModelProject
 {

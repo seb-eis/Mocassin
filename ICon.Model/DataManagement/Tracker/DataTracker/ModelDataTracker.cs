@@ -175,12 +175,12 @@ namespace Mocassin.Model.DataManagement
                 if (!(property.GetCustomAttribute(typeof(UseTrackedDataAttribute)) is UseTrackedDataAttribute attribute))
                     continue;
 
-                switch (attribute.ReferenceLevel)
+                switch (attribute.ReferenceCorrectionLevel)
                 {
-                    case ReferenceLevel.Value:
+                    case ReferenceCorrectionLevel.Full:
                         linkers.Add(MakeLinkDelegate(property));
                         break;
-                    case ReferenceLevel.Content:
+                    case ReferenceCorrectionLevel.IgnoreTopLevel:
                         linkers.Add(x => LinkContent(property.GetValue(x)));
                         break;
                     default:

@@ -7,7 +7,7 @@ using Mocassin.Framework.Collections;
 using Mocassin.Framework.Exceptions;
 using Mocassin.Framework.Extensions;
 using Mocassin.Framework.SQLiteCore;
-using Mocassin.Mathematics.Comparers;
+using Mocassin.Mathematics.Comparer;
 using Mocassin.Mathematics.Extensions;
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Symmetry.CrystalSystems;
@@ -72,7 +72,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         public SpaceGroupService(string dbFilepath, double tolerance)
             : this(dbFilepath, NumericComparer.CreateRanged(tolerance))
         {
-            TryLoadGroup(group => group.Index == 1);
+            TryLoadGroup(group => group.InternationalIndex == 1);
         }
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace Mocassin.Symmetry.SpaceGroups
             if (!HasDbConnection) return false;
             if (groupEntry == null) throw new ArgumentNullException(nameof(groupEntry));
             if (LoadedGroup != null && groupEntry.Equals(LoadedGroup.GetGroupEntry())) return true;
-            return TryLoadGroup(group => group.Index == groupEntry.Index && group.Specifier == groupEntry.Specifier);
+            return TryLoadGroup(group => group.InternationalIndex == groupEntry.Index && group.VariationName == groupEntry.Specifier);
         }
 
         /// <inheritdoc />
@@ -141,7 +141,7 @@ namespace Mocassin.Symmetry.SpaceGroups
             if (LoadedGroup == null)
                 throw new InvalidObjectStateException("No space group loaded, cannot create crystal system");
 
-            return source.Create(LoadedGroup);
+            return source.GetSystem(LoadedGroup);
         }
 
         /// <inheritdoc />

@@ -12,7 +12,7 @@ namespace Mocassin.Symmetry.CrystalSystems
         /// <summary>
         ///     Get the currently loaded crystal system
         /// </summary>
-        CrystalSystem CrystalSystem { get; }
+        CrystalSystem ActiveCrystalSystem { get; }
 
         /// <summary>
         ///     Get the vector transformer that handles transformations between coordinate systems
@@ -34,24 +34,22 @@ namespace Mocassin.Symmetry.CrystalSystems
         bool LoadNewSystem(ISpaceGroup group);
 
         /// <summary>
-        ///     Get a <see cref="CrystalSystem"/> for the passed <see cref="ISpaceGroup"/>
+        ///     Get a <see cref="ActiveCrystalSystem"/> for the passed <see cref="ISpaceGroup"/>
         /// </summary>
         /// <param name="group"></param>
         /// <returns></returns>
         CrystalSystem GetSystem(ISpaceGroup group);
 
         /// <summary>
-        ///     Load a new crystal system into the service by system index and variation name
+        ///     Load a new crystal system into the service by a <see cref="CrystalSystemIdentification"/>
         /// </summary>
-        /// <param name="systemIndex"></param>
-        /// <param name="variationName"></param>
         /// <returns></returns>
-        bool LoadNewSystem(int systemIndex, string variationName);
+        bool LoadNewSystem(CrystalSystemIdentification identification);
 
         /// <summary>
-        ///     Get a copy of the current parameter set
+        ///     Get a copy of the current <see cref="CrystalParameterSet"/>
         /// </summary>
         /// <returns></returns>
-        CrystalParameterSet GetCurrentParameterSet();
+        CrystalParameterSet CopyCurrentParameterSet();
     }
 }

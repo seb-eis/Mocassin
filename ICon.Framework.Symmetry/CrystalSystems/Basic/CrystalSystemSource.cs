@@ -10,12 +10,12 @@ namespace Mocassin.Symmetry.CrystalSystems
     public class CrystalSystemSource : ICrystalSystemSource
     {
         /// <summary>
-        ///     The crystal system context to find crystal system settings
+        ///     The <see cref="CrystalSystemContext"/> used by the source
         /// </summary>
         public CrystalSystemContext Context { get; set; }
 
         /// <inheritdoc />
-        public double ToleranceRange { get; set; }
+        public double Tolerance { get; set; }
 
         /// <inheritdoc />
         public double ParameterMaxValue { get; set; }
@@ -29,7 +29,7 @@ namespace Mocassin.Symmetry.CrystalSystems
         public CrystalSystemSource(CrystalSystemContext context, double parameterMaxValue, double toleranceRange)
         {
             Context = context ?? throw new ArgumentNullException(nameof(context));
-            ToleranceRange = toleranceRange;
+            Tolerance = toleranceRange;
             ParameterMaxValue = parameterMaxValue;
         }
 
@@ -39,34 +39,28 @@ namespace Mocassin.Symmetry.CrystalSystems
         /// </summary>
         /// <param name="where"></param>
         /// <returns></returns>
-        public CrystalSystem Create(Func<KeyValuePair<(int SystemID, string VariationName), CrystalSystemSetting>, bool> where)
+        public CrystalSystem Create(Func<KeyValuePair<CrystalSystemIdentification, CrystalSystemDefinition>, bool> where)
         {
             var settings = Context.FindSettingEntry(where);
-
-            if (settings.Value == null)
-                throw new ArgumentException("The context search function did not yield any valid settings", nameof(where));
-
-            var system = settings.Value.DefaultConstruct();
-            settings.Value.ApplySettings(system, ToleranceRange, ParameterMaxValue);
-            if (!system.TrySetParameters(system.GetDefaultParameterSet()))
+            var system = settings.Value.Factory();
+            settings.Value.ApplySettings(system, Tolerance, ParameterMaxValue);
+            if (!system.TrySetParameterValues(system.GetDefaultParameterSet()))
                 throw new InvalidOperationException("Basic default parameter set not compatible with own constraints");
 
             return system;
         }
 
         /// <inheritdoc />
-        public CrystalSystem Create(int systemIndex, string variationName)
+        public CrystalSystem GetSystem(CrystalSystemIdentification identification)
         {
-            return Create(pair => pair.Key.SystemID == systemIndex && pair.Key.VariationName == variationName);
+            return Create(pair => pair.Key.Equals(identification));
         }
 
         /// <inheritdoc />
-        public CrystalSystem Create(ISpaceGroup group)
+        public CrystalSystem GetSystem(ISpaceGroup group)
         {
-            if (group == null)
-                throw new ArgumentNullException(nameof(group));
-
-            return Create(pair => pair.Key.SystemID == group.CrystalSystemIndex && group.Specifier == pair.Key.VariationName);
+            if (group == null) throw new ArgumentNullException(nameof(group));
+            return Create(pair => pair.Key.CrystalType.Equals(group.CrystalType) && pair.Key.CrystalVariation.Equals(group.CrystalVariation));
         }
 
         /// <summary>

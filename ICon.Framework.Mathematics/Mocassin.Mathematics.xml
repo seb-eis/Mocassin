@@ -1,0 +1,3310 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Mocassin.Mathematics</name>
+    </assembly>
+    <members>
+        <member name="T:Mocassin.Mathematics.Bitmasks.IBitmask">
+            <summary>
+                Abstract base class for all bitmask of arbitrary size
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.Bitmasks.IBitmask.Item(System.Int32)">
+            <summary>
+                Index access of the entries
+            </summary>
+            <param name="index"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Mocassin.Mathematics.Bitmasks.Bitmask128">
+            <summary>
+                Two wrapped 64 bit unsigned integer to be used as 128 entry bitmask (Waring: Mutable struct!)
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.Bitmasks.Bitmask128.Mask0">
+            <summary>
+                The first internal 64 bit mask
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.Bitmasks.Bitmask128.Mask1">
+            <summary>
+                The first internal 64 bit mask
+            </summary>
+        </member>
+        <member name="M:Mocassin.Mathematics.Bitmasks.Bitmask128.#ctor(System.UInt64,System.UInt64)">
+            <summary>
+                Creates new mask from unsigned integer
+            </summary>
+            <param name="mask0"></param>
+            <param name="mask1"></param>
+        </member>
+        <member name="M:Mocassin.Mathematics.Bitmasks.Bitmask128.#ctor(Mocassin.Mathematics.Bitmasks.Bitmask128)">
+            <summary>
+                Copy constructor
+            </summary>
+            <param name="bitmask"></param>
+        </member>
+        <member name="P:Mocassin.Mathematics.Bitmasks.Bitmask128.Item(System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Bitmasks.Bitmask128.CompareTo(Mocassin.Mathematics.Bitmasks.Bitmask128)">
+            <summary>
+                Compares the wrapped integer
+            </summary>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Bitmasks.Bitmask128.Equals(Mocassin.Mathematics.Bitmasks.Bitmask128)">
+            <inheritdoc />
+        </member>
+        <member name="T:Mocassin.Mathematics.Bitmasks.Bitmask32">
+            <summary>
+                Wrapped 32 bit unsigned integer to be used as 32 entry bitmask (Waring: Mutable struct!)
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.Bitmasks.Bitmask32.Mask">
+            <summary>
+                The internal mask value
+            </summary>
+        </member>
+        <member name="M:Mocassin.Mathematics.Bitmasks.Bitmask32.#ctor(System.UInt32)">
+            <summary>
+                Creates new mask from unsigned integer
+            </summary>
+            <param name="mask"></param>
+        </member>
+        <member name="M:Mocassin.Mathematics.Bitmasks.Bitmask32.#ctor(Mocassin.Mathematics.Bitmasks.Bitmask32)">
+            <summary>
+                Copy constructor
+            </summary>
+            <param name="bitmask"></param>
+        </member>
+        <member name="P:Mocassin.Mathematics.Bitmasks.Bitmask32.Item(System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Bitmasks.Bitmask32.op_Implicit(System.UInt32)~Mocassin.Mathematics.Bitmasks.Bitmask32">
+            <summary>
+                Implicit conversion operator for unsigned 32 bit integer
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="M:Mocassin.Mathematics.Bitmasks.Bitmask32.CompareTo(Mocassin.Mathematics.Bitmasks.Bitmask32)">
+            <summary>
+                Compares the wrapped integer
+            </summary>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Bitmasks.Bitmask32.Equals(Mocassin.Mathematics.Bitmasks.Bitmask32)">
+            <inheritdoc />
+        </member>
+        <member name="T:Mocassin.Mathematics.Bitmasks.Bitmask64">
+            <summary>
+                Wrapped 64 bit unsigned integer to be used as 64 entry bitmask (Waring: Mutable struct!)
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.Bitmasks.Bitmask64.Mask">
+            <summary>
+                The internal mask value
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.Bitmasks.Bitmask64.MaxEntries">
+            <summary>
+                Get the size of the mask
+            </summary>
+        </member>
+        <member name="M:Mocassin.Mathematics.Bitmasks.Bitmask64.#ctor(System.UInt64)">
+            <summary>
+                Creates new mask from unsigned integer
+            </summary>
+            <param name="mask"></param>
+        </member>
+        <member name="M:Mocassin.Mathematics.Bitmasks.Bitmask64.#ctor(Mocassin.Mathematics.Bitmasks.Bitmask64)">
+            <summary>
+                Copy constructor
+            </summary>
+            <param name="bitmask"></param>
+        </member>
+        <member name="P:Mocassin.Mathematics.Bitmasks.Bitmask64.Item(System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Bitmasks.Bitmask64.CompareTo(Mocassin.Mathematics.Bitmasks.Bitmask64)">
+            <summary>
+                Compares the wrapped integer
+            </summary>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Bitmasks.Bitmask64.Equals(Mocassin.Mathematics.Bitmasks.Bitmask64)">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Bitmasks.Bitmask64.PopCount">
+            <summary>
+                Counts the number of set bits
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Bitmasks.Bitmask64.op_Implicit(System.UInt64)~Mocassin.Mathematics.Bitmasks.Bitmask64">
+            <summary>
+                Implicit conversion operator for unsigned 64 bit integer
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="M:Mocassin.Mathematics.Bitmasks.Bitmask64.ToString">
+            <summary>
+                String representation fo the bitmask
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Mocassin.Mathematics.Comparer.NumericCombinedComparer">
+            <summary>
+                A <see cref="T:Mocassin.Mathematics.Comparer.NumericComparer"/> that is build from one zero safe comparer and a main comparer
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.Comparer.NumericCombinedComparer.ZeroComparer">
+            <summary>
+                Get the <see cref="T:Mocassin.Mathematics.Comparer.NumericComparer"/> for zero values
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.Comparer.NumericCombinedComparer.MainComparer">
+            <summary>
+                Get the main <see cref="T:Mocassin.Mathematics.Comparer.NumericComparer"/>
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.Comparer.NumericCombinedComparer.IsZeroCompatible">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Comparer.NumericCombinedComparer.#ctor(Mocassin.Mathematics.Comparer.NumericComparer,Mocassin.Mathematics.Comparer.NumericComparer)">
+            <summary>
+                Combines a zero safe and any other main <see cref="T:Mocassin.Mathematics.Comparer.NumericComparer"/> to a combined multi purpose one that can handle all cases
+            </summary>
+            <param name="zeroComparer"></param>
+            <param name="mainComparer"></param>
+        </member>
+        <member name="M:Mocassin.Mathematics.Comparer.NumericCombinedComparer.Compare(System.Double,System.Double)">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Comparer.NumericCombinedComparer.Equals(System.Double,System.Double)">
+            <inheritdoc />
+        </member>
+        <member name="T:Mocassin.Mathematics.Comparer.NumericComparer">
+            <summary>
+                Abstract base class for all tolerance based double comparer objects
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.Comparer.NumericComparer.IsZeroCompatible">
+            <summary>
+                Flag that defines if the comparer can be safely used to compare to zero
+            </summary>
+        </member>
+        <member name="M:Mocassin.Mathematics.Comparer.NumericComparer.CreateUlp(System.Int32)">
+            <summary>
+                Creates a new ULP comparator object with the specified step count
+            </summary>
+            <param name="steps"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Comparer.NumericComparer.CreateRelative(System.Double)">
+            <summary>
+                Creates a new relative comparator object with the specified relative factor
+            </summary>
+            <param name="relativeRange"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Comparer.NumericComparer.CreateRanged(System.Double)">
+            <summary>
+                Creates a new range comparator object with the specified absolute range
+            </summary>
+            <param name="absoluteRange"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Comparer.NumericComparer.CreateRangedCombined(System.Double)">
+            <summary>
+                Creates a new combined comparator object with the specified absolute range
+            </summary>
+            <param name="absoluteRange"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Comparer.NumericComparer.Default">
+            <summary>
+                Creates a new default tolerance comparer (range based, allows 1.0e-13 offset, overwrites Comparer.Default)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Comparer.NumericComparer.Compare(System.Double,System.Double)">
+            <summary>
+                Compares two double values with the internally specified information
+            </summary>
+            <param name="lhs"></param>
+            <param name="rhs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Comparer.NumericComparer.Equals(System.Double,System.Double)">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Comparer.NumericComparer.GetHashCode(System.Double)">
+            <inheritdoc />
+        </member>
+        <member name="T:Mocassin.Mathematics.Comparer.NumericRangeComparer">
+            <summary>
+                Double range comparer class that performs almost equal comparisons with an absolut range tolerance
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.Comparer.NumericRangeComparer.Range">
+            <summary>
+                The absolute tolerance range value
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.Comparer.NumericRangeComparer.IsZeroCompatible">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Comparer.NumericRangeComparer.#ctor(System.Double)">
+            <summary>
+                Creates a new range comparer with the specified range
+            </summary>
+            <param name="range"></param>
+        </member>
+        <member name="M:Mocassin.Mathematics.Comparer.NumericRangeComparer.Compare(System.Double,System.Double)">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Comparer.NumericRangeComparer.Equals(System.Double,System.Double)">
+            <inheritdoc />
+        </member>
+        <member name="T:Mocassin.Mathematics.Comparer.NumericRelativeComparer">
+            <summary>
+                Double relative comparer class that performs almost equal comparisons with a relative factor (Not zero safe)
+            </summary>
+        </member>
+        <member name="F:Mocassin.Mathematics.Comparer.NumericRelativeComparer.ZeroSaveValue">
+            <summary>
+                Shared zero safe flag
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.Comparer.NumericRelativeComparer.RelativeRange">
+            <summary>
+                The absolute tolerance range value
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.Comparer.NumericRelativeComparer.IsZeroCompatible">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Comparer.NumericRelativeComparer.#ctor(System.Double)">
+            <summary>
+                Creates a new relative range comparer with the specified tolerance factor
+            </summary>
+            <param name="range"></param>
+        </member>
+        <member name="M:Mocassin.Mathematics.Comparer.NumericRelativeComparer.Compare(System.Double,System.Double)">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Comparer.NumericRelativeComparer.Equals(System.Double,System.Double)">
+            <inheritdoc />
+        </member>
+        <member name="T:Mocassin.Mathematics.Comparer.NumericUlpComparer">
+            <summary>
+                Double comparer class that performs almost equal comparisons using the ULP integer conversion principle of the IEEE
+                standard (not zero safe)
+            </summary>
+        </member>
+        <member name="F:Mocassin.Mathematics.Comparer.NumericUlpComparer.ZeroSaveValue">
+            <summary>
+                Shared zero safe flag
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.Comparer.NumericUlpComparer.Steps">
+            <summary>
+                The number of allowed offset steps within the integer converted double values
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.Comparer.NumericUlpComparer.IsZeroCompatible">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Comparer.NumericUlpComparer.#ctor(System.Int32)">
+            <summary>
+                Creates a new ULP comparer with the specified number of steps
+            </summary>
+            <param name="steps"></param>
+        </member>
+        <member name="M:Mocassin.Mathematics.Comparer.NumericUlpComparer.Compare(System.Double,System.Double)">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Comparer.NumericUlpComparer.Equals(System.Double,System.Double)">
+            <inheritdoc />
+        </member>
+        <member name="T:Mocassin.Mathematics.Comparer.VectorComparer3D`1">
+            <summary>
+                Generic comparator object for structs that implement IVector3D, automatically provides generic comparisons for any
+                IVector3D types
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.Comparer.VectorComparer3D`1.ValueComparer">
+            <summary>
+                The internal double value comparer for the vector coordinate values
+            </summary>
+        </member>
+        <member name="M:Mocassin.Mathematics.Comparer.VectorComparer3D`1.#ctor(System.Collections.Generic.IComparer{System.Double})">
+            <summary>
+                Creates new vector comparer using the provided comparer interface
+            </summary>
+            <param name="valueComparer"></param>
+        </member>
+        <member name="M:Mocassin.Mathematics.Comparer.VectorComparer3D`1.Equals(`0,`0)">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Comparer.VectorComparer3D`1.GetHashCode(`0)">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Comparer.VectorComparer3D`1.Compare(`0,`0)">
+            <summary>
+                Compares the two vectors
+            </summary>
+            <param name="x"></param>
+            <param name="y"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Comparer.VectorComparer3D`1.Compare``2(``0,``1)">
+            <summary>
+                Generic compare for two vectors that implement the IVector3D vector of the provided vector type
+            </summary>
+            <typeparam name="T1"></typeparam>
+            <typeparam name="T2"></typeparam>
+            <param name="x"></param>
+            <param name="y"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Comparer.VectorComparer3D`1.ToCompatibleComparer``1">
+            <summary>
+                Creates a new vector 3D comparer for another type with the same comparisons tolerance as the current
+            </summary>
+            <typeparam name="TVector"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Comparer.VectorComparer3D`1.System#Collections#Generic#IComparer{Mocassin#Mathematics#ValueTypes#IVector3D}#Compare(Mocassin.Mathematics.ValueTypes.IVector3D,Mocassin.Mathematics.ValueTypes.IVector3D)">
+            <summary>
+                Implementation of generic 3D vector interface comparison
+            </summary>
+            <param name="x"></param>
+            <param name="y"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Mocassin.Mathematics.Comparer.VectorComparer3D`2">
+            <inheritdoc />
+            <remarks> Version for two different vector types </remarks>
+        </member>
+        <member name="M:Mocassin.Mathematics.Comparer.VectorComparer3D`2.#ctor(Mocassin.Mathematics.Comparer.NumericComparer)">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Comparer.VectorComparer3D`2.Equals(`0,`1)">
+            <summary>
+                Test for equality with the internal almost equal comparator
+            </summary>
+            <param name="x"></param>
+            <param name="y"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Comparer.VectorComparer3D`2.Compare(`0,`1)">
+            <summary>
+                Compares the two vectors
+            </summary>
+            <param name="x"></param>
+            <param name="y"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Mocassin.Mathematics.Constraints.NumericConstraint">
+            <summary>
+                Numeric constraint class that restricts the definition range of a double value through a numeric comparer
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.Constraints.NumericConstraint.Comparer">
+            <summary>
+                The double comparator object
+            </summary>
+        </member>
+        <member name="M:Mocassin.Mathematics.Constraints.NumericConstraint.#ctor(System.Boolean,System.Double,System.Double,System.Boolean,Mocassin.Mathematics.Comparer.NumericComparer)">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Constraints.NumericConstraint.IsValid(System.Double)">
+            <inheritdoc />
+        </member>
+        <member name="T:Mocassin.Mathematics.Constraints.NumericPeriodicConstraint">
+            <summary>
+                Periodic numeric constraint that allows periodic parsing into the constraint range
+            </summary>
+        </member>
+        <member name="M:Mocassin.Mathematics.Constraints.NumericPeriodicConstraint.#ctor(System.Boolean,System.Double,System.Double,System.Boolean,Mocassin.Mathematics.Comparer.NumericComparer)">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Constraints.NumericPeriodicConstraint.ParseToPeriodicRange(System.Double)">
+            <summary>
+                Parses a double value into the constraint with the almost equal tolerance range
+            </summary>
+            <param name="sourceValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Constraints.NumericPeriodicConstraint.TryParseToMinValue(System.Double,System.Double@)">
+            <summary>
+                Tries to parse source value to lower limit value, sets result to source on fail and returns false
+            </summary>
+            <param name="sourceValue"></param>
+            <param name="result"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Constraints.NumericPeriodicConstraint.TryParseToMaxValue(System.Double,System.Double@)">
+            <summary>
+                Tries to parse source value to upper limit value, sets result to source on fail and returns false
+            </summary>
+            <param name="sourceValue"></param>
+            <param name="result"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Mocassin.Mathematics.Coordinates.AffineCoordinateSystem3D`1">
+            <summary>
+                Defines an affine coordinate system of the specified coordinate tuple type
+            </summary>
+            <typeparam name="T1"></typeparam>
+        </member>
+        <member name="P:Mocassin.Mathematics.Coordinates.AffineCoordinateSystem3D`1.BaseVectors">
+            <summary>
+                The coordinate tuples that represent the basis vector coordinate information of the affine system
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.Coordinates.AffineCoordinateSystem3D`1.ReferenceBaseVectors">
+            <summary>
+                The coordinate tuples that represent the basis vector coordinate information of the affine reference system
+            </summary>
+        </member>
+        <member name="T:Mocassin.Mathematics.Coordinates.CartesianCoordinateSystem">
+            <summary>
+                Double precision cartesian coordinate system
+            </summary>
+        </member>
+        <member name="F:Mocassin.Mathematics.Coordinates.CartesianCoordinateSystem.BaseCoordinates">
+            <summary>
+                The system base coordinate vectors as coordinate tuple information
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.Coordinates.CartesianCoordinateSystem.BaseVectors">
+            <inheritdoc />
+        </member>
+        <member name="P:Mocassin.Mathematics.Coordinates.CartesianCoordinateSystem.ReferenceBaseVectors">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.CartesianCoordinateSystem.#cctor">
+            <summary>
+                Static constructor, initializes the static cartesian base vectors
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.Coordinates.CartesianCoordinateSystem.ReferenceSystemType">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.CartesianCoordinateSystem.ToReferenceSystem(Mocassin.Mathematics.ValueTypes.Coordinates3D@)">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.CartesianCoordinateSystem.ToSystem(Mocassin.Mathematics.ValueTypes.Coordinates3D@)">
+            <inheritdoc />
+        </member>
+        <member name="T:Mocassin.Mathematics.Coordinates.FractionalCoordinateSystem3D">
+            <summary>
+                Basic fractional coordinate system in 3D that supports the 7 crystal systems and fractional coordinates
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.Coordinates.FractionalCoordinateSystem3D.Comparer">
+            <summary>
+                The internal tolerance double comparer of the coordinate system
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.Coordinates.FractionalCoordinateSystem3D.BaseVectors">
+            <inheritdoc />
+        </member>
+        <member name="P:Mocassin.Mathematics.Coordinates.FractionalCoordinateSystem3D.ToFractionalMatrix">
+            <summary>
+                The transformation matrix to transform cartesian into fractional coordinates
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.Coordinates.FractionalCoordinateSystem3D.ToCartesianMatrix">
+            <summary>
+                The transformation matrix to transform fractional to cartesian coordinates
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.Coordinates.FractionalCoordinateSystem3D.ReferenceBaseVectors">
+            <inheritdoc />
+        </member>
+        <member name="P:Mocassin.Mathematics.Coordinates.FractionalCoordinateSystem3D.ReferenceSystemType">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.FractionalCoordinateSystem3D.#ctor(Mocassin.Mathematics.ValueTypes.Coordinates3D@,Mocassin.Mathematics.ValueTypes.Coordinates3D@,Mocassin.Mathematics.ValueTypes.Coordinates3D@,Mocassin.Mathematics.Comparer.NumericComparer)">
+            <summary>
+                Construct a new fractional coordinate system from the base vectors and range comparer
+            </summary>
+            <param name="vectorA"></param>
+            <param name="vectorB"></param>
+            <param name="vectorC"></param>
+            <param name="comparer"></param>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.FractionalCoordinateSystem3D.ToReferenceSystem(Mocassin.Mathematics.ValueTypes.Coordinates3D@)">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.FractionalCoordinateSystem3D.ToSystem(Mocassin.Mathematics.ValueTypes.Cartesian3D@)">
+            <summary>
+                Transforms a basic cartesian vector to a basic fractional vector
+            </summary>
+            <param name="cartesian"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.FractionalCoordinateSystem3D.ToSystem(Mocassin.Mathematics.ValueTypes.Coordinates3D@)">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.FractionalCoordinateSystem3D.ToReferenceSystem(Mocassin.Mathematics.ValueTypes.Fractional3D@)">
+            <summary>
+                Transforms a basic fractional vector to a basic cartesian vector
+            </summary>
+            <param name="fractional"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.FractionalCoordinateSystem3D.GetToCartesianMatrix(System.Double[0:,0:],Mocassin.Mathematics.Comparer.NumericComparer)">
+            <summary>
+                Calculates the transform matrix from fractional to cartesian vectors
+            </summary>
+            <param name="baseVectors"></param>
+            <param name="comparer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.FractionalCoordinateSystem3D.GetToFractionalMatrix(System.Double[0:,0:],Mocassin.Mathematics.Comparer.NumericComparer)">
+            <summary>
+                Calculates the transform matrix from cartesian to fractional vectors using the Gauss-Jordan algorithm
+            </summary>
+            <param name="baseVectors"></param>
+            <param name="comparer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.FractionalCoordinateSystem3D.GetBaseVectors">
+            <summary>
+                Get the base vectors of the system as cartesian vectors
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Mocassin.Mathematics.Coordinates.SphericalCoordinateSystem3D">
+            <summary>
+                Defines double precision spherical coordinate system which follows the iso standard limitations (Theta: true, 0°,
+                180°, true, Phi: true, 0°, 360°, false)
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.Coordinates.SphericalCoordinateSystem3D.AzimuthalConstraint">
+            <summary>
+                The azimuthal constraint, ISO standard (true, 0.0, 2*PI, false) with construction specified boundary tolerance
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.Coordinates.SphericalCoordinateSystem3D.PolarConstraint">
+            <summary>
+                The polar constraint, ISO standard (true, 0.0, PI, true) with construction specified boundary tolerance
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.Coordinates.SphericalCoordinateSystem3D.AlmostEqualRange">
+            <summary>
+                The internal tolerance range for almost equal comparisons of double values
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.Coordinates.SphericalCoordinateSystem3D.ReferenceSystemType">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.SphericalCoordinateSystem3D.#ctor(Mocassin.Mathematics.Constraints.NumericPeriodicConstraint,Mocassin.Mathematics.Constraints.NumericPeriodicConstraint,System.Double)">
+            <summary>
+                Create new spherical coordinate system with the provided constraints
+            </summary>
+            <param name="azimuthalConstraint"></param>
+            <param name="polarConstraint"></param>
+            <param name="almostEqualRange"></param>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.SphericalCoordinateSystem3D.CreateIsoSystem(System.Double)">
+            <summary>
+                Creates new spherical coordinate system following the ISO standard with the given tolerance range
+            </summary>
+            <param name="almostEqualRange"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.SphericalCoordinateSystem3D.CreateIsoSystem(Mocassin.Mathematics.Comparer.NumericRangeComparer)">
+            <summary>
+                Creates new spherical coordinate system following the ISO standard with the provided range comparer
+            </summary>
+            <param name="comparer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.SphericalCoordinateSystem3D.ToReferenceSystem(Mocassin.Mathematics.ValueTypes.Coordinates3D@)">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.SphericalCoordinateSystem3D.ToReferenceSystem(Mocassin.Mathematics.ValueTypes.Spherical3D@)">
+            <summary>
+                Transforms a <see cref="T:Mocassin.Mathematics.ValueTypes.Spherical3D"/> to a <see cref="T:Mocassin.Mathematics.ValueTypes.Cartesian3D"/>
+            </summary>
+            <param name="original"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.SphericalCoordinateSystem3D.ToSystem(Mocassin.Mathematics.ValueTypes.Coordinates3D@)">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.SphericalCoordinateSystem3D.ToSystem(Mocassin.Mathematics.ValueTypes.Cartesian3D@)">
+            <summary>
+                Transforms a <see cref="T:Mocassin.Mathematics.ValueTypes.Cartesian3D"/> to a <see cref="T:Mocassin.Mathematics.ValueTypes.Spherical3D"/>
+            </summary>
+            <param name="original"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.SphericalCoordinateSystem3D.CalculateRadius(Mocassin.Mathematics.ValueTypes.Coordinates3D@)">
+            <summary>
+                Calculates the radius as the length of the cartesian coordinate tuple
+            </summary>
+            <param name="original"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.SphericalCoordinateSystem3D.CalculatePolarAngle(Mocassin.Mathematics.ValueTypes.Coordinates3D@,System.Double)">
+            <summary>
+                Calculates the polar angle under consideration of ISO standard (true, 0.0, PI, true)
+            </summary>
+            <param name="original"></param>
+            <param name="radial"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.SphericalCoordinateSystem3D.CalculateAzimuthalAngle(Mocassin.Mathematics.ValueTypes.Coordinates3D@,System.Double)">
+            <summary>
+                Calculates azimuthal angle under consideration of ISO standard (true, 0.0, 2*PI, false) and corrects inconsistency
+                issue for z-Alignment if polar angle is 0.0
+            </summary>
+            <param name="original"></param>
+            <param name="theta"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.SphericalCoordinateSystem3D.GetCoordinateX(Mocassin.Mathematics.ValueTypes.Coordinates3D@)">
+            <summary>
+                Calculates coordinate X from polar coordinate tuple, corrects almost zero value
+            </summary>
+            <param name="original"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.SphericalCoordinateSystem3D.GetCoordinateY(Mocassin.Mathematics.ValueTypes.Coordinates3D@)">
+            <summary>
+                Calculates coordinate Y from polar coordinate tuple, corrects almost zero value
+            </summary>
+            <param name="original"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.SphericalCoordinateSystem3D.GetCoordinateZ(Mocassin.Mathematics.ValueTypes.Coordinates3D@)">
+            <summary>
+                Calculates coordinate Z from polar coordinate tuple, corrects almost zero value
+            </summary>
+            <param name="original"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Mocassin.Mathematics.Coordinates.AngularCoordinateSystem`1">
+            <summary>
+                Represents an angular coordinate system of the specified type which does not have fixed base vectors
+            </summary>
+            <typeparam name="T1"></typeparam>
+        </member>
+        <member name="T:Mocassin.Mathematics.Coordinates.CoordinateSystem">
+            <summary>
+                Abstract class that defines a coordinate system in N dimensional space
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.Coordinates.CoordinateSystem.Dimension">
+            <summary>
+                Dimensions value of the coordinate system
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.Coordinates.CoordinateSystem.CoordinateType">
+            <summary>
+                Type of the coordinate structure
+            </summary>
+        </member>
+        <member name="T:Mocassin.Mathematics.Coordinates.CoordinateSystem`1">
+            <summary>
+                Abstract class that defines a generic coordinate system in N dimensional space with a specific <see cref="T:Mocassin.Mathematics.ValueTypes.ICoordinates"/> type
+            </summary>
+        </member>
+        <member name="F:Mocassin.Mathematics.Coordinates.CoordinateSystem`1.DimensionValue">
+            <summary>
+                Stores the dimension value that is defined in the coordinate tuple type
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.Coordinates.CoordinateSystem`1.Dimension">
+            <inheritdoc />
+        </member>
+        <member name="P:Mocassin.Mathematics.Coordinates.CoordinateSystem`1.CoordinateType">
+            <inheritdoc />
+        </member>
+        <member name="P:Mocassin.Mathematics.Coordinates.CoordinateSystem`1.ReferenceSystemType">
+            <summary>
+                Get the type of the reference affine coordinate system this system is based upon
+            </summary>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.CoordinateSystem`1.ToReferenceSystem(`0@)">
+            <summary>
+                Threats a coordinate tuple as being of the system type and transforms it to the specified reference type
+            </summary>
+            <param name="original"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.CoordinateSystem`1.ToSystem(`0@)">
+            <summary>
+                Threats a coordinate tuple as being of the reference type and transforms it to the specified system type
+            </summary>
+            <param name="original"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Mocassin.Mathematics.Coordinates.IUnitCellVectorEncoder">
+            <summary>
+                Encoder system that handles the transformations between 3D (spherical, fractional, cartesian) and 4D encoded
+                super-cell coordinates
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.Coordinates.IUnitCellVectorEncoder.PositionList">
+            <summary>
+                The sorted list (Binary searchable) of possible fractional coordinates any 3D vector could point to
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.Coordinates.IUnitCellVectorEncoder.Transformer">
+            <summary>
+                Instance of the vector transformer that handles 3D coordinate system conversions
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.Coordinates.IUnitCellVectorEncoder.PositionCount">
+            <summary>
+                Get the number of fractional positions supported by the encoder
+            </summary>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.IUnitCellVectorEncoder.TryEncode(Mocassin.Mathematics.ValueTypes.Fractional3D@,Mocassin.Mathematics.ValueTypes.CrystalVector4D@)">
+            <summary>
+                Encodes a fractional vector into the 4D crystal vector representation (Returns false if vector cannot be encoded )
+            </summary>
+            <param name="vector"></param>
+            <param name="encoded"></param>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.IUnitCellVectorEncoder.TryEncode(System.Collections.Generic.IEnumerable{Mocassin.Mathematics.ValueTypes.Fractional3D},System.Collections.Generic.List{Mocassin.Mathematics.ValueTypes.CrystalVector4D}@)">
+            <summary>
+                Tries to encode a sequence of fractional vectors into a list of encoded crystal 4D vectors (Returns false if one of
+                the encodings fails)
+            </summary>
+            <param name="decoded"></param>
+            <param name="encoded"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.IUnitCellVectorEncoder.TryEncode(Mocassin.Mathematics.ValueTypes.Fractional3D@,Mocassin.Mathematics.ValueTypes.Fractional3D@,Mocassin.Mathematics.ValueTypes.CrystalVector4D@)">
+            <summary>
+                Tries to encode a fractional vector that starts at another fractional position into an absolute 4D vector (Returns
+                false if not possible)
+            </summary>
+            <param name="origin"></param>
+            <param name="vector"></param>
+            <param name="encoded"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.IUnitCellVectorEncoder.TryEncodeAsRelative(Mocassin.Mathematics.ValueTypes.Fractional3D@,Mocassin.Mathematics.ValueTypes.Fractional3D@,Mocassin.Mathematics.ValueTypes.CrystalVector4D@)">
+            <summary>
+                Tries to encode a vector that points from a start to another position into a relative 4D vector (Returns false if
+                not possible)
+            </summary>
+            <param name="vector"></param>
+            <param name="origin"></param>
+            <param name="encoded"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.IUnitCellVectorEncoder.TryEncode(Mocassin.Mathematics.ValueTypes.Cartesian3D@,Mocassin.Mathematics.ValueTypes.CrystalVector4D@)">
+            <summary>
+                tries to encode a cartesian vector that starts at unit cell origin point into a 4D vector (Returns false if not
+                possible)
+            </summary>
+            <param name="vector"></param>
+            <param name="encoded"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.IUnitCellVectorEncoder.TryEncode(Mocassin.Mathematics.ValueTypes.Cartesian3D@,Mocassin.Mathematics.ValueTypes.Cartesian3D@,Mocassin.Mathematics.ValueTypes.CrystalVector4D@)">
+            <summary>
+                Tries to encode a cartesian vector that starts at another cartesian position into an absolute 4D vector (Returns
+                false if not possible)
+            </summary>
+            <param name="origin"></param>
+            <param name="vector"></param>
+            <param name="encoded"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.IUnitCellVectorEncoder.TryEncodeAsRelative(Mocassin.Mathematics.ValueTypes.Cartesian3D@,Mocassin.Mathematics.ValueTypes.Cartesian3D@,Mocassin.Mathematics.ValueTypes.CrystalVector4D@)">
+            <summary>
+                Tries to encode a cartesian vector that starts at another cartesian vector into a relative 4D vector (Returns false
+                if not possible)
+            </summary>
+            <param name="origin"></param>
+            <param name="vector"></param>
+            <param name="encoded"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.IUnitCellVectorEncoder.TryEncode(Mocassin.Mathematics.ValueTypes.Spherical3D@,Mocassin.Mathematics.ValueTypes.CrystalVector4D@)">
+            <summary>
+                tries to encode a spherical vector that starts at unit cell origin point into a 4D vector (Returns false if not
+                possible)
+            </summary>
+            <param name="vector"></param>
+            <param name="encoded"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.IUnitCellVectorEncoder.TryDecode(Mocassin.Mathematics.ValueTypes.CrystalVector4D@,Mocassin.Mathematics.ValueTypes.Fractional3D@)">
+            <summary>
+                Tries to decode the provided 4D encoded vector to an absolute fractional 3D vector (Returns false if not possible,
+                happens if 4D vector has negative P entry)
+            </summary>
+            <param name="encoded"></param>
+            <param name="decoded"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.IUnitCellVectorEncoder.TryDecode(System.Collections.Generic.IEnumerable{Mocassin.Mathematics.ValueTypes.CrystalVector4D},System.Collections.Generic.List{Mocassin.Mathematics.ValueTypes.Fractional3D}@)">
+            <summary>
+                Tries to decode multiple 4D vectors into a list of fractional vectors (Returns false if not possible)
+            </summary>
+            <param name="encoded"></param>
+            <param name="decoded"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.IUnitCellVectorEncoder.TryDecode(Mocassin.Mathematics.ValueTypes.CrystalVector4D@,Mocassin.Mathematics.ValueTypes.Cartesian3D@)">
+            <summary>
+                Tries to decode 4D encoded vector into an absolute cartesian vector starting at unit cell origin (Returns false if
+                not possible)
+            </summary>
+            <param name="encoded"></param>
+            <param name="decoded"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.IUnitCellVectorEncoder.TryDecode(Mocassin.Mathematics.ValueTypes.CrystalVector4D@,Mocassin.Mathematics.ValueTypes.Spherical3D@)">
+            <summary>
+                Tries to decoded 4D encoded vector into a spherical vector from unit cell origin (Returns false if not possible)
+            </summary>
+            <param name="encoded"></param>
+            <param name="decoded"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.IUnitCellVectorEncoder.TryDecodeToRelative(Mocassin.Mathematics.ValueTypes.CrystalVector4D@,Mocassin.Mathematics.ValueTypes.CrystalVector4D@,Mocassin.Mathematics.ValueTypes.Fractional3D@)">
+            <summary>
+                Tries to decode a relative 4D vector that starts at a 4D origin point into a relative 3D fractional vector (Returns
+                false if not possible)
+            </summary>
+            <param name="origin"></param>
+            <param name="encoded"></param>
+            <param name="decoded"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.IUnitCellVectorEncoder.TryDecodeToRelative(Mocassin.Mathematics.ValueTypes.CrystalVector4D@,Mocassin.Mathematics.ValueTypes.CrystalVector4D@,Mocassin.Mathematics.ValueTypes.Cartesian3D@)">
+            <summary>
+                Tries to decode a relative 4D vector that starts at a 4D origin point into a relative 3D cartesian vector (Returns
+                false if not possible)
+            </summary>
+            <param name="origin"></param>
+            <param name="encoded"></param>
+            <param name="decoded"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.IUnitCellVectorEncoder.TryDecodeToRelative(Mocassin.Mathematics.ValueTypes.CrystalVector4D@,Mocassin.Mathematics.ValueTypes.CrystalVector4D@,Mocassin.Mathematics.ValueTypes.Spherical3D@)">
+            <summary>
+                Tries to decode a relative 4D vector that starts at a 4D origin point into a relative 3D spherical vector (Returns
+                false if not possible)
+            </summary>
+            <param name="origin"></param>
+            <param name="encoded"></param>
+            <param name="decoded"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.IUnitCellVectorEncoder.GetTargetCellOffset(Mocassin.Mathematics.ValueTypes.Fractional3D@)">
+            <summary>
+                Calculates the cell offset counts from origin in a,b,c direction of a generic fractional vector (Uses tolerance of
+                the fractional system)
+            </summary>
+            <param name="vector"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.IUnitCellVectorEncoder.GetOriginCellTrimmedVector(Mocassin.Mathematics.ValueTypes.Fractional3D@,Moccasin.Mathematics.ValueTypes.VectorI3@)">
+            <summary>
+                Trims the coordinates of any fractional vector into the origin cell (Optional out parameter contains the calculated
+                unit cell offset)
+            </summary>
+            <param name="vector"></param>
+            <param name="offset"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.IUnitCellVectorEncoder.GetBaseVectors">
+            <summary>
+                Get the base vectors of the fractional system
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.IUnitCellVectorEncoder.GetCellVolume">
+            <summary>
+                Calculates the volume of the unit cell as the spat product of the base vectors
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.IUnitCellVectorEncoder.GetPosition(System.Int32)">
+            <summary>
+                Get the fractional position at the specified index
+            </summary>
+            <param name="index"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.IUnitCellVectorEncoder.GetCartesianPosition(System.Int32)">
+            <summary>
+                Get the position at the specified index as a cartesian vector
+            </summary>
+            <param name="index"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Mocassin.Mathematics.Coordinates.UnitCellVectorEncoder">
+            <inheritdoc />
+        </member>
+        <member name="P:Mocassin.Mathematics.Coordinates.UnitCellVectorEncoder.PositionList">
+            <inheritdoc />
+        </member>
+        <member name="P:Mocassin.Mathematics.Coordinates.UnitCellVectorEncoder.Transformer">
+            <inheritdoc />
+        </member>
+        <member name="P:Mocassin.Mathematics.Coordinates.UnitCellVectorEncoder.PositionCount">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.UnitCellVectorEncoder.#ctor(Mocassin.Framework.Collections.SetList{Mocassin.Mathematics.ValueTypes.Fractional3D},Mocassin.Mathematics.Coordinates.IVectorTransformer)">
+            <summary>
+                Creates new vector encoder with specified position list and vector transformer
+            </summary>
+            <param name="positionList"></param>
+            <param name="vectorTransformer"></param>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.UnitCellVectorEncoder.TryEncodeFractional(Mocassin.Mathematics.ValueTypes.Coordinates3D@,Mocassin.Mathematics.ValueTypes.CrystalVector4D@)">
+            <summary>
+                Internal fractional encode function that uses a <see cref="T:Mocassin.Mathematics.ValueTypes.Coordinates3D"/> input
+            </summary>
+            <param name="vector"></param>
+            <param name="encoded"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.UnitCellVectorEncoder.TryEncode(Mocassin.Mathematics.ValueTypes.Fractional3D@,Mocassin.Mathematics.ValueTypes.CrystalVector4D@)">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.UnitCellVectorEncoder.TryEncode(Mocassin.Mathematics.ValueTypes.Fractional3D@,Mocassin.Mathematics.ValueTypes.Fractional3D@,Mocassin.Mathematics.ValueTypes.CrystalVector4D@)">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.UnitCellVectorEncoder.TryEncode(System.Collections.Generic.IEnumerable{Mocassin.Mathematics.ValueTypes.Fractional3D},System.Collections.Generic.List{Mocassin.Mathematics.ValueTypes.CrystalVector4D}@)">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.UnitCellVectorEncoder.TryEncodeAsRelative(Mocassin.Mathematics.ValueTypes.Fractional3D@,Mocassin.Mathematics.ValueTypes.Fractional3D@,Mocassin.Mathematics.ValueTypes.CrystalVector4D@)">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.UnitCellVectorEncoder.TryEncode(Mocassin.Mathematics.ValueTypes.Cartesian3D@,Mocassin.Mathematics.ValueTypes.CrystalVector4D@)">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.UnitCellVectorEncoder.TryEncode(Mocassin.Mathematics.ValueTypes.Cartesian3D@,Mocassin.Mathematics.ValueTypes.Cartesian3D@,Mocassin.Mathematics.ValueTypes.CrystalVector4D@)">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.UnitCellVectorEncoder.TryEncodeAsRelative(Mocassin.Mathematics.ValueTypes.Cartesian3D@,Mocassin.Mathematics.ValueTypes.Cartesian3D@,Mocassin.Mathematics.ValueTypes.CrystalVector4D@)">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.UnitCellVectorEncoder.TryEncode(Mocassin.Mathematics.ValueTypes.Spherical3D@,Mocassin.Mathematics.ValueTypes.CrystalVector4D@)">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.UnitCellVectorEncoder.TryDecodeFractional(Mocassin.Mathematics.ValueTypes.Coordinates4I@,Mocassin.Mathematics.ValueTypes.Fractional3D@)">
+            <summary>
+                Internal decode from <see cref="T:Mocassin.Mathematics.ValueTypes.Coordinates4I"/> to <see cref="T:Mocassin.Mathematics.ValueTypes.Fractional3D"/>
+            </summary>
+            <param name="encoded"></param>
+            <param name="decoded"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.UnitCellVectorEncoder.TryDecode(Mocassin.Mathematics.ValueTypes.CrystalVector4D@,Mocassin.Mathematics.ValueTypes.Fractional3D@)">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.UnitCellVectorEncoder.TryDecode(System.Collections.Generic.IEnumerable{Mocassin.Mathematics.ValueTypes.CrystalVector4D},System.Collections.Generic.List{Mocassin.Mathematics.ValueTypes.Fractional3D}@)">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.UnitCellVectorEncoder.TryDecode(Mocassin.Mathematics.ValueTypes.CrystalVector4D@,Mocassin.Mathematics.ValueTypes.Cartesian3D@)">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.UnitCellVectorEncoder.TryDecode(Mocassin.Mathematics.ValueTypes.CrystalVector4D@,Mocassin.Mathematics.ValueTypes.Spherical3D@)">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.UnitCellVectorEncoder.TryDecodeToRelative(Mocassin.Mathematics.ValueTypes.CrystalVector4D@,Mocassin.Mathematics.ValueTypes.CrystalVector4D@,Mocassin.Mathematics.ValueTypes.Fractional3D@)">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.UnitCellVectorEncoder.TryDecodeToRelative(Mocassin.Mathematics.ValueTypes.CrystalVector4D@,Mocassin.Mathematics.ValueTypes.CrystalVector4D@,Mocassin.Mathematics.ValueTypes.Cartesian3D@)">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.UnitCellVectorEncoder.TryDecodeToRelative(Mocassin.Mathematics.ValueTypes.CrystalVector4D@,Mocassin.Mathematics.ValueTypes.CrystalVector4D@,Mocassin.Mathematics.ValueTypes.Spherical3D@)">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.UnitCellVectorEncoder.GetTargetCellOffset(Mocassin.Mathematics.ValueTypes.Coordinates3D@)">
+            <summary>
+                Calculates the target cell offset from a <see cref="T:Mocassin.Mathematics.ValueTypes.Coordinates3D"/>
+            </summary>
+            <param name="vector"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.UnitCellVectorEncoder.GetTargetCellOffset(Mocassin.Mathematics.ValueTypes.Fractional3D@)">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.UnitCellVectorEncoder.GetOriginCellTrimmedVector(Mocassin.Mathematics.ValueTypes.Coordinates3D@,Moccasin.Mathematics.ValueTypes.VectorI3@)">
+            <summary>
+                Calculates an origin cell trimmed vector from a <see cref="T:Mocassin.Mathematics.ValueTypes.Coordinates3D"/>
+            </summary>
+            <param name="vector"></param>
+            <param name="offset"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.UnitCellVectorEncoder.GetOriginCellTrimmedVector(Mocassin.Mathematics.ValueTypes.Fractional3D@,Moccasin.Mathematics.ValueTypes.VectorI3@)">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.UnitCellVectorEncoder.GetBaseVectors">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.UnitCellVectorEncoder.GetCellVolume">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.UnitCellVectorEncoder.GetPosition(System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.UnitCellVectorEncoder.GetCartesianPosition(System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="T:Mocassin.Mathematics.Coordinates.IVectorTransformer">
+            <summary>
+                Provides vector transformations between the cartesian system, a spherical and a fractional system
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.Coordinates.IVectorTransformer.FractionalSystem">
+            <summary>
+                The fractional coordinate system (Supports Fractional/Cartesian transformations)
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.Coordinates.IVectorTransformer.SphericalSystem">
+            <summary>
+                The spherical coordinate system (Supports Cartesian/Spherical transformations)
+            </summary>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.IVectorTransformer.ToCartesian(Mocassin.Mathematics.ValueTypes.Fractional3D@)">
+            <summary>
+                Transforms from a <see cref="T:Mocassin.Mathematics.ValueTypes.Fractional3D"/> to a <see cref="T:Mocassin.Mathematics.ValueTypes.Cartesian3D"/>
+            </summary>
+            <param name="vector"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.IVectorTransformer.ToSpherical(Mocassin.Mathematics.ValueTypes.Fractional3D@)">
+            <summary>
+                Transforms from a <see cref="T:Mocassin.Mathematics.ValueTypes.Fractional3D"/> to a <see cref="T:Mocassin.Mathematics.ValueTypes.Spherical3D"/>
+            </summary>
+            <param name="vector"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.IVectorTransformer.ToCartesian(System.Collections.Generic.IEnumerable{Mocassin.Mathematics.ValueTypes.Fractional3D})">
+            <summary>
+                Transforms from a <see cref="T:Mocassin.Mathematics.ValueTypes.Fractional3D"/> sequence to a <see cref="T:Mocassin.Mathematics.ValueTypes.Cartesian3D"/> sequence
+            </summary>
+            <param name="vectors"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.IVectorTransformer.ToSpherical(System.Collections.Generic.IEnumerable{Mocassin.Mathematics.ValueTypes.Fractional3D})">
+            <summary>
+                Transforms from a <see cref="T:Mocassin.Mathematics.ValueTypes.Fractional3D"/> sequence to a <see cref="T:Mocassin.Mathematics.ValueTypes.Spherical3D"/> sequence
+            </summary>
+            <param name="vectors"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.IVectorTransformer.ToFractional(Mocassin.Mathematics.ValueTypes.Cartesian3D@)">
+            <summary>
+                Transforms from a <see cref="T:Mocassin.Mathematics.ValueTypes.Cartesian3D"/> to a <see cref="T:Mocassin.Mathematics.ValueTypes.Fractional3D"/>
+            </summary>
+            <param name="vector"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.IVectorTransformer.ToSpherical(Mocassin.Mathematics.ValueTypes.Cartesian3D@)">
+            <summary>
+                Transforms from a <see cref="T:Mocassin.Mathematics.ValueTypes.Cartesian3D"/> to a <see cref="T:Mocassin.Mathematics.ValueTypes.Spherical3D"/>
+            </summary>
+            <param name="vector"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.IVectorTransformer.ToFractional(System.Collections.Generic.IEnumerable{Mocassin.Mathematics.ValueTypes.Cartesian3D})">
+            <summary>
+                Transforms from a <see cref="T:Mocassin.Mathematics.ValueTypes.Cartesian3D"/> sequence to a <see cref="T:Mocassin.Mathematics.ValueTypes.Fractional3D"/> sequence
+            </summary>
+            <param name="vectors"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.IVectorTransformer.ToSpherical(System.Collections.Generic.IEnumerable{Mocassin.Mathematics.ValueTypes.Cartesian3D})">
+            <summary>
+                Transforms from a <see cref="T:Mocassin.Mathematics.ValueTypes.Cartesian3D"/> sequence to a <see cref="T:Mocassin.Mathematics.ValueTypes.Spherical3D"/> sequence
+            </summary>
+            <param name="vectors"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.IVectorTransformer.ToFractional(Mocassin.Mathematics.ValueTypes.Spherical3D@)">
+            <summary>
+                Transforms from a <see cref="T:Mocassin.Mathematics.ValueTypes.Spherical3D"/> to a <see cref="T:Mocassin.Mathematics.ValueTypes.Fractional3D"/>
+            </summary>
+            <param name="vector"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.IVectorTransformer.ToCartesian(Mocassin.Mathematics.ValueTypes.Spherical3D@)">
+            <summary>
+                Transforms from a <see cref="T:Mocassin.Mathematics.ValueTypes.Spherical3D"/> to a <see cref="T:Mocassin.Mathematics.ValueTypes.Cartesian3D"/>
+            </summary>
+            <param name="vector"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.IVectorTransformer.ToFractional(System.Collections.Generic.IEnumerable{Mocassin.Mathematics.ValueTypes.Spherical3D})">
+            <summary>
+                Transforms from a <see cref="T:Mocassin.Mathematics.ValueTypes.Spherical3D"/> sequence to a <see cref="T:Mocassin.Mathematics.ValueTypes.Fractional3D"/> sequence
+            </summary>
+            <param name="vectors"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.IVectorTransformer.ToCartesian(System.Collections.Generic.IEnumerable{Mocassin.Mathematics.ValueTypes.Spherical3D})">
+            <summary>
+                Transforms from a <see cref="T:Mocassin.Mathematics.ValueTypes.Spherical3D"/> sequence to a <see cref="T:Mocassin.Mathematics.ValueTypes.Cartesian3D"/> sequence
+            </summary>
+            <param name="vectors"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Mocassin.Mathematics.Coordinates.VectorTransformer">
+            <inheritdoc />
+        </member>
+        <member name="P:Mocassin.Mathematics.Coordinates.VectorTransformer.FractionalSystem">
+            <inheritdoc />
+        </member>
+        <member name="P:Mocassin.Mathematics.Coordinates.VectorTransformer.SphericalSystem">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.VectorTransformer.#ctor(Mocassin.Mathematics.Coordinates.FractionalCoordinateSystem3D,Mocassin.Mathematics.Coordinates.SphericalCoordinateSystem3D)">
+            <summary>
+                Creates new vector transformer with the provided coordinate systems
+            </summary>
+            <param name="fractionalSystem"></param>
+            <param name="sphericalSystem"></param>
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.VectorTransformer.ToCartesian(Mocassin.Mathematics.ValueTypes.Fractional3D@)">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.VectorTransformer.ToSpherical(Mocassin.Mathematics.ValueTypes.Fractional3D@)">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.VectorTransformer.ToCartesian(System.Collections.Generic.IEnumerable{Mocassin.Mathematics.ValueTypes.Fractional3D})">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.VectorTransformer.ToSpherical(System.Collections.Generic.IEnumerable{Mocassin.Mathematics.ValueTypes.Fractional3D})">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.VectorTransformer.ToFractional(Mocassin.Mathematics.ValueTypes.Cartesian3D@)">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.VectorTransformer.ToSpherical(Mocassin.Mathematics.ValueTypes.Cartesian3D@)">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.VectorTransformer.ToFractional(System.Collections.Generic.IEnumerable{Mocassin.Mathematics.ValueTypes.Cartesian3D})">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.VectorTransformer.ToSpherical(System.Collections.Generic.IEnumerable{Mocassin.Mathematics.ValueTypes.Cartesian3D})">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.VectorTransformer.ToFractional(Mocassin.Mathematics.ValueTypes.Spherical3D@)">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.VectorTransformer.ToCartesian(Mocassin.Mathematics.ValueTypes.Spherical3D@)">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.VectorTransformer.ToFractional(System.Collections.Generic.IEnumerable{Mocassin.Mathematics.ValueTypes.Spherical3D})">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Coordinates.VectorTransformer.ToCartesian(System.Collections.Generic.IEnumerable{Mocassin.Mathematics.ValueTypes.Spherical3D})">
+            <inheritdoc />
+        </member>
+        <member name="T:Mocassin.Mathematics.Extensions.CartesianVectorExtensions">
+            <summary>
+                Extension class to provide generic mathematical operations for objects that implement the cartesian vector
+                interface without the virtual call overhead
+            </summary>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.CartesianVectorExtensions.GetLength(Mocassin.Mathematics.ValueTypes.ICartesian3D)">
+            <summary>
+                Get the two norm of a cartesian vector
+            </summary>
+            <param name="vector"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.CartesianVectorExtensions.IsLinearIndependent(Mocassin.Mathematics.ValueTypes.ICartesian3D,Mocassin.Mathematics.ValueTypes.ICartesian3D,System.Collections.Generic.IEqualityComparer{System.Double})">
+            <summary>
+                Checks if cartesian vector is linear independent from another
+            </summary>
+            <param name="first"></param>
+            <param name="second"></param>
+            <param name="comparer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.CartesianVectorExtensions.IsLinearIndependent(Mocassin.Mathematics.ValueTypes.Cartesian3D,Mocassin.Mathematics.ValueTypes.Cartesian3D@,System.Collections.Generic.IEqualityComparer{Mocassin.Mathematics.ValueTypes.Cartesian3D})">
+            <summary>
+                Check if two vectors are linear dependent within the tolerance of the provided double comparer
+            </summary>
+            <param name="first"></param>
+            <param name="second"></param>
+            <param name="comparer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.CartesianVectorExtensions.GetZeroCleaned(Mocassin.Mathematics.ValueTypes.Cartesian3D,System.Collections.Generic.IComparer{System.Double})">
+            <summary>
+                Fixes all almost zeros to zero utilizing the provided double comparer
+            </summary>
+            <param name="vector"></param>
+            <param name="comparer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.CartesianVectorExtensions.GetNormalized(Mocassin.Mathematics.ValueTypes.Cartesian3D)">
+            <summary>
+                Returns the normalized version of the vector
+            </summary>
+            <param name="vector"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.CartesianVectorExtensions.GetAngleTo(Mocassin.Mathematics.ValueTypes.Cartesian3D,Mocassin.Mathematics.ValueTypes.Cartesian3D@)">
+            <summary>
+                Get the angle between this and the second vector in radian
+            </summary>
+            <param name="first"></param>
+            <param name="second"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.CartesianVectorExtensions.GetScalarProduct(Mocassin.Mathematics.ValueTypes.Cartesian3D,Mocassin.Mathematics.ValueTypes.Cartesian3D@)">
+            <summary>
+                Calculates the scalar product (dot product) of the two vectors
+            </summary>
+            <param name="first"></param>
+            <param name="second"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.CartesianVectorExtensions.GetCrossProduct(Mocassin.Mathematics.ValueTypes.Cartesian3D,Mocassin.Mathematics.ValueTypes.Cartesian3D@)">
+            <summary>
+                Gets the cross product of the first vector with the second
+            </summary>
+            <param name="first"></param>
+            <param name="second"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.CartesianVectorExtensions.GetSpatProduct(Mocassin.Mathematics.ValueTypes.Cartesian3D,Mocassin.Mathematics.ValueTypes.Cartesian3D@,Mocassin.Mathematics.ValueTypes.Cartesian3D@)">
+            <summary>
+                Get the spat product between three cartesian vectors
+            </summary>
+            <param name="first"></param>
+            <param name="second"></param>
+            <param name="third"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.CartesianVectorExtensions.GetProjectionLength(Mocassin.Mathematics.ValueTypes.Cartesian3D,Mocassin.Mathematics.ValueTypes.Cartesian3D@)">
+            <summary>
+                Calculates the projection length of this vector onto the other
+            </summary>
+            <param name="first"></param>
+            <param name="second"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.CartesianVectorExtensions.GetProjection(Mocassin.Mathematics.ValueTypes.Cartesian3D,Mocassin.Mathematics.ValueTypes.Cartesian3D@)">
+            <summary>
+                Projects the vector onto another
+            </summary>
+            <param name="first"></param>
+            <param name="second"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.CartesianVectorExtensions.GetRejection(Mocassin.Mathematics.ValueTypes.Cartesian3D,Mocassin.Mathematics.ValueTypes.Cartesian3D@)">
+            <summary>
+                Rejection of the vector with another
+            </summary>
+            <param name="first"></param>
+            <param name="second"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.CartesianVectorExtensions.GetNormalVector(Mocassin.Mathematics.ValueTypes.Cartesian3D,Mocassin.Mathematics.ValueTypes.Cartesian3D@)">
+            <summary>
+                Returns the shortest possible vector of source type from an axis defined by the second vector (New vector is
+                perpendicular to second)
+            </summary>
+            <param name="first"></param>
+            <param name="second"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Mocassin.Mathematics.Extensions.IntegerExtensions">
+            <summary>
+                ICon integer extension class
+            </summary>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.IntegerExtensions.GetBit(System.UInt32,System.Int32)">
+            <summary>
+                Get true/false of a single bit
+            </summary>
+            <param name="integer"></param>
+            <param name="index"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.IntegerExtensions.SetBit(System.UInt32,System.Int32)">
+            <summary>
+                Set a single bit within an integer to true
+            </summary>
+            <param name="integer"></param>
+            <param name="index"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.IntegerExtensions.UnsetBit(System.UInt32,System.Int32)">
+            <summary>
+                Set a single bit within an integer to false
+            </summary>
+            <param name="integer"></param>
+            <param name="index"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.IntegerExtensions.SetBits(System.UInt32,System.UInt32)">
+            <summary>
+                Sets all true bits of secoond integer to true in the first
+            </summary>
+            <param name="integer"></param>
+            <param name="flags"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.IntegerExtensions.UnsetBits(System.UInt32,System.UInt32)">
+            <summary>
+                Sets all true bits in the second integer to false in the first
+            </summary>
+            <param name="integer"></param>
+            <param name="flags"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.IntegerExtensions.GetBit(System.UInt64,System.Int32)">
+            <summary>
+                Get true/false of a single bit
+            </summary>
+            <param name="integer"></param>
+            <param name="index"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.IntegerExtensions.SetBit(System.UInt64,System.Int32)">
+            <summary>
+                Set a single bit within an integer to true
+            </summary>
+            <param name="integer"></param>
+            <param name="index"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.IntegerExtensions.UnsetBit(System.UInt64,System.Int32)">
+            <summary>
+                Set a single bit within an integer to false
+            </summary>
+            <param name="integer"></param>
+            <param name="index"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.IntegerExtensions.SetBits(System.UInt64,System.UInt64)">
+            <summary>
+                Sets all true bits of second integer to true in the first
+            </summary>
+            <param name="integer"></param>
+            <param name="flags"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.IntegerExtensions.UnsetBits(System.UInt64,System.UInt64)">
+            <summary>
+                Sets all true bits in the second integer to false in the first
+            </summary>
+            <param name="integer"></param>
+            <param name="flags"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.IntegerExtensions.PopCount(System.UInt64)">
+            <summary>
+                Performs a population count on an 64 bit unsigned integer
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.IntegerExtensions.PopCount``1(``0)">
+            <summary>
+                Performs a population count on an IConvertible struct (Will always result in the population count of the conversion
+                result to 64bit unsigned integer!)
+            </summary>
+            <typeparam name="T1"></typeparam>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.IntegerExtensions.InvertBytes(System.Int64)">
+            <summary>
+                Invert the byte order of a long value
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Mocassin.Mathematics.Extensions.MocassinMath">
+            <summary>
+                Extends the System.Math implementation with additional functionality and constants in radian
+            </summary>
+        </member>
+        <member name="F:Mocassin.Mathematics.Extensions.MocassinMath.Radian45">
+            <summary>
+                Angle (45°) in radian
+            </summary>
+        </member>
+        <member name="F:Mocassin.Mathematics.Extensions.MocassinMath.Radian90">
+            <summary>
+                Right angle (90°) in radian
+            </summary>
+        </member>
+        <member name="F:Mocassin.Mathematics.Extensions.MocassinMath.Radian120">
+            <summary>
+                Hexagonal angle (120°) in radian
+            </summary>
+        </member>
+        <member name="F:Mocassin.Mathematics.Extensions.MocassinMath.Radian360">
+            <summary>
+                Full angle (360°) in radian
+            </summary>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.MocassinMath.DegreeToRadian(System.Double)">
+            <summary>
+                Transforms a degree double value to radian double
+            </summary>
+            <param name="degree"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.MocassinMath.RadianToDegree(System.Double)">
+            <summary>
+                Transforms a radian double value to degree double
+            </summary>
+            <param name="radian"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.MocassinMath.SaveIsZero(System.Double,Mocassin.Mathematics.Comparer.NumericComparer)">
+            <summary>
+                Checks if a value is zero using the provided double comparer (Throws if the tolerance comparer does not support
+                safe zero comparisons)
+            </summary>
+            <param name="value"></param>
+            <param name="comparer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.MocassinMath.Floor(System.Double,System.Collections.Generic.IEqualityComparer{System.Double})">
+            <summary>
+                Rounds a double value to the largest integer that compares less or equal to value
+            </summary>
+            <param name="value"></param>
+            <param name="comparer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.MocassinMath.FloorToInt(System.Double,System.Collections.Generic.IEqualityComparer{System.Double})">
+            <summary>
+                Rounds the provided double value to the largest integer that compares less or equal to value
+            </summary>
+            <param name="value"></param>
+            <param name="comparer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.MocassinMath.FloorToInt(System.Double)">
+            <summary>
+                Rounds the provided double value to the largest integer that compares less or equal to value
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.MocassinMath.CeilToInt(System.Double)">
+            <summary>
+                Rounds the provided double value to the smallest integer that compares greater or equal to value
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.MocassinMath.RoundToInt(System.Double,System.MidpointRounding)">
+            <summary>
+                Rounds the provided double value to an integer
+            </summary>
+            <param name="value"></param>
+            <param name="midpointRounding"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.MocassinMath.GetSphereVolume(System.Double)">
+            <summary>
+                Get the volume of a sphere with the provided radius
+            </summary>
+            <param name="radius"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Mocassin.Mathematics.Extensions.NumericExtensions">
+            <summary>
+                ICon floating point extension class that provides almost equal comparisons for FLP32 and FLP64 types
+            </summary>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.NumericExtensions.ConvertToInt64Bits(System.Double)">
+            <summary>
+                Bit conversion of double value into 64 bit signed integer
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.NumericExtensions.ConvertToInt32Bits(System.Single)">
+            <summary>
+                Bit conversion of single value into 32 bit signed integer
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.NumericExtensions.AlmostEqualByUlp(System.Double,System.Double,System.Int32)">
+            <summary>
+                Almost equal double comparison based upon ULP steps and IEEE standard (Cannot be used for 0.0 comparisons)
+            </summary>
+            <param name="value"></param>
+            <param name="other"></param>
+            <param name="steps"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.NumericExtensions.AlmostEqualByRange(System.Double,System.Double,System.Double)">
+            <summary>
+                Almost equal double comparison based upon range value (most flexible, no limitations)
+            </summary>
+            <param name="value"></param>
+            <param name="other"></param>
+            <param name="range"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.NumericExtensions.AlmostEqualByFactor(System.Double,System.Double,System.Double)">
+            <summary>
+                Almost equal double comparison based upon relative range (cannot be used if factor or value are 0.0)
+            </summary>
+            <param name="value"></param>
+            <param name="other"></param>
+            <param name="factor"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.NumericExtensions.AlmostZero(System.Double,System.Double)">
+            <summary>
+                Almost zero test for double value based upon range value
+            </summary>
+            <param name="value"></param>
+            <param name="range"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.NumericExtensions.CompareToByRange(System.Double,System.Double,System.Double)">
+            <summary>
+                Alternative CompareTo() implementation utilizing almost equal double comparison by range
+            </summary>
+            <param name="value"></param>
+            <param name="other"></param>
+            <param name="range"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.NumericExtensions.PeriodicTrim(System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+                Trims a double value into a specified range [lower, upper) constraint
+            </summary>
+            <param name="value"></param>
+            <param name="lowerBound"></param>
+            <param name="upperBound"></param>
+            <param name="almostEqualRange"></param>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.NumericExtensions.PeriodicTrim(System.Double,System.Double,System.Double,System.Collections.Generic.IComparer{System.Double})">
+            <summary>
+                Trims a double value into a specified range [lower, upper) constraint in steps of (upper - lower) using the
+                provided double comparer
+            </summary>
+            <param name="value"></param>
+            <param name="lowerBound"></param>
+            <param name="upperBound"></param>
+            <param name="comparer"></param>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.NumericExtensions.IsSymmetric(System.Double[0:,0:],System.Collections.Generic.IComparer{System.Double})">
+            <summary>
+                Checks if an 2D array of double values is symmetric with the provided equality comparer
+            </summary>
+            <param name="matrix"></param>
+            <param name="comparer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.NumericExtensions.IsQuadratic``1(``0[0:,0:])">
+            <summary>
+                Generic check if a 2D array of any type is quadratic
+            </summary>
+            <typeparam name="T1"></typeparam>
+            <param name="matrix"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.NumericExtensions.CleanAlmostZeroEntries(System.Double[0:,0:],System.Collections.Generic.IComparer{System.Double})">
+            <summary>
+                Use the provided double equality comparer and set all values that compare equal to 0.0 to actual 0.0
+            </summary>
+            <param name="array"></param>
+            <param name="comparer"></param>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.NumericExtensions.RightMatrixMultiplication(System.Double[0:,0:],System.Double[0:,0:])">
+            <summary>
+                Performs a matrix multiplication from the right (equal to lhs * rhs)
+            </summary>
+            <param name="lhs"></param>
+            <param name="rhs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.NumericExtensions.LeftMatrixMultiplication(System.Double[0:,0:],System.Double[0:,0:])">
+            <summary>
+                Performs a left matrix multiplication (equal to rhs * lhs)
+            </summary>
+            <param name="lhs"></param>
+            <param name="rhs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.NumericExtensions.GetDimensions(System.Double[0:,0:])">
+            <summary>
+                Get the dimensions of a Double[,] array
+            </summary>
+            <param name="matrix"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.NumericExtensions.ZeroSafeRound(System.Double,System.Double)">
+            <summary>
+                Rounds a double to the other value if close enough (Uses zero safe default ranged comparer)
+            </summary>
+            <param name="value"></param>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.NumericExtensions.ZeroSafeRound(System.Double,System.Double,Mocassin.Mathematics.Comparer.NumericComparer)">
+            <summary>
+                Rounds a double to the other value if close enough (Zero safe, throws if one of the values is exactly zero and the
+                comparer does not support zero safe comparisons)
+            </summary>
+            <param name="value"></param>
+            <param name="other"></param>
+            <param name="comparer"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Mocassin.Mathematics.Extensions.VectorExtensions">
+            <summary>
+                ICon vector math extensions that are shared between all kinds of 3D vectors
+            </summary>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.VectorExtensions.MultiplyWith(System.Double[0:,0:],Mocassin.Mathematics.ValueTypes.Coordinates3D@)">
+            <summary>
+                Multiplies an array with the provided basic 3D coordinate tuple (matrix * vector)
+            </summary>
+            <param name="matrix"></param>
+            <param name="vector"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.VectorExtensions.MultiplyWith(System.Double[0:,0:],Mocassin.Mathematics.ValueTypes.Cartesian3D@)">
+            <summary>
+                Multiplies an array with the provided basic cartesian vector (matrix * vector)
+            </summary>
+            <param name="matrix"></param>
+            <param name="vector"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.VectorExtensions.MultiplyWith(System.Double[0:,0:],Mocassin.Mathematics.ValueTypes.Fractional3D@)">
+            <summary>
+                Multiplies an array with the provided basic fractional vector (matrix * vector)
+            </summary>
+            <param name="matrix"></param>
+            <param name="vector"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.VectorExtensions.MultiplyWith(System.Double[0:,0:],Mocassin.Mathematics.ValueTypes.Spherical3D@)">
+            <summary>
+                Multiplies an array with the provided basic spherical vector (matrix * vector)
+            </summary>
+            <param name="matrix"></param>
+            <param name="vector"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.VectorExtensions.GetLength(Mocassin.Mathematics.ValueTypes.Coordinates3D)">
+            <summary>
+                Calculates the euclidean length of a 3D coordinate tuple (Only useful if the tuple represents cartesian values)
+            </summary>
+            <param name="coordinates"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.VectorExtensions.GetCrossProduct(Mocassin.Mathematics.ValueTypes.Coordinates3D,Mocassin.Mathematics.ValueTypes.Coordinates3D@)">
+            <summary>
+                Calculates the cross product with another 3D coordinate tuple
+            </summary>
+            <param name="first"></param>
+            <param name="second"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.VectorExtensions.IsLinearIndependentFrom(Mocassin.Mathematics.ValueTypes.Coordinates3D,Mocassin.Mathematics.ValueTypes.Coordinates3D@,Mocassin.Mathematics.ValueTypes.Coordinates3D@,System.Collections.Generic.IEqualityComparer{System.Double})">
+            <summary>
+                Checks if a 3D coordinate tuple is linear independent from two others
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <param name="c"></param>
+            <param name="comparer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.VectorExtensions.IsLinearIndependentFrom(Mocassin.Mathematics.ValueTypes.Coordinates3D,Mocassin.Mathematics.ValueTypes.Coordinates3D@,System.Collections.Generic.IEqualityComparer{System.Double})">
+            <summary>
+                Checks if a 3D coordinate tuple is independent from another
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <param name="comparer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Extensions.VectorExtensions.CuboidHitTest``1(``0,``0,``0,System.Collections.Generic.IComparer{System.Double})">
+            <summary>
+                Generic test wherever a <see cref="T:Mocassin.Mathematics.ValueTypes.IFractional3D"/> lies within abounding cuboid defined by two <see cref="T:Mocassin.Mathematics.ValueTypes.IFractional3D"/> points
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="value"></param>
+            <param name="start"></param>
+            <param name="end"></param>
+            <param name="comparer"></param>
+            <returns>-1 if any component is below the lower point, 0 if all are within bounds an +1 if any component is above the upper point</returns>
+        </member>
+        <member name="T:Mocassin.Mathematics.Permutation.IPermutationSource`1">
+            <summary>
+                Represents a permutation source for a specific type set
+            </summary>
+            <typeparam name="T1"></typeparam>
+        </member>
+        <member name="P:Mocassin.Mathematics.Permutation.IPermutationSource`1.PermutationCount">
+            <summary>
+                Get the number of possible permutations
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.Permutation.IPermutationSource`1.ResultLength">
+            <summary>
+                Get the length of the result permutation
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.Permutation.IPermutationSource`1.Value">
+            <summary>
+                Get the current value array
+            </summary>
+        </member>
+        <member name="M:Mocassin.Mathematics.Permutation.IPermutationSource`1.GetNext">
+            <summary>
+                Get the next permutation value
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Permutation.IPermutationSource`1.GetPrevious">
+            <summary>
+                Get the previous permutation value
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Permutation.IPermutationSource`1.Next">
+            <summary>
+                Increases internal state to next permutation
+            </summary>
+        </member>
+        <member name="M:Mocassin.Mathematics.Permutation.IPermutationSource`1.Previous">
+            <summary>
+                Decreases internal state to the previous permutation
+            </summary>
+        </member>
+        <member name="M:Mocassin.Mathematics.Permutation.IPermutationSource`1.Reset">
+            <summary>
+                Reset to start state
+            </summary>
+        </member>
+        <member name="T:Mocassin.Mathematics.Permutation.PermutationMachineSlot`1">
+            <summary>
+                Single periodic permutation machine slot that lexicographically and periodically goes through all entries of a list
+            </summary>
+        </member>
+        <member name="M:Mocassin.Mathematics.Permutation.PermutationMachineSlot`1.#ctor(System.Collections.Generic.IEnumerable{`0},System.Collections.Generic.IComparer{`0})">
+            <summary>
+                Creates a new permutation machine slot from array, set to the last existing value
+            </summary>
+            <param name="valueOptions"></param>
+            <param name="comparer"></param>
+        </member>
+        <member name="P:Mocassin.Mathematics.Permutation.PermutationMachineSlot`1.ValueOptions">
+            <summary>
+                The list of possible values
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.Permutation.PermutationMachineSlot`1.SlotSize">
+            <summary>
+                The number of possible values
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.Permutation.PermutationMachineSlot`1.CurrentIndex">
+            <summary>
+                The current index of the value options
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.Permutation.PermutationMachineSlot`1.Value">
+            <summary>
+                The current active value
+            </summary>
+        </member>
+        <member name="M:Mocassin.Mathematics.Permutation.PermutationMachineSlot`1.GetNext">
+            <summary>
+                Advances to the next value and returns the value
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Permutation.PermutationMachineSlot`1.GetPrevious">
+            <summary>
+                Returns to the previous value and returns the value
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Permutation.PermutationMachineSlot`1.Next">
+            <summary>
+                Advances the slot to the next value
+            </summary>
+        </member>
+        <member name="M:Mocassin.Mathematics.Permutation.PermutationMachineSlot`1.Previous">
+            <summary>
+                Returns the slot to the previous value
+            </summary>
+        </member>
+        <member name="M:Mocassin.Mathematics.Permutation.PermutationMachineSlot`1.NextWithPeriodicCheck">
+            <summary>
+                Set to the next value, returns true if the upper limit was reached and the slot reset to start value
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Permutation.PermutationMachineSlot`1.PreviousWithPeriodicCheck">
+            <summary>
+                Set to the previous value, returns true if the lower limit was reached and the slot reset to the final value
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Permutation.PermutationMachineSlot`1.Reset">
+            <summary>
+                Resets the slot to start conditions (i.e. last existing state)
+            </summary>
+        </member>
+        <member name="T:Mocassin.Mathematics.Permutation.PermutationSlotMachine`1">
+            <summary>
+                A generic permutation class that counter lexicographically and periodically generates the permutations of a two
+                dimensional list using a slot machine setup
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.Permutation.PermutationSlotMachine`1.Value">
+            <inheritdoc />
+        </member>
+        <member name="P:Mocassin.Mathematics.Permutation.PermutationSlotMachine`1.PermutationCount">
+            <inheritdoc />
+        </member>
+        <member name="P:Mocassin.Mathematics.Permutation.PermutationSlotMachine`1.ResultLength">
+            <inheritdoc />
+        </member>
+        <member name="P:Mocassin.Mathematics.Permutation.PermutationSlotMachine`1.Slots">
+            <summary>
+                The internal slot machine to produce permutations
+            </summary>
+        </member>
+        <member name="M:Mocassin.Mathematics.Permutation.PermutationSlotMachine`1.#ctor(System.Collections.Generic.IEnumerable{`0}[])">
+            <summary>
+                Creates new slot machine from arbitrary number of generic enumerable sequences
+            </summary>
+            <param name="optionsSet"></param>
+        </member>
+        <member name="M:Mocassin.Mathematics.Permutation.PermutationSlotMachine`1.#ctor(System.Collections.Generic.IEnumerable{System.Collections.Generic.IEnumerable{`0}})">
+            <summary>
+                Creates new slot machine from a 2d field of enumerable sequences
+            </summary>
+            <param name="optionsSet"></param>
+        </member>
+        <member name="M:Mocassin.Mathematics.Permutation.PermutationSlotMachine`1.GetNext">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Permutation.PermutationSlotMachine`1.GetPrevious">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Permutation.PermutationSlotMachine`1.Next">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Permutation.PermutationSlotMachine`1.Previous">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Permutation.PermutationSlotMachine`1.Reset">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.Permutation.PermutationSlotMachine`1.ForEach(System.Action{`0[]})">
+            <summary>
+                Linq style for each method over all permutations in lexicographical order
+            </summary>
+            <param name="action"></param>
+        </member>
+        <member name="M:Mocassin.Mathematics.Permutation.PermutationSlotMachine`1.GetEnumerator">
+            <inheritdoc />
+            <remarks> Getting an enumerator from the permutation source triggers the internal reset </remarks>
+        </member>
+        <member name="M:Mocassin.Mathematics.Permutation.PermutationSlotMachine`1.System#Collections#IEnumerable#GetEnumerator">
+            <inheritdoc />
+            <remarks> Getting an enumerator from the permutation source triggers the internal reset </remarks>
+        </member>
+        <member name="T:Mocassin.Mathematics.Solver.GaussJordanSolver">
+            <summary>
+                Classical Gauss-Jordan solver implementation for multiple linear equation systems
+            </summary>
+        </member>
+        <member name="M:Mocassin.Mathematics.Solver.GaussJordanSolver.TrySolve(System.Double[0:,0:],System.Double[0:,0:],System.Collections.Generic.IComparer{System.Double})">
+            <summary>
+                Solves the left matrix to an entity if possible, the right matrix afterwards contains the solutions of the linear
+                equation system
+            </summary>
+            <param name="leftMatrix"></param>
+            <param name="rightMatrix"></param>
+            <param name="comparer"></param>
+        </member>
+        <member name="M:Mocassin.Mathematics.Solver.GaussJordanSolver.TrySolve(Mocassin.Mathematics.ValueTypes.Matrix2D,Mocassin.Mathematics.ValueTypes.Matrix2D,System.Collections.Generic.IComparer{System.Double})">
+            <summary>
+                Solves left matrix to an entity if possible, the right matrix contains the solution of the linear equation system
+                on success
+            </summary>
+            <param name="leftMatrix"></param>
+            <param name="rightMatrix"></param>
+            <param name="comparer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Solver.GaussJordanSolver.CheckStartConditionsAndFixZeros(System.Double[0:,0:],System.Double[0:,0:],System.Collections.Generic.IComparer{System.Double})">
+            <summary>
+                Checks if the start conditions are met and fixes potential almost zero entries in both arrays, returns false if not
+                met
+            </summary>
+            <param name="leftMatrix"></param>
+            <param name="rightMatrix"></param>
+            <param name="comparer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Solver.GaussJordanSolver.TryTransformSystemToStartConditions(System.Double[0:,0:],System.Double[0:,0:],System.Collections.Generic.IComparer{System.Double})">
+            <summary>
+                Brings the system into a condition where all diagonal entries of the left matrix are non zero, returns false if
+                impossible
+            </summary>
+            <param name="leftMatrix"></param>
+            <param name="rightMatrix"></param>
+            <param name="comparer"></param>
+        </member>
+        <member name="M:Mocassin.Mathematics.Solver.GaussJordanSolver.TryGaussJordanSolve(System.Double[0:,0:],System.Double[0:,0:],System.Collections.Generic.IComparer{System.Double})">
+            <summary>
+                Applies the actual gauss jordan algorithm to the prepared system, returns false if non-solvable
+            </summary>
+            <param name="leftMatrix"></param>
+            <param name="rightMatrix"></param>
+            <param name="comparer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Solver.GaussJordanSolver.NormalizeByLeftMatrix(System.Double[0:,0:],System.Double[0:,0:],System.Collections.Generic.IComparer{System.Double})">
+            <summary>
+                Uses the left matrix to normalize both matrices
+            </summary>
+            <param name="leftMatrix"></param>
+            <param name="rightMatrix"></param>
+            <param name="comparer"></param>
+        </member>
+        <member name="M:Mocassin.Mathematics.Solver.GaussJordanSolver.AddFirstRowToSecond(System.Double[0:,0:],System.Int32,System.Int32,System.Double)">
+            <summary>
+                Adds the source row to the target row (entry by entry) with the optional multiplication factor
+            </summary>
+            <param name="matrix"></param>
+            <param name="targetRow"></param>
+            <param name="factor"></param>
+            <param name="sourceRow"></param>
+        </member>
+        <member name="M:Mocassin.Mathematics.Solver.GaussJordanSolver.MultiplyRowWithFactor(System.Double[0:,0:],System.Int32,System.Double)">
+            <summary>
+                Multiplies the target row with the provided factor
+            </summary>
+            <param name="matrix"></param>
+            <param name="row"></param>
+            <param name="factor"></param>
+        </member>
+        <member name="T:Mocassin.Mathematics.Solver.InertiaTensorSolver">
+            <summary>
+                Calculates the principal inertia tensor by the Oliver K. Smith trigonometric substitution
+            </summary>
+        </member>
+        <member name="M:Mocassin.Mathematics.Solver.InertiaTensorSolver.GetPrincipalTensorEntries(System.Double[0:,0:],System.Collections.Generic.IComparer{System.Double})">
+            <summary>
+                Solves eigenvalue problem of the generic inertia tensor and returns the diagonal entries of the principal inertia
+                tensor
+            </summary>
+            <param name="tensor"></param>
+            <param name="comparer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Solver.InertiaTensorSolver.GetPrincipalTensorLength(System.Double[0:,0:],System.Collections.Generic.IComparer{System.Double})">
+            <summary>
+                Get the length of the principal axis inertia tensor diagonal vector
+            </summary>
+            <param name="tensor"></param>
+            <param name="comparer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Solver.InertiaTensorSolver.CalculateEigenvalues(System.Double[0:,0:],System.Collections.Generic.IComparer{System.Double})">
+            <summary>
+                Uses trigonometric substitution to solve 3x3 symmetric matrix eigenvalue problem
+            </summary>
+            <param name="tensor"></param>
+            <param name="comparer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Solver.InertiaTensorSolver.Determinant(System.Collections.Generic.IReadOnlyList{System.Double},System.Collections.Generic.IReadOnlyList{System.Double})">
+            <summary>
+                Calculates the determinant of a 3x3 symmetric array from the diagonal entries and the outer values
+            </summary>
+            <param name="diagonal"></param>
+            <param name="outer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Solver.InertiaTensorSolver.Trace(System.Double[0:,0:])">
+            <summary>
+                Calculates the trace of a 3x3 double array
+            </summary>
+            <param name="tensor"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Solver.InertiaTensorSolver.Quad(System.Double)">
+            <summary>
+                Quadratic of a double value
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Mocassin.Mathematics.Solver.PointMechanicsSolver">
+            <summary>
+                Supplies solvers to handle group of mass points (e.g. mass center shifting) based upon read only mass point structs
+            </summary>
+        </member>
+        <member name="M:Mocassin.Mathematics.Solver.PointMechanicsSolver.ShiftOriginToMassCenter(System.Collections.Generic.IEnumerable{Mocassin.Mathematics.ValueTypes.CartesianMassPoint3D},System.Collections.Generic.IComparer{System.Double})">
+            <summary>
+                Shifts the origin point of a set of mass points to the center of mass. Comparer used to compare for zero values
+            </summary>
+            <param name="original"></param>
+            <param name="comparer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Solver.PointMechanicsSolver.GetMassCenter(System.Collections.Generic.IEnumerable{Mocassin.Mathematics.ValueTypes.CartesianMassPoint3D},System.Collections.Generic.IComparer{System.Double})">
+            <summary>
+                Finds the center of mass for a list of fast mass points. Comparer is used to check for zero values
+            </summary>
+            <param name="massPoints"></param>
+            <param name="comparer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Solver.PointMechanicsSolver.GetInertiaTensor(System.Collections.Generic.IEnumerable{Mocassin.Mathematics.ValueTypes.CartesianMassPoint3D})">
+            <summary>
+                Calculates the inertia tensor of a set of mass points
+            </summary>
+            <param name="massPoints"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Solver.PointMechanicsSolver.GetSumOfMassTimesDistance(System.Collections.Generic.IEnumerable{Mocassin.Mathematics.ValueTypes.CartesianMassPoint3D})">
+            <summary>
+                Calculates the sum of the product of absolute vector length times mass for a sequence of mass points
+            </summary>
+            <param name="massPoints"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Solver.PointMechanicsSolver.CreateGeometryInfo(System.Collections.Generic.IEnumerable{Mocassin.Mathematics.ValueTypes.CartesianMassPoint3D},System.Collections.Generic.IComparer{System.Double})">
+            <summary>
+                Creates the geometry information object for a sequence of mass points. Comparer is used to check for zero values
+            </summary>
+            <param name="massPoints"></param>
+            <param name="comparer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.Solver.PointMechanicsSolver.AddInertiaEntry(Mocassin.Mathematics.ValueTypes.Matrix2D,Mocassin.Mathematics.ValueTypes.CartesianMassPoint3D)">
+            <summary>
+                Adds the inertia entry of the provided mass point to the tensor
+            </summary>
+            <param name="tensor"></param>
+            <param name="point"></param>
+        </member>
+        <member name="M:Mocassin.Mathematics.Solver.PointMechanicsSolver.MakeSymmetric(Mocassin.Mathematics.ValueTypes.Matrix2D)">
+            <summary>
+                Sets the missing symmetric entries of a tensor
+            </summary>
+            <param name="tensor"></param>
+        </member>
+        <member name="T:Mocassin.Mathematics.ValueTypes.FractionalBox3D">
+            <summary>
+                Describes a rectangular box in the fractional coordinates that supports <see cref="T:Mocassin.Mathematics.ValueTypes.Fractional3D"/> bounds checking without converting to a cartesian context
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.FractionalBox3D.Start">
+            <summary>
+                Get the <see cref="T:Mocassin.Mathematics.ValueTypes.Fractional3D"/> that describes the start point
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.FractionalBox3D.Size">
+            <summary>
+                Get the <see cref="T:Mocassin.Mathematics.ValueTypes.Fractional3D"/> that describes the A,B,C sizes
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.FractionalBox3D.End">
+            <summary>
+                Get the <see cref="T:Mocassin.Mathematics.ValueTypes.Fractional3D"/> that describes the end point
+            </summary>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.FractionalBox3D.#ctor(Mocassin.Mathematics.ValueTypes.Fractional3D@,Mocassin.Mathematics.ValueTypes.Fractional3D@)">
+            <summary>
+                Creates a new <see cref="T:Mocassin.Mathematics.ValueTypes.FractionalBox3D"/> with start point and size information
+            </summary>
+            <param name="start"></param>
+            <param name="size"></param>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.FractionalBox3D.IsWithinBounds(System.Double,System.Double,System.Double)">
+            <summary>
+                Performs a within bounds check for the provided a,b,c coordinates using direct double comparison (Strictly within bounds)
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <param name="c"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.FractionalBox3D.IsWithinBounds(Mocassin.Mathematics.ValueTypes.Fractional3D@)">
+            <summary>
+                Performs a within bounds check for the provided <see cref="T:Mocassin.Mathematics.ValueTypes.Fractional3D"/> using direct double comparison (Strictly within bounds)
+            </summary>
+            <param name="point"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.FractionalBox3D.IsWithinBounds(System.Double,System.Double,System.Double,System.Collections.Generic.IComparer{System.Double})">
+            <summary>
+                Performs a within bounds check for the provided a,b,c coordinates using a double <see cref="T:System.Collections.Generic.IComparer`1" />
+            </summary>
+            <param name="c"></param>
+            <param name="comparer"></param>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.FractionalBox3D.IsWithinBounds(Mocassin.Mathematics.ValueTypes.Fractional3D@,System.Collections.Generic.IComparer{System.Double})">
+            <summary>
+                Performs a within bounds check for the provided <see cref="T:Mocassin.Mathematics.ValueTypes.Fractional3D"/> using a double <see cref="T:System.Collections.Generic.IComparer`1"/>
+            </summary>
+            <param name="point"></param>
+            <param name="comparer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.FractionalBox3D.IsWithinBounds(System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+                Performs an almost within bounds check for the provided <see cref="T:Mocassin.Mathematics.ValueTypes.Fractional3D"/> using a range tolerance
+            </summary>
+            <param name="c"></param>
+            <param name="tolerance"></param>
+            <param name="a"></param>
+            <param name="b"></param>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.FractionalBox3D.IsWithinBounds(Mocassin.Mathematics.ValueTypes.Fractional3D@,System.Double)">
+            <summary>
+                Performs an almost within bounds check for the provided <see cref="T:Mocassin.Mathematics.ValueTypes.Fractional3D"/> using a range tolerance
+            </summary>
+            <param name="point"></param>
+            <param name="tolerance"></param>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.FractionalBox3D.CalculateStartAndEndPoint(Mocassin.Mathematics.ValueTypes.Fractional3D@,Mocassin.Mathematics.ValueTypes.Fractional3D@)">
+            <summary>
+                Calculates the <see cref="T:Mocassin.Mathematics.ValueTypes.Fractional3D"/> start and end points of the <see cref="T:Mocassin.Mathematics.ValueTypes.FractionalBox3D"/> from an arbitrary start point and a size information
+            </summary>
+            <param name="start"></param>
+            <param name="size"></param>
+            <remarks> The resulting end point is component wise greater or equal to the resulting start point components </remarks>
+            <returns></returns>
+        </member>
+        <member name="T:Mocassin.Mathematics.ValueTypes.Coordinates3D">
+            <summary>
+                Represents a context free, readonly 24 byte double precision coordinate information for 3D space
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.Coordinates3D.A">
+            <summary>
+                First coordinate value
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.Coordinates3D.B">
+            <summary>
+                Second coordinate value
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.Coordinates3D.C">
+            <summary>
+                Third coordinate value
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.Coordinates3D.Dimension">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.Coordinates3D.#ctor(System.Double,System.Double,System.Double)">
+            <summary>
+             Creates a new <see cref="T:Mocassin.Mathematics.ValueTypes.Coordinates3D"/> struct from coordinate points
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <param name="c"></param>
+        </member>
+        <member name="T:Mocassin.Mathematics.ValueTypes.Coordinates4I">
+            <summary>
+                Represents a context free, readonly 16 byte coordinate information for 4D translation invariant integer space
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.Coordinates4I.A">
+            <summary>
+                First coordinate value
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.Coordinates4I.B">
+            <summary>
+                Second coordinate value
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.Coordinates4I.C">
+            <summary>
+                Third coordinate value
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.Coordinates4I.D">
+            <summary>
+                Fourth coordinate value
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.Coordinates4I.Dimension">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.Coordinates4I.#ctor(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+             Creates a new <see cref="T:Mocassin.Mathematics.ValueTypes.Coordinates4I"/> struct from coordinate points
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <param name="c"></param>
+            <param name="d"></param>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.Coordinates4I.CompareTo(Mocassin.Mathematics.ValueTypes.Coordinates4I)">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.Coordinates4I.Equals(Mocassin.Mathematics.ValueTypes.Coordinates4I)">
+            <inheritdoc />
+        </member>
+        <member name="T:Mocassin.Mathematics.ValueTypes.ICoordinates">
+            <summary>
+                Defines a coordinate object that holds coordinate information of specific dimension
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.ICoordinates.Dimension">
+            <summary>
+                Get the dimension of the coordinates
+            </summary>
+        </member>
+        <member name="T:Mocassin.Mathematics.ValueTypes.MassPointGeometryInfo">
+            <summary>
+                Geometric information for a mass point set. Contains multiple values to characterize the mechanic properties of the
+                mass points
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.MassPointGeometryInfo.MassCenterInertiaTensor">
+            <summary>
+                The inertia tensor calculated for the mass center as a matrix
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.MassPointGeometryInfo.SumOfMassTimesDistance">
+            <summary>
+                Sum of mass times distance from the center of mass (Pseudo torsional moment around the center)
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.MassPointGeometryInfo.TotalMass">
+            <summary>
+                The sum of all mass points
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.MassPointGeometryInfo.PointCount">
+            <summary>
+                The number of contained mass points
+            </summary>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.MassPointGeometryInfo.#ctor(Mocassin.Mathematics.ValueTypes.Matrix2D,System.Double,System.Double,System.Int32)">
+            <summary>
+                Create new mass point geometry info
+            </summary>
+            <param name="massCenterInertiaTensor"></param>
+            <param name="sumOfMassTimesDistance"></param>
+            <param name="totalMass"></param>
+            <param name="totalMassPoints"></param>
+        </member>
+        <member name="T:Mocassin.Mathematics.ValueTypes.CartesianMassPoint3D">
+            <summary>
+                Cartesian 3D mass point
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.CartesianMassPoint3D.Mass">
+            <inheritdoc />
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.CartesianMassPoint3D.Vector">
+            <inheritdoc />
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.CartesianMassPoint3D.X">
+            <inheritdoc />
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.CartesianMassPoint3D.Y">
+            <inheritdoc />
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.CartesianMassPoint3D.Z">
+            <inheritdoc />
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.CartesianMassPoint3D.Coordinates">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.CartesianMassPoint3D.#ctor(System.Double,Mocassin.Mathematics.ValueTypes.Cartesian3D@)">
+            <summary>
+                Creates new mass point from mass and cartesian vector
+            </summary>
+            <param name="mass"></param>
+            <param name="vector"></param>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.CartesianMassPoint3D.#ctor(System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+                Creates new mass point from mass and coordinate infos
+            </summary>
+            <param name="mass"></param>
+            <param name="x"></param>
+            <param name="y"></param>
+            <param name="z"></param>
+        </member>
+        <member name="T:Mocassin.Mathematics.ValueTypes.FractionalMassPoint3D">
+            <summary>
+                Fractional mass point
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.FractionalMassPoint3D.Mass">
+            <summary>
+                The raw mass value of the mass point
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.FractionalMassPoint3D.A">
+            <inheritdoc />
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.FractionalMassPoint3D.B">
+            <inheritdoc />
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.FractionalMassPoint3D.C">
+            <inheritdoc />
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.FractionalMassPoint3D.Coordinates">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.FractionalMassPoint3D.#ctor(System.Double,Mocassin.Mathematics.ValueTypes.Fractional3D@)">
+            <summary>
+                Creates new mass point from mass and fractional vector
+            </summary>
+            <param name="mass"></param>
+            <param name="vector"></param>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.FractionalMassPoint3D.#ctor(System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+                Creates new mass point from mass and coordinate infos
+            </summary>
+            <param name="mass"></param>
+            <param name="x"></param>
+            <param name="y"></param>
+            <param name="z"></param>
+        </member>
+        <member name="T:Mocassin.Mathematics.ValueTypes.IMassPoint3D">
+            <summary>
+                General interface for all 3D mass points that support a double convertible mass object
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.IMassPoint3D.Mass">
+            <summary>
+                The mass value
+            </summary>
+        </member>
+        <member name="T:Mocassin.Mathematics.ValueTypes.ICartesianMassPoint3D">
+            <summary>
+                Combined vector and mass point interface for cartesian case
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.ICartesianMassPoint3D.Vector">
+            <summary>
+                Get the cartesian vector
+            </summary>
+        </member>
+        <member name="T:Mocassin.Mathematics.ValueTypes.IFractionalMassPoint3D">
+            <summary>
+                Combined vector and mass point interface for fractional case
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.IFractionalMassPoint3D.Vector">
+            <summary>
+                Get the fractional vector
+            </summary>
+        </member>
+        <member name="T:Mocassin.Mathematics.ValueTypes.ISphericalMassPoint3D">
+            <summary>
+                Combined vector and mass point interface for spherical case
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.ISphericalMassPoint3D.Vector">
+            <summary>
+                Get the spherical vector
+            </summary>
+        </member>
+        <member name="T:Mocassin.Mathematics.ValueTypes.SphericalMassPoint3D">
+            <summary>
+                Spherical mass point
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.SphericalMassPoint3D.Mass">
+            <summary>
+                The raw mass value of the mass point
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.SphericalMassPoint3D.Vector">
+            <inheritdoc />
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.SphericalMassPoint3D.Radius">
+            <inheritdoc />
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.SphericalMassPoint3D.Theta">
+            <inheritdoc />
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.SphericalMassPoint3D.Phi">
+            <inheritdoc />
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.SphericalMassPoint3D.Coordinates">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.SphericalMassPoint3D.#ctor(System.Double,Mocassin.Mathematics.ValueTypes.Spherical3D@)">
+            <summary>
+                Creates new mass point from mass and spherical vector
+            </summary>
+            <param name="mass"></param>
+            <param name="vector"></param>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.SphericalMassPoint3D.#ctor(System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+                Creates new mass point from mass and coordinate infos
+            </summary>
+            <param name="mass"></param>
+            <param name="x"></param>
+            <param name="y"></param>
+            <param name="z"></param>
+        </member>
+        <member name="T:Mocassin.Mathematics.ValueTypes.Matrix2D">
+            <summary>
+                Double precision two dimensional matrix of arbitrary size, wraps double[,] to restrict access and provide matrix
+                functionality
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.Matrix2D.Values">
+            <summary>
+                The wrapped 2D array of double values
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.Matrix2D.Comparer">
+            <summary>
+                The internal double comparison object
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.Matrix2D.Rows">
+            <summary>
+                The number of rows
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.Matrix2D.Cols">
+            <summary>
+                The number of cols
+            </summary>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.Matrix2D.#ctor(System.Double[0:,0:],System.Collections.Generic.IComparer{System.Double})">
+            <summary>
+                Construct new matrix from 2D array and double comparer
+            </summary>
+            <param name="comparer"></param>
+            <param name="values"></param>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.Matrix2D.#ctor(System.Int32,System.Int32,System.Collections.Generic.IComparer{System.Double})">
+            <summary>
+                Creates  new matrix of the specified dimensions
+            </summary>
+            <param name="comparer"></param>
+            <param name="rows"></param>
+            <param name="cols"></param>
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.Matrix2D.Item(System.Int32,System.Int32)">
+            <summary>
+                Access the matrix by indexer [row,col]
+            </summary>
+            <param name="row"></param>
+            <param name="col"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.Matrix2D.CleanAlmostZeros">
+            <summary>
+                Fixes all almost zero entries to zero
+            </summary>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.Matrix2D.Equals(Mocassin.Mathematics.ValueTypes.Matrix2D)">
+            <summary>
+                Compares for almost equality
+            </summary>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.Matrix2D.IsQuadratic">
+            <summary>
+                Checks if the matrix is quadratic
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.Matrix2D.IsSymmetric">
+            <summary>
+                Checks if the matrix is symmetric
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.Matrix2D.GetEntity(System.Int32,System.Collections.Generic.IComparer{System.Double})">
+            <summary>
+                Creates and entity matrix of the specified size
+            </summary>
+            <param name="size"></param>
+            <param name="comparer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.Matrix2D.GetInverse">
+            <summary>
+                Tries to inverse the matrix, returns null if failed
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.Matrix2D.GetTransposed">
+            <summary>
+                Returns the a new matrix that is the transposed of the current
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.Matrix2D.GetRowReversed">
+            <summary>
+                Get a matrix where each row is reversed
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.Matrix2D.GetTrace">
+            <summary>
+                Calculates the trace of the matrix, returns NaN if not possible
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.Matrix2D.Add(Mocassin.Mathematics.ValueTypes.Matrix2D)">
+            <summary>
+                Adds the matrix onto the current if possible
+            </summary>
+            <param name="rhs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.Matrix2D.Subtract(Mocassin.Mathematics.ValueTypes.Matrix2D)">
+            <summary>
+                Subtracts the matrix from the current if possible
+            </summary>
+            <param name="rhs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.Matrix2D.ScalarMultiply(System.Double)">
+            <summary>
+                Performs multiplication with provided scalar value
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.Matrix2D.ScalarDivide(System.Double)">
+            <summary>
+                Performs division by provide scalar value
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.Matrix2D.op_Multiply(Mocassin.Mathematics.ValueTypes.Matrix2D,Mocassin.Mathematics.ValueTypes.Matrix2D)">
+            <summary>
+                Matrix multiplication operator
+            </summary>
+            <param name="lhs"></param>
+            <param name="rhs"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Mocassin.Mathematics.ValueTypes.RotationMatrix2D">
+            <summary>
+                Rotation matrix for 3D vectors, contains factories for common cartesian operations
+            </summary>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.RotationMatrix2D.#ctor(System.Double[0:,0:],System.Collections.Generic.IComparer{System.Double})">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.RotationMatrix2D.#ctor(System.Collections.Generic.IComparer{System.Double})">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.RotationMatrix2D.CreateForAxisX(System.Double,Mocassin.Mathematics.Comparer.NumericComparer)">
+            <summary>
+                Creates a rotation matrix for X-Axis rotation by the given angle
+            </summary>
+            <param name="radian"></param>
+            <param name="comparer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.RotationMatrix2D.CreateForAxisY(System.Double,System.Collections.Generic.IComparer{System.Double})">
+            <summary>
+                Creates a rotation matrix for Y-Axis rotation by the given angle
+            </summary>
+            <param name="radian"></param>
+            <param name="comparer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.RotationMatrix2D.CreateForAxisZ(System.Double,Mocassin.Mathematics.Comparer.NumericComparer)">
+            <summary>
+                Creates a rotation matrix for Z-Axis rotation by the given angle
+            </summary>
+            <param name="radian"></param>
+            <param name="comparer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.RotationMatrix2D.CreateForArbitraryAxis(System.Double,Mocassin.Mathematics.ValueTypes.Cartesian3D@,Mocassin.Mathematics.Comparer.NumericComparer)">
+            <summary>
+                Creates a rotation matrix for arbitrary axis rotation in positive direction
+            </summary>
+            <param name="radian"></param>
+            <param name="axis"></param>
+            <param name="comparer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.RotationMatrix2D.op_Multiply(Mocassin.Mathematics.ValueTypes.RotationMatrix2D,Mocassin.Mathematics.ValueTypes.RotationMatrix2D)">
+            <summary>
+                Multiplies with another transformation matrix
+            </summary>
+            <param name="lhs"></param>
+            <param name="rhs"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Mocassin.Mathematics.ValueTypes.TransformMatrix2D">
+            <summary>
+                Transformation matrix for three dimensional vector systems, matrix is always 3x3
+            </summary>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.TransformMatrix2D.#ctor(System.Double[0:,0:],System.Collections.Generic.IComparer{System.Double})">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.TransformMatrix2D.#ctor(System.Collections.Generic.IComparer{System.Double})">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.TransformMatrix2D.Transform(Mocassin.Mathematics.ValueTypes.Cartesian3D@)">
+            <summary>
+                Generic application of the rotation onto a generic cartesian vector
+            </summary>
+            <param name="vector"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.TransformMatrix2D.Transform(Mocassin.Mathematics.ValueTypes.Coordinates3D@)">
+            <summary>
+                Transform operation for unspecified 3D coordinate tuple
+            </summary>
+            <param name="vector"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.TransformMatrix2D.Transform(Mocassin.Mathematics.ValueTypes.Fractional3D@)">
+            <summary>
+                Transform operation for non generic basic fractional vector
+            </summary>
+            <param name="vector"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.TransformMatrix2D.Transform(Mocassin.Mathematics.ValueTypes.Spherical3D@)">
+            <summary>
+                Transform operation for non generic basic spherical vector
+            </summary>
+            <param name="vector"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.TransformMatrix2D.op_Multiply(Mocassin.Mathematics.ValueTypes.TransformMatrix2D,Mocassin.Mathematics.ValueTypes.Coordinates3D@)">
+            <summary>
+                Matrix vector multiplication with unspecified 3D coordinate tuple
+            </summary>
+            <param name="matrix"></param>
+            <param name="vector"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.TransformMatrix2D.op_Multiply(Mocassin.Mathematics.ValueTypes.TransformMatrix2D,Mocassin.Mathematics.ValueTypes.Cartesian3D@)">
+            <summary>
+                Matrix vector multiplication with basic cartesian vector
+            </summary>
+            <param name="matrix"></param>
+            <param name="vector"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.TransformMatrix2D.op_Multiply(Mocassin.Mathematics.ValueTypes.TransformMatrix2D,Mocassin.Mathematics.ValueTypes.Fractional3D@)">
+            <summary>
+                Matrix vector multiplication with basic fractional vector
+            </summary>
+            <param name="matrix"></param>
+            <param name="vector"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.TransformMatrix2D.op_Multiply(Mocassin.Mathematics.ValueTypes.TransformMatrix2D,Mocassin.Mathematics.ValueTypes.Spherical3D@)">
+            <summary>
+                Matrix vector multiplication with basic spherical vector
+            </summary>
+            <param name="matrix"></param>
+            <param name="vector"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.TransformMatrix2D.op_Multiply(Mocassin.Mathematics.ValueTypes.TransformMatrix2D,Mocassin.Mathematics.ValueTypes.TransformMatrix2D)">
+            <summary>
+                Multiplies with another transformation matrix
+            </summary>
+            <param name="lhs"></param>
+            <param name="rhs"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Mocassin.Mathematics.ValueTypes.Cartesian3D">
+            <summary>
+                Basic cartesian vector that carries not additional information other than X,Y,Z coordinates
+            </summary>
+        </member>
+        <member name="F:Mocassin.Mathematics.ValueTypes.Cartesian3D.Coordinates">
+            <summary>
+                The readonly <see cref="T:Mocassin.Mathematics.ValueTypes.Coordinates3D"/> backing field
+            </summary>
+        </member>
+        <member name="F:Mocassin.Mathematics.ValueTypes.Cartesian3D.Zero">
+            <summary>
+                The zero vector (0,0,0) of this type
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.Cartesian3D.Mocassin#Mathematics#ValueTypes#IVector3D#Coordinates">
+            <inheritdoc />
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.Cartesian3D.X">
+            <inheritdoc />
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.Cartesian3D.Y">
+            <inheritdoc />
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.Cartesian3D.Z">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.Cartesian3D.#ctor(System.Double,System.Double,System.Double)">
+            <summary>
+                Construct from X,Y,Z coordinate values
+            </summary>
+            <param name="x"></param>
+            <param name="y"></param>
+            <param name="z"></param>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.Cartesian3D.#ctor(Mocassin.Mathematics.ValueTypes.Coordinates3D@)">
+            <summary>
+                Creates new cartesian vector from 3D coordinate tuple
+            </summary>
+            <param name="coordinates"></param>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.Cartesian3D.IsLinearIndependentFrom(Mocassin.Mathematics.ValueTypes.Cartesian3D@,Mocassin.Mathematics.ValueTypes.Cartesian3D@,System.Collections.Generic.IEqualityComparer{System.Double})">
+            <summary>
+                Checks if three cartesian vectors form a linear independent system
+            </summary>
+            <param name="vecA"></param>
+            <param name="vecB"></param>
+            <param name="comparer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.Cartesian3D.IsLinearIndependentFrom(Mocassin.Mathematics.ValueTypes.Cartesian3D@,System.Collections.Generic.IEqualityComparer{System.Double})">
+            <summary>
+                Checks if the cartesian vector is linear independent from another
+            </summary>
+            <param name="vecA"></param>
+            <param name="comparer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.Cartesian3D.op_Addition(Mocassin.Mathematics.ValueTypes.Cartesian3D,Mocassin.Mathematics.ValueTypes.Cartesian3D)">
+            <summary>
+                Vector addition
+            </summary>
+            <param name="lhs"></param>
+            <param name="rhs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.Cartesian3D.op_Subtraction(Mocassin.Mathematics.ValueTypes.Cartesian3D,Mocassin.Mathematics.ValueTypes.Cartesian3D)">
+            <summary>
+                Vector subtraction
+            </summary>
+            <param name="lhs"></param>
+            <param name="rhs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.Cartesian3D.op_Addition(Mocassin.Mathematics.ValueTypes.Cartesian3D,Mocassin.Mathematics.ValueTypes.ICartesian3D)">
+            <summary>
+                Vector addition
+            </summary>
+            <param name="lhs"></param>
+            <param name="rhs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.Cartesian3D.op_Subtraction(Mocassin.Mathematics.ValueTypes.Cartesian3D,Mocassin.Mathematics.ValueTypes.ICartesian3D)">
+            <summary>
+                Vector subtraction
+            </summary>
+            <param name="lhs"></param>
+            <param name="rhs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.Cartesian3D.op_Multiply(Mocassin.Mathematics.ValueTypes.Cartesian3D,Mocassin.Mathematics.ValueTypes.Cartesian3D)">
+            <summary>
+                Scalar product of two cartesian vectors
+            </summary>
+            <param name="lhs"></param>
+            <param name="rhs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.Cartesian3D.op_Multiply(Mocassin.Mathematics.ValueTypes.Cartesian3D,System.Double)">
+            <summary>
+                Multiplication with scalar value
+            </summary>
+            <param name="lhs"></param>
+            <param name="scalar"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.Cartesian3D.op_Division(Mocassin.Mathematics.ValueTypes.Cartesian3D,System.Double)">
+            <summary>
+                Division by scalar value
+            </summary>
+            <param name="lhs"></param>
+            <param name="scalar"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.Cartesian3D.GetLength">
+            <summary>
+                Get the length of the vector
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.Cartesian3D.GetSquared">
+            <summary>
+                Get a <see cref="T:Mocassin.Mathematics.ValueTypes.Cartesian3D" /> where each component is squared
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.Cartesian3D.ToString">
+            <inheritdoc />
+        </member>
+        <member name="T:Mocassin.Mathematics.ValueTypes.Fractional3D">
+            <summary>
+                Basic fractional vector that carries fractional affine coordinate system information (A,B,C)
+            </summary>
+        </member>
+        <member name="F:Mocassin.Mathematics.ValueTypes.Fractional3D.Coordinates">
+            <summary>
+                The readonly <see cref="T:Mocassin.Mathematics.ValueTypes.Coordinates3D"/> backing field
+            </summary>
+        </member>
+        <member name="F:Mocassin.Mathematics.ValueTypes.Fractional3D.Zero">
+            <summary>
+                The zero vector (0,0,0) of this type
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.Fractional3D.Mocassin#Mathematics#ValueTypes#IVector3D#Coordinates">
+            <inheritdoc />
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.Fractional3D.A">
+            <inheritdoc />
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.Fractional3D.B">
+            <inheritdoc />
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.Fractional3D.C">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.Fractional3D.#ctor(System.Double,System.Double,System.Double)">
+            <summary>
+                Construct from fractional A,B,C information
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <param name="c"></param>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.Fractional3D.#ctor(Mocassin.Mathematics.ValueTypes.Coordinates3D@)">
+            <summary>
+                Creates new fractional vector from 3D coordinate tuple
+            </summary>
+            <param name="coordinates"></param>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.Fractional3D.TrimToUnitCell(System.Double)">
+            <summary>
+                Trims the fractional vector into [0.0;1.0) range of the unit cell
+            </summary>
+            <param name="tolerance"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.Fractional3D.TrimToUnitCell(System.Collections.Generic.IComparer{System.Double})">
+            <summary>
+                Trims the fractional vector into [0.0;1.0) range of the unit cell
+            </summary>
+            <param name="comparer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.Fractional3D.op_Addition(Mocassin.Mathematics.ValueTypes.Fractional3D@,Mocassin.Mathematics.ValueTypes.Fractional3D@)">
+            <summary>
+                Vector addition
+            </summary>
+            <param name="lhs"></param>
+            <param name="rhs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.Fractional3D.op_Multiply(Mocassin.Mathematics.ValueTypes.Fractional3D@,System.Double)">
+            <summary>
+                Multiplication with scalar value
+            </summary>
+            <param name="lhs"></param>
+            <param name="rhs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.Fractional3D.op_Subtraction(Mocassin.Mathematics.ValueTypes.Fractional3D@,Mocassin.Mathematics.ValueTypes.Fractional3D@)">
+            <summary>
+                Vector subtraction
+            </summary>
+            <param name="lhs"></param>
+            <param name="rhs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.Fractional3D.op_Addition(Mocassin.Mathematics.ValueTypes.Fractional3D@,Mocassin.Mathematics.ValueTypes.IFractional3D)">
+            <summary>
+                Vector addition
+            </summary>
+            <param name="lhs"></param>
+            <param name="rhs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.Fractional3D.op_Subtraction(Mocassin.Mathematics.ValueTypes.Fractional3D@,Mocassin.Mathematics.ValueTypes.IFractional3D)">
+            <summary>
+                Vector subtraction
+            </summary>
+            <param name="lhs"></param>
+            <param name="rhs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.Fractional3D.ToString">
+            <summary>
+                Get vector values as a string
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.Fractional3D.CalculateMiddle(Mocassin.Mathematics.ValueTypes.Fractional3D@,Mocassin.Mathematics.ValueTypes.Fractional3D@)">
+            <summary>
+                Get the vector to the middle between two fractional vectors
+            </summary>
+            <param name="lhs"></param>
+            <param name="rhs"></param>
+        </member>
+        <member name="T:Mocassin.Mathematics.ValueTypes.IVector3D">
+            <summary>
+                Interface for all double precision three dimensional vectors of unspecified type
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.IVector3D.Coordinates">
+            <summary>
+                Get the coordinate information as a <see cref="T:Mocassin.Mathematics.ValueTypes.Coordinates3D"/> struct
+            </summary>
+        </member>
+        <member name="T:Mocassin.Mathematics.ValueTypes.ICartesian3D">
+            <summary>
+                General interface of all cartesian double precision vectors
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.ICartesian3D.X">
+            <summary>
+                The X coordinate value
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.ICartesian3D.Y">
+            <summary>
+                The Y coordinate value
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.ICartesian3D.Z">
+            <summary>
+                The Z coordinate value
+            </summary>
+        </member>
+        <member name="T:Mocassin.Mathematics.ValueTypes.IFractional3D">
+            <summary>
+                General interface of all fractional double precision vectors with three coordinates
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.IFractional3D.A">
+            <summary>
+                The A coordinate value
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.IFractional3D.B">
+            <summary>
+                The B coordinate value
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.IFractional3D.C">
+            <summary>
+                The C coordinate value
+            </summary>
+        </member>
+        <member name="T:Mocassin.Mathematics.ValueTypes.ISpherical3D">
+            <summary>
+                General interface of all spherical double precision vectors
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.ISpherical3D.Radius">
+            <summary>
+                The radius coordinate value
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.ISpherical3D.Theta">
+            <summary>
+                The theta (polar) coordinate value
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.ISpherical3D.Phi">
+            <summary>
+                The phi (azimuthal) coordinate value
+            </summary>
+        </member>
+        <member name="T:Mocassin.Mathematics.ValueTypes.Spherical3D">
+            <summary>
+                Basic fractional vector that carries fractional affine coordinate system information (A,B,C)
+            </summary>
+        </member>
+        <member name="F:Mocassin.Mathematics.ValueTypes.Spherical3D.Coordinates">
+            <summary>
+                The readonly <see cref="T:Mocassin.Mathematics.ValueTypes.Coordinates3D"/> backing field
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.Spherical3D.Mocassin#Mathematics#ValueTypes#IVector3D#Coordinates">
+            <inheritdoc />
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.Spherical3D.Radius">
+            <inheritdoc />
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.Spherical3D.Theta">
+            <inheritdoc />
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.Spherical3D.Phi">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.Spherical3D.#ctor(System.Double,System.Double,System.Double)">
+            <summary>
+                Construct from radius, theta and phi information
+            </summary>
+            <param name="radius"></param>
+            <param name="theta"></param>
+            <param name="phi"></param>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.Spherical3D.#ctor(Mocassin.Mathematics.ValueTypes.Coordinates3D@)">
+            <summary>
+                Creates new spherical vector from 3D coordinate tuple
+            </summary>
+            <param name="coordinates"></param>
+        </member>
+        <member name="T:Mocassin.Mathematics.ValueTypes.CrystalVector4D">
+            <summary>
+                Four dimensional 128 bit encoded linear supercell crystal position information
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.CrystalVector4D.NullVector">
+            <summary>
+                The null vector of this type
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.CrystalVector4D.Coordinates">
+            <summary>
+                The integer coordinate tuple
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.CrystalVector4D.A">
+            <inheritdoc />
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.CrystalVector4D.B">
+            <inheritdoc />
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.CrystalVector4D.C">
+            <inheritdoc />
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.CrystalVector4D.P">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.CrystalVector4D.#ctor(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+                Creates new from integer coordinates
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <param name="c"></param>
+            <param name="p"></param>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.CrystalVector4D.op_Subtraction(Mocassin.Mathematics.ValueTypes.CrystalVector4D,Mocassin.Mathematics.ValueTypes.ICrystalVector4D)">
+            <summary>
+                Vector subtraction of all values
+            </summary>
+            <param name="lhs"></param>
+            <param name="rhs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.CrystalVector4D.op_Addition(Mocassin.Mathematics.ValueTypes.CrystalVector4D,Mocassin.Mathematics.ValueTypes.ICrystalVector4D)">
+            <summary>
+                Vector addition of all values
+            </summary>
+            <param name="lhs"></param>
+            <param name="rhs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.CrystalVector4D.op_Multiply(Mocassin.Mathematics.ValueTypes.CrystalVector4D,System.Int32)">
+            <summary>
+                Vector multiplication with scalar value
+            </summary>
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.CrystalVector4D.ToString">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.CrystalVector4D.CompareTo(Mocassin.Mathematics.ValueTypes.CrystalVector4D)">
+            <inheritdoc />
+        </member>
+        <member name="M:Mocassin.Mathematics.ValueTypes.CrystalVector4D.Equals(Mocassin.Mathematics.ValueTypes.CrystalVector4D)">
+            <inheritdoc />
+        </member>
+        <member name="T:Mocassin.Mathematics.ValueTypes.ICrystalVector4D">
+            <summary>
+                General interface for all four dimensional 128 bit encoded linear supercell crystal position information
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.ICrystalVector4D.Coordinates">
+            <summary>
+                Get the coordinate tuple
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.ICrystalVector4D.A">
+            <summary>
+                Offset in A direction
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.ICrystalVector4D.B">
+            <summary>
+                Offset in B direction
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.ICrystalVector4D.C">
+            <summary>
+                Offset in C direction
+            </summary>
+        </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.ICrystalVector4D.P">
+            <summary>
+                The position ID within the unit cell
+            </summary>
+        </member>
+        <member name="T:Moccasin.Mathematics.ValueTypes.VectorI3">
+            <summary>
+                Represents a readonly set of A,B,C offset integers in a 3D translation invariant coordinate system
+            </summary>
+        </member>
+        <member name="P:Moccasin.Mathematics.ValueTypes.VectorI3.A">
+            <summary>
+                Get the X coordinate value
+            </summary>
+        </member>
+        <member name="P:Moccasin.Mathematics.ValueTypes.VectorI3.B">
+            <summary>
+                Get the Y coordinate value
+            </summary>
+        </member>
+        <member name="P:Moccasin.Mathematics.ValueTypes.VectorI3.C">
+            <summary>
+                Get the Z coordinate value
+            </summary>
+        </member>
+        <member name="M:Moccasin.Mathematics.ValueTypes.VectorI3.#ctor(System.Int32,System.Int32,System.Int32)">
+            <summary>
+                Construct from A,B,C coordinate values
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <param name="c"></param>
+        </member>
+        <member name="M:Moccasin.Mathematics.ValueTypes.VectorI3.op_Addition(Moccasin.Mathematics.ValueTypes.VectorI3,Moccasin.Mathematics.ValueTypes.VectorI3)">
+            <summary>
+                Vector addition
+            </summary>
+            <param name="lhs"></param>
+            <param name="rhs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Moccasin.Mathematics.ValueTypes.VectorI3.op_Subtraction(Moccasin.Mathematics.ValueTypes.VectorI3,Moccasin.Mathematics.ValueTypes.VectorI3)">
+            <summary>
+                Vector subtraction
+            </summary>
+            <param name="lhs"></param>
+            <param name="rhs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Moccasin.Mathematics.ValueTypes.VectorI3.op_Multiply(Moccasin.Mathematics.ValueTypes.VectorI3,Moccasin.Mathematics.ValueTypes.VectorI3)">
+            <summary>
+                Scalar product of two cartesian vectors
+            </summary>
+            <param name="lhs"></param>
+            <param name="rhs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Moccasin.Mathematics.ValueTypes.VectorI3.op_Multiply(Moccasin.Mathematics.ValueTypes.VectorI3,System.Int32)">
+            <summary>
+                Multiplication with scalar value
+            </summary>
+            <param name="lhs"></param>
+            <param name="scalar"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Moccasin.Mathematics.ValueTypes.VectorI3.op_Division(Moccasin.Mathematics.ValueTypes.VectorI3,System.Int32)">
+            <summary>
+                Division by scalar value
+            </summary>
+            <param name="lhs"></param>
+            <param name="scalar"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Moccasin.Mathematics.ValueTypes.VectorI3.op_Division(Moccasin.Mathematics.ValueTypes.VectorI3,Moccasin.Mathematics.ValueTypes.VectorI3)">
+            <summary>
+                Division by vector
+            </summary>
+            <param name="lhs"></param>
+            <param name="rhs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Moccasin.Mathematics.ValueTypes.VectorI3.op_Modulus(Moccasin.Mathematics.ValueTypes.VectorI3,System.Int32)">
+            <summary>
+                Remainder operation of every component by scalar value
+            </summary>
+            <param name="lhs"></param>
+            <param name="scalar"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Moccasin.Mathematics.ValueTypes.VectorI3.op_Modulus(Moccasin.Mathematics.ValueTypes.VectorI3,Moccasin.Mathematics.ValueTypes.VectorI3)">
+            <summary>
+                Remainder operation of every component by scalar value
+            </summary>
+            <param name="lhs"></param>
+            <param name="rhs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Moccasin.Mathematics.ValueTypes.VectorI3.GetLength">
+            <summary>
+                Get the length of the vector
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Moccasin.Mathematics.ValueTypes.VectorI3.GetCoordinateProduct">
+            <summary>
+                Get the volume of a cuboid generated by this vector
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Moccasin.Mathematics.ValueTypes.VectorI3.Equals(Moccasin.Mathematics.ValueTypes.VectorI3@)">
+            <summary>
+                Compares the components of two vectors for equality
+            </summary>
+            <param name="vector"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

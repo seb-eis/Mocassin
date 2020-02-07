@@ -8,28 +8,27 @@ namespace Mocassin.Symmetry.CrystalSystems
     public interface ICrystalSystemSource
     {
         /// <summary>
-        ///     The max value for parameters
+        ///     Get or set the max value for parameters
         /// </summary>
         double ParameterMaxValue { get; set; }
 
         /// <summary>
-        ///     The tolerance range for parameter comparisons within the crystal systems
+        ///     Get or set tolerance range for parameter comparisons within the crystal systems
         /// </summary>
-        double ToleranceRange { get; set; }
+        double Tolerance { get; set; }
 
         /// <summary>
-        ///     Create a new crystal system for the provided space group interface
+        ///     Get a <see cref="CrystalSystem"/> for the provided <see cref="ISpaceGroup"/>
         /// </summary>
         /// <param name="group"></param>
         /// <returns></returns>
-        CrystalSystem Create(ISpaceGroup group);
+        CrystalSystem GetSystem(ISpaceGroup group);
 
         /// <summary>
-        ///     Create a new crystal system for the provided system index and variation name
+        ///     Get a <see cref="CrystalSystem"/> based oon a <see cref="CrystalSystemIdentification"/>
         /// </summary>
-        /// <param name="systemIndex"></param>
-        /// <param name="variationName"></param>
+        /// <param name="identification"></param>
         /// <returns></returns>
-        CrystalSystem Create(int systemIndex, string variationName);
+        CrystalSystem GetSystem(CrystalSystemIdentification identification);
     }
 }

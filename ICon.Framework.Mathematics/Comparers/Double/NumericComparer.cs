@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Mocassin.Mathematics.Comparers
+namespace Mocassin.Mathematics.Comparer
 {
     /// <summary>
     ///     Abstract base class for all tolerance based double comparer objects

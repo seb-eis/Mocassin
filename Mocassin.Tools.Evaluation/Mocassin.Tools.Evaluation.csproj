@@ -6,6 +6,10 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <DocumentationFile>C:\Users\hims-user\source\repos\ICon.Program\Mocassin.Tools.Evaluation\Mocassin.Tools.Evaluation.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\ICon.Framework.Mathematics\Mocassin.Mathematics.csproj" />
     <ProjectReference Include="..\ICon.Framework.Shared\Mocassin.Framework.csproj" />
