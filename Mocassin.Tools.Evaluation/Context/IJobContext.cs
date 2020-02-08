@@ -1,5 +1,4 @@
-﻿using Mocassin.Model.Translator;
-using Mocassin.Model.Translator.ModelContext;
+﻿using Mocassin.Model.Translator.ModelContext;
 using Mocassin.Tools.UAccess.Readers;
 
 namespace Mocassin.Tools.Evaluation.Context

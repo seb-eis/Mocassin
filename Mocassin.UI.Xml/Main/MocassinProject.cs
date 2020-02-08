@@ -17,12 +17,12 @@ namespace Mocassin.UI.Xml.Main
     [XmlRoot]
     public class MocassinProject : ProjectDataEntity
     {
-        private string projectGuid;
-        private ProjectModelData projectModelData;
         private ObservableCollection<ProjectCustomizationTemplate> customizationTemplates;
         private ObservableCollection<ProjectJobSetTemplate> jobSetTemplates;
-        private ObservableCollection<SimulationDbBuildTemplate> simulationDbBuildTemplates;
+        private string projectGuid;
+        private ProjectModelData projectModelData;
         private ResourcesData resources;
+        private ObservableCollection<SimulationDbBuildTemplate> simulationDbBuildTemplates;
 
         /// <summary>
         ///     Get or set a Guid for the project
@@ -73,7 +73,8 @@ namespace Mocassin.UI.Xml.Main
         }
 
         /// <summary>
-        ///     Get or set the list of <see cref="ProjectCustomizationTemplate" /> that defines parameters for auto generated content
+        ///     Get or set the list of <see cref="ProjectCustomizationTemplate" /> that defines parameters for auto generated
+        ///     content
         /// </summary>
         [XmlArray]
         [NotMapped]

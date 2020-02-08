@@ -14,18 +14,18 @@ namespace Mocassin.UI.Xml.Customization
     [XmlRoot("KineticRule")]
     public class KineticRuleData : ProjectDataObject, IDuplicable<KineticRuleData>
     {
-        /// <summary>
-        ///     Get or set the default value used for the <see cref="AttemptFrequency"/>. Standard ist 1.0e13 Hz
-        /// </summary>
-        public static double DefaultAttemptFrequency { get; set; } = 1.0e13;
-
         private double attemptFrequency = DefaultAttemptFrequency;
+        private int dependencyRuleCount;
+        private OccupationStateData finalState;
         private string ruleFlags;
         private int ruleIndex;
         private OccupationStateData startState;
         private OccupationStateData transitionState;
-        private OccupationStateData finalState;
-        private int dependencyRuleCount;
+
+        /// <summary>
+        ///     Get or set the default value used for the <see cref="AttemptFrequency" />. Standard ist 1.0e13 Hz
+        /// </summary>
+        public static double DefaultAttemptFrequency { get; set; } = 1.0e13;
 
         /// <summary>
         ///     Get or set the attempt frequency value of the rule in [Hz]
@@ -97,6 +97,29 @@ namespace Mocassin.UI.Xml.Customization
             set => SetProperty(ref dependencyRuleCount, value);
         }
 
+        /// <inheritdoc />
+        public KineticRuleData Duplicate()
+        {
+            var copy = new KineticRuleData
+            {
+                Name = Name,
+                attemptFrequency = attemptFrequency,
+                ruleFlags = ruleFlags,
+                ruleIndex = ruleIndex,
+                dependencyRuleCount = dependencyRuleCount,
+                startState = startState.Duplicate(),
+                transitionState = transitionState.Duplicate(),
+                finalState = finalState.Duplicate()
+            };
+            return copy;
+        }
+
+        /// <inheritdoc />
+        object IDuplicable.Duplicate()
+        {
+            return Duplicate();
+        }
+
         /// <summary>
         ///     Creates a new serializable <see cref="KineticRuleData" /> by pulling the required data from the passed
         ///     <see cref="IKineticRule" /> and <see cref="ProjectModelData" /> parent
@@ -125,41 +148,18 @@ namespace Mocassin.UI.Xml.Customization
             return obj;
         }
 
-        /// <inheritdoc />
-        public KineticRuleData Duplicate()
-        {
-            var copy = new KineticRuleData
-            {
-                Name = Name,
-                attemptFrequency = attemptFrequency,
-                ruleFlags = ruleFlags,
-                ruleIndex = ruleIndex,
-                dependencyRuleCount = dependencyRuleCount,
-                startState = startState.Duplicate(),
-                transitionState = transitionState.Duplicate(),
-                finalState = finalState.Duplicate()
-            };
-            return copy;
-        }
-
         /// <summary>
-        ///     Check if all occupation states are equal to the states on the provided <see cref="KineticRuleSetData"/>
+        ///     Check if all occupation states are equal to the states on the provided <see cref="KineticRuleSetData" />
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
         public bool HasEqualStates(KineticRuleData other)
         {
-            return other != null && 
+            return other != null &&
                    (ReferenceEquals(this, other) ||
-                    StartState.HasEqualState(other.StartState) && 
+                    StartState.HasEqualState(other.StartState) &&
                     TransitionState.HasEqualState(other.TransitionState) &&
                     FinalState.HasEqualState(other.FinalState));
-        }
-
-        /// <inheritdoc />
-        object IDuplicable.Duplicate()
-        {
-            return Duplicate();
         }
     }
 }

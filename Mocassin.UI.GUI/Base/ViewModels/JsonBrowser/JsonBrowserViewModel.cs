@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Security.RightsManagement;
 using System.Windows.Controls;
 using Mocassin.Framework.Extensions;
 using Newtonsoft.Json;
@@ -7,17 +6,17 @@ using Newtonsoft.Json;
 namespace Mocassin.UI.GUI.Base.ViewModels.JsonBrowser
 {
     /// <summary>
-    ///     <see cref="ViewModelBase"/> for <see cref="JsonBrowserView"/> that enables browsing of JSON data
+    ///     <see cref="ViewModelBase" /> for <see cref="JsonBrowserView" /> that enables browsing of JSON data
     /// </summary>
     public class JsonBrowserViewModel : ViewModelBase
     {
         /// <summary>
-        ///     The <see cref="RootViewItems"/> backing field
+        ///     The <see cref="RootViewItems" /> backing field
         /// </summary>
         private IEnumerable<TreeViewItem> rootViewItems;
 
         /// <summary>
-        ///     Get or set the <see cref="TreeViewItem"/> that is the root item
+        ///     Get or set the <see cref="TreeViewItem" /> that is the root item
         /// </summary>
         public IEnumerable<TreeViewItem> RootViewItems
         {
@@ -26,7 +25,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.JsonBrowser
         }
 
         /// <summary>
-        ///     Get or set the <see cref="JsonSerializerSettings"/> that should be used
+        ///     Get or set the <see cref="JsonSerializerSettings" /> that should be used
         /// </summary>
         public JsonSerializerSettings SerializerSettings { get; set; }
 
@@ -42,7 +41,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.JsonBrowser
         }
 
         /// <summary>
-        ///     Sets the active <see cref="TreeViewItem"/> by converting the provided <see cref="object"/>
+        ///     Sets the active <see cref="TreeViewItem" /> by converting the provided <see cref="object" />
         /// </summary>
         /// <param name="obj"></param>
         /// <param name="rootName"></param>
@@ -54,7 +53,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.JsonBrowser
         }
 
         /// <summary>
-        ///     Sets the active <see cref="TreeViewItem"/> by converting the provided json formatted <see cref="string"/>
+        ///     Sets the active <see cref="TreeViewItem" /> by converting the provided json formatted <see cref="string" />
         /// </summary>
         /// <param name="json"></param>
         /// <param name="rootName"></param>

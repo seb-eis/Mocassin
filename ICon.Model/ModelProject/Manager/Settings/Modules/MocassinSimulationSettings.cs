@@ -146,7 +146,7 @@ namespace Mocassin.Model.ModelProject
             Doping = new ValueSetting<double>("Doping Concentration", 0, 0, 1, 1);
             ElectricField = new ValueSetting<double>("Electric Field", 0, 1e4, 1e9, double.MaxValue);
             TargetMcsp = new ValueSetting<int>("Steps per Particle", 1, 1, 1000, 1000000);
-            PreRunMcsp = new ValueSetting<int>("Pre-run steps per particle", -1,0,1000, 1000000);
+            PreRunMcsp = new ValueSetting<int>("Pre-run steps per particle", -1, 0, 1000, 1000000);
             JobCount = new ValueSetting<int>("Jobs per Simulation", 1, 5, 100, 1000);
             WriteCallCount = new ValueSetting<int>("Write Calls per Simulation", 0, 5, 100, 1000);
             Temperature = new ValueSetting<double>("Temperature", 0.1, 100, 5000, 10000);

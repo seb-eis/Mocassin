@@ -16,12 +16,12 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
     public class MigrateCustomizationCommand : AsyncProjectControlCommand<ProjectCustomizationTemplate>
     {
         /// <summary>
-        ///     Get the <see cref="Action{T}"/> that is called on success
+        ///     Get the <see cref="Action{T}" /> that is called on success
         /// </summary>
         public Action<ProjectCustomizationTemplate> OnSuccessAction { get; }
 
         /// <inheritdoc />
-        public MigrateCustomizationCommand(IMocassinProjectControl projectControl, Action<ProjectCustomizationTemplate> onSuccessAction =null)
+        public MigrateCustomizationCommand(IMocassinProjectControl projectControl, Action<ProjectCustomizationTemplate> onSuccessAction = null)
             : base(projectControl)
         {
             OnSuccessAction = onSuccessAction;

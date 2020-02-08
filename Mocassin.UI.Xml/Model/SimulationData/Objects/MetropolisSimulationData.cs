@@ -13,11 +13,13 @@ namespace Mocassin.UI.Xml.SimulationModel
     [XmlRoot]
     public class MetropolisSimulationData : SimulationBaseData
     {
-        private double relativeBreakTolerance;
-        private int breakSampleLength = 1000;
         private int breakSampleIntervalMcs = 100;
+        private int breakSampleLength = 1000;
+        private double relativeBreakTolerance;
         private int resultSampleMcs = 200;
-        private ObservableCollection<ModelObjectReference<MetropolisTransition>> transitions = new ObservableCollection<ModelObjectReference<MetropolisTransition>>();
+
+        private ObservableCollection<ModelObjectReference<MetropolisTransition>> transitions =
+            new ObservableCollection<ModelObjectReference<MetropolisTransition>>();
 
         /// <summary>
         ///     Get or set the relative break tolerance value

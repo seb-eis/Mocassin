@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Mocassin.Framework.Collections;
 
 namespace Mocassin.Framework.Extensions
 {
     /// <summary>
-    /// Contains extensions methods for comparer objects and IComparer interfaces
+    ///     Contains extensions methods for comparer objects and IComparer interfaces
     /// </summary>
     public static class MocassinComparerExtensions
     {
         /// <summary>
-        /// Wraps an IComparer interface into a delegate based equality comparer using the (first.CompareTo(second) == 0) formalism
+        ///     Wraps an IComparer interface into a delegate based equality comparer using the (first.CompareTo(second) == 0)
+        ///     formalism
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <param name="comparer"></param>

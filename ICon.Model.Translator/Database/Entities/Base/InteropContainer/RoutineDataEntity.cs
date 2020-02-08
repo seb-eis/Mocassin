@@ -14,18 +14,18 @@ namespace Mocassin.Model.Translator
     public abstract class RoutineDataEntity : BlobEntityBase
     {
         /// <summary>
-        ///  Get the <see cref="IReadOnlyDictionary{TKey,TValue}"/> of known <see cref="RoutineDataEntity"/> types
+        ///     Get the <see cref="IReadOnlyDictionary{TKey,TValue}" /> of known <see cref="RoutineDataEntity" /> types
         /// </summary>
         public static IReadOnlyDictionary<MocsimExtensionComponentAttribute, Func<RoutineDataEntity>> RoutineDataConstructors { get; }
 
         /// <summary>
-        ///     Get the default <see cref="Regex"/> used to parse routine instructions from a job instruction string
+        ///     Get the default <see cref="Regex" /> used to parse routine instructions from a job instruction string
         /// </summary>
-        public static Regex DefaultInstructionRegex { get; } 
+        public static Regex DefaultInstructionRegex { get; }
             = new Regex("routine:\\s*(?<alias>[^=\\s]+)\\s*@\\s*\\{\\s*(?<params>[^}]+)\\s*\\}", RegexOptions.Singleline);
 
         /// <summary>
-        ///     Get the default <see cref="Regex"/> used to parse the routine parameters from a found routine instruction
+        ///     Get the default <see cref="Regex" /> used to parse the routine parameters from a found routine instruction
         /// </summary>
         public static Regex DefaultParameterRegex { get; } = new Regex("(?<name>[a-zA-Z0-9]+)\\s*=\\s*\"(?<value>[^\"]+)\"");
 
@@ -96,7 +96,8 @@ namespace Mocassin.Model.Translator
         protected abstract InteropObject GetInteropObjectFromBinaryState(IMarshalService marshalService);
 
         /// <summary>
-        ///     Tries to parse a parameter <see cref="string"/> of the routine, returns false on error. Format is implementation dependent
+        ///     Tries to parse a parameter <see cref="string" /> of the routine, returns false on error. Format is implementation
+        ///     dependent
         /// </summary>
         /// <param name="str"></param>
         public virtual bool TryParseParameters(string str)
@@ -105,7 +106,7 @@ namespace Mocassin.Model.Translator
         }
 
         /// <summary>
-        ///  Creates an empty <see cref="RoutineDataEntity"/> with an empty guid and one byte of data (17 total)
+        ///     Creates an empty <see cref="RoutineDataEntity" /> with an empty guid and one byte of data (17 total)
         /// </summary>
         /// <returns></returns>
         public static RoutineDataEntity CreateEmpty()
@@ -114,7 +115,8 @@ namespace Mocassin.Model.Translator
         }
 
         /// <summary>
-        ///     Tries to parse a routine instruction from a <see cref="string"/> into the matching <see cref="RoutineDataEntity"/>
+        ///     Tries to parse a routine instruction from a <see cref="string" /> into the matching
+        ///     <see cref="RoutineDataEntity" />
         /// </summary>
         /// <param name="str"></param>
         /// <param name="entity"></param>
@@ -136,13 +138,13 @@ namespace Mocassin.Model.Translator
         }
 
         /// <summary>
-        ///     Creates a new <see cref="RoutineDataEntity"/> that matches the provided identification <see cref="string"/>
+        ///     Creates a new <see cref="RoutineDataEntity" /> that matches the provided identification <see cref="string" />
         /// </summary>
         /// <param name="identification"></param>
         /// <returns></returns>
         private static RoutineDataEntity CreateRoutineObject(string identification)
         {
-            var obj = Guid.TryParse(identification, out var guid) 
+            var obj = Guid.TryParse(identification, out var guid)
                 ? RoutineDataConstructors.SingleOrDefault(x => x.Key.ExtensionGuid == guid).Value?.Invoke()
                 : RoutineDataConstructors.SingleOrDefault(x => x.Key.ExtensionAlias == identification).Value?.Invoke();
             return obj ?? CreateEmpty();
@@ -183,7 +185,7 @@ namespace Mocassin.Model.Translator
         }
 
         /// <summary>
-        ///  Tries to parse the passed parameters and uses the parameter names for value setting using reflection
+        ///     Tries to parse the passed parameters and uses the parameter names for value setting using reflection
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>

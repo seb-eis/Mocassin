@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 
@@ -27,7 +26,7 @@ namespace Mocassin.UI.GUI.Base.UiElements.ComboBox
         }
 
         /// <summary>
-        ///     Copies the item source of the column to the passed <see cref="DataGridCell"/>
+        ///     Copies the item source of the column to the passed <see cref="DataGridCell" />
         /// </summary>
         /// <param name="element"></param>
         private void CopyItemsSource(FrameworkElement element)

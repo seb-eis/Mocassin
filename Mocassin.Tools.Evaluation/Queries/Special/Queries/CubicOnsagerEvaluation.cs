@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Particles;
 using Mocassin.Tools.Evaluation.Context;
 using Mocassin.Tools.Evaluation.Queries.Base;
@@ -58,7 +57,7 @@ namespace Mocassin.Tools.Evaluation.Queries
             var volume = LatticeMetaEvaluation[jobContext.DataId].Volume;
             var temperature = jobContext.JobModel.JobMetaData.Temperature;
             var time = jobContext.McsReader.ReadMetaData().SimulatedTime;
-            
+
             if (displacements.First().IsSquared) throw new InvalidOperationException("Cannot use squared displacements.");
 
             for (var i = 0; i < displacements.Count; i++)
@@ -89,8 +88,8 @@ namespace Mocassin.Tools.Evaluation.Queries
         /// <inheritdoc />
         protected override void PrepareForExecution()
         {
-            DisplacementEvaluation = DisplacementEvaluation ?? new EnsembleDisplacementEvaluation(JobSet);
-            LatticeMetaEvaluation = LatticeMetaEvaluation ?? new LatticeMetaEvaluation(JobSet);
+            DisplacementEvaluation ??= new EnsembleDisplacementEvaluation(JobSet);
+            LatticeMetaEvaluation ??= new LatticeMetaEvaluation(JobSet);
 
             if (!DisplacementEvaluation.JobSet.CompatibleTo(JobSet))
                 throw new InvalidOperationException("Displacement evaluation is not compatible.");

@@ -8,8 +8,6 @@ using Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Scene;
 using Mocassin.UI.GUI.Controls.Visualizer.Objects;
 using Mocassin.UI.GUI.Properties;
 using Mocassin.UI.Xml.Base;
-using SharpDX;
-using Color = System.Windows.Media.Color;
 
 namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
 {
@@ -57,15 +55,21 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
         }
 
         /// <inheritdoc />
+        public DxProjectLineObjectSceneConfig(ExtensibleProjectDataObject dataObject, VisualObjectCategory visualCategory)
+            : base(dataObject, visualCategory)
+        {
+        }
+
+        /// <inheritdoc />
         public LineMaterialCore CreateMaterial()
         {
             return new LineMaterialCore {LineColor = Color.ToColor4(), Thickness = (float) LineThickness};
         }
 
         /// <inheritdoc />
-        public DxProjectLineObjectSceneConfig(ExtensibleProjectDataObject dataObject, VisualObjectCategory visualCategory)
-            : base(dataObject, visualCategory)
+        public sealed override bool CheckSupport(SceneNode node)
         {
+            return node is LineNode;
         }
 
         /// <summary>
@@ -102,12 +106,6 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
         {
             if (lineNode == null || material == null) return;
             lineNode.Material = lineMaterial;
-        }
-
-        /// <inheritdoc />
-        public sealed override bool CheckSupport(SceneNode node)
-        {
-            return node is LineNode;
         }
 
         /// <inheritdoc />

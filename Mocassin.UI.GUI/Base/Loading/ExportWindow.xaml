@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Mocassin.UI.GUI.Base.Loading"
         mc:Ignorable="d"
         Title="ExportWindow" Height="Auto" Width="Auto"
         WindowStartupLocation="CenterScreen"
@@ -11,7 +10,7 @@
         AllowsTransparency="True"
         SizeToContent="WidthAndHeight"
         Background="Transparent">
-    <Grid>
-        <TextBox Text="Exporting... Please wait!" Background="White" FontSize="20"/>
-    </Grid>
+  <Grid>
+    <TextBox Text="Exporting... Please wait!" Background="White" FontSize="20" />
+  </Grid>
 </Window>

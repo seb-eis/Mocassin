@@ -27,14 +27,14 @@
         string Name { get; }
 
         /// <summary>
+        ///     Returns a string that represents the model object type name
+        /// </summary>
+        /// <returns></returns>
+        string ObjectName { get; }
+
+        /// <summary>
         ///     Deprecates object
         /// </summary>
         void Deprecate();
-
-		/// <summary>
-		///     Returns a string that represents the model object type name
-		/// </summary>
-		/// <returns></returns>
-		string ObjectName { get; }
-	}
+    }
 }

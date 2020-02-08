@@ -97,14 +97,6 @@ namespace Mocassin.UI.Xml.ProjectLibrary
             }
         }
 
-        /// <summary>
-        ///     Relays the <see cref="DbContext" /> entity changed event to the internal <see cref="ReactiveEvent{TSubject}" />
-        /// </summary>
-        private void RelayEntityChangeEvent(object sender, EventArgs args)
-        {
-            StateChangedEvent.OnNext(Unit.Default);
-        }
-
         /// <inheritdoc />
         public override void Dispose()
         {
@@ -115,6 +107,14 @@ namespace Mocassin.UI.Xml.ProjectLibrary
             }
 
             StateChangedEvent.OnCompleted();
+        }
+
+        /// <summary>
+        ///     Relays the <see cref="DbContext" /> entity changed event to the internal <see cref="ReactiveEvent{TSubject}" />
+        /// </summary>
+        private void RelayEntityChangeEvent(object sender, EventArgs args)
+        {
+            StateChangedEvent.OnNext(Unit.Default);
         }
     }
 }

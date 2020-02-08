@@ -4,7 +4,7 @@ using Mocassin.UI.GUI.Controls.Base.Commands;
 namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager.Commands
 {
     /// <summary>
-    ///     The <see cref="ProjectControlCommand"/> to save all pending changes to the current project library
+    ///     The <see cref="ProjectControlCommand" /> to save all pending changes to the current project library
     /// </summary>
     public class SaveProjectLibraryChangesCommand : ProjectControlCommand
     {

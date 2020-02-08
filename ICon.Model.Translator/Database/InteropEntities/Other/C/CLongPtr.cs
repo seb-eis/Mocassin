@@ -8,7 +8,6 @@ namespace Mocassin.Model.Translator
     [StructLayout(LayoutKind.Sequential, Size = 8)]
     public readonly struct CLongPtr
     {
-        [MarshalAs(UnmanagedType.I8)] 
-        private readonly long value;
+        [MarshalAs(UnmanagedType.I8)] private readonly long value;
     }
 }

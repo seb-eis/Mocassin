@@ -48,18 +48,6 @@ namespace Mocassin.UI.Xml.TransitionModel
         }
 
         /// <inheritdoc />
-        protected override ModelObject GetModelObjectInternal()
-        {
-            var obj = new MetropolisTransition
-            {
-                AbstractTransition = new AbstractTransition {Key = AbstractTransition.Key},
-                FirstCellReferencePosition = new CellReferencePosition {Key = FirstCellReferencePosition.Key},
-                SecondCellReferencePosition = new CellReferencePosition {Key = SecondCellReferencePosition.Key}
-            };
-            return obj;
-        }
-
-        /// <inheritdoc />
         public bool Equals(MetropolisTransitionData other)
         {
             if (other == null) return false;
@@ -71,6 +59,18 @@ namespace Mocassin.UI.Xml.TransitionModel
                     && SecondCellReferencePosition.Equals(other.SecondCellReferencePosition)
                     || SecondCellReferencePosition.Equals(other.FirstCellReferencePosition)
                     && FirstCellReferencePosition.Equals(other.SecondCellReferencePosition));
+        }
+
+        /// <inheritdoc />
+        protected override ModelObject GetModelObjectInternal()
+        {
+            var obj = new MetropolisTransition
+            {
+                AbstractTransition = new AbstractTransition {Key = AbstractTransition.Key},
+                FirstCellReferencePosition = new CellReferencePosition {Key = FirstCellReferencePosition.Key},
+                SecondCellReferencePosition = new CellReferencePosition {Key = SecondCellReferencePosition.Key}
+            };
+            return obj;
         }
 
         /// <summary>

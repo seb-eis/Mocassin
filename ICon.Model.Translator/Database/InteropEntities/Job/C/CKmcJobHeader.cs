@@ -23,7 +23,6 @@ namespace Mocassin.Model.Translator
         [field: MarshalAs(UnmanagedType.I4)]
         public int PreRunMcsp { get; set; }
 
-        [field: MarshalAs(UnmanagedType.I4)] 
-        private readonly int padding;
+        [field: MarshalAs(UnmanagedType.I4)] private readonly int padding;
     }
 }

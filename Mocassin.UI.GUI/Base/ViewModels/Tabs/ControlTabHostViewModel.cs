@@ -8,17 +8,18 @@ using Mocassin.UI.GUI.Base.ViewModels.Collections;
 namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
 {
     /// <summary>
-    ///     Base <see cref="ViewModelBase" /> for providing sets of <see cref="System.Windows.Controls.UserControl" /> through a
+    ///     Base <see cref="ViewModelBase" /> for providing sets of <see cref="System.Windows.Controls.UserControl" /> through
+    ///     a
     ///     <see cref="System.Windows.Controls.TabControl" />
     /// </summary>
     public class ControlTabHostViewModel : ObservableCollectionViewModel<ControlTabItem>, IControlTabHost
     {
+        private bool isFrontInsertMode;
         private ControlTabItem selectedTab;
         private Dock tabStripPlacement = Dock.Top;
-        private bool isFrontInsertMode;
 
         /// <inheritdoc />
-        public Command<IDataObject> HandleDropAddCommand { get; }
+        public Command<IDataObject> ProcessDataObjectCommand { get; }
 
         /// <inheritdoc />
         public Dock TabStripPlacement
@@ -43,7 +44,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
 
         public ControlTabHostViewModel()
         {
-            HandleDropAddCommand = new RelayCommand<IDataObject>(HandleDataDrop, CanHandleDataDrop);
+            ProcessDataObjectCommand = new RelayCommand<IDataObject>(HandleDataDrop, CanHandleDataDrop);
         }
 
         /// <inheritdoc />
@@ -86,7 +87,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
                 return;
             }
 
-            if (IsFrontInsertMode) 
+            if (IsFrontInsertMode)
                 InsertItem(0, tabItem);
             else
                 AddItem(tabItem);
@@ -131,7 +132,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
         }
 
         /// <summary>
-        ///     Internal implementation of <see cref="SetActiveTabByIndex"/>
+        ///     Internal implementation of <see cref="SetActiveTabByIndex" />
         /// </summary>
         /// <param name="index"></param>
         private void SetActiveTabByIndexInternal(int index)
@@ -141,14 +142,16 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
                 SelectedTab = null;
                 return;
             }
+
             if (index < 0)
             {
                 SelectedTab = ObservableItems[ObservableItems.Count - 1];
                 return;
             }
+
             if (index >= ObservableItems.Count)
             {
-                SelectedTab = ObservableItems[index-1];
+                SelectedTab = ObservableItems[index - 1];
                 return;
             }
 
@@ -156,7 +159,8 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
         }
 
         /// <summary>
-        ///     Handles the processing of a dropped <see cref="IDataObject"/> if it contains a movable <see cref="DynamicControlTabItem"/>
+        ///     Handles the processing of a dropped <see cref="IDataObject" /> if it contains a movable
+        ///     <see cref="DynamicControlTabItem" />
         /// </summary>
         /// <param name="dataObject"></param>
         private void HandleDataDrop(IDataObject dataObject)
@@ -166,7 +170,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
         }
 
         /// <summary>
-        ///     Checks if a <see cref="IDataObject"/> of a drop event can be processed
+        ///     Checks if a <see cref="IDataObject" /> of a drop event can be processed
         /// </summary>
         /// <param name="dataObject"></param>
         /// <returns></returns>

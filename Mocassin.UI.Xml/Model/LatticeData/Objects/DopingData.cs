@@ -11,11 +11,11 @@ namespace Mocassin.UI.Xml.LatticeModel
     [XmlRoot]
     public class DopingData : ModelDataObject
     {
-        private ModelObjectReference<DopingCombination> primaryDoping = new ModelObjectReference<DopingCombination>();
-        private ModelObjectReference<DopingCombination> counterDoping = new ModelObjectReference<DopingCombination>();
         private ModelObjectReference<BuildingBlock> buildingBlock = new ModelObjectReference<BuildingBlock>();
-        private bool useCounterDoping;
+        private ModelObjectReference<DopingCombination> counterDoping = new ModelObjectReference<DopingCombination>();
+        private ModelObjectReference<DopingCombination> primaryDoping = new ModelObjectReference<DopingCombination>();
         private int priority;
+        private bool useCounterDoping;
 
         /// <summary>
         ///     The doping which is applied

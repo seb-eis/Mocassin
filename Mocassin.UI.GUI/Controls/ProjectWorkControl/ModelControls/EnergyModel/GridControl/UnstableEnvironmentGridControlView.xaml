@@ -60,17 +60,19 @@
     <content:HeaderedGroup Grid.Row="2">
       <content:HeaderedGroup.Header>
         <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
-          <Run Text="Interaction Filters:"/>
-          <Run Text="{Binding SelectedItem.Name, StringFormat={}[{0}]}"/>
+          <Run Text="Interaction Filters:" />
+          <Run Text="{Binding SelectedItem.Name, StringFormat={}[{0}]}" />
         </TextBlock>
       </content:HeaderedGroup.Header>
       <local:InteractionFilterGridControlView>
         <local:InteractionFilterGridControlView.DataContext>
           <MultiBinding Converter="{adapter:UnstableEnvironmentInteractionFilterVmConverter}">
-            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type local:UnstableEnvironmentGridControlView}}"
-                     Path="DataContext.ContentSource" />
-            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type local:UnstableEnvironmentGridControlView}}"
-                     Path="DataContext.SelectedItem" />
+            <Binding
+              RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type local:UnstableEnvironmentGridControlView}}"
+              Path="DataContext.ContentSource" />
+            <Binding
+              RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type local:UnstableEnvironmentGridControlView}}"
+              Path="DataContext.SelectedItem" />
           </MultiBinding>
         </local:InteractionFilterGridControlView.DataContext>
       </local:InteractionFilterGridControlView>

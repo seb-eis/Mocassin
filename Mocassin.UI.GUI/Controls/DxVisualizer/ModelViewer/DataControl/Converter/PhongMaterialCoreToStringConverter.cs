@@ -11,22 +11,23 @@ using Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene;
 namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.DataControl.Converter
 {
     /// <summary>
-    ///     A <see cref="ValueConverter"/> implementation to convert from strings to phong materials 
+    ///     A <see cref="ValueConverter" /> implementation to convert from strings to phong materials
     /// </summary>
     public class PhongMaterialCoreToStringConverter : ValueConverter
     {
         /// <summary>
-        ///     Get the <see cref="IReadOnlyDictionary{TKey,TValue}"/> of known material names and <see cref="PhongMaterialCore"/> instances
+        ///     Get the <see cref="IReadOnlyDictionary{TKey,TValue}" /> of known material names and
+        ///     <see cref="PhongMaterialCore" /> instances
         /// </summary>
         public static IReadOnlyDictionary<string, PhongMaterialCore> MaterialCatalog { get; }
 
         /// <summary>
-        ///     Get the <see cref="IReadOnlyCollection{T}"/> of known material names
+        ///     Get the <see cref="IReadOnlyCollection{T}" /> of known material names
         /// </summary>
         public static IReadOnlyCollection<string> MaterialNameCollection { get; }
 
         /// <summary>
-        ///         Static constructor that initializes the material catalog
+        ///     Static constructor that initializes the material catalog
         /// </summary>
         static PhongMaterialCoreToStringConverter()
         {

@@ -1,7 +1,7 @@
 ﻿using Mocassin.Model.Energies;
 using Mocassin.Model.Lattices;
-using Mocassin.Model.Particles;
 using Mocassin.Model.ModelProject;
+using Mocassin.Model.Particles;
 using Mocassin.Model.Simulations;
 using Mocassin.Model.Structures;
 using Mocassin.Model.Transitions;

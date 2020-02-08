@@ -29,8 +29,7 @@
               ToolTip="{StaticResource App.ToolTip.ProjectSelection}"
               DisplayMemberPath="Name"
               IsEditable="True"
-              IsTextSearchEnabled="True">
-    </ComboBox>
+              IsTextSearchEnabled="True" />
 
     <ComboBox Grid.Column="2" Grid.Row="0"
               ItemsSource="{Binding JobTranslationGraphs}"
@@ -43,10 +42,10 @@
       <ComboBox.ContextMenu>
         <ContextMenu>
           <MenuItem Header="Add Translation" Command="{Binding AddJobTranslationCommand}" />
-          <Separator/>
+          <Separator />
           <MenuItem Header="Duplicate Selected" Command="{Binding DuplicateTranslationCommand}"
-                    CommandParameter="{Binding SelectedJobSetTemplate}"/>
-          <Separator/>
+                    CommandParameter="{Binding SelectedJobSetTemplate}" />
+          <Separator />
           <MenuItem Header="Delete Selected" Command="{Binding DeleteTranslationCommand}"
                     CommandParameter="{Binding SelectedJobSetTemplate}" />
         </ContextMenu>

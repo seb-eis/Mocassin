@@ -36,12 +36,12 @@ namespace Mocassin.UI.GUI.Base.Objects
         }
 
         /// <summary>
-        ///     Creates a new <see cref="VvmContainer" /> with a view that uses an <see cref="EmptyViewModel"/>
+        ///     Creates a new <see cref="VvmContainer" /> with a view that uses an <see cref="EmptyViewModel" />
         /// </summary>
         /// <param name="view"></param>
-        public VvmContainer(UserControl view) : this(view, new EmptyViewModel())
+        public VvmContainer(UserControl view)
+            : this(view, new EmptyViewModel())
         {
-
         }
     }
 }

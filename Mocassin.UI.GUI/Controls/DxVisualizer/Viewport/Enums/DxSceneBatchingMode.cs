@@ -1,9 +1,8 @@
-﻿using Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Base;
-
-namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Enums
+﻿namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Enums
 {
     /// <summary>
-    ///     Batching mode for DX 3D scenes that indicates how much batching of scene elements is allowed to increase render and setup performance
+    ///     Batching mode for DX 3D scenes that indicates how much batching of scene elements is allowed to increase render and
+    ///     setup performance
     /// </summary>
     public enum DxSceneBatchingMode
     {
@@ -33,7 +32,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Enums
         Extreme,
 
         /// <summary>
-        ///     No limit on mesh batching. Keeps CPU demand minimal to maximize GPU load but may case models that no longer fit into VRAM
+        ///     No limit on mesh batching. Keeps CPU demand minimal to maximize GPU load but may case models that no longer fit
+        ///     into VRAM
         /// </summary>
         Unlimited
     }

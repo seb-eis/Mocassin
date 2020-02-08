@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Mocassin.Model.Basic;
 using Mocassin.Model.Energies;
 using Mocassin.Model.ModelProject;
 using Mocassin.Model.Particles;
@@ -59,22 +57,6 @@ namespace Mocassin.Model.Translator.ModelContext
             return BuildTask;
         }
 
-        /// <summary>
-        ///     Populates the passed context and returns the object on completion
-        /// </summary>
-        protected abstract TContext PopulateContext(TContext modelContext);
-
-        /// <summary>
-        ///     Creates a new empty context as defined in the implementing builder
-        /// </summary>
-        /// <returns></returns>
-        protected abstract TContext GetEmptyDefaultContext();
-
-        /// <summary>
-        ///     Sets all unset builder instances to the internally defined default builder system
-        /// </summary>
-        protected abstract void SetNullBuildersToDefault();
-
         /// <inheritdoc />
         public abstract bool CheckBuildRequirements();
 
@@ -93,5 +75,21 @@ namespace Mocassin.Model.Translator.ModelContext
             isOk &= managers.Any(x => x is ISimulationManager);
             return isOk;
         }
+
+        /// <summary>
+        ///     Populates the passed context and returns the object on completion
+        /// </summary>
+        protected abstract TContext PopulateContext(TContext modelContext);
+
+        /// <summary>
+        ///     Creates a new empty context as defined in the implementing builder
+        /// </summary>
+        /// <returns></returns>
+        protected abstract TContext GetEmptyDefaultContext();
+
+        /// <summary>
+        ///     Sets all unset builder instances to the internally defined default builder system
+        /// </summary>
+        protected abstract void SetNullBuildersToDefault();
     }
 }

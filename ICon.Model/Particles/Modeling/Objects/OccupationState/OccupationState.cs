@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
 using Mocassin.Framework.Extensions;
 
 namespace Mocassin.Model.Particles
@@ -44,15 +43,10 @@ namespace Mocassin.Model.Particles
             Particles = state.ToList();
         }
 
-        /// <summary>
-        ///     Creates a deep copy of the occupation state
-        /// </summary>
-        /// <returns></returns>
-        public OccupationState DeepCopy()
+        /// <inheritdoc />
+        public bool Equals(OccupationState other)
         {
-            var state = new OccupationState {Particles = new List<IParticle>(Particles.Count)};
-            state.Particles.AddRange(Particles);
-            return state;
+            return Equals(other as IOccupationState);
         }
 
         /// <inheritdoc />
@@ -71,26 +65,11 @@ namespace Mocassin.Model.Particles
         public bool Equals(IOccupationState other)
         {
             if (other == null) return false;
-            if (StateLength != other.StateLength)  return false;
+            if (StateLength != other.StateLength) return false;
 
             return !Particles
                 .Where((t, i) => !t.Equals(other.Particles[i]))
                 .Any();
-        }
-
-        /// <inheritdoc />
-        public bool Equals(OccupationState other)
-        {
-            return Equals(other as IOccupationState);
-        }
-
-        /// <summary>
-        ///     Get the hash code of the particle set
-        /// </summary>
-        /// <returns></returns>
-        public override int GetHashCode()
-        {
-            return Particles.Sum(value => value.GetHashCode());
         }
 
         /// <summary>
@@ -102,6 +81,26 @@ namespace Mocassin.Model.Particles
         {
             var comparer = Comparer<IParticle>.Create((a, b) => a.Index.CompareTo(b.Index));
             return Particles.LexicographicCompare(other.Particles, comparer);
+        }
+
+        /// <summary>
+        ///     Creates a deep copy of the occupation state
+        /// </summary>
+        /// <returns></returns>
+        public OccupationState DeepCopy()
+        {
+            var state = new OccupationState {Particles = new List<IParticle>(Particles.Count)};
+            state.Particles.AddRange(Particles);
+            return state;
+        }
+
+        /// <summary>
+        ///     Get the hash code of the particle set
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return Particles.Sum(value => value.GetHashCode());
         }
     }
 }

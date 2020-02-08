@@ -55,7 +55,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.DataControl
         public bool IsInvalidScene => ParentModelSceneViewModel.IsInvalidScene;
 
         /// <summary>
-        ///     Get or set the <see cref="Scene.PathSymmetryExtensionMode"/> for the rendering of path objects
+        ///     Get or set the <see cref="Scene.PathSymmetryExtensionMode" /> for the rendering of path objects
         /// </summary>
         public PathSymmetryExtensionMode PathSymmetryExtensionMode
         {
@@ -64,7 +64,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.DataControl
         }
 
         /// <summary>
-        ///     Get the selectable <see cref="Scene.PathSymmetryExtensionMode"/> modes
+        ///     Get the selectable <see cref="Scene.PathSymmetryExtensionMode" /> modes
         /// </summary>
         public IEnumerable<PathSymmetryExtensionMode> PathSymmetryExtensionModes => EnumeratePathSymmetryExtensionModes();
 
@@ -107,7 +107,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.DataControl
         }
 
         /// <summary>
-        ///     Get an <see cref="IEnumerable{T}"/> of all selectable <see cref="Scene.PathSymmetryExtensionMode"/> values
+        ///     Get an <see cref="IEnumerable{T}" /> of all selectable <see cref="Scene.PathSymmetryExtensionMode" /> values
         /// </summary>
         /// <returns></returns>
         public IEnumerable<PathSymmetryExtensionMode> EnumeratePathSymmetryExtensionModes()

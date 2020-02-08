@@ -6,7 +6,8 @@ using Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuilding;
 namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ToolMenu.Commands
 {
     /// <summary>
-    ///     The <see cref="AddDefaultLayoutControlTabCommand" /> implementation to add a new project deployment tab to the main tab control
+    ///     The <see cref="AddDefaultLayoutControlTabCommand" /> implementation to add a new project deployment tab to the main
+    ///     tab control
     /// </summary>
     public class AddProjectDeploymentTabCommand : AddDefaultLayoutControlTabCommand
     {

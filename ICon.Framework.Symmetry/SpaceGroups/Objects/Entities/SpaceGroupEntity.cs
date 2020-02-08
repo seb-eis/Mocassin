@@ -72,15 +72,6 @@ namespace Mocassin.Symmetry.SpaceGroups
             BaseSymmetryOperations = new List<SymmetryOperationEntity>();
         }
 
-        /// <summary>
-        ///     Checks if the symmetry operation array is empty
-        /// </summary>
-        /// <returns></returns>
-        public bool IsReady()
-        {
-            return BaseSymmetryOperations.Count != 0;
-        }
-
         /// <inheritdoc />
         public bool Equals(SpaceGroupEntity other)
         {
@@ -107,6 +98,15 @@ namespace Mocassin.Symmetry.SpaceGroups
         {
             var indexCompare = InternationalIndex.CompareTo(other.InternationalIndex);
             return indexCompare == 0 ? CrystalVariation.CompareTo(other.CrystalVariation) : indexCompare;
+        }
+
+        /// <summary>
+        ///     Checks if the symmetry operation array is empty
+        /// </summary>
+        /// <returns></returns>
+        public bool IsReady()
+        {
+            return BaseSymmetryOperations.Count != 0;
         }
     }
 }

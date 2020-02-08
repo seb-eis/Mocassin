@@ -58,28 +58,28 @@
         <content:HeaderedGroup Style="{StaticResource App.Style.HeaderedGroup.BoldText}"
                                HeaderToolTip="{StaticResource Local.ToolTip.KineticRules}"
                                Header="KMC Transitions Rule Sets:">
-          <dataControl:TransitionCustomizationControlView DataContext="{Binding TransitionCustomizationViewModel}"/>
+          <dataControl:TransitionCustomizationControlView DataContext="{Binding TransitionCustomizationViewModel}" />
         </content:HeaderedGroup>
       </TabItem>
 
       <TabItem Header="Pair Interactions (Stable)">
         <content:HeaderedGroup Style="{StaticResource App.Style.HeaderedGroup.BoldText}"
                                Header="Interaction Set Selection:">
-          <dataControl:PairInteractionControlView DataContext="{Binding StablePairInteractionViewModel}"/>
+          <dataControl:PairInteractionControlView DataContext="{Binding StablePairInteractionViewModel}" />
         </content:HeaderedGroup>
       </TabItem>
 
       <TabItem Header="Pair Interactions (Unstable)">
         <content:HeaderedGroup Style="{StaticResource App.Style.HeaderedGroup.BoldText}"
                                Header="Interaction Set Selection:">
-          <dataControl:PairInteractionControlView DataContext="{Binding UnstablePairInteractionViewModel}"/>
+          <dataControl:PairInteractionControlView DataContext="{Binding UnstablePairInteractionViewModel}" />
         </content:HeaderedGroup>
       </TabItem>
 
       <TabItem Header="Group Interactions (All)">
         <content:HeaderedGroup Style="{StaticResource App.Style.HeaderedGroup.BoldText}"
                                Header="Interaction Set Selection:">
-          <dataControl:GroupInteractionControlView DataContext="{Binding GroupInteractionViewModel}"/>
+          <dataControl:GroupInteractionControlView DataContext="{Binding GroupInteractionViewModel}" />
         </content:HeaderedGroup>
       </TabItem>
     </TabControl>

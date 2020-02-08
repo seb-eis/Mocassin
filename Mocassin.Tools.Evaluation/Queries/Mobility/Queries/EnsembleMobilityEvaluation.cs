@@ -12,12 +12,12 @@ namespace Mocassin.Tools.Evaluation.Queries
     public class EnsembleMobilityEvaluation : JobEvaluation<IReadOnlyList<EnsembleMobility>>
     {
         /// <summary>
-        ///     Get or set the <see cref="IJobEvaluation{T}"/> that supplies the <see cref="EnsembleDisplacement"/> set
+        ///     Get or set the <see cref="IJobEvaluation{T}" /> that supplies the <see cref="EnsembleDisplacement" /> set
         /// </summary>
         public IJobEvaluation<IReadOnlyList<EnsembleDisplacement>> EnsembleDisplacementEvaluation { get; set; }
 
         /// <summary>
-        ///     Get or set the <see cref="IJobEvaluation{T}"/> that supplies the <see cref="EnsembleMetaData"/> set
+        ///     Get or set the <see cref="IJobEvaluation{T}" /> that supplies the <see cref="EnsembleMetaData" /> set
         /// </summary>
         public IJobEvaluation<IReadOnlyList<EnsembleMetaData>> EnsembleMetaEvaluation { get; set; }
 
@@ -52,8 +52,8 @@ namespace Mocassin.Tools.Evaluation.Queries
         /// <inheritdoc />
         protected override void PrepareForExecution()
         {
-            EnsembleDisplacementEvaluation = EnsembleDisplacementEvaluation ?? new EnsembleDisplacementEvaluation(JobSet);
-            EnsembleMetaEvaluation = EnsembleMetaEvaluation ?? new EnsembleMetaEvaluation(JobSet);
+            EnsembleDisplacementEvaluation ??= new EnsembleDisplacementEvaluation(JobSet);
+            EnsembleMetaEvaluation ??= new EnsembleMetaEvaluation(JobSet);
 
             if (!EnsembleDisplacementEvaluation.JobSet.CompatibleTo(JobSet))
                 throw new InvalidOperationException("Ensemble displacement evaluation is not compatible.");

@@ -98,13 +98,6 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
             }
         }
 
-        /// <inheritdoc />
-        public bool IsApplicable(object obj)
-        {
-            if (obj == null || !(obj is ExtensibleProjectDataObject objectGraph)) return false;
-            return ReferenceEquals(DataObject, objectGraph);
-        }
-
         /// <summary>
         ///     Creates new <see cref="ObjectVisualResourcesViewModel" /> from the provided
         ///     <see cref="ExtensibleProjectDataObject" />
@@ -116,6 +109,20 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
         {
             DataObject = dataObject ?? throw new ArgumentNullException(nameof(dataObject));
             VisualCategory = visualCategory;
+        }
+
+        /// <inheritdoc />
+        public bool IsApplicable(object obj)
+        {
+            if (obj == null || !(obj is ExtensibleProjectDataObject objectGraph)) return false;
+            return ReferenceEquals(DataObject, objectGraph);
+        }
+
+        /// <inheritdoc />
+        public bool Equals(IObjectSceneConfig other)
+        {
+            if (other == null) return false;
+            return ReferenceEquals(this, other) || ReferenceEquals(DataObject, (other as ObjectVisualResourcesViewModel)?.DataObject);
         }
 
         /// <summary>
@@ -135,13 +142,6 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
                 VisualObjectCategory.PolygonSet => (Colors.Gray, 0, 0),
                 _ => throw new ArgumentOutOfRangeException(nameof(category), category, null)
             };
-        }
-
-        /// <inheritdoc />
-        public bool Equals(IObjectSceneConfig other)
-        {
-            if (other == null) return false;
-            return ReferenceEquals(this, other) || ReferenceEquals(DataObject, (other as ObjectVisualResourcesViewModel)?.DataObject);
         }
     }
 }

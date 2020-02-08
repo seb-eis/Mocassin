@@ -19,7 +19,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
             : base(hostObject, true)
         {
             Items = GetTargetCollection(hostObject);
-            HandleDropAddCommand = GetDropAddObjectCommand<StateExchangePairData>();
+            ProcessDataObjectCommand = GetDropAddObjectCommand<StateExchangePairData>();
         }
 
         /// <inheritdoc />

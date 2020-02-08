@@ -108,9 +108,11 @@ namespace Mocassin.Model.Transitions
             var indexPoolCollection = particleIndexPool.ToCollection();
 
             foreach (var statePair in statePairs)
+            {
                 if (!statePair.IsDeprecated && indexPoolCollection.Contains(statePair.DonorParticle.Index) &&
                     indexPoolCollection.Contains(statePair.AcceptorParticle.Index))
                     yield return statePair.AsIndexTuple();
+            }
         }
 
         /// <summary>
@@ -124,8 +126,10 @@ namespace Mocassin.Model.Transitions
             IEnumerable<IStateExchangePair> statePairPool)
         {
             foreach (var statePair in statePairPool)
+            {
                 if (!statePair.IsDeprecated && stateGroup.GetStateExchangePairs().Select(a => a.Index).Contains(statePair.Index))
                     yield return statePair;
+            }
         }
     }
 }

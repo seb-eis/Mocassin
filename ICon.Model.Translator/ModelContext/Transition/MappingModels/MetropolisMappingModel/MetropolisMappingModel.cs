@@ -34,6 +34,15 @@ namespace Mocassin.Model.Translator.ModelContext
         public CrystalVector4D StartVector4D { get; set; }
 
         /// <inheritdoc />
+        public CrystalVector4D EndVector4D { get; set; }
+
+        /// <inheritdoc />
+        public IMetropolisTransitionModel TransitionModel { get; set; }
+
+        /// <inheritdoc />
+        public bool InverseIsSet => InverseMapping != null;
+
+        /// <inheritdoc />
         public IEnumerable<Fractional3D> GetMovementSequence()
         {
             yield break;
@@ -52,20 +61,11 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <inheritdoc />
-        public CrystalVector4D EndVector4D { get; set; }
-
-        /// <inheritdoc />
-        public IMetropolisTransitionModel TransitionModel { get; set; }
-
-        /// <inheritdoc />
-        public bool InverseIsSet => InverseMapping != null;
-
-        /// <inheritdoc />
         public IMetropolisMappingModel CreateGeometricInversion()
         {
             return new MetropolisMappingModel
             {
-                TransitionModel = TransitionModel.InverseTransitionModel 
+                TransitionModel = TransitionModel.InverseTransitionModel
                                   ?? throw new InvalidOperationException("Inverse transition model is unknown!"),
                 IsSourceInversion = true,
                 Mapping = Mapping.CreateGeometricInversion(),

@@ -12,17 +12,17 @@ namespace Mocassin.Framework.Collections
     public class ListReadOnlyWrapper<T1> : IList<T1>, IReadOnlyList<T1>
     {
         /// <summary>
-        /// The encapsulated list interface
+        ///     The encapsulated list interface
         /// </summary>
         private IList<T1> Data { get; set; }
 
-        /// <inheritdoc cref="IReadOnlyCollection{T}.Count"/>
+        /// <inheritdoc cref="IReadOnlyCollection{T}.Count" />
         public int Count => Data.Count;
 
         /// <inheritdoc />
-        public bool IsReadOnly =>true;
+        public bool IsReadOnly => true;
 
-        /// <inheritdoc cref="IReadOnlyList{T}.this"/>
+        /// <inheritdoc cref="IReadOnlyList{T}.this" />
         public T1 this[int index]
         {
             get => Data[index];
@@ -30,7 +30,7 @@ namespace Mocassin.Framework.Collections
         }
 
         /// <summary>
-        /// Create new read only list
+        ///     Create new read only list
         /// </summary>
         public ListReadOnlyWrapper()
         {
@@ -98,14 +98,14 @@ namespace Mocassin.Framework.Collections
         }
 
         /// <summary>
-        /// Creates read only list from an enumerable of potentially derived type
+        ///     Creates read only list from an enumerable of potentially derived type
         /// </summary>
         /// <typeparam name="T2"></typeparam>
         /// <param name="list"></param>
         /// <returns></returns>
         public static ListReadOnlyWrapper<T1> FromEnumerable<T2>(IEnumerable<T2> list) where T2 : T1
         {
-            return new ListReadOnlyWrapper<T1>() { Data = list.Cast<T1>().ToList() };
+            return new ListReadOnlyWrapper<T1> {Data = list.Cast<T1>().ToList()};
         }
     }
 }

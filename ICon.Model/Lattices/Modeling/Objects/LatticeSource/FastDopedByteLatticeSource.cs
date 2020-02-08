@@ -12,7 +12,8 @@ using Moccasin.Mathematics.ValueTypes;
 namespace Mocassin.Model.Lattices
 {
     /// <summary>
-    ///     Provides a fast <see cref="IDopedByteLatticeSource" />
+    ///     Provides a fast <see cref="IDopedByteLatticeSource" /> that supports doping based on only one reference
+    ///     <see cref="IBuildingBlock" />
     /// </summary>
     public class FastDopedByteLatticeSource : IDopedByteLatticeSource
     {

@@ -20,7 +20,7 @@ namespace Mocassin.UI.Xml.Helper
     public class ObjectGraphChangeObserver : IDisposable
     {
         /// <summary>
-        ///     Get the <see cref="ImmutableHashSet{T}"/> of property <see cref="Type"/> values that are ignored by default
+        ///     Get the <see cref="ImmutableHashSet{T}" /> of property <see cref="Type" /> values that are ignored by default
         /// </summary>
         public static ImmutableHashSet<Type> DefaultIgnoredPropertyTypes { get; }
 
@@ -57,27 +57,32 @@ namespace Mocassin.UI.Xml.Helper
         public IObservable<(object Sender, EventArgs args)> ChangeEventNotifications => ChangeEventOccuredEvent.AsObservable();
 
         /// <summary>
-        ///     Get the <see cref="IObservable{T}" /> that provides notifications when an object is added to the subscription system
+        ///     Get the <see cref="IObservable{T}" /> that provides notifications when an object is added to the subscription
+        ///     system
         /// </summary>
         public IObservable<object> ObjectAddedNotifications => ObjectAddedEvent.AsObservable();
 
         /// <summary>
-        ///     Get the <see cref="IObservable{T}" /> that provides observation when an object is removed from the subscription system
+        ///     Get the <see cref="IObservable{T}" /> that provides observation when an object is removed from the subscription
+        ///     system
         /// </summary>
         public IObservable<object> ObjectRemovedNotifications => ObjectRemovedEvent.AsObservable();
 
         /// <summary>
-        ///     Get a <see cref="HashSet{T}"/> of property <see cref="Type"/> that should be ignored during recursive event search
+        ///     Get a <see cref="HashSet{T}" /> of property <see cref="Type" /> that should be ignored during recursive event
+        ///     search
         /// </summary>
         public HashSet<Type> IgnoredTypes { get; }
 
         /// <summary>
-        ///     Get or set a boolean flag if objects not implementing <see cref="INotifyCollectionChanged"/> or <see cref="INotifyPropertyChanged"/> should be included
+        ///     Get or set a boolean flag if objects not implementing <see cref="INotifyCollectionChanged" /> or
+        ///     <see cref="INotifyPropertyChanged" /> should be included
         /// </summary>
         public bool IncludeSilentObjects { get; set; }
 
         /// <summary>
-        ///     Get or set a boolean flag if <see cref="INotifyCollectionChanged"/> implementors should also be included as <see cref="INotifyPropertyChanged"/> if possible
+        ///     Get or set a boolean flag if <see cref="INotifyCollectionChanged" /> implementors should also be included as
+        ///     <see cref="INotifyPropertyChanged" /> if possible
         /// </summary>
         public bool IncludeCollectionProperties { get; set; }
 
@@ -96,7 +101,8 @@ namespace Mocassin.UI.Xml.Helper
         }
 
         /// <summary>
-        ///     Creates a new <see cref="ObjectGraphChangeObserver"/> with an optional set of ignored property <see cref="Type"/> values
+        ///     Creates a new <see cref="ObjectGraphChangeObserver" /> with an optional set of ignored property <see cref="Type" />
+        ///     values
         /// </summary>
         /// <param name="ignoredTypes"></param>
         public ObjectGraphChangeObserver(IEnumerable<Type> ignoredTypes = null)
@@ -108,8 +114,16 @@ namespace Mocassin.UI.Xml.Helper
             IgnoredTypes = new HashSet<Type>((ignoredTypes ?? Enumerable.Empty<Type>()).Concat(DefaultIgnoredPropertyTypes));
         }
 
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            StopObservation();
+            NotifyEventsCompleted();
+        }
+
         /// <summary>
-        ///     Sets the provided object as the new observation root and attaches itself the the change notification events if requested
+        ///     Sets the provided object as the new observation root and attaches itself the the change notification events if
+        ///     requested
         /// </summary>
         /// <param name="rootObject"></param>
         /// <param name="startObservation"></param>
@@ -172,7 +186,8 @@ namespace Mocassin.UI.Xml.Helper
         }
 
         /// <summary>
-        ///     Creates a subscription for the change events of the provided <see cref="object"/>. Has no effect if the object does not provide change events
+        ///     Creates a subscription for the change events of the provided <see cref="object" />. Has no effect if the object
+        ///     does not provide change events
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
@@ -236,9 +251,8 @@ namespace Mocassin.UI.Xml.Helper
                 });
             }
             else
-            {
-                disposable = Disposable.Create(() => notifyCollectionChanged.CollectionChanged -= OnChangeDetected);   
-            }
+                disposable = Disposable.Create(() => notifyCollectionChanged.CollectionChanged -= OnChangeDetected);
+
             Subscriptions.Add(notifyCollectionChanged, disposable);
         }
 
@@ -249,7 +263,8 @@ namespace Mocassin.UI.Xml.Helper
         /// <param name="doneObjects"></param>
         /// <param name="bindingFlags"></param>
         /// <returns></returns>
-        public HashSet<object> FindIncludedObjectsRecursive(object root, BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Instance, HashSet<object> doneObjects = null)
+        public HashSet<object> FindIncludedObjectsRecursive(object root, BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Instance,
+            HashSet<object> doneObjects = null)
         {
             doneObjects ??= new HashSet<object>();
             if (doneObjects.Contains(root)) return doneObjects;
@@ -309,7 +324,7 @@ namespace Mocassin.UI.Xml.Helper
         }
 
         /// <summary>
-        ///     Checks if the provided <see cref="Type"/> is included in the search routine
+        ///     Checks if the provided <see cref="Type" /> is included in the search routine
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
@@ -385,6 +400,7 @@ namespace Mocassin.UI.Xml.Helper
                         break;
                     }
                 }
+
                 DebugLogEvent(false);
             }
 
@@ -399,13 +415,6 @@ namespace Mocassin.UI.Xml.Helper
             ChangeEventOccuredEvent.OnCompleted();
             ObjectAddedEvent.OnCompleted();
             ObjectRemovedEvent.OnCompleted();
-        }
-
-        /// <inheritdoc />
-        public void Dispose()
-        {
-            StopObservation();
-            NotifyEventsCompleted();
         }
 
         /// <summary>

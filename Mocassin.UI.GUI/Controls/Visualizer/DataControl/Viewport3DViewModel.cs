@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
 using HelixToolkit.Wpf;
@@ -23,16 +22,16 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
     /// </summary>
     public class Viewport3DViewModel : ViewModelBase, IDisposable
     {
-        private LightSetup lightSetup;
-        private ModelVisual3D selectedVisual;
+        private int exportHeight = 1080 * 2;
+        private int exportWidth = 1920 * 2;
         private bool isAutoUpdating;
-        private bool isVisualCubeActive;
+        private bool isCameraInfoActive;
         private bool isCoordinateSystemActive;
         private bool isFrameRateCounterActive;
-        private bool isCameraInfoActive;
         private bool isRenderInfoActive;
-        private int exportWidth = 1920 * 2;
-        private int exportHeight = 1080 * 2;
+        private bool isVisualCubeActive;
+        private LightSetup lightSetup;
+        private ModelVisual3D selectedVisual;
 
         /// <summary>
         ///     Get the default light setup for the visual collection
@@ -144,22 +143,22 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         }
 
         /// <summary>
-        ///     Get a <see cref="ParameterlessCommand" /> to clear the visual data and reset to minimum contents
+        ///     Get a <see cref="VoidParameterCommand" /> to clear the visual data and reset to minimum contents
         /// </summary>
-        public ParameterlessCommand ClearVisualCommand { get; }
+        public VoidParameterCommand ClearVisualCommand { get; }
 
         /// <summary>
-        ///     Get a <see cref="ParameterlessCommand" /> to resynchronize the visual collection with the visual groups
+        ///     Get a <see cref="VoidParameterCommand" /> to resynchronize the visual collection with the visual groups
         /// </summary>
-        public ParameterlessCommand UpdateVisualCommand { get; }
+        public VoidParameterCommand UpdateVisualCommand { get; }
 
         /// <summary>
-        ///     Get the <see cref="ExportViewCommand"/> to create en export or image of the current viewport
+        ///     Get the <see cref="ExportViewCommand" /> to create en export or image of the current viewport
         /// </summary>
         public ExportViewportCommand ExportViewCommand { get; }
 
         /// <summary>
-        ///     Get the <see cref="ToggleViewportCameraCommand"/> to switch the camera modes
+        ///     Get the <see cref="ToggleViewportCameraCommand" /> to switch the camera modes
         /// </summary>
         public ToggleViewportCameraCommand ToggleCameraCommand { get; }
 
@@ -177,6 +176,14 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
             ExportViewCommand = new ExportViewportCommand(() => (ExportWidth, ExportHeight));
             ToggleCameraCommand = new ToggleViewportCameraCommand();
             ClearVisual();
+        }
+
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            foreach (var visualGroup in VisualGroups) visualGroup?.Dispose();
+            VisualGroups.Clear();
+            Visuals.Clear();
         }
 
 
@@ -339,6 +346,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         public Func<Transform3D, LinesVisual3D> BuildLinesVisualFactory(Point3DCollection point3DCollection, bool freezePoints = true)
         {
             if (freezePoints) point3DCollection.Freeze();
+
             LinesVisual3D CreateInternal(Transform3D transform)
             {
                 return new LinesVisual3D
@@ -476,16 +484,15 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         /// <param name="thetaDiv"></param>
         /// <param name="freezeMesh"></param>
         /// <returns></returns>
-        public Func<Transform3D, MeshGeometryVisual3D> BuildPipeFrameVisualFactory(IReadOnlyList<Point3D> points, double diameter, int thetaDiv, bool freezeMesh = true)
+        public Func<Transform3D, MeshGeometryVisual3D> BuildPipeFrameVisualFactory(IReadOnlyList<Point3D> points, double diameter, int thetaDiv,
+            bool freezeMesh = true)
         {
             var meshBuilder = new MeshBuilder();
             for (var i = 0; i < points.Count; i++)
             {
-                for (var j = i+1; j < points.Count; j++)
-                {
-                    meshBuilder.AddCylinder(points[i], points[j], diameter, thetaDiv);
-                }
+                for (var j = i + 1; j < points.Count; j++) meshBuilder.AddCylinder(points[i], points[j], diameter, thetaDiv);
             }
+
             var meshGeometry = meshBuilder.ToMesh(true);
             return BuildMeshVisualFactory(meshGeometry);
         }
@@ -502,14 +509,12 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
             var meshBuilder = new MeshBuilder();
             for (var i = 0; i < points.Count; i++)
             {
-                for (var j = i+1; j < points.Count; j++)
+                for (var j = i + 1; j < points.Count; j++)
                 {
-                    for (var k = j+1; k < points.Count; k++)
-                    {
-                        meshBuilder.AddTriangle(points[i], points[j], points[k]);
-                    }
+                    for (var k = j + 1; k < points.Count; k++) meshBuilder.AddTriangle(points[i], points[j], points[k]);
                 }
             }
+
             var meshGeometry = meshBuilder.ToMesh(true);
             return BuildMeshVisualFactory(meshGeometry);
         }
@@ -529,11 +534,9 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
             var meshBuilder = new MeshBuilder();
             for (var i = 0; i < points.Count; i++)
             {
-                for (var j = i+1; j < points.Count; j++)
-                {
-                    meshBuilder.AddCylinder(points[i], points[j], diameter, thetaDiv);       
-                }
+                for (var j = i + 1; j < points.Count; j++) meshBuilder.AddCylinder(points[i], points[j], diameter, thetaDiv);
             }
+
             var meshGeometry = meshBuilder.ToMesh(freezeMesh);
 
             return BuildMeshVisualFactory(meshGeometry);
@@ -610,7 +613,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         }
 
         /// <summary>
-        ///     Sets the <see cref="Material"/> of a set of <see cref="MeshGeometryVisual3D"/> with the provided information
+        ///     Sets the <see cref="Material" /> of a set of <see cref="MeshGeometryVisual3D" /> with the provided information
         /// </summary>
         /// <param name="visuals"></param>
         /// <param name="material"></param>
@@ -642,14 +645,6 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         private void AutoUpdateVisualInternal(object sender, PropertyChangedEventArgs args)
         {
             if (IsAutoUpdating) UpdateVisual();
-        }
-
-        /// <inheritdoc />
-        public void Dispose()
-        {
-            foreach (var visualGroup in VisualGroups) visualGroup?.Dispose();
-            VisualGroups.Clear();
-            Visuals.Clear();
         }
     }
 }

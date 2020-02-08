@@ -106,7 +106,7 @@ namespace Mocassin.Model.Translator.ModelContext
         protected long Create64BitIndexCode(IEnumerable<int> values, byte[] buffer)
         {
             var index = -1;
-            foreach (var item in values) 
+            foreach (var item in values)
                 buffer[++index] = (byte) item;
 
             var code = BitConverter.ToInt64(buffer, 0);
@@ -142,7 +142,7 @@ namespace Mocassin.Model.Translator.ModelContext
             foreach (var (start, end) in transitionRule.GetMovementDescription().SelectConsecutivePairs((a, b) => (a, b)))
                 result.Swap(start, end);
 
-            for (var i = 0; i < result.Count; i++) 
+            for (var i = 0; i < result.Count; i++)
                 result[i] -= i;
 
             return result;
@@ -161,7 +161,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Adds the mobility information (selectable particle set, particle mask ...) to the passed transition model
+        ///     Adds the mobility information (selectable particle set, particle mask ...) to the passed transition model
         /// </summary>
         /// <param name="transitionModel"></param>
         protected void AddBasicMobilityInformation(ITransitionModel transitionModel)

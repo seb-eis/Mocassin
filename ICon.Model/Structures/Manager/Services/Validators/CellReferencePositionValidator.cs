@@ -1,7 +1,6 @@
 ﻿using Mocassin.Framework.Operations;
 using Mocassin.Mathematics.Comparer;
 using Mocassin.Mathematics.Constraints;
-using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Basic;
 using Mocassin.Model.ModelProject;
 
@@ -58,7 +57,7 @@ namespace Mocassin.Model.Structures.Validators
         {
             foreach (var item in DataReader.Access.GetCellReferencePositions())
             {
-                if (item.IsDeprecated) 
+                if (item.IsDeprecated)
                     continue;
 
                 var extended = ModelProject.SpaceGroupService.GetUnitCellP1PositionExtension(item.Vector);

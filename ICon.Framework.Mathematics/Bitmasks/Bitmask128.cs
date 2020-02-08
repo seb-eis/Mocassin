@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Runtime.Serialization;
 using Mocassin.Mathematics.Extensions;
 
-namespace Mocassin.Mathematics.Bitmasks
+namespace Mocassin.Mathematics.Bitmask
 {
     /// <summary>
     ///     Two wrapped 64 bit unsigned integer to be used as 128 entry bitmask (Waring: Mutable struct!)
@@ -18,27 +17,6 @@ namespace Mocassin.Mathematics.Bitmasks
         ///     The first internal 64 bit mask
         /// </summary>
         public ulong Mask1 { get; set; }
-
-        /// <summary>
-        ///     Creates new mask from unsigned integer
-        /// </summary>
-        /// <param name="mask0"></param>
-        /// <param name="mask1"></param>
-        public Bitmask128(ulong mask0, ulong mask1)
-        {
-            Mask0 = mask0;
-            Mask1 = mask1;
-        }
-
-        /// <summary>
-        ///     Copy constructor
-        /// </summary>
-        /// <param name="bitmask"></param>
-        public Bitmask128(Bitmask128 bitmask)
-        {
-            Mask0 = bitmask.Mask0;
-            Mask1 = bitmask.Mask1;
-        }
 
         /// <inheritdoc />
         public bool this[int index]
@@ -64,6 +42,27 @@ namespace Mocassin.Mathematics.Bitmasks
         }
 
         /// <summary>
+        ///     Creates new mask from unsigned integer
+        /// </summary>
+        /// <param name="mask0"></param>
+        /// <param name="mask1"></param>
+        public Bitmask128(ulong mask0, ulong mask1)
+        {
+            Mask0 = mask0;
+            Mask1 = mask1;
+        }
+
+        /// <summary>
+        ///     Copy constructor
+        /// </summary>
+        /// <param name="bitmask"></param>
+        public Bitmask128(Bitmask128 bitmask)
+        {
+            Mask0 = bitmask.Mask0;
+            Mask1 = bitmask.Mask1;
+        }
+
+        /// <summary>
         ///     Compares the wrapped integer
         /// </summary>
         /// <param name="other"></param>
@@ -71,8 +70,8 @@ namespace Mocassin.Mathematics.Bitmasks
         public int CompareTo(Bitmask128 other)
         {
             var compare1 = Mask1.CompareTo(other.Mask1);
-            return compare1 == 0 
-                ? Mask0.CompareTo(other.Mask0) 
+            return compare1 == 0
+                ? Mask0.CompareTo(other.Mask0)
                 : compare1;
         }
 

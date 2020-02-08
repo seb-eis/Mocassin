@@ -4,7 +4,7 @@ using Mocassin.Model.ModelProject;
 namespace Mocassin.Model.Basic
 {
     /// <summary>
-    /// Abstract base class for event handlers that handle object removals provided by the specfified event port
+    ///     Abstract base class for event handlers that handle object removals provided by the specfified event port
     /// </summary>
     /// <typeparam name="T1"></typeparam>
     /// <typeparam name="T2"></typeparam>
@@ -18,7 +18,6 @@ namespace Mocassin.Model.Basic
         protected ObjectRemovedEventHandler(IModelProject modelProject, DataAccessorSource<T2> dataAccessorSource, T3 eventManager)
             : base(modelProject, dataAccessorSource, eventManager)
         {
-
         }
 
         /// <inheritdoc />

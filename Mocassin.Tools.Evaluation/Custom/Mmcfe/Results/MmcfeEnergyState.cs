@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Runtime.InteropServices;
 using System.Text;
 using Mocassin.Tools.Evaluation.Queries.Base;
 
@@ -37,7 +36,7 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         public double Entropy { get; }
 
         /// <summary>
-        ///     Creates a new <see cref="MmcfeEnergyState"/> with implicit entropy specification
+        ///     Creates a new <see cref="MmcfeEnergyState" /> with implicit entropy specification
         /// </summary>
         /// <param name="alpha"></param>
         /// <param name="temperature"></param>
@@ -53,7 +52,7 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         }
 
         /// <summary>
-        ///     Creates a new <see cref="MmcfeEnergyState"/> with explicit entropy specification
+        ///     Creates a new <see cref="MmcfeEnergyState" /> with explicit entropy specification
         /// </summary>
         /// <param name="alpha"></param>
         /// <param name="temperature"></param>
@@ -70,7 +69,7 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         }
 
         /// <summary>
-        ///     Get a by defect result <see cref="MmcfeEnergyState"/> for the given defect count
+        ///     Get a by defect result <see cref="MmcfeEnergyState" /> for the given defect count
         /// </summary>
         /// <param name="defectCount"></param>
         /// <returns></returns>
@@ -80,7 +79,7 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         }
 
         /// <summary>
-        ///     Get a <see cref="MmcfeEnergyState"/> where the energy values are relative to the provided reference
+        ///     Get a <see cref="MmcfeEnergyState" /> where the energy values are relative to the provided reference
         /// </summary>
         /// <param name="reference"></param>
         /// <returns></returns>
@@ -100,7 +99,7 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         /// <returns></returns>
         public string GetFormattedEnergies(bool entropyInKb = true, IFormatProvider formatProvider = null, string separator = " ", string doubleFormat = "e13")
         {
-            formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
+            formatProvider ??= CultureInfo.InvariantCulture;
             var builder = new StringBuilder(100);
             builder.Append(InnerEnergy.ToString(doubleFormat, formatProvider));
             builder.Append(separator);

@@ -1,25 +1,25 @@
-﻿using System;
-using Mocassin.Framework.Operations;
+﻿using Mocassin.Framework.Operations;
 using Mocassin.Model.Basic;
-using Mocassin.Model.Particles;
 using Mocassin.Model.ModelProject;
+using Mocassin.Model.Particles;
 
 namespace Mocassin.Model.Structures.Handler
 {
     /// <summary>
-    /// Event handler that manages the processing of object reindexing events that the structure manager receives from the particle manager event port
+    ///     Event handler that manages the processing of object reindexing events that the structure manager receives from the
+    ///     particle manager event port
     /// </summary>
     internal class ParticleObjectIndexingChangedHandler : ObjectIndexingChangedEventHandler<IParticleEventPort, StructureModelData, StructureEventManager>
     {
         /// <inheritdoc />
-        public ParticleObjectIndexingChangedHandler(IModelProject modelProject, DataAccessorSource<StructureModelData> dataAccessorSource, StructureEventManager eventManager)
+        public ParticleObjectIndexingChangedHandler(IModelProject modelProject, DataAccessorSource<StructureModelData> dataAccessorSource,
+            StructureEventManager eventManager)
             : base(modelProject, dataAccessorSource, eventManager)
         {
-
         }
 
         /// <summary>
-        /// Event reaction to a changed particle list indexing in the particle manager
+        ///     Event reaction to a changed particle list indexing in the particle manager
         /// </summary>
         /// <param name="eventArgs"></param>
         /// <returns></returns>
@@ -30,7 +30,7 @@ namespace Mocassin.Model.Structures.Handler
         }
 
         /// <summary>
-        /// Event reaction to a changed particle set list indexing in the particle manager
+        ///     Event reaction to a changed particle set list indexing in the particle manager
         /// </summary>
         /// <param name="eventArgs"></param>
         /// <returns></returns>

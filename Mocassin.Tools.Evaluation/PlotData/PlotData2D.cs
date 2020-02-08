@@ -16,24 +16,12 @@ namespace Mocassin.Tools.Evaluation.PlotData
         private List<(TX X, TX ErrorX, TY Y, TY ErrorY)> Values { get; }
 
         /// <summary>
-        ///     Creates new <see cref="PlotData2D{TX,TY}"/> with initial capacity
+        ///     Creates new <see cref="PlotData2D{TX,TY}" /> with initial capacity
         /// </summary>
         /// <param name="capacity"></param>
         public PlotData2D(int capacity = 0)
         {
             Values = new List<(TX, TX, TY, TY)>(capacity);
-        }
-
-        /// <summary>
-        ///     Adds a plot point to the data
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="errorX"></param>
-        /// <param name="errorY"></param>
-        public void AddPoint(TX x, TY y, TX errorX = default, TY errorY = default)
-        {
-            Values.Add((x, errorX, y, errorY));
         }
 
         /// <inheritdoc />
@@ -46,6 +34,18 @@ namespace Mocassin.Tools.Evaluation.PlotData
         IEnumerator IEnumerable.GetEnumerator()
         {
             return ((IEnumerable) Values).GetEnumerator();
+        }
+
+        /// <summary>
+        ///     Adds a plot point to the data
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="errorX"></param>
+        /// <param name="errorY"></param>
+        public void AddPoint(TX x, TY y, TX errorX = default, TY errorY = default)
+        {
+            Values.Add((x, errorX, y, errorY));
         }
     }
 }

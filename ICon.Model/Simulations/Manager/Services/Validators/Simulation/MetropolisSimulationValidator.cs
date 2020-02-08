@@ -44,7 +44,7 @@ namespace Mocassin.Model.Simulations
             if (Settings.BreakSampleInterval.ParseValue(simulation.BreakSampleIntervalMcs, out warnings) != 0)
                 report.AddWarnings(warnings);
 
-            if (Settings.ResultSampleLength.ParseValue(simulation.ResultSampleMcs, out warnings) != 0) 
+            if (Settings.ResultSampleLength.ParseValue(simulation.ResultSampleMcs, out warnings) != 0)
                 report.AddWarnings(warnings);
         }
 

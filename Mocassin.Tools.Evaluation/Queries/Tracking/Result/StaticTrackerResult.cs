@@ -15,16 +15,17 @@ namespace Mocassin.Tools.Evaluation.Queries
         public int PositionId { get; }
 
         /// <summary>
-        ///     Get the <see cref="IParticle"/> that the data belongs to
+        ///     Get the <see cref="IParticle" /> that the data belongs to
         /// </summary>
         public IParticle Particle { get; }
 
         /// <summary>
-        ///     Get the local velocity <see cref="Cartesian3D"/> vector of the <see cref="IParticle"/> movement in [m/s]
+        ///     Get the local velocity <see cref="Cartesian3D" /> vector of the <see cref="IParticle" /> movement in [m/s]
         /// </summary>
         public Cartesian3D VelocityVector { get; }
 
-        public StaticTrackerResult(int positionId, IParticle particle, in Cartesian3D velocityVector) : this()
+        public StaticTrackerResult(int positionId, IParticle particle, in Cartesian3D velocityVector)
+            : this()
         {
             PositionId = positionId;
             Particle = particle ?? throw new ArgumentNullException(nameof(particle));

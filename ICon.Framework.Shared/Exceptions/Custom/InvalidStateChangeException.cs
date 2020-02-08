@@ -1,38 +1,41 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.Serialization;
-using System.Text;
 
 namespace Mocassin.Framework.Exceptions
 {
     /// <summary>
-    /// Exception thrown if a method/property access to an object tries to change an inherited field/property that is immutable in the implementing type
+    ///     Exception thrown if a method/property access to an object tries to change an inherited field/property that is
+    ///     immutable in the implementing type
     /// </summary>
     public class InvalidStateChangeException : CustomException
     {
         /// <summary>
-        /// The name of the immutable property or field
+        ///     The name of the immutable property or field
         /// </summary>
         public string DataMemberName { get; }
 
         /// <inheritdoc />
-        public InvalidStateChangeException(string message) : base(message)
+        public InvalidStateChangeException(string message)
+            : base(message)
         {
         }
 
         /// <inheritdoc />
-        public InvalidStateChangeException(string message, string dataMemberName) : base(message)
+        public InvalidStateChangeException(string message, string dataMemberName)
+            : base(message)
         {
             DataMemberName = dataMemberName;
         }
 
         /// <inheritdoc />
-        public InvalidStateChangeException(string message, Exception innerException) : base(message, innerException)
+        public InvalidStateChangeException(string message, Exception innerException)
+            : base(message, innerException)
         {
         }
 
         /// <inheritdoc />
-        protected InvalidStateChangeException(SerializationInfo info, StreamingContext context) : base(info, context)
+        protected InvalidStateChangeException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
         {
         }
 

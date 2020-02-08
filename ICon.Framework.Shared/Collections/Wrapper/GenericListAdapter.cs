@@ -6,14 +6,14 @@ using System.Linq;
 namespace Mocassin.Framework.Collections
 {
     /// <summary>
-    /// Adapter that emulates a generic list interface for a non generic list
+    ///     Adapter that emulates a generic list interface for a non generic list
     /// </summary>
     /// <typeparam name="T1"></typeparam>
     /// <remarks> Circumvents the C# invalid cast problem of list interfaces to list interfaces of derived type </remarks>
     public class GenericListAdapter<T1> : IList<T1>
     {
         /// <summary>
-        /// The encapsulated non generic list interface
+        ///     The encapsulated non generic list interface
         /// </summary>
         protected IList List { get; set; }
 
@@ -26,7 +26,7 @@ namespace Mocassin.Framework.Collections
         /// <inheritdoc />
         public T1 this[int index]
         {
-            get => (T1)List[index];
+            get => (T1) List[index];
             set => List[index] = value;
         }
 

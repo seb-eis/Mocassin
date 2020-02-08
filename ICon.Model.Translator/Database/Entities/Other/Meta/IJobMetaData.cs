@@ -71,12 +71,12 @@
         string FlagString { get; set; }
 
         /// <summary>
-        ///     Get or set a doping information <see cref="string"/>
+        ///     Get or set a doping information <see cref="string" />
         /// </summary>
         string DopingInfo { get; set; }
 
         /// <summary>
-        ///     Get or set a lattice information <see cref="string"/>
+        ///     Get or set a lattice information <see cref="string" />
         /// </summary>
         string LatticeInfo { get; set; }
     }

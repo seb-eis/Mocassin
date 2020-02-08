@@ -93,6 +93,13 @@ namespace Mocassin.UI.Xml.ProjectBuilding
             JobBuildCounterEvent = new ReactiveEvent<(int Done, int Total)>();
         }
 
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            JobBuildCounterEvent.OnCompleted();
+            BuildStatusEvent.OnCompleted();
+        }
+
 
         /// <summary>
         ///     Executes a full translation cycle of a <see cref="SimulationDbBuildTemplate" /> into a
@@ -362,13 +369,6 @@ namespace Mocassin.UI.Xml.ProjectBuilding
             foreach (var optimizer in jobCollection.GetPostBuildOptimizers()) builder.AddPostBuildOptimizer(optimizer);
 
             return builder;
-        }
-
-        /// <inheritdoc />
-        public void Dispose()
-        {
-            JobBuildCounterEvent.OnCompleted();
-            BuildStatusEvent.OnCompleted();
         }
     }
 }

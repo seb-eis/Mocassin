@@ -34,7 +34,8 @@ namespace Mocassin.UI.Xml.Base
         }
 
         /// <summary>
-        ///     Get or set the <see cref="ModelObjectReference{T}" /> to the occupation <see cref="Mocassin.Model.Particles.Particle" />
+        ///     Get or set the <see cref="ModelObjectReference{T}" /> to the occupation
+        ///     <see cref="Mocassin.Model.Particles.Particle" />
         /// </summary>
         [XmlElement("Particle")]
         public ModelObjectReference<Particle> Particle

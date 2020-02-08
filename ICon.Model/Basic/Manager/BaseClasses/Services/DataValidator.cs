@@ -56,7 +56,7 @@ namespace Mocassin.Model.Basic
         /// <param name="report"></param>
         protected void AddGenericContentEqualityValidation<T1>(T1 first, T1 second, ValidationReport report) where T1 : IModelParameter
         {
-            if (!first.Equals(second)) 
+            if (!first.Equals(second))
                 return;
 
             var detail = $"The current model parameter of type {first.GetParameterName()} is equal to the provided replacement";
@@ -76,7 +76,7 @@ namespace Mocassin.Model.Basic
         {
             foreach (var item in existingData)
             {
-                if (!item.Equals(obj)) 
+                if (!item.Equals(obj))
                     continue;
 
                 var detail = $"The provided {obj} is a duplicate to the existing object ({item.Index}) {item}";

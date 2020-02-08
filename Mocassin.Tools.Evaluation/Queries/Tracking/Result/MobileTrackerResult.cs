@@ -5,7 +5,7 @@ using Mocassin.Model.Particles;
 namespace Mocassin.Tools.Evaluation.Queries
 {
     /// <summary>
-    ///     Struct that contains the tracking data of a single mobile <see cref="IParticle"/>
+    ///     Struct that contains the tracking data of a single mobile <see cref="IParticle" />
     /// </summary>
     public readonly struct MobileTrackerResult
     {
@@ -15,16 +15,17 @@ namespace Mocassin.Tools.Evaluation.Queries
         public int OriginalPositionId { get; }
 
         /// <summary>
-        ///     Get the <see cref="IParticle"/> that the movement belongs to
+        ///     Get the <see cref="IParticle" /> that the movement belongs to
         /// </summary>
         public IParticle Particle { get; }
 
         /// <summary>
-        ///     Get the <see cref="Cartesian3D"/> that describes the displacement
+        ///     Get the <see cref="Cartesian3D" /> that describes the displacement
         /// </summary>
         public Cartesian3D Displacement { get; }
 
-        public MobileTrackerResult(IParticle particle, int originalPositionId, in Cartesian3D displacement) : this()
+        public MobileTrackerResult(IParticle particle, int originalPositionId, in Cartesian3D displacement)
+            : this()
         {
             Particle = particle ?? throw new ArgumentNullException(nameof(particle));
             OriginalPositionId = originalPositionId;

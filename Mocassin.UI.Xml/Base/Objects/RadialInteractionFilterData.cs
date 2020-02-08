@@ -11,10 +11,10 @@ namespace Mocassin.UI.Xml.Base
     [XmlRoot("RadialInteractionFilter")]
     public class RadialInteractionFilterData : ProjectDataObject
     {
-        private double startRadius;
-        private double endRadius;
         private ModelObjectReference<CellReferencePosition> centerCellReferencePosition;
+        private double endRadius;
         private ModelObjectReference<CellReferencePosition> partnerCellReferencePosition;
+        private double startRadius;
 
         /// <summary>
         ///     Get or set the start radius of the filter

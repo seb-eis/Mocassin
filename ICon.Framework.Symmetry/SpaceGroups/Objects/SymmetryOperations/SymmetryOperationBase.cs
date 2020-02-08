@@ -15,8 +15,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// <summary>
         ///     The <see cref="SymmetryOperationCore" /> backing field
         /// </summary>
-        [NotMapped] 
-        private SymmetryOperationCore operationCore;
+        [NotMapped] private SymmetryOperationCore operationCore;
 
         /// <inheritdoc />
         [NotMapped]

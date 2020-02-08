@@ -23,7 +23,7 @@ namespace Mocassin.Model.Transitions
             foreach (var vector in geometryVectors)
             {
                 relative += vector - last;
-                if (relative.Equals(CrystalVector4D.NullVector)) 
+                if (relative.Equals(CrystalVector4D.NullVector))
                     return true;
 
                 last = vector;
@@ -52,7 +52,8 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <summary>
-        ///     Takes a set of fractional reference positions and creates a 2D map of all symmetry equivalent intermediate positions
+        ///     Takes a set of fractional reference positions and creates a 2D map of all symmetry equivalent intermediate
+        ///     positions
         ///     between each two consecutive vectors
         /// </summary>
         /// <param name="geometry"></param>
@@ -92,7 +93,7 @@ namespace Mocassin.Model.Transitions
         /// <returns></returns>
         public bool IsBackjumpRulePair(ITransitionRule lhs, ITransitionRule rhs)
         {
-            if (lhs.MovementFlags != rhs.MovementFlags) 
+            if (lhs.MovementFlags != rhs.MovementFlags)
                 return false;
 
             return lhs.GetStartStateOccupation().Select(a => a.Index)
@@ -110,7 +111,7 @@ namespace Mocassin.Model.Transitions
         /// <returns></returns>
         public bool IsTwistedRulePair(ITransitionRule lhs, ITransitionRule rhs)
         {
-            if (lhs.MovementFlags != rhs.MovementFlags) 
+            if (lhs.MovementFlags != rhs.MovementFlags)
                 return false;
 
             return lhs.GetStartStateOccupation().Select(a => a.Index)
@@ -147,9 +148,11 @@ namespace Mocassin.Model.Transitions
                 var chargeTransport = GetStatePairChargeTransport(propertyGroup.GetStateExchangePairs().First());
 
                 foreach (var statePair in propertyGroup.GetStateExchangePairs().Skip(1))
+                {
                     chargeTransport = comparer.Compare(chargeTransport, GetStatePairChargeTransport(statePair)) == 0
                         ? chargeTransport
                         : double.NaN;
+                }
 
                 transportChain.Add(chargeTransport);
             }

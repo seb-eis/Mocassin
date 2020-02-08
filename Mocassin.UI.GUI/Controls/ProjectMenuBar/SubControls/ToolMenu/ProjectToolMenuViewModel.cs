@@ -5,7 +5,8 @@ using Mocassin.UI.GUI.Controls.Base.ViewModels;
 namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ToolMenu
 {
     /// <summary>
-    ///The <see cref="PrimaryControlViewModel"/> for <see cref="ProjectToolMenuView"/> that supplies project related tool
+    ///     The <see cref="PrimaryControlViewModel" /> for <see cref="ProjectToolMenuView" /> that supplies project related
+    ///     tool
     /// </summary>
     public class ProjectToolMenuViewModel : PrimaryControlViewModel
     {

@@ -16,12 +16,12 @@ namespace Mocassin.UI.Xml.Customization
     [XmlRoot("MocassinModelCustomizationGraph")]
     public class ProjectCustomizationTemplate : ModelCustomizationData, IDuplicable<ProjectCustomizationTemplate>
     {
-        private string key;
         private EnergyModelCustomizationData energyModelCustomization;
+        private string key;
         private TransitionModelCustomizationData transitionModelCustomization;
 
         /// <summary>
-        ///     Get the <see cref="ProjectCustomizationTemplate"/> that represents an empty customization
+        ///     Get the <see cref="ProjectCustomizationTemplate" /> that represents an empty customization
         /// </summary>
         public static ProjectCustomizationTemplate Empty { get; } = new ProjectCustomizationTemplate {Name = "[Empty]"};
 
@@ -69,6 +69,24 @@ namespace Mocassin.UI.Xml.Customization
         }
 
         /// <inheritdoc />
+        public ProjectCustomizationTemplate Duplicate()
+        {
+            return new ProjectCustomizationTemplate
+            {
+                Parent = Parent,
+                Name = $"{Name}(copy)",
+                TransitionModelCustomization = TransitionModelCustomization.Duplicate(),
+                EnergyModelCustomization = EnergyModelCustomization.Duplicate()
+            };
+        }
+
+        /// <inheritdoc />
+        object IDuplicable.Duplicate()
+        {
+            return Duplicate();
+        }
+
+        /// <inheritdoc />
         public override void PushToModel(IModelProject modelProject)
         {
             foreach (var propertyInfo in GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
@@ -103,24 +121,6 @@ namespace Mocassin.UI.Xml.Customization
             obj.Name = $"New Customization [{obj.Parent.ProjectName}]";
 
             return obj;
-        }
-
-        /// <inheritdoc />
-        public ProjectCustomizationTemplate Duplicate()
-        {
-            return new ProjectCustomizationTemplate
-            {
-                Parent = Parent,
-                Name = $"{Name}(copy)",
-                TransitionModelCustomization = TransitionModelCustomization.Duplicate(),
-                EnergyModelCustomization = EnergyModelCustomization.Duplicate()
-            };
-        }
-
-        /// <inheritdoc />
-        object IDuplicable.Duplicate()
-        {
-            return Duplicate();
         }
     }
 }

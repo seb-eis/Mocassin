@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
@@ -59,11 +58,15 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
         }
 
         /// <summary>
-        ///     Synchronously creates the unified <see cref="SceneNodeGroupModel3D"/>. This method will throw if any build tasks are still pending
+        ///     Synchronously creates the unified <see cref="SceneNodeGroupModel3D" />. This method will throw if any build tasks
+        ///     are still pending
         /// </summary>
         /// <param name="clear"></param>
         /// <param name="dispatcher"></param>
-        /// <exception cref="InvalidOperationException">If active build tasks collection is not empty or a  build task is added during the operation</exception>
+        /// <exception cref="InvalidOperationException">
+        ///     If active build tasks collection is not empty or a  build task is added
+        ///     during the operation
+        /// </exception>
         /// <returns></returns>
         public SceneNodeGroupModel3D ToModel(bool clear = true, Dispatcher dispatcher = null)
         {
@@ -84,11 +87,11 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
         }
 
         /// <summary>
-        ///     Asynchronously awaits all active build tasks and builds a unified a <see cref="SceneNodeGroupModel3D"/>
+        ///     Asynchronously awaits all active build tasks and builds a unified a <see cref="SceneNodeGroupModel3D" />
         /// </summary>
         /// <param name="clear"></param>
         /// <param name="dispatcher"></param>
-        /// <remarks>Application.Current is used to get a <see cref="Dispatcher"/> if none is specified</remarks>
+        /// <remarks>Application.Current is used to get a <see cref="Dispatcher" /> if none is specified</remarks>
         /// <returns></returns>
         public Task<SceneNodeGroupModel3D> ToModelAsync(bool clear = true, Dispatcher dispatcher = null)
         {
@@ -96,7 +99,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
         }
 
         /// <summary>
-        ///     Internal implementation of the <see cref="SceneNodeGroupModel3D"/> build process
+        ///     Internal implementation of the <see cref="SceneNodeGroupModel3D" /> build process
         /// </summary>
         /// <param name="clear"></param>
         /// <param name="dispatcher"></param>
@@ -113,7 +116,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
         }
 
         /// <summary>
-        ///     Creates the <see cref="SceneNodeGroupModel3D"/>
+        ///     Creates the <see cref="SceneNodeGroupModel3D" />
         /// </summary>
         /// <returns></returns>
         private SceneNodeGroupModel3D CreateModel()
@@ -135,7 +138,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
         }
 
         /// <summary>
-        ///     Adds a set of of <see cref="MeshNode" /> transforms sharing a common <see cref="MeshGeometry3D" /> and <see cref="MaterialCore" />
+        ///     Adds a set of of <see cref="MeshNode" /> transforms sharing a common <see cref="MeshGeometry3D" /> and
+        ///     <see cref="MaterialCore" />
         /// </summary>
         /// <param name="geometry"></param>
         /// <param name="material"></param>
@@ -171,7 +175,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
         }
 
         /// <summary>
-        ///     Adds a new <see cref="BatchedMeshNode" /> of mesh transforms sharing a common <see cref="MeshGeometry3D" /> and <see cref="MaterialCore" />
+        ///     Adds a new <see cref="BatchedMeshNode" /> of mesh transforms sharing a common <see cref="MeshGeometry3D" /> and
+        ///     <see cref="MaterialCore" />
         /// </summary>
         /// <param name="geometry"></param>
         /// <param name="material"></param>
@@ -199,13 +204,15 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
         /// <param name="transforms"></param>
         /// <param name="callback"></param>
         /// <returns></returns>
-        public Task BeginAddBatchedMeshTransforms(MeshGeometry3D geometry, MaterialCore material, IList<Matrix> transforms, Action<BatchedMeshNode> callback = null)
+        public Task BeginAddBatchedMeshTransforms(MeshGeometry3D geometry, MaterialCore material, IList<Matrix> transforms,
+            Action<BatchedMeshNode> callback = null)
         {
             return RunBuildTask(() => AddBatchedMeshTransforms(geometry, material, transforms, callback));
         }
 
         /// <summary>
-        ///     Adds a <see cref="LineGeometry3D"/> using the provided model <see cref="Matrix"/> and <see cref="LineMaterialCore"/>
+        ///     Adds a <see cref="LineGeometry3D" /> using the provided model <see cref="Matrix" /> and
+        ///     <see cref="LineMaterialCore" />
         /// </summary>
         /// <param name="geometry"></param>
         /// <param name="material"></param>
@@ -234,10 +241,13 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
         }
 
         /// <summary>
-        ///     Attaches a custom build <see cref="Task"/> that requires awaiting when creating the model
+        ///     Attaches a custom build <see cref="Task" /> that requires awaiting when creating the model
         /// </summary>
         /// <param name="task"></param>
-        /// <remarks>Warning: Never attach a task that itself attaches a build task to the builder instance, this causes an <see cref="InvalidOperationException"/> on model creation. </remarks>
+        /// <remarks>
+        ///     Warning: Never attach a task that itself attaches a build task to the builder instance, this causes an
+        ///     <see cref="InvalidOperationException" /> on model creation.
+        /// </remarks>
         public void AttachCustomTask(Task task)
         {
             AttachBuildTask(task);
@@ -245,7 +255,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
         }
 
         /// <summary>
-        ///     Runs an <see cref="Action" /> as a build <see cref="Task" /> that detaches itself on completion. Returned <see cref="Task" /> completes after the build process has detached from the scene builder
+        ///     Runs an <see cref="Action" /> as a build <see cref="Task" /> that detaches itself on completion. Returned
+        ///     <see cref="Task" /> completes after the build process has detached from the scene builder
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
@@ -282,7 +293,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
         }
 
         /// <summary>
-        ///     Get a <see cref="Task"/> to await completion fo all active build tasks
+        ///     Get a <see cref="Task" /> to await completion fo all active build tasks
         /// </summary>
         /// <returns></returns>
         private Task GetBuildAwaitTask()

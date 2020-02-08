@@ -6,7 +6,7 @@
     public interface IVector3D
     {
         /// <summary>
-        ///     Get the coordinate information as a <see cref="Coordinates3D"/> struct
+        ///     Get the coordinate information as a <see cref="Coordinates3D" /> struct
         /// </summary>
         Coordinates3D Coordinates { get; }
     }

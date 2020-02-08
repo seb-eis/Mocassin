@@ -13,7 +13,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
     public partial class Viewport3DView : UserControl, IDisposable
     {
         /// <summary>
-        ///     Get the <see cref="PropertyInfo"/> for the default <see cref="Color"/> property
+        ///     Get the <see cref="PropertyInfo" /> for the default <see cref="Color" /> property
         /// </summary>
         private static PropertyInfo DefaultColorPropertyInfo { get; }
 

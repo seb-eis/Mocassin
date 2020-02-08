@@ -15,8 +15,8 @@ namespace Mocassin.UI.Xml.SimulationModel
     [XmlRoot]
     public class SimulationModelData : ModelManagerData
     {
-        private ObservableCollection<MetropolisSimulationData> metropolisSimulations;
         private ObservableCollection<KineticSimulationData> kineticSimulations;
+        private ObservableCollection<MetropolisSimulationData> metropolisSimulations;
 
         /// <summary>
         ///     Get or set the list of metropolis simulations

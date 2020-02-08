@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Mocassin.Symmetry.Analysis
 {
@@ -56,10 +57,11 @@ namespace Mocassin.Symmetry.Analysis
         /// </summary>
         /// <param name="comparer"></param>
         /// <returns></returns>
+        [SuppressMessage("ReSharper", "CompareOfFloatsByEqualityOperator")]
         public bool CheckEquivalency(IComparer<SymmetryIndicator> comparer)
         {
             if (FirstIndicator.First == 0 && FirstIndicator.Second == 0 && SecondIndicator.First == 0 &&
-                SecondIndicator.Second == 0) 
+                SecondIndicator.Second == 0)
                 return false;
 
             return comparer.Compare(FirstIndicator, SecondIndicator) == 0;

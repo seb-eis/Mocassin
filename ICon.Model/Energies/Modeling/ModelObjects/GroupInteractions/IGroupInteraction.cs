@@ -7,7 +7,8 @@ using Mocassin.Model.Structures;
 namespace Mocassin.Model.Energies
 {
     /// <summary>
-    ///     Represents a group interaction to describe a more complex (No pair interaction) reference grouping around a position
+    ///     Represents a group interaction to describe a more complex (No pair interaction) reference grouping around a
+    ///     position
     /// </summary>
     public interface IGroupInteraction : IModelObject
     {

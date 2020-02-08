@@ -10,7 +10,7 @@ using Mocassin.Model.Transitions;
 namespace Mocassin.Model.Basic
 {
     /// <summary>
-    ///     Defines a static helper class for generating <see cref="ManagerPackage"/> instances
+    ///     Defines a static helper class for generating <see cref="ManagerPackage" /> instances
     /// </summary>
     public static class ManagerFactory
     {

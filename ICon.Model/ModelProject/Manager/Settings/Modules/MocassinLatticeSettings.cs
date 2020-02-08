@@ -7,13 +7,12 @@ namespace Mocassin.Model.ModelProject
     ///     Settings data object for the energy managing module
     /// </summary>
     [DataContract]
-	[ModuleSettings(typeof(ILatticeManager))]
+    [ModuleSettings(typeof(ILatticeManager))]
     public class MocassinLatticeSettings : MocassinModuleSettings
     {
         /// <inheritdoc />
         public override void InitAsDefault()
         {
-            
         }
     }
 }

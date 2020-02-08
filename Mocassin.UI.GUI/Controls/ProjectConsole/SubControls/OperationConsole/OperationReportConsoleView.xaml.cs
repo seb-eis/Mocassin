@@ -1,5 +1,4 @@
 ﻿using System.Windows.Controls;
-using System.Windows.Input;
 
 namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.OperationConsole
 {
@@ -11,16 +10,6 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.OperationConsole
         public OperationReportConsoleView()
         {
             InitializeComponent();
-        }
-
-        private void ReportDataGrid_OnMouseEnter(object sender, MouseEventArgs e)
-        {
-            (DataContext as OperationReportConsoleViewModel).IsSoftUpdateStop = true;
-        }
-
-        private void ReportDataGrid_OnMouseLeave(object sender, MouseEventArgs e)
-        {
-            (DataContext as OperationReportConsoleViewModel).IsSoftUpdateStop = false;
         }
     }
 }

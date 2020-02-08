@@ -4,12 +4,12 @@ using Mocassin.Model.Particles;
 namespace Mocassin.Tools.Evaluation.Queries
 {
     /// <summary>
-    ///     Contains the mobility data for a <see cref="IParticle"/> ensemble
+    ///     Contains the mobility data for a <see cref="IParticle" /> ensemble
     /// </summary>
     public readonly struct EnsembleMobility
     {
         /// <summary>
-        ///     Get the <see cref="IParticle"/> that forms the ensemble
+        ///     Get the <see cref="IParticle" /> that forms the ensemble
         /// </summary>
         public IParticle Particle { get; }
 
@@ -23,7 +23,8 @@ namespace Mocassin.Tools.Evaluation.Queries
         /// </summary>
         public double Conductivity { get; }
 
-        public EnsembleMobility(IParticle particle, double ionicMobility, double conductivity) : this()
+        public EnsembleMobility(IParticle particle, double ionicMobility, double conductivity)
+            : this()
         {
             Particle = particle ?? throw new ArgumentNullException(nameof(particle));
             IonicMobility = ionicMobility;

@@ -1,5 +1,4 @@
-﻿using System;
-using Mocassin.UI.GUI.Controls.Base.Interfaces;
+﻿using Mocassin.UI.GUI.Controls.Base.Interfaces;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
 using Mocassin.UI.Xml.Main;
 using Mocassin.UI.Xml.TransitionModel;

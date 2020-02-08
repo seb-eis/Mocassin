@@ -11,7 +11,7 @@ using Mocassin.UI.Xml.Main;
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslation.GridControl
 {
     /// <summary>
-    ///     Get the <see cref="CollectionControlViewModel{T}"/> for <see cref="DopingValueData"/> instances
+    ///     Get the <see cref="CollectionControlViewModel{T}" /> for <see cref="DopingValueData" /> instances
     /// </summary>
     public class DopingValueControlViewModel : CollectionControlViewModel<DopingValueData>, IContentSupplier<MocassinProject>
     {
@@ -19,7 +19,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         public MocassinProject ContentSource { get; set; }
 
         /// <summary>
-        ///     Get the <see cref="LatticeConfigData"/> of the model parent
+        ///     Get the <see cref="LatticeConfigData" /> of the model parent
         /// </summary>
         public LatticeConfigData ParentLatticeConfiguration { get; }
 

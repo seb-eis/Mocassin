@@ -26,7 +26,7 @@
         public int AbortSampleInterval { get; set; }
 
         /// <summary>
-        /// Copies the data to another mmc job configuration
+        ///     Copies the data to another mmc job configuration
         /// </summary>
         /// <param name="jobConfiguration"></param>
         public void CopyTo(MmcJobConfiguration jobConfiguration)

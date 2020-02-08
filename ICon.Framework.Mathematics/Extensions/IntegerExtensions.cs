@@ -149,7 +149,7 @@ namespace Mocassin.Mathematics.Extensions
         /// <returns></returns>
         public static long InvertBytes(this long value)
         {
-            return ((value & (0xffL << 0)) << 56) |
+            return ((value & 0xffL) << 56) |
                    ((value & (0xffL << 8)) << 40) |
                    ((value & (0xffL << 16)) << 24) |
                    ((value & (0xffL << 24)) << 8) |

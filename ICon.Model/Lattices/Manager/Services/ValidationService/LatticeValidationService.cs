@@ -7,27 +7,28 @@ using Mocassin.Model.ModelProject;
 namespace Mocassin.Model.Lattices
 {
     /// <summary>
-    /// Validation service for lattice related model objects that checks new lattice related model object inputs
+    ///     Validation service for lattice related model objects that checks new lattice related model object inputs
     /// </summary>
     public class LatticeValidationService : ValidationService<ILatticeDataPort>
     {
         /// <summary>
-        /// The basic Lattice settings object that defines all data constraints
+        ///     The basic Lattice settings object that defines all data constraints
         /// </summary>
         protected MocassinLatticeSettings Settings { get; set; }
 
         /// <summary>
-        /// Create new Lattice validation service that uses the provided project service and settings object
+        ///     Create new Lattice validation service that uses the provided project service and settings object
         /// </summary>
         /// <param name="modelProject"></param>
         /// <param name="settings"></param>
-        public LatticeValidationService(IModelProject modelProject, MocassinLatticeSettings settings) : base(modelProject)
+        public LatticeValidationService(IModelProject modelProject, MocassinLatticeSettings settings)
+            : base(modelProject)
         {
             Settings = settings ?? throw new ArgumentNullException(nameof(settings));
         }
 
         /// <summary>
-        /// Validate a BuildingBlock in terms of conflicts with basic limitations
+        ///     Validate a BuildingBlock in terms of conflicts with basic limitations
         /// </summary>
         /// <param name="buildingBlock"></param>
         /// <param name="dataReader"></param>
@@ -40,7 +41,8 @@ namespace Mocassin.Model.Lattices
 
 
         /// <summary>
-        ///     Validate a DopingCombination in terms of conflicts with basic limitations and ParticleSets of cell reference Position
+        ///     Validate a DopingCombination in terms of conflicts with basic limitations and ParticleSets of cell reference
+        ///     Position
         /// </summary>
         /// <param name="dopingCombination"></param>
         /// <param name="dataReader"></param>
@@ -52,7 +54,7 @@ namespace Mocassin.Model.Lattices
         }
 
         /// <summary>
-        /// Validate a Doping in terms of conflicts with basic limitations
+        ///     Validate a Doping in terms of conflicts with basic limitations
         /// </summary>
         /// <param name="doping"></param>
         /// <param name="dataReader"></param>

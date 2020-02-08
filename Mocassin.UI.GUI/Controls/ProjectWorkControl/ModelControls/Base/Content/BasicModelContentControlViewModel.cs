@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Windows.Controls;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Base.ViewModels;
@@ -17,11 +16,11 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
     /// </summary>
     public class BasicModelContentControlViewModel : PrimaryControlViewModel
     {
-        private MocassinProject selectedProject;
         private ContentControl dataContentControl;
+        private MocassinProject selectedProject;
 
         /// <summary>
-        ///     Stores a reference to the content control data context <see cref="IDisposable"/> interface (If it exists)
+        ///     Stores a reference to the content control data context <see cref="IDisposable" /> interface (If it exists)
         /// </summary>
         private IDisposable DataContextDisposable { get; set; }
 
@@ -56,7 +55,6 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         public BasicModelContentControlViewModel(IMocassinProjectControl projectControl)
             : base(projectControl)
         {
-
         }
 
         /// <summary>

@@ -14,143 +14,151 @@
 
   <UserControl.Resources>
     <Style TargetType="{x:Type TextBlock}" x:Key="Local.TypeTextBlockStyle">
-      <Setter Property="VerticalAlignment" Value="Center"/>
-      <Setter Property="HorizontalAlignment" Value="Center"/>
-      <Setter Property="Foreground" Value="White"/>
-      <Setter Property="Margin" Value="5,10,5,10"/>
+      <Setter Property="VerticalAlignment" Value="Center" />
+      <Setter Property="HorizontalAlignment" Value="Center" />
+      <Setter Property="Foreground" Value="White" />
+      <Setter Property="Margin" Value="5,10,5,10" />
     </Style>
     <Style TargetType="{x:Type TextBox}" x:Key="Local.NamingTextBoxStyle">
-      <Setter Property="MinWidth" Value="50"/>
-      <Setter Property="VerticalAlignment" Value="Center"/>
-      <Setter Property="BorderThickness" Value="0"/>
+      <Setter Property="MinWidth" Value="50" />
+      <Setter Property="VerticalAlignment" Value="Center" />
+      <Setter Property="BorderThickness" Value="0" />
       <Style.Triggers>
         <Trigger Property="IsKeyboardFocused" Value="True">
-          <Setter Property="FontWeight" Value="DemiBold"/>
-          <Setter Property="Background" Value="White"/>
+          <Setter Property="FontWeight" Value="DemiBold" />
+          <Setter Property="Background" Value="White" />
         </Trigger>
         <Trigger Property="IsKeyboardFocused" Value="False">
-          <Setter Property="Background" Value="Transparent"/>
+          <Setter Property="Background" Value="Transparent" />
         </Trigger>
       </Style.Triggers>
     </Style>
     <Style TargetType="{x:Type Line}" x:Key="Local.VerticalConnectorLineStyle">
-      <Setter Property="Stretch" Value="Fill"/>
-      <Setter Property="Stroke" Value="Gray"/>
-      <Setter Property="StrokeDashArray" Value="2 1"/>
-      <Setter Property="StrokeThickness" Value="2"/>
-      <Setter Property="Margin" Value="5,10,5,18"/>
-      <Setter Property="Y2" Value="1"/>
-      <Setter Property="HorizontalAlignment" Value="Center"/>
+      <Setter Property="Stretch" Value="Fill" />
+      <Setter Property="Stroke" Value="Gray" />
+      <Setter Property="StrokeDashArray" Value="2 1" />
+      <Setter Property="StrokeThickness" Value="2" />
+      <Setter Property="Margin" Value="5,10,5,18" />
+      <Setter Property="Y2" Value="1" />
+      <Setter Property="HorizontalAlignment" Value="Center" />
     </Style>
     <Style TargetType="{x:Type Line}" x:Key="Local.HorizontalConnectorLineStyle">
-      <Setter Property="Stretch" Value="Fill"/>
-      <Setter Property="Stroke" Value="Gray"/>
-      <Setter Property="StrokeDashArray" Value="2 1"/>
-      <Setter Property="StrokeThickness" Value="2"/>
-      <Setter Property="Margin" Value="-13,10,5,10"/>
-      <Setter Property="X2" Value="1"/>
+      <Setter Property="Stretch" Value="Fill" />
+      <Setter Property="Stroke" Value="Gray" />
+      <Setter Property="StrokeDashArray" Value="2 1" />
+      <Setter Property="StrokeThickness" Value="2" />
+      <Setter Property="Margin" Value="-13,10,5,10" />
+      <Setter Property="X2" Value="1" />
     </Style>
   </UserControl.Resources>
 
   <Grid>
     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-    <ListBox ItemsSource="{Binding ProjectGraphs}" SelectedItem="{Binding SelectedProject}" BorderThickness="0">
-      <ListBox.ContextMenu>
-        <ContextMenu Visibility="{Binding SelectedProject, Converter={StaticResource App.Converter.NullToVisibility}}">
-          <MenuItem Command="{Binding DeleteSelectedProjectCommand}">
-            <MenuItem.Header>
-              <TextBlock>
-                <Run Text="Delete:"/>
-                <Run Text="{Binding SelectedProject.ProjectName}"/>
-              </TextBlock>
-            </MenuItem.Header>
-          </MenuItem>
-          <Separator/>
-          <MenuItem Command="{Binding DuplicateSelectedProjectCommand}">
-            <MenuItem.Header>
-              <TextBlock>
-                <Run Text="Duplicate:"/>
-                <Run Text="{Binding SelectedProject.ProjectName}"/>
-              </TextBlock>
-            </MenuItem.Header>
-          </MenuItem>
-        </ContextMenu>
-      </ListBox.ContextMenu>
-      <ListBox.ItemTemplate>
-        <DataTemplate DataType="{x:Type main:MocassinProject}">
-          <Border>
-            <Grid>
-              <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-              </Grid.ColumnDefinitions>
-              <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-              </Grid.RowDefinitions>
-              <Line Grid.Column="0" Grid.Row="0" Grid.RowSpan="3" Style="{StaticResource Local.VerticalConnectorLineStyle}"/>
-              <views:ObjectRowHeaderLogo Grid.Column="0" Grid.Row="0" Margin="5,10,5,10"/>
-              <TextBlock Text="P" Grid.Column="0" Grid.Row="0" Style="{StaticResource Local.TypeTextBlockStyle}"/>
-              <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Name}" Style="{StaticResource Local.NamingTextBoxStyle}">
-                <TextBox.InputBindings>
-                  <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
-                              CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
-                </TextBox.InputBindings>
-              </TextBox>
-              <ItemsControl Grid.Row="1" Grid.Column="1" ItemsSource="{Binding CustomizationTemplates}" BorderThickness="0">
-                <ItemsControl.ItemTemplate>
-                  <DataTemplate DataType="{x:Type customization:ProjectCustomizationTemplate}">
-                    <Grid>
-                      <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                      </Grid.ColumnDefinitions>
-                      <Grid Grid.Column="0">
-                        <Line Style="{StaticResource Local.HorizontalConnectorLineStyle}"/>
-                        <views:ObjectRowHeaderLogo Margin="5,10,5,10"/>
-                        <TextBlock Text="C" Grid.Column="0" Grid.Row="0" Style="{StaticResource Local.TypeTextBlockStyle}"/>
+      <ListBox ItemsSource="{Binding ProjectGraphs}" SelectedItem="{Binding SelectedProject}" BorderThickness="0">
+        <ListBox.ContextMenu>
+          <ContextMenu
+            Visibility="{Binding SelectedProject, Converter={StaticResource App.Converter.NullToVisibility}}">
+            <MenuItem Command="{Binding DeleteSelectedProjectCommand}">
+              <MenuItem.Header>
+                <TextBlock>
+                  <Run Text="Delete:" />
+                  <Run Text="{Binding SelectedProject.ProjectName}" />
+                </TextBlock>
+              </MenuItem.Header>
+            </MenuItem>
+            <Separator />
+            <MenuItem Command="{Binding DuplicateSelectedProjectCommand}">
+              <MenuItem.Header>
+                <TextBlock>
+                  <Run Text="Duplicate:" />
+                  <Run Text="{Binding SelectedProject.ProjectName}" />
+                </TextBlock>
+              </MenuItem.Header>
+            </MenuItem>
+          </ContextMenu>
+        </ListBox.ContextMenu>
+        <ListBox.ItemTemplate>
+          <DataTemplate DataType="{x:Type main:MocassinProject}">
+            <Border>
+              <Grid>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="Auto" />
+                  <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                  <RowDefinition Height="Auto" />
+                  <RowDefinition Height="Auto" />
+                  <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Line Grid.Column="0" Grid.Row="0" Grid.RowSpan="3"
+                      Style="{StaticResource Local.VerticalConnectorLineStyle}" />
+                <views:ObjectRowHeaderLogo Grid.Column="0" Grid.Row="0" Margin="5,10,5,10" />
+                <TextBlock Text="P" Grid.Column="0" Grid.Row="0" Style="{StaticResource Local.TypeTextBlockStyle}" />
+                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Name}"
+                         Style="{StaticResource Local.NamingTextBoxStyle}">
+                  <TextBox.InputBindings>
+                    <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                                CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
+                  </TextBox.InputBindings>
+                </TextBox>
+                <ItemsControl Grid.Row="1" Grid.Column="1" ItemsSource="{Binding CustomizationTemplates}"
+                              BorderThickness="0">
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="{x:Type customization:ProjectCustomizationTemplate}">
+                      <Grid>
+                        <Grid.ColumnDefinitions>
+                          <ColumnDefinition Width="Auto" />
+                          <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0">
+                          <Line Style="{StaticResource Local.HorizontalConnectorLineStyle}" />
+                          <views:ObjectRowHeaderLogo Margin="5,10,5,10" />
+                          <TextBlock Text="C" Grid.Column="0" Grid.Row="0"
+                                     Style="{StaticResource Local.TypeTextBlockStyle}" />
+                        </Grid>
+                        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Name}"
+                                 Style="{StaticResource Local.NamingTextBoxStyle}">
+                          <TextBox.InputBindings>
+                            <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                                        CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
+                          </TextBox.InputBindings>
+                        </TextBox>
                       </Grid>
-                      <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Name}" Style="{StaticResource Local.NamingTextBoxStyle}">
-                        <TextBox.InputBindings>
-                          <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
-                                      CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
-                        </TextBox.InputBindings>
-                      </TextBox>
-                    </Grid>
-                  </DataTemplate>
-                </ItemsControl.ItemTemplate>
-              </ItemsControl>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
 
-              <ItemsControl Grid.Row="2" Grid.Column="1" ItemsSource="{Binding JobSetTemplates}" BorderThickness="0">
-                <ItemsControl.ItemTemplate>
-                  <DataTemplate DataType="{x:Type jobs:ProjectJobSetTemplate}">
-                    <Grid>
-                      <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                      </Grid.ColumnDefinitions>
-                      <Grid Grid.Column="0">
-                        <Line Style="{StaticResource Local.HorizontalConnectorLineStyle}"/>
-                        <views:ObjectRowHeaderLogo Margin="5,10,5,10"/>
-                        <TextBlock Text="T" Grid.Column="0" Grid.Row="0" Style="{StaticResource Local.TypeTextBlockStyle}"/>
+                <ItemsControl Grid.Row="2" Grid.Column="1" ItemsSource="{Binding JobSetTemplates}" BorderThickness="0">
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="{x:Type jobs:ProjectJobSetTemplate}">
+                      <Grid>
+                        <Grid.ColumnDefinitions>
+                          <ColumnDefinition Width="Auto" />
+                          <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0">
+                          <Line Style="{StaticResource Local.HorizontalConnectorLineStyle}" />
+                          <views:ObjectRowHeaderLogo Margin="5,10,5,10" />
+                          <TextBlock Text="T" Grid.Column="0" Grid.Row="0"
+                                     Style="{StaticResource Local.TypeTextBlockStyle}" />
+                        </Grid>
+                        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Name}"
+                                 Style="{StaticResource Local.NamingTextBoxStyle}">
+                          <TextBox.InputBindings>
+                            <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                                        CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
+                          </TextBox.InputBindings>
+                        </TextBox>
                       </Grid>
-                      <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Name}" Style="{StaticResource Local.NamingTextBoxStyle}">
-                        <TextBox.InputBindings>
-                          <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
-                                      CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
-                        </TextBox.InputBindings>
-                      </TextBox>
-                    </Grid>
-                  </DataTemplate>
-                </ItemsControl.ItemTemplate>
-              </ItemsControl>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
 
-            </Grid>
-          </Border>
-        </DataTemplate>
-      </ListBox.ItemTemplate>
-    </ListBox>
+              </Grid>
+            </Border>
+          </DataTemplate>
+        </ListBox.ItemTemplate>
+      </ListBox>
     </ScrollViewer>
   </Grid>
 </UserControl>

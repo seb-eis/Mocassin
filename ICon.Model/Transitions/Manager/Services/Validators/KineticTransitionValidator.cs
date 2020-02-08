@@ -102,10 +102,10 @@ namespace Mocassin.Model.Transitions.Validators
 
             for (var i = 1; i < cellReferencePositions.Count - 1; i++)
             {
-                if (!cellReferencePositions[i].IsValidAndUnstable() || !cellReferencePositions[i + 1].IsValidAndUnstable()) 
+                if (!cellReferencePositions[i].IsValidAndUnstable() || !cellReferencePositions[i + 1].IsValidAndUnstable())
                     continue;
 
-                var detail2 = $"The geometry position contains consecutive unstable positions at positions ({i}) and ({i+1})";
+                var detail2 = $"The geometry position contains consecutive unstable positions at positions ({i}) and ({i + 1})";
                 details.Add(detail2);
                 break;
             }
@@ -131,7 +131,8 @@ namespace Mocassin.Model.Transitions.Validators
         }
 
         /// <summary>
-        /// Validates that the set of passed exchange groups matches the set of binding unit cell positions and adds the results to the passed validation report
+        ///     Validates that the set of passed exchange groups matches the set of binding unit cell positions and adds the
+        ///     results to the passed validation report
         /// </summary>
         /// <param name="cellReferencePositions"></param>
         /// <param name="stateExchangeGroups"></param>

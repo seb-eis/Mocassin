@@ -6,24 +6,24 @@ using Mocassin.Framework.Extensions;
 namespace Mocassin.UI.GUI.Base.ViewModels.Content
 {
     /// <summary>
-    ///     Represents a <see cref="ViewModelBase"/> implementation for custom content windows
+    ///     Represents a <see cref="ViewModelBase" /> implementation for custom content windows
     /// </summary>
     public class ContentWindowViewModel : ViewModelBase, IDisposable
     {
         private string windowDescription;
 
         /// <summary>
-        ///     Get the <see cref="HashSet{T}"/> of <see cref="Action"/> delegates to be called when disposing the view model
+        ///     Get the <see cref="HashSet{T}" /> of <see cref="Action" /> delegates to be called when disposing the view model
         /// </summary>
         public HashSet<Action> DisposeActions { get; }
 
         /// <summary>
-        ///     Get the <see cref="ContentControl"/> that supplies the content
+        ///     Get the <see cref="ContentControl" /> that supplies the content
         /// </summary>
         public ContentControl Content { get; }
 
         /// <summary>
-        ///     Get the <see cref="ViewModelBase"/> that controls the content
+        ///     Get the <see cref="ViewModelBase" /> that controls the content
         /// </summary>
         public ViewModelBase ViewModel { get; }
 
@@ -46,7 +46,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Content
         }
 
         /// <inheritdoc />
-        public void Dispose()
+        public virtual void Dispose()
         {
             DisposeActions.Action(x => x?.Invoke()).Load();
             (Content as IDisposable)?.Dispose();

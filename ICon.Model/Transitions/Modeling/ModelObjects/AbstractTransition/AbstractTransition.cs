@@ -31,6 +31,9 @@ namespace Mocassin.Model.Transitions
         public bool IsAssociation { get; set; }
 
         /// <inheritdoc />
+        public override string ObjectName => "Abstract Transition";
+
+        /// <inheritdoc />
         public IEnumerable<ConnectorType> GetConnectorSequence()
         {
             return (Connectors ?? new List<ConnectorType>()).AsEnumerable();
@@ -40,21 +43,6 @@ namespace Mocassin.Model.Transitions
         public IEnumerable<IStateExchangeGroup> GetStateExchangeGroups()
         {
             return (StateExchangeGroups ?? new List<IStateExchangeGroup>()).AsEnumerable();
-        }
-
-        /// <inheritdoc />
-        public override string ObjectName => "Abstract Transition";
-
-        /// <inheritdoc />
-        public override ModelObject PopulateFrom(IModelObject obj)
-        {
-            if (!(CastIfNotDeprecated<IAbstractTransition>(obj) is { } transition)) return null;
-
-            Name = transition.Name;
-            IsAssociation = transition.IsAssociation;
-            StateExchangeGroups = transition.GetStateExchangeGroups().ToList();
-            Connectors = transition.GetConnectorSequence().ToList();
-            return this;
         }
 
         /// <inheritdoc />
@@ -75,6 +63,18 @@ namespace Mocassin.Model.Transitions
             otherIndices.Reverse();
             return indices.SequenceEqual(otherIndices)
                    && Connectors.SequenceEqual(other.GetConnectorSequence().Reverse());
+        }
+
+        /// <inheritdoc />
+        public override ModelObject PopulateFrom(IModelObject obj)
+        {
+            if (!(CastIfNotDeprecated<IAbstractTransition>(obj) is { } transition)) return null;
+
+            Name = transition.Name;
+            IsAssociation = transition.IsAssociation;
+            StateExchangeGroups = transition.GetStateExchangeGroups().ToList();
+            Connectors = transition.GetConnectorSequence().ToList();
+            return this;
         }
     }
 }

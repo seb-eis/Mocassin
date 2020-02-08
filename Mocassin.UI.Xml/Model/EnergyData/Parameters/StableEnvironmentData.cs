@@ -13,9 +13,9 @@ namespace Mocassin.UI.Xml.EnergyModel
     [XmlRoot]
     public class StableEnvironmentData : ModelParameterObject
     {
-        private double maxInteractionRange;
-        private ObservableCollection<RadialInteractionFilterData> interactionFilters;
         private DefectBackgroundData defectBackground;
+        private ObservableCollection<RadialInteractionFilterData> interactionFilters;
+        private double maxInteractionRange;
 
         /// <summary>
         ///     Get or set the interaction cutoff range in [Ang]

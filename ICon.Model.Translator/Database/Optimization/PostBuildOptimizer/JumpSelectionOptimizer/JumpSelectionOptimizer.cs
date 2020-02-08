@@ -78,8 +78,7 @@ namespace Mocassin.Model.Translator.Optimization
             var index = 0;
             while (mask != 0)
             {
-                if ((1L & mask) != 0)
-                    result.Particles.Add(particleManager.QueryPort.Query(port => port.GetParticle(index)));
+                if ((1L & mask) != 0) result.Particles.Add(particleManager.QueryPort.Query(port => port.GetParticle(index)));
 
                 mask >>= 1;
                 index++;

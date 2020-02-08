@@ -62,6 +62,13 @@ namespace Mocassin.Tools.Evaluation.Context
             MarshalService = new MarshalService();
         }
 
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            DataContext.Dispose();
+            MarshalService.Dispose();
+        }
+
         /// <summary>
         ///     Get a <see cref="IQueryable{T}" /> for queries against the <see cref="SimulationJobModel" /> set of the context
         ///     without any includes
@@ -106,7 +113,8 @@ namespace Mocassin.Tools.Evaluation.Context
         }
 
         /// <summary>
-        ///     Ensures that the <see cref="IProjectModelContext"/> for the passed <see cref="JobContext"/> is loaded into the caching system
+        ///     Ensures that the <see cref="IProjectModelContext" /> for the passed <see cref="JobContext" /> is loaded into the
+        ///     caching system
         /// </summary>
         /// <param name="jobContext"></param>
         public void EnsureModelContextCreated(JobContext jobContext)
@@ -156,13 +164,14 @@ namespace Mocassin.Tools.Evaluation.Context
             var context2 = RestoreProjectModelContext(packageModel.ProjectXml);
             lock (lockObject)
             {
-                ProjectContextCache[contextId] = context2;   
+                ProjectContextCache[contextId] = context2;
             }
+
             return context2;
         }
 
         /// <summary>
-        ///     Get a <see cref="SimulationJobPackageModel"/> by context id from the database
+        ///     Get a <see cref="SimulationJobPackageModel" /> by context id from the database
         /// </summary>
         /// <param name="contextId"></param>
         /// <returns></returns>
@@ -213,8 +222,9 @@ namespace Mocassin.Tools.Evaluation.Context
 
             lock (lockObject)
             {
-                SimulationModelCache[jobModel.SimulationPackageId] = simulationModel;   
+                SimulationModelCache[jobModel.SimulationPackageId] = simulationModel;
             }
+
             return simulationModel;
         }
 
@@ -243,13 +253,6 @@ namespace Mocassin.Tools.Evaluation.Context
         public static MslEvaluationContext Create(string filename)
         {
             return Create(filename, ModelProjectFactory.CreateDefault);
-        }
-
-        /// <inheritdoc />
-        public void Dispose()
-        {
-            DataContext.Dispose();
-            MarshalService.Dispose();
         }
     }
 }

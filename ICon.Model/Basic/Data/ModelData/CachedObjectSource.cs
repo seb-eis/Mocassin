@@ -50,29 +50,6 @@ namespace Mocassin.Model.Basic
             DataCreator = dataCreator ?? throw new ArgumentNullException(nameof(dataCreator));
         }
 
-        /// <summary>
-        ///     Get the data object, triggers update if data is deprecated/null
-        /// </summary>
-        /// <returns></returns>
-        public T1 GetData()
-        {
-            lock (AccessLock)
-            {
-                if (IsDeprecated)  Recalculate();
-
-                return Data;
-            }
-        }
-
-        /// <summary>
-        ///     Start data object retrieval as a new task, triggers data update if deprecated flag is set
-        /// </summary>
-        /// <returns></returns>
-        public Task<T1> GetDataAsync()
-        {
-            return Task.Run(GetData);
-        }
-
         /// <inheritdoc />
         public void Clear()
         {
@@ -117,6 +94,29 @@ namespace Mocassin.Model.Basic
             {
                 IsDeprecated = true;
             }
+        }
+
+        /// <summary>
+        ///     Get the data object, triggers update if data is deprecated/null
+        /// </summary>
+        /// <returns></returns>
+        public T1 GetData()
+        {
+            lock (AccessLock)
+            {
+                if (IsDeprecated) Recalculate();
+
+                return Data;
+            }
+        }
+
+        /// <summary>
+        ///     Start data object retrieval as a new task, triggers data update if deprecated flag is set
+        /// </summary>
+        /// <returns></returns>
+        public Task<T1> GetDataAsync()
+        {
+            return Task.Run(GetData);
         }
 
         /// <summary>

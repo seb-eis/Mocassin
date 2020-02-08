@@ -53,8 +53,8 @@ namespace Mocassin.Tools.Evaluation.Queries
         /// <inheritdoc />
         protected override void PrepareForExecution()
         {
-            GlobalTrackerEvaluation = GlobalTrackerEvaluation ?? new GlobalTrackingEvaluation(JobSet);
-            EnsembleMetaEvaluation = EnsembleMetaEvaluation ?? new EnsembleMetaEvaluation(JobSet);
+            GlobalTrackerEvaluation ??= new GlobalTrackingEvaluation(JobSet);
+            EnsembleMetaEvaluation ??= new EnsembleMetaEvaluation(JobSet);
 
             if (!GlobalTrackerEvaluation.JobSet.CompatibleTo(JobSet))
                 throw new InvalidOperationException("Global tracker evaluation is not compatible.");

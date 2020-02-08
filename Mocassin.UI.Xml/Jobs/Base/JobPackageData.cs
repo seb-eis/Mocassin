@@ -17,8 +17,8 @@ namespace Mocassin.UI.Xml.Jobs
     [XmlRoot]
     public abstract class JobPackageData : ProjectDataObject
     {
-        private string rngSeed;
         private string jobCountPerConfig;
+        private string rngSeed;
         private ObservableCollection<SelectionOptimizerData> selectionOptimizers;
 
         /// <summary>

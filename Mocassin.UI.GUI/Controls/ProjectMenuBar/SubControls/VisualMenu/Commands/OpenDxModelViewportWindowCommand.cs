@@ -1,15 +1,15 @@
-﻿using Mocassin.UI.GUI.Base.DataContext;
+﻿using System;
+using System.Collections.Generic;
+using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Base.Objects;
 using Mocassin.UI.GUI.Controls.Base.Commands;
 using Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer;
 using Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content;
-using System;
-using System.Collections.Generic;
 
 namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.VisualMenu.Commands
 {
     /// <summary>
-    ///     A <see cref="OpenDefaultContentWindowCommand" /> to open the <see cref="Dx" />
+    ///     A <see cref="OpenDefaultContentWindowCommand" /> to open the <see cref="DxModelSceneView" /> in a separated window
     /// </summary>
     public class OpenDxModelViewportWindowCommand : OpenDefaultContentWindowCommand
     {

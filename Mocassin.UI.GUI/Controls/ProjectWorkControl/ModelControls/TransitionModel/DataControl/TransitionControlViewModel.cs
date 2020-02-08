@@ -1,5 +1,4 @@
 ﻿using Mocassin.UI.GUI.Base.DataContext;
-using Mocassin.UI.GUI.Controls.Base.Interfaces;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
 using Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionModel.GridControl;
 using Mocassin.UI.Xml.Main;

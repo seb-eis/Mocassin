@@ -7,26 +7,27 @@ using Mocassin.Model.Structures;
 namespace Mocassin.Model.Transitions.Handler
 {
     /// <summary>
-    /// Event handler that manages the processing of object removal events that the transition manager receives from the structure manager event port
+    ///     Event handler that manages the processing of object removal events that the transition manager receives from the
+    ///     structure manager event port
     /// </summary>
     internal class StructureObjectRemovedEventHandler : ObjectRemovedEventHandler<IStructureEventPort, TransitionModelData, TransitionEventManager>
     {
         /// <inheritdoc />
-        public StructureObjectRemovedEventHandler(IModelProject modelProject, DataAccessorSource<TransitionModelData> dataAccessorSource, TransitionEventManager eventManager)
+        public StructureObjectRemovedEventHandler(IModelProject modelProject, DataAccessorSource<TransitionModelData> dataAccessorSource,
+            TransitionEventManager eventManager)
             : base(modelProject, dataAccessorSource, eventManager)
         {
-
         }
 
         /// <summary>
-        /// Event reaction to a removed particle in the particle manager
+        ///     Event reaction to a removed particle in the particle manager
         /// </summary>
         /// <param name="eventArgs"></param>
         /// <returns></returns>
         [EventHandlingMethod]
         protected IConflictReport HandleUnitCellRemoval(IModelObjectEventArgs<ICellReferencePosition> eventArgs)
         {
-            Console.WriteLine($"{eventArgs.ToString()} received on {ToString()}");
+            Console.WriteLine($"{eventArgs} received on {ToString()}");
             return new ConflictReport();
         }
     }

@@ -18,7 +18,7 @@ namespace Mocassin.UI.Xml.Base
         public Dictionary<string, string> Content { get; set; }
 
         /// <summary>
-        ///     Creates a new <see cref="ResourcesData"/> with empty dictionary
+        ///     Creates a new <see cref="ResourcesData" /> with empty dictionary
         /// </summary>
         public ResourcesData()
         {
@@ -26,7 +26,7 @@ namespace Mocassin.UI.Xml.Base
         }
 
         /// <summary>
-        ///     Checks if the <see cref="ResourcesData"/> has a resource with the provided key
+        ///     Checks if the <see cref="ResourcesData" /> has a resource with the provided key
         /// </summary>
         /// <returns></returns>
         public bool HasResource(string key)
@@ -34,8 +34,8 @@ namespace Mocassin.UI.Xml.Base
             return Content.ContainsKey(key);
         }
 
-                /// <summary>
-        ///     Sets a generic resource of type <see cref="T"/> with the supplied key and converter <see cref="Func{T,TResult}"/>
+        /// <summary>
+        ///     Sets a generic resource of type <see cref="T" /> with the supplied key and converter <see cref="Func{T,TResult}" />
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
@@ -48,7 +48,7 @@ namespace Mocassin.UI.Xml.Base
         }
 
         /// <summary>
-        ///     Sets a <see cref="string"/> resource with the specified key
+        ///     Sets a <see cref="string" /> resource with the specified key
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
@@ -58,7 +58,7 @@ namespace Mocassin.UI.Xml.Base
         }
 
         /// <summary>
-        ///     Sets a <see cref="int"/> resource with the specified key
+        ///     Sets a <see cref="int" /> resource with the specified key
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
@@ -68,7 +68,7 @@ namespace Mocassin.UI.Xml.Base
         }
 
         /// <summary>
-        ///     Sets a <see cref="long"/> resource with the specified key
+        ///     Sets a <see cref="long" /> resource with the specified key
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
@@ -78,7 +78,7 @@ namespace Mocassin.UI.Xml.Base
         }
 
         /// <summary>
-        ///     Sets a <see cref="double"/> resource with the specified key
+        ///     Sets a <see cref="double" /> resource with the specified key
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
@@ -88,7 +88,7 @@ namespace Mocassin.UI.Xml.Base
         }
 
         /// <summary>
-        ///     Sets a <see cref="bool"/> resource with the specified key
+        ///     Sets a <see cref="bool" /> resource with the specified key
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
@@ -98,7 +98,7 @@ namespace Mocassin.UI.Xml.Base
         }
 
         /// <summary>
-        ///     Tries to get a stored generic resource as type <see cref="T"/> that belongs to the supplied key
+        ///     Tries to get a stored generic resource as type <see cref="T" /> that belongs to the supplied key
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="key"></param>
@@ -120,7 +120,7 @@ namespace Mocassin.UI.Xml.Base
         }
 
         /// <summary>
-        ///     Tries to get a stored <see cref="string"/> resource with the supplied key
+        ///     Tries to get a stored <see cref="string" /> resource with the supplied key
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
@@ -131,7 +131,7 @@ namespace Mocassin.UI.Xml.Base
         }
 
         /// <summary>
-        ///     Tries to get a stored <see cref="int"/> resource with the supplied key
+        ///     Tries to get a stored <see cref="int" /> resource with the supplied key
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
@@ -142,7 +142,7 @@ namespace Mocassin.UI.Xml.Base
         }
 
         /// <summary>
-        ///     Tries to get a stored <see cref="long"/> resource with the supplied key
+        ///     Tries to get a stored <see cref="long" /> resource with the supplied key
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
@@ -153,7 +153,7 @@ namespace Mocassin.UI.Xml.Base
         }
 
         /// <summary>
-        ///     Tries to get a stored <see cref="double"/> resource with the supplied key
+        ///     Tries to get a stored <see cref="double" /> resource with the supplied key
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
@@ -164,7 +164,7 @@ namespace Mocassin.UI.Xml.Base
         }
 
         /// <summary>
-        ///     Tries to get a stored <see cref="bool"/> resource with the supplied key
+        ///     Tries to get a stored <see cref="bool" /> resource with the supplied key
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>

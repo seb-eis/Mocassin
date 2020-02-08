@@ -31,7 +31,7 @@ namespace Mocassin.Mathematics.ValueTypes
         public int Dimension => 4;
 
         /// <summary>
-        ///  Creates a new <see cref="Coordinates4I"/> struct from coordinate points
+        ///     Creates a new <see cref="Coordinates4I" /> struct from coordinate points
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>

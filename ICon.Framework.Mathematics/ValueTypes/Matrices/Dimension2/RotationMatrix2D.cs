@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Mocassin.Mathematics.Extensions;
 using Mocassin.Mathematics.Comparer;
+using Mocassin.Mathematics.Extensions;
 
 namespace Mocassin.Mathematics.ValueTypes
 {
@@ -31,9 +31,9 @@ namespace Mocassin.Mathematics.ValueTypes
         public static TransformMatrix2D CreateForAxisX(double radian, NumericComparer comparer)
         {
             var matrix = new TransformMatrix2D(
-                new [,]
+                new[,]
                 {
-                    {1.0, 0.0, 0.0}, 
+                    {1.0, 0.0, 0.0},
                     {0.0, Math.Cos(radian), -Math.Sin(radian)},
                     {0, Math.Sin(radian), Math.Cos(radian)}
                 },
@@ -52,7 +52,7 @@ namespace Mocassin.Mathematics.ValueTypes
         public static TransformMatrix2D CreateForAxisY(double radian, IComparer<double> comparer)
         {
             var matrix = new TransformMatrix2D(
-                new [,]
+                new[,]
                 {
                     {Math.Cos(radian), 0.0, Math.Sin(radian)},
                     {0.0, 1.0, 0.0},
@@ -73,7 +73,7 @@ namespace Mocassin.Mathematics.ValueTypes
         public static TransformMatrix2D CreateForAxisZ(double radian, NumericComparer comparer)
         {
             var matrix = new TransformMatrix2D(
-                new [,]
+                new[,]
                 {
                     {Math.Cos(radian), -Math.Sin(radian), 0.0},
                     {Math.Sin(radian), Math.Cos(radian), 0.0},
@@ -92,7 +92,7 @@ namespace Mocassin.Mathematics.ValueTypes
         /// <param name="axis"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        public static TransformMatrix2D CreateForArbitraryAxis(double radian, in Cartesian3D axis, NumericComparer comparer) 
+        public static TransformMatrix2D CreateForArbitraryAxis(double radian, in Cartesian3D axis, NumericComparer comparer)
         {
             if (comparer.Compare(axis.GetLength(), 0.0) == 0)
                 throw new ArgumentException("Cannot created rotation axis around a zero vector", nameof(axis));

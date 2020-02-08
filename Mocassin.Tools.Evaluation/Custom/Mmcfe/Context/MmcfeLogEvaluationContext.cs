@@ -24,6 +24,12 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
             DataContext = dataContext?.AsReadOnly() ?? throw new ArgumentNullException(nameof(dataContext));
         }
 
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            DataContext.Dispose();
+        }
+
         /// <summary>
         ///     Gets a non-tracking <see cref="IQueryable{T}" /> of the <see cref="MmcfeLogEntry" /> set
         /// </summary>
@@ -52,12 +58,6 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         public IQueryable<MmcfeLogReader> CreateReaders(IQueryable<MmcfeLogEntry> entries)
         {
             return entries.Select(x => MmcfeLogReader.Create(x.StateBytes, x.HistogramBytes, x.ParameterBytes));
-        }
-
-        /// <inheritdoc />
-        public void Dispose()
-        {
-            DataContext.Dispose();
         }
 
         /// <summary>

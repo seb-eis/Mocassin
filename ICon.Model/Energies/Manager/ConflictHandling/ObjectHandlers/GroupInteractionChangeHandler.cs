@@ -6,7 +6,7 @@ using Mocassin.Model.Structures;
 namespace Mocassin.Model.Energies.ConflictHandling
 {
     /// <summary>
-    /// Object conflict handler for changes in group interaction objects
+    ///     Object conflict handler for changes in group interaction objects
     /// </summary>
     public class GroupInteractionChangeHandler : ObjectConflictHandler<GroupInteraction, EnergyModelData>
     {

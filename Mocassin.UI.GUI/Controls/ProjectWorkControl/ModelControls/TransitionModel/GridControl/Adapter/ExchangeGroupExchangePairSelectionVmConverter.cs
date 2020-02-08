@@ -1,8 +1,5 @@
-﻿using System;
-using System.Globalization;
-using Mocassin.UI.GUI.Controls.Base.Interfaces;
+﻿using Mocassin.UI.GUI.Controls.Base.Interfaces;
 using Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.GridControl;
-using Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ParticleModel.GridControl;
 using Mocassin.UI.Xml.Main;
 using Mocassin.UI.Xml.TransitionModel;
 

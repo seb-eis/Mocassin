@@ -11,6 +11,18 @@ namespace Mocassin.Framework.Collections
         where T1 : IComparable<T1>
         where T2 : IComparable<T2>
     {
+        /// <inheritdoc />
+        public bool Equals((T1, T2) x, (T1, T2) y)
+        {
+            return Compare(x, y) == 0;
+        }
+
+        /// <inheritdoc />
+        public int GetHashCode((T1, T2) obj)
+        {
+            return obj.GetHashCode();
+        }
+
         /// <summary>
         ///     Compares the content of two tuples in tuple definition order
         /// </summary>
@@ -23,18 +35,6 @@ namespace Mocassin.Framework.Collections
             return compItem1 == 0
                 ? x.Item2.CompareTo(y.Item2)
                 : compItem1;
-        }
-
-        /// <inheritdoc />
-        public bool Equals((T1, T2) x, (T1, T2) y)
-        {
-            return Compare(x, y) == 0;
-        }
-
-        /// <inheritdoc />
-        public int GetHashCode((T1, T2) obj)
-        {
-            return obj.GetHashCode();
         }
     }
 }

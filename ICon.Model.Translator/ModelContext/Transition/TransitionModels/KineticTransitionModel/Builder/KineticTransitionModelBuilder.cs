@@ -56,7 +56,8 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        ///     Checks if the user has accidentally defined a <see cref="IKineticTransitionModel"/> that can be used as the inverse
+        ///     Checks if the user has accidentally defined a <see cref="IKineticTransitionModel" /> that can be used as the
+        ///     inverse
         /// </summary>
         /// <param name="transitionModel"></param>
         /// <param name="models"></param>
@@ -403,7 +404,6 @@ namespace Mocassin.Model.Translator.ModelContext
             if (!restoreOriginalOnFailure) return false;
             for (var i = 0; i < mappingModels.Count; i++) mappingModels[i].InverseMapping = backup[i];
             return false;
-
         }
 
         /// <summary>

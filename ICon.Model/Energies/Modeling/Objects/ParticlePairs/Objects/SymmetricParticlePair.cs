@@ -10,7 +10,8 @@ namespace Mocassin.Model.Energies
         /// <inheritdoc />
         public bool Equals(SymmetricParticlePair other)
         {
-            if (other != null && Particle0.Index != other.Particle0.Index)
+            if (other == null) return false;
+            if (Particle0.Index != other.Particle0.Index)
                 return Particle0.Index == other.Particle1.Index && Particle1.Index == other.Particle0.Index;
 
             return Particle1.Index == other.Particle1.Index;
@@ -19,9 +20,7 @@ namespace Mocassin.Model.Energies
         /// <inheritdoc />
         public override bool Equals(ParticlePair other)
         {
-            if (other is SymmetricParticlePair pair)
-                return Equals(pair);
-
+            if (other is SymmetricParticlePair pair) return Equals(pair);
             return false;
         }
     }

@@ -1,8 +1,8 @@
 ﻿using System;
 using Mocassin.Framework.Operations;
 using Mocassin.Model.Basic;
-using Mocassin.Model.Particles.Validators;
 using Mocassin.Model.ModelProject;
+using Mocassin.Model.Particles.Validators;
 
 namespace Mocassin.Model.Particles
 {

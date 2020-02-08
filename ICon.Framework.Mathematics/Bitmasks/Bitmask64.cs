@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Runtime.Serialization;
 using Mocassin.Mathematics.Extensions;
 
-namespace Mocassin.Mathematics.Bitmasks
+namespace Mocassin.Mathematics.Bitmask
 {
     /// <summary>
     ///     Wrapped 64 bit unsigned integer to be used as 64 entry bitmask (Waring: Mutable struct!)
@@ -41,8 +40,8 @@ namespace Mocassin.Mathematics.Bitmasks
         public bool this[int index]
         {
             get => Mask.GetBit(index);
-            set => Mask = value 
-                ? Mask.SetBit(index) 
+            set => Mask = value
+                ? Mask.SetBit(index)
                 : Mask.UnsetBit(index);
         }
 

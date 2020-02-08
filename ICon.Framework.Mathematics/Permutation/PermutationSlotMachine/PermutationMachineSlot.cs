@@ -10,22 +10,6 @@ namespace Mocassin.Mathematics.Permutation
     public class PermutationMachineSlot<T1> where T1 : IComparable<T1>
     {
         /// <summary>
-        ///     Creates a new permutation machine slot from array, set to the last existing value
-        /// </summary>
-        /// <param name="valueOptions"></param>
-        /// <param name="comparer"></param>
-        public PermutationMachineSlot(IEnumerable<T1> valueOptions, IComparer<T1> comparer = null)
-        {
-            var valueArray = valueOptions.ToArray();
-            if (valueArray.Length == 0)
-                throw new ArgumentException(paramName: nameof(valueOptions), message: "The number of value options is zero");
-            Array.Sort(valueArray, comparer ?? Comparer<T1>.Default);
-            ValueOptions = valueArray;
-            SlotSize = ValueOptions.Length;
-            CurrentIndex = SlotSize - 1;
-        }
-
-        /// <summary>
         ///     The list of possible values
         /// </summary>
         public T1[] ValueOptions { get; protected set; }
@@ -44,6 +28,22 @@ namespace Mocassin.Mathematics.Permutation
         ///     The current active value
         /// </summary>
         public T1 Value { get; protected set; }
+
+        /// <summary>
+        ///     Creates a new permutation machine slot from array, set to the last existing value
+        /// </summary>
+        /// <param name="valueOptions"></param>
+        /// <param name="comparer"></param>
+        public PermutationMachineSlot(IEnumerable<T1> valueOptions, IComparer<T1> comparer = null)
+        {
+            var valueArray = valueOptions.ToArray();
+            if (valueArray.Length == 0)
+                throw new ArgumentException(paramName: nameof(valueOptions), message: "The number of value options is zero");
+            Array.Sort(valueArray, comparer ?? Comparer<T1>.Default);
+            ValueOptions = valueArray;
+            SlotSize = ValueOptions.Length;
+            CurrentIndex = SlotSize - 1;
+        }
 
         /// <summary>
         ///     Advances to the next value and returns the value
@@ -71,7 +71,7 @@ namespace Mocassin.Mathematics.Permutation
         public void Next()
         {
             CurrentIndex++;
-            if (CurrentIndex == SlotSize) 
+            if (CurrentIndex == SlotSize)
                 CurrentIndex = 0;
 
             Value = ValueOptions[CurrentIndex];

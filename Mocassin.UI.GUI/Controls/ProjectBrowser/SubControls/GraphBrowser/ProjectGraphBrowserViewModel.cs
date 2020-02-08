@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
@@ -17,16 +16,16 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.GraphBrowser
     /// </summary>
     public class ProjectGraphBrowserViewModel : PrimaryControlViewModel
     {
-        private MocassinProject selectedProject;
         private ObservableCollection<MocassinProject> projectGraphs;
+        private MocassinProject selectedProject;
 
         /// <summary>
-        ///     Get a <see cref="RelayCommand"/> to remove the currently selected <see cref="MocassinProject"/>
+        ///     Get a <see cref="RelayCommand" /> to remove the currently selected <see cref="MocassinProject" />
         /// </summary>
         public RelayCommand DeleteSelectedProjectCommand { get; }
 
         /// <summary>
-        ///     Get a <see cref="RelayCommand"/> to duplicate the selected <see cref="MocassinProject"/>
+        ///     Get a <see cref="RelayCommand" /> to duplicate the selected <see cref="MocassinProject" />
         /// </summary>
         public RelayCommand DuplicateSelectedProjectCommand { get; }
 
@@ -81,7 +80,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.GraphBrowser
         }
 
         /// <summary>
-        ///     Creates a deep copy of the provided <see cref="MocassinProject"/> and adds it to the project collection
+        ///     Creates a deep copy of the provided <see cref="MocassinProject" /> and adds it to the project collection
         /// </summary>
         /// <param name="project"></param>
         protected void DuplicateProject(MocassinProject project)
@@ -89,7 +88,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.GraphBrowser
             if (project == null) throw new ArgumentNullException(nameof(project));
 
             const string caption = "Confirmation - Duplicate project!";
-            var message = $"Should extended data (customizations/job definitions/build instructions) be deleted when duplicating '{project.ProjectName}' (ID = {project.ProjectGuid})?";
+            var message =
+                $"Should extended data (customizations/job definitions/build instructions) be deleted when duplicating '{project.ProjectName}' (ID = {project.ProjectGuid})?";
             var result = MessageBox.Show(message, caption, MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
             if (result == MessageBoxResult.Cancel) return;
 

@@ -25,7 +25,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         public MocassinProject Project { get; }
 
         /// <summary>
-        ///     Get the <see cref="DuplicateCollectionItemCommand{T}"/> for the collection
+        ///     Get the <see cref="DuplicateCollectionItemCommand{T}" /> for the collection
         /// </summary>
         public DuplicateCollectionItemCommand<KmcJobConfigData> DuplicateItemCommand { get; }
 

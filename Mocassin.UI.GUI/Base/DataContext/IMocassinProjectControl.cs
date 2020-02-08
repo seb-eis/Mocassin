@@ -90,16 +90,16 @@ namespace Mocassin.UI.GUI.Base.DataContext
         ProjectManagerViewModel ProjectManagerViewModel { get; }
 
         /// <summary>
-        ///     Sets a new <see cref="IMocassinProjectLibrary" /> as the open library
-        /// </summary>
-        /// <param name="projectLibrary"></param>
-        void ChangeOpenProjectLibrary(IMocassinProjectLibrary projectLibrary);
-
-        /// <summary>
         ///     Get a <see cref="IList{T}" /> of loaded plugin <see cref="Assembly" /> instances
         /// </summary>
         /// <returns></returns>
         IEnumerable<Assembly> PluginAssemblies { get; }
+
+        /// <summary>
+        ///     Sets a new <see cref="IMocassinProjectLibrary" /> as the open library
+        /// </summary>
+        /// <param name="projectLibrary"></param>
+        void ChangeOpenProjectLibrary(IMocassinProjectLibrary projectLibrary);
 
         /// <summary>
         ///     Creates a new <see cref="IModelProject" /> interface with all internally defined settings and capabilities

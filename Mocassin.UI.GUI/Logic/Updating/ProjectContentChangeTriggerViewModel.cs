@@ -18,7 +18,7 @@ namespace Mocassin.UI.GUI.Logic.Updating
         private bool isChecking;
 
         /// <summary>
-        ///     Get the <see cref="Queue{T}"/> that contains conflicting task
+        ///     Get the <see cref="Queue{T}" /> that contains conflicting task
         /// </summary>
         private Queue<Task> ConflictingTasks { get; }
 
@@ -87,7 +87,7 @@ namespace Mocassin.UI.GUI.Logic.Updating
         }
 
         /// <summary>
-        ///     Attaches an <see cref=" Action"/> and ensures that the change checking system is not running during execution
+        ///     Attaches an <see cref=" Action" /> and ensures that the change checking system is not running during execution
         /// </summary>
         /// <param name="action"></param>
         /// <param name="onDispatcher"></param>
@@ -124,6 +124,7 @@ namespace Mocassin.UI.GUI.Logic.Updating
                 PushErrorMessage(new InvalidOperationException($"Unexpected error in change detection system: {exception.Message}"));
                 IsChecking = false;
             }
+
             IsChecking = false;
         }
 
@@ -132,10 +133,7 @@ namespace Mocassin.UI.GUI.Logic.Updating
         /// </summary>
         private void AwaitConflictingTasks(int maxSeconds = 20)
         {
-            while (ConflictingTasks.Count != 0)
-            {
-                ConflictingTasks.Dequeue().Wait(TimeSpan.FromSeconds(maxSeconds));
-            }
+            while (ConflictingTasks.Count != 0) ConflictingTasks.Dequeue().Wait(TimeSpan.FromSeconds(maxSeconds));
         }
 
         /// <summary>

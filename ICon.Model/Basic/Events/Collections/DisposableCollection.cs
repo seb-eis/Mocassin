@@ -35,6 +35,15 @@ namespace Mocassin.Model.Basic
             Disposables = new List<IDisposable>();
         }
 
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            foreach (var disposable in Disposables)
+                disposable?.Dispose();
+
+            Disposables.Clear();
+        }
+
         /// <summary>
         ///     Adds a new disposable to the collection
         /// </summary>
@@ -50,20 +59,11 @@ namespace Mocassin.Model.Basic
         /// <param name="disposables"></param>
         public void Add(IEnumerable<IDisposable> disposables)
         {
-            if (disposables == null) 
+            if (disposables == null)
                 throw new ArgumentNullException(nameof(disposables));
 
-            foreach (var disposable in disposables) 
+            foreach (var disposable in disposables)
                 Add(disposable);
-        }
-
-        /// <inheritdoc />
-        public void Dispose()
-        {
-            foreach (var disposable in Disposables) 
-                disposable?.Dispose();
-
-            Disposables.Clear();
         }
     }
 }

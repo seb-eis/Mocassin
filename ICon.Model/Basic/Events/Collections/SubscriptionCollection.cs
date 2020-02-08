@@ -34,6 +34,12 @@ namespace Mocassin.Model.Basic
             EventPortType = portType ?? throw new ArgumentNullException(nameof(portType));
         }
 
+        /// <inheritdoc />
+        public bool Equals(SubscriptionCollection other)
+        {
+            return other != null && EventPortType == other.EventPortType;
+        }
+
         /// <summary>
         ///     Disposes the collection only if the specified port type the internal stored type, returns true if dispose was
         ///     performed
@@ -46,13 +52,6 @@ namespace Mocassin.Model.Basic
 
             Dispose();
             return true;
-
-        }
-
-        /// <inheritdoc />
-        public bool Equals(SubscriptionCollection other)
-        {
-            return other != null && EventPortType == other.EventPortType;
         }
     }
 }

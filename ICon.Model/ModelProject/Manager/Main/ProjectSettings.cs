@@ -50,10 +50,10 @@ namespace Mocassin.Model.ModelProject
         [DataMember]
         public MocassinSymmetrySettings SymmetrySettings { get; set; }
 
-		/// <summary>
-		///		The basic doping range tolerance
-		/// </summary>
-		public double DopingToleranceSetting { get; set; }
+        /// <summary>
+        ///     The basic doping range tolerance
+        /// </summary>
+        public double DopingToleranceSetting { get; set; }
 
         /// <summary>
         ///     Default construct project settings with empty module settings collection
@@ -160,7 +160,7 @@ namespace Mocassin.Model.ModelProject
                     VectorTolerance = 1.0e-3,
                     ParameterTolerance = 1.0e-3
                 },
-	            DopingToleranceSetting = 5.0e-3
+                DopingToleranceSetting = 5.0e-3
             };
 
             settings.LookupAndAddModuleSettings(Assembly.GetExecutingAssembly());

@@ -37,7 +37,7 @@ namespace Mocassin.Mathematics.ValueTypes
         /// <param name="totalMassPoints"></param>
         public MassPointGeometryInfo(Matrix2D massCenterInertiaTensor, double sumOfMassTimesDistance, double totalMass, int totalMassPoints)
         {
-            if (massCenterInertiaTensor == null) 
+            if (massCenterInertiaTensor == null)
                 throw new ArgumentNullException(nameof(massCenterInertiaTensor));
 
             if (massCenterInertiaTensor.Rows != 3 || massCenterInertiaTensor.Cols != 3)

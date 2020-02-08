@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using HelixToolkit.Wpf.SharpDX;
+﻿using HelixToolkit.Wpf.SharpDX;
 using SharpDX;
 
 namespace Mocassin.UI.GUI.Controls.DxVisualizer.Extensions

@@ -34,14 +34,18 @@ namespace Mocassin.Model.Translator.Jobs
         NoSaving = 1 << 3,
 
         /// <summary>
-        ///     Marks a simulation to correct the dual-definition of degrees of freedom (Only relevant to KMC time-stepping calculation)
+        ///     Marks a simulation to correct the dual-definition of degrees of freedom (Only relevant to KMC time-stepping
+        ///     calculation)
         /// </summary>
-        /// <remarks> In a completely unoptimized simulation every degree of freedom exists twice in the system which causes invalid time calculation</remarks>
-        UseDualDofCorrection =  1 << 4
+        /// <remarks>
+        ///     In a completely unoptimized simulation every degree of freedom exists twice in the system which causes
+        ///     invalid time calculation
+        /// </remarks>
+        UseDualDofCorrection = 1 << 4
     }
 
     /// <summary>
-    ///     Custom simulation job flags that provides customizable parts of <see cref="SimulationExecutionFlags"/>
+    ///     Custom simulation job flags that provides customizable parts of <see cref="SimulationExecutionFlags" />
     /// </summary>
     [Flags]
     public enum SimulationExecutionOverwriteFlags

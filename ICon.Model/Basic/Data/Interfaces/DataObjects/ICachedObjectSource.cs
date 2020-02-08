@@ -14,6 +14,11 @@ namespace Mocassin.Model.Basic
         Delegate FactoryDelegate { get; }
 
         /// <summary>
+        ///     Flag that indicates if the data is no longer valid
+        /// </summary>
+        bool IsDeprecated { get; }
+
+        /// <summary>
         ///     Get the data as an object
         /// </summary>
         /// <returns></returns>
@@ -24,11 +29,6 @@ namespace Mocassin.Model.Basic
         /// </summary>
         /// <returns></returns>
         Task<object> GetValueAsync();
-
-        /// <summary>
-        ///     Flag that indicates if the data is no longer valid
-        /// </summary>
-        bool IsDeprecated { get; }
 
         /// <summary>
         ///     Clears the cached data object

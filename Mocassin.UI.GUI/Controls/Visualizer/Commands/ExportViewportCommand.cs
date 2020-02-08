@@ -22,12 +22,12 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Commands
         private UserFileSelectionSource FileSelectionSource { get; }
 
         /// <summary>
-        ///     Get the <see cref="Func{TResult}"/> that provides the render size
+        ///     Get the <see cref="Func{TResult}" /> that provides the render size
         /// </summary>
         private Func<(int Width, int Height)> ExportSizeProvider { get; }
 
         /// <summary>
-        ///     Creates a new <see cref="ExportViewportCommand"/> with the provided provider functions
+        ///     Creates a new <see cref="ExportViewportCommand" /> with the provided provider functions
         /// </summary>
         /// <param name="exportSizeProvider"></param>
         public ExportViewportCommand(Func<(int Width, int Height)> exportSizeProvider)
@@ -62,7 +62,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Commands
                     case ".png":
                         ExportAsBitmap(parameter, fileName, new PngBitmapEncoder());
                         break;
-                    case ".tiff" :
+                    case ".tiff":
                         ExportAsBitmap(parameter, fileName, new TiffBitmapEncoder());
                         break;
                     case ".wdp":
@@ -79,6 +79,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Commands
                 window.Close();
                 MessageBox.Show($"Export error:\n{exception.Message}", "Export", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+
             window.Close();
         }
 
@@ -97,7 +98,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Commands
                 ("Windows media photo", "wdp"),
                 //("Collada file", "dae"),
                 //("Object file", "obj"),
-                ("Standard triangulation language", "stl"),
+                ("Standard triangulation language", "stl")
                 //("Extensible 3D", "x3d"),
                 //("Extensible application markup language", "xaml"),
                 //("Kerkythea file", "xml")
@@ -105,7 +106,8 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Commands
         }
 
         /// <summary>
-        ///     Exports a bitmap to a file using the provided <see cref="BitmapEncoder"/> and background <see cref="Brush"/> (Defaults to white background)
+        ///     Exports a bitmap to a file using the provided <see cref="BitmapEncoder" /> and background <see cref="Brush" />
+        ///     (Defaults to white background)
         /// </summary>
         /// <param name="parameter"></param>
         /// <param name="path"></param>
@@ -115,15 +117,12 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Commands
         {
             if (encoder == null) throw new ArgumentNullException(nameof(encoder));
 
-            backgroundBrush = backgroundBrush ?? parameter.Background ?? new SolidColorBrush(Colors.White);
+            backgroundBrush ??= parameter.Background ?? new SolidColorBrush(Colors.White);
             var (width, height) = ExportSizeProvider.Invoke();
             var bitmapSource = parameter.Viewport.RenderBitmap(width, height, backgroundBrush);
-            using (var fileStream = new FileStream(path, FileMode.Create))
-            {
-                encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
-                encoder.Save(fileStream);
-            }
-
+            using var fileStream = new FileStream(path, FileMode.Create);
+            encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
+            encoder.Save(fileStream);
         }
     }
 }

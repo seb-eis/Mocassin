@@ -9,8 +9,8 @@ namespace Mocassin.UI.GUI.Logic.Validation
     /// </summary>
     public class AsyncRunValidationCommand : AsyncCommand
     {
-        private Task currentExecutionTask;
         private readonly object lockObject = new object();
+        private Task currentExecutionTask;
 
         /// <summary>
         ///     Get the <see cref="ModelValidatorViewModel" />  that the command targets
@@ -18,11 +18,11 @@ namespace Mocassin.UI.GUI.Logic.Validation
         private ModelValidatorViewModel ValidatorViewModel { get; }
 
         /// <summary>
-        ///     Get the current execution <see cref="Task"/>
+        ///     Get the current execution <see cref="Task" />
         /// </summary>
         private Task CurrentExecutionTask
         {
-            get 
+            get
             {
                 lock (lockObject)
                 {
@@ -36,7 +36,6 @@ namespace Mocassin.UI.GUI.Logic.Validation
                     currentExecutionTask = value;
                 }
             }
-
         }
 
         /// <inheritdoc />
@@ -53,18 +52,17 @@ namespace Mocassin.UI.GUI.Logic.Validation
                 WhenCurrentExecutionFinished().Wait();
                 CurrentExecutionTask = Task.Run(ValidatorViewModel.RunValidation);
             });
-
         }
 
         /// <summary>
-        ///     Get a <see cref="Task"/> that completes when the last execution has finished
+        ///     Get a <see cref="Task" /> that completes when the last execution has finished
         /// </summary>
         /// <returns></returns>
         public Task WhenCurrentExecutionFinished()
         {
             return CurrentExecutionTask == null || !CurrentExecutionTask.IsCompleted
-            ? Task.CompletedTask
-            : Task.WhenAll(CurrentExecutionTask);
+                ? Task.CompletedTask
+                : Task.WhenAll(CurrentExecutionTask);
         }
     }
 }

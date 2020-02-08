@@ -35,7 +35,7 @@ namespace Mocassin.Model.Transitions.Validators
         protected void AddAbstractTransitionValidation(IMetropolisTransition transition, ValidationReport report)
         {
             var metropolisPattern = ConnectorPattern.GetMetropolisPattern();
-            if (metropolisPattern.IsValid(transition.AbstractTransition.GetConnectorSequence())) 
+            if (metropolisPattern.IsValid(transition.AbstractTransition.GetConnectorSequence()))
                 return;
 
             const string detail0 = "The abstract transition does not describe a valid metropolis pattern";

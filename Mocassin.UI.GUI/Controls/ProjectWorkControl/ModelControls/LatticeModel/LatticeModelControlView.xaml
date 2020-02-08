@@ -15,8 +15,9 @@
     <ToolTip x:Key="Local.ToolTip.BuildingBlocks" Style="{StaticResource App.Style.ToolTip.Default}">
       <StackPanel>
         <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="Define the basic building blocks of your lattice. Currently only the default block can be used!"/>
-          <Run Text="The default occupation is automatically set to the first entry of the affiliated position occupation option list."/>
+          <Run Text="Define the basic building blocks of your lattice. Currently only the default block can be used!" />
+          <Run
+            Text="The default occupation is automatically set to the first entry of the affiliated position occupation option list." />
         </TextBlock>
       </StackPanel>
 
@@ -24,14 +25,14 @@
     <ToolTip x:Key="Local.ToolTip.Doping" Style="{StaticResource App.Style.ToolTip.Default}">
       <StackPanel>
         <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="Define how actual dopings are applied to a building block."/>
+          <Run Text="Define how actual dopings are applied to a building block." />
         </TextBlock>
       </StackPanel>
     </ToolTip>
     <ToolTip x:Key="Local.ToolTip.DopingCombination" Style="{StaticResource App.Style.ToolTip.Default}">
       <StackPanel>
         <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="Define how one particle can replace another on which position."/>
+          <Run Text="Define how one particle can replace another on which position." />
         </TextBlock>
       </StackPanel>
     </ToolTip>
@@ -40,31 +41,31 @@
     <TabControl>
 
       <TabItem Header="Building Blocks">
-        <content:HeaderedGroup Style="{StaticResource App.Style.HeaderedGroup.BoldText}" 
+        <content:HeaderedGroup Style="{StaticResource App.Style.HeaderedGroup.BoldText}"
                                HeaderToolTip="{StaticResource Local.ToolTip.BuildingBlocks}"
                                Header="Building Block Definitions:">
-          <dataControl:BuildingBlockControlView DataContext="{Binding BlockControlViewModel}"/>
+          <dataControl:BuildingBlockControlView DataContext="{Binding BlockControlViewModel}" />
         </content:HeaderedGroup>
       </TabItem>
 
       <TabItem Header="Block Doping">
         <Grid>
           <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="{StaticResource App.Default.GridLength.Splitter}"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="{StaticResource App.Default.GridLength.Splitter}" />
+            <RowDefinition Height="*" />
           </Grid.RowDefinitions>
 
           <content:HeaderedGroup Grid.Row="0" Style="{StaticResource App.Style.HeaderedGroup.BoldText}"
                                  HeaderToolTip="{StaticResource Local.ToolTip.DopingCombination}"
                                  Header="Occupation Exchange Definitions:">
-            <dataControl:DopingCombinationControlView DataContext="{Binding DopingCombinationViewModel}"/>
+            <dataControl:DopingCombinationControlView DataContext="{Binding DopingCombinationViewModel}" />
           </content:HeaderedGroup>
 
           <content:HeaderedGroup Grid.Row="2" Style="{StaticResource App.Style.HeaderedGroup.BoldText}"
                                  HeaderToolTip="{StaticResource Local.ToolTip.Doping}"
                                  Header="Doping Definitions">
-            <dataControl:DopingControlView DataContext="{Binding DopingViewModel}"/>
+            <dataControl:DopingControlView DataContext="{Binding DopingViewModel}" />
           </content:HeaderedGroup>
 
         </Grid>

@@ -2,7 +2,7 @@
 
 namespace Mocassin.Model.Translator.ModelContext
 {
-    /// <inheritdoc cref="Mocassin.Model.Translator.ModelContext.IMetropolisLocalJumpModel"/>
+    /// <inheritdoc cref="Mocassin.Model.Translator.ModelContext.IMetropolisLocalJumpModel" />
     public class MetropolisLocalJumpModel : ModelComponentBase, IMetropolisLocalJumpModel
     {
         /// <inheritdoc />
@@ -10,14 +10,6 @@ namespace Mocassin.Model.Translator.ModelContext
 
         /// <inheritdoc />
         public IMetropolisRuleModel RuleModel { get; set; }
-
-        /// <inheritdoc />
-        public bool Equals(IMetropolisLocalJumpModel other)
-        {
-            return other != null 
-                   && MappingModel.Equals(other.MappingModel) 
-                   && RuleModel.Equals(other.RuleModel);
-        }
 
         /// <inheritdoc />
         public ITransitionRuleModel RuleModelBase => RuleModel;
@@ -36,9 +28,16 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <inheritdoc />
+        public bool Equals(IMetropolisLocalJumpModel other)
+        {
+            return other != null
+                   && MappingModel.Equals(other.MappingModel)
+                   && RuleModel.Equals(other.RuleModel);
+        }
+
+        /// <inheritdoc />
         public MobilityType GetMobilityType(int positionId, int particleId)
         {
-
             if (RuleModel.StartState[0].Index == particleId &&
                 RuleModel.FinalState[0].Index != particleId &&
                 MappingModel.StartVector4D.P == positionId)

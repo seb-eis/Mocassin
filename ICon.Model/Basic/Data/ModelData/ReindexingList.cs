@@ -14,6 +14,19 @@ namespace Mocassin.Model.Basic
         /// </summary>
         public List<(int Old, int New)> Data;
 
+        /// <inheritdoc />
+        public (int Old, int New) this[int index]
+        {
+            get => Data[index];
+            set => Data[index] = value;
+        }
+
+        /// <inheritdoc />
+        public int Count => Data.Count;
+
+        /// <inheritdoc />
+        public bool IsReadOnly => false;
+
         /// <summary>
         ///     Creates new reindexing list with an initial capacity of 0
         /// </summary>
@@ -30,19 +43,6 @@ namespace Mocassin.Model.Basic
         {
             Data = new List<(int Old, int New)>(capacity);
         }
-
-        /// <inheritdoc />
-        public (int Old, int New) this[int index]
-        {
-            get => Data[index];
-            set => Data[index] = value;
-        }
-
-        /// <inheritdoc />
-        public int Count => Data.Count;
-
-        /// <inheritdoc />
-        public bool IsReadOnly => false;
 
         /// <inheritdoc />
         public void Add((int Old, int New) item)

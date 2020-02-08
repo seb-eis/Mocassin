@@ -44,7 +44,7 @@ namespace Mocassin.Model.Basic
         /// <param name="lockSource"></param>
         public DataReader(TData data, AccessLockSource lockSource)
         {
-            if (lockSource == null) 
+            if (lockSource == null)
                 throw new ArgumentNullException(nameof(lockSource));
 
             Access = data.AsReadOnly();

@@ -3,7 +3,8 @@
 namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Attributes
 {
     /// <summary>
-    ///     The <see cref="Attribute"/> to mark properties as having an overlay toggling effect. Use for boolean properties only
+    ///     The <see cref="Attribute" /> to mark properties as having an overlay toggling effect. Use for boolean properties
+    ///     only
     /// </summary>
     [AttributeUsage(AttributeTargets.Property)]
     public class TogglesOverlayAttribute : Attribute
@@ -14,7 +15,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Attributes
         public bool IsUnique { get; }
 
         /// <summary>
-        ///     Creates a new <see cref="TogglesOverlayAttribute"/>. By default the toggle effect is marked as unique
+        ///     Creates a new <see cref="TogglesOverlayAttribute" />. By default the toggle effect is marked as unique
         /// </summary>
         /// <param name="isUnique"></param>
         public TogglesOverlayAttribute(bool isUnique = true)

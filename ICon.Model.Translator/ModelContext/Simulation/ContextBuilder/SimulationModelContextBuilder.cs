@@ -20,6 +20,26 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <inheritdoc />
+        public override bool CheckBuildRequirements()
+        {
+            return ModelProject?.GetAllManagers().Any(x => x is ISimulationManager) ?? false;
+        }
+
+        /// <inheritdoc />
+        public override Task BuildLinkDependentComponents()
+        {
+            if (!CheckLinkDependentBuildRequirements()) return Task.CompletedTask;
+            var tasks = new[]
+            {
+                Task.Run(
+                    () => MetropolisSimulationModelBuilder.BuildLinkingDependentComponents(BuildTask.Result.MetropolisSimulationModels)),
+                Task.Run(
+                    () => KineticSimulationModelBuilder.BuildLinkingDependentComponents(BuildTask.Result.KineticSimulationModels))
+            };
+            return Task.WhenAll(tasks);
+        }
+
+        /// <inheritdoc />
         protected override ISimulationModelContext PopulateContext(ISimulationModelContext modelContext)
         {
             if (!CheckBuildRequirements()) return modelContext;
@@ -42,28 +62,8 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <inheritdoc />
         protected override void SetNullBuildersToDefault()
         {
-            MetropolisSimulationModelBuilder = MetropolisSimulationModelBuilder ?? new MetropolisSimulationModelBuilder(ModelProject);
-            KineticSimulationModelBuilder = KineticSimulationModelBuilder ?? new KineticSimulationModelBuilder(ModelProject);
-        }
-
-        /// <inheritdoc />
-        public override bool CheckBuildRequirements()
-        {
-            return ModelProject?.GetAllManagers().Any(x => x is ISimulationManager) ?? false;
-        }
-
-        /// <inheritdoc />
-        public override Task BuildLinkDependentComponents()
-        {
-            if (!CheckLinkDependentBuildRequirements()) return Task.CompletedTask;
-            var tasks = new[]
-            {
-                Task.Run(
-                    () => MetropolisSimulationModelBuilder.BuildLinkingDependentComponents(BuildTask.Result.MetropolisSimulationModels)),
-                Task.Run(
-                    () => KineticSimulationModelBuilder.BuildLinkingDependentComponents(BuildTask.Result.KineticSimulationModels))
-            };
-            return Task.WhenAll(tasks);
+            MetropolisSimulationModelBuilder ??= new MetropolisSimulationModelBuilder(ModelProject);
+            KineticSimulationModelBuilder ??= new KineticSimulationModelBuilder(ModelProject);
         }
     }
 }

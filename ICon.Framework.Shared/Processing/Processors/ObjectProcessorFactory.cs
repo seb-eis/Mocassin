@@ -71,7 +71,7 @@ namespace Mocassin.Framework.Processing
             {
                 if (type == null) throw new ArgumentNullException(nameof(type));
 
-                if (!type.IsGenericType) 
+                if (!type.IsGenericType)
                     continue;
 
                 var genType = type.GetGenericTypeDefinition();

@@ -23,9 +23,9 @@
     </Grid.ColumnDefinitions>
     <Grid.RowDefinitions>
       <RowDefinition Height="*" />
-      <RowDefinition Height="{StaticResource App.Default.GridLength.Splitter}"/>
+      <RowDefinition Height="{StaticResource App.Default.GridLength.Splitter}" />
       <RowDefinition Height="Auto" />
-      <RowDefinition Height="{StaticResource App.Default.GridLength.Splitter}"/>
+      <RowDefinition Height="{StaticResource App.Default.GridLength.Splitter}" />
       <RowDefinition Height="*" />
     </Grid.RowDefinitions>
 
@@ -78,7 +78,7 @@
     <content:HeaderedGroup Grid.Row="2" Grid.Column="0" x:Name="CollectionSettingsGroupBox">
       <content:HeaderedGroup.Header>
         <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
-          <Run Text="Collection Settings:"/>
+          <Run Text="Collection Settings:" />
           <Run Text="{Binding SelectedItem.Name, StringFormat={}[{0}]}" />
         </TextBlock>
       </content:HeaderedGroup.Header>
@@ -98,10 +98,12 @@
       <gridControl:SelectionOptimizerSetControlView>
         <gridControl:SelectionOptimizerSetControlView.DataContext>
           <MultiBinding Converter="{adapter:JobPackageDescriptionSelectionOptimizerSetViewModelConverter}">
-            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type local:MmcJobPackageControlView}}"
-                     Path="DataContext.ContentSource.Parent" />
-            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type local:MmcJobPackageControlView}}"
-                     Path="DataContext.SelectedItem" />
+            <Binding
+              RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type local:MmcJobPackageControlView}}"
+              Path="DataContext.ContentSource.Parent" />
+            <Binding
+              RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type local:MmcJobPackageControlView}}"
+              Path="DataContext.SelectedItem" />
           </MultiBinding>
         </gridControl:SelectionOptimizerSetControlView.DataContext>
       </gridControl:SelectionOptimizerSetControlView>

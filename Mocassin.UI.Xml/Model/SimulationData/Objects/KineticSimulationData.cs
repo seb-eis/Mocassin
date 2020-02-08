@@ -14,10 +14,10 @@ namespace Mocassin.UI.Xml.SimulationModel
     [XmlRoot]
     public class KineticSimulationData : SimulationBaseData
     {
-        private int preRunMcsp = 100;
-        private double normalizationProbability = 1.0;
         private double electricFieldMagnitude = 10e6;
         private VectorData3D electricFieldVector = new VectorData3D {A = 1};
+        private double normalizationProbability = 1.0;
+        private int preRunMcsp = 100;
         private ObservableCollection<ModelObjectReference<KineticTransition>> transitions = new ObservableCollection<ModelObjectReference<KineticTransition>>();
 
         /// <summary>

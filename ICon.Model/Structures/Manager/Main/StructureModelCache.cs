@@ -18,7 +18,7 @@ namespace Mocassin.Model.Structures
         /// <inheritdoc />
         public override IStructureCachePort AsReadOnly()
         {
-            return CachePort ?? (CachePort = new StructureCacheManager(this, ModelProject));
+            return CachePort ??= new StructureCacheManager(this, ModelProject);
         }
     }
 }

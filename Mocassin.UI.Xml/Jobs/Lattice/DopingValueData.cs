@@ -10,11 +10,11 @@ namespace Mocassin.UI.Xml.Jobs
     [XmlRoot]
     public class DopingValueData : ProjectDataObject, IDuplicable<DopingValueData>
     {
-        private double value;
         private ModelObjectReference<Doping> doping;
+        private double value;
 
         /// <summary>
-        ///     Get or set the <see cref="ModelObjectReference{T}"/> for the doping information
+        ///     Get or set the <see cref="ModelObjectReference{T}" /> for the doping information
         /// </summary>
         [XmlElement]
         public ModelObjectReference<Doping> Doping

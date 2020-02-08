@@ -5,23 +5,25 @@ using Mocassin.Model.ModelProject;
 namespace Mocassin.Model.Lattices
 {
     /// <summary>
-    /// Basic implementation of the lattice input manager that handles validated adding, removal and replacement of lattice base data by an outside source
+    ///     Basic implementation of the lattice input manager that handles validated adding, removal and replacement of lattice
+    ///     base data by an outside source
     /// </summary>
     internal class LatticeInputManager : ModelInputManager<LatticeModelData, ILatticeDataPort, LatticeEventManager>, ILatticeInputPort
     {
         /// <summary>
-        /// Create new lattice input manager from data object, event manager and project services
+        ///     Create new lattice input manager from data object, event manager and project services
         /// </summary>
         /// <param name="modelData"></param>
         /// <param name="eventManager"></param>
         /// <param name="project"></param>
-        public LatticeInputManager(LatticeModelData modelData, LatticeEventManager eventManager, IModelProject project) : base(modelData, eventManager, project)
+        public LatticeInputManager(LatticeModelData modelData, LatticeEventManager eventManager, IModelProject project)
+            : base(modelData, eventManager, project)
         {
-
         }
 
         /// <summary>
-        /// Get the lattice conflict resolver provider that provides conflicts resolvers for internal data conflicts in this manager
+        ///     Get the lattice conflict resolver provider that provides conflicts resolvers for internal data conflicts in this
+        ///     manager
         /// </summary>
         /// <returns></returns>
         protected override IDataConflictHandlerProvider<LatticeModelData> CreateDataConflictHandlerProvider()
@@ -30,7 +32,8 @@ namespace Mocassin.Model.Lattices
         }
 
         /// <summary>
-        /// Tries to clean deprecated data by removing deprecated model objects and reindexing the model object lists. Distributes affiliated eventy on operation success
+        ///     Tries to clean deprecated data by removing deprecated model objects and reindexing the model object lists.
+        ///     Distributes affiliated eventy on operation success
         /// </summary>
         /// <returns></returns>
         [DataOperation(DataOperationType.ObjectCleaning)]
@@ -40,7 +43,8 @@ namespace Mocassin.Model.Lattices
         }
 
         /// <summary>
-        /// Registers a new BuildingBlock to the manager if it passes validation (Awaits distribution of affiliated events in case of operation success)
+        ///     Registers a new BuildingBlock to the manager if it passes validation (Awaits distribution of affiliated events in
+        ///     case of operation success)
         /// </summary>
         /// <param name="buildingBlock"></param>
         /// <returns></returns>
@@ -52,7 +56,8 @@ namespace Mocassin.Model.Lattices
         }
 
         /// <summary>
-        /// Removes a BuildingBlock from the manager by deprecation if possible (Awaits distribution of affiliated events in case of operation success)
+        ///     Removes a BuildingBlock from the manager by deprecation if possible (Awaits distribution of affiliated events in
+        ///     case of operation success)
         /// </summary>
         /// <param name="buildingBlock"></param>
         /// <returns></returns>
@@ -63,7 +68,8 @@ namespace Mocassin.Model.Lattices
         }
 
         /// <summary>
-        /// Replaces a BuildingBlock in the manager by another if the new one passes validation (Awaits distribution of affiliated events in case of operation success)
+        ///     Replaces a BuildingBlock in the manager by another if the new one passes validation (Awaits distribution of
+        ///     affiliated events in case of operation success)
         /// </summary>
         /// <param name="orgBuildingBlock"></param>
         /// <param name="newBuildingBlock"></param>
@@ -75,9 +81,10 @@ namespace Mocassin.Model.Lattices
         }
 
         /// <summary>
-        /// Registers a new Doping to the manager if it passes validation (Awaits distribution of affiliated events in case of operation success)
+        ///     Registers a new Doping to the manager if it passes validation (Awaits distribution of affiliated events in case of
+        ///     operation success)
         /// </summary>
-        /// <param name="buildingBlock"></param>
+        /// <param name="dopingCombination"></param>
         /// <returns></returns>
         [DataOperation(DataOperationType.NewObject)]
         protected IOperationReport TryRegisterNewDopingCombination(IDopingCombination dopingCombination)
@@ -87,9 +94,10 @@ namespace Mocassin.Model.Lattices
         }
 
         /// <summary>
-        /// Removes a Doping from the manager by deprecation if possible (Awaits distribution of affiliated events in case of operation success)
+        ///     Removes a Doping from the manager by deprecation if possible (Awaits distribution of affiliated events in case of
+        ///     operation success)
         /// </summary>
-        /// <param name="buildingBlock"></param>
+        /// <param name="dopingCombination"></param>
         /// <returns></returns>
         [DataOperation(DataOperationType.ObjectRemoval)]
         protected IOperationReport TryRemoveDopingCombination(IDopingCombination dopingCombination)
@@ -98,10 +106,11 @@ namespace Mocassin.Model.Lattices
         }
 
         /// <summary>
-        /// Replaces a Doping in the manager by another if the new one passes validation (Awaits distribution of affiliated events in case of operation success)
+        ///     Replaces a Doping in the manager by another if the new one passes validation (Awaits distribution of affiliated
+        ///     events in case of operation success)
         /// </summary>
-        /// <param name="orgBuildingBlock"></param>
-        /// <param name="newBuildingBlock"></param>
+        /// <param name="orgDopingCombination"></param>
+        /// <param name="newDopingCombination"></param>
         /// <returns></returns>
         [DataOperation(DataOperationType.ObjectChange)]
         protected IOperationReport TryReplaceDopingCombination(IDopingCombination orgDopingCombination, IDopingCombination newDopingCombination)
@@ -110,21 +119,23 @@ namespace Mocassin.Model.Lattices
         }
 
         /// <summary>
-        /// Registers a new Doping to the manager if it passes validation (Awaits distribution of affiliated events in case of operation success)
+        ///     Registers a new Doping to the manager if it passes validation (Awaits distribution of affiliated events in case of
+        ///     operation success)
         /// </summary>
-        /// <param name="buildingBlock"></param>
+        /// <param name="doping"></param>
         /// <returns></returns>
         [DataOperation(DataOperationType.NewObject)]
         protected IOperationReport TryRegisterNewDoping(IDoping doping)
         {
-            var result =  DefaultRegisterModelObject(doping, accessor => accessor.Query(data => data.Dopings));
+            var result = DefaultRegisterModelObject(doping, accessor => accessor.Query(data => data.Dopings));
             return result;
         }
 
         /// <summary>
-        /// Removes a Doping from the manager by deprecation if possible (Awaits distribution of affiliated events in case of operation success)
+        ///     Removes a Doping from the manager by deprecation if possible (Awaits distribution of affiliated events in case of
+        ///     operation success)
         /// </summary>
-        /// <param name="buildingBlock"></param>
+        /// <param name="doping"></param>
         /// <returns></returns>
         [DataOperation(DataOperationType.ObjectRemoval)]
         protected IOperationReport TryRemoveDoping(IDoping doping)
@@ -133,10 +144,11 @@ namespace Mocassin.Model.Lattices
         }
 
         /// <summary>
-        /// Replaces a Doping in the manager by another if the new one passes validation (Awaits distribution of affiliated events in case of operation success)
+        ///     Replaces a Doping in the manager by another if the new one passes validation (Awaits distribution of affiliated
+        ///     events in case of operation success)
         /// </summary>
-        /// <param name="orgBuildingBlock"></param>
-        /// <param name="newBuildingBlock"></param>
+        /// <param name="orgDoping"></param>
+        /// <param name="newDoping"></param>
         /// <returns></returns>
         [DataOperation(DataOperationType.ObjectChange)]
         protected IOperationReport TryReplaceDoping(IDoping orgDoping, IDoping newDoping)
@@ -144,5 +156,4 @@ namespace Mocassin.Model.Lattices
             return DefaultReplaceModelObject(orgDoping, newDoping, accessor => accessor.Query(data => data.Dopings));
         }
     }
-
 }

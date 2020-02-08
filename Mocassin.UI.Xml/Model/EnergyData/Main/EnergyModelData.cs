@@ -14,9 +14,9 @@ namespace Mocassin.UI.Xml.EnergyModel
     [XmlRoot]
     public class EnergyModelData : ModelManagerData
     {
+        private ObservableCollection<GroupInteractionData> groupInteractions;
         private StableEnvironmentData stableEnvironment;
         private ObservableCollection<UnstableEnvironmentData> unstableEnvironments;
-        private ObservableCollection<GroupInteractionData> groupInteractions;
 
         /// <summary>
         ///     Get or set the stable environment info of the energy model

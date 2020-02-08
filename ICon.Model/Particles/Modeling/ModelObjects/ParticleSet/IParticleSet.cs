@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Mocassin.Mathematics.Bitmasks;
+using Mocassin.Mathematics.Bitmask;
 using Mocassin.Model.Basic;
 
 namespace Mocassin.Model.Particles

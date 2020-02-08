@@ -9,7 +9,7 @@ namespace Mocassin.Model.Basic
     /// </summary>
     /// <typeparam name="TObject"></typeparam>
     /// <typeparam name="TDataObject"></typeparam>
-    public abstract class ObjectConflictHandler<TObject, TDataObject> : IDisposable 
+    public abstract class ObjectConflictHandler<TObject, TDataObject> : IDisposable
         where TDataObject : ModelData
     {
         /// <summary>
@@ -33,6 +33,13 @@ namespace Mocassin.Model.Basic
             ModelProject = modelProject ?? throw new ArgumentNullException(nameof(modelProject));
         }
 
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            DataAccess = null;
+            ModelProject = null;
+        }
+
         /// <summary>
         ///     Determine required changes due to provided object in the given context and update the internal management model
         ///     data system
@@ -40,12 +47,5 @@ namespace Mocassin.Model.Basic
         /// <param name="obj"></param>
         /// <returns></returns>
         public abstract ConflictReport HandleConflicts(TObject obj);
-
-        /// <inheritdoc />
-        public void Dispose()
-        {
-            DataAccess = null;
-            ModelProject = null;
-        }
     }
 }

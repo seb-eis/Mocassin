@@ -42,7 +42,7 @@ namespace Mocassin.Model.Basic
         /// </summary>
         protected ModelDataCache(IModelEventPort eventPort, IModelProject modelProject)
         {
-            if (eventPort == null) 
+            if (eventPort == null)
                 throw new ArgumentNullException(nameof(eventPort));
 
             SubscribeToEventPort(eventPort);
@@ -56,7 +56,7 @@ namespace Mocassin.Model.Basic
         /// <param name="dataObject"></param>
         public void Initialize(IEnumerable<ICachedObjectSource> dataObject)
         {
-            if (IsInitialized) 
+            if (IsInitialized)
                 return;
 
             foreach (var item in dataObject)
@@ -119,7 +119,7 @@ namespace Mocassin.Model.Basic
         /// </summary>
         protected void DisposeSubscriptions()
         {
-            foreach (var item in EventSubscriptions) 
+            foreach (var item in EventSubscriptions)
                 item?.Dispose();
         }
     }

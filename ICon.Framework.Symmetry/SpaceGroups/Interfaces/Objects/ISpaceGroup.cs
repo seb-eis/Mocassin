@@ -15,7 +15,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         int InternationalIndex { get; }
 
         /// <summary>
-        ///     The Mauguin notation <see cref="string"/> of the group
+        ///     The Mauguin notation <see cref="string" /> of the group
         /// </summary>
         string MauguinNotation { get; }
 

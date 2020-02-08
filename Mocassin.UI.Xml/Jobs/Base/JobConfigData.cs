@@ -15,12 +15,12 @@ namespace Mocassin.UI.Xml.Jobs
     public abstract class JobConfigData : ProjectDataObject
     {
         private string executionFlags;
-        private string targetMcsp;
-        private string timeLimit;
-        private string temperature;
-        private string minimalSuccessRate;
-        private LatticeConfigData latticeConfiguration;
         private string instruction;
+        private LatticeConfigData latticeConfiguration;
+        private string minimalSuccessRate;
+        private string targetMcsp;
+        private string temperature;
+        private string timeLimit;
 
         /// <summary>
         ///     Get or set additional job info flags
@@ -73,7 +73,7 @@ namespace Mocassin.UI.Xml.Jobs
         }
 
         /// <summary>
-        ///     Get or set the <see cref="LatticeConfigData"/> of the job
+        ///     Get or set the <see cref="LatticeConfigData" /> of the job
         /// </summary>
         [XmlElement]
         public LatticeConfigData LatticeConfiguration
@@ -83,7 +83,7 @@ namespace Mocassin.UI.Xml.Jobs
         }
 
         /// <summary>
-        ///     Get or set a <see cref="string"/> that describes additional instructions
+        ///     Get or set a <see cref="string" /> that describes additional instructions
         /// </summary>
         [XmlElement]
         public string Instruction
@@ -177,7 +177,7 @@ namespace Mocassin.UI.Xml.Jobs
         }
 
         /// <summary>
-        ///     Copies the base data of the <see cref="JobConfigData"/> to the target
+        ///     Copies the base data of the <see cref="JobConfigData" /> to the target
         /// </summary>
         /// <param name="other"></param>
         protected void CopyBaseDataTo(JobConfigData other)

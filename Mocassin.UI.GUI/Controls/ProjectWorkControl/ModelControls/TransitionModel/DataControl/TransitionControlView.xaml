@@ -135,7 +135,7 @@
   <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="*" />
-      <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}"/>
+      <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}" />
       <ColumnDefinition Width="*" />
     </Grid.ColumnDefinitions>
 
@@ -145,7 +145,7 @@
       <gridControl:MetropolisTransitionGridControlView DataContext="{Binding MetropolisTransitionGridViewModel}" />
     </content:HeaderedGroup>
 
-    <GridSplitter Grid.Column="1"/>
+    <GridSplitter Grid.Column="1" />
 
     <content:HeaderedGroup Grid.Column="2" Style="{StaticResource App.Style.HeaderedGroup.BoldText}"
                            HeaderToolTip="{StaticResource Local.ToolTip.KineticTransitions}"

@@ -17,10 +17,10 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
             if (value is LibraryBuildStatus buildStatus)
             {
                 return !(buildStatus == LibraryBuildStatus.Unknown ||
-                       buildStatus == LibraryBuildStatus.BuildProcessCompleted ||
-                       buildStatus == LibraryBuildStatus.BuildingLibrary ||
-                       buildStatus == LibraryBuildStatus.Cancel ||
-                       buildStatus.ToString().Contains("Error"));
+                         buildStatus == LibraryBuildStatus.BuildProcessCompleted ||
+                         buildStatus == LibraryBuildStatus.BuildingLibrary ||
+                         buildStatus == LibraryBuildStatus.Cancel ||
+                         buildStatus.ToString().Contains("Error"));
             }
 
             return false;

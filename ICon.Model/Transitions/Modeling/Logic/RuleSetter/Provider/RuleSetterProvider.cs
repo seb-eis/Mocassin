@@ -30,22 +30,18 @@ namespace Mocassin.Model.Transitions
         /// <inheritdoc />
         public IReadOnlyList<IKineticRuleSetter> GetRuleSetters()
         {
-            using (var accessor = DataAccessorSource.Create())
-            {
-                return accessor.Query(x => x.KineticTransitions.Select(GetRuleSetter).ToList());
-            }
+            using var accessor = DataAccessorSource.Create();
+            return accessor.Query(x => x.KineticTransitions.Select(GetRuleSetter).ToList());
         }
 
         /// <inheritdoc />
         public IKineticRuleSetter GetRuleSetter(IKineticTransition kineticTransition)
         {
-            using (var accessor = DataAccessorSource.CreateUnsafe())
-            {
-                var transition = accessor.Query(x => x.KineticTransitions.SingleOrDefault(y => TransitionsAreEqual(y, kineticTransition)));
-                return transition is null
-                    ? null
-                    : new KineticRuleSetter(transition, DataAccessorSource) {AttemptFrequencyConstraint = AttemptFrequencyConstraint};
-            }
+            using var accessor = DataAccessorSource.CreateUnsafe();
+            var transition = accessor.Query(x => x.KineticTransitions.SingleOrDefault(y => TransitionsAreEqual(y, kineticTransition)));
+            return transition is null
+                ? null
+                : new KineticRuleSetter(transition, DataAccessorSource) {AttemptFrequencyConstraint = AttemptFrequencyConstraint};
         }
 
         /// <summary>

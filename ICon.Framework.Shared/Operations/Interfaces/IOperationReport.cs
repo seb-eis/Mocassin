@@ -16,7 +16,7 @@ namespace Mocassin.Framework.Operations
         /// <summary>
         ///     Boolean flag that indicates if the report contains a validation failure
         /// </summary>
-        bool HasValidationError{ get; }
+        bool HasValidationError { get; }
 
         /// <summary>
         ///     Boolean flag that indicates if the report has relevant conflict handling information
@@ -49,7 +49,7 @@ namespace Mocassin.Framework.Operations
         IConflictReport ConflictReport { get; set; }
 
         /// <summary>
-        ///     Get the <see cref="DateTime"/> when the report was created
+        ///     Get the <see cref="DateTime" /> when the report was created
         /// </summary>
         DateTime TimeStamp { get; }
 

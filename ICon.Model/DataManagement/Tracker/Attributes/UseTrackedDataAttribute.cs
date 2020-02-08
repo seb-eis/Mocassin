@@ -3,7 +3,7 @@
 namespace Mocassin.Model.Basic
 {
     /// <summary>
-    ///     Defines the level of reference correction for properties marked with <see cref="UseTrackedDataAttribute"/>
+    ///     Defines the level of reference correction for properties marked with <see cref="UseTrackedDataAttribute" />
     /// </summary>
     public enum ReferenceCorrectionLevel
     {
@@ -13,7 +13,8 @@ namespace Mocassin.Model.Basic
         Full,
 
         /// <summary>
-        ///     Defines a content only correction where the property or list content itself is not replaced, only the properties on these instances
+        ///     Defines a content only correction where the property or list content itself is not replaced, only the properties on
+        ///     these instances
         /// </summary>
         IgnoreTopLevel
     }

@@ -39,7 +39,7 @@ namespace Mocassin.Model.Translator
         public byte[] DefectBackgroundBinary { get; set; }
 
         /// <summary>
-        ///     Get or set the <see cref="DefectBackgroundEntity"/> that stores the 2D structure defect background
+        ///     Get or set the <see cref="DefectBackgroundEntity" /> that stores the 2D structure defect background
         /// </summary>
         [NotMapped]
         [OwnedBlobProperty(nameof(DefectBackgroundBinary))]

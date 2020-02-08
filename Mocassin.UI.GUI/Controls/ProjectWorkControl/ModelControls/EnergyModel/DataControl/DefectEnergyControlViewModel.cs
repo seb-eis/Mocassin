@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
-using Mocassin.Model.Particles;
 using Mocassin.Model.Structures;
 using Mocassin.UI.Base.Commands;
 using Mocassin.UI.GUI.Base.DataContext;
@@ -9,12 +7,11 @@ using Mocassin.UI.GUI.Controls.Base.ViewModels;
 using Mocassin.UI.Xml.Base;
 using Mocassin.UI.Xml.EnergyModel;
 using Mocassin.UI.Xml.Main;
-using Mocassin.UI.Xml.StructureModel;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.DataControl
 {
     /// <summary>
-    ///     The <see cref="ProjectGraphControlViewModel"/> for the set of <see cref="DefectEnergyData"/> definitions
+    ///     The <see cref="ProjectGraphControlViewModel" /> for the set of <see cref="DefectEnergyData" /> definitions
     /// </summary>
     public class DefectEnergyControlViewModel : ProjectGraphControlViewModel
     {
@@ -24,12 +21,12 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.
         private DefectBackgroundData DefectBackground { get; set; }
 
         /// <summary>
-        ///     Get the <see cref="CollectionControlViewModel{T}"/> for the <see cref="DefectEnergyData"/> set
+        ///     Get the <see cref="CollectionControlViewModel{T}" /> for the <see cref="DefectEnergyData" /> set
         /// </summary>
         public CollectionControlViewModel<DefectEnergyData> DefectEnergiesControlViewModel { get; }
 
         /// <summary>
-        ///     Get a <see cref="RelayCommand"/> to force update the current defect collection
+        ///     Get a <see cref="RelayCommand" /> to force update the current defect collection
         /// </summary>
         public RelayCommand UpdateDefectCollectionCommand { get; }
 
@@ -39,7 +36,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.
         {
             DefectEnergiesControlViewModel = new CollectionControlViewModel<DefectEnergyData>();
             UpdateDefectCollectionCommand = new RelayCommand(
-                () => UpdateDefectCollection(DefectBackground, ContentSource), 
+                () => UpdateDefectCollection(DefectBackground, ContentSource),
                 () => ContentSource != null && DefectBackground != null);
         }
 
@@ -53,7 +50,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.
         }
 
         /// <summary>
-        ///     Updates the defect list of <see cref="DefectBackgroundData"/> to the context of the passed <see cref="MocassinProject"/>
+        ///     Updates the defect list of <see cref="DefectBackgroundData" /> to the context of the passed
+        ///     <see cref="MocassinProject" />
         /// </summary>
         /// <param name="contentSource"></param>
         /// <param name="defectBackground"></param>
@@ -76,11 +74,12 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.
                     obj ??= new DefectEnergyData
                     {
                         Particle = particle.Duplicate(),
-                        CellReferencePosition = new ModelObjectReference<CellReferencePosition>(position),
+                        CellReferencePosition = new ModelObjectReference<CellReferencePosition>(position)
                     };
                     newList.Add(obj);
                 }
             }
+
             defectBackground.DefectEnergies = newList;
         }
     }

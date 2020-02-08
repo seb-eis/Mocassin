@@ -40,7 +40,6 @@ namespace Mocassin.Model.Translator
         [field: MarshalAs(UnmanagedType.I4)]
         public int ObjectId { get; set; }
 
-        [MarshalAs(UnmanagedType.I4)] 
-        private readonly int paddingInt;
+        [MarshalAs(UnmanagedType.I4)] private readonly int paddingInt;
     }
 }

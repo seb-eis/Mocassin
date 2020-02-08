@@ -22,7 +22,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.GridCon
     public abstract class HostGraphModelObjectSelectionViewModel<TModelObject, TObjectGraph> :
         CollectionControlViewModel<ModelObjectReference<TModelObject>>,
         IContentSupplier<MocassinProject>,
-        IObjectDropAcceptor
+        IDataObjectAcceptor
         where TModelObject : ModelObject, new()
         where TObjectGraph : ModelDataObject
     {
@@ -43,7 +43,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.GridCon
         public TObjectGraph HostObject { get; }
 
         /// <inheritdoc />
-        public Command<IDataObject> HandleDropAddCommand { get; set; }
+        public Command<IDataObject> ProcessDataObjectCommand { get; set; }
 
         /// <summary>
         ///     Get the <see cref="IEnumerable{T}" /> of currently selectable <see cref="ModelDataObject" /> instances
@@ -66,6 +66,14 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.GridCon
             HostObject = hostObject;
         }
 
+        /// <inheritdoc />
+        public virtual void ChangeContentSource(MocassinProject contentSource)
+        {
+            ContentSource = contentSource;
+            ReferenceObjectGraphs = GetSourceCollection(ContentSource);
+            Items = GetTargetCollection(HostObject);
+        }
+
         /// <summary>
         ///     Get the <see cref="IEnumerable{T}" /> sequence of <see cref="ModelDataObject" /> values that remains after internal
         ///     filtering is applied
@@ -80,14 +88,6 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.GridCon
             return targetCollection == null
                 ? baseCollection
                 : baseCollection.Where(x => targetCollection.All(y => y.Key != x.Key));
-        }
-
-        /// <inheritdoc />
-        public virtual void ChangeContentSource(MocassinProject contentSource)
-        {
-            ContentSource = contentSource;
-            ReferenceObjectGraphs = GetSourceCollection(ContentSource);
-            Items = GetTargetCollection(HostObject);
         }
 
         /// <summary>
@@ -123,7 +123,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.GridCon
             {
                 if (!(obj.GetData(typeof(TGraph)) is TGraph graph)) return false;
                 var result = !GetDropRejectPredicates().Any(predicate => predicate.Invoke(obj));
-                result &=  !IsDuplicateFiltered || GetTargetCollection(HostObject).All(x => x.Key != graph.Key);
+                result &= !IsDuplicateFiltered || GetTargetCollection(HostObject).All(x => x.Key != graph.Key);
                 return result;
             }
 
@@ -131,7 +131,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.GridCon
         }
 
         /// <summary>
-        ///     Get an <see cref="IEnumerable{T}"/> of additional rejection <see cref="Predicate{T}"/> instances for a drop object
+        ///     Get an <see cref="IEnumerable{T}" /> of additional rejection <see cref="Predicate{T}" /> instances for a drop
+        ///     object
         /// </summary>
         /// <returns></returns>
         protected virtual IEnumerable<Predicate<IDataObject>> GetDropRejectPredicates()

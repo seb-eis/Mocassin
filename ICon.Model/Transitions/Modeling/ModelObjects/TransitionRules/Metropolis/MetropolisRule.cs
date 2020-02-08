@@ -17,6 +17,9 @@ namespace Mocassin.Model.Transitions
         /// </summary>
         public List<MetropolisRule> DependentRules { get; set; }
 
+        /// <inheritdoc />
+        public override string ObjectName => "Metropolis Rule";
+
 
         /// <summary>
         ///     Creates new kinetic rule with empty dependent rule list
@@ -31,9 +34,6 @@ namespace Mocassin.Model.Transitions
         {
             return DependentRules.AsEnumerable();
         }
-
-        /// <inheritdoc />
-        public override string ObjectName => "Metropolis Rule";
 
         /// <inheritdoc />
         public override ModelObject PopulateFrom(IModelObject obj)

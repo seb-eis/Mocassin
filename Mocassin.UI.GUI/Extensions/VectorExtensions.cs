@@ -9,7 +9,7 @@ namespace Mocassin.UI.GUI.Extensions
     public static class VectorExtensions
     {
         /// <summary>
-        ///      Get a <see cref="Point3D"/> with the same dat as the passed <see cref="Cartesian3D"/>
+        ///     Get a <see cref="Point3D" /> with the same dat as the passed <see cref="Cartesian3D" />
         /// </summary>
         /// <param name="cartesian"></param>
         /// <returns></returns>
@@ -19,7 +19,7 @@ namespace Mocassin.UI.GUI.Extensions
         }
 
         /// <summary>
-        ///      Get a <see cref="Vector3D"/> with the same dat as the passed <see cref="Cartesian3D"/>
+        ///     Get a <see cref="Vector3D" /> with the same dat as the passed <see cref="Cartesian3D" />
         /// </summary>
         /// <param name="cartesian"></param>
         /// <returns></returns>

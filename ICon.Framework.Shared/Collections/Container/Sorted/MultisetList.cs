@@ -1,25 +1,23 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Text;
-
-using Mocassin.Framework.Extensions;
+﻿using System.Collections.Generic;
 
 namespace Mocassin.Framework.Collections
 {
     /// <summary>
-    /// Wrapped list that is always sorted utilizing the provided comparer and allows multiple entries that compare equal to each other
+    ///     Wrapped list that is always sorted utilizing the provided comparer and allows multiple entries that compare equal
+    ///     to each other
     /// </summary>
     /// <typeparam name="T1"></typeparam>
     public class MultisetList<T1> : BinarySearchableList<T1>
     {
         /// <inheritdoc />
-        public MultisetList(IComparer<T1> comparer) :  base(comparer)
+        public MultisetList(IComparer<T1> comparer)
+            : base(comparer)
         {
         }
 
         /// <inheritdoc />
-        public MultisetList(IComparer<T1> comparer, int capacity) :  base(comparer, capacity)
+        public MultisetList(IComparer<T1> comparer, int capacity)
+            : base(comparer, capacity)
         {
         }
 

@@ -16,8 +16,8 @@ namespace Mocassin.UI.Xml.Customization
     public class PairEnergyData : ProjectDataObject, IComparable<PairEnergyData>, IDuplicable<PairEnergyData>
     {
         private ModelObjectReference<Particle> centerParticle;
-        private ModelObjectReference<Particle> partnerParticle;
         private double energy;
+        private ModelObjectReference<Particle> partnerParticle;
 
         /// <summary>
         ///     Get or set the <see cref="ModelObjectReference{T}" /> that targets the center particle
@@ -47,6 +47,44 @@ namespace Mocassin.UI.Xml.Customization
         {
             get => energy;
             set => SetProperty(ref energy, value);
+        }
+
+        /// <inheritdoc />
+        public int CompareTo(PairEnergyData other)
+        {
+            if (ReferenceEquals(this, other))
+                return 0;
+
+            if (other is null)
+                return 1;
+
+            var centerParticleKeyComparison = string.Compare(CenterParticle.Key, other.CenterParticle.Key, StringComparison.Ordinal);
+            if (centerParticleKeyComparison != 0)
+                return centerParticleKeyComparison;
+
+            var partnerParticleKeyComparison = string.Compare(PartnerParticle.Key, other.PartnerParticle.Key, StringComparison.Ordinal);
+            return partnerParticleKeyComparison != 0
+                ? partnerParticleKeyComparison
+                : Energy.CompareTo(other.Energy);
+        }
+
+        /// <inheritdoc />
+        public PairEnergyData Duplicate()
+        {
+            var copy = new PairEnergyData
+            {
+                Name = Name,
+                energy = energy,
+                centerParticle = centerParticle.Duplicate(),
+                partnerParticle = partnerParticle.Duplicate()
+            };
+            return copy;
+        }
+
+        /// <inheritdoc />
+        object IDuplicable.Duplicate()
+        {
+            return Duplicate();
         }
 
         /// <summary>
@@ -125,44 +163,6 @@ namespace Mocassin.UI.Xml.Customization
             };
 
             return obj;
-        }
-
-        /// <inheritdoc />
-        public int CompareTo(PairEnergyData other)
-        {
-            if (ReferenceEquals(this, other))
-                return 0;
-
-            if (other is null)
-                return 1;
-
-            var centerParticleKeyComparison = string.Compare(CenterParticle.Key, other.CenterParticle.Key, StringComparison.Ordinal);
-            if (centerParticleKeyComparison != 0)
-                return centerParticleKeyComparison;
-
-            var partnerParticleKeyComparison = string.Compare(PartnerParticle.Key, other.PartnerParticle.Key, StringComparison.Ordinal);
-            return partnerParticleKeyComparison != 0
-                ? partnerParticleKeyComparison
-                : Energy.CompareTo(other.Energy);
-        }
-
-        /// <inheritdoc />
-        public PairEnergyData Duplicate()
-        {
-            var copy = new PairEnergyData
-            {
-                Name = Name,
-                energy = energy,
-                centerParticle = centerParticle.Duplicate(),
-                partnerParticle = partnerParticle.Duplicate()
-            };
-            return copy;
-        }
-
-        /// <inheritdoc />
-        object IDuplicable.Duplicate()
-        {
-            return Duplicate();
         }
     }
 }

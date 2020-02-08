@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.FileMenu"
-             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:fileCommands="clr-namespace:Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.FileMenu.Commands"
              xmlns:projectCommands="clr-namespace:Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager.Commands"
              mc:Ignorable="d"
@@ -20,10 +19,10 @@
           <MenuItem Header="Model" Command="{Binding CommandSource}"
                     CommandParameter="{x:Type projectCommands:AddNewProjectGraphCommand}" />
         </MenuItem>
-        <Separator/>
+        <Separator />
         <MenuItem Header="New Work Window" Command="{Binding CommandSource}"
-                  CommandParameter="{x:Type fileCommands:OpenProjectWorkTabHostWindow}"/>
-        <Separator/>
+                  CommandParameter="{x:Type fileCommands:OpenProjectWorkTabHostWindow}" />
+        <Separator />
         <MenuItem Header="_Open Project" Command="{Binding CommandSource}"
                   CommandParameter="{x:Type fileCommands:ShowProjectLoadingDialogCommand}" />
         <MenuItem Header="_Close Project" Command="{Binding CommandSource}"

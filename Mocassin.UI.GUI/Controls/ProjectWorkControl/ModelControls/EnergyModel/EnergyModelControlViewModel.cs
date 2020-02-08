@@ -1,5 +1,4 @@
 ﻿using Mocassin.UI.GUI.Base.DataContext;
-using Mocassin.UI.GUI.Controls.Base.Interfaces;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
 using Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.DataControl;
 using Mocassin.UI.Xml.Main;
@@ -8,7 +7,8 @@ using Mocassin.UI.Xml.ProjectLibrary;
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel
 {
     /// <summary>
-    ///     The <see cref="ProjectGraphControlViewModel" /> for <see cref="EnergyModelControlView" /> that controls the energy model
+    ///     The <see cref="ProjectGraphControlViewModel" /> for <see cref="EnergyModelControlView" /> that controls the energy
+    ///     model
     ///     definition
     /// </summary>
     public class EnergyModelControlViewModel : ProjectGraphControlViewModel
@@ -29,7 +29,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel
         public GroupInteractionControlViewModel GroupInteractionViewModel { get; }
 
         /// <summary>
-        ///     Get the <see cref="DefectEnergyControlViewModel"/> that controls the background defect energy set
+        ///     Get the <see cref="DefectEnergyControlViewModel" /> that controls the background defect energy set
         /// </summary>
         public DefectEnergyControlViewModel DefectEnergyViewModel { get; }
 

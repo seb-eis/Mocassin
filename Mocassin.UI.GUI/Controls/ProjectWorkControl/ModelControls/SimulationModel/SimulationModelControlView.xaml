@@ -15,11 +15,11 @@
 
     <TabControl>
       <TabItem Header="Metropolis Simulations">
-        <dataControl:MetropolisSimulationControlView DataContext="{Binding MetropolisSimulationViewModel}"/>
+        <dataControl:MetropolisSimulationControlView DataContext="{Binding MetropolisSimulationViewModel}" />
       </TabItem>
       <TabItem Header="Kinetic Simulations">
 
-        <dataControl:KineticSimulationControlView DataContext="{Binding KineticSimulationViewModel}"/>
+        <dataControl:KineticSimulationControlView DataContext="{Binding KineticSimulationViewModel}" />
       </TabItem>
     </TabControl>
   </Grid>

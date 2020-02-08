@@ -6,7 +6,7 @@ using Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureModel;
 namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ControlMenu.Commands
 {
     /// <summary>
-    ///     The <see cref="AddDefaultLayoutControlTabCommand"/> implementation to a default structure control tab
+    ///     The <see cref="AddDefaultLayoutControlTabCommand" /> implementation to a default structure control tab
     /// </summary>
     public class AddStructureControlTabCommand : AddDefaultLayoutControlTabCommand
     {

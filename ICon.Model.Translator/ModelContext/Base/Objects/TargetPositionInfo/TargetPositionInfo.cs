@@ -1,5 +1,4 @@
 ﻿using Mocassin.Mathematics.ValueTypes;
-using Mocassin.Model.Energies;
 using Mocassin.Model.Structures;
 
 namespace Mocassin.Model.Translator.ModelContext

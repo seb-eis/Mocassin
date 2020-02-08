@@ -14,6 +14,14 @@ namespace Mocassin.Model.Structures
             return "Structure Info";
         }
 
+        /// <inheritdoc />
+        public override bool Equals(IModelParameter other)
+        {
+            if (other is IStructureInfo otherInfo) return Name == otherInfo.Name;
+
+            return false;
+        }
+
         /// <summary>
         ///     Creates the default initialized structure info
         /// </summary>
@@ -31,14 +39,6 @@ namespace Mocassin.Model.Structures
 
             Name = structureInfo.Name;
             return this;
-        }
-
-        /// <inheritdoc />
-        public override bool Equals(IModelParameter other)
-        {
-            if (other is IStructureInfo otherInfo) return Name == otherInfo.Name;
-
-            return false;
         }
     }
 }

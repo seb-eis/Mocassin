@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using HelixToolkit.Wpf.SharpDX;
@@ -185,7 +184,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
         }
 
         /// <summary>
-        ///     Changes the color of the wireframe of a <see cref="SceneNode"/>
+        ///     Changes the color of the wireframe of a <see cref="SceneNode" />
         /// </summary>
         /// <param name="sceneNode"></param>
         /// <param name="color"></param>
@@ -204,7 +203,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
         }
 
         /// <summary>
-        ///     Updates the transparency flag on all <see cref="SceneNode"/> instances
+        ///     Updates the transparency flag on all <see cref="SceneNode" /> instances
         /// </summary>
         protected void UpdateTransparencyFlags()
         {
@@ -232,12 +231,14 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
                 OnChangeInvalidatesNode?.Invoke();
                 return;
             }
+
             var rescalingMatrix = GetRescalingMatrix(oldValue, newValue);
             foreach (var sceneNode in SceneNodes) ChangeNodeScaling(sceneNode, ref rescalingMatrix);
         }
 
         /// <summary>
-        ///     Changes the scaling of the provided <see cref="SceneNode" /> using a scaling <see cref="Matrix" /> and a temporary origin shift
+        ///     Changes the scaling of the provided <see cref="SceneNode" /> using a scaling <see cref="Matrix" /> and a temporary
+        ///     origin shift
         /// </summary>
         /// <param name="sceneNode"></param>
         /// <param name="rescalingMatrix"></param>
@@ -263,7 +264,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
         }
 
         /// <summary>
-        ///     Incorporates a rescaling transform into a model <see cref="Matrix"/> using a temporary (0,0,0) translation transform
+        ///     Incorporates a rescaling transform into a model <see cref="Matrix" /> using a temporary (0,0,0) translation
+        ///     transform
         /// </summary>
         /// <param name="modelMatrix"></param>
         /// <param name="rescalingMatrix"></param>
@@ -328,7 +330,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
         }
 
         /// <summary>
-        ///     Performs an action on a <see cref="SceneNode"/> depending on it being a <see cref="MeshNode"/> or a <see cref="BatchedMeshNode"/>
+        ///     Performs an action on a <see cref="SceneNode" /> depending on it being a <see cref="MeshNode" /> or a
+        ///     <see cref="BatchedMeshNode" />
         /// </summary>
         /// <param name="sceneNode"></param>
         /// <param name="meshNodeAction"></param>
@@ -347,7 +350,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
         }
 
         /// <summary>
-        ///     Get the default scaling value based on the <see cref="VisualObjectCategory"/>
+        ///     Get the default scaling value based on the <see cref="VisualObjectCategory" />
         /// </summary>
         /// <returns></returns>
         protected double GetDefaultScaling()

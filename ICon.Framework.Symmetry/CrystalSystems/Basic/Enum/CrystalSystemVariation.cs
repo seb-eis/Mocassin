@@ -9,7 +9,7 @@
         ///     System has not special variation or the variation is an origin choice
         /// </summary>
         NoneOrOriginChoice = 0,
-        
+
         /// <summary>
         ///     System has a unique axis in A direction
         /// </summary>

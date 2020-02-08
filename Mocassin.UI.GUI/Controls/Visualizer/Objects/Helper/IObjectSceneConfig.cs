@@ -5,7 +5,8 @@ using System.Windows.Media;
 namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
 {
     /// <summary>
-    ///     Provides a 3D scene configuration for a rendered object (Scaling, mesh quality, material, ...) with property change notifications
+    ///     Provides a 3D scene configuration for a rendered object (Scaling, mesh quality, material, ...) with property change
+    ///     notifications
     /// </summary>
     public interface IObjectSceneConfig : IEquatable<IObjectSceneConfig>, INotifyPropertyChanged
     {

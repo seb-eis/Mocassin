@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Mocassin.Mathematics.Extensions;
 using Mocassin.Mathematics.Comparer;
+using Mocassin.Mathematics.Extensions;
 using Mocassin.Mathematics.Solver;
 
 namespace Mocassin.Mathematics.ValueTypes
@@ -33,6 +33,18 @@ namespace Mocassin.Mathematics.ValueTypes
         public int Cols { get; protected set; }
 
         /// <summary>
+        ///     Access the matrix by indexer [row,col]
+        /// </summary>
+        /// <param name="row"></param>
+        /// <param name="col"></param>
+        /// <returns></returns>
+        public double this[int row, int col]
+        {
+            get => Values[row, col];
+            set => Values[row, col] = value;
+        }
+
+        /// <summary>
         ///     Construct new matrix from 2D array and double comparer
         /// </summary>
         /// <param name="comparer"></param>
@@ -60,15 +72,27 @@ namespace Mocassin.Mathematics.ValueTypes
         }
 
         /// <summary>
-        ///     Access the matrix by indexer [row,col]
+        ///     Compares for almost equality
         /// </summary>
-        /// <param name="row"></param>
-        /// <param name="col"></param>
+        /// <param name="other"></param>
         /// <returns></returns>
-        public double this[int row, int col]
+        public bool Equals(Matrix2D other)
         {
-            get => Values[row, col];
-            set => Values[row, col] = value;
+            if (other == null)
+                throw new ArgumentNullException(nameof(other));
+
+            if (Rows != other.Rows || Cols != other.Cols) return false;
+
+            for (var row = 0; row < Rows; row++)
+            {
+                for (var col = 0; col < Cols; col++)
+                {
+                    if (Comparer.Compare(Values[row, col], other.Values[row, col]) != 0)
+                        return false;
+                }
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -77,28 +101,6 @@ namespace Mocassin.Mathematics.ValueTypes
         public void CleanAlmostZeros()
         {
             Values.CleanAlmostZeroEntries(Comparer);
-        }
-
-        /// <summary>
-        ///     Compares for almost equality
-        /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
-        public bool Equals(Matrix2D other)
-        {
-            if (other == null) 
-                throw new ArgumentNullException(nameof(other));
-
-            if (Rows != other.Rows || Cols != other.Cols) return false;
-
-            for (var row = 0; row < Rows; row++)
-            {
-                for (var col = 0; col < Cols; col++)
-                    if (Comparer.Compare(Values[row, col], other.Values[row, col]) != 0)
-                        return false;
-            }
-
-            return true;
         }
 
         /// <summary>
@@ -128,7 +130,7 @@ namespace Mocassin.Mathematics.ValueTypes
         public static Matrix2D GetEntity(int size, IComparer<double> comparer = null)
         {
             var entity = new double[size, size];
-            for (var i = 0; i < size; i++) 
+            for (var i = 0; i < size; i++)
                 entity[i, i] = 1.0;
 
             return new Matrix2D(entity, comparer);
@@ -145,8 +147,8 @@ namespace Mocassin.Mathematics.ValueTypes
 
             var result = GetEntity(Rows, Comparer);
             var solver = new GaussJordanSolver();
-            return !solver.TrySolve(Values, result.Values, Comparer) 
-                ? null 
+            return !solver.TrySolve(Values, result.Values, Comparer)
+                ? null
                 : result;
         }
 
@@ -206,7 +208,7 @@ namespace Mocassin.Mathematics.ValueTypes
         /// <returns></returns>
         public void Add(Matrix2D rhs)
         {
-            if (rhs == null) 
+            if (rhs == null)
                 throw new ArgumentNullException(nameof(rhs));
 
             if (Rows != rhs.Rows || Cols != rhs.Cols)
@@ -214,7 +216,7 @@ namespace Mocassin.Mathematics.ValueTypes
 
             for (var row = 0; row < Rows; row++)
             {
-                for (var col = 0; col < Cols; col++) 
+                for (var col = 0; col < Cols; col++)
                     Values[row, col] += rhs.Values[row, col];
             }
         }
@@ -226,7 +228,7 @@ namespace Mocassin.Mathematics.ValueTypes
         /// <returns></returns>
         public void Subtract(Matrix2D rhs)
         {
-            if (rhs == null) 
+            if (rhs == null)
                 throw new ArgumentNullException(nameof(rhs));
 
             if (Rows != rhs.Rows || Cols != rhs.Cols)

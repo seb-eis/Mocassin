@@ -27,6 +27,9 @@ namespace Mocassin.Model.Transitions
         public int GeometryStepCount => PathGeometry.Count;
 
         /// <inheritdoc />
+        public override string ObjectName => "Kinetic Transition";
+
+        /// <inheritdoc />
         public IEnumerable<IKineticRule> GetExtendedTransitionRules()
         {
             foreach (var rule in GetTransitionRules())
@@ -49,9 +52,6 @@ namespace Mocassin.Model.Transitions
         {
             return (TransitionRules ?? new List<KineticRule>()).AsEnumerable();
         }
-
-        /// <inheritdoc />
-        public override string ObjectName => "Kinetic Transition";
 
         /// <inheritdoc />
         public override ModelObject PopulateFrom(IModelObject obj)

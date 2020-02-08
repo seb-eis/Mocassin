@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Mocassin.UI.GUI.Extensions;
@@ -12,7 +11,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
     public partial class ControlTabHostView : UserControl
     {
         /// <summary>
-        ///     The <see cref="DragHandler{TElement}"/> for <see cref="Grid"/> instances of tab items
+        ///     The <see cref="DragHandler{TElement}" /> for <see cref="Grid" /> instances of tab items
         /// </summary>
         private DragHandler<Grid> TabItemDragHandler { get; }
 
@@ -50,6 +49,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
                 e.Handled = true;
                 return;
             }
+
             var insertIndex = (headerItemGrid.DataContext as DynamicControlTabItem)?.GetIndexInHost() ?? -1;
             e.Data.SetData(new TabMoveData(droppedItem, insertIndex));
             this.RelayDragOverToContext(e, DragDropEffects.Move);

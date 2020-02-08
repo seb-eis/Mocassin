@@ -72,7 +72,7 @@ namespace Mocassin.Model.Translator.ModelContext
                 EnergyModelContextBuilder.BuildContext(),
                 StructureModelContextBuilder.BuildContext(),
                 TransitionModelContextBuilder.BuildContext(),
-                SimulationModelContextBuilder.BuildContext(),
+                SimulationModelContextBuilder.BuildContext()
             };
 
             return Task.WhenAll(tasks);
@@ -98,11 +98,11 @@ namespace Mocassin.Model.Translator.ModelContext
         /// </summary>
         protected void SetUnknownBuildSystemsToDefault()
         {
-            StructureModelContextBuilder = StructureModelContextBuilder ?? new StructureModelContextBuilder(this);
-            EnergyModelContextBuilder = EnergyModelContextBuilder ?? new EnergyModelContextBuilder(this);
-            TransitionModelContextBuilder = TransitionModelContextBuilder ?? new TransitionModelContextBuilder(this);
-            SimulationModelContextBuilder = SimulationModelContextBuilder ?? new SimulationModelContextBuilder(this);
-            ProjectModelContextLinker = ProjectModelContextLinker ?? new ProjectModelContextLinker();
+            StructureModelContextBuilder ??= new StructureModelContextBuilder(this);
+            EnergyModelContextBuilder ??= new EnergyModelContextBuilder(this);
+            TransitionModelContextBuilder ??= new TransitionModelContextBuilder(this);
+            SimulationModelContextBuilder ??= new SimulationModelContextBuilder(this);
+            ProjectModelContextLinker ??= new ProjectModelContextLinker();
         }
     }
 }

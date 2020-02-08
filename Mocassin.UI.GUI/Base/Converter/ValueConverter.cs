@@ -6,7 +6,7 @@ using System.Windows.Markup;
 namespace Mocassin.UI.GUI.Base.Converter
 {
     /// <summary>
-    ///     Base class for all <see cref="IValueConverter"/> implementations that are a <see cref="MarkupExtension"/>
+    ///     Base class for all <see cref="IValueConverter" /> implementations that are a <see cref="MarkupExtension" />
     /// </summary>
     public abstract class ValueConverter : MarkupExtension, IValueConverter
     {

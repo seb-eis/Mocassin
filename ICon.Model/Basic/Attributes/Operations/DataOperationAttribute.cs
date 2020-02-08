@@ -3,7 +3,8 @@
 namespace Mocassin.Model.Basic
 {
     /// <summary>
-    ///     Enum for data operation types that can be applied to the model data and are supported by the automated pipeline build system
+    ///     Enum for data operation types that can be applied to the model data and are supported by the automated pipeline
+    ///     build system
     /// </summary>
     public enum DataOperationType
     {

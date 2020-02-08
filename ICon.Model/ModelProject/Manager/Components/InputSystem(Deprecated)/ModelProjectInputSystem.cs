@@ -30,6 +30,18 @@ namespace Mocassin.Model.ModelProject
             InputRequests = new List<ProjectInputRequest>();
         }
 
+        /// <inheritdoc />
+        public IEnumerator<ProjectInputRequest> GetEnumerator()
+        {
+            return ((IEnumerable<ProjectInputRequest>) InputRequests).GetEnumerator();
+        }
+
+        /// <inheritdoc />
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return ((IEnumerable<ProjectInputRequest>) InputRequests).GetEnumerator();
+        }
+
         /// <summary>
         ///     Adds a new input request for the passed object
         /// </summary>
@@ -149,18 +161,6 @@ namespace Mocassin.Model.ModelProject
         protected Func<IModelManager, object, Task<IOperationReport>> GetParameterSetDelegate()
         {
             return (manager, obj) => manager.InputPort.SetModelParameter((IModelParameter) obj);
-        }
-
-        /// <inheritdoc />
-        public IEnumerator<ProjectInputRequest> GetEnumerator()
-        {
-            return ((IEnumerable<ProjectInputRequest>) InputRequests).GetEnumerator();
-        }
-
-        /// <inheritdoc />
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return ((IEnumerable<ProjectInputRequest>) InputRequests).GetEnumerator();
         }
 
         /// <summary>

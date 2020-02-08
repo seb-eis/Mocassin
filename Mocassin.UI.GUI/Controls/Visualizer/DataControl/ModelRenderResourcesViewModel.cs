@@ -91,7 +91,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         }
 
         /// <summary>
-        ///     Changes the data source to another <see cref="ResourcesData"/>
+        ///     Changes the data source to another <see cref="ResourcesData" />
         /// </summary>
         /// <param name="resources"></param>
         public void SetDataSource(ResourcesData resources)
@@ -102,7 +102,8 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         }
 
         /// <summary>
-        ///     Forces a load of the data stored in the <see cref="ResourcesData"/> effectively synchronizing the view model to its data source
+        ///     Forces a load of the data stored in the <see cref="ResourcesData" /> effectively synchronizing the view model to
+        ///     its data source
         /// </summary>
         public void LoadSourceData()
         {
@@ -110,7 +111,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         }
 
         /// <summary>
-        ///     Returns the floored values of the render area using the provided <see cref="IEqualityComparer{T}"/>
+        ///     Returns the floored values of the render area using the provided <see cref="IEqualityComparer{T}" />
         /// </summary>
         /// <param name="comparer"></param>
         /// <returns></returns>
@@ -127,7 +128,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         }
 
         /// <summary>
-        ///     Get the <see cref="Fractional3D"/> vector pair that describes the render cuboid
+        ///     Get the <see cref="Fractional3D" /> vector pair that describes the render cuboid
         /// </summary>
         /// <returns></returns>
         public (Fractional3D StartVector, Fractional3D EndVector) GetRenderCuboidVectors()
@@ -138,7 +139,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         }
 
         /// <summary>
-        ///     Returns a <see cref="FractionalBox3D"/> that describes the render limits
+        ///     Returns a <see cref="FractionalBox3D" /> that describes the render limits
         /// </summary>
         /// <returns></returns>
         public FractionalBox3D GetRenderBox3D()

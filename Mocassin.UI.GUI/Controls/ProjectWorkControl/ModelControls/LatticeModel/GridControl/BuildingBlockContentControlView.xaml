@@ -20,7 +20,7 @@
               CanUserDeleteRows="False">
       <DataGrid.RowHeaderTemplate>
         <DataTemplate>
-          <views:ObjectRowHeaderLogo/>
+          <views:ObjectRowHeaderLogo />
         </DataTemplate>
       </DataGrid.RowHeaderTemplate>
 
@@ -39,7 +39,7 @@
                                                  ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.SelectableOccupationParticles}"
                                                  SelectedItemBinding="{Binding Particle}"
                                                  DisplayMemberPath="Name"
-                                                 IsReadOnly="True"/>
+                                                 IsReadOnly="True" />
       </DataGrid.Columns>
     </DataGrid>
   </Grid>

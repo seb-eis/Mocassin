@@ -53,7 +53,15 @@ namespace Mocassin.Model.Translator
         /// <summary>
         ///     The wrapped structure
         /// </summary>
-        private T _structure;
+        private T structure;
+
+        /// <summary>
+        ///     Reference access to the wrapped structure
+        /// </summary>
+        public ref T Structure => ref structure;
+
+        /// <inheritdoc />
+        public override int ByteCount => Marshal.SizeOf(typeof(T));
 
         /// <summary>
         ///     Create new interop object base wrapping the passed structure
@@ -61,31 +69,23 @@ namespace Mocassin.Model.Translator
         /// <param name="structure"></param>
         public InteropObject(T structure)
         {
-            _structure = structure;
+            this.structure = structure;
         }
 
         public InteropObject()
         {
         }
 
-        /// <summary>
-        ///     Reference access to the wrapped structure
-        /// </summary>
-        public ref T Structure => ref _structure;
-
-        /// <inheritdoc />
-        public override int ByteCount => Marshal.SizeOf(typeof(T));
-
         /// <inheritdoc />
         public override void ToBinary(byte[] targetBuffer, int offset, IMarshalService marshalService)
         {
-            marshalService.GetBytes(targetBuffer, offset, _structure);
+            marshalService.GetBytes(targetBuffer, offset, structure);
         }
 
         /// <inheritdoc />
         public override void FromBinary(byte[] sourceBuffer, int offset, IMarshalService marshalService)
         {
-            _structure = marshalService.GetStructure<T>(sourceBuffer, offset);
+            structure = marshalService.GetStructure<T>(sourceBuffer, offset);
         }
     }
 
@@ -100,13 +100,11 @@ namespace Mocassin.Model.Translator
         /// <inheritdoc />
         public override void ToBinary(byte[] targetBuffer, int offset, IMarshalService marshalService)
         {
-            return;
         }
 
         /// <inheritdoc />
         public override void FromBinary(byte[] sourceBuffer, int offset, IMarshalService marshalService)
         {
-            return;
         }
     }
 }

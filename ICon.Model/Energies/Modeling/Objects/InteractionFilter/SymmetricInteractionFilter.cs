@@ -26,15 +26,25 @@ namespace Mocassin.Model.Energies
         public double EndRadius { get; set; }
 
         /// <inheritdoc />
+        public bool Equals(SymmetricInteractionFilter other)
+        {
+            return other != null
+                   && PartnerCellReferencePosition == other.PartnerCellReferencePosition
+                   && CenterCellReferencePosition == other.CenterCellReferencePosition
+                   && EndRadius.AlmostEqualByRange(other.EndRadius)
+                   && StartRadius.AlmostEqualByRange(other.StartRadius);
+        }
+
+        /// <inheritdoc />
         public bool IsApplicable(double distance, ICellReferencePosition centerCellReferencePosition, ICellReferencePosition partnerCellReferencePosition)
         {
-            var result = partnerCellReferencePosition == PartnerCellReferencePosition 
+            var result = partnerCellReferencePosition == PartnerCellReferencePosition
                          && centerCellReferencePosition == CenterCellReferencePosition;
 
-            result |= partnerCellReferencePosition == CenterCellReferencePosition 
+            result |= partnerCellReferencePosition == CenterCellReferencePosition
                       && centerCellReferencePosition == PartnerCellReferencePosition;
 
-            result &= distance > StartRadius && distance < EndRadius 
+            result &= distance > StartRadius && distance < EndRadius
                       || distance.AlmostEqualByRange(StartRadius)
                       || distance.AlmostEqualByRange(EndRadius);
 
@@ -54,16 +64,6 @@ namespace Mocassin.Model.Energies
         public bool IsEqualFilter(IInteractionFilter other)
         {
             return Equals(FromInterface(other));
-        }
-
-        /// <inheritdoc />
-        public bool Equals(SymmetricInteractionFilter other)
-        {
-            return other != null
-                   && PartnerCellReferencePosition == other.PartnerCellReferencePosition
-                   && CenterCellReferencePosition == other.CenterCellReferencePosition
-                   && EndRadius.AlmostEqualByRange(other.EndRadius)
-                   && StartRadius.AlmostEqualByRange(other.StartRadius);
         }
 
         /// <summary>

@@ -24,6 +24,19 @@ namespace Mocassin.Model.Structures
             return "Space Group Info";
         }
 
+        /// <inheritdoc />
+        public override bool Equals(IModelParameter other)
+        {
+            if (other is ISpaceGroupInfo otherInfo)
+            {
+                return GroupIndex == otherInfo.GroupIndex
+                       && GroupLiteral == otherInfo.GroupLiteral
+                       && SpecifierName == otherInfo.SpecifierName;
+            }
+
+            return false;
+        }
+
         /// <summary>
         ///     Implicit cast of a space group entry to the wrapper class object
         /// </summary>
@@ -41,19 +54,6 @@ namespace Mocassin.Model.Structures
 
             GroupEntry = new SpaceGroupEntry(groupInfo.GroupIndex, groupInfo.GroupLiteral, groupInfo.SpecifierName);
             return this;
-        }
-
-        /// <inheritdoc />
-        public override bool Equals(IModelParameter other)
-        {
-            if (other is ISpaceGroupInfo otherInfo)
-            {
-                return GroupIndex == otherInfo.GroupIndex
-                       && GroupLiteral == otherInfo.GroupLiteral
-                       && SpecifierName == otherInfo.SpecifierName;
-            }
-
-            return false;
         }
     }
 }

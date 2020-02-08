@@ -15,8 +15,8 @@ namespace Mocassin.UI.Xml.LatticeModel
     public class LatticeModelData : ModelManagerData
     {
         private ObservableCollection<BuildingBlockData> buildingBlocks;
-        private ObservableCollection<DopingData> dopings;
         private ObservableCollection<DopingAbstractData> dopingCombination;
+        private ObservableCollection<DopingData> dopings;
 
         /// <summary>
         ///     The list of defines building blocks

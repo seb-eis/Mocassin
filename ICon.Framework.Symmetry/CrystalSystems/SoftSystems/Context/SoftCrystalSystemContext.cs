@@ -5,15 +5,11 @@ using Mocassin.Mathematics.Extensions;
 namespace Mocassin.Symmetry.CrystalSystems
 {
     /// <summary>
-    ///     A <see cref="CrystalSystemContext"/> for handling of soft crystal system settings (Crystal hierarchy is not strictly enforced)
+    ///     A <see cref="CrystalSystemContext" /> for handling of soft crystal system settings (Crystal hierarchy is not
+    ///     strictly enforced)
     /// </summary>
     public sealed class SoftCrystalSystemContext : CrystalSystemContext
     {
-        /// <summary>
-        ///     Static settings dictionary for all existing soft settings (12 in total)
-        /// </summary>
-        private static Dictionary<CrystalSystemIdentification, CrystalSystemDefinition> SoftSystemDictionary { get; set; }
-
         /// <summary>
         ///     Default open angle range (context mutable, from 0 to 2*PI)
         /// </summary>
@@ -35,12 +31,19 @@ namespace Mocassin.Symmetry.CrystalSystems
         public static CrystalParameterRange HexagonalAngleRange = new CrystalParameterRange(MocassinMath.Radian120, MocassinMath.Radian120, true);
 
         /// <summary>
-        ///     Property access for the static soft settings dictionary
+        ///     Static settings dictionary for all existing soft settings (12 in total)
         /// </summary>
-        protected override Dictionary<CrystalSystemIdentification, CrystalSystemDefinition> SettingsDictionary => SoftSystemDictionary ??= CreateSystemDictionary();
+        private static Dictionary<CrystalSystemIdentification, CrystalSystemDefinition> SoftSystemDictionary { get; set; }
 
         /// <summary>
-        ///     Sets the <see cref="CrystalParameterRange"/> data for A,B,C to fit all immutable triclinic systems on a <see cref="CrystalSystemDefinition"/>
+        ///     Property access for the static soft settings dictionary
+        /// </summary>
+        protected override Dictionary<CrystalSystemIdentification, CrystalSystemDefinition> SettingsDictionary =>
+            SoftSystemDictionary ??= CreateSystemDictionary();
+
+        /// <summary>
+        ///     Sets the <see cref="CrystalParameterRange" /> data for A,B,C to fit all immutable triclinic systems on a
+        ///     <see cref="CrystalSystemDefinition" />
         /// </summary>
         /// <param name="definition"></param>
         public void SetLengthRangesToTriclinic(CrystalSystemDefinition definition)
@@ -51,7 +54,8 @@ namespace Mocassin.Symmetry.CrystalSystems
         }
 
         /// <summary>
-        ///     Sets the <see cref="CrystalParameterRange"/> data for A,B,C to fit partial immutable cubic systems on a <see cref="CrystalSystemDefinition"/>
+        ///     Sets the <see cref="CrystalParameterRange" /> data for A,B,C to fit partial immutable cubic systems on a
+        ///     <see cref="CrystalSystemDefinition" />
         /// </summary>
         /// <param name="definition"></param>
         public void SetLengthRangesToCubic(CrystalSystemDefinition definition)
@@ -62,7 +66,8 @@ namespace Mocassin.Symmetry.CrystalSystems
         }
 
         /// <summary>
-        ///     Sets the <see cref="CrystalParameterRange"/> data for A,B,C to fit partial immutable hexagonal systems on a <see cref="CrystalSystemDefinition"/>
+        ///     Sets the <see cref="CrystalParameterRange" /> data for A,B,C to fit partial immutable hexagonal systems on a
+        ///     <see cref="CrystalSystemDefinition" />
         /// </summary>
         /// <param name="definition"></param>
         public void SetLengthRangesToHexagonal(CrystalSystemDefinition definition)
@@ -188,7 +193,7 @@ namespace Mocassin.Symmetry.CrystalSystems
             dictionary[hexagonalDefinition.GetIdentification()] = hexagonalDefinition;
             dictionary[new CrystalSystemIdentification(CrystalSystemType.Trigonal, CrystalSystemVariation.NoneOrOriginChoice)] = hexagonalDefinition;
 
-            var rhombohedralDefinition =  new CrystalSystemDefinition
+            var rhombohedralDefinition = new CrystalSystemDefinition
             {
                 SystemName = "Trigonal",
                 CrystalType = CrystalSystemType.Trigonal,

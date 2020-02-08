@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Xml.Serialization;
 using Mocassin.Model.Basic;
 using Mocassin.Model.Structures;
@@ -14,8 +13,8 @@ namespace Mocassin.UI.Xml.StructureModel
     [XmlRoot]
     public class SpaceGroupInfoData : ModelParameterObject
     {
-        private int number;
         private string literal;
+        private int number;
         private string specifier;
 
         /// <summary>

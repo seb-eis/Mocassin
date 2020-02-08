@@ -33,7 +33,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Adds the interaction cube information to the passed range model
+        ///     Adds the interaction cube information to the passed range model
         /// </summary>
         /// <param name="rangeModel"></param>
         /// <param name="modelProject"></param>

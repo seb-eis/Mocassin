@@ -9,6 +9,7 @@
         ///     Identifies the triclinic crystal system
         /// </summary>
         Triclinic = 0,
+
         /// <summary>
         ///     Identifies the monoclinic crystal system
         /// </summary>

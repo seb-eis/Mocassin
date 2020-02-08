@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using Mocassin.Model.Basic;
-using Mocassin.Model.Particles;
+﻿using Mocassin.Model.Basic;
 
 namespace Mocassin.Model.Simulations
 {
@@ -9,6 +7,5 @@ namespace Mocassin.Model.Simulations
     /// </summary>
     public interface ISimulationCachePort : IModelCachePort
     {
-
     }
 }

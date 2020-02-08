@@ -64,7 +64,7 @@ namespace Mocassin.Model.Translator
         {
             var size = Marshal.SizeOf<TUnmanaged>();
 
-            if (size != binary.Length) 
+            if (size != binary.Length)
                 throw new ArgumentException("Array has wrong size", nameof(binary));
 
             var ptr = Marshal.AllocHGlobal(size);

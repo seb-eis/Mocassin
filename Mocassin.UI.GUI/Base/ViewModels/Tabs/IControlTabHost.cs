@@ -7,7 +7,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
     /// <summary>
     ///     Represents a <see cref="TabControl" /> host that provides collections of <see cref="UserControl" /> instances
     /// </summary>
-    public interface IControlTabHost : IObservableCollectionViewModel<ControlTabItem>, IObjectDropAcceptor
+    public interface IControlTabHost : IObservableCollectionViewModel<ControlTabItem>, IDataObjectAcceptor
     {
         /// <summary>
         ///     Get or set the currently selected <see cref="ControlTabItem" />
@@ -15,20 +15,20 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
         ControlTabItem SelectedTab { get; set; }
 
         /// <summary>
-        ///     Get or set the <see cref="Dock"/> for the tab strip position
+        ///     Get or set the <see cref="Dock" /> for the tab strip position
         /// </summary>
         Dock TabStripPlacement { get; set; }
-
-        /// <summary>
-        ///     Removes the tab affiliated with the provided <see cref="ControlTabItem"/>
-        /// </summary>
-        /// <param name="tabItem"></param>
-        void RemoveAndDispose(ControlTabItem tabItem);
 
         /// <summary>
         ///     Get or set a boolean flag if new tabs should be inserted at the front instead of the back
         /// </summary>
         bool IsFrontInsertMode { get; set; }
+
+        /// <summary>
+        ///     Removes the tab affiliated with the provided <see cref="ControlTabItem" />
+        /// </summary>
+        /// <param name="tabItem"></param>
+        void RemoveAndDispose(ControlTabItem tabItem);
 
         /// <summary>
         ///     Changes the index of a tab. If the second index is negative it defaults to the last entry
@@ -56,14 +56,14 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
         void AddStaticTab(string tabName, ViewModelBase contentViewModel, Control content, bool selectTab = true);
 
         /// <summary>
-        ///     Adds a new <see cref="ControlTabItem"/> to the host
+        ///     Adds a new <see cref="ControlTabItem" /> to the host
         /// </summary>
         /// <param name="tabItem"></param>
         /// <param name="selectTab"></param>
         void AddTab(ControlTabItem tabItem, bool selectTab = true);
 
         /// <summary>
-        ///     Removes a <see cref="ControlTabItem"/> from the host
+        ///     Removes a <see cref="ControlTabItem" /> from the host
         /// </summary>
         /// <param name="tabItem"></param>
         /// <returns></returns>
@@ -80,7 +80,8 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
         void DisposeAndClearItems();
 
         /// <summary>
-        ///     Sets the <see cref="SelectedTab" /> property to the item with the passed index. Negative values should default to the last item
+        ///     Sets the <see cref="SelectedTab" /> property to the item with the passed index. Negative values should default to
+        ///     the last item
         /// </summary>
         void SetActiveTabByIndex(int index);
     }

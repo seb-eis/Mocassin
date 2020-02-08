@@ -6,19 +6,20 @@ using HelixToolkit.Wpf.SharpDX;
 namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
 {
     /// <summary>
-    ///     Static class that provides helper methods for creating <see cref="Light3D"/> and <see cref="LightNode"/>
+    ///     Static class that provides helper methods for creating 3D light objects and nodes
     /// </summary>
     public static class DxLightFactory
     {
         /// <summary>
-        ///     Builds the default  <see cref="GroupModel3D"/> of <see cref="Light3D"/> instances using the provided base <see cref="Color"/>
+        ///     Builds the default  <see cref="GroupModel3D" /> of <see cref="Light3D" /> instances using the provided base
+        ///     <see cref="Color" />
         /// </summary>
         /// <param name="color"></param>
         /// <param name="name"></param>
         /// <returns></returns>
         public static GroupModel3D DefaultLightModel3D(in Color color, string name = null)
         {
-            var lightModel = new GroupModel3D() {IsHitTestVisible = false, Name = name};
+            var lightModel = new GroupModel3D {IsHitTestVisible = false, Name = name};
             lightModel.Children.Add(DirectionalLight3D(color.ChangeIntensity(180.0 / byte.MaxValue), -1, -1, -1));
             lightModel.Children.Add(DirectionalLight3D(color.ChangeIntensity(120.0 / byte.MaxValue), -1, -1, -.1));
             lightModel.Children.Add(DirectionalLight3D(color.ChangeIntensity(60.0 / byte.MaxValue), .1, 1, -1));
@@ -28,7 +29,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
         }
 
         /// <summary>
-        ///     Builds the default  <see cref="GroupModel3D"/> of <see cref="Light3D"/> instances using <see cref="Colors.White"/> as base
+        ///     Builds the default  <see cref="GroupModel3D" /> of <see cref="Light3D" /> instances using
+        ///     <see cref="Colors.White" /> as base
         /// </summary>
         public static GroupModel3D DefaultLightModel3D()
         {
@@ -36,9 +38,10 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
         }
 
         /// <summary>
-        ///     Builds a default weak <see cref="AmbientLight3D"/> using the provided <see cref="Color"/>
+        ///     Builds a default weak <see cref="AmbientLight3D" /> using the provided <see cref="Color" />
         /// </summary>
         /// <param name="color"></param>
+        /// <param name="intensity"></param>
         /// <returns></returns>
         public static AmbientLight3D DefaultAmbientLight3D(in Color color, double intensity = 1.0)
         {
@@ -46,7 +49,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
         }
 
         /// <summary>
-        ///     Builds a default <see cref="AmbientLight3D"/> using <see cref="Colors.White"/> as a base
+        ///     Builds a default <see cref="AmbientLight3D" /> using <see cref="Colors.White" /> as a base
         /// </summary>
         /// <returns></returns>
         /// <param name="intensity"></param>
@@ -63,7 +66,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
         /// <returns></returns>
         public static GroupModel3D DefaultOmniDirectionalLightModel3D(in Color color, double intensity = 1.0)
         {
-            var lightModel = new GroupModel3D() {IsHitTestVisible = false};
+            var lightModel = new GroupModel3D {IsHitTestVisible = false};
             lightModel.Children.Add(DirectionalLight3D(color.ChangeIntensity(intensity), 1, 0, 0));
             lightModel.Children.Add(DirectionalLight3D(color.ChangeIntensity(intensity), -1, 0, 0));
             lightModel.Children.Add(DirectionalLight3D(color.ChangeIntensity(intensity), 0, 1, 0));
@@ -74,7 +77,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
         }
 
         /// <summary>
-        ///     Creates a new <see cref="HelixToolkit.Wpf.SharpDX.DirectionalLight3D"/> from a <see cref="Color"/> and x,y,z direction information
+        ///     Creates a new <see cref="HelixToolkit.Wpf.SharpDX.DirectionalLight3D" /> from a <see cref="Color" /> and x,y,z
+        ///     direction information
         /// </summary>
         /// <param name="color"></param>
         /// <param name="x"></param>
@@ -87,7 +91,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
         }
 
         /// <summary>
-        ///     Creates a new <see cref="HelixToolkit.Wpf.SharpDX.DirectionalLight3D"/> from a <see cref="Color"/> and a direction <see cref="Vector3D"/>
+        ///     Creates a new <see cref="HelixToolkit.Wpf.SharpDX.DirectionalLight3D" /> from a <see cref="Color" /> and a
+        ///     direction <see cref="Vector3D" />
         /// </summary>
         /// <param name="color"></param>
         /// <param name="direction"></param>

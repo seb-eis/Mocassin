@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Mocassin.Framework.Extensions;
-using Mocassin.Mathematics.Extensions;
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Particles;
 using Mocassin.Model.Transitions;
@@ -52,7 +51,7 @@ namespace Mocassin.Model.Translator.ModelContext
             {
                 RuleDirectionValue = -RuleDirectionValue,
                 IsSourceInversion = true,
-                TransitionModel = TransitionModel.InverseTransitionModel 
+                TransitionModel = TransitionModel.InverseTransitionModel
                                   ?? throw new InvalidOperationException("Inverse transition model is unknown!"),
                 TransitionState = TransitionState.Reverse().ToList(),
                 TransitionStateCode = MakeInvertedStateCode(TransitionState),
@@ -95,7 +94,7 @@ namespace Mocassin.Model.Translator.ModelContext
         {
             var result = new Matrix2D(ChargeTransportMatrix.Rows, ChargeTransportMatrix.Cols, ChargeTransportMatrix.Comparer);
 
-            for (var i = 0; i < result.Cols; i++) 
+            for (var i = 0; i < result.Cols; i++)
                 result[0, i] = ChargeTransportMatrix[0, result.Cols - i - 1];
 
             return result;

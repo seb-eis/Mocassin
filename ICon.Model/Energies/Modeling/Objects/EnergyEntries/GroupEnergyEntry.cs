@@ -74,8 +74,8 @@ namespace Mocassin.Model.Energies
         public int CompareTo(GroupEnergyEntry other)
         {
             var particleCompare = CenterParticle.CompareTo(other.CenterParticle);
-            return particleCompare == 0 
-                ? GroupOccupation.CompareTo(other.GroupOccupation) 
+            return particleCompare == 0
+                ? GroupOccupation.CompareTo(other.GroupOccupation)
                 : particleCompare;
         }
 

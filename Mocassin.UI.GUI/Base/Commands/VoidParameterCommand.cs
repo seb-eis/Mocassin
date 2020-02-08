@@ -3,7 +3,7 @@ namespace Mocassin.UI.Base.Commands
     /// <summary>
     ///     Abstract base class for implementations of parameterless <see cref="Command" /> objects
     /// </summary>
-    public abstract class ParameterlessCommand : Command
+    public abstract class VoidParameterCommand : Command
     {
         /// <inheritdoc />
         public sealed override bool CanExecute(object parameter)

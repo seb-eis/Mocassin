@@ -24,7 +24,7 @@
               HeadersVisibility="Row">
       <DataGrid.RowHeaderTemplate>
         <DataTemplate>
-          <views:ObjectRowHeaderLogo/>
+          <views:ObjectRowHeaderLogo />
         </DataTemplate>
       </DataGrid.RowHeaderTemplate>
 
@@ -32,7 +32,7 @@
         <comboBox:BindableDataGridComboBoxColumn
           ItemsSource="{Binding ElementName=HostDataGrid, Path=DataContext.SelectableReferences}"
           DisplayMemberPath="Name"
-          SelectedItemBinding="{Binding Target}"/>
+          SelectedItemBinding="{Binding Target}" />
       </DataGrid.Columns>
 
     </DataGrid>

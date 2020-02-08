@@ -15,15 +15,11 @@ namespace Mocassin.UI.GUI.Base.UiElements.Popup
     /// </summary>
     public class ControlOverlay : System.Windows.Controls.Primitives.Popup
     {
-        private static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
-        private static readonly IntPtr HWND_NOTOPMOST = new IntPtr(-2);
-        private static readonly IntPtr HWND_TOP = new IntPtr(0);
-        private static readonly IntPtr HWND_BOTTOM = new IntPtr(1);
-
         /// <summary>
         ///     The <see cref="Topmost" /> <see cref="DependencyProperty" />
         /// </summary>
-        public static DependencyProperty TopmostProperty = Window.TopmostProperty.AddOwner(typeof(ControlOverlay), new FrameworkPropertyMetadata(false, OnIsTopmostChanged));
+        public static DependencyProperty TopmostProperty =
+            Window.TopmostProperty.AddOwner(typeof(ControlOverlay), new FrameworkPropertyMetadata(false, OnIsTopmostChanged));
 
         /// <summary>
         ///     Get or set the parent <see cref="Window" />
@@ -31,7 +27,7 @@ namespace Mocassin.UI.GUI.Base.UiElements.Popup
         private Window ParentWindow { get; set; }
 
         /// <summary>
-        ///     Get or set the parent <see cref="UserControl"/>
+        ///     Get or set the parent <see cref="UserControl" />
         /// </summary>
         private UserControl ParentControl { get; set; }
 
@@ -87,7 +83,7 @@ namespace Mocassin.UI.GUI.Base.UiElements.Popup
             }
             finally
             {
-                AlreadyLoaded = false;   
+                AlreadyLoaded = false;
             }
         }
 
@@ -111,10 +107,7 @@ namespace Mocassin.UI.GUI.Base.UiElements.Popup
                     ParentWindow.LocationChanged += OnForceResetRequired;
                 }
 
-                if (ParentControl != null)
-                {
-                    ParentControl.SizeChanged += OnForceResetRequired;
-                }
+                if (ParentControl != null) ParentControl.SizeChanged += OnForceResetRequired;
             }
             finally
             {
@@ -137,7 +130,6 @@ namespace Mocassin.UI.GUI.Base.UiElements.Popup
         /// <param name="arg"></param>
         private void OnParentWindowActivated(object sender, EventArgs arg)
         {
-
         }
 
         /// <summary>
@@ -147,11 +139,11 @@ namespace Mocassin.UI.GUI.Base.UiElements.Popup
         /// <param name="arg"></param>
         private void OnParentWindowDeactivated(object sender, EventArgs arg)
         {
-
         }
 
         /// <summary>
-        ///     Event handler for changes of the parent <see cref="FrameworkElement"/> or <see cref="Window"/> that require a forced update of the overlay
+        ///     Event handler for changes of the parent <see cref="FrameworkElement" /> or <see cref="Window" /> that require a
+        ///     forced update of the overlay
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
@@ -178,10 +170,10 @@ namespace Mocassin.UI.GUI.Base.UiElements.Popup
         }
 
         /// <summary>
-        ///     Finds the parent control of type <see cref="T"/> that hosts the provided <see cref="DependencyObject"/>
+        ///     Finds the parent control of type <see cref="T" /> that hosts the provided <see cref="DependencyObject" />
         /// </summary>
         /// <returns></returns>
-        protected T FindParent<T>(DependencyObject child = null) where  T : class
+        protected T FindParent<T>(DependencyObject child = null) where T : class
         {
             if (child == null) throw new ArgumentNullException(nameof(child));
             while (child != null)
@@ -200,33 +192,43 @@ namespace Mocassin.UI.GUI.Base.UiElements.Popup
         private void UpdateOverlayPosition()
         {
             if (!(PresentationSource.FromVisual(Child) is HwndSource hwndSource)) return;
-            var callOk = GetWindowRect(hwndSource.Handle, out var rect);
-            Debug.WriteLineIf(!callOk, $"Cannot set window position: {nameof(GetWindowRect)} returned false.");
+            var callOk = NativeMethods.GetWindowRect(hwndSource.Handle, out var rect);
+            Debug.WriteLineIf(!callOk, $"Cannot set window position: {nameof(NativeMethods.GetWindowRect)} returned false.");
             if (!callOk) return;
 
-            callOk = SetWindowPos(hwndSource.Handle, Topmost ? HWND_TOPMOST : HWND_NOTOPMOST, rect.Left, rect.Top, (int) Width, (int) Height, 0);
-            Debug.WriteLineIf(!callOk, $"Cannot set window position: {nameof(SetWindowPos)} returned false.");
+            var hwnd = Topmost ? NativeMethods.HWND_TOPMOST : NativeMethods.HWND_NOTOPMOST;
+            callOk = NativeMethods.SetWindowPos(hwndSource.Handle, hwnd, rect.Left, rect.Top, (int) Width, (int) Height, 0);
+            Debug.WriteLineIf(!callOk, $"Cannot set window position: {nameof(NativeMethods.SetWindowPos)} returned false.");
         }
 
-        #region dllimport
+        #region externcalls
 
-        [StructLayout(LayoutKind.Sequential)]
-        [DebuggerDisplay("L:{Left},T:{Top},R:{Right},B:{Bottom}")]
-        public struct RECT
+        private static class NativeMethods
         {
-            public int Left;
-            public int Top;
-            public int Right;
-            public int Bottom;
+            internal static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
+            internal static readonly IntPtr HWND_NOTOPMOST = new IntPtr(-2);
+            internal static readonly IntPtr HWND_TOP = new IntPtr(0);
+            internal static readonly IntPtr HWND_BOTTOM = new IntPtr(1);
+
+            [DllImport("user32.dll")]
+            [return: MarshalAs(UnmanagedType.Bool)]
+            internal static extern bool GetWindowRect(IntPtr hWnd, out Rect lpRect);
+
+            [DllImport("user32.dll")]
+            [return: MarshalAs(UnmanagedType.Bool)]
+            internal static extern bool SetWindowPos(IntPtr hWnd, IntPtr hwndInsertAfter, int x, int y, int cx, int cy, uint flags);
+
+
+            [StructLayout(LayoutKind.Sequential)]
+            [DebuggerDisplay("L:{Left},T:{Top},R:{Right},B:{Bottom}")]
+            internal struct Rect
+            {
+                internal readonly int Left;
+                internal readonly int Top;
+                internal readonly int Right;
+                internal readonly int Bottom;
+            }
         }
-
-        [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
-
-        [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool SetWindowPos(IntPtr hWnd, IntPtr hwndInsertAfter, int x, int y, int cx, int cy, uint flags);
 
         #endregion
     }

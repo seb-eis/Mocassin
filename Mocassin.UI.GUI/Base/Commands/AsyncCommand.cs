@@ -10,18 +10,18 @@ namespace Mocassin.UI.Base.Commands
         /// <summary>
         ///     Backing field for the is executing status
         /// </summary>
-        private bool _isExecuting;
+        private bool isExecuting;
 
         /// <summary>
         ///     Get or set a boolean flag if the command is currently executing
         /// </summary>
         protected bool IsExecuting
         {
-            get => _isExecuting;
+            get => isExecuting;
             private set
             {
-                if (value == _isExecuting) return;
-                _isExecuting = value;
+                if (value == isExecuting) return;
+                isExecuting = value;
                 NotifyCanExecuteChanged();
             }
         }
@@ -29,7 +29,7 @@ namespace Mocassin.UI.Base.Commands
         /// <inheritdoc />
         protected AsyncCommand()
         {
-            _isExecuting = false;
+            isExecuting = false;
         }
 
         /// <inheritdoc />

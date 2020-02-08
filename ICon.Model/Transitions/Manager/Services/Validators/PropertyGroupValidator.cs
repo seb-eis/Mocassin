@@ -21,7 +21,7 @@ namespace Mocassin.Model.Transitions.Validators
         public override IValidationReport Validate(IStateExchangeGroup obj)
         {
             var report = new ValidationReport();
-            if (!AddHasContentValidation(obj, report)) 
+            if (!AddHasContentValidation(obj, report))
                 return report;
 
             AddGenericObjectDuplicateValidation(obj, DataReader.Access.GetStateExchangeGroups(), report);
@@ -36,13 +36,12 @@ namespace Mocassin.Model.Transitions.Validators
         /// <param name="report"></param>
         protected bool AddHasContentValidation(IStateExchangeGroup group, ValidationReport report)
         {
-            if (group.StatePairCount != 0) 
+            if (group.StatePairCount != 0)
                 return true;
 
             const string detail = "The provided property group does not contain any state pairs and does not describe a valid set of state changes";
             report.AddWarning(ModelMessageSource.CreateMissingOrEmptyContentWarning(this, detail));
             return false;
-
         }
     }
 }

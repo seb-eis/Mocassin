@@ -50,6 +50,9 @@ namespace Mocassin.Model.Energies
         }
 
         /// <inheritdoc />
+        public abstract IEnumerable<PairEnergyEntry> GetEnergyEntries();
+
+        /// <inheritdoc />
         public override ModelObject PopulateFrom(IModelObject obj)
         {
             if (!(CastIfNotDeprecated<IPairInteraction>(obj) is { } interaction))
@@ -69,8 +72,5 @@ namespace Mocassin.Model.Energies
         /// <param name="energyEntry"></param>
         /// <returns></returns>
         public abstract bool TrySetEnergyEntry(in PairEnergyEntry energyEntry);
-
-        /// <inheritdoc />
-        public abstract IEnumerable<PairEnergyEntry> GetEnergyEntries();
     }
 }

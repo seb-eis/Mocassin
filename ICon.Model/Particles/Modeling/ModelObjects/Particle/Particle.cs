@@ -24,6 +24,9 @@ namespace Mocassin.Model.Particles
         /// <inheritdoc />
         public bool IsVoid { get; private set; }
 
+        /// <inheritdoc />
+        public override string ObjectName => "Particle";
+
         /// <summary>
         ///     Compares particle by name, symbol and then charge (Charge is not compared with tolerance)
         /// </summary>
@@ -52,6 +55,12 @@ namespace Mocassin.Model.Particles
             return Math.Abs(Charge) < 1e-10 ? Symbol : $"{Symbol}{(Charge < 0 ? $"{Math.Abs(Charge):#.-}" : $"{Charge:#.+}")}";
         }
 
+        /// <inheritdoc />
+        public bool Equals(IParticle other)
+        {
+            return other != null && Index == other.Index;
+        }
+
         /// <summary>
         ///     Creates a void particle, this particle represents an active but context unavailable particle and should always have
         ///     the index 0 in a particle manager
@@ -62,12 +71,9 @@ namespace Mocassin.Model.Particles
             return new Particle {Name = "Void", Symbol = "Void", Key = "Particle.Void", Charge = 0.0, Index = VoidIndex, IsVoid = true};
         }
 
-		/// <inheritdoc />
-		public override string ObjectName => "Particle";
 
-
-		/// <inheritdoc />
-		public override ModelObject PopulateFrom(IModelObject obj)
+        /// <inheritdoc />
+        public override ModelObject PopulateFrom(IModelObject obj)
         {
             if (!(CastIfNotDeprecated<IParticle>(obj) is { } particle)) return null;
             if (particle.IsVoid) throw new ArgumentException("Empty particle object interface reached consume function");
@@ -77,12 +83,6 @@ namespace Mocassin.Model.Particles
             Charge = particle.Charge;
             IsVacancy = particle.IsVacancy;
             return this;
-        }
-
-        /// <inheritdoc />
-        public bool Equals(IParticle other)
-        {
-            return other != null && Index == other.Index;
         }
 
         /// <summary>

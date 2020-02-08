@@ -9,7 +9,7 @@ namespace Mocassin.Mathematics.ValueTypes
     public readonly struct Fractional3D : IFractional3D
     {
         /// <summary>
-        ///     The readonly <see cref="Coordinates3D"/> backing field
+        ///     The readonly <see cref="Coordinates3D" /> backing field
         /// </summary>
         public readonly Coordinates3D Coordinates;
 

@@ -46,7 +46,8 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         public double FreeEnergy { get; set; }
 
         /// <summary>
-        ///     Creates a new <see cref="MmcfeLogEnergyEntry"/> from <see cref="MmcfeEnergyState"/> and <see cref="MmcfeExtendedLogEntry"/>
+        ///     Creates a new <see cref="MmcfeLogEnergyEntry" /> from <see cref="MmcfeEnergyState" /> and
+        ///     <see cref="MmcfeExtendedLogEntry" />
         /// </summary>
         /// <param name="energyState"></param>
         /// <param name="logEntry"></param>
@@ -64,7 +65,7 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         }
 
         /// <summary>
-        ///     Gets the data as an <see cref="MmcfeEnergyState"/> struct
+        ///     Gets the data as an <see cref="MmcfeEnergyState" /> struct
         /// </summary>
         /// <returns></returns>
         public MmcfeEnergyState AsStruct()

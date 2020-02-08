@@ -14,10 +14,10 @@ namespace Mocassin.UI.Xml.Jobs
     [XmlRoot]
     public class KmcJobConfigData : JobConfigData, IDuplicable<KmcJobConfigData>
     {
-        private string preRunMcsp;
         private string electricFieldModulus;
-        private string normalizationProbability;
         private string maxAttemptFrequency;
+        private string normalizationProbability;
+        private string preRunMcsp;
 
         /// <summary>
         ///     Get or set the pre run monte carlo steps per particle as a string
@@ -57,6 +57,26 @@ namespace Mocassin.UI.Xml.Jobs
         {
             get => maxAttemptFrequency;
             set => SetProperty(ref maxAttemptFrequency, value);
+        }
+
+        /// <inheritdoc />
+        public KmcJobConfigData Duplicate()
+        {
+            var result = new KmcJobConfigData
+            {
+                ElectricFieldModulus = ElectricFieldModulus,
+                PreRunMcsp = PreRunMcsp,
+                NormalizationProbability = NormalizationProbability,
+                MaxAttemptFrequency = MaxAttemptFrequency
+            };
+            CopyBaseDataTo(result);
+            return result;
+        }
+
+        /// <inheritdoc />
+        object IDuplicable.Duplicate()
+        {
+            return Duplicate();
         }
 
         /// <inheritdoc />
@@ -113,26 +133,6 @@ namespace Mocassin.UI.Xml.Jobs
             };
 
             return obj;
-        }
-
-        /// <inheritdoc />
-        public KmcJobConfigData Duplicate()
-        {
-            var result = new KmcJobConfigData
-            {
-                ElectricFieldModulus = ElectricFieldModulus,
-                PreRunMcsp = PreRunMcsp,
-                NormalizationProbability = NormalizationProbability,
-                MaxAttemptFrequency = MaxAttemptFrequency
-            };
-            CopyBaseDataTo(result);
-            return result;
-        }
-
-        /// <inheritdoc />
-        object IDuplicable.Duplicate()
-        {
-            return Duplicate();
         }
     }
 }

@@ -16,8 +16,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
     public class MmcJobPackageControlViewModel : CollectionControlViewModel<MmcJobPackageData>,
         IContentSupplier<ProjectJobSetTemplate>
     {
-        private int duplicateCount = 1;
         private ProjectJobSetTemplate contentSource;
+        private int duplicateCount = 1;
         private IEnumerable<ModelObjectReference<MetropolisSimulation>> selectableSimulations;
 
         /// <inheritdoc />
@@ -38,7 +38,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         }
 
         /// <summary>
-        ///     Get the <see cref="DuplicateCollectionItemCommand{T}"/> for the collection
+        ///     Get the <see cref="DuplicateCollectionItemCommand{T}" /> for the collection
         /// </summary>
         public DuplicateCollectionItemCommand<MmcJobPackageData> DuplicateItemCommand { get; }
 
@@ -52,7 +52,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         }
 
         /// <summary>
-        ///     Creates a new <see cref="MmcJobPackageControlViewModel"/>
+        ///     Creates a new <see cref="MmcJobPackageControlViewModel" />
         /// </summary>
         public MmcJobPackageControlViewModel()
         {
@@ -63,11 +63,11 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         }
 
         /// <inheritdoc />
-        public void ChangeContentSource(ProjectJobSetTemplate contentSource)
+        public void ChangeContentSource(ProjectJobSetTemplate jobSetTemplate)
         {
-            ContentSource = contentSource;
-            SetCollection(contentSource?.MmcJobPackageDescriptions);
-            SelectableSimulations = GetSelectableSimulations(contentSource);
+            ContentSource = jobSetTemplate;
+            SetCollection(jobSetTemplate?.MmcJobPackageDescriptions);
+            SelectableSimulations = GetSelectableSimulations(jobSetTemplate);
         }
 
         /// <summary>

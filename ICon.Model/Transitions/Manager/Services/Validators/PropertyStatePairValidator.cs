@@ -34,7 +34,7 @@ namespace Mocassin.Model.Transitions.Validators
         /// <param name="report"></param>
         protected void AddStateExchangeValidation(IStateExchangePair statePair, ValidationReport report)
         {
-            if (statePair.DonorParticle != statePair.AcceptorParticle) 
+            if (statePair.DonorParticle != statePair.AcceptorParticle)
                 return;
 
             const string detail = "Donor and acceptor states of the provided state pair are identical and cannot describe a valid state change";

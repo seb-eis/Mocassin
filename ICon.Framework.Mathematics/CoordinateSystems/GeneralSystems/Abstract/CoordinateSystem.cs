@@ -20,7 +20,8 @@ namespace Mocassin.Mathematics.Coordinates
     }
 
     /// <summary>
-    ///     Abstract class that defines a generic coordinate system in N dimensional space with a specific <see cref="ICoordinates"/> type
+    ///     Abstract class that defines a generic coordinate system in N dimensional space with a specific
+    ///     <see cref="ICoordinates" /> type
     /// </summary>
     public abstract class CoordinateSystem<T1> : CoordinateSystem where T1 : struct, ICoordinates
     {

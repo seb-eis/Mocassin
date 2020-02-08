@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Windows.Controls;
 using System.Windows.Input;
 using Mocassin.UI.GUI.Base.Objects;
-using Mocassin.UI.GUI.Base.ViewModels.Tabs;
 
 namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Base
 {
@@ -29,13 +27,13 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Base
         IDxSceneHost SceneHost { get; }
 
         /// <summary>
-        ///     Get the <see cref="ICommand"/> to invalidate the scene
+        ///     Get the <see cref="ICommand" /> to invalidate the scene
         /// </summary>
         /// <returns></returns>
         ICommand InvalidateSceneCommand { get; }
 
         /// <summary>
-        ///     Get a set of <see cref="VvmContainer"/> instances that supply scene interaction controls
+        ///     Get a set of <see cref="VvmContainer" /> instances that supply scene interaction controls
         /// </summary>
         /// <returns></returns>
         IEnumerable<VvmContainer> GetControlContainers();

@@ -21,9 +21,12 @@ namespace Mocassin.UI.Xml.TransitionModel
         /// </summary>
         public static readonly Regex ConnectorRegex = new Regex($"{ConnectorType.Static.ToString()}|{ConnectorType.Dynamic.ToString()}");
 
-        private bool isAssociation;
-        private ObservableCollection<ModelObjectReference<StateExchangeGroup>> stateExchangeGroups = new ObservableCollection<ModelObjectReference<StateExchangeGroup>>();
         private string connectorString = ConnectorType.Dynamic.ToString();
+
+        private bool isAssociation;
+
+        private ObservableCollection<ModelObjectReference<StateExchangeGroup>> stateExchangeGroups =
+            new ObservableCollection<ModelObjectReference<StateExchangeGroup>>();
 
         /// <summary>
         ///     Get or set the association/dissociation flag that enables this behavior
@@ -76,8 +79,10 @@ namespace Mocassin.UI.Xml.TransitionModel
         {
             var matches = ConnectorRegex.Matches(ConnectorString);
             foreach (Match match in matches)
+            {
                 if (Enum.TryParse(match.Value, out ConnectorType connector))
                     yield return connector;
+            }
         }
     }
 }

@@ -124,7 +124,7 @@ namespace Mocassin.Model.Translator
         public InteropObject JobHeader { get; set; }
 
         /// <summary>
-        ///     The <see cref="RoutineDataEntity"/> that stores additional information for custom routines
+        ///     The <see cref="RoutineDataEntity" /> that stores additional information for custom routines
         /// </summary>
         [NotMapped]
         [OwnedBlobProperty(nameof(RoutineDataBinary))]

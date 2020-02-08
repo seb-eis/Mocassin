@@ -179,9 +179,8 @@ namespace Mocassin.Model.Energies
                 .ToDictionary(item => item.Key, item => (IReadOnlyList<IPairInteraction>) item.Value);
 
             foreach (var referencePosition in structureManager.QueryPort.Query(port => port.GetCellReferencePositions()))
-            {
-                if (!result.ContainsKey(referencePosition)) result.Add(referencePosition, new List<IPairInteraction>());
-            }
+                if (!result.ContainsKey(referencePosition))
+                    result.Add(referencePosition, new List<IPairInteraction>());
 
             return result;
         }

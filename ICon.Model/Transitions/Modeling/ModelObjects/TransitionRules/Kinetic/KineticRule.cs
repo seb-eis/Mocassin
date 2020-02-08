@@ -21,13 +21,19 @@ namespace Mocassin.Model.Transitions
         public List<KineticRule> DependentRules { get; set; }
 
         /// <inheritdoc />
+        public override string ObjectName => "Kinetic Rule";
+
+        /// <inheritdoc />
         public KineticRule()
         {
             DependentRules = new List<KineticRule>();
         }
 
         /// <inheritdoc />
-        public override string ObjectName => "Kinetic Rule";
+        public IEnumerable<IKineticRule> GetDependentRules()
+        {
+            return DependentRules.AsEnumerable();
+        }
 
         /// <inheritdoc />
         public override ModelObject PopulateFrom(IModelObject obj)
@@ -40,12 +46,6 @@ namespace Mocassin.Model.Transitions
             AttemptFrequency = rule.AttemptFrequency;
 
             return null;
-        }
-
-        /// <inheritdoc />
-        public IEnumerable<IKineticRule> GetDependentRules()
-        {
-            return DependentRules.AsEnumerable();
         }
 
         /// <inheritdoc />

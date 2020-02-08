@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Mocassin.UI.GUI.Base;
@@ -12,7 +11,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ParticleMode
     public partial class ParticleControlView : UserControl
     {
         /// <summary>
-        ///     Get or set the <see cref="DragHandler{TElement}"/> for the row header
+        ///     Get or set the <see cref="DragHandler{TElement}" /> for the row header
         /// </summary>
         private DragHandler<DataGrid> RowHeaderDragHandler { get; set; }
 

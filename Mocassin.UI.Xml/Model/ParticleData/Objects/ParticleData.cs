@@ -17,8 +17,8 @@ namespace Mocassin.UI.Xml.ParticleModel
         public static readonly ParticleData VoidParticle = new ParticleData {Key = Particle.CreateVoid().Key, Name = "Void"};
 
         private double charge;
-        private string symbol;
         private bool isVacancy;
+        private string symbol;
 
         /// <summary>
         ///     Get or set the charge value of the particle as a string

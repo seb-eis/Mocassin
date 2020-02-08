@@ -1,7 +1,7 @@
 ﻿using System;
-using Mocassin.Mathematics.Extensions;
 using Mocassin.Mathematics.Comparer;
 using Mocassin.Mathematics.Constraints;
+using Mocassin.Mathematics.Extensions;
 using Mocassin.Mathematics.ValueTypes;
 
 namespace Mocassin.Mathematics.Coordinates
@@ -80,7 +80,7 @@ namespace Mocassin.Mathematics.Coordinates
         }
 
         /// <summary>
-        ///     Transforms a <see cref="Spherical3D"/> to a <see cref="Cartesian3D"/>
+        ///     Transforms a <see cref="Spherical3D" /> to a <see cref="Cartesian3D" />
         /// </summary>
         /// <param name="original"></param>
         /// <returns></returns>
@@ -99,7 +99,7 @@ namespace Mocassin.Mathematics.Coordinates
         }
 
         /// <summary>
-        ///     Transforms a <see cref="Cartesian3D"/> to a <see cref="Spherical3D"/>
+        ///     Transforms a <see cref="Cartesian3D" /> to a <see cref="Spherical3D" />
         /// </summary>
         /// <param name="original"></param>
         /// <returns></returns>

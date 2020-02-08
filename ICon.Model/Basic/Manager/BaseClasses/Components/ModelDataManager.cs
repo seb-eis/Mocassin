@@ -93,7 +93,7 @@ namespace Mocassin.Model.Basic
             if (stream == null)
                 throw new ArgumentNullException(nameof(stream));
 
-            if (settings == null) 
+            if (settings == null)
                 throw new ArgumentNullException(nameof(settings));
 
             new DataContractSerializer(typeof(TData), settings).WriteObject(stream, Data);

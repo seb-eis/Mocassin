@@ -5,7 +5,7 @@ using Mocassin.Mathematics.Extensions;
 namespace Mocassin.Symmetry.CrystalSystems
 {
     /// <summary>
-    ///     Defines the range of a <see cref="CrystalParameter"/> and if the value is mutable
+    ///     Defines the range of a <see cref="CrystalParameter" /> and if the value is mutable
     /// </summary>
     public readonly struct CrystalParameterRange
     {
@@ -30,7 +30,7 @@ namespace Mocassin.Symmetry.CrystalSystems
         public bool IsAlwaysImmutable => MinValue.AlmostEqualByRange(MaxValue);
 
         /// <summary>
-        ///     Creates a new <see cref="CrystalParameterRange"/> with a minimal and maximal value
+        ///     Creates a new <see cref="CrystalParameterRange" /> with a minimal and maximal value
         /// </summary>
         /// <param name="minValue"></param>
         /// <param name="maxValue"></param>
@@ -43,7 +43,7 @@ namespace Mocassin.Symmetry.CrystalSystems
         }
 
         /// <summary>
-        ///     Creates a <see cref="CrystalParameter"/> that defines the smallest possible setting
+        ///     Creates a <see cref="CrystalParameter" /> that defines the smallest possible setting
         /// </summary>
         /// <returns></returns>
         public CrystalParameter GetMinimalParameter()
@@ -52,7 +52,7 @@ namespace Mocassin.Symmetry.CrystalSystems
         }
 
         /// <summary>
-        ///     Creates a <see cref="NumericConstraint"/> instance from the contained values and a <see cref="NumericComparer"/>
+        ///     Creates a <see cref="NumericConstraint" /> instance from the contained values and a <see cref="NumericComparer" />
         /// </summary>
         /// <param name="comparer"></param>
         /// <param name="includeMin"></param>

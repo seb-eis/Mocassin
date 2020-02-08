@@ -81,7 +81,7 @@ namespace Mocassin.Model.Translator
         int SaveChanges();
 
         /// <summary>
-        ///     Sets the <see cref="DbJournalMode"/>
+        ///     Sets the <see cref="DbJournalMode" />
         /// </summary>
         /// <param name="journalMode"></param>
         void SetJournalMode(DbJournalMode journalMode);

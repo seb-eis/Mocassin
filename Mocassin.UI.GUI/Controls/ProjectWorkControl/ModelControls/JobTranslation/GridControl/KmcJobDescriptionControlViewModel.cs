@@ -3,12 +3,13 @@
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslation.GridControl
 {
     /// <summary>
-    ///     Extended implementation of the <see cref="BaseJobDescriptionControlViewModel"/> for <see cref="KmcJobConfigData"/> instances
+    ///     Extended implementation of the <see cref="BaseJobDescriptionControlViewModel" /> for
+    ///     <see cref="KmcJobConfigData" /> instances
     /// </summary>
-    public class KmcJobDescriptionControlViewModel : BaseJobDescriptionControlViewModel 
+    public class KmcJobDescriptionControlViewModel : BaseJobDescriptionControlViewModel
     {
         /// <summary>
-        ///     Get the <see cref="KmcJobConfigData"/> that the view model targets
+        ///     Get the <see cref="KmcJobConfigData" /> that the view model targets
         /// </summary>
         private KmcJobConfigData JobDescription { get; }
 

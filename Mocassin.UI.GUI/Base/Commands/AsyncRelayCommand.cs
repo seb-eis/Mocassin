@@ -4,19 +4,19 @@ using System.Threading.Tasks;
 namespace Mocassin.UI.Base.Commands
 {
     /// <summary>
-    ///     Adapter class that wraps <see cref="Delegate" /> objects into a <see cref="ParameterlessAsyncCommand" />
+    ///     Adapter class that wraps <see cref="Delegate" /> objects into a <see cref="AsyncVoidParameterCommand" />
     /// </summary>
-    public sealed class AsyncRelayCommand : ParameterlessAsyncCommand
+    public sealed class AsyncRelayCommand : AsyncVoidParameterCommand
     {
-        /// <summary>
-        ///     The <see cref="Delegate" /> to call on command execution
-        /// </summary>
-        private readonly Func<Task> _func;
-
         /// <summary>
         ///     The <see cref="Delegate" /> to call on checking if the command can be executed
         /// </summary>
-        private readonly Func<bool> _canExecuteFunc;
+        private readonly Func<bool> canExecuteFunc;
+
+        /// <summary>
+        ///     The <see cref="Delegate" /> to call on command execution
+        /// </summary>
+        private readonly Func<Task> func;
 
         /// <summary>
         ///     Creates new <see cref="AsyncRelayCommand" /> using the provided <see cref="Func{TResult}" />
@@ -31,22 +31,23 @@ namespace Mocassin.UI.Base.Commands
         ///     Creates new <see cref="AsyncRelayCommand" /> using the provided <see cref="Func{TResult}" /> and execution check
         /// </summary>
         /// <param name="execute"></param>
+        /// <param name="canExecuteFunc"></param>
         public AsyncRelayCommand(Func<Task> execute, Func<bool> canExecuteFunc)
         {
-            _func = execute ?? throw new ArgumentNullException(nameof(execute));
-            _canExecuteFunc = canExecuteFunc;
+            func = execute ?? throw new ArgumentNullException(nameof(execute));
+            this.canExecuteFunc = canExecuteFunc;
         }
 
         /// <inheritdoc />
         public override bool CanExecuteInternal()
         {
-            return _canExecuteFunc?.Invoke() ?? base.CanExecuteInternal();
+            return canExecuteFunc?.Invoke() ?? base.CanExecuteInternal();
         }
 
         /// <inheritdoc />
         public override Task ExecuteAsync()
         {
-            return _func.Invoke();
+            return func.Invoke();
         }
     }
 
@@ -56,14 +57,14 @@ namespace Mocassin.UI.Base.Commands
     public sealed class AsyncRelayCommand<T> : AsyncCommand<T>
     {
         /// <summary>
-        ///     The <see cref="Delegate" /> to call on command execution
-        /// </summary>
-        private readonly Func<T, Task> _func;
-
-        /// <summary>
         ///     The <see cref="Delegate" /> to call on checking if the command can be executed
         /// </summary>
-        private readonly Func<T, bool> _canExecuteFunc;
+        private readonly Func<T, bool> canExecuteFunc;
+
+        /// <summary>
+        ///     The <see cref="Delegate" /> to call on command execution
+        /// </summary>
+        private readonly Func<T, Task> func;
 
         /// <summary>
         ///     Create new <see cref="AsyncCommand{T}" /> using the provided execution <see cref="Delegate" />
@@ -81,20 +82,20 @@ namespace Mocassin.UI.Base.Commands
         /// <param name="canExecuteFunc"></param>
         public AsyncRelayCommand(Func<T, Task> execute, Func<T, bool> canExecuteFunc)
         {
-            _func = execute ?? throw new ArgumentNullException(nameof(execute));
-            _canExecuteFunc = canExecuteFunc;
+            func = execute ?? throw new ArgumentNullException(nameof(execute));
+            this.canExecuteFunc = canExecuteFunc;
         }
 
         /// <inheritdoc />
         public override bool CanExecuteInternal(T parameter)
         {
-            return _canExecuteFunc?.Invoke(parameter) ?? base.CanExecuteInternal(parameter);
+            return canExecuteFunc?.Invoke(parameter) ?? base.CanExecuteInternal(parameter);
         }
 
         /// <inheritdoc />
         public override Task ExecuteAsync(T parameter)
         {
-            return _func.Invoke(parameter);
+            return func.Invoke(parameter);
         }
     }
 }

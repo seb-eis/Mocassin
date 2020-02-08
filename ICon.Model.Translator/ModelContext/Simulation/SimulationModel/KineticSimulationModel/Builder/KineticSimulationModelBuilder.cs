@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Mocassin.Framework.Collections;
 using Mocassin.Framework.Extensions;
@@ -123,7 +122,8 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        ///     Creates a 2D index mapping table that assigns each positionId/particleId combination its basic static movement tracker index for the simulation
+        ///     Creates a 2D index mapping table that assigns each positionId/particleId combination its basic static movement
+        ///     tracker index for the simulation
         /// </summary>
         /// <param name="trackerModels"></param>
         /// <returns></returns>

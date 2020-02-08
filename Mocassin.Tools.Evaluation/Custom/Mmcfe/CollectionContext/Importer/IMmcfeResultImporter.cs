@@ -27,7 +27,7 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe.Importer
         /// <summary>
         ///     Get a boolean flag if the system is currently saving data
         /// </summary>
-        bool IsSaving { get;}
+        bool IsSaving { get; }
 
         /// <summary>
         ///     Collects the data into the set <see cref="MmcfeLogDbContext" /> with an optional acceptance predicate expression

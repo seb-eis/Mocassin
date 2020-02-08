@@ -1,5 +1,4 @@
 ﻿using Mocassin.UI.GUI.Base.DataContext;
-using Mocassin.UI.GUI.Controls.Base.Interfaces;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
 using Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.SimulationModel.DataControl;
 using Mocassin.UI.Xml.Main;
@@ -8,7 +7,8 @@ using Mocassin.UI.Xml.ProjectLibrary;
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.SimulationModel
 {
     /// <summary>
-    ///     The <see cref="ProjectGraphControlViewModel" /> for <see cref="SimulationModelControlView" /> that controls simulation
+    ///     The <see cref="ProjectGraphControlViewModel" /> for <see cref="SimulationModelControlView" /> that controls
+    ///     simulation
     ///     base definitions
     /// </summary>
     public class SimulationModelControlViewModel : ProjectGraphControlViewModel

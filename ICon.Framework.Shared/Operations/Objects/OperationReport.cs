@@ -65,6 +65,37 @@ namespace Mocassin.Framework.Operations
         }
 
         /// <summary>
+        ///     Adds an exception and updates the affiliated flags
+        /// </summary>
+        /// <param name="exception"></param>
+        public void AddException(Exception exception)
+        {
+            if (Exceptions == null)
+                Exceptions = new List<Exception>();
+
+            if (exception == null)
+                return;
+
+            Exceptions.Add(exception);
+            IsGood = false;
+            IsError = true;
+        }
+
+        /// <inheritdoc />
+        public void Merge(IOperationReport other)
+        {
+            foreach (var exception in other.Exceptions) AddException(exception);
+
+            ConflictReport ??= new ConflictReport();
+            ValidationReport ??= new ValidationReport();
+
+            ConflictReport.Merge(other.ConflictReport);
+            ValidationReport.Merge(other.ValidationReport);
+
+            IsGood = IsGood && ValidationReport.IsGood && ConflictReport.IsGood;
+        }
+
+        /// <summary>
         ///     Sets the validation result and updates the affiliated flags
         /// </summary>
         /// <param name="report"></param>
@@ -88,40 +119,6 @@ namespace Mocassin.Framework.Operations
 
             ConflictReport = report;
             IsGood = IsGood && report.IsGood;
-        }
-
-        /// <summary>
-        ///     Adds an exception and updates the affiliated flags
-        /// </summary>
-        /// <param name="exception"></param>
-        public void AddException(Exception exception)
-        {
-            if (Exceptions == null)
-                Exceptions = new List<Exception>();
-
-            if (exception == null)
-                return;
-
-            Exceptions.Add(exception);
-            IsGood = false;
-            IsError = true;
-        }
-
-        /// <inheritdoc />
-        public void Merge(IOperationReport other)
-        {
-            foreach (var exception in other.Exceptions)
-            {
-                AddException(exception);
-            }
-
-            ConflictReport = ConflictReport ?? new ConflictReport();
-            ValidationReport = ValidationReport ?? new ValidationReport();
-
-            ConflictReport.Merge(other.ConflictReport);
-            ValidationReport.Merge(other.ValidationReport);
-
-            IsGood = IsGood && ValidationReport.IsGood && ConflictReport.IsGood;
         }
 
         /// <summary>
@@ -152,7 +149,7 @@ namespace Mocassin.Framework.Operations
             var result = new OperationReport("Model object handler pipeline failed due to unexpected type");
             var builder = new StringBuilder();
             builder.AppendLine("Expected types :");
-            foreach (var item in expectedTypes) 
+            foreach (var item in expectedTypes)
                 builder.AppendLine(item.ToString());
 
             result.AddException(new InvalidPipelineInputException(builder.ToString(), unexpectedType));
@@ -160,7 +157,7 @@ namespace Mocassin.Framework.Operations
         }
 
         /// <summary>
-        ///Creates a new <see cref="OperationReport"/> for model build errors
+        ///     Creates a new <see cref="OperationReport" /> for model build errors
         /// </summary>
         /// <param name="description"></param>
         /// <param name="message"></param>

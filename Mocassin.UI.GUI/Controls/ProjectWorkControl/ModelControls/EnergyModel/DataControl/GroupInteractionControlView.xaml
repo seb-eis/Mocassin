@@ -24,11 +24,11 @@
 
       <DataGrid.RowHeaderTemplate>
         <DataTemplate>
-          <views:ObjectRowHeaderLogo x:Name="RowHeaderLogo" 
+          <views:ObjectRowHeaderLogo x:Name="RowHeaderLogo"
                                      PreviewMouseLeftButtonDown="RowHeaderLogo_OnPreviewMouseLeftButtonDown"
                                      PreviewMouseLeftButtonUp="RowHeaderLogo_OnPreviewMouseLeftButtonUp"
                                      PreviewMouseMove="RowHeaderLogo_OnPreviewMouseMove"
-                                     Cursor="Hand"/>
+                                     Cursor="Hand" />
         </DataTemplate>
       </DataGrid.RowHeaderTemplate>
 
@@ -51,7 +51,7 @@
 
                 <DataGrid.RowHeaderTemplate>
                   <DataTemplate>
-                    <views:ObjectRowHeaderLogo/>
+                    <views:ObjectRowHeaderLogo />
                   </DataTemplate>
                 </DataGrid.RowHeaderTemplate>
 

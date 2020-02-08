@@ -1,23 +1,20 @@
 ﻿using System;
 using System.Threading.Tasks;
-using System.Windows;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Controls.Base.Commands;
-using Mocassin.UI.GUI.Logic.Validation;
-using Mocassin.UI.Xml.Customization;
 using Mocassin.UI.Xml.Jobs;
-using Mocassin.UI.Xml.Main;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content.Commands
 {
     /// <summary>
-    ///     The <see cref="AsyncProjectControlCommand" /> to duplicate a <see cref="ProjectJobSetTemplate" /> and add the copy to the selected
+    ///     The <see cref="AsyncProjectControlCommand" /> to duplicate a <see cref="ProjectJobSetTemplate" /> and add the copy
+    ///     to the selected
     ///     project
     /// </summary>
     public class DuplicateJobTranslationCommand : AsyncProjectControlCommand<ProjectJobSetTemplate>
     {
         /// <summary>
-        ///     Get an <see cref="Action"/> to be executed on success
+        ///     Get an <see cref="Action" /> to be executed on success
         /// </summary>
         private Action<ProjectJobSetTemplate> OnSuccessAction { get; }
 

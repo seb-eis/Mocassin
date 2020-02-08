@@ -44,6 +44,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
                 KineticRuleSetCollectionViewModel.SetCollection(null);
                 return;
             }
+
             var viewModels = interactionSets.Select(x => new KineticRuleSetControlViewModel(x)).ToList(interactionSets.Count);
             KineticRuleSetCollectionViewModel.SetCollection(viewModels);
         }

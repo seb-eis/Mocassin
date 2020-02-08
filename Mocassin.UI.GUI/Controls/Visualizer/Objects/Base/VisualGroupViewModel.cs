@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Media.Media3D;
 using Mocassin.UI.GUI.Base.ViewModels;
 
@@ -11,9 +10,9 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
     /// </summary>
     public class VisualGroupViewModel : ViewModelBase, IVisualGroupViewModel
     {
-        private string name;
-        private ModelVisual3D modelVisual;
         private bool isVisible;
+        private ModelVisual3D modelVisual;
+        private string name;
 
         /// <inheritdoc />
         public int ItemCount => modelVisual?.Children.Count ?? 0;

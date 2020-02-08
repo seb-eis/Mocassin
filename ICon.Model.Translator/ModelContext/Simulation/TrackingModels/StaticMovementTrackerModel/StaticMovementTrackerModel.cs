@@ -24,8 +24,8 @@
                 return 1;
 
             var positionCompare = TrackedPositionIndex.CompareTo(other.TrackedPositionIndex);
-            return positionCompare != 0 
-                ? positionCompare 
+            return positionCompare != 0
+                ? positionCompare
                 : TrackedParticleIndex.CompareTo(other.TrackedParticleIndex);
         }
 

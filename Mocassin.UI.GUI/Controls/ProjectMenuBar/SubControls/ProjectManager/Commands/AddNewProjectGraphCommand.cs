@@ -1,5 +1,4 @@
-﻿using Mocassin.UI.Base.Commands;
-using Mocassin.UI.GUI.Base.DataContext;
+﻿using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Controls.Base.Commands;
 
 namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager.Commands

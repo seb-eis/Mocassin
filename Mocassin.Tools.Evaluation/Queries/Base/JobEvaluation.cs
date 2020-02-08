@@ -42,6 +42,18 @@ namespace Mocassin.Tools.Evaluation.Queries
             JobSet = jobSet ?? throw new ArgumentNullException(nameof(jobSet));
         }
 
+        /// <inheritdoc />
+        public IEnumerator<T> GetEnumerator()
+        {
+            return Result.GetEnumerator();
+        }
+
+        /// <inheritdoc />
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
         /// <summary>
         ///     Executes the query for a single <see cref="JobContext" /> without checking if the passed context is part of the
         ///     data source
@@ -76,6 +88,7 @@ namespace Mocassin.Tools.Evaluation.Queries
                 resultList.AddRange(JobSet.Select(GetValue));
                 return resultList.AsReadOnly();
             }
+
             return Task.Run(ExecuteLocal);
         }
 
@@ -95,6 +108,7 @@ namespace Mocassin.Tools.Evaluation.Queries
                 resultList.AddRange(taskList.Select(x => x.Result));
                 return resultList.AsReadOnly();
             }
+
             return Task.Run(ExecuteLocal);
         }
 
@@ -112,18 +126,6 @@ namespace Mocassin.Tools.Evaluation.Queries
         public Func<JobContext, T> AsSelector()
         {
             return GetValue;
-        }
-
-        /// <inheritdoc />
-        public IEnumerator<T> GetEnumerator()
-        {
-            return Result.GetEnumerator();
-        }
-
-        /// <inheritdoc />
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
         }
     }
 }

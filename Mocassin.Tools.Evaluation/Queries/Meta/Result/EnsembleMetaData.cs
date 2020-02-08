@@ -9,7 +9,7 @@ namespace Mocassin.Tools.Evaluation.Queries
     public readonly struct EnsembleMetaData
     {
         /// <summary>
-        ///     Get the <see cref="IParticle"/> that the data belongs to
+        ///     Get the <see cref="IParticle" /> that the data belongs to
         /// </summary>
         public IParticle Particle { get; }
 
@@ -23,7 +23,8 @@ namespace Mocassin.Tools.Evaluation.Queries
         /// </summary>
         public double ParticleDensity { get; }
 
-        public EnsembleMetaData(IParticle particle, int particleCount, double particleDensity) : this()
+        public EnsembleMetaData(IParticle particle, int particleCount, double particleDensity)
+            : this()
         {
             Particle = particle ?? throw new ArgumentNullException(nameof(particle));
             ParticleCount = particleCount;

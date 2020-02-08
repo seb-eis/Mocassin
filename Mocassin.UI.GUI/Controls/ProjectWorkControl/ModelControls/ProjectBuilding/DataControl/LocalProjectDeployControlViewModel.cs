@@ -22,12 +22,11 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
     /// </summary>
     public class LocalProjectDeployControlViewModel : ProjectGraphControlViewModel
     {
-        private string buildTargetFilePath;
-        private readonly UserFileSelectionSource fileSelectionSource;
-        private int maxJobs;
-        private int doneJobs;
         private LibraryBuildStatus buildStatus;
+        private string buildTargetFilePath;
+        private int doneJobs;
         private bool isManualLibrarySaving;
+        private int maxJobs;
 
         /// <summary>
         ///     Get or set the last build <see cref="ISimulationLibrary" />
@@ -128,7 +127,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
         {
             ProjectBuildGraphCollectionViewModel = projectBuildGraphCollectionViewModel;
             LogConsoleMessages = new ObservableCollectionViewModel<Tuple<DateTime, string>>(1000);
-            fileSelectionSource = UserFileSelectionSource.CreateForJobDbFiles(true);
+            var fileSelectionSource = UserFileSelectionSource.CreateForJobDbFiles(true);
             GetFileSelectionCommand = new RelayCommand(() => BuildTargetFilePath = fileSelectionSource.GetFileSelection());
             WriteDatabaseCommand = GetWriteDatabaseCommand();
             JobMetaDataCollectionControlViewModel = new ObservableCollectionViewModel<JobMetaDataEntity>();
@@ -202,6 +201,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
             {
                 BuildCancellationTokenSource.Cancel();
             }
+
             bool CanCancel()
             {
                 return BuildCancellationTokenSource != null && !BuildCancellationTokenSource.IsCancellationRequested;
@@ -260,6 +260,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
                 AddConsoleMessage($"Creation failed, collecting garbage! ({(cancellationToken.IsCancellationRequested ? "Cancelled" : "Error")})");
                 GC.Collect();
             }
+
             BuildCancellationTokenSource.Dispose();
             BuildCancellationTokenSource = null;
         }

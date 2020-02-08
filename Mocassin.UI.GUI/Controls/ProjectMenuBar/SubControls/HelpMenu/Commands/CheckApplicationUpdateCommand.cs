@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Deployment.Application;
-using System.Threading.Tasks;
 using System.Windows;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Base.Loading;
 using Mocassin.UI.GUI.Controls.Base.Commands;
+using Application = System.Windows.Forms.Application;
 
 namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.HelpMenu.Commands
 {
     /// <summary>
-    ///     The <see cref="ProjectControlCommand"/> to manually check and install an application update
+    ///     The <see cref="ProjectControlCommand" /> to manually check and install an application update
     /// </summary>
     public class CheckApplicationUpdateCommand : ProjectControlCommand
     {
@@ -34,11 +34,12 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.HelpMenu.Commands
                 UpdateApplication();
                 ProjectControl.StartServices();
             }
+
             ProjectControl.StartServices();
         }
 
         /// <summary>
-        ///     Tries to get the <see cref="UpdateCheckInfo"/> or the application
+        ///     Tries to get the <see cref="UpdateCheckInfo" /> or the application
         /// </summary>
         /// <returns></returns>
         private bool TryGetUpdateInformation(out UpdateCheckInfo info)
@@ -104,8 +105,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.HelpMenu.Commands
             {
                 DoUpdate();
                 MessageBox.Show("Application has been updated and will now restart.", "Update Success", MessageBoxButton.OK, MessageBoxImage.Information);
-                System.Windows.Forms.Application.Restart();
-                Application.Current.Shutdown();
+                Application.Restart();
+                System.Windows.Application.Current.Shutdown();
             }
             catch (DeploymentDownloadException exception)
             {

@@ -17,7 +17,7 @@ namespace Mocassin.Tools.Evaluation.Queries
         public IJobEvaluation<IReadOnlyList<int>> ParticleCountEvaluation { get; set; }
 
         /// <summary>
-        ///     Get or set the <see cref="IJobEvaluation{T}"/> that supplies the <see cref="LatticeMetaData"/>
+        ///     Get or set the <see cref="IJobEvaluation{T}" /> that supplies the <see cref="LatticeMetaData" />
         /// </summary>
         public IJobEvaluation<LatticeMetaData> LatticeMetaEvaluation { get; set; }
 
@@ -47,8 +47,8 @@ namespace Mocassin.Tools.Evaluation.Queries
         /// <inheritdoc />
         protected override void PrepareForExecution()
         {
-            ParticleCountEvaluation = ParticleCountEvaluation ?? new ParticleCountEvaluation(JobSet);
-            LatticeMetaEvaluation = LatticeMetaEvaluation ?? new LatticeMetaEvaluation(JobSet);
+            ParticleCountEvaluation ??= new ParticleCountEvaluation(JobSet);
+            LatticeMetaEvaluation ??= new LatticeMetaEvaluation(JobSet);
 
             if (!ParticleCountEvaluation.JobSet.CompatibleTo(JobSet))
                 throw new InvalidOperationException("Particle count evaluation is not compatible.");

@@ -9,12 +9,12 @@ namespace Mocassin.Model.Translator.ModelContext
     public interface ITransitionMappingModel
     {
         /// <summary>
-        /// Get the jump length of the mapping
+        ///     Get the jump length of the mapping
         /// </summary>
         int PathLength { get; }
 
         /// <summary>
-        ///     Get the inverse <see cref="ITransitionMappingModel"/>
+        ///     Get the inverse <see cref="ITransitionMappingModel" />
         /// </summary>
         ITransitionMappingModel InverseMappingBase { get; }
 

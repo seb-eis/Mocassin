@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Text.RegularExpressions;
 using Mocassin.Framework.Extensions;
 using Mocassin.Framework.Operations;
 using Mocassin.Model.Basic;
@@ -86,10 +85,7 @@ namespace Mocassin.Model.Transitions.Validators
         protected void AddConnectorPatternValidation(IAbstractTransition transition, ValidationReport report)
         {
             var validPatterns = GetValidConnectorPatterns();
-            if (validPatterns.Any(pattern => pattern.IsValid(transition.GetConnectorSequence())))
-            {
-                return;
-            }
+            if (validPatterns.Any(pattern => pattern.IsValid(transition.GetConnectorSequence()))) return;
 
             var patternType = ConnectorPattern.DeterminePatternType(transition.GetConnectorSequence());
             if (patternType != ConnectorPatternType.NormalVehicle && patternType != ConnectorPatternType.SplitTransitionVehicle &&
@@ -108,7 +104,8 @@ namespace Mocassin.Model.Transitions.Validators
         }
 
         /// <summary>
-        /// Validates that the passed abstract transition does not carry ambiguous transition definition in case of regular vehicle patterns
+        ///     Validates that the passed abstract transition does not carry ambiguous transition definition in case of regular
+        ///     vehicle patterns
         /// </summary>
         /// <param name="transition"></param>
         /// <param name="report"></param>

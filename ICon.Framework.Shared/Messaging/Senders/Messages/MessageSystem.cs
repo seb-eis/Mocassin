@@ -97,6 +97,32 @@ namespace Mocassin.Framework.Messaging
             FinishSending();
         }
 
+        /// <inheritdoc />
+        public void DumpMessageToConsole(PushMessage message)
+        {
+            Console.WriteLine(MessageToString(message));
+        }
+
+        /// <inheritdoc />
+        public void SubscribeConsoleDisplay()
+        {
+            if (ConsoleSubscriptionActive == false) ConsoleSubscription = AnyMessageNotification.Subscribe(DumpMessageToConsole);
+
+            ConsoleSubscriptionActive = true;
+        }
+
+        /// <inheritdoc />
+        public void UnsubscribeConsoleDisplay()
+        {
+            if (ConsoleSubscriptionActive)
+            {
+                ConsoleSubscription?.Dispose();
+                ConsoleSubscription = null;
+            }
+
+            ConsoleSubscriptionActive = false;
+        }
+
         /// <summary>
         ///     Takes arbitrary operation message and distributes the message to all registered observers
         /// </summary>
@@ -141,32 +167,6 @@ namespace Mocassin.Framework.Messaging
         protected void OnMessageReceived(PushMessage message)
         {
             SendPushMessageEvent.OnNext(message);
-        }
-
-        /// <inheritdoc />
-        public void DumpMessageToConsole(PushMessage message)
-        {
-            Console.WriteLine(MessageToString(message));
-        }
-
-        /// <inheritdoc />
-        public void SubscribeConsoleDisplay()
-        {
-            if (ConsoleSubscriptionActive == false) ConsoleSubscription = AnyMessageNotification.Subscribe(DumpMessageToConsole);
-
-            ConsoleSubscriptionActive = true;
-        }
-
-        /// <inheritdoc />
-        public void UnsubscribeConsoleDisplay()
-        {
-            if (ConsoleSubscriptionActive)
-            {
-                ConsoleSubscription?.Dispose();
-                ConsoleSubscription = null;
-            }
-
-            ConsoleSubscriptionActive = false;
         }
 
         /// <summary>

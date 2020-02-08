@@ -28,7 +28,8 @@ namespace Mocassin.Model.Translator.ModelContext
         int[,] StaticTrackerMappingTable { get; set; }
 
         /// <summary>
-        ///     2D Matrix that assigns each transition index/particle index combination a global tracker index (for global movement and probability tracking)
+        ///     2D Matrix that assigns each transition index/particle index combination a global tracker index (for global movement
+        ///     and probability tracking)
         /// </summary>
         int[,] GlobalTrackerMappingTable { get; set; }
 

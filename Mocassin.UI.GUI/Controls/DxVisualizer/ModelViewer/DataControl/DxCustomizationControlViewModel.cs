@@ -65,7 +65,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.DataControl
         public IReadOnlyCollection<string> MeshMaterialNames => PhongMaterialCoreToStringConverter.MaterialNameCollection;
 
         /// <summary>
-        ///     Get or set the currently selected <see cref="ProjectCustomizationTemplate"/>
+        ///     Get or set the currently selected <see cref="ProjectCustomizationTemplate" />
         /// </summary>
         public ProjectCustomizationTemplate SelectedCustomization
         {

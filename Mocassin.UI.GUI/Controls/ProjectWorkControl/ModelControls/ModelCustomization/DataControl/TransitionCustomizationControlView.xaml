@@ -32,7 +32,7 @@
                                      PreviewMouseLeftButtonDown="RowHeaderLogo_OnPreviewMouseLeftButtonDown"
                                      PreviewMouseLeftButtonUp="RowHeaderLogo_OnPreviewMouseLeftButtonUp"
                                      PreviewMouseMove="RowHeaderLogo_OnPreviewMouseMove"
-                                     Cursor="Hand"/>
+                                     Cursor="Hand" />
         </DataTemplate>
       </DataGrid.RowHeaderTemplate>
 
@@ -42,9 +42,9 @@
                             IsReadOnly="True" />
       </DataGrid.Columns>
     </DataGrid>
-    <GridSplitter Grid.Column="1"/>
+    <GridSplitter Grid.Column="1" />
     <gridControl:KineticRuleSetControlView Grid.Column="2"
-                                           DataContext="{Binding KineticRuleSetCollectionViewModel.SelectedItem}" 
-                                           Visibility="{Binding Converter={converter:NullToVisibilityConverter}}"/>
+                                           DataContext="{Binding KineticRuleSetCollectionViewModel.SelectedItem}"
+                                           Visibility="{Binding Converter={converter:NullToVisibilityConverter}}" />
   </Grid>
 </UserControl>

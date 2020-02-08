@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using Mocassin.Mathematics.Comparer;
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Particles;
@@ -32,7 +31,7 @@ namespace Mocassin.Tools.Evaluation.Queries
         public bool YieldImmobile { get; set; }
 
         /// <summary>
-        ///     Get or set a <see cref="IComparer{T}"/> for <see cref="Cartesian3D"/> for the evaluation
+        ///     Get or set a <see cref="IComparer{T}" /> for <see cref="Cartesian3D" /> for the evaluation
         /// </summary>
         public IComparer<Cartesian3D> VectorComparer { get; set; }
 

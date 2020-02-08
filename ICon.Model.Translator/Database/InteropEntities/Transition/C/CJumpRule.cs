@@ -32,7 +32,7 @@ namespace Mocassin.Model.Translator
             get => trackerOrder;
             set
             {
-                if ((value?.Length ?? throw new ArgumentNullException()) != 8) 
+                if ((value?.Length ?? throw new ArgumentNullException()) != 8)
                     throw new ArgumentException("Array has to be of size 8");
 
                 trackerOrder = value;

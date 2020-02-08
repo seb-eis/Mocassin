@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Mocassin.Framework.Extensions;
 using Mocassin.Model.Particles;
@@ -77,7 +76,7 @@ namespace Mocassin.Model.Translator.EntityBuilder
             var buffer = new byte[64].Populate(SimulationConstants.InvalidParticleId);
 
             (byte particleId, byte bufferId) = (0, 0);
-            foreach (var mobilityType in encodingModel.PositionIndexToMobilityTypesSet[positionId])
+            foreach (var _ in encodingModel.PositionIndexToMobilityTypesSet[positionId])
             {
                 if (ParticlePositionPairHasNonZeroEnergies(positionId, particleId)) buffer[bufferId++] = particleId;
 
@@ -88,7 +87,8 @@ namespace Mocassin.Model.Translator.EntityBuilder
         }
 
         /// <summary>
-        ///     Checks if a position id and particle id combination has any non zero energy entries in affiliated pair or group tables
+        ///     Checks if a position id and particle id combination has any non zero energy entries in affiliated pair or group
+        ///     tables
         /// </summary>
         /// <param name="positionId"></param>
         /// <param name="particleId"></param>

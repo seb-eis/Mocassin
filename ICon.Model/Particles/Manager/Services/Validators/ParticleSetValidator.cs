@@ -55,10 +55,10 @@ namespace Mocassin.Model.Particles.Validators
         {
             foreach (var item in DataReader.Access.GetParticleSets())
             {
-                if (item.IsDeprecated) 
+                if (item.IsDeprecated)
                     continue;
 
-                if (!particleSet.EqualsInModelProperties(item)) 
+                if (!particleSet.EqualsInModelProperties(item))
                     continue;
 
                 var warning = new WarningMessage(this, "Particle set duplicate detected") {IsCritical = true};

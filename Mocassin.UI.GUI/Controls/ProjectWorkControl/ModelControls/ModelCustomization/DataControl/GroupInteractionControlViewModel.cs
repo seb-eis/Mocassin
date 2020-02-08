@@ -35,6 +35,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
                 SetCollection(null);
                 return;
             }
+
             var viewModels = interactionSets.Select(x => new GroupEnergySetControlViewModel(x)).ToList(interactionSets.Count);
             SetCollection(viewModels);
         }

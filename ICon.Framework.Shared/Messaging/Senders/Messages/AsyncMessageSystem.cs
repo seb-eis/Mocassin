@@ -84,6 +84,32 @@ namespace Mocassin.Framework.Messaging
             OnMessageReceived(message);
         }
 
+        /// <inheritdoc />
+        public void DumpMessageToConsole(PushMessage message)
+        {
+            Console.WriteLine(MessageToString(message));
+        }
+
+        /// <inheritdoc />
+        public void SubscribeConsoleDisplay()
+        {
+            if (ConsoleSubscriptionActive == false) ConsoleSubscription = AnyMessageNotification.Subscribe(DumpMessageToConsole);
+
+            ConsoleSubscriptionActive = true;
+        }
+
+        /// <inheritdoc />
+        public void UnsubscribeConsoleDisplay()
+        {
+            if (ConsoleSubscriptionActive)
+            {
+                ConsoleSubscription?.Dispose();
+                ConsoleSubscription = null;
+            }
+
+            ConsoleSubscriptionActive = false;
+        }
+
         /// <summary>
         ///     Creates a new task that sends the information message to all subscribers
         /// </summary>
@@ -119,32 +145,6 @@ namespace Mocassin.Framework.Messaging
         protected Task OnMessageReceived(PushMessage message)
         {
             return Task.Run(() => SendPushMessageEvent.OnNext(message));
-        }
-
-        /// <inheritdoc />
-        public void DumpMessageToConsole(PushMessage message)
-        {
-            Console.WriteLine(MessageToString(message));
-        }
-
-        /// <inheritdoc />
-        public void SubscribeConsoleDisplay()
-        {
-            if (ConsoleSubscriptionActive == false) ConsoleSubscription = AnyMessageNotification.Subscribe(DumpMessageToConsole);
-
-            ConsoleSubscriptionActive = true;
-        }
-
-        /// <inheritdoc />
-        public void UnsubscribeConsoleDisplay()
-        {
-            if (ConsoleSubscriptionActive)
-            {
-                ConsoleSubscription?.Dispose();
-                ConsoleSubscription = null;
-            }
-
-            ConsoleSubscriptionActive = false;
         }
 
         /// <summary>

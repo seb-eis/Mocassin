@@ -62,7 +62,7 @@ namespace Mocassin.Tools.Evaluation.Queries
         /// <inheritdoc />
         protected override void PrepareForExecution()
         {
-            EnsembleDisplacementEvaluation = EnsembleDisplacementEvaluation ?? new SquaredDisplacementEvaluation(JobSet);
+            EnsembleDisplacementEvaluation ??= new SquaredDisplacementEvaluation(JobSet);
 
             if (!EnsembleDisplacementEvaluation.JobSet.CompatibleTo(JobSet))
                 throw new InvalidOperationException("Ensemble displacement evaluation is not compatible.");

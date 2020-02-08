@@ -16,7 +16,7 @@ namespace Mocassin.Tools.Evaluation.Queries
         MslEvaluationContext EvaluationContext { get; }
 
         /// <summary>
-        ///     Checks if the <see cref="IEvaluableJobSet"/> is compatible
+        ///     Checks if the <see cref="IEvaluableJobSet" /> is compatible
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>

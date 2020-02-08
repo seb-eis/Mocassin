@@ -6,23 +6,24 @@ using Mocassin.Tools.UAccess.Readers.HistogramReader.Components;
 namespace Mocassin.Tools.UAccess.Readers
 {
     /// <summary>
-    ///     Provides fast read only access to the unmanaged binary state raw variable size histograms of the 'C' Mocassin.Simulator
+    ///     Provides fast read only access to the unmanaged binary state raw variable size histograms of the 'C'
+    ///     Mocassin.Simulator
     /// </summary>
     /// <remarks>The access is context free and requires the affiliated model context for evaluation</remarks>
     public class DynamicHistogramReader : IDisposable
     {
         /// <summary>
-        ///     Get the byte count of the <see cref="DynamicHistogramHeader"/>
+        ///     Get the byte count of the <see cref="DynamicHistogramHeader" />
         /// </summary>
         public static int HeaderByteCount { get; } = Marshal.SizeOf<DynamicHistogramHeader>();
 
         /// <summary>
-        ///     Get the <see cref="BinaryStructureReader"/> for the binary representation
+        ///     Get the <see cref="BinaryStructureReader" /> for the binary representation
         /// </summary>
         private BinaryStructureReader BinaryReader { get; }
 
         /// <summary>
-        ///     Creates a new <see cref="DynamicHistogramReader"/> using the provided <see cref="BinaryStructureReader"/>
+        ///     Creates a new <see cref="DynamicHistogramReader" /> using the provided <see cref="BinaryStructureReader" />
         /// </summary>
         /// <param name="binaryReader"></param>
         private DynamicHistogramReader(BinaryStructureReader binaryReader)
@@ -30,8 +31,14 @@ namespace Mocassin.Tools.UAccess.Readers
             BinaryReader = binaryReader ?? throw new ArgumentNullException(nameof(binaryReader));
         }
 
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            BinaryReader.Dispose();
+        }
+
         /// <summary>
-        ///     Reads the histogram header bytes as an <see cref="DynamicHistogramHeader"/> structure
+        ///     Reads the histogram header bytes as an <see cref="DynamicHistogramHeader" /> structure
         /// </summary>
         /// <returns></returns>
         public ref DynamicHistogramHeader ReadHeader()
@@ -40,7 +47,7 @@ namespace Mocassin.Tools.UAccess.Readers
         }
 
         /// <summary>
-        ///     Reads the histogram counters as a <see cref="ReadOnlySpan{T}"/> of <see cref="long"/> values
+        ///     Reads the histogram counters as a <see cref="ReadOnlySpan{T}" /> of <see cref="long" /> values
         /// </summary>
         /// <returns></returns>
         public ReadOnlySpan<long> ReadCounters()
@@ -49,7 +56,8 @@ namespace Mocassin.Tools.UAccess.Readers
         }
 
         /// <summary>
-        ///     Creates a new <see cref="DynamicHistogramReader"/> using the provided <see cref="byte"/> array and checks for data consistency
+        ///     Creates a new <see cref="DynamicHistogramReader" /> using the provided <see cref="byte" /> array and checks for
+        ///     data consistency
         /// </summary>
         /// <param name="bytes"></param>
         /// <returns></returns>
@@ -60,12 +68,6 @@ namespace Mocassin.Tools.UAccess.Readers
             var byteCount = HeaderByteCount + entryCount * sizeof(long);
             if (byteCount != bytes.Length) throw new InvalidOperationException("Byte array has incorrect size.");
             return new DynamicHistogramReader(binaryReader);
-        }
-
-        /// <inheritdoc />
-        public void Dispose()
-        {
-            BinaryReader.Dispose();
         }
     }
 }

@@ -143,7 +143,7 @@ namespace Mocassin.Model.Basic
                 if (!(propertyInfo.GetCustomAttribute(typeof(IndexedModelDataAttribute)) is IndexedModelDataAttribute))
                     continue;
 
-                if (propertyInfo.GetValue(this) is IList collection) 
+                if (propertyInfo.GetValue(this) is IList collection)
                     collection.Clear();
                 else
                     propertyInfo.SetValue(this, Activator.CreateInstance(propertyInfo.PropertyType));

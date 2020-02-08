@@ -16,8 +16,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
     public class KmcJobPackageControlViewModel : CollectionControlViewModel<KmcJobPackageData>,
         IContentSupplier<ProjectJobSetTemplate>
     {
-        private int duplicateCount = 1;
         private ProjectJobSetTemplate contentSource;
+        private int duplicateCount = 1;
         private IEnumerable<ModelObjectReference<KineticSimulation>> selectableSimulations;
 
         /// <inheritdoc />
@@ -38,7 +38,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         }
 
         /// <summary>
-        ///     Get the <see cref="DuplicateCollectionItemCommand{T}"/> for the collection
+        ///     Get the <see cref="DuplicateCollectionItemCommand{T}" /> for the collection
         /// </summary>
         public DuplicateCollectionItemCommand<KmcJobPackageData> DuplicateItemCommand { get; }
 
@@ -52,7 +52,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         }
 
         /// <summary>
-        ///     Creates a new <see cref="KmcJobPackageControlViewModel"/>
+        ///     Creates a new <see cref="KmcJobPackageControlViewModel" />
         /// </summary>
         public KmcJobPackageControlViewModel()
         {
@@ -63,15 +63,16 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         }
 
         /// <inheritdoc />
-        public void ChangeContentSource(ProjectJobSetTemplate contentSource)
+        public void ChangeContentSource(ProjectJobSetTemplate jobSetTemplate)
         {
-            ContentSource = contentSource;
-            SetCollection(contentSource?.KmcJobPackageDescriptions);
-            SelectableSimulations = GetSelectableSimulations(contentSource);
+            ContentSource = jobSetTemplate;
+            SetCollection(jobSetTemplate?.KmcJobPackageDescriptions);
+            SelectableSimulations = GetSelectableSimulations(jobSetTemplate);
         }
 
         /// <summary>
-        ///     Get the sequence selectable <see cref="ModelObjectReference{T}"/> of <see cref="KineticSimulation"/> instances that are available for the passed <see cref="ProjectJobSetTemplate"/>
+        ///     Get the sequence selectable <see cref="ModelObjectReference{T}" /> of <see cref="KineticSimulation" /> instances
+        ///     that are available for the passed <see cref="ProjectJobSetTemplate" />
         /// </summary>
         /// <param name="jobTranslation"></param>
         /// <returns></returns>

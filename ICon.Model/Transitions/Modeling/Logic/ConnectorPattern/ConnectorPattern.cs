@@ -24,7 +24,7 @@ namespace Mocassin.Model.Transitions
     }
 
     /// <summary>
-    /// Enum for connector pattern types that are supported and recognized by the system
+    ///     Enum for connector pattern types that are supported and recognized by the system
     /// </summary>
     public enum ConnectorPatternType
     {
@@ -187,8 +187,8 @@ namespace Mocassin.Model.Transitions
         public static ConnectorPatternType DeterminePatternType(IEnumerable<ConnectorType> connectors)
         {
             var code = MakeConnectorCode(connectors);
-            return (from pattern in GetAllSupportedPatterns() 
-                where pattern.PatternRegex.IsMatch(code) 
+            return (from pattern in GetAllSupportedPatterns()
+                where pattern.PatternRegex.IsMatch(code)
                 select pattern.PatternType).FirstOrDefault();
         }
     }

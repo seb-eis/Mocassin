@@ -36,6 +36,9 @@ namespace Mocassin.Model.Energies
         [UseTrackedData]
         public List<IGroupInteraction> GroupInteractions { get; set; }
 
+        /// <inheritdoc />
+        public override string ObjectName => "Unstable Environment Info";
+
         /// <summary>
         ///     Create new unstable environment and sets all lists to empty
         /// </summary>
@@ -63,9 +66,6 @@ namespace Mocassin.Model.Energies
         {
             return (GroupInteractions ?? new List<IGroupInteraction>()).AsEnumerable();
         }
-
-        /// <inheritdoc />
-        public override string ObjectName => "Unstable Environment Info";
 
         /// <inheritdoc />
         public override ModelObject PopulateFrom(IModelObject obj)

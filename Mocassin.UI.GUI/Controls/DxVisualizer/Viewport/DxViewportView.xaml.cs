@@ -15,6 +15,14 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
             InitializeComponent();
         }
 
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            foreach (var item in Viewport3Dx.Items) item.Dispose();
+            Viewport3Dx.Items.Clear();
+            Viewport3Dx.DataContext = null;
+        }
+
         private void Viewport3Dx_OnPreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (!ReferenceEquals(sender, Viewport3Dx)) return;
@@ -25,14 +33,6 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
         {
             if (!ReferenceEquals(sender, Viewport3Dx)) return;
             Viewport3Dx?.SetValue(DxViewportExtensions.IsInteractingProperty, false);
-        }
-
-        /// <inheritdoc />
-        public void Dispose()
-        {
-            foreach (var item in Viewport3Dx.Items) item.Dispose();
-            Viewport3Dx.Items.Clear();
-            Viewport3Dx.DataContext = null;
         }
     }
 }

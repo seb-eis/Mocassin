@@ -64,6 +64,12 @@ namespace Mocassin.Model.Basic
             DataObject = dataObject ?? throw new ArgumentNullException(nameof(dataObject));
         }
 
+        /// <inheritdoc />
+        public IDataReader<TPort> CreateInterface()
+        {
+            return Create();
+        }
+
         /// <summary>
         ///     Creates a new model data reader for the internal data object
         /// </summary>
@@ -71,12 +77,6 @@ namespace Mocassin.Model.Basic
         public DataReader<TData, TPort> Create()
         {
             return new DataReader<TData, TPort>(DataObject, LockSource);
-        }
-
-        /// <inheritdoc />
-        public IDataReader<TPort> CreateInterface()
-        {
-            return Create();
         }
     }
 }

@@ -109,7 +109,7 @@ namespace Mocassin.Model.ModelProject
         }
 
         /// <summary>
-        /// Get a generic validation <see cref="Func{T1, TResult}"/> delegate for the passed object of type <see cref="T"/>
+        ///     Get a generic validation <see cref="Func{T1, TResult}" /> delegate for the passed object of type <see cref="T" />
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="obj"></param>
@@ -119,12 +119,12 @@ namespace Mocassin.Model.ModelProject
             if (ValidationDelegateDictionary.TryGetValue(typeof(T), out var func))
                 return func;
 
-            var reader = GetMatchingDataReader(obj) 
+            var reader = GetMatchingDataReader(obj)
                          ?? throw new InvalidOperationException($"[{obj.GetType()}] has no matching model manager");
 
             var service = ValidationServices.FirstOrDefault(x => x.CanValidate(obj, reader))
                           ?? throw new InvalidOperationException($"[{obj.GetType()}] has no matching validation service");
-           
+
             func = a =>
             {
                 service.TryValidate(a, reader, out var report);

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.Serialization;
-using System.Text;
 
 namespace Mocassin.Framework.Exceptions
 {
@@ -10,17 +8,20 @@ namespace Mocassin.Framework.Exceptions
     public abstract class CustomException : Exception
     {
         /// <inheritdoc />
-        protected CustomException(string message) : base(message)
+        protected CustomException(string message)
+            : base(message)
         {
         }
 
         /// <inheritdoc />
-        protected CustomException(string message, Exception innerException) : base(message, innerException)
+        protected CustomException(string message, Exception innerException)
+            : base(message, innerException)
         {
         }
 
         /// <inheritdoc />
-        protected CustomException(SerializationInfo info, StreamingContext context) : base(info, context)
+        protected CustomException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
         {
         }
 

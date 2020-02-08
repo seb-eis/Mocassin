@@ -127,13 +127,13 @@ namespace Mocassin.Model.ModelProject
         public int ParseValue(T value)
         {
             var lowerParse = ParseLower(value);
-            return lowerParse == 0 
-                ? ParseUpper(value) 
+            return lowerParse == 0
+                ? ParseUpper(value)
                 : lowerParse;
         }
 
         /// <summary>
-        ///     Creates a <see cref="IValueConstraint{TSource,TTarget}"/> of matching type from the setting
+        ///     Creates a <see cref="IValueConstraint{TSource,TTarget}" /> of matching type from the setting
         /// </summary>
         /// <returns></returns>
         public IValueConstraint<T, T> ToConstraint()
@@ -175,7 +175,7 @@ namespace Mocassin.Model.ModelProject
         /// <param name="values"></param>
         protected void SetValues(T[] values)
         {
-            if (values.Length != 4) 
+            if (values.Length != 4)
                 throw new ArgumentException("Wrong number of values for value restriction");
 
             Array.Sort(values);

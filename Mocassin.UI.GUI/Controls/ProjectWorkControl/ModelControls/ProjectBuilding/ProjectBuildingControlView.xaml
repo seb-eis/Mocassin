@@ -15,7 +15,8 @@
   <UserControl.Resources>
     <ToolTip x:Key="Local.ToolTip.DeployInstruction" Style="{StaticResource App.Style.ToolTip.Default}">
       <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-        <Run Text="Define a full translation group containing a model project, customization and job definition source." />
+        <Run
+          Text="Define a full translation group containing a model project, customization and job definition source." />
       </TextBlock>
     </ToolTip>
     <ToolTip x:Key="Local.ToolTip.LocalDeployment" Style="{StaticResource App.Style.ToolTip.Default}">
@@ -34,7 +35,7 @@
 
           <Grid.RowDefinitions>
             <RowDefinition Height="*" />
-            <RowDefinition Height="{StaticResource App.Default.GridLength.Splitter}"/>
+            <RowDefinition Height="{StaticResource App.Default.GridLength.Splitter}" />
             <RowDefinition Height="*" />
           </Grid.RowDefinitions>
           <Grid.ColumnDefinitions>
@@ -47,33 +48,36 @@
                                  Style="{StaticResource App.Style.HeaderedGroup.BoldText}"
                                  HeaderToolTip="{StaticResource Local.ToolTip.DeployInstruction}"
                                  Header="Build Instruction Definitions:">
-            <dataControl:ProjectBuildGraphControlView DataContext="{Binding BuildGraphControlViewModel}"/>
+            <dataControl:ProjectBuildGraphControlView DataContext="{Binding BuildGraphControlViewModel}" />
           </content:HeaderedGroup>
 
           <content:HeaderedGroup Grid.Row="2" Grid.Column="0"
                                  HeaderToolTip="{StaticResource Local.ToolTip.LocalDeployment}">
             <content:HeaderedGroup.Header>
               <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
-                <Run Text="Deploy to Localhost:"/>
-                <Run Text="{Binding BuildGraphControlViewModel.ProjectBuildCollectionViewModel.SelectedItem.Name, StringFormat={}[{0}]}" />
+                <Run Text="Deploy to Localhost:" />
+                <Run
+                  Text="{Binding BuildGraphControlViewModel.ProjectBuildCollectionViewModel.SelectedItem.Name, StringFormat={}[{0}]}" />
               </TextBlock>
             </content:HeaderedGroup.Header>
 
-            <dataControl:LocalProjectDeployControlView DataContext="{Binding LocalDeployControlViewModel}"/>
+            <dataControl:LocalProjectDeployControlView DataContext="{Binding LocalDeployControlViewModel}" />
           </content:HeaderedGroup>
 
-          <GridSplitter Grid.Row="0" Grid.RowSpan="3" Grid.Column="1"/>
+          <GridSplitter Grid.Row="0" Grid.RowSpan="3" Grid.Column="1" />
 
-          <content:HeaderedGroup Grid.Row="0" Grid.Column="2" Grid.RowSpan="3" HeaderToolTip="Metadata table of the last deploy process.">
+          <content:HeaderedGroup Grid.Row="0" Grid.Column="2" Grid.RowSpan="3"
+                                 HeaderToolTip="Metadata table of the last deploy process.">
             <HeaderedContentControl.Header>
               <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
-                <Run Text="Deploy Metadata Table:"/>
-                <Run Text="{Binding LocalDeployControlViewModel.BuildTargetFilePath, StringFormat={}[{0}], TargetNullValue={}}" />
+                <Run Text="Deploy Metadata Table:" />
+                <Run
+                  Text="{Binding LocalDeployControlViewModel.BuildTargetFilePath, StringFormat={}[{0}], TargetNullValue={}}" />
               </TextBlock>
             </HeaderedContentControl.Header>
-            <DataGrid ItemsSource="{Binding LocalDeployControlViewModel.JobMetaDataCollectionControlViewModel.ObservableItems}"
-                      IsReadOnly="True">
-            </DataGrid>
+            <DataGrid
+              ItemsSource="{Binding LocalDeployControlViewModel.JobMetaDataCollectionControlViewModel.ObservableItems}"
+              IsReadOnly="True" />
           </content:HeaderedGroup>
         </Grid>
       </TabItem>

@@ -37,7 +37,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         public IComparer<Fractional3D> Comparer => VectorComparer;
 
         /// <summary>
-        ///     Get the <see cref="IComparer{T}"/> for double values used by the vector comparer
+        ///     Get the <see cref="IComparer{T}" /> for double values used by the vector comparer
         /// </summary>
         public IComparer<double> DoubleComparer => VectorComparer.ValueComparer;
 
@@ -187,55 +187,6 @@ namespace Mocassin.Symmetry.SpaceGroups
             return refVectors.Select(GetUnitCellP1PositionExtension).ToList();
         }
 
-        /// <summary>
-        ///     Creates the position set list of all equivalent vectors to the passed source
-        /// </summary>
-        /// <param name="vector"></param>
-        /// <returns></returns>
-        protected SetList<Fractional3D> CreatePositionSetList(Fractional3D vector)
-        {
-            var results = new SetList<Fractional3D>(VectorComparer, LoadedGroup.Operations.Count);
-            foreach (var operation in LoadedGroup.Operations)
-                results.Add(operation.TrimTransform(vector));
-
-            results.List.TrimExcess();
-            return results;
-        }
-
-        /// <summary>
-        ///     Creates a basic fractional position set list from double coordinate values
-        /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <param name="c"></param>
-        /// <returns></returns>
-        protected SetList<Fractional3D> CreatePositionSetList(double a, double b, double c)
-        {
-            var results = new SetList<Fractional3D>(VectorComparer, LoadedGroup.Operations.Count);
-            foreach (var operation in LoadedGroup.Operations)
-                results.Add(operation.TrimTransform(a, b, c));
-
-            results.List.TrimExcess();
-            return results;
-        }
-
-        /// <summary>
-        ///     Creates a source type fractional position set list where all results carry the original information of the source
-        /// </summary>
-        /// <typeparam name="TSource"></typeparam>
-        /// <param name="vector"></param>
-        /// <returns></returns>
-        protected SetList<Fractional3D> CreatePositionSetList<TSource>(TSource vector) where TSource : IFractional3D
-        {
-            var results = new SetList<Fractional3D>(VectorComparer, LoadedGroup.Operations.Count);
-
-            foreach (var operation in LoadedGroup.Operations)
-                results.Add(operation.TrimTransform(vector));
-
-            results.List.TrimExcess();
-            return results;
-        }
-
         /// <inheritdoc />
         public IList<Fractional3D[]> GetFullP1PathExtension(IEnumerable<Fractional3D> refSequence)
         {
@@ -381,8 +332,8 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// <inheritdoc />
         public bool CheckInteractionGeometryIsChiralPair(in Fractional3D left0, in Fractional3D right0, in Fractional3D left1, in Fractional3D right1)
         {
-            var leftSet = GetUnitCellP1PathExtension(new []{left0, right0});
-            var rightSet = GetUnitCellP1PathExtension(new []{right0, left0});
+            var leftSet = GetUnitCellP1PathExtension(new[] {left0, right0});
+            var rightSet = GetUnitCellP1PathExtension(new[] {right0, left0});
             var testArray = new[] {left1, right1};
             return !leftSet.Contains(testArray) && rightSet.Contains(testArray);
         }
@@ -391,20 +342,6 @@ namespace Mocassin.Symmetry.SpaceGroups
         public bool CheckInteractionGeometryIsChiral(in Fractional3D left, in Fractional3D right)
         {
             return CheckInteractionGeometryIsChiralPair(left, right, right, left);
-        }
-
-        /// <summary>
-        ///     Shifts all positions so that the resulting sequence first position is on the new position
-        /// </summary>
-        /// <param name="source"></param>
-        /// <param name="newFirst"></param>
-        /// <returns></returns>
-        public IEnumerable<Fractional3D> ShiftFirstToPosition(IEnumerable<Fractional3D> source, in Fractional3D newFirst)
-        {
-            var sourceList = source.AsList();
-
-            var shift = newFirst - sourceList[0];
-            return sourceList.Select(value => value + shift);
         }
 
         /// <inheritdoc />
@@ -495,6 +432,75 @@ namespace Mocassin.Symmetry.SpaceGroups
             return result;
         }
 
+        /// <inheritdoc />
+        public IComparer<T1> GetSpecialVectorComparer<T1>() where T1 : IVector3D
+        {
+            return new VectorComparer3D<T1>(DoubleComparer);
+        }
+
+        /// <summary>
+        ///     Creates the position set list of all equivalent vectors to the passed source
+        /// </summary>
+        /// <param name="vector"></param>
+        /// <returns></returns>
+        protected SetList<Fractional3D> CreatePositionSetList(Fractional3D vector)
+        {
+            var results = new SetList<Fractional3D>(VectorComparer, LoadedGroup.Operations.Count);
+            foreach (var operation in LoadedGroup.Operations)
+                results.Add(operation.TrimTransform(vector));
+
+            results.List.TrimExcess();
+            return results;
+        }
+
+        /// <summary>
+        ///     Creates a basic fractional position set list from double coordinate values
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <param name="c"></param>
+        /// <returns></returns>
+        protected SetList<Fractional3D> CreatePositionSetList(double a, double b, double c)
+        {
+            var results = new SetList<Fractional3D>(VectorComparer, LoadedGroup.Operations.Count);
+            foreach (var operation in LoadedGroup.Operations)
+                results.Add(operation.TrimTransform(a, b, c));
+
+            results.List.TrimExcess();
+            return results;
+        }
+
+        /// <summary>
+        ///     Creates a source type fractional position set list where all results carry the original information of the source
+        /// </summary>
+        /// <typeparam name="TSource"></typeparam>
+        /// <param name="vector"></param>
+        /// <returns></returns>
+        protected SetList<Fractional3D> CreatePositionSetList<TSource>(TSource vector) where TSource : IFractional3D
+        {
+            var results = new SetList<Fractional3D>(VectorComparer, LoadedGroup.Operations.Count);
+
+            foreach (var operation in LoadedGroup.Operations)
+                results.Add(operation.TrimTransform(vector));
+
+            results.List.TrimExcess();
+            return results;
+        }
+
+        /// <summary>
+        ///     Shifts all positions so that the resulting sequence first position is on the new position
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="newFirst"></param>
+        /// <returns></returns>
+        public IEnumerable<Fractional3D> ShiftFirstToPosition(IEnumerable<Fractional3D> source, in Fractional3D newFirst)
+        {
+            var sourceList = source.AsList();
+
+            var shift = newFirst - sourceList[0];
+            return sourceList.Select(value => value + shift);
+        }
+
         /// <summary>
         ///     Add a translation shift to a symmetry operation and returns a new symmetry operation that contains the new
         ///     operations array and literal description
@@ -563,12 +569,6 @@ namespace Mocassin.Symmetry.SpaceGroups
             }
 
             return new EqualityCompareAdapter<IList<Fractional3D>>(AreEquivalent);
-        }
-
-        /// <inheritdoc />
-        public IComparer<T1> GetSpecialVectorComparer<T1>() where T1 : IVector3D
-        {
-            return new VectorComparer3D<T1>(DoubleComparer);
         }
     }
 }

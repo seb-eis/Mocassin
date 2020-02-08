@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Mocassin.UI.GUI.Base.Loading"
         xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
         mc:Ignorable="d"
         Title="LoadingWindow" Height="Auto" Width="Auto"
@@ -13,6 +12,6 @@
         SizeToContent="WidthAndHeight"
         Background="Transparent">
   <Grid>
-    <views:ContentLoadingView VerticalAlignment="Center" HorizontalAlignment="Center"/>
+    <views:ContentLoadingView VerticalAlignment="Center" HorizontalAlignment="Center" />
   </Grid>
 </Window>

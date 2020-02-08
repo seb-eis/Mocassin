@@ -14,12 +14,12 @@ namespace Mocassin.UI.Xml.SimulationModel
     public abstract class SimulationBaseData : ModelDataObject
     {
         private string customRngSeed;
-        private double temperature = 1000;
-        private int targetMcsp = 1000;
-        private int simulationBlockCount = 100;
-        private string saveRunTimeLimit = "P1Y";
-        private double lowerSuccessRateLimit;
         private int jobCount = 12;
+        private double lowerSuccessRateLimit;
+        private string saveRunTimeLimit = "P1Y";
+        private int simulationBlockCount = 100;
+        private int targetMcsp = 1000;
+        private double temperature = 1000;
 
         /// <summary>
         ///     Get or set the custom rng seed for the simulation

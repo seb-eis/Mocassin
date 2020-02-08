@@ -9,7 +9,7 @@ namespace Mocassin.Symmetry.SpaceGroups
     public interface ISymmetryOperation
     {
         /// <summary>
-        ///     Get the <see cref="SymmetryOperationCore"/> reference
+        ///     Get the <see cref="SymmetryOperationCore" /> reference
         /// </summary>
         ref SymmetryOperationCore Core { get; }
 
@@ -29,7 +29,8 @@ namespace Mocassin.Symmetry.SpaceGroups
         double TrimTolerance { get; }
 
         /// <summary>
-        ///     Applies the symmetry operation to an unspecified coordinate point and creates new coordinate information that is trimmed to the 0,0,0 unit cell
+        ///     Applies the symmetry operation to an unspecified coordinate point and creates new coordinate information that is
+        ///     trimmed to the 0,0,0 unit cell
         /// </summary>
         /// <param name="orgA"></param>
         /// <param name="orgB"></param>

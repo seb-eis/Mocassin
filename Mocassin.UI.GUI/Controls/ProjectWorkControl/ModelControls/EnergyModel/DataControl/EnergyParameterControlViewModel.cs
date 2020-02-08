@@ -1,5 +1,4 @@
 ﻿using Mocassin.UI.GUI.Base.DataContext;
-using Mocassin.UI.GUI.Controls.Base.Interfaces;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
 using Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.GridControl;
 using Mocassin.UI.Xml.Base;
@@ -9,7 +8,8 @@ using Mocassin.UI.Xml.Main;
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.DataControl
 {
     /// <summary>
-    ///     The <see cref="ProjectGraphControlViewModel" /> for <see cref="RadialInteractionFilterData" /> and radius definitions
+    ///     The <see cref="ProjectGraphControlViewModel" /> for <see cref="RadialInteractionFilterData" /> and radius
+    ///     definitions
     ///     of the stable environment
     /// </summary>
     public class EnergyParameterControlViewModel : ProjectGraphControlViewModel
@@ -21,7 +21,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.
         public InteractionFilterGridControlViewModel InteractionFilterGridViewModel { get; }
 
         /// <summary>
-        ///     Get the <see cref="StableEnvironmentData" /> of the currently < set <see cref="MocassinProject" />
+        ///     Get the <see cref="StableEnvironmentData" /> of the currently set <see cref="MocassinProject" />
         /// </summary>
         public StableEnvironmentData Environment => ContentSource?.ProjectModelData?.EnergyModelData?.StableEnvironment;
 

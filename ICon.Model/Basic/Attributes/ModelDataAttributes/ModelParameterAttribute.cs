@@ -24,8 +24,10 @@ namespace Mocassin.Model.Basic
                 throw new ArgumentNullException(nameof(interfaceType));
 
             if (!interfaceType.GetInterfaces().Contains(typeof(IModelParameter)))
+            {
                 throw new ArgumentException("Specified interface type does not implement general model parameter interface",
                     nameof(interfaceType));
+            }
 
             InterfaceType = interfaceType;
         }

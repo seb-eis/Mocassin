@@ -41,6 +41,18 @@ namespace Mocassin.Framework.Operations
             }
         }
 
+        /// <inheritdoc />
+        public IEnumerable<WarningMessage> GetWarnings()
+        {
+            return Warnings.AsEnumerable();
+        }
+
+        /// <inheritdoc />
+        public void Merge(IValidationReport other)
+        {
+            AddWarnings(other.GetWarnings());
+        }
+
         /// <summary>
         ///     Adds a warning message and sets validation to failed if the warning is critical
         /// </summary>
@@ -58,18 +70,6 @@ namespace Mocassin.Framework.Operations
         public void AddWarnings(IEnumerable<WarningMessage> messages)
         {
             foreach (var warning in messages) AddWarning(warning);
-        }
-
-        /// <inheritdoc />
-        public IEnumerable<WarningMessage> GetWarnings()
-        {
-            return Warnings.AsEnumerable();
-        }
-
-        /// <inheritdoc />
-        public void Merge(IValidationReport other)
-        {
-            AddWarnings(other.GetWarnings());
         }
 
         /// <summary>

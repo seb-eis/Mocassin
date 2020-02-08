@@ -20,6 +20,18 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <inheritdoc />
+        public override bool CheckBuildRequirements()
+        {
+            return ModelProject?.GetAllManagers().Any(x => x is IEnergyManager) ?? false;
+        }
+
+        /// <inheritdoc />
+        public override bool CheckLinkDependentBuildRequirements()
+        {
+            return true;
+        }
+
+        /// <inheritdoc />
         protected override IEnergyModelContext PopulateContext(IEnergyModelContext modelContext)
         {
             if (!CheckBuildRequirements()) return modelContext;
@@ -49,20 +61,8 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <inheritdoc />
         protected override void SetNullBuildersToDefault()
         {
-            GroupEnergyModelBuilder = GroupEnergyModelBuilder ?? new GroupEnergyModelBuilder(ModelProject);
-            PairEnergyModelBuilder = PairEnergyModelBuilder ?? new PairEnergyModelBuilder(ModelProject);
-        }
-
-        /// <inheritdoc />
-        public override bool CheckBuildRequirements()
-        {
-            return ModelProject?.GetAllManagers().Any(x => x is IEnergyManager) ?? false;
-        }
-
-        /// <inheritdoc />
-        public override bool CheckLinkDependentBuildRequirements()
-        {
-            return true;
+            GroupEnergyModelBuilder ??= new GroupEnergyModelBuilder(ModelProject);
+            PairEnergyModelBuilder ??= new PairEnergyModelBuilder(ModelProject);
         }
     }
 }

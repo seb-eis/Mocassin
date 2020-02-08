@@ -11,7 +11,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.
     public partial class InteractionFilterGridControlView : UserControl
     {
         /// <summary>
-        ///     Get or set the <see cref="DragHandler{TElement}"/> for the row header
+        ///     Get or set the <see cref="DragHandler{TElement}" /> for the row header
         /// </summary>
         private DragHandler<DataGrid> RowHeaderDragHandler { get; set; }
 

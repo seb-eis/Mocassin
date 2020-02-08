@@ -48,7 +48,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// <param name="specifier"></param>
         public SpaceGroupEntry(int index, string literal, string specifier)
         {
-            if (IndexConstraint.IsValid(index) == false) 
+            if (IndexConstraint.IsValid(index) == false)
                 throw new ArgumentOutOfRangeException(nameof(index));
 
             Index = index;
@@ -79,9 +79,15 @@ namespace Mocassin.Symmetry.SpaceGroups
                 return numberCompare;
 
             var nameCompare = string.Compare(Literal, other.Literal, StringComparison.Ordinal);
-            return nameCompare == 0 
+            return nameCompare == 0
                 ? string.Compare(Specifier, other.Specifier, StringComparison.Ordinal)
                 : nameCompare;
+        }
+
+        /// <inheritdoc />
+        public bool Equals(SpaceGroupEntry other)
+        {
+            return CompareTo(other) == 0;
         }
 
         /// <summary>
@@ -91,12 +97,6 @@ namespace Mocassin.Symmetry.SpaceGroups
         public static SpaceGroupEntry CreateDefault()
         {
             return new SpaceGroupEntry(1, "P1", "None");
-        }
-
-        /// <inheritdoc />
-        public bool Equals(SpaceGroupEntry other)
-        {
-            return CompareTo(other) == 0;
         }
     }
 }

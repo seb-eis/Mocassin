@@ -10,7 +10,7 @@ namespace Mocassin.Symmetry.CrystalSystems
     public class CrystalSystemSource : ICrystalSystemSource
     {
         /// <summary>
-        ///     The <see cref="CrystalSystemContext"/> used by the source
+        ///     The <see cref="CrystalSystemContext" /> used by the source
         /// </summary>
         public CrystalSystemContext Context { get; set; }
 
@@ -33,6 +33,19 @@ namespace Mocassin.Symmetry.CrystalSystems
             ParameterMaxValue = parameterMaxValue;
         }
 
+        /// <inheritdoc />
+        public CrystalSystem GetSystem(CrystalSystemIdentification identification)
+        {
+            return Create(pair => pair.Key.Equals(identification));
+        }
+
+        /// <inheritdoc />
+        public CrystalSystem GetSystem(ISpaceGroup group)
+        {
+            if (group == null) throw new ArgumentNullException(nameof(group));
+            return Create(pair => pair.Key.CrystalType.Equals(group.CrystalType) && pair.Key.CrystalVariation.Equals(group.CrystalVariation));
+        }
+
         /// <summary>
         ///     Creates a new crystal system with default parameters using the settings search expression (throws if more than one
         ///     settings matches the condition)
@@ -48,19 +61,6 @@ namespace Mocassin.Symmetry.CrystalSystems
                 throw new InvalidOperationException("Basic default parameter set not compatible with own constraints");
 
             return system;
-        }
-
-        /// <inheritdoc />
-        public CrystalSystem GetSystem(CrystalSystemIdentification identification)
-        {
-            return Create(pair => pair.Key.Equals(identification));
-        }
-
-        /// <inheritdoc />
-        public CrystalSystem GetSystem(ISpaceGroup group)
-        {
-            if (group == null) throw new ArgumentNullException(nameof(group));
-            return Create(pair => pair.Key.CrystalType.Equals(group.CrystalType) && pair.Key.CrystalVariation.Equals(group.CrystalVariation));
         }
 
         /// <summary>

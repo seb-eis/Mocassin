@@ -1,19 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Drawing;
 using System.Linq;
 
 namespace Mocassin.Framework.Extensions
 {
     /// <summary>
-    /// Contains linq style extension methods for the IEnumerable interface
+    ///     Contains linq style extension methods for the IEnumerable interface
     /// </summary>
     public static class MocassinLinqExtensions
     {
         /// <summary>
-        /// Get a reverse iterator for a generic enumerable sequence (Uses the list or generic interface if available, else linq reverse)
+        ///     Get a reverse iterator for a generic enumerable sequence (Uses the list or generic interface if available, else
+        ///     linq reverse)
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <param name="sequence"></param>
@@ -29,7 +29,7 @@ namespace Mocassin.Framework.Extensions
             if (sequence is IList list)
             {
                 for (var i = list.Count - 1; i >= 0; i--)
-                    yield return (T1)list[i];
+                    yield return (T1) list[i];
             }
             else
             {
@@ -39,7 +39,7 @@ namespace Mocassin.Framework.Extensions
         }
 
         /// <summary>
-        /// Casts the enumerable to a generic collection if possible or creates a new collection from the enumerable
+        ///     Casts the enumerable to a generic collection if possible or creates a new collection from the enumerable
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <param name="enumerable"></param>
@@ -69,7 +69,7 @@ namespace Mocassin.Framework.Extensions
         }
 
         /// <summary>
-        /// Generic lexicographical compare for two sequences of values where the items implement generic IComparable
+        ///     Generic lexicographical compare for two sequences of values where the items implement generic IComparable
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <param name="lhs"></param>
@@ -81,8 +81,8 @@ namespace Mocassin.Framework.Extensions
         }
 
         /// <summary>
-        /// Perform a sequence comparison of two sequences in order using the provided comparer interface.
-        /// If the sequences are identical till point of completion of the first, the lengths are compared
+        ///     Perform a sequence comparison of two sequences in order using the provided comparer interface.
+        ///     If the sequences are identical till point of completion of the first, the lengths are compared
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <param name="lhs"></param>
@@ -99,14 +99,13 @@ namespace Mocassin.Framework.Extensions
 
             using (var lhsIterator = lhsCollection.GetEnumerator())
             {
-                using (var rhsIterator = rhsCollection.GetEnumerator())
+                // ReSharper disable once GenericEnumeratorNotDisposed
+                using var rhsIterator = rhsCollection.GetEnumerator();
+                while (lhsIterator.MoveNext() && rhsIterator.MoveNext())
                 {
-                    while (lhsIterator.MoveNext() && rhsIterator.MoveNext())
-                    {
-                        var compValue = comparer.Compare(lhsIterator.Current, rhsIterator.Current);
-                        if (compValue != 0)
-                            return compValue;
-                    }
+                    var compValue = comparer.Compare(lhsIterator.Current, rhsIterator.Current);
+                    if (compValue != 0)
+                        return compValue;
                 }
             }
 
@@ -114,7 +113,8 @@ namespace Mocassin.Framework.Extensions
         }
 
         /// <summary>
-        /// Performs a select operation on consecutive pairs within the enumerable yielding N-1 results. First argument of function is last value, second is current value
+        ///     Performs a select operation on consecutive pairs within the enumerable yielding N-1 results. First argument of
+        ///     function is last value, second is current value
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <typeparam name="T2"></typeparam>
@@ -123,22 +123,20 @@ namespace Mocassin.Framework.Extensions
         /// <returns></returns>
         public static IEnumerable<T2> SelectConsecutivePairs<T1, T2>(this IEnumerable<T1> values, Func<T1, T1, T2> function)
         {
-            using (var iterator = values.GetEnumerator())
-            {
-                if (!iterator.MoveNext())
-                    yield break;
+            // ReSharper disable once GenericEnumeratorNotDisposed
+            using var iterator = values.GetEnumerator();
+            if (!iterator.MoveNext()) yield break;
 
-                var last = iterator.Current;
-                while (iterator.MoveNext())
-                {
-                    yield return function(last, iterator.Current);
-                    last = iterator.Current;
-                }
+            var last = iterator.Current;
+            while (iterator.MoveNext())
+            {
+                yield return function(last, iterator.Current);
+                last = iterator.Current;
             }
         }
 
         /// <summary>
-        /// Enables passing of a single item as en enumerable sequence containing only that item
+        ///     Enables passing of a single item as en enumerable sequence containing only that item
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <param name="item"></param>
@@ -149,7 +147,7 @@ namespace Mocassin.Framework.Extensions
         }
 
         /// <summary>
-        /// Returns the enumeration index of all entries that match the search predicate
+        ///     Returns the enumeration index of all entries that match the search predicate
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <param name="searchSequence"></param>
@@ -168,7 +166,7 @@ namespace Mocassin.Framework.Extensions
         }
 
         /// <summary>
-        ///     Linq style <see cref="List{T}"/> conversion extension with initial capacity value
+        ///     Linq style <see cref="List{T}" /> conversion extension with initial capacity value
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="source"></param>
@@ -182,7 +180,7 @@ namespace Mocassin.Framework.Extensions
         }
 
         /// <summary>
-        ///     Linq style <see cref="Array"/> conversion for cases where the size of the <see cref="IEnumerable{T}"/> is known
+        ///     Linq style <see cref="Array" /> conversion for cases where the size of the <see cref="IEnumerable{T}" /> is known
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="source"></param>
@@ -199,7 +197,7 @@ namespace Mocassin.Framework.Extensions
         }
 
         /// <summary>
-        ///     Linq style <see cref="ObservableCollection{T}"/> conversion extension
+        ///     Linq style <see cref="ObservableCollection{T}" /> conversion extension
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="source"></param>
@@ -210,7 +208,8 @@ namespace Mocassin.Framework.Extensions
         }
 
         /// <summary>
-        ///     Get an <see cref="ICollection{T}"/> from the provided <see cref="IEnumerable{T}"/>. If the source does not implement the interface a new collection is created by invoking the sequence
+        ///     Get an <see cref="ICollection{T}" /> from the provided <see cref="IEnumerable{T}" />. If the source does not
+        ///     implement the interface a new collection is created by invoking the sequence
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="source"></param>
@@ -221,7 +220,8 @@ namespace Mocassin.Framework.Extensions
         }
 
         /// <summary>
-        ///     Get an <see cref="IList{T}"/> from the provided <see cref="IEnumerable{T}"/>. If the source does not implement the interface a new list is created by invoking the sequence
+        ///     Get an <see cref="IList{T}" /> from the provided <see cref="IEnumerable{T}" />. If the source does not implement
+        ///     the interface a new list is created by invoking the sequence
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="source"></param>
@@ -232,14 +232,18 @@ namespace Mocassin.Framework.Extensions
         }
 
         /// <summary>
-        ///     Enumerates the provided <see cref="IEnumerable{T}"/>. Equivalent to calling ToList() and throwing away the list without the overhead of actually creating a list
+        ///     Enumerates the provided <see cref="IEnumerable{T}" />. Equivalent to calling ToList() and throwing away the list
+        ///     without the overhead of actually creating a list
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="source"></param>
         public static void Load<T>(this IEnumerable<T> source)
         {
             using var enumerator = source.GetEnumerator();
-            while (enumerator.MoveNext()){}
+            while (enumerator.MoveNext())
+            {
+            }
+
             enumerator.Dispose();
         }
     }

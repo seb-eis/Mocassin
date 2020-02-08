@@ -44,7 +44,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
         }
 
         /// <summary>
-        ///     Get an <see cref="IEnumerable{T}" /> for the donor <see cref="ModelObjectReference{T}" /> options of the currently selected <see cref="StateExchangePairData" />
+        ///     Get an <see cref="IEnumerable{T}" /> for the donor <see cref="ModelObjectReference{T}" /> options of the currently
+        ///     selected <see cref="StateExchangePairData" />
         /// </summary>
         /// <returns></returns>
         /// <remarks> This method ensures that on loading (Selection is null) the full collection is returned </remarks>
@@ -59,7 +60,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
         }
 
         /// <summary>
-        ///     Get an <see cref="IEnumerable{T}" /> for the acceptor <see cref="ModelObjectReference{T}" /> options of the currently selected <see cref="StateExchangePairData" />
+        ///     Get an <see cref="IEnumerable{T}" /> for the acceptor <see cref="ModelObjectReference{T}" /> options of the
+        ///     currently selected <see cref="StateExchangePairData" />
         /// </summary>
         /// <returns></returns>
         /// <remarks> This method ensures that on loading (Selection is null) the full collection is returned </remarks>
@@ -85,7 +87,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
         /// <returns></returns>
         private bool PairIsAlreadyDefined(ICollection<StateExchangePairData> defined, string donorKey, string acceptorKey)
         {
-            return donorKey == acceptorKey 
+            return donorKey == acceptorKey
                    || defined != null && defined
                        .Where(x => x != SelectedItem)
                        .Any(x => x.AcceptorParticle?.Key == acceptorKey && x.DonorParticle?.Key == donorKey);

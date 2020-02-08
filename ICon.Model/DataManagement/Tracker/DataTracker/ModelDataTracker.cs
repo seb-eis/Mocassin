@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using Mocassin.Model.Basic;
-using Mocassin.Model.Energies;
 using Mocassin.Model.ModelProject;
 
 namespace Mocassin.Model.DataManagement
@@ -17,7 +16,7 @@ namespace Mocassin.Model.DataManagement
         /// <summary>
         ///     The object liker dictionary that contains cached linking delegates for known model data objects
         /// </summary>
-        [IgnoreDataMember] private readonly Dictionary<Type, Action<object>> _objectLinkerDictionary;
+        [IgnoreDataMember] private readonly Dictionary<Type, Action<object>> objectLinkerDictionary;
 
         /// <summary>
         ///     The data object dictionary that stores the data object reference and affiliated manager as key value pairs
@@ -38,14 +37,14 @@ namespace Mocassin.Model.DataManagement
         public ModelDataTracker()
         {
             ModelObjectDictionary = new Dictionary<Type, IList>();
-            _objectLinkerDictionary = new Dictionary<Type, Action<object>>();
+            objectLinkerDictionary = new Dictionary<Type, Action<object>>();
             ModelDataDictionary = new Dictionary<Type, object>();
         }
 
         /// <inheritdoc />
         public IModelManager CreateAndRegister(IModelProject modelProject, IModelManagerFactory managerFactory)
         {
-            if (!(managerFactory.CreateNew(modelProject, out var dataObject) is IModelManager manager))
+            if (!(managerFactory.CreateNew(modelProject, out var dataObject) is { } manager))
                 return null;
 
             modelProject.RegisterManager(manager);
@@ -90,7 +89,7 @@ namespace Mocassin.Model.DataManagement
         public IEnumerable<TObject> EnumerateObjects<TObject>() where TObject : IModelObject
         {
             if (typeof(TObject) == typeof(IModelObject))
-                    throw new InvalidOperationException("Lookup of unspecified model object interface is ambiguous");
+                throw new InvalidOperationException("Lookup of unspecified model object interface is ambiguous");
 
             return FindObjectList(typeof(TObject)).Cast<TObject>();
         }
@@ -104,14 +103,12 @@ namespace Mocassin.Model.DataManagement
         /// <inheritdoc />
         public void LinkModelObject(object obj)
         {
-            if (_objectLinkerDictionary.TryGetValue(obj.GetType(), out var linker))
-            {
+            if (objectLinkerDictionary.TryGetValue(obj.GetType(), out var linker))
                 linker(obj);
-            }
             else
             {
                 linker = MakeLinker(obj.GetType(), obj);
-                _objectLinkerDictionary[obj.GetType()] = linker;
+                objectLinkerDictionary[obj.GetType()] = linker;
                 linker(obj);
             }
         }
