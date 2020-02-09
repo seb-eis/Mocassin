@@ -11,7 +11,7 @@ namespace Mocassin.Model.Structures
         /// <summary>
         ///     The index of the space group in the "International tables of space groups"
         /// </summary>
-        int GroupIndex { get; }
+        int GroupNumber { get; }
 
         /// <summary>
         ///     The literal name of the space group

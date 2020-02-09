@@ -86,7 +86,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// <inheritdoc />
         public SpaceGroupEntry GetGroupEntry()
         {
-            return new SpaceGroupEntry(InternationalIndex, MauguinNotation, VariationName);
+            return new SpaceGroupEntry(InternationalIndex, MauguinNotation, CrystalVariation);
         }
 
         /// <summary>

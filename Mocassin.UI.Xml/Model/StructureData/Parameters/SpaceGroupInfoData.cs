@@ -2,6 +2,7 @@
 using System.Xml.Serialization;
 using Mocassin.Model.Basic;
 using Mocassin.Model.Structures;
+using Mocassin.Symmetry.CrystalSystems;
 using Mocassin.Symmetry.SpaceGroups;
 using Mocassin.UI.Xml.Base;
 
@@ -15,7 +16,7 @@ namespace Mocassin.UI.Xml.StructureModel
     {
         private string literal;
         private int number;
-        private string specifier;
+        private CrystalSystemVariation crystalVariation;
 
         /// <summary>
         ///     Get or set the number of the space group
@@ -38,13 +39,13 @@ namespace Mocassin.UI.Xml.StructureModel
         }
 
         /// <summary>
-        ///     Get or set the literal specifier of the space group
+        ///     Get or set the <see cref="CrystalSystemVariation"/> of the space group
         /// </summary>
         [XmlAttribute]
-        public string Specifier
+        public CrystalSystemVariation CrystalVariation
         {
-            get => specifier;
-            set => SetProperty(ref specifier, value);
+            get => crystalVariation;
+            set => SetProperty(ref crystalVariation, value);
         }
 
         /// <summary>
@@ -53,8 +54,8 @@ namespace Mocassin.UI.Xml.StructureModel
         public SpaceGroupInfoData()
         {
             Number = 1;
-            Specifier = "None";
             Literal = "P1";
+            CrystalVariation = CrystalSystemVariation.NoneOrOriginChoice;
         }
 
         /// <inheritdoc />
@@ -74,7 +75,7 @@ namespace Mocassin.UI.Xml.StructureModel
         {
             try
             {
-                return new SpaceGroupEntry(Number, Literal ?? "", Specifier ?? "None");
+                return new SpaceGroupEntry(Number, Literal ?? "", CrystalVariation);
             }
             catch (Exception e)
             {
@@ -90,9 +91,9 @@ namespace Mocassin.UI.Xml.StructureModel
         public void PopulateFrom(SpaceGroupEntry entry)
         {
             entry ??= SpaceGroupEntry.CreateDefault();
-            Number = entry.Index;
+            Number = entry.GroupNumber;
             Literal = entry.Literal;
-            Specifier = entry.Specifier;
+            CrystalVariation = entry.CrystalVariation;
         }
     }
 }
