@@ -68,8 +68,8 @@
         {
             var libraryName16 = GetUnicodeLibraryName(libraryPath);
             HMODULE module;
-            if ((module = GetModuleHandleW(libraryPath)) == NULL)
-                module = LoadLibraryW(libraryPath);
+            if ((module = GetModuleHandleW(libraryName16)) == NULL)
+                module = LoadLibraryW(libraryName16);
             free(libraryName16);
             return module;
         }
