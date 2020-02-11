@@ -357,11 +357,12 @@ error_t KMC_EnterExecutionPhase(SCONTEXT_PARAM)
     var counters = getMainCycleCounters(SCONTEXT);
     for (;counters->McsCount < counters->NextExecutionPhaseGoalMcsCount;)
     {
-        for (int64_t i = 0; i < counters->CycleCountPerExecutionLoop; ++i)
+        let countPerLoop = counters->CycleCountPerExecutionLoop;
+        for (int64_t i = 0; i < countPerLoop; ++i)
         {
             KMC_ExecuteSimulationCycle(SCONTEXT);
         }
-        counters->CycleCount += counters->CycleCountPerExecutionLoop;
+        counters->CycleCount += countPerLoop;
         return_if(KMC_UpdateAndCheckAbortConditions(SCONTEXT) != STATE_FLG_CONTINUE, ERR_OK);
     }
     return SIMERROR;
@@ -372,11 +373,12 @@ error_t KMC_EnterSOPExecutionPhase(SCONTEXT_PARAM)
     var counters = getMainCycleCounters(SCONTEXT);
     for (;counters->McsCount < counters->NextExecutionPhaseGoalMcsCount;)
     {
-        for (int64_t i = 0; i < counters->CycleCountPerExecutionLoop; ++i)
+        let countPerLoop = counters->CycleCountPerExecutionLoop;
+        for (int64_t i = 0; i < countPerLoop; ++i)
         {
             KMC_ExecuteSOPSimulationCycle(SCONTEXT);
         }
-        counters->CycleCount += counters->CycleCountPerExecutionLoop;
+        counters->CycleCount += countPerLoop;
         KMC_UpdateTotalJumpNormalization(SCONTEXT);
     }
     return ERR_OK;
@@ -589,7 +591,7 @@ error_t SyncMainStateLatticeToRunStatus(SCONTEXT_PARAM)
     return_if(span_Length(*latticeState) != array_Length(*environmentLattice), ERR_DATACONSISTENCY);
 
     cpp_foreach(envState, *getEnvironmentLattice(SCONTEXT))
-        span_Get(*latticeState, envState->EnvironmentId) = envState->ParticleId;
+        span_Get(*latticeState, getEnvironmentStateIdByPointer(SCONTEXT, envState)) = envState->ParticleId;
 
     return ERR_OK;
 }
@@ -754,6 +756,7 @@ void KMC_SetJumpPathProperties(SCONTEXT_PARAM)
     }
 }
 
+// Deprecated loop version of KMC_SetJumpPathProperties
 //void KMC_SetJumpPathProperties(SCONTEXT_PARAM)
 //{
 //    let latticeSizes = getLatticeSizeVector(SCONTEXT);

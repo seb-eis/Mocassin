@@ -66,8 +66,8 @@ static error_t AddEnvStateToSelectionPool(SCONTEXT_PARAM, EnvironmentState_t* re
     let poolId = getDirectionPoolIdByJumpCount(SCONTEXT, jumpCount);
     var selectionPool = getJumpSelectionPool(SCONTEXT);
     var directionPool = getDirectionPoolAt(SCONTEXT, poolId);
-
-    return_if(!TryAddDirectionPoolEntry(directionPool, environment->EnvironmentId), ERR_BUFFEROVERFLOW);
+    let envId = getEnvironmentStateIdByPointer(SCONTEXT, environment);
+    return_if(!TryAddDirectionPoolEntry(directionPool, envId), ERR_BUFFEROVERFLOW);
 
     directionPool->PositionCount++;
     directionPool->JumpCount += jumpCount;
@@ -153,8 +153,8 @@ static inline void RemoveDirectionPoolEntryAt(SCONTEXT_PARAM, DirectionPool_t *r
 static inline void OnPoolUpdateInvalidToSelectable(SCONTEXT_PARAM, JumpSelectionPool_t*restrict selectionPool,  EnvironmentState_t *restrict environment, const int32_t newPoolId)
 {
     var newDirectionPool = getDirectionPoolAt(SCONTEXT, newPoolId);
-
-    AddDirectionPoolEntry(newDirectionPool, environment->EnvironmentId);
+    let envId = getEnvironmentStateIdByPointer(SCONTEXT, environment);
+    AddDirectionPoolEntry(newDirectionPool, envId);
     environment->PoolId = newPoolId;
     environment->PoolPositionId = newDirectionPool->PositionCount;
 
@@ -185,8 +185,8 @@ static inline void OnPoolUpdateSelectableToSelectable(SCONTEXT_PARAM, JumpSelect
 
     var oldDirectionPool = getDirectionPoolAt(SCONTEXT, environment->PoolId);
     var newDirectionPool = getDirectionPoolAt(SCONTEXT, newPoolId);
-
-    AddDirectionPoolEntry(newDirectionPool, environment->EnvironmentId);
+    let envId = getEnvironmentStateIdByPointer(SCONTEXT, environment);
+    AddDirectionPoolEntry(newDirectionPool, envId);
     RemoveDirectionPoolEntryAt(SCONTEXT, oldDirectionPool, environment->PoolPositionId);
 
     environment->PoolId = newPoolId;

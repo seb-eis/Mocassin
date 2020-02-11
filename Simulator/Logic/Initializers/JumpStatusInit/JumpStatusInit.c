@@ -65,7 +65,7 @@ static error_t BufferJumpLinksOfJumpPath(SCONTEXT_PARAM, const int32_t jumpLengt
     {
         continue_if(!JUMPPATH[receiverPathId]->IsStable);
 
-        let searchEnvId = JUMPPATH[receiverPathId]->EnvironmentId;
+        let searchEnvId = getEnvironmentStateIdByPointer(SCONTEXT, JUMPPATH[receiverPathId]);
         for (int32_t senderPathId = 0; senderPathId < jumpLength; ++senderPathId)
         {
             continue_if(receiverPathId == senderPathId || !JUMPPATH[senderPathId]->IsStable);

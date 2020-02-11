@@ -107,7 +107,7 @@ typedef Span_t(ClusterState_t, ClusterStates) ClusterStates_t;
 typedef Span_t(double, EnergyStates) EnergyStates_t;
 
 // Type for a full environment state definition (Does not support 16 bit alignment)
-// Layout@ggc_x86_64 => 100@[1,1,1,1,4,4,4,16,4,,16,16,24,8]
+// Layout@ggc_x86_64 => 96@[1,1,1,1,4,4,16,4,,16,16,24,8]
 typedef struct EnvironmentState
 {
     // Boolean flag if the environment center is mobile
@@ -121,9 +121,6 @@ typedef struct EnvironmentState
 
     // Current id of the environment in the jump path
     byte_t                      PathId;
-
-    // Environment id in the linearized lattice
-    int32_t                     EnvironmentId;
 
     // Current direction pool id the environment is registered in
     int32_t                     PoolId;

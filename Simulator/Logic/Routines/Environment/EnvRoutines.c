@@ -195,7 +195,8 @@ static error_t LinkEnvironmentToSurroundings(SCONTEXT_PARAM, EnvironmentState_t*
         var environmentLink = GetNextLinkFromTargetEnvironment(SCONTEXT, pairDefinition, environment);
         if (environmentLink != NULL)
         {
-            error = InPlaceConstructEnvironmentLink(environment->EnvironmentDefinition, environment->EnvironmentId, pairId, environmentLink);
+            let envId = getEnvironmentStateIdByPointer(SCONTEXT, environment);
+            error = InPlaceConstructEnvironmentLink(environment->EnvironmentDefinition, envId, pairId, environmentLink);
             return_if(error, error);
         }
         pairId++;
@@ -411,7 +412,8 @@ void ResynchronizeEnvironmentEnergyStatus(SCONTEXT_PARAM)
 
     cpp_foreach (envState, *getEnvironmentLattice(SCONTEXT))
     {
-        error = DynamicLookupEnvironmentStatus(SCONTEXT, envState->EnvironmentId, &occupationBuffer);
+        let envId = getEnvironmentStateIdByPointer(SCONTEXT, envState);
+        error = DynamicLookupEnvironmentStatus(SCONTEXT, envId, &occupationBuffer);
         error_assert(error, "Dynamic lookup of environment occupation and energy failed.");
         continue_if(!envState->IsStable);
         energy += GetEnvironmentStateEnergy(envState);
@@ -425,7 +427,6 @@ void SetEnvironmentStateToDefault(SCONTEXT_PARAM, const int32_t environmentId, c
 {
     var environment = getEnvironmentStateAt(SCONTEXT, environmentId);
     environment->ParticleId = particleId;
-    environment->EnvironmentId = environmentId;
     environment->IsMobile = false;
     environment->IsStable = (particleId == PARTICLE_VOID) ? false : true;
     environment->PositionVector = Vector4FromInt32(environmentId, getLatticeBlockSizes(SCONTEXT));
@@ -652,7 +653,7 @@ void KMC_CreateBackupAndJumpDelta(SCONTEXT_PARAM)
     let JumpDirection = getActiveJumpDirection(SCONTEXT);
 
     // Backup all required energy states
-    for (byte_t i = 0; i < JumpDirection->JumpLength; ++i)
+    for (int32_t i = 0; i < JumpDirection->JumpLength; ++i)
         SetFinalStateEnergyBackup(SCONTEXT, i);
 
     // Prepare the cluster state changes to avoid multiple code lookups
@@ -667,16 +668,16 @@ void KMC_CreateBackupAndJumpDelta(SCONTEXT_PARAM)
 void KMC_LoadJumpDeltaBackup(SCONTEXT_PARAM)
 {
     let jumpDirection = getActiveJumpDirection(SCONTEXT);
-    for(byte_t i = 0; i < jumpDirection->JumpLength; i++)
+    for(int32_t i = 0; i < jumpDirection->JumpLength; i++)
         LoadFinalStateEnergyBackup(SCONTEXT, i);
 }
 
 void KMC_SetStateEnergies(SCONTEXT_PARAM)
 {
     KMC_SetStartTransitionBaseAndFieldEnergyStates(SCONTEXT);
-    KMC_CreateBackupAndJumpDelta(SCONTEXT);
+    //KMC_CreateBackupAndJumpDelta(SCONTEXT);
     KMC_SetFinalStateEnergy(SCONTEXT);
-    KMC_LoadJumpDeltaBackup(SCONTEXT);
+    //KMC_LoadJumpDeltaBackup(SCONTEXT);
 }
 
 void KMC_SetStartTransitionBaseAndFieldEnergyStates(SCONTEXT_PARAM)
@@ -714,11 +715,12 @@ void KMC_SetFinalStateEnergy(SCONTEXT_PARAM)
     // Set the values of the first entry
     energyInfo->S2Energy = *getPathStateEnergyByIds(SCONTEXT, 0, particleId);
 
-    for(byte_t i = 1; i < jumpDirection->JumpLength;i++)
+    for(int32_t i = 1; i < jumpDirection->JumpLength;i++)
     {
         particleId = GetCodeByteAt(&jumpRule->StateCode2, i);
         energyInfo->S2Energy += *getPathStateEnergyByIds(SCONTEXT, i, particleId);
     }
+    energyInfo->S2Energy -= 0.9 * getPhysicalFactors(SCONTEXT)->EnergyFactorEvToKt;
 }
 
 void KMC_AdvanceSystemToFinalState(SCONTEXT_PARAM)
@@ -726,7 +728,7 @@ void KMC_AdvanceSystemToFinalState(SCONTEXT_PARAM)
     let stateCode = &getActiveJumpRule(SCONTEXT)->StateCode2;
     let jumpDirection = getActiveJumpDirection(SCONTEXT);
 
-    for(byte_t i = 0; i < jumpDirection->JumpLength; i++)
+    for(int32_t i = 0; i < jumpDirection->JumpLength; i++)
     {
         let newParticleId = GetCodeByteAt(stateCode, i);
         DistributeEnvironmentUpdate(SCONTEXT, JUMPPATH[i], newParticleId);
@@ -753,10 +755,10 @@ bool_t MMC_TryCreateBackupAndJumpDelta(SCONTEXT_PARAM)
 
     // Find the required environment links and build matching temporary jump links if they exist
     // If the first is not found the second can by definition not exist as well
-    let path0JumpLink = MMC_BuildJumpLink(JUMPPATH[0], JUMPPATH[1]->EnvironmentId);
+    let path0JumpLink = MMC_BuildJumpLink(JUMPPATH[0], getEnvironmentStateIdByPointer(SCONTEXT, JUMPPATH[1]));
     return_if(path0JumpLink.LinkId == INVALID_INDEX, false);
 
-    let path1JumpLink = MMC_BuildJumpLink(JUMPPATH[1], JUMPPATH[0]->EnvironmentId);
+    let path1JumpLink = MMC_BuildJumpLink(JUMPPATH[1], getEnvironmentStateIdByPointer(SCONTEXT, JUMPPATH[0]));
 
     // Backup the final state energies
     SetFinalStateEnergyBackup(SCONTEXT, 0);

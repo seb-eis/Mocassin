@@ -54,7 +54,7 @@ static void AllocateEnvironmentLattice(SCONTEXT_PARAM)
 
             // Premature ID assignment required for further allocation/construction routines
             envState->EnvironmentDefinition = envModel;
-            envState->EnvironmentId = i++;
+            i++;
         }
     }
 }
@@ -534,12 +534,13 @@ static error_t CopyDefaultMobileTrackersToMainState(SCONTEXT_PARAM)
 
     cpp_foreach(envState, *getEnvironmentLattice(SCONTEXT))
     {
-        let particleId = span_Get(*dbLattice, envState->EnvironmentId);
+        let envId = getEnvironmentStateIdByPointer(SCONTEXT, envState);
+        let particleId = span_Get(*dbLattice, envId);
         let jumpCount = getJumpCountAt(SCONTEXT, envState->EnvironmentDefinition->ObjectId, particleId);
         if ((jumpCount >= JPOOL_DIRCOUNT_PASSIVE) && (particleId != PARTICLE_VOID))
         {
             envState->MobileTrackerId = trackerId;
-            span_Get(*mapping, trackerId) = envState->EnvironmentId;
+            span_Get(*mapping, trackerId) = getEnvironmentStateIdByPointer(SCONTEXT, envState);
             trackerId++;
         }
     }

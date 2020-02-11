@@ -39,6 +39,7 @@
 #define INFO_FLG_SKIPSAVE           1 << 3  // Flag that marks a job as unsaved with no state saving
 #define INFO_FLG_DUALDOF            1 << 4  // Flag that marks a job as non-optimized with twice the actually existing degrees of freedom
 #define INFO_FLG_NOJUMPLOGGING      1 << 5  // Flag that marks a job as non histogram creating where the histograms will not be populated during simulation
+#define INFO_FLG_NORNGBIASCORRECT   1 << 6  // Flag that marks a job as not using (random % ceil) bias correction and use the number directly
 
 /* Main state flag values */
 

@@ -38,6 +38,7 @@ static inline uint32_t Pcg32Next(Pcg32_t* restrict rng)
 	return (xorshifted >> rot) | (xorshifted << ((-rot) & 31));
 }
 
+//  Get the next ceiled random number from [0...ceil) where the modulo bias is corrected
 static inline uint32_t Pcg32NextCeiled(Pcg32_t* restrict rng, uint32_t ceil)
 {
     let threshold = -ceil % ceil;
@@ -46,6 +47,12 @@ static inline uint32_t Pcg32NextCeiled(Pcg32_t* restrict rng, uint32_t ceil)
         let rnv = Pcg32Next(rng);
         if(rnv >= threshold) return rnv % ceil;
     }
+}
+
+//  Get the next random ceiled number from [0...ceil) by a simple modulo operation (slight statistical bias)
+static inline uint32_t Pcg32NextCeiledBySingleModulo(Pcg32_t* restrict rng, uint32_t ceil)
+{
+    return Pcg32Next(rng) % ceil;
 }
 
 // Get next random double from range [0.0,1.0] using the passed pcg32 rng

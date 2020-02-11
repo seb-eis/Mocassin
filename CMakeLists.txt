@@ -24,7 +24,7 @@ file(GLOB_RECURSE SIMULATOR_HEADER ./Simulator/*.c)
 file(GLOB_RECURSE UTILITY_HEADER ./Utility/*.h)
 file(GLOB_RECURSE UTILITY_SOURCE ./Utility/*.c)
 
-set(VAR_LIBRARY_TYPE "STATIC")
+set(VAR_LIBRARY_TYPE "SHARED")
 
 # Library and executable definitions
 add_executable(Mocassin.Simulator ./Main/main.c)

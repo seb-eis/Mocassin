@@ -146,7 +146,8 @@ error_t SyncMainStateTrackerMappingToSimulation(SCONTEXT_PARAM)
     cpp_foreach(envState, *getEnvironmentLattice(SCONTEXT))
     {
         continue_if(envState->MobileTrackerId <= INVALID_INDEX);
-        span_Get(*trackerMapping, envState->MobileTrackerId) = envState->EnvironmentId;
+        let envId = getEnvironmentStateIdByPointer(SCONTEXT, envState);
+        span_Get(*trackerMapping, envState->MobileTrackerId) = envId;
     }
 
     return error;

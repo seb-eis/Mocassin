@@ -45,18 +45,6 @@ static inline int32_t FindMaxJumpDirectionCount(const JumpCountTable_t* restrict
     return max;
 }
 
-// Get the next compare double between [0,1] from the RNG
-static inline double GetNextRandomDouble(SCONTEXT_PARAM)
-{
-    return Pcg32NextDouble(getMainRng(SCONTEXT));
-}
-
-// Get a ceiled random number from the main RNG
-static inline int32_t GetNextCeiledRandom(SCONTEXT_PARAM, const int32_t upperLimit)
-{
-    return (int32_t) Pcg32NextCeiled(getMainRng(SCONTEXT), upperLimit);
-}
-
 // Resolves the passed pair definition and start environment to the target environment state
 static inline EnvironmentState_t* GetPairDefinitionTargetEnvironment(SCONTEXT_PARAM, const PairInteraction_t *restrict pairDef, const EnvironmentState_t *startEnv)
 {
@@ -163,4 +151,16 @@ static inline int32_t GetParticleCountInLattice(SCONTEXT_PARAM, const byte_t par
 static inline double GetEnvironmentStateEnergy(const EnvironmentState_t* restrict envState)
 {
     return span_Get(envState->EnergyStates, envState->ParticleId);
+}
+
+// Get the next compare double between [0,1] from the RNG
+static inline double GetNextRandomDouble(SCONTEXT_PARAM)
+{
+    return Pcg32NextDouble(getMainRng(SCONTEXT));
+}
+
+// Get a ceiled random number from the main RNG
+static inline int32_t GetNextCeiledRandom(SCONTEXT_PARAM, const int32_t upperLimit)
+{
+    return Pcg32NextCeiled(getMainRng(SCONTEXT), upperLimit);
 }
