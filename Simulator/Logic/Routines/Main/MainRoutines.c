@@ -715,22 +715,61 @@ void KMC_SetNextJumpSelection(SCONTEXT_PARAM)
     SetActiveCounterCollection(SCONTEXT);
 }
 
+// Sets the jump path property of one step by the step index
+static inline void KMC_SetJumpPathPropertyByIndex(SCONTEXT_PARAM, int32_t stepIndex, const Vector4_t*restrict baseVector, const JumpSequence_t* restrict jumpSequence, const Vector4_t*restrict latticeSizes, OccupationCode64_t*restrict stateCode)
+{
+    let actVector = AddAndTrimVector4(baseVector, &span_Get(*jumpSequence, stepIndex), latticeSizes);
+    var envState = getEnvironmentStateByVector4(SCONTEXT, &actVector);
+    ++stepIndex;
+    envState->PathId = stepIndex;
+    SetCodeByteAt(stateCode, stepIndex, envState->ParticleId);
+    JUMPPATH[stepIndex] = envState;
+}
+
 void KMC_SetJumpPathProperties(SCONTEXT_PARAM)
 {
     let latticeSizes = getLatticeSizeVector(SCONTEXT);
+    let jumpSequence = &getActiveJumpDirection(SCONTEXT)->JumpSequence;
+    let length = span_Length(*jumpSequence);
+    let baseVector = &JUMPPATH[0]->PositionVector;
     var stateCode = &getCycleState(SCONTEXT)->ActiveStateCode;
-    byte_t index = 1;
-
-    cpp_foreach(relVector, getActiveJumpDirection(SCONTEXT)->JumpSequence)
+    switch (length)
     {
-        let actVector = AddAndTrimVector4(&JUMPPATH[0]->PositionVector, relVector, latticeSizes);
-        JUMPPATH[index] = getEnvironmentStateByVector4(SCONTEXT, &actVector);
-
-        SetCodeByteAt(stateCode, index, JUMPPATH[index]->ParticleId);
-        JUMPPATH[index]->PathId = index;
-        ++index;
+        case 7:
+            KMC_SetJumpPathPropertyByIndex(SCONTEXT, 6, baseVector, jumpSequence, latticeSizes, stateCode);
+        case 6:
+            KMC_SetJumpPathPropertyByIndex(SCONTEXT, 5, baseVector, jumpSequence, latticeSizes, stateCode);
+        case 5:
+            KMC_SetJumpPathPropertyByIndex(SCONTEXT, 4, baseVector, jumpSequence, latticeSizes, stateCode);
+        case 4:
+            KMC_SetJumpPathPropertyByIndex(SCONTEXT, 3, baseVector, jumpSequence, latticeSizes, stateCode);
+        case 3:
+            KMC_SetJumpPathPropertyByIndex(SCONTEXT, 2, baseVector, jumpSequence, latticeSizes, stateCode);
+        case 2:
+            KMC_SetJumpPathPropertyByIndex(SCONTEXT, 1, baseVector, jumpSequence, latticeSizes, stateCode);
+            KMC_SetJumpPathPropertyByIndex(SCONTEXT, 0, baseVector, jumpSequence, latticeSizes, stateCode);
+            break;
+        default:
+            break;
     }
 }
+
+//void KMC_SetJumpPathProperties(SCONTEXT_PARAM)
+//{
+//    let latticeSizes = getLatticeSizeVector(SCONTEXT);
+//    var stateCode = &getCycleState(SCONTEXT)->ActiveStateCode;
+//    let baseVector = &JUMPPATH[0]->PositionVector;
+//    byte_t index = 1;
+//    cpp_foreach(relVector, getActiveJumpDirection(SCONTEXT)->JumpSequence)
+//    {
+//        let actVector = AddAndTrimVector4(baseVector, relVector, latticeSizes);
+//        let envState = getEnvironmentStateByVector4(SCONTEXT, &actVector);
+//        SetCodeByteAt(stateCode, index, envState->ParticleId);
+//        envState->PathId = index;
+//        JUMPPATH[index] = envState;
+//        ++index;
+//    }
+//}
 
 static inline void LinearSearchAndSetActiveJumpRule(SCONTEXT_PARAM)
 {
@@ -854,11 +893,12 @@ void MMC_SetJumpPathProperties(SCONTEXT_PARAM)
 
     // Translate the offset index into the target environment
     let offsetVector = &getEnvironmentStateAt(SCONTEXT, selectionInfo->MmcOffsetSourceId)->PositionVector;
-    JUMPPATH[1] = &array_Get(*lattice, offsetVector->A, offsetVector->B, offsetVector->C, jumpVector->D);
+    var pathState1 = &array_Get(*lattice, offsetVector->A, offsetVector->B, offsetVector->C, jumpVector->D);
+    pathState1->PathId = 1;
 
     // Correct the active state code byte and set the path id of the second environment state
-    SetCodeByteAt(&cycleState->ActiveStateCode, 1, JUMPPATH[1]->ParticleId);
-    JUMPPATH[1]->PathId = 1;
+    SetCodeByteAt(&cycleState->ActiveStateCode, 1, pathState1->ParticleId);
+    JUMPPATH[1] = pathState1;
 }
 
 JumpRule_t* MMC_TrySetActiveJumpRule(SCONTEXT_PARAM)
