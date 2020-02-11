@@ -3,7 +3,7 @@
 namespace Mocassin.Model.Translator.Jobs
 {
     /// <summary>
-    ///     Basic simulation job flags that are shared between the different simulation types
+    ///     Basic simulation job flags that are shared between the different simulation types. These flags are used by the internal system
     /// </summary>
     [Flags]
     public enum SimulationExecutionFlags
@@ -41,24 +41,29 @@ namespace Mocassin.Model.Translator.Jobs
         ///     In a completely unoptimized simulation every degree of freedom exists twice in the system which causes
         ///     invalid time calculation
         /// </remarks>
-        UseDualDofCorrection = 1 << 4
+        UseDualDofCorrection = 1 << 4,
+
+        /// <summary>
+        ///     Marks a simulation to skip the time expensive jump logging step into a histogram (KMC only)
+        /// </summary>
+        NoJumpLogging = 1 << 5,
     }
 
     /// <summary>
-    ///     Custom simulation job flags that provides customizable parts of <see cref="SimulationExecutionFlags" />
+    ///     Custom simulation job flags that provides customizable parts of <see cref="SimulationExecutionFlags" /> as overwrites
     /// </summary>
     [Flags]
     public enum SimulationExecutionOverwriteFlags
     {
         /// <summary>
-        ///     Marks nothing
+        ///     Marks the simulation to not generate state dumps as checkpoints
         /// </summary>
-        None = 0,
+        NoSaving = SimulationExecutionFlags.NoSaving,
 
         /// <summary>
-        ///     Marks the skip the simulation to generate state dumps as checkpoints
+        ///     Marks a simulation to skip the time expensive jump logging step into a histogram (KMC only)
         /// </summary>
-        NoSaving = SimulationExecutionFlags.NoSaving
+        NoJumpLogging = SimulationExecutionFlags.NoJumpLogging,
     }
 
     /// <summary>
