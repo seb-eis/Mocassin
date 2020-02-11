@@ -54,7 +54,7 @@ void AddEnergyValueToJumpHistogram(JumpHistogram_t*restrict jumpHistogram, const
         return;
     }
 
-    let counterId = (int32_t) round((value - jumpHistogram->MinValue) * jumpHistogram->SteppingInverse);
+    let counterId = (int32_t) ((value - jumpHistogram->MinValue) * jumpHistogram->SteppingInverse);
     if (counterId >= STATE_JUMPSTAT_SIZE)
     {
         ++jumpHistogram->OverflowCount;
@@ -74,7 +74,7 @@ void AddEnergyValueToDynamicJumpHistogram(DynamicJumpHistogram_t*restrict jumpHi
         return;
     }
 
-    let counterId = (int32_t) round((value - jumpHistogram->Header->MinValue) * jumpHistogram->Header->SteppingInverse);
+    let counterId = (int32_t) ((value - jumpHistogram->Header->MinValue) * jumpHistogram->Header->SteppingInverse);
     if (counterId >= jumpHistogram->Header->EntryCount)
     {
         ++jumpHistogram->Header->OverflowCount;
@@ -121,6 +121,7 @@ static inline void UpdatePathEnvironmentTrackingData(SCONTEXT_PARAM, const byte_
 
 void KMC_AddCurrentJumpDataToHistograms(SCONTEXT_PARAM)
 {
+    return_if(JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_NOJUMPLOGGING));
     for (byte_t pathId = 0; pathId < getActiveJumpDirection(SCONTEXT)->JumpLength; ++pathId)
     {
         continue_if(!JUMPPATH[pathId]->IsMobile);

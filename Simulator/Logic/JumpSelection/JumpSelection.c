@@ -120,16 +120,14 @@ static inline void RollPositionAndDirectionFromPool(SCONTEXT_PARAM)
 
     cpp_offset_foreach(directionPool, SCONTEXT->SelectionPool.DirectionPools, 1)
     {
-        if (random >= directionPool->JumpCount)
+        if (random < directionPool->JumpCount)
         {
-            random -= directionPool->JumpCount;
-            continue;
+            let rdiv = div(random, directionPool->DirectionCount);
+            selectionInfo->EnvironmentId = getEnvironmentPoolEntryAt(directionPool, rdiv.quot);
+            selectionInfo->RelativeJumpId = rdiv.rem;
+            return;
         }
-
-        selectionInfo->EnvironmentId = getEnvironmentPoolEntryAt(directionPool, random / directionPool->DirectionCount);
-        selectionInfo->RelativeJumpId = random % directionPool->DirectionCount;
-
-        return;
+        random -= directionPool->JumpCount;
     }
 
     SIMERROR = ERR_UNKNOWN;

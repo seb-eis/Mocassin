@@ -601,11 +601,12 @@ static inline void PrepareJumpLinkClusterStateChanges(SCONTEXT_PARAM, const Jump
 static void InvokeJumpLinkDeltas(SCONTEXT_PARAM, const JumpLink_t* restrict jumpLink)
 {
     let environmentLink = getEnvLinkByJumpLink(SCONTEXT, jumpLink);
-    let workEnvironment = getActiveWorkEnvironment(SCONTEXT);
+    let sourceWorkEnvironment = getActiveWorkEnvironment(SCONTEXT);
     let jumpRule = getActiveJumpRule(SCONTEXT);
 
+    //  Set the work pair table based on the environment link of the sender and switch active work environment to receiver
+    SetActiveWorkPairTable(SCONTEXT, sourceWorkEnvironment, environmentLink);
     SetActiveWorkEnvironment(SCONTEXT, environmentLink);
-    SetActiveWorkPairTable(SCONTEXT, workEnvironment, environmentLink);
 
     let newParticleId = GetCodeByteAt(&jumpRule->StateCode2, jumpLink->SenderPathId);
     let updateParticleId = GetCodeByteAt(&jumpRule->StateCode2, getActiveWorkEnvironment(SCONTEXT)->PathId);

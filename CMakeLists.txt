@@ -24,27 +24,29 @@ file(GLOB_RECURSE SIMULATOR_HEADER ./Simulator/*.c)
 file(GLOB_RECURSE UTILITY_HEADER ./Utility/*.h)
 file(GLOB_RECURSE UTILITY_SOURCE ./Utility/*.c)
 
+set(VAR_LIBRARY_TYPE "STATIC")
+
 # Library and executable definitions
 add_executable(Mocassin.Simulator ./Main/main.c)
 set_target_properties(Mocassin.Simulator PROPERTIES C_STANDARD 11)
 
-add_library(simulator SHARED ${SIMULATOR_SOURCE})
+add_library(simulator ${VAR_LIBRARY_TYPE} ${SIMULATOR_SOURCE})
 set_target_properties(simulator PROPERTIES C_STANDARD 11)
 
-add_library(sqlite3 SHARED ./ExternalLibraries/sqlite3.h ./ExternalLibraries/sqlite3.c)
+add_library(sqlite3 ${VAR_LIBRARY_TYPE} ./ExternalLibraries/sqlite3.h ./ExternalLibraries/sqlite3.c)
 set_target_properties(sqlite3 PROPERTIES PUBLIC_HEADER ./ExternalLibraries/sqlite3.h C_STANDARD 11)
 
-add_library(jobloader SHARED ./InternalLibraries/SqliteJobLoader/Sqlite3JobLoader.h ./InternalLibraries/SqliteJobLoader/Sqlite3JobLoader.c)
+add_library(jobloader ${VAR_LIBRARY_TYPE} ./InternalLibraries/SqliteJobLoader/Sqlite3JobLoader.h ./InternalLibraries/SqliteJobLoader/Sqlite3JobLoader.c)
 set_target_properties(jobloader PROPERTIES PUBLIC_HEADER ./InternalLibraries/Interfaces/JobLoader.h C_STANDARD 11)
 
-add_library(progressprint SHARED InternalLibraries/Interfaces/ProgressPrint.h InternalLibraries/ProgressPrint/ProgressPrint.c
+add_library(progressprint ${VAR_LIBRARY_TYPE} InternalLibraries/Interfaces/ProgressPrint.h InternalLibraries/ProgressPrint/ProgressPrint.c
             Simulator/Logic/Routines/Statistics/McStatistics.c Simulator/Logic/Routines/Statistics/McStatistics.h)
 set_target_properties(progressprint PROPERTIES PUBLIC_HEADER InternalLibraries/Interfaces/ProgressPrint.h C_STANDARD 11)
 
-add_library(framework SHARED ${FRAMEWORK_SOURCE})
+add_library(framework ${VAR_LIBRARY_TYPE} ${FRAMEWORK_SOURCE})
 set_target_properties(framework PROPERTIES C_STANDARD 11)
 
-add_library(progressprint.minimal SHARED InternalLibraries/Interfaces/ProgressPrint.h InternalLibraries/ProgressPrint/MinimalProgressPrint.c
+add_library(progressprint.minimal ${VAR_LIBRARY_TYPE} InternalLibraries/Interfaces/ProgressPrint.h InternalLibraries/ProgressPrint/MinimalProgressPrint.c
             Simulator/Logic/Routines/Statistics/McStatistics.c Simulator/Logic/Routines/Statistics/McStatistics.h)
 set_target_properties(progressprint.minimal PROPERTIES PUBLIC_HEADER InternalLibraries/Interfaces/ProgressPrint.h C_STANDARD 11)
 

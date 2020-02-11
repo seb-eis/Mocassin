@@ -134,6 +134,12 @@ static inline EnvironmentState_t* getEnvironmentStateByIds(SCONTEXT_PARAM, const
     return &array_Get(*getEnvironmentLattice(SCONTEXT), a, b, c, d);
 }
 
+// Get a linearized environment state id by performing pointer arithmetic on the state environment buffer
+static inline int32_t getEnvironmentStateIdByPointerArithmetic(SCONTEXT_PARAM, const EnvironmentState_t*restrict environmentState)
+{
+    return environmentState - getEnvironmentLattice(SCONTEXT)->Begin;
+}
+
 // Get an environment state by a 4D vector access from the context
 static inline EnvironmentState_t* getEnvironmentStateByVector4(SCONTEXT_PARAM, const Vector4_t* restrict vector)
 {

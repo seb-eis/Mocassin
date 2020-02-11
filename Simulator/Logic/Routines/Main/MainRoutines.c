@@ -746,8 +746,8 @@ void KMC_SetJumpPathProperties(SCONTEXT_PARAM)
         case 3:
             KMC_SetJumpPathPropertyByIndex(SCONTEXT, 2, baseVector, jumpSequence, latticeSizes, stateCode);
         case 2:
-            KMC_SetJumpPathPropertyByIndex(SCONTEXT, 1, baseVector, jumpSequence, latticeSizes, stateCode);
             KMC_SetJumpPathPropertyByIndex(SCONTEXT, 0, baseVector, jumpSequence, latticeSizes, stateCode);
+            KMC_SetJumpPathPropertyByIndex(SCONTEXT, 1, baseVector, jumpSequence, latticeSizes, stateCode);
             break;
         default:
             break;
