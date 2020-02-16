@@ -112,17 +112,19 @@ static error_t BuildJumpStatusByStatusVector(SCONTEXT_PARAMETER, const Vector4_t
 // Constructs all jump status objects into the allocated jump status collection
 static error_t ConstructJumpStatusCollection(SCONTEXT_PARAMETER)
 {
-    error_t error;
+    error_t error = ERR_OK;
     JumpLink_t linkSearchBuffer[JUMPS_JUMPLINK_LIMIT];
     let jumpDirectionCount = (int32_t) span_Length(*getJumpDirections(simContext));
     memset(linkSearchBuffer, 0, sizeof(linkSearchBuffer));
 
     // Generate jump status for each jump direction in each unit cell
-    for (int32_t a = 0; a < getLatticeSizeVector(simContext)->A; ++a)
+    let latticeSize = getLatticeSizeVector(simContext);
+    int64_t totalCount = jumpDirectionCount * latticeSize->A * latticeSize->B * latticeSize->C;
+    for (int32_t a = 0; a < latticeSize->A; ++a)
     {
-        for (int32_t b = 0; b < getLatticeSizeVector(simContext)->B; ++b)
+        for (int32_t b = 0; b < latticeSize->B; ++b)
         {
-            for (int32_t c = 0; c < getLatticeSizeVector(simContext)->C; ++c)
+            for (int32_t c = 0; c < latticeSize->C; ++c)
             {
                 for (int32_t d = 0; d < jumpDirectionCount; ++d)
                 {
@@ -133,7 +135,7 @@ static error_t ConstructJumpStatusCollection(SCONTEXT_PARAMETER)
             }
         }
     }
-
+    printf("[Init-Info]: Constructed transition status cache [TRANSITION_COUNT=" FORMAT_I64() "]\n", totalCount);
     return error;
 }
 
@@ -193,12 +195,12 @@ static error_t AssignPossibleStaticCorrectionValuesToRules(SCONTEXT_PARAMETER)
             jumpRule->StaticVirtualJumpEnergyCorrection = isConst ? energy : NAN;
             if (isConst)
             {
-                printf("[Init-Optimization SUCCESS]: Trivialized transition event cost [TRANSITION_ID=%i, STATE_ENCODING="FORMAT_I64()"-"FORMAT_I64()"-"FORMAT_I64()"] => Path bias S0->S2 is context independent [%f eV].\n",
+                printf("[Init-Info]: Optimized transition event [TRANSITION_ID=%i, STATE_ENCODING="FORMAT_I64()"-"FORMAT_I64()"-"FORMAT_I64()"] => Path bias S0->S2 is context independent [%f eV].\n",
                        jumpCollection->ObjectId, jumpRule->StateCode0.Value, jumpRule->StateCode1.Value, jumpRule->StateCode2.Value, energy * physicalFactors->EnergyFactorKtToEv);
             }
             else
             {
-                printf("[Init-Optimization FAILURE]: Cannot trivialize transition event cost [TRANSITION_ID=%i, STATE_ENCODING="FORMAT_I64()"-"FORMAT_I64()"-"FORMAT_I64()"] => Path bias S0->S2 is context dependent. \n",
+                printf("[Init-Info]: Cannot optimize transition event [TRANSITION_ID=%i, STATE_ENCODING="FORMAT_I64()"-"FORMAT_I64()"-"FORMAT_I64()"] => Path bias S0->S2 is context dependent. \n",
                        jumpCollection->ObjectId, jumpRule->StateCode0.Value, jumpRule->StateCode1.Value, jumpRule->StateCode2.Value);
             }
         }

@@ -223,8 +223,9 @@ static void SortEnvironmentLinkingSystem(SCONTEXT_PARAMETER, EnvironmentState_t*
 static error_t ConstructPreparedLinkingSystem(SCONTEXT_PARAMETER)
 {
     error_t error;
-
-    cpp_foreach(environment, *getEnvironmentLattice(simContext))
+    int64_t linkCount = 0;
+    var environmentLattice = getEnvironmentLattice(simContext);
+    cpp_foreach(environment, *environmentLattice)
     {
         // Immobility OPT Part 1 -> Incoming updates are not required, the state energy of immobile particles is not used during mc routine
         // Effect:    Causes all immobile particles to remain at their initial energy state during simulation (can be resynchronized by dynamic lookup)
@@ -237,9 +238,12 @@ static error_t ConstructPreparedLinkingSystem(SCONTEXT_PARAMETER)
         return_if(error, error);
     }
 
-    cpp_foreach(environment, *getEnvironmentLattice(simContext))
+    cpp_foreach(environment, *environmentLattice)
+    {
         SortEnvironmentLinkingSystem(simContext, environment);
-
+        linkCount += span_Length(environment->EnvironmentLinks);
+    }
+    printf("[Init-Info]: Constructed environment update network [LINK_COUNT=" FORMAT_I64() ", LINK_COUNT_AVERAGE=" FORMAT_I64() "]\n", linkCount, linkCount / span_Length(*environmentLattice));
     return ERR_OK;
 }
 
