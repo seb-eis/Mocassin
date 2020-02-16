@@ -13,41 +13,64 @@
 #include "Simulator/Logic/Routines/Helper/HelperRoutines.h"
 #include "Simulator/Data/State/StateModel.h"
 
-// Updates the mobile tracker index on all used path environment states using the previously set backup data
-static void UpdateMobileTrackerMapping(SCONTEXT_PARAM)
+// Updates the mobile tracker index on path environment state by path id using the previously set backup data
+static inline void UpdateMobileTrackerMappingByPathId(SCONTEXT_PARAMETER, const int32_t pathId, const JumpRule_t*restrict jumpRule, const EnvironmentBackup_t*restrict envBackup)
 {
-    for (int32_t pathId = 0; pathId < getActiveJumpDirection(SCONTEXT)->JumpLength; ++pathId)
-    {
-        let pullId = getActiveJumpRule(SCONTEXT)->TrackerOrderCode[pathId];
+    let pullId = jumpRule->TrackerOrderCode[pathId];
 
-        // On debug assert that no immobile particle has a tracker reorder instruction
-        debug_assert(!((pullId != pathId) && !JUMPPATH[pathId]->IsMobile));
-        JUMPPATH[pathId]->MobileTrackerId = getEnvironmentBackup(SCONTEXT)->PathMobileMappings[pullId];
+    // On debug assert that no immobile particle has a tracker reorder instruction
+    debug_assert(!((pullId != pathId) && !JUMPPATH[pathId]->IsMobile));
+    JUMPPATH[pathId]->MobileTrackerId = envBackup->PathMobileMappings[pullId];
+}
+
+// Updates the mobile tracker index on all used path environment states using the previously set backup data
+static void UpdateMobileTrackerMapping(SCONTEXT_PARAMETER)
+{
+    let length = getActiveJumpDirection(simContext)->JumpLength;
+    let jumpRule = getActiveJumpRule(simContext);
+    let envBackup = getEnvironmentBackup(simContext);
+
+    // Fallthrough switch of possible jump lengths, path id 0 and 2 are always mobile and 1 never is
+    switch(length)
+    {
+        case 8:
+            UpdateMobileTrackerMappingByPathId(simContext, 7, jumpRule, envBackup);
+        case 7:
+            UpdateMobileTrackerMappingByPathId(simContext, 6, jumpRule, envBackup);
+        case 6:
+            UpdateMobileTrackerMappingByPathId(simContext, 5, jumpRule, envBackup);
+        case 5:
+            UpdateMobileTrackerMappingByPathId(simContext, 4, jumpRule, envBackup);
+        case 4:
+            UpdateMobileTrackerMappingByPathId(simContext, 3, jumpRule, envBackup);
+        case 3:
+            UpdateMobileTrackerMappingByPathId(simContext, 2, jumpRule, envBackup);
+            UpdateMobileTrackerMappingByPathId(simContext, 1, jumpRule, envBackup);
+            UpdateMobileTrackerMappingByPathId(simContext, 0, jumpRule, envBackup);
+        default:
+            break;
     }
 }
 
 // Updates the path environment movement tracking at the specified index
-static inline void UpdatePathEnvironmentMovementTracking(SCONTEXT_PARAM, const byte_t pathId)
+static inline void UpdatePathEnvironmentMovementTracking(SCONTEXT_PARAMETER, const int32_t pathId)
 {
-    let moveVector = &span_Get(getActiveJumpDirection(SCONTEXT)->MovementSequence, pathId);
+    let moveVector = &span_Get(getActiveJumpDirection(simContext)->MovementSequence, pathId);
+    let envState = JUMPPATH[pathId];
 
-    // Update the movement data on the mobile tracker
-    var mobileTracker = getMobileTrackerAt(SCONTEXT, JUMPPATH[pathId]->MobileTrackerId);
+    var mobileTracker = getMobileTrackerAt(simContext, envState->MobileTrackerId);
     vector3VectorOp(*mobileTracker, *moveVector, +=);
 
-    // Update the movement data of the static tracker
-    var staticTracker = getStaticMovementTrackerAt(SCONTEXT, &JUMPPATH[pathId]->PositionVector, JUMPPATH[pathId]->ParticleId);
+    var staticTracker = getStaticMovementTrackerAt(simContext, &envState->LatticeVector, envState->ParticleId);
     vector3VectorOp(*staticTracker, *moveVector, +=);
 
-    // Update the movement data on the global tracker
-    var globalTracker = getGlobalMovementTrackerAt(SCONTEXT, getActiveJumpCollection(SCONTEXT)->ObjectId, JUMPPATH[pathId]->ParticleId);
+    var globalTracker = getGlobalMovementTrackerAt(simContext, getActiveJumpCollection(simContext)->ObjectId, envState->ParticleId);
     vector3VectorOp(*globalTracker, *moveVector, +=);
 }
 
 
 void AddEnergyValueToJumpHistogram(JumpHistogram_t*restrict jumpHistogram, const double value)
 {
-    // Handle the correct counter id generation and overflow cases
     if (value < jumpHistogram->MinValue)
     {
         ++jumpHistogram->UnderflowCount;
@@ -61,13 +84,11 @@ void AddEnergyValueToJumpHistogram(JumpHistogram_t*restrict jumpHistogram, const
         return;
     }
 
-    // Handle the correct insert
     ++jumpHistogram->CountBuffer[counterId];
 }
 
 void AddEnergyValueToDynamicJumpHistogram(DynamicJumpHistogram_t*restrict jumpHistogram, const double value)
 {
-    // Handle the correct counter id generation and overflow cases
     if (value < jumpHistogram->Header->MinValue)
     {
         ++jumpHistogram->Header->UnderflowCount;
@@ -81,72 +102,105 @@ void AddEnergyValueToDynamicJumpHistogram(DynamicJumpHistogram_t*restrict jumpHi
         return;
     }
 
-    // Handle the correct insert
     ++span_Get(jumpHistogram->Counters, counterId);
 }
 
 // Updates the jump statistics affiliated with the passed environment state in the current simulation cycle context
-static inline void UpdatePathEnvironmentJumpStatistics(SCONTEXT_PARAM, const byte_t pathId)
+static inline void UpdatePathEnvironmentJumpStatistics(SCONTEXT_PARAMETER, const int32_t pathId)
 {
-    let toEvFactor = getPhysicalFactors(SCONTEXT)->EnergyFactorKtToEv;
-    let energyInfo = getJumpEnergyInfo(SCONTEXT);
-    var jumpStatistic = getJumpStatisticAt(SCONTEXT, getActiveJumpCollection(SCONTEXT)->ObjectId, JUMPPATH[pathId]->ParticleId);
+    let toEvFactor = getPhysicalFactors(simContext)->EnergyFactorKtToEv;
+    let energyInfo = getJumpEnergyInfo(simContext);
+    var jumpStatistic = getJumpStatisticAt(simContext, getActiveJumpCollection(simContext)->ObjectId, JUMPPATH[pathId]->ParticleId);
 
-    // Handle edge energy
     let energyS1 = energyInfo->S1Energy * toEvFactor;
     AddEnergyValueToJumpHistogram(&jumpStatistic->EdgeEnergyHistogram, energyS1);
 
-    // Handle conformation influence depending on prefix
     let energyConf = energyInfo->ConformationDeltaEnergy * toEvFactor;
     if (energyConf < 0.0)
         AddEnergyValueToJumpHistogram(&jumpStatistic->NegConfEnergyHistogram, fabs(energyConf));
     else
         AddEnergyValueToJumpHistogram(&jumpStatistic->PosConfEnergyHistogram, energyConf);
 
-    // Handle the total energy value
     let totEnergy = energyInfo->S0toS2DeltaEnergy * toEvFactor;
     AddEnergyValueToJumpHistogram(&jumpStatistic->TotalEnergyHistogram, totEnergy);
 }
 
 // Updates all tracking data (movement and jump statistics) affiliated with the passed path id in the current cycle context
-static inline void UpdatePathEnvironmentTrackingData(SCONTEXT_PARAM, const byte_t pathId)
+static inline void UpdatePathEnvironmentTrackingData(SCONTEXT_PARAMETER, const int32_t pathId)
 {
-    getEnvironmentBackup(SCONTEXT)->PathMobileMappings[pathId] = JUMPPATH[pathId]->MobileTrackerId;
-    return_if(!JUMPPATH[pathId]->IsMobile);
+    let envState = JUMPPATH[pathId];
+    getEnvironmentBackup(simContext)->PathMobileMappings[pathId] = envState->MobileTrackerId;
+    return_if(!envState->IsMobile);
 
     // ToDo: Optimize this to lookup the required globalTrackerId only once (Needed for movement and jump statistics)
-    UpdatePathEnvironmentMovementTracking(SCONTEXT, pathId);
-    UpdatePathEnvironmentJumpStatistics(SCONTEXT, pathId);
+    UpdatePathEnvironmentMovementTracking(simContext, pathId);
+    return_if(simContext->IsJumpLoggingDisabled);
+    UpdatePathEnvironmentJumpStatistics(simContext, pathId);
 }
 
-void KMC_AddCurrentJumpDataToHistograms(SCONTEXT_PARAM)
+void KMC_AddCurrentJumpDataToHistograms(SCONTEXT_PARAMETER)
 {
-    return_if(JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_NOJUMPLOGGING));
-    for (byte_t pathId = 0; pathId < getActiveJumpDirection(SCONTEXT)->JumpLength; ++pathId)
+    return_if(simContext->IsJumpLoggingDisabled);
+    let length = getActiveJumpDirection(simContext)->JumpLength;
+
+    // Fallthrough switch of possible jump lengths, path id 0 and 2 are always mobile and 1 never is
+    switch(length)
     {
-        continue_if(!JUMPPATH[pathId]->IsMobile);
-        UpdatePathEnvironmentJumpStatistics(SCONTEXT, pathId);
+        case 8:
+            if (JUMPPATH[7]->IsMobile) UpdatePathEnvironmentJumpStatistics(simContext, 7);
+        case 7:
+            if (JUMPPATH[6]->IsMobile) UpdatePathEnvironmentJumpStatistics(simContext, 6);
+        case 6:
+            if (JUMPPATH[5]->IsMobile) UpdatePathEnvironmentJumpStatistics(simContext, 5);
+        case 5:
+            if (JUMPPATH[4]->IsMobile) UpdatePathEnvironmentJumpStatistics(simContext, 4);
+        case 4:
+            if (JUMPPATH[3]->IsMobile) UpdatePathEnvironmentJumpStatistics(simContext, 3);
+        case 3:
+            UpdatePathEnvironmentJumpStatistics(simContext, 2);
+            UpdatePathEnvironmentJumpStatistics(simContext, 0);
+        default:
+            break;
     }
 }
 
-void KMC_AdvanceTransitionTrackingSystem(SCONTEXT_PARAM)
+void KMC_AdvanceTransitionTrackingSystem(SCONTEXT_PARAMETER)
 {
-    for (byte_t pathId = 0; pathId < getActiveJumpDirection(SCONTEXT)->JumpLength; ++pathId)
-        UpdatePathEnvironmentTrackingData(SCONTEXT, pathId);
+    let length = getActiveJumpDirection(simContext)->JumpLength;
 
-    UpdateMobileTrackerMapping(SCONTEXT);
+    // Fallthrough switch of possible jump lengths
+    switch(length)
+    {
+        case 8:
+            UpdatePathEnvironmentTrackingData(simContext, 7);
+        case 7:
+            UpdatePathEnvironmentTrackingData(simContext, 6);
+        case 6:
+            UpdatePathEnvironmentTrackingData(simContext, 5);
+        case 5:
+            UpdatePathEnvironmentTrackingData(simContext, 4);
+        case 4:
+            UpdatePathEnvironmentTrackingData(simContext, 3);
+        case 3:
+            UpdatePathEnvironmentTrackingData(simContext, 2);
+            UpdatePathEnvironmentTrackingData(simContext, 1);
+            UpdatePathEnvironmentTrackingData(simContext, 0);
+        default:
+            break;
+    }
+
+    UpdateMobileTrackerMapping(simContext);
 }
 
-error_t SyncMainStateTrackerMappingToSimulation(SCONTEXT_PARAM)
+error_t SyncMainStateTrackerMappingToSimulation(SCONTEXT_PARAMETER)
 {
     error_t error = ERR_OK;
-    var trackerMapping = getMobileTrackerMapping(SCONTEXT);
+    var trackerMapping = getMobileTrackerMapping(simContext);
 
-    // Update mobile tracker mapping in the state to the current simulation lattice state
-    cpp_foreach(envState, *getEnvironmentLattice(SCONTEXT))
+    cpp_foreach(envState, *getEnvironmentLattice(simContext))
     {
         continue_if(envState->MobileTrackerId <= INVALID_INDEX);
-        let envId = getEnvironmentStateIdByPointer(SCONTEXT, envState);
+        let envId = getEnvironmentStateIdByPointer(simContext, envState);
         span_Get(*trackerMapping, envState->MobileTrackerId) = envId;
     }
 
@@ -166,9 +220,9 @@ static inline void InitJumpHistogramToDefault(JumpHistogram_t*restrict jumpHisto
 }
 
 // Initializes the full jump statistic system to the default state
-static inline void InitJumpStatisticSystemToDefault(SCONTEXT_PARAM)
+static inline void InitJumpStatisticSystemToDefault(SCONTEXT_PARAMETER)
 {
-    cpp_foreach(jumpStatistic, *getJumpStatistics(SCONTEXT))
+    cpp_foreach(jumpStatistic, *getJumpStatistics(simContext))
     {
         InitJumpHistogramToDefault(&jumpStatistic->TotalEnergyHistogram);
         InitJumpHistogramToDefault(&jumpStatistic->PosConfEnergyHistogram);
@@ -177,11 +231,11 @@ static inline void InitJumpStatisticSystemToDefault(SCONTEXT_PARAM)
     }
 }
 
-error_t InitJumpStatisticsTrackingSystem(SCONTEXT_PARAM)
+error_t InitJumpStatisticsTrackingSystem(SCONTEXT_PARAMETER)
 {
-    if (!StateFlagsAreSet(SCONTEXT, STATE_FLG_INITIALIZED))
+    if (!StateFlagsAreSet(simContext, STATE_FLG_INITIALIZED))
     {
-        InitJumpStatisticSystemToDefault(SCONTEXT);
+        InitJumpStatisticSystemToDefault(simContext);
     }
 
     return ERR_OK;

@@ -12,29 +12,29 @@
 #include "Simulator/Logic/Routines/Statistics/McStatistics.h"
 #include "InternalLibraries/Interfaces/ProgressPrint.h"
 
-void ProgressPrint_OnBlockFinish(SCONTEXT_PARAM, file_t *fstream, bool_t onlyMobiles)
+void ProgressPrint_OnBlockFinish(SCONTEXT_PARAMETER, file_t *fstream, bool_t onlyMobiles)
 {
     fprintf(fstream, ".");
     fflush(fstream);
 }
 
-void ProgressPrint_OnSimulationStart(SCONTEXT_PARAM, file_t *fstream)
+void ProgressPrint_OnSimulationStart(SCONTEXT_PARAMETER, file_t *fstream)
 {
     fprintf(fstream, "[START]");
     fflush(fstream);
 }
 
-void ProgressPrint_OnContextReset(SCONTEXT_PARAM, file_t *fstream)
+void ProgressPrint_OnContextReset(SCONTEXT_PARAMETER, file_t *fstream)
 {
     fprintf(fstream, "[MAIN-RUN]");
     fflush(fstream);
 }
 
-void ProgressPrint_OnSimulationFinish(SCONTEXT_PARAM, file_t *fstream)
+void ProgressPrint_OnSimulationFinish(SCONTEXT_PARAMETER, file_t *fstream)
 {
-    let meta = getDbStructureModelMetaData(SCONTEXT);
-    let stateMeta = getMainStateMetaData(SCONTEXT);
-    let energyBuffer = getLatticeEnergyBuffer(SCONTEXT);
+    let meta = getDbStructureModelMetaData(simContext);
+    let stateMeta = getMainStateMetaData(simContext);
+    let energyBuffer = getLatticeEnergyBuffer(simContext);
 
     fprintf(fstream, "[DONE]:\n");
     fprintf(fstream, "LatticeEnergy:%+.10e[eV]|EnergyBufferSum:%+.10e[eV]|LastBufferSum:%+.10e[eV]\n",
@@ -47,12 +47,12 @@ void ProgressPrint_OnSimulationFinish(SCONTEXT_PARAM, file_t *fstream)
     for (byte_t i = 1; isfinite(meta->ParticleCharges[i]);++i)
     {
         var statisticsData = (ParticleStatistics_t) { .ParticleId = i, .ParticleCharge = meta->ParticleCharges[i] };
-        PopulateParticleStatistics(SCONTEXT, &statisticsData);
+        PopulateParticleStatistics(simContext, &statisticsData);
 
-        continue_if(JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_MMC));
+        continue_if(JobInfoFlagsAreSet(simContext, INFO_FLG_MMC));
 
         var mobilityData = (ParticleMobilityData_t) { .ParticleStatistics = &statisticsData };
-        PopulateMobilityData(SCONTEXT, &mobilityData);
+        PopulateMobilityData(simContext, &mobilityData);
 
 
         let moveR1 = mobilityData.EnsembleMoveR1;

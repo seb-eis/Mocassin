@@ -25,6 +25,7 @@ file(GLOB_RECURSE UTILITY_HEADER ./Utility/*.h)
 file(GLOB_RECURSE UTILITY_SOURCE ./Utility/*.c)
 
 set(VAR_LIBRARY_TYPE "SHARED")
+set(VAR_COMPILE_SQLITE "FALSE")
 
 # Library and executable definitions
 add_executable(Mocassin.Simulator ./Main/main.c)
@@ -33,8 +34,10 @@ set_target_properties(Mocassin.Simulator PROPERTIES C_STANDARD 11)
 add_library(simulator ${VAR_LIBRARY_TYPE} ${SIMULATOR_SOURCE})
 set_target_properties(simulator PROPERTIES C_STANDARD 11)
 
-add_library(sqlite3 ${VAR_LIBRARY_TYPE} ./ExternalLibraries/sqlite3.h ./ExternalLibraries/sqlite3.c)
-set_target_properties(sqlite3 PROPERTIES PUBLIC_HEADER ./ExternalLibraries/sqlite3.h C_STANDARD 11)
+if ("${VAR_COMPILE_SQLITE}" STREQUAL "TRUE")
+    add_library(sqlite3 ${VAR_LIBRARY_TYPE} ./ExternalLibraries/sqlite3.h ./ExternalLibraries/sqlite3.c)
+    set_target_properties(sqlite3 PROPERTIES PUBLIC_HEADER ./ExternalLibraries/sqlite3.h C_STANDARD 11)
+endif()
 
 add_library(jobloader ${VAR_LIBRARY_TYPE} ./InternalLibraries/SqliteJobLoader/Sqlite3JobLoader.h ./InternalLibraries/SqliteJobLoader/Sqlite3JobLoader.c)
 set_target_properties(jobloader PROPERTIES PUBLIC_HEADER ./InternalLibraries/Interfaces/JobLoader.h C_STANDARD 11)
@@ -65,7 +68,7 @@ set_target_properties(mmcfe.mocext PROPERTIES C_STANDARD 11 PUBLIC_HEADER Extens
 if (WIN32)
     # Compiler settings for windows
     message(STATUS "** Compiling with WINDOWS settings **")
-    # Basic compiler settings, not mchine specific
+    # Basic compiler settings, not machine specific
     #set(CMAKE_C_FLAGS_DEBUG "-Wall -g")
     #set(CMAKE_C_FLAGS_RELEASE "-Wall -O3")
 
@@ -73,11 +76,11 @@ if (WIN32)
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -municode")
 
     # Advanced compiler settings, small performance improvement
-    set(CMAKE_C_FLAGS_DEBUG "${COMPILE_FLAGS_SSE_GNU} -g -fno-cx-limited-range -funroll-loops -march=native -mtune=native")
+    set(CMAKE_C_FLAGS_DEBUG "${COMPILE_FLAGS_SSE_GNU} -g -march=native -mtune=native")
     set(CMAKE_C_FLAGS_RELEASE "${COMPILE_FLAGS_SSE_GNU} -O3 -w -fno-cx-limited-range -funroll-loops -march=native -mtune=native")
 
 elseif (UNIX)
-    # Set the linker flasg to use origin linking
+    # Set the linker flags to use origin linking
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-rpath -Wl,$ORIGIN")
 
     # Advanced gnu compiler settings

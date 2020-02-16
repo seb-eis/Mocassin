@@ -85,16 +85,16 @@ static inline DynamicJumpHistogram_t ctor_DynamicJumpHistogram_FromBuffer(const 
 }
 
 // Updates the tracking system on the simulation state after a successful KMC transition with the current data
-void KMC_AdvanceTransitionTrackingSystem(SCONTEXT_PARAM);
+void KMC_AdvanceTransitionTrackingSystem(SCONTEXT_PARAMETER);
 
 // Updates the jump histogram data after a KMC jump attempt without advancing to the next state
-void KMC_AddCurrentJumpDataToHistograms(SCONTEXT_PARAM);
+void KMC_AddCurrentJumpDataToHistograms(SCONTEXT_PARAMETER);
 
 // Initializes the jump statistics system on the passed simulation context (Has en effect only in KMC runs)
-error_t InitJumpStatisticsTrackingSystem(SCONTEXT_PARAM);
+error_t InitJumpStatisticsTrackingSystem(SCONTEXT_PARAMETER);
 
 // Synchronizes the mobile tracker mapping of the main simulation state to the current values in the simulation lattice
-error_t SyncMainStateTrackerMappingToSimulation(SCONTEXT_PARAM);
+error_t SyncMainStateTrackerMappingToSimulation(SCONTEXT_PARAMETER);
 
 //  Adds an energy value to the passed fixed size jump histogram
 void AddEnergyValueToJumpHistogram(JumpHistogram_t*restrict jumpHistogram, double value);

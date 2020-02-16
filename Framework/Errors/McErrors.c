@@ -71,7 +71,7 @@ static void AwaitErrorResponse(error_t error)
     #endif
 }
 
-void ErrorToStdout(int32_t errCode, const char *errFunc, int32_t errLine, const char *errMsg)
+void ErrorToStderrOut(int32_t errCode, const char *errFunc, int32_t errLine, const char *errMsg)
 {
     fprintf(stderr, ERROR_FORMAT, errCode, errFunc, errLine, ErrorCodeToString(errCode), errMsg);
     fflush(stderr);

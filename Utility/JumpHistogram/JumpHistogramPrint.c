@@ -104,20 +104,20 @@ void PrintJumpHistogramsFromStateFile(char const *stateFileName, char const *out
     SimulationState_t simulationState;
 
     var error = LoadContextFreeSimulationStateFromFile(stateFileName, &simulationState);
-    error_assert(error, "Could not load the requested file as a simulation state!");
-    error_assert(span_Length(simulationState.Buffer) != 0 ? ERR_OK : ERR_FILE, "The loaded state is empty!");
+    assert_success(error, "Could not load the requested file as a simulation state!");
+    assert_success(span_Length(simulationState.Buffer) != 0 ? ERR_OK : ERR_FILE, "The loaded state is empty!");
 
     var fstream = outFileName != NULL ? fopen(outFileName, "w") : stdout;
     error = PrintJumpHistogramsToStream(&simulationState, fstream);
     if (fstream != stdout) fclose(fstream);
 
-    error_assert(error, "Failed to write the data to the target file!");
+    assert_success(error, "Failed to write the data to the target file!");
 }
 
 void UtilityCmd_PrintJumpHistogram(int32_t argc, const char*const* argv)
 {
-    error_assert(argc >= 3 ? ERR_OK : ERR_ARGUMENT, "Invalid number of arguments");
+    assert_success(argc >= 3 ? ERR_OK : ERR_ARGUMENT, "Invalid number of arguments");
     let sourceName = argv[2];
-    error_assert(IsAccessibleFile(sourceName) ? ERR_OK : ERR_ARGUMENT, "Passed source file does not exist or cannot be accessed!");
+    assert_success(IsAccessibleFile(sourceName) ? ERR_OK : ERR_ARGUMENT, "Passed source file does not exist or cannot be accessed!");
     PrintJumpHistogramsFromStateFile(sourceName, NULL);
 }

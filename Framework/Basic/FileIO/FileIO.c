@@ -186,7 +186,7 @@ error_t LoadBufferFromFile(const char* restrict fileName, Buffer_t* restrict out
         return ERR_STREAM;
 
     if (span_Length(*outBuffer) != (size_t)bufferSize)
-        *outBuffer = new_Span(*outBuffer, (size_t)bufferSize);
+        *outBuffer = span_New(*outBuffer, (size_t)bufferSize);
 
     error = LoadBufferFromStream(fileStream, outBuffer);
     fclose(fileStream);
@@ -235,11 +235,11 @@ static error_t SaveAddStringEntryToList(StringList_t*restrict list, char * value
     }
 
     var count = list_Capacity(*list);
-    StringList_t newList = new_List(newList, 2 * count);
+    StringList_t newList = list_New(newList, 2 * count);
     memcpy(newList.Begin, list->Begin, count * sizeof(char*));
     newList.End += count;
     list_PushBack(newList, insertValue);
-    delete_List(*list);
+    list_Delete(*list);
     *list = newList;
     return ERR_OK;
 }
@@ -247,7 +247,7 @@ static error_t SaveAddStringEntryToList(StringList_t*restrict list, char * value
 #if defined(WIN32)
 error_t ListAllFilesByPattern(const char* root, const char* pattern, bool_t includeSubdirs, StringList_t*restrict outList)
 {
-    *outList = new_List(*outList, 10);
+    *outList = list_New(*outList, 10);
     wchar_t * root16, * pattern16;
     var error = Win32ConvertUtf8ToUtf16(root, &root16);
     return_if(error <= 0, ERR_FILE);
@@ -276,7 +276,7 @@ error_t ListAllFilesByPattern(const char* root, const char* pattern, bool_t incl
             error = ListAllFilesByPattern(fileName, pattern, includeSubdirs, &subList);
             free(fileName);
             cpp_foreach(item, subList) SaveAddStringEntryToList(outList, *item, false);
-            delete_List(subList);
+            list_Delete(subList);
         }
         if ((fileAtr != INVALID_FILE_ATTRIBUTES) && pattern != NULL && wcsstr(buffer16, pattern16) != NULL)
         {
@@ -291,7 +291,7 @@ error_t ListAllFilesByPattern(const char* root, const char* pattern, bool_t incl
 #else
 error_t ListAllFilesByPattern(const char* root, const char* pattern, bool_t includeSubdirs, StringList_t*restrict outList)
 {
-    *outList = new_List(*outList, 10);
+    *outList = list_New(*outList, 10);
 
     char buffer[260];
     var directory = opendir(root);
@@ -315,7 +315,7 @@ error_t ListAllFilesByPattern(const char* root, const char* pattern, bool_t incl
             StringList_t subList;
             error = ListAllFilesByPattern(buffer, pattern, includeSubdirs, &subList);
             cpp_foreach(item, subList) SaveAddStringEntryToList(outList, *item, false);
-            delete_List(subList);
+            list_Delete(subList);
         }
         memset(buffer, 0, sizeof(buffer));
     }

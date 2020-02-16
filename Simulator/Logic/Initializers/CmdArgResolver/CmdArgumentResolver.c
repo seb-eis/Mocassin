@@ -13,9 +13,9 @@
 #include "Simulator/Logic/Validators/Validators.h"
 
 // Checks if the set of command arguments contains the build call flag and terminates the execution if true
-static void TerminateOnSetBuildCallFlag(SCONTEXT_PARAM)
+static void TerminateOnSetBuildCallFlag(SCONTEXT_PARAMETER)
 {
-    let args = getCommandArguments(SCONTEXT);
+    let args = getCommandArguments(simContext);
     for (int32_t i = 1; i < args->Count; i++)
     {
         if (strcmp("--bcall", args->Values[i]) != 0) continue;
@@ -41,25 +41,25 @@ static struct _iobuf* freopen_utf8(const char* filename, const char* mode, file_
 }
 
 // Tries to redirect the stdout and stderr stream to file streams (stdout is selectable, stderr defaults to stderr.log)
-static void setStdoutRedirection(SCONTEXT_PARAM, const char* stdoutFile)
+static void setStdoutRedirection(SCONTEXT_PARAMETER, const char* stdoutFile)
 {
-    var fileInfo = getFileInformation(SCONTEXT);
+    var fileInfo = getFileInformation(simContext);
     char* tmp = NULL;
     char* tmp1 = NULL;
 
     var error = ConcatStrings(fileInfo->IODirectoryPath, "/", &tmp);
-    error_assert(error, "Stream redirection of stdout failed on target building");
+    assert_success(error, "Stream redirection of stdout failed on target building");
     error = ConcatStrings(tmp, stdoutFile, &tmp1);
-    error_assert(error, "Stream redirection of stdout failed on target building");
+    assert_success(error, "Stream redirection of stdout failed on target building");
     error = freopen_utf8(tmp1, "a", stdout) != NULL ? ERR_OK : ERR_STREAM;
-    error_assert(error, "Stream redirection of stdout to a file returned a null stream");
+    assert_success(error, "Stream redirection of stdout to a file returned a null stream");
 
     free(tmp1);
 
     error = ConcatStrings(tmp, "stderr.log", &tmp1);
-    error_assert(error, "Stream redirection of stderr failed on target building");
+    assert_success(error, "Stream redirection of stderr failed on target building");
     error = freopen_utf8(tmp1, "a", stderr) != NULL ? ERR_OK : ERR_STREAM;
-    error_assert(error, "Stream redirection of stderr to a file returned a null stream");
+    assert_success(error, "Stream redirection of stderr to a file returned a null stream");
 
     free(tmp);
     free(tmp1);
@@ -94,7 +94,6 @@ static const CmdArgLookup_t* getOptionalCmdArgsResolverTable()
         { "-engPluginPath",   (FValidator_t)  ValidateIsValidFilePath,     (FCmdCallback_t) setEnergyPluginPath },
         { "-engPluginSymbol", (FValidator_t)  ValidateStringNotNullOrEmpty,(FCmdCallback_t) setEnergyPluginSymbol },
         { "-stdout",          (FValidator_t)  ValidateStringNotNullOrEmpty,(FCmdCallback_t) setStdoutRedirection},
-        { "-fexp",            (FValidator_t)  ValidateAsTrue,              (FCmdCallback_t) setEnableFastExpMode},
         { "-extDir",          (FValidator_t)  ValidateIsDiretoryPath,      (FCmdCallback_t) setExtensionLookupPath}
     };
 
@@ -108,11 +107,11 @@ static const CmdArgLookup_t* getOptionalCmdArgsResolverTable()
 }
 
 // Searches for a command line argument in the passed resolver table and calls validator and callback if a handler is found
-static error_t LookupAndResolveCmdArgument(SCONTEXT_PARAM, const CmdArgLookup_t* restrict resolverTable, const int32_t argId)
+static error_t LookupAndResolveCmdArgument(SCONTEXT_PARAMETER, const CmdArgLookup_t* restrict resolverTable, const int32_t argId)
 {
     error_t error;
-    let keyArgument = getCommandArgumentStringAt(SCONTEXT, argId);
-    let valArgument = getCommandArgumentStringAt(SCONTEXT, argId + 1);
+    let keyArgument = getCommandArgumentStringAt(simContext, argId);
+    let valArgument = getCommandArgumentStringAt(simContext, argId + 1);
 
     error = ValidateCmdKeyArgumentFormat(keyArgument);
     return_if(error, ERR_CONTINUE);
@@ -124,7 +123,7 @@ static error_t LookupAndResolveCmdArgument(SCONTEXT_PARAM, const CmdArgLookup_t*
             error = argResolver->ValueValidator(valArgument);
             return_if(error, error);
 
-            argResolver->ValueCallback(SCONTEXT, valArgument);
+            argResolver->ValueCallback(simContext, valArgument);
             return ERR_OK;
         }
     }
@@ -133,17 +132,17 @@ static error_t LookupAndResolveCmdArgument(SCONTEXT_PARAM, const CmdArgLookup_t*
 }
 
 // Resolves the essential command line arguments and using the affiliated callback table
-static error_t ResolveAndSetEssentialCmdArguments(SCONTEXT_PARAM)
+static error_t ResolveAndSetEssentialCmdArguments(SCONTEXT_PARAMETER)
 {
     error_t error;
     let resolverTable = getEssentialCmdArgsResolverTable();
     var unresolved = span_Length(*resolverTable);
 
-    TerminateOnSetBuildCallFlag(SCONTEXT);
+    TerminateOnSetBuildCallFlag(simContext);
 
-    for (int32_t i = 1; i < getCommandArguments(SCONTEXT)->Count; i++)
+    for (int32_t i = 1; i < getCommandArguments(simContext)->Count; i++)
     {
-        error = LookupAndResolveCmdArgument(SCONTEXT, resolverTable, i);
+        error = LookupAndResolveCmdArgument(simContext, resolverTable, i);
         return_if(error == ERR_VALIDATION, error);
 
         if (error == ERR_OK)
@@ -158,15 +157,15 @@ static error_t ResolveAndSetEssentialCmdArguments(SCONTEXT_PARAM)
 }
 
 // Resolves all optional command line arguments and calls the affiliated callbacks
-static error_t ResolveAndSetOptionalCmdArguments(SCONTEXT_PARAM)
+static error_t ResolveAndSetOptionalCmdArguments(SCONTEXT_PARAMETER)
 {
     error_t error;
     let resolverTable = getOptionalCmdArgsResolverTable();
     var unresolved = span_Length(*resolverTable);
 
-    for (int32_t i = 1; i < getCommandArguments(SCONTEXT)->Count; i++)
+    for (int32_t i = 1; i < getCommandArguments(simContext)->Count; i++)
     {
-        error = LookupAndResolveCmdArgument(SCONTEXT, resolverTable, i);
+        error = LookupAndResolveCmdArgument(simContext, resolverTable, i);
         continue_if(error);
 
         return_if(--unresolved == 0, ERR_OK);
@@ -175,10 +174,10 @@ static error_t ResolveAndSetOptionalCmdArguments(SCONTEXT_PARAM)
     return ERR_OK;
 }
 
-static error_t BuildAndSetFileTargets(SCONTEXT_PARAM)
+static error_t BuildAndSetFileTargets(SCONTEXT_PARAMETER)
 {
     error_t error;
-    var fileInfo = getFileInformation(SCONTEXT);
+    var fileInfo = getFileInformation(simContext);
     char* tmp = NULL;
 
     error = ConcatStrings(fileInfo->IODirectoryPath, "/" FILE_MAINSTATE, &tmp);
@@ -192,19 +191,19 @@ static error_t BuildAndSetFileTargets(SCONTEXT_PARAM)
     return ERR_OK;
 }
 
-void ResolveCommandLineArguments(SCONTEXT_PARAM, const int32_t argCount, char const * const * argValues)
+void ResolveCommandLineArguments(SCONTEXT_PARAMETER, const int32_t argCount, char const * const * argValues)
 {
     error_t error;
 
-    setCommandArguments(SCONTEXT, argCount, argValues);
-    setProgramRunPath(SCONTEXT, getCommandArgumentStringAt(SCONTEXT, 0));
+    setCommandArguments(simContext, argCount, argValues);
+    setProgramRunPath(simContext, getCommandArgumentStringAt(simContext, 0));
 
-    error = ResolveAndSetEssentialCmdArguments(SCONTEXT);
-    error_assert(error, "Failed to resolve essential command line arguments.");
+    error = ResolveAndSetEssentialCmdArguments(simContext);
+    assert_success(error, "Failed to resolve essential command line arguments.");
 
-    error = ResolveAndSetOptionalCmdArguments(SCONTEXT);
-    error_assert(error, "Failed to resolve optional command line arguments.");
+    error = ResolveAndSetOptionalCmdArguments(simContext);
+    assert_success(error, "Failed to resolve optional command line arguments.");
 
-    error = BuildAndSetFileTargets(SCONTEXT);
-    error_assert(error, "Failed to build required file targets.");
+    error = BuildAndSetFileTargets(simContext);
+    assert_success(error, "Failed to build required file targets.");
 }

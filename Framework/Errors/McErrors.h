@@ -35,10 +35,10 @@
 
 #if defined(MC_TESTBUILD)
     // Defines the default exception handling for debug builds
-    #define errorhandle_default(code, msg) error_display(code, msg)
+    #define default_handle_error(code, msg) error_display(code, msg)
 #else
     // Defines the default exception handling action for non debug builds
-    #define errorhandle_default(code, msg) error_exit(code, msg)
+    #define default_handle_error(code, msg) error_exit(code, msg)
 #endif
 
 // Defines error codes to be a 32 bit signed integer. Returns type of functions that can return error codes
@@ -129,19 +129,19 @@ typedef int64_t cerror_t;
 #define ERR_NOMOBILES 21
 
 // Defines the default error display with code and message
-#define error_display(__CODE, __MSG) ErrorToStdout(__CODE, __FUNCTION__, __LINE__, __MSG)
+#define error_display(__CODE, __MSG) ErrorToStderrOut(__CODE, __FUNCTION__, __LINE__, __MSG)
 
-// Defines the simulator error dump macro. Dumps error information to stderr and quits programm with error code
+// Defines the simulator error dump macro. Dumps error information to stderr and quits program with error code
 #define error_exit(__CODE, __MSG) OnErrorExit(__CODE, __FUNCTION__, __LINE__, __MSG)
 
 // Defines the simulator error and memory dump macro. Dumps error information to stderr and quits programm with error code
 #define error_exitdump(__CODE, __MSG, __BSTART, __BEND) OnErrorExitWithMemDump(__CODE, __FUNCTION__, __LINE__, __MSG, __BSTART, __BEND)
 
 // Asserts that the passed condition is true. Calls default error handling if condition is false
-#define runtime_assertion(cond, error, msg) if (!(cond)) errorhandle_default((error), (msg))
+#define assert_true(cond, error, msg) if (!(cond)) default_handle_error((error), (msg))
 
 // Asserts that the error is ERR_OK and if not calls the default runtime assert reaction
-#define error_assert(error, msg) runtime_assertion((error) == (ERR_OK), (error), (msg))
+#define assert_success(error, msg) assert_true((error) == (ERR_OK), (error), (msg))
 
 // Macro for conditional one line returns statements
 #define return_if(cond, ...) if (cond) return __VA_ARGS__
@@ -156,19 +156,10 @@ typedef int64_t cerror_t;
 const char* ErrorCodeToString(error_t errCode);
 
 // Error handling call for debugging that dumps the information the stdout
-void ErrorToStdout(int32_t errCode, const char *errFunc, int32_t errLine, const char *errMsg);
+void ErrorToStderrOut(int32_t errCode, const char *errFunc, int32_t errLine, const char *errMsg);
 
 // Dumps the passed error information to stderr and exists the program with the provided code. 
 void OnErrorExit(int32_t errCode, const char* errFunc, int32_t errLine, const char* errMsg);
 
 // Dumps the passed error information to stderr and exists the program with the provided code. Dumps memory bytes between passed byte pointers
 void OnErrorExitWithMemDump(int32_t errCode, const char* errFunc, int32_t errLine, const char* errMsg, uint8_t* memStart, uint8_t* memEnd);
-
-// Invokes the passed function pointer and returns the elapsed time in milliseconds
-static inline double InvokeAndProfile(void (*func)(void))
-{
-    clock_t start = clock();
-    func();
-    clock_t end = clock();
-    return (double)(end - start);
-}

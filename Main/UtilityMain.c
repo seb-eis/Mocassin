@@ -27,7 +27,7 @@ int wmain(int argc, wchar_t const* const* argv)
     for (var i = 0; i < argc; ++i)
     {
         let error = Win32ConvertUtf16ToUtf8(argv[i], &utf8Argv[i]) <= 0 ? ERR_VALIDATION : ERR_OK;
-        error_assert(error, "Failure on converting UTF16 argument set to UTF8.");
+        assert_success(error, "Failure on converting UTF16 argument set to UTF8.");
     }
     _main(argc, (const char *const *) utf8Argv);
 }
@@ -53,7 +53,7 @@ UtilityCallbacks_t UtilityCmd_GetCallbackCollection()
 
 int _main(int argc, char const * const *argv)
 {
-    error_assert(argc >= 2 ? ERR_OK : ERR_ARGUMENT, "Invalid number of arguments, no command defined!");
+    assert_success(argc >= 2 ? ERR_OK : ERR_ARGUMENT, "Invalid number of arguments, no command defined!");
     let callbackName = argv[1];
 
     cpp_foreach(item, UtilityCmd_GetCallbackCollection())
@@ -63,5 +63,5 @@ int _main(int argc, char const * const *argv)
         return 0;
     }
 
-    error_assert(ERR_ARGUMENT, "No matching command was found!");
+    assert_success(ERR_ARGUMENT, "No matching command was found!");
 }

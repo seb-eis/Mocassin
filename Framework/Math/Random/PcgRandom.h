@@ -35,7 +35,7 @@ static inline uint32_t Pcg32Next(Pcg32_t* restrict rng)
 	rng->State = oldstate * 6364136223846793005ULL + rng->Inc;
 	let xorshifted = (uint32_t) (((oldstate >> 18u) ^ oldstate) >> 27u);
 	let rot = (uint32_t) (oldstate >> 59u);
-	return (xorshifted >> rot) | (xorshifted << ((-rot) & 31));
+	return (xorshifted >> rot) | (xorshifted << ((-rot) & 31u));
 }
 
 //  Get the next ceiled random number from [0...ceil) where the modulo bias is corrected
@@ -105,11 +105,11 @@ static inline Pcg32_t ConstructTimeInitializedPcg32()
 	Pcg32_t pcg;
 	char timeStr[100];
 	error_t error = GetFormatedTimeStamp("%Y-%m-%d-%H-%M-%S-STATE", timeStr, sizeof(timeStr));
-	error_assert(error, "Failed to get system time string fro state");
+	assert_success(error, "Failed to get system time string fro state");
 	uint64_t state = GetStringHash(timeStr);
 
 	error = GetFormatedTimeStamp("%Y-%m-%d-%H-%M-%S-INC", timeStr, sizeof(timeStr));
-	error_assert(error, "Failed to get system time string for inc");
+	assert_success(error, "Failed to get system time string for inc");
 	uint64_t inc = GetStringHash(timeStr) | 1ULL;
 
 	return new_Pcg32(pcg, state, inc);

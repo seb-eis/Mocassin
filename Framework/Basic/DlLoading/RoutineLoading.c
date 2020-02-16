@@ -28,7 +28,7 @@ FMocExtEntry_t MocExt_TryFindExtensionRoutine(const moc_uuid_t* routineUuid, con
     }
 
     cpp_foreach(item, libList) free(*item);
-    delete_List(libList);
+    list_Delete(libList);
     return entryFunc;
 }
 

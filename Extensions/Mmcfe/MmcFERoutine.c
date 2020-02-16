@@ -37,13 +37,13 @@ FMocExtEntry_t MocExtRoutine_GetEntryPoint()
 /* Internal routine implementation */
 
 // Builds the default log database file path using the provided simulation context (Has to be freed manually)
-static const char* BuildDefaultLogDbFilePath(SCONTEXT_PARAM)
+static const char* BuildDefaultLogDbFilePath(SCONTEXT_PARAMETER)
 {
-    let ioPath = getFileInformation(SCONTEXT)->IODirectoryPath;
+    let ioPath = getFileInformation(simContext)->IODirectoryPath;
     let fileName = "/mmcfelog.db";
     char* result;
     var error = ConcatStrings(ioPath, fileName, &result);
-    error_assert(error, "Fatal error on building the log database file path.");
+    assert_success(error, "Fatal error on building the log database file path.");
     return result;
 }
 
@@ -102,11 +102,11 @@ sqlite3* MMCFE_OpenLogDb(const char* dbPath, MmcfeLog_t*restrict outLog)
     if (sqlite3_open(dbPath, &db) != SQLITE_OK)
     {
         sqlite3_close(db);
-        error_assert(ERR_DATABASE, "Fatal error while trying to create the MMCFE log database connection.");
+        assert_success(ERR_DATABASE, "Fatal error while trying to create the MMCFE log database connection.");
     }
 
     var error = EnsureLogDbCreated(db, outLog);
-    error_assert(error, "Fatal error while creating or loading the log database.");
+    assert_success(error, "Fatal error while creating or loading the log database.");
     return db;
 }
 
@@ -172,9 +172,9 @@ static inline bool_t RoutineIsAlreadyCompleted(MmcfeParams_t* restrict params)
 }
 
 // Verifies that the MMCFE routine parameter data exists in the context and the right UUID is set
-static error_t TryLoadRoutineParameters(SCONTEXT_PARAM, MmcfeParams_t*restrict outParams)
+static error_t TryLoadRoutineParameters(SCONTEXT_PARAMETER, MmcfeParams_t*restrict outParams)
 {
-    let routineData = getCustomRoutineData(SCONTEXT);
+    let routineData = getCustomRoutineData(simContext);
 
     let testGuid = MocExtRoutine_GetUUID();
     return_if(CompareUUID(routineData->Guid, testGuid) != 0, ERR_DATACONSISTENCY);
@@ -189,50 +189,50 @@ static error_t TryLoadRoutineParameters(SCONTEXT_PARAM, MmcfeParams_t*restrict o
 }
 
 // Initializes the routine log after the parameter state was loaded from either log-db or simulation database
-static error_t InitializeRoutineLog(SCONTEXT_PARAM, MmcfeLog_t*restrict log)
+static error_t InitializeRoutineLog(SCONTEXT_PARAMETER, MmcfeLog_t*restrict log)
 {
     debug_assert(log != NULL);
 
-    log->StateBuffer = getSimulationState(SCONTEXT)->Buffer;
+    log->StateBuffer = getSimulationState(simContext)->Buffer;
     log->Histogram = ctor_DynamicJumpHistogram(log->ParamsState.HistogramSize);
     return ERR_OK;
 }
 
 // Executes simulation cycles till the next log relevant event (Either accepted or rejected cycle, site blocks are skipped)
-static inline void CycleSimulationTillNextLogEvent(SCONTEXT_PARAM, const MmcfeLog_t*restrict log, double* latticeEnergy)
+static inline void CycleSimulationTillNextLogEvent(SCONTEXT_PARAMETER, const MmcfeLog_t*restrict log, double* latticeEnergy)
 {
-    var counters = getMainCycleCounters(SCONTEXT);
+    var counters = getMainCycleCounters(simContext);
 
     // Cycle till the next accepted or rejected case
-    for (int32_t test = MC_BLOCKED_CYCLE; test == MC_BLOCKED_CYCLE; test = SCONTEXT->CycleResult)
+    for (int32_t test = MC_BLOCKED_CYCLE; test == MC_BLOCKED_CYCLE; test = simContext->CycleResult)
     {
-        MMC_ExecuteSimulationCycle_WithAlpha(SCONTEXT, log->ParamsState.AlphaCurrent);
+        MMC_ExecuteSimulationCycle_WithAlpha(simContext, log->ParamsState.AlphaCurrent);
     }
 
     // Update energy if required and count the cycle
-    if (SCONTEXT->CycleResult == MC_ACCEPTED_CYCLE)
+    if (simContext->CycleResult == MC_ACCEPTED_CYCLE)
     {
-        let factors = getPhysicalFactors(SCONTEXT);
-        let jumpInfo = getJumpEnergyInfo(SCONTEXT);
+        let factors = getPhysicalFactors(simContext);
+        let jumpInfo = getJumpEnergyInfo(simContext);
         *latticeEnergy += factors->EnergyFactorKtToEv * jumpInfo->S0toS2DeltaEnergy;
     }
     counters->CycleCount++;
 }
 
 // Performs the log action of a cycle outcome and writes the new data to the routine log
-static inline void LogCycleOutcome(SCONTEXT_PARAM, MmcfeLog_t*restrict log, const double latticeEnergy)
+static inline void LogCycleOutcome(SCONTEXT_PARAMETER, MmcfeLog_t*restrict log, const double latticeEnergy)
 {
     AddEnergyValueToDynamicJumpHistogram(&log->Histogram, latticeEnergy);
 }
 
 // Calculates the expected average cycle rate for the remaining simulation alpha values
-static double CalculateExpectedAverageCycleRate(SCONTEXT_PARAM, const MmcfeLog_t*restrict log)
+static double CalculateExpectedAverageCycleRate(SCONTEXT_PARAMETER, const MmcfeLog_t*restrict log)
 {
     // Estimates the average cycle rate using the fact that the success rate can be expressed as f(a) = k_0(a) * f(0)*exp(k_1 * a)
     // where the factor k_1 is the logarithm of the average best-rate/worst-rate scenario in MMC (approx. 11)
     // and the factor k_0(a) is an arbitrary exponential correction for the increasing rate bias when calculating f(0)
 
-    let meta = getMainStateMetaData(SCONTEXT);
+    let meta = getMainStateMetaData(simContext);
     let logValue = 2.398;
     let frqIntegral = 4.1703;
     let frqFactor = exp(-logValue * log->ParamsState.AlphaCurrent);
@@ -243,27 +243,27 @@ static double CalculateExpectedAverageCycleRate(SCONTEXT_PARAM, const MmcfeLog_t
 }
 
 // Calculates an estimated time till completion of the routine using the current log data
-static int64_t CalculateRuntimeEtaInSeconds(SCONTEXT_PARAM, const MmcfeLog_t*restrict log)
+static int64_t CalculateRuntimeEtaInSeconds(SCONTEXT_PARAMETER, const MmcfeLog_t*restrict log)
 {
     let cycleCountPerBlock = log->ParamsState.RelaxPhaseCycleCount + log->ParamsState.LogPhaseCycleCount;
     let alphaStep = (log->ParamsState.AlphaMax - log->ParamsState.AlphaMin) / log->ParamsState.AlphaCount;
     let remainingAlphaCount = (int32_t) round((log->ParamsState.AlphaMax - log->ParamsState.AlphaCurrent) / alphaStep);
 
-    let avgCycleRate = CalculateExpectedAverageCycleRate(SCONTEXT, log);
+    let avgCycleRate = CalculateExpectedAverageCycleRate(simContext, log);
     return (cycleCountPerBlock * remainingAlphaCount) / (int64_t) avgCycleRate;
 }
 
 // Prints the progress of the MMCFE routine
-static inline void PrintRoutineProgress(SCONTEXT_PARAM, const MmcfeLog_t*restrict log)
+static inline void PrintRoutineProgress(SCONTEXT_PARAMETER, const MmcfeLog_t*restrict log)
 {
-    let meta = getMainStateMetaData(SCONTEXT);
+    let meta = getMainStateMetaData(simContext);
     let peakEnergy = FindDynamicJumpHistogramMaxValue(&log->Histogram);
-    let tempEquiv = getDbModelJobInfo(SCONTEXT)->Temperature / log->ParamsState.AlphaCurrent;
+    let tempEquiv = getDbModelJobInfo(simContext)->Temperature / log->ParamsState.AlphaCurrent;
 
     char stampBuffer[TIME_ISO8601_BYTECOUNT], runBuffer[TIME_ISO8601_BYTECOUNT], etaBuffer[TIME_ISO8601_BYTECOUNT];
     GetCurrentTimeStampISO8601UTC(stampBuffer);
     SecondsToISO8601TimeSpan(runBuffer, meta->ProgramRunTime);
-    let timeEta = CalculateRuntimeEtaInSeconds(SCONTEXT, log);
+    let timeEta = CalculateRuntimeEtaInSeconds(simContext, log);
     SecondsToISO8601TimeSpan(etaBuffer, timeEta);
 
     fprintf(stdout, "MMCFE  => Logtime: %s [  ] (Runtime = %s, ETA = %s)\n", stampBuffer, runBuffer, etaBuffer);
@@ -273,16 +273,16 @@ static inline void PrintRoutineProgress(SCONTEXT_PARAM, const MmcfeLog_t*restric
 }
 
 // Finishes one logging phase of the MMCFE routine
-static inline void FinishLoggingPhase(SCONTEXT_PARAM, MmcfeLog_t*restrict log, sqlite3*restrict db)
+static inline void FinishLoggingPhase(SCONTEXT_PARAMETER, MmcfeLog_t*restrict log, sqlite3*restrict db)
 {
-    MMC_UpdateAndCheckAbortConditions(SCONTEXT);
-    MC_DoCommonPhaseFinish(SCONTEXT);
+    MMC_UpdateAndCheckAbortConditions(simContext);
+    MC_DoCommonPhaseFinish(simContext);
     MMCFE_WriteEntryToLogDb(db, log);
-    PrintRoutineProgress(SCONTEXT, log);
+    PrintRoutineProgress(simContext, log);
 }
 
 // Prepares the MMCFE log for the next execution phase using the provide energy buffer information
-static inline void PrepareLogForNextLoggingPhase(SCONTEXT_PARAM, MmcfeLog_t*restrict log, const Flp64Buffer_t*restrict engBuffer)
+static inline void PrepareLogForNextLoggingPhase(SCONTEXT_PARAMETER, MmcfeLog_t*restrict log, const Flp64Buffer_t*restrict engBuffer)
 {
     var avgEnergy = 0.0;
     cpp_foreach(item, *engBuffer) avgEnergy+= *item;
@@ -292,49 +292,49 @@ static inline void PrepareLogForNextLoggingPhase(SCONTEXT_PARAM, MmcfeLog_t*rest
 }
 
 // Enters the relaxation phase of the MMCFE that will prepare the lattice and the histogram system fro the next logging phase
-static inline void EnterRelaxationPhase(SCONTEXT_PARAM, MmcfeLog_t*restrict log)
+static inline void EnterRelaxationPhase(SCONTEXT_PARAMETER, MmcfeLog_t*restrict log)
 {
-    let latticeEnergy = &getMainStateMetaData(SCONTEXT)->LatticeEnergy;
+    let latticeEnergy = &getMainStateMetaData(simContext)->LatticeEnergy;
     let bufferSize = log->ParamsState.RelaxPhaseCycleCount > MMCFE_RELAXBUFFER_SIZE ? MMCFE_RELAXBUFFER_SIZE : log->ParamsState.RelaxPhaseCycleCount;
-    Flp64Buffer_t energyBuffer = new_List(energyBuffer, bufferSize);
+    Flp64Buffer_t energyBuffer = list_New(energyBuffer, bufferSize);
 
     for (int64_t i = 0; i < log->ParamsState.RelaxPhaseCycleCount; i++)
     {
-        CycleSimulationTillNextLogEvent(SCONTEXT, log, latticeEnergy);
+        CycleSimulationTillNextLogEvent(simContext, log, latticeEnergy);
         list_PushBack(energyBuffer, *latticeEnergy);
         if (list_IsFull(energyBuffer)) list_Clear(energyBuffer);
     }
 
     energyBuffer.End = energyBuffer.CapacityEnd;
-    PrepareLogForNextLoggingPhase(SCONTEXT, log, &energyBuffer);
-    delete_List(energyBuffer);
+    PrepareLogForNextLoggingPhase(simContext, log, &energyBuffer);
+    list_Delete(energyBuffer);
 }
 
 // Enters the logging phase of the MMCFE that produces the histogram data
-static inline void EnterLoggingPhase(SCONTEXT_PARAM, MmcfeLog_t*restrict log)
+static inline void EnterLoggingPhase(SCONTEXT_PARAMETER, MmcfeLog_t*restrict log)
 {
-    let latticeEnergy = &getMainStateMetaData(SCONTEXT)->LatticeEnergy;
+    let latticeEnergy = &getMainStateMetaData(simContext)->LatticeEnergy;
 
     for (int64_t i = 0; i < log->ParamsState.LogPhaseCycleCount; i++)
     {
-        CycleSimulationTillNextLogEvent(SCONTEXT, log, latticeEnergy);
-        LogCycleOutcome(SCONTEXT, log, *latticeEnergy);
+        CycleSimulationTillNextLogEvent(simContext, log, latticeEnergy);
+        LogCycleOutcome(simContext, log, *latticeEnergy);
     }
 }
 
 // Enters the actual outer MMCFE routine execution phase that performs the simulation with the provided routine log and database
-static error_t EnterExecutionLoop(SCONTEXT_PARAM, MmcfeLog_t*restrict log, sqlite3*restrict db, const bool_t logLoaded)
+static error_t EnterExecutionLoop(SCONTEXT_PARAMETER, MmcfeLog_t*restrict log, sqlite3*restrict db, const bool_t logLoaded)
 {
     let alphaStep = (log->ParamsState.AlphaMax - log->ParamsState.AlphaMin) / log->ParamsState.AlphaCount;
     if (logLoaded) log->ParamsState.AlphaCurrent += alphaStep;
 
-    MMC_UpdateAndCheckAbortConditions(SCONTEXT);
+    MMC_UpdateAndCheckAbortConditions(simContext);
 
     for (;log->ParamsState.AlphaCurrent <= log->ParamsState.AlphaMax + 1.0e-6;)
     {
-        EnterRelaxationPhase(SCONTEXT, log);
-        EnterLoggingPhase(SCONTEXT, log);
-        FinishLoggingPhase(SCONTEXT, log, db);
+        EnterRelaxationPhase(simContext, log);
+        EnterLoggingPhase(simContext, log);
+        FinishLoggingPhase(simContext, log, db);
         log->ParamsState.AlphaCurrent += alphaStep;
     }
 
@@ -342,27 +342,27 @@ static error_t EnterExecutionLoop(SCONTEXT_PARAM, MmcfeLog_t*restrict log, sqlit
 }
 
 // The internal MMCFE routine entry point
-static error_t StartRoutineInternal(SCONTEXT_PARAM)
+static error_t StartRoutineInternal(SCONTEXT_PARAMETER)
 {
     var error = ERR_OK;
     MmcfeLog_t routineLog;
     nullStructContent(routineLog);
 
-    let logPath = BuildDefaultLogDbFilePath(SCONTEXT);
+    let logPath = BuildDefaultLogDbFilePath(simContext);
     var db = MMCFE_OpenLogDb(logPath, &routineLog);
     return_if(RoutineIsAlreadyCompleted(&routineLog.ParamsState), (sqlite3_close(db), ERR_ALREADYCOMPLETED));
 
     let logLoaded = RoutineParametersAreValid(&routineLog.ParamsState);
     if (!logLoaded)
     {
-        error = TryLoadRoutineParameters(SCONTEXT, &routineLog.ParamsState);
+        error = TryLoadRoutineParameters(simContext, &routineLog.ParamsState);
         return_if(error, error);
     }
 
-    error = InitializeRoutineLog(SCONTEXT, &routineLog);
+    error = InitializeRoutineLog(simContext, &routineLog);
     return_if(error, error);
 
-    error = EnterExecutionLoop(SCONTEXT, &routineLog, db, logLoaded);
+    error = EnterExecutionLoop(simContext, &routineLog, db, logLoaded);
     return_if(error, error);
 
     return sqlite3_close(db) != SQLITE_OK ? ERR_DATABASE : ERR_OK;
@@ -371,5 +371,5 @@ static error_t StartRoutineInternal(SCONTEXT_PARAM)
 void MMCFE_StartRoutine(void* context)
 {
     let error = StartRoutineInternal((SimulationContext_t *) context);
-    error_assert(error, "Unhandled internal error in MMCFE execution routine.");
+    assert_success(error, "Unhandled internal error in MMCFE execution routine.");
 }
