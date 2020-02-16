@@ -47,6 +47,11 @@ namespace Mocassin.Model.Translator.Jobs
         ///     Marks a simulation to skip the time expensive jump logging step into a histogram (KMC only)
         /// </summary>
         NoJumpLogging = 1 << 5,
+
+        /// <summary>
+        ///     Marks a simulation to use the fast exponential approximation by N. Schraudolph
+        /// </summary>
+        UseFastExp = 1 << 6
     }
 
     /// <summary>
@@ -64,6 +69,11 @@ namespace Mocassin.Model.Translator.Jobs
         ///     Marks a simulation to skip the time expensive jump logging step into a histogram (KMC only)
         /// </summary>
         NoJumpLogging = SimulationExecutionFlags.NoJumpLogging,
+
+        /// <summary>
+        ///     Marks a simulation to use the fast exponential approximation by N. Schraudolph
+        /// </summary>
+        UseFastExp = SimulationExecutionFlags.UseFastExp
     }
 
     /// <summary>

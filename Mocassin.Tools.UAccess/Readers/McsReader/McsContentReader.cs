@@ -15,6 +15,11 @@ namespace Mocassin.Tools.UAccess.Readers
         private readonly McsHeader header;
 
         /// <summary>
+        ///     Get the value that indicates if data is not set on the <see cref="McsHeader"/>
+        /// </summary>
+        public static int DataNotPresentOffsetIndicator { get; } = -1;
+
+        /// <summary>
         ///     Get the <see cref="BinaryReader" /> to access the byte array contents
         /// </summary>
         private BinaryStructureReader BinaryReader { get; }
@@ -129,6 +134,7 @@ namespace Mocassin.Tools.UAccess.Readers
         /// </summary>
         public ReadOnlySpan<McsJumpStatistic> ReadJumpStatistics()
         {
+            if (Header.JumpStatisticsOffset == DataNotPresentOffsetIndicator) return ReadOnlySpan<McsJumpStatistic>.Empty;
             return IsReadingMmcState
                 ? ReadOnlySpan<McsJumpStatistic>.Empty
                 : BinaryReader.ReadAreaAs<McsJumpStatistic>(Header.JumpStatisticsOffset, BinaryReader.ByteCount);

@@ -21,7 +21,7 @@ namespace Mocassin.Tools.UAccess.Readers.McsReader.Components
         /// <summary>
         ///     Get set simulation flags
         /// </summary>
-        [MarshalAs(UnmanagedType.I4)] public readonly int Flags;
+        [MarshalAs(UnmanagedType.I8)] public readonly ulong Flags;
 
         /// <summary>
         ///     Get the byte offset for the start of the meta data block
@@ -62,10 +62,5 @@ namespace Mocassin.Tools.UAccess.Readers.McsReader.Components
         ///     Get the byte offset for the start of the jump statistics data block
         /// </summary>
         [MarshalAs(UnmanagedType.I4)] public readonly int JumpStatisticsOffset;
-
-        /// <summary>
-        ///     Explicit padding to 56 bytes
-        /// </summary>
-        [MarshalAs(UnmanagedType.I4)] private readonly int padding;
     }
 }
