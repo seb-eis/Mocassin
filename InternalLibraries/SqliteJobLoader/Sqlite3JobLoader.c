@@ -23,10 +23,12 @@ void JobLoader_LoadDatabaseModelToContext(SCONTEXT_PARAMETER)
 
 static error_t PrepareSqlStatement(char *sqlQuery, sqlite3 *db, sqlite3_stmt **sqlStatement, int32_t id)
 {
+    const int variableIndexInStmt = 1;
+
     error_t error = sqlite3_prepare_v2(db, sqlQuery, -1, &(*sqlStatement), NULL);
     return_if(error != SQLITE_OK, error);
 
-    error = sqlite3_bind_int(*sqlStatement, ID_POS_IN_SQLSTMT, id);
+    error = sqlite3_bind_int(*sqlStatement, variableIndexInStmt, id);
     return_if(error != SQLITE_OK, error);
 
     error = sqlite3_step(*sqlStatement);
@@ -42,7 +44,7 @@ static error_t GetJobModelFromDb_Deprecated(char *sqlQuery, sqlite3 *db, DbModel
     sqlite3_stmt *sqlStatement = NULL;
 
     error_t error = PrepareSqlStatement(sqlQuery, db, &sqlStatement, dbModel->JobModel.ContextId);
-    sql_FinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement);
+    SQLFinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement, error);
 
     dbModel->JobModel.StructureModelId = sqlite3_column_int(sqlStatement, 0);
     dbModel->JobModel.EnergyModelId = sqlite3_column_int(sqlStatement, 1);
@@ -147,7 +149,7 @@ static error_t GetStructureModelFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *d
     var model = &dbModel->StructureModel;
 
     error_t error = PrepareSqlStatement(sqlQuery, db, &sqlStatement, dbModel->JobModel.StructureModelId);
-    sql_FinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement);
+    SQLFinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement, error);
 
     let environmentCount = sqlite3_column_int(sqlStatement, 3);
 
@@ -157,7 +159,8 @@ static error_t GetStructureModelFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *d
     model->EnvironmentDefinitions = span_New(model->EnvironmentDefinitions, environmentCount);
 
     model->MetaData = malloc(sizeof(StructureMetaData_t));
-    sql_FinalizeAndReturnIf(model->MetaData == NULL, sqlStatement);
+    SQLFinalizeAndReturnIf(model->MetaData == NULL, sqlStatement, ERR_MEMALLOCATION);
+
     memcpy(model->MetaData, sqlite3_column_blob(sqlStatement, 4), sizeof(StructureMetaData_t));
 
     error = sqlite3_finalize(sqlStatement);
@@ -174,7 +177,7 @@ static error_t GetEnergyModelFromDb_Deprecated(char *sqlQuery, sqlite3 *db, DbMo
     var model = &dbModel->EnergyModel;
 
     error_t error = PrepareSqlStatement(sqlQuery, db, &sqlStatement, dbModel->JobModel.EnergyModelId);
-    sql_FinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement);
+    SQLFinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement, error);
 
     let pairTableCount = sqlite3_column_int(sqlStatement, 0);
     let clusterTableCount = sqlite3_column_int(sqlStatement, 1);
@@ -203,7 +206,7 @@ static error_t GetEnergyModelFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *dbMo
         return GetEnergyModelFromDb_Deprecated(sqlQuery, db , dbModel);
     }
 
-    sql_FinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement);
+    SQLFinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement, error);
 
     let pairTableCount = sqlite3_column_int(sqlStatement, 0);
     let clusterTableCount = sqlite3_column_int(sqlStatement, 1);
@@ -227,7 +230,7 @@ static error_t GetTransitionModelFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *
     var model = &dbModel->TransitionModel;
 
     error_t error = PrepareSqlStatement(sqlQuery, db, &sqlStatement, dbModel->JobModel.TransitionModelId);
-    sql_FinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement);
+    SQLFinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement, error);
 
     let jumpCollectionCount = sqlite3_column_int(sqlStatement, 4);
     let jumpDirectionCount = sqlite3_column_int(sqlStatement, 5);
@@ -252,7 +255,7 @@ static error_t GetLatticeModelFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *dbM
     var latticeModel = &dbModel->LatticeModel;
 
     error_t error = PrepareSqlStatement(sqlQuery, db, &sqlStatement, dbModel->JobModel.LatticeModelId);
-    sql_FinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement);
+    SQLFinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement, error);
 
     latticeModel->Lattice = array_ConstructFromBlob(latticeModel->Lattice, sqlite3_column_blob(sqlStatement, 0));
     latticeModel->LatticeInfo = *(LatticeInfo_t*) sqlite3_column_blob(sqlStatement, 1);
@@ -272,7 +275,7 @@ static error_t GetEnvironmentDefinitionsFromDb(char *sqlQuery, sqlite3 *db, DbMo
     var environmentDefinitions = &dbModel->StructureModel.EnvironmentDefinitions;
 
     error_t error = PrepareSqlStatement(sqlQuery, db, &sqlStatement, dbModel->JobModel.StructureModelId);
-    sql_FinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement);
+    SQLFinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement, error);
 
     cpp_foreach(item, *environmentDefinitions)
     {
@@ -290,7 +293,7 @@ static error_t GetEnvironmentDefinitionsFromDb(char *sqlQuery, sqlite3 *db, DbMo
         if (item != environmentDefinitions->End - 1)
         {
             error = sqlite3_step(sqlStatement);
-            sql_FinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement);
+            SQLFinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement, error);
         }
     }
 
@@ -308,7 +311,7 @@ static error_t GetPairEnergyTablesFromDb(char *sqlQuery, sqlite3 *db, DbModel_t 
     var tables = &dbModel->EnergyModel.PairTables;
 
     error_t error = PrepareSqlStatement(sqlQuery, db, &sqlStatement, dbModel->JobModel.EnergyModelId);
-    sql_FinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement);
+    SQLFinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement, error);
 
     cpp_foreach(table, *tables)
     {
@@ -318,7 +321,7 @@ static error_t GetPairEnergyTablesFromDb(char *sqlQuery, sqlite3 *db, DbModel_t 
         if (table != tables->End - 1)
         {
             error = sqlite3_step(sqlStatement);
-            sql_FinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement);
+            SQLFinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement, error);
         }
     }
 
@@ -336,7 +339,7 @@ static error_t GetClusterEnergyTablesFromDb(char *sqlQuery, sqlite3 *db, DbModel
     var tables = &dbModel->EnergyModel.ClusterTables;
 
     error_t error = PrepareSqlStatement(sqlQuery, db, &sqlStatement, dbModel->JobModel.EnergyModelId);
-    sql_FinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement);
+    SQLFinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement, error);
 
     cpp_foreach(table, *tables)
     {
@@ -351,7 +354,7 @@ static error_t GetClusterEnergyTablesFromDb(char *sqlQuery, sqlite3 *db, DbModel
         if (table != tables->End - 1)
         {
             error = sqlite3_step(sqlStatement);
-            sql_FinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement);
+            SQLFinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement, error);
         }
     }
 
@@ -369,7 +372,7 @@ static error_t GetJumpCollectionsFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *
     var collections = &dbModel->TransitionModel.JumpCollections;
 
     error_t error = PrepareSqlStatement(sqlQuery, db, &sqlStatement, dbModel->JobModel.TransitionModelId);
-    sql_FinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement);
+    SQLFinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement, error);
 
     cpp_foreach(collection, *collections)
     {
@@ -382,7 +385,7 @@ static error_t GetJumpCollectionsFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *
         if (collection != collections->End - 1)
         {
             error = sqlite3_step(sqlStatement);
-            sql_FinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement);
+            SQLFinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement, error);
         }
     }
 
@@ -400,7 +403,7 @@ static error_t GetJumpDirectionsFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *d
     var directions = &dbModel->TransitionModel.JumpDirections;
 
     error_t error = PrepareSqlStatement(sqlQuery, db, &sqlStatement, dbModel->JobModel.TransitionModelId);
-    sql_FinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement);
+    SQLFinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement, error);
 
     cpp_foreach(direction, *directions)
     {
@@ -418,7 +421,7 @@ static error_t GetJumpDirectionsFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *d
         if (direction != directions->End - 1)
         {
             error = sqlite3_step(sqlStatement);
-            sql_FinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement);
+            SQLFinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement, error);
         }
     }
 
@@ -458,13 +461,13 @@ error_t PopulateDbModelFromDatabase(DbModel_t *dbModel, const char *dbFile, int3
     dbModel->JobModel.ContextId = jobContextId;
 
     error = sqlite3_open_v2(dbFile, &db, SQLITE_OPEN_READONLY | SQLITE_OPEN_NOMUTEX, NULL);
-    sql_DbCloseAndReturnIf(error != SQLITE_OK, db);
+    SQLCloseAndReturnIf(error != SQLITE_OK, db);
 
     error = InvokeLoadOperations(db, dbModel, GetParentLoadOperations());
-    sql_DbCloseAndReturnIf(error != SQLITE_OK, db);
+    SQLCloseAndReturnIf(error != SQLITE_OK, db);
 
     error = InvokeLoadOperations(db, dbModel, GetChildLoadOperations());
-    sql_DbCloseAndReturnIf(error != SQLITE_OK, db);
+    SQLCloseAndReturnIf(error != SQLITE_OK, db);
 
     error = InvokeOnLoadedOperations(dbModel, GetOnLoadedOperations());
 
