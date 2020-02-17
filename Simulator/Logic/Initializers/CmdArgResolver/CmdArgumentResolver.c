@@ -36,7 +36,7 @@ static struct _iobuf* freopen_utf8(const char* filename, const char* mode, file_
     var iobuf = _wfreopen(filename16, mode16, file);
     return free(filename16), free(mode16), iobuf;
 #else
-    return freopen(tmp1, "a", stdout) != NULL ? ERR_OK : ERR_STREAM;
+    return freopen(filename, mode, file);
 #endif
 }
 

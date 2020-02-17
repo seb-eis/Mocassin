@@ -40,18 +40,18 @@ error_t remove_utf8(const char* restrict fileName)
 }
 
 // Renames a file by two utf8 encoded file names
-error_t rename_utf8(const char* restrict fileName, const char* restrict newfileName)
+error_t rename_utf8(const char* restrict fileName, const char* restrict newFileName)
 {
 #if  defined(WIN32)
     wchar_t * file16, * newFile16;
     var error = Win32ConvertUtf8ToUtf16(fileName, &file16);
     return_if(error <= 0, ERR_FILE);
-    error = Win32ConvertUtf8ToUtf16(newfileName, &newFile16);
+    error = Win32ConvertUtf8ToUtf16(newFileName, &newFile16);
     return_if(error <= 0, ERR_FILE);
     error = _wrename(file16, newFile16);
     return free(file16), free(newFile16), error;
 #else
-    return rename(fileName. newFileName);
+    return rename(fileName, newFileName);
 #endif
 }
 

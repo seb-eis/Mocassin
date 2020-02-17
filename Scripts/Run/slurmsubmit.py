@@ -59,6 +59,7 @@ class SlurmJob:
         self.ArgumentProvider = SingleArgumentProvider()
         self.DeleteScripts = True
         self.TestMode = False
+        self.OverwritesDisabled = False
         if templatePath is not None:
             self.LoadTemplateFromXml(templatePath)
 
@@ -80,9 +81,11 @@ class SlurmJob:
         shell = root.get("Shell")
         autoDelete = root.get("DeleteScripts")
         testMode = root.get("TestMode")
+        disableOverwrites = root.get("DisableProviderOverwrites")
         self.DeleteScripts = False if autoDelete == "False" else True
         self.Shell = shell if shell is not None else self.Shell
         self.TestMode = True if testMode == "True" else False
+        self.OverwritesDisabled = True if disableOverwrites == "True" else False
 
     def _LoadScriptTemplateFromXml(self, root):
         self.ScriptTemplate = re.sub(r"\s{2,}", " ", root.find("ScriptTemplate").text).strip()
@@ -176,7 +179,9 @@ class SlurmJob:
     def OverwriteCookie(self, tag, value, sender=None):
         if tag is None or str(tag).isspace():
             raise Exception("Cannot overwrite a None or whitespace tag.")
-
+        if self.OverwritesDisabled:
+            print("{}: [OVERWRITE BLOCKED: {}]".format(sender if not None else "Unknown", tag), flush=True)
+            return
         for cookie in self.BatchCookies:
             if cookie.Tag == tag:
                 cookie.Value = value

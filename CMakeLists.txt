@@ -63,16 +63,14 @@ set_target_properties(mmcfe.mocext PROPERTIES C_STANDARD 11 PUBLIC_HEADER Extens
 if (WIN32)
     # Compiler settings for windows
     message(STATUS "** Compiling with WINDOWS settings **")
-    # Basic compiler settings, not mchine specific
-    #set(CMAKE_C_FLAGS_DEBUG "-Wall -g")
-    #set(CMAKE_C_FLAGS_RELEASE "-Wall -O3")
 
-    # Set the linker flags to allow unicode and wmain
+    # Set the flags to allow unicode and wmain
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -municode")
+    add_compile_definitions(UNICODE _UNICODE)
 
     # Advanced compiler settings, small performance improvement
-    set(CMAKE_C_FLAGS_DEBUG "${COMPILE_FLAGS_SSE_GNU} -g -fno-cx-limited-range -funroll-loops -march=native -mtune=native")
-    set(CMAKE_C_FLAGS_RELEASE "${COMPILE_FLAGS_SSE_GNU} -O3 -w -fno-cx-limited-range -funroll-loops -march=native -mtune=native")
+    set(CMAKE_C_FLAGS_DEBUG "${COMPILE_FLAGS_SSE_GNU} -g -fno-cx-limited-range -funroll-loops -m64 -mtune=generic  -fopt-info")
+    set(CMAKE_C_FLAGS_RELEASE "${COMPILE_FLAGS_SSE_GNU} -O3 -w -fno-cx-limited-range -funroll-loops -m64 -mtune=generic  -fopt-info")
 
 elseif (UNIX)
     # Set the linker flasg to use origin linking

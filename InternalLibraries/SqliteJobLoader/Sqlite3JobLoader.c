@@ -55,6 +55,7 @@ static error_t GetJobModelFromDb_Deprecated(char *sqlQuery, sqlite3 *db, DbModel
     dbModel->JobModel.JobHeader = malloc(jobHeaderSize);
     dbModel->JobModel.JobInfo.JobHeader = dbModel->JobModel.JobHeader;
     memcpy(dbModel->JobModel.JobHeader, sqlite3_column_blob(sqlStatement, 6), jobHeaderSize);
+    memset(dbModel->JobModel.RoutineData.Guid, 0, 16);
 
     error = sqlite3_finalize(sqlStatement);
     return error;
@@ -96,9 +97,8 @@ static error_t GetJobModelFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *dbModel
         return error;
     }
 
-    dbModel->JobModel.RoutineData.Guid = malloc(routineDataSize);
-    dbModel->JobModel.RoutineData.ParamData.End = dbModel->JobModel.RoutineData.Guid + routineDataSize;
     dbModel->JobModel.RoutineData.ParamData.Begin = dbModel->JobModel.RoutineData.Guid + 16;
+    dbModel->JobModel.RoutineData.ParamData.End = dbModel->JobModel.RoutineData.Guid + routineDataSize;
     memcpy(dbModel->JobModel.RoutineData.Guid, sqlite3_column_blob(sqlStatement, 7), routineDataSize);
 
     error = sqlite3_finalize(sqlStatement);

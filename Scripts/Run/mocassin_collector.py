@@ -122,7 +122,10 @@ class ResultCollector:
         return argList
 
     def WriteJobResultsToDatabase(self, jobResults):
+        sys.stdout.write("Setting database to WAL.\n")
+        self.DbConnection.execute(r"pragma journal_mode=wal")
         sys.stdout.write("Writing ({0}) found jobs ... _____".format(len(jobResults)))
+        jobResults.sort(key=lambda job: job.JobId)
         for jobResult in jobResults:
             sys.stdout.write("\b\b\b\b\b{0:05d}".format(jobResult.JobId))
             sys.stdout.flush()
@@ -130,6 +133,8 @@ class ResultCollector:
             self.DbConnection.execute(self.Sql, self.FormatUpdateArg(jobResult))
             jobResult.NullData()
         sys.stdout.write("\b\b\b\b\bDone!\n")
+        sys.stdout.write("Setting database to DELETE.\n")
+        self.DbConnection.execute(r"pragma journal_mode=delete")
 
     def CollectAllResults(self, jobBaseDir, deleteFiles = False):
         print("Collecting results for:")
