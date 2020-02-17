@@ -45,15 +45,6 @@ namespace Mocassin.Symmetry.CrystalSystems
             return true;
         }
 
-        /// <summary>
-        ///     Get the default crystal system (Triclinic)
-        /// </summary>
-        /// <returns></returns>
-        public CrystalSystem GetDefaultSystem()
-        {
-            return CrystalSystemSource.GetSystem(CrystalSystemIdentification.Triclinic);
-        }
-
         /// <inheritdoc />
         public bool LoadNewSystem(ISpaceGroup group)
         {
@@ -72,6 +63,29 @@ namespace Mocassin.Symmetry.CrystalSystems
         public bool LoadNewSystem(CrystalSystemIdentification systemIdentification)
         {
             return LoadIfDifferentSystem(CrystalSystemSource.GetSystem(systemIdentification));
+        }
+
+        /// <inheritdoc />
+        public CrystalParameterSet CopyCurrentParameterSet()
+        {
+            return new CrystalParameterSet
+            {
+                ParamA = ActiveCrystalSystem.ParamA.Value,
+                ParamB = ActiveCrystalSystem.ParamB.Value,
+                ParamC = ActiveCrystalSystem.ParamC.Value,
+                Alpha = ActiveCrystalSystem.Alpha.Value,
+                Beta = ActiveCrystalSystem.Beta.Value,
+                Gamma = ActiveCrystalSystem.Gamma.Value
+            };
+        }
+
+        /// <summary>
+        ///     Get the default crystal system (Triclinic)
+        /// </summary>
+        /// <returns></returns>
+        public CrystalSystem GetDefaultSystem()
+        {
+            return CrystalSystemSource.GetSystem(CrystalSystemIdentification.Triclinic);
         }
 
         /// <summary>
@@ -104,20 +118,6 @@ namespace Mocassin.Symmetry.CrystalSystems
         public void UpdateVectorTransformer()
         {
             VectorTransformer = CreateVectorTransformer();
-        }
-
-        /// <inheritdoc />
-        public CrystalParameterSet CopyCurrentParameterSet()
-        {
-            return new CrystalParameterSet
-            {
-                ParamA = ActiveCrystalSystem.ParamA.Value,
-                ParamB = ActiveCrystalSystem.ParamB.Value,
-                ParamC = ActiveCrystalSystem.ParamC.Value,
-                Alpha = ActiveCrystalSystem.Alpha.Value,
-                Beta = ActiveCrystalSystem.Beta.Value,
-                Gamma = ActiveCrystalSystem.Gamma.Value
-            };
         }
     }
 }

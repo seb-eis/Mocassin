@@ -10,23 +10,23 @@ using Mocassin.UI.Xml.Base;
 namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
 {
     /// <summary>
-    ///     Base class for <see cref="IDxSceneItemConfig"/> implementations for <see cref="ExtensibleProjectDataObject"/>
+    ///     Base class for <see cref="IDxSceneItemConfig" /> implementations for <see cref="ExtensibleProjectDataObject" />
     /// </summary>
     public abstract class DxProjectObjectSceneConfig : ViewModelBase, IDxSceneItemConfig, IDisposable
     {
-        private Action onChangeInvalidatesNode;
         private string description;
+        private Action onChangeInvalidatesNode;
         private static string IsInactiveKey => Resources.ResourceKey_ModelObject_RenderInactiveFlag;
         private static string IsVisibleKey => Resources.ResourceKey_ModelObject_RenderVisibilityFlag;
         private static string NameKey => Resources.ResourceKey_ModelObject_RenderDisplayName;
 
         /// <summary>
-        ///     Get the <see cref="ExtensibleProjectDataObject"/> that provides the scene resources
+        ///     Get the <see cref="ExtensibleProjectDataObject" /> that provides the scene resources
         /// </summary>
         protected ExtensibleProjectDataObject DataObject { get; }
 
         /// <summary>
-        ///     Get the <see cref="HashSet{T}"/> of managed <see cref="SceneNode"/> instances
+        ///     Get the <see cref="HashSet{T}" /> of managed <see cref="SceneNode" /> instances
         /// </summary>
         protected HashSet<SceneNode> SceneNodes { get; }
 
@@ -87,7 +87,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
         }
 
         /// <summary>
-        ///     Creates a new <see cref="DxProjectObjectSceneConfig"/> for a <see cref="ExtensibleProjectDataObject"/>
+        ///     Creates a new <see cref="DxProjectObjectSceneConfig" /> for a <see cref="ExtensibleProjectDataObject" />
         /// </summary>
         /// <param name="dataObject"></param>
         /// <param name="visualCategory"></param>
@@ -96,6 +96,13 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
             DataObject = dataObject ?? throw new ArgumentNullException(nameof(dataObject));
             VisualCategory = visualCategory;
             SceneNodes = new HashSet<SceneNode>();
+        }
+
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            DetachAll();
+            OnChangeInvalidatesNode = null;
         }
 
         /// <inheritdoc />
@@ -108,17 +115,6 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
         public virtual bool CheckAccess(object model)
         {
             return model != null && ReferenceEquals(model, DataObject);
-        }
-
-        /// <summary>
-        ///     Ensures that the provided <see cref="SceneNode"/> is not null and a supported a type. Throws an exception if the condition is not met
-        /// </summary>
-        /// <param name="node"></param>
-        /// <returns></returns>
-        private void ThrowIfNodeNullOrNotSupported(SceneNode node)
-        {
-            if (node == null) throw new ArgumentNullException(nameof(node));
-            if (!CheckSupport(node)) throw new NotSupportedException($"The provided scene node ({node.GetType()}) is not supported.");
         }
 
         /// <summary>
@@ -150,6 +146,18 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
         }
 
         /// <summary>
+        ///     Ensures that the provided <see cref="SceneNode" /> is not null and a supported a type. Throws an exception if the
+        ///     condition is not met
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        private void ThrowIfNodeNullOrNotSupported(SceneNode node)
+        {
+            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (!CheckSupport(node)) throw new NotSupportedException($"The provided scene node ({node.GetType()}) is not supported.");
+        }
+
+        /// <summary>
         ///     Action that is called when the <see cref="Name" /> property changed
         /// </summary>
         protected virtual void OnNameChanged()
@@ -166,7 +174,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
         }
 
         /// <summary>
-        ///     Action that is called when the <see cref="IsInactive"/> property changed
+        ///     Action that is called when the <see cref="IsInactive" /> property changed
         /// </summary>
         protected virtual void OnIsInactiveChanged()
         {
@@ -174,7 +182,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
         }
 
         /// <summary>
-        ///     Copies the currently set properties to the passed <see cref="SceneNode"/>
+        ///     Copies the currently set properties to the passed <see cref="SceneNode" />
         /// </summary>
         /// <param name="sceneNode"></param>
         protected virtual void CopyCurrentValuesToNode(SceneNode sceneNode)
@@ -182,13 +190,6 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
             if (sceneNode == null) throw new ArgumentNullException(nameof(sceneNode));
             sceneNode.Name = Name;
             sceneNode.Visible = IsVisible;
-        }
-
-        /// <inheritdoc />
-        public void Dispose()
-        {
-            DetachAll();
-            OnChangeInvalidatesNode = null;
         }
     }
 }

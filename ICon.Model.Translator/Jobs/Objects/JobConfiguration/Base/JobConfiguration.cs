@@ -76,7 +76,7 @@
         /// <param name="jobConfiguration"></param>
         public void CopyTo(JobConfiguration jobConfiguration)
         {
-            jobConfiguration.LatticeConfiguration = jobConfiguration.LatticeConfiguration ?? new LatticeConfiguration();
+            jobConfiguration.LatticeConfiguration ??= new LatticeConfiguration();
 
             LatticeConfiguration.CopyTo(jobConfiguration.LatticeConfiguration);
             jobConfiguration.ExecutionFlags = ExecutionFlags;

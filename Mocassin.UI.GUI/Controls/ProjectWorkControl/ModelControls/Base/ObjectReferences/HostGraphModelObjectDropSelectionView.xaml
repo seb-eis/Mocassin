@@ -16,7 +16,7 @@
   <Grid>
     <TextBox IsReadOnly="True" TextAlignment="Center" Text="{StaticResource App.String.DropLocationText}"
              Background="Transparent" BorderThickness="5"
-             Visibility="{Binding Converter={converter:NullToVisibilityConverter}, ConverterParameter=Collapsed}"/>
+             Visibility="{Binding Converter={converter:NullToVisibilityConverter}, ConverterParameter=Collapsed}" />
     <DataGrid Name="HostGrid"
               ItemsSource="{Binding Items}"
               SelectedItem="{Binding SelectedItem}"
@@ -31,7 +31,7 @@
               DragOver="HostGrid_OnDragOver">
       <DataGrid.RowHeaderTemplate>
         <DataTemplate>
-          <views:ObjectRowHeaderLogo/>
+          <views:ObjectRowHeaderLogo />
         </DataTemplate>
       </DataGrid.RowHeaderTemplate>
 

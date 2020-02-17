@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using Mocassin.Mathematics.Coordinates;
 using Mocassin.Model.Basic;
 using Mocassin.Model.Structures;
@@ -10,12 +8,12 @@ using Mocassin.Symmetry.Analysis;
 namespace Mocassin.Tools.Evaluation.Extensions
 {
     /// <summary>
-    ///     Provides extension methods for extracting general information from a <see cref="IProjectModelContext"/>
+    ///     Provides extension methods for extracting general information from a <see cref="IProjectModelContext" />
     /// </summary>
     public static class ProjectModelContextExtensions
     {
         /// <summary>
-        ///     Get the collection of <see cref="IModelObject"/> instances of the specified type
+        ///     Get the collection of <see cref="IModelObject" /> instances of the specified type
         /// </summary>
         /// <typeparam name="TObject"></typeparam>
         /// <param name="value"></param>
@@ -26,7 +24,7 @@ namespace Mocassin.Tools.Evaluation.Extensions
         }
 
         /// <summary>
-        ///     Get a <see cref="IModelObject"/> of specified type by index
+        ///     Get a <see cref="IModelObject" /> of specified type by index
         /// </summary>
         /// <typeparam name="TObject"></typeparam>
         /// <param name="value"></param>
@@ -38,7 +36,7 @@ namespace Mocassin.Tools.Evaluation.Extensions
         }
 
         /// <summary>
-        ///     Get a <see cref="IModelObject"/> of specified type by key
+        ///     Get a <see cref="IModelObject" /> of specified type by key
         /// </summary>
         public static TObject GetModelObject<TObject>(this IProjectModelContext value, string key) where TObject : IModelObject
         {
@@ -46,7 +44,7 @@ namespace Mocassin.Tools.Evaluation.Extensions
         }
 
         /// <summary>
-        ///     Gets the <see cref="IUnitCellProvider{T1}"/> for the context
+        ///     Gets the <see cref="IUnitCellProvider{T1}" /> for the context
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
@@ -56,7 +54,7 @@ namespace Mocassin.Tools.Evaluation.Extensions
         }
 
         /// <summary>
-        ///     Get the <see cref="IUnitCellVectorEncoder"/> for the context
+        ///     Get the <see cref="IUnitCellVectorEncoder" /> for the context
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>

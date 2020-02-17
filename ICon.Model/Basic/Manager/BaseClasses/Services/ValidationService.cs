@@ -14,7 +14,7 @@ namespace Mocassin.Model.Basic
     ///     upon a synchronous data processing pipeline
     /// </summary>
     /// <typeparam name="TPort"></typeparam>
-    public abstract class ValidationService<TPort> : IValidationService<TPort>  where TPort : class, IModelDataPort
+    public abstract class ValidationService<TPort> : IValidationService<TPort> where TPort : class, IModelDataPort
     {
         /// <inheritdoc />
         public Type DataPortType { get; } = typeof(TPort);
@@ -33,6 +33,17 @@ namespace Mocassin.Model.Basic
         ///     The synchronous validation pipeline for model objects that have potential conflicts with existing data
         /// </summary>
         protected BreakPipeline<IValidationReport> ObjectPipeline { get; set; }
+
+        /// <summary>
+        ///     Creates new validation service, initializes the validation pipeline with the handlers defined in the implementing
+        ///     class
+        /// </summary>
+        protected ValidationService(IModelProject modelProject)
+        {
+            ParameterPipeline = new BreakPipeline<IValidationReport>(MakeCannotValidateProcessor(), MakeParameterValidationProcessors());
+            ObjectPipeline = new BreakPipeline<IValidationReport>(MakeCannotValidateProcessor(), MakeObjectValidationProcessors());
+            ModelProject = modelProject ?? throw new ArgumentNullException(nameof(modelProject));
+        }
 
         /// <inheritdoc />
         public bool TryValidate<T>(T obj, IDataReader<IModelDataPort> dataReader, out IValidationReport report)
@@ -69,51 +80,20 @@ namespace Mocassin.Model.Basic
             }
         }
 
-        /// <summary>
-        ///     Creates new validation service, initializes the validation pipeline with the handlers defined in the implementing
-        ///     class
-        /// </summary>
-        protected ValidationService(IModelProject modelProject)
-        {
-            ParameterPipeline = new BreakPipeline<IValidationReport>(MakeCannotValidateProcessor(), MakeParameterValidationProcessors());
-            ObjectPipeline = new BreakPipeline<IValidationReport>(MakeCannotValidateProcessor(), MakeObjectValidationProcessors());
-            ModelProject = modelProject ?? throw new ArgumentNullException(nameof(modelProject));
-        }
-
         /// <inheritdoc />
         public IValidationReport ValidateObject<TObject>(TObject obj, IDataReader<TPort> dataReader)
             where TObject : IModelObject
         {
-            if (dataReader == null) 
+            if (dataReader == null)
                 throw new ArgumentNullException(nameof(dataReader));
 
-            if (obj == null) 
+            if (obj == null)
                 throw new ArgumentNullException(nameof(obj));
 
-            if (obj.IsDeprecated) 
+            if (obj.IsDeprecated)
                 throw new ArgumentException("Model object passed to validation is deprecated", nameof(obj));
 
             return ValidateAlias(obj) ?? ObjectPipeline.Process(obj, dataReader);
-        }
-
-        /// <summary>
-        /// Validates the alias of the passed model object for uniqueness and 
-        /// </summary>
-        /// <typeparam name="TObject"></typeparam>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        protected IValidationReport ValidateAlias<TObject>(TObject obj)
-            where TObject : IModelObject
-        {
-            if (ModelProject.DataTracker.FindObjectByKey<TObject>(obj.Key) == null) 
-                return null;
-
-            var detail0 = $"The object [{obj.ObjectName}] with alias [{obj.Key}] is already present.";
-            const string detail1 = "Define another alias for the object or use an empty one";
-            var report = new ValidationReport();
-            report.AddWarning(ModelMessageSource.CreateAliasViolationWarning(this, detail0, detail1));
-            return report;
-
         }
 
         /// <inheritdoc />
@@ -121,6 +101,25 @@ namespace Mocassin.Model.Basic
             where TParameter : IModelParameter
         {
             return ParameterPipeline.Process(obj, dataReader);
+        }
+
+        /// <summary>
+        ///     Validates the alias of the passed model object for uniqueness and
+        /// </summary>
+        /// <typeparam name="TObject"></typeparam>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        protected IValidationReport ValidateAlias<TObject>(TObject obj)
+            where TObject : IModelObject
+        {
+            if (ModelProject.DataTracker.FindObjectByKey<TObject>(obj.Key) == null)
+                return null;
+
+            var detail0 = $"The object [{obj.ObjectName}] with alias [{obj.Key}] is already present.";
+            const string detail1 = "Define another alias for the object or use an empty one";
+            var report = new ValidationReport();
+            report.AddWarning(ModelMessageSource.CreateAliasViolationWarning(this, detail0, detail1));
+            return report;
         }
 
         /// <summary>
@@ -143,7 +142,7 @@ namespace Mocassin.Model.Basic
         protected void ValidateModelParameterContentEquality<TParameter>(TParameter original, TParameter replacement,
             ValidationReport report) where TParameter : IModelParameter
         {
-            if (!original.Equals(replacement)) 
+            if (!original.Equals(replacement))
                 return;
 
             var detail = $"The current model parameter of type {original.GetParameterName()} is equal to the provided replacement";
@@ -163,7 +162,7 @@ namespace Mocassin.Model.Basic
         {
             foreach (var item in existingData)
             {
-                if (!item.Equals(obj)) 
+                if (!item.Equals(obj))
                     continue;
 
                 var detail =

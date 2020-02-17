@@ -35,10 +35,11 @@ namespace Mocassin.Model.Lattices.Validators
         }
 
         /// <summary>
-        ///     Validate if doping concentration is positive
+        ///     Validate if a <see cref="IDopingCombination" /> pair forms a valid charge balance pair
         /// </summary>
-        /// <param name="concentration"></param>
+        /// <param name="counterDoping"></param>
         /// <param name="report"></param>
+        /// <param name="primaryDoping"></param>
         protected void AddCounterChargeValidation(IDopingCombination primaryDoping, IDopingCombination counterDoping,
             ValidationReport report)
         {

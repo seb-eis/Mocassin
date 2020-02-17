@@ -73,7 +73,7 @@ namespace Mocassin.Model.Translator.EntityBuilder
 
             var packageModel = CreatePackageModel(simulationModel);
             var jobModelTasks = GetJobModelBuildTasks(simulationModel, jobCollection, cancellationToken);
-            Task.WhenAll(jobModelTasks).Wait();
+            Task.WhenAll(jobModelTasks).Wait(cancellationToken);
 
             packageModel.JobModels = new List<SimulationJobModel>(jobModelTasks.Count);
             packageModel.JobModels.AddRange(jobModelTasks.Select(x => x.Result));
@@ -97,7 +97,8 @@ namespace Mocassin.Model.Translator.EntityBuilder
         }
 
         /// <summary>
-        ///     Creates a set of <see cref="SimulationJobModel"/> from a <see cref="ISimulationModel"/> and <see cref="IJobCollection"/>
+        ///     Creates a set of <see cref="SimulationJobModel" /> from a <see cref="ISimulationModel" /> and
+        ///     <see cref="IJobCollection" />
         /// </summary>
         /// <param name="simulationModel"></param>
         /// <param name="jobCollection"></param>
@@ -114,12 +115,15 @@ namespace Mocassin.Model.Translator.EntityBuilder
         }
 
         /// <summary>
-        ///     Creates a set of <see cref="SimulationJobModel"/> build <see cref="Task"/> instances from a <see cref="ISimulationModel"/> and <see cref="IJobCollection"/>
+        ///     Creates a set of <see cref="SimulationJobModel" /> build <see cref="Task" /> instances from a
+        ///     <see cref="ISimulationModel" /> and <see cref="IJobCollection" />
         /// </summary>
         /// <param name="simulationModel"></param>
         /// <param name="jobCollection"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        protected IList<Task<SimulationJobModel>> GetJobModelBuildTasks(ISimulationModel simulationModel, IJobCollection jobCollection, CancellationToken cancellationToken = default)
+        protected IList<Task<SimulationJobModel>> GetJobModelBuildTasks(ISimulationModel simulationModel, IJobCollection jobCollection,
+            CancellationToken cancellationToken = default)
         {
             var result = new List<Task<SimulationJobModel>>();
 
@@ -159,9 +163,7 @@ namespace Mocassin.Model.Translator.EntityBuilder
 
             if (jobConfiguration.Instruction == null) result.RoutineData = RoutineDataEntity.CreateEmpty();
             if (jobConfiguration.Instruction != null && RoutineDataEntity.TryParse(jobConfiguration.Instruction, out var routineData))
-            {
                 result.RoutineData = routineData ?? throw new InvalidOperationException("Failed to parse attached routine instruction.");
-            }
 
             result.JobMetaData.JobModel = result;
             result.JobResultData.JobModel = result;
@@ -170,7 +172,7 @@ namespace Mocassin.Model.Translator.EntityBuilder
         }
 
         /// <summary>
-        ///     Get a <see cref="JobMetaDataEntity" /> for the passed <see cref="JobConfiguration" /> 
+        ///     Get a <see cref="JobMetaDataEntity" /> for the passed <see cref="JobConfiguration" />
         /// </summary>
         /// <param name="jobConfiguration"></param>
         /// <param name="jobCollection"></param>
@@ -303,10 +305,10 @@ namespace Mocassin.Model.Translator.EntityBuilder
         /// </summary>
         protected virtual void PrepareBuildComponents()
         {
-            EnergyDbEntityBuilder = EnergyDbEntityBuilder ?? new EnergyDbEntityBuilder(ProjectModelContext);
-            StructureDbEntityBuilder = StructureDbEntityBuilder ?? new StructureDbEntityBuilder(ProjectModelContext);
-            TransitionDbEntityBuilder = TransitionDbEntityBuilder ?? new TransitionDbEntityBuilder(ProjectModelContext);
-            LatticeDbEntityBuilder = LatticeDbEntityBuilder ?? new LatticeDbEntityBuilder(ProjectModelContext);
+            EnergyDbEntityBuilder ??= new EnergyDbEntityBuilder(ProjectModelContext);
+            StructureDbEntityBuilder ??= new StructureDbEntityBuilder(ProjectModelContext);
+            TransitionDbEntityBuilder ??= new TransitionDbEntityBuilder(ProjectModelContext);
+            LatticeDbEntityBuilder ??= new LatticeDbEntityBuilder(ProjectModelContext);
         }
     }
 }

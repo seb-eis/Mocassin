@@ -5,7 +5,7 @@ namespace Mocassin.UI.Base.Commands
     /// <summary>
     ///     Abstract base class for <see cref="AsyncCommand" /> implementations without a call parameter
     /// </summary>
-    public abstract class ParameterlessAsyncCommand : AsyncCommand
+    public abstract class AsyncVoidParameterCommand : AsyncCommand
     {
         /// <inheritdoc />
         protected sealed override bool CanExecuteInternal(object parameter)

@@ -74,12 +74,12 @@
   <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="1*" />
-      <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}"/>
+      <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}" />
       <ColumnDefinition Width="2*" />
     </Grid.ColumnDefinitions>
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto" />
-      <RowDefinition Height="{StaticResource App.Default.GridLength.Splitter}"/>
+      <RowDefinition Height="{StaticResource App.Default.GridLength.Splitter}" />
       <RowDefinition Height="Auto" />
       <RowDefinition Height="*" />
     </Grid.RowDefinitions>
@@ -94,11 +94,11 @@
                 AutoGenerateColumns="False">
         <DataGrid.RowHeaderTemplate>
           <DataTemplate>
-            <views:ObjectRowHeaderLogo x:Name="RowHeaderLogo" 
+            <views:ObjectRowHeaderLogo x:Name="RowHeaderLogo"
                                        PreviewMouseLeftButtonDown="RowHeaderLogo_OnPreviewMouseLeftButtonDown"
                                        PreviewMouseLeftButtonUp="RowHeaderLogo_OnPreviewMouseLeftButtonUp"
                                        PreviewMouseMove="RowHeaderLogo_OnPreviewMouseMove"
-                                       Cursor="Hand"/>
+                                       Cursor="Hand" />
           </DataTemplate>
         </DataGrid.RowHeaderTemplate>
 
@@ -125,65 +125,68 @@
       </DataGrid>
     </content:HeaderedGroup>
 
-    <GridSplitter Grid.Column="1" Grid.Row="0" Grid.RowSpan="4"/>
+    <GridSplitter Grid.Column="1" Grid.Row="0" Grid.RowSpan="4" />
 
     <content:HeaderedGroup Grid.Column="2" Grid.Row="0"
                            HeaderToolTip="{StaticResource Local.ToolTip.GeneralSettings}">
       <content:HeaderedGroup.Header>
         <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
-          <Run Text="General Fallback Values:"/>
-          <Run Text="{Binding SelectedItem.Name, StringFormat={}[{0}]}"/>
+          <Run Text="General Fallback Values:" />
+          <Run Text="{Binding SelectedItem.Name, StringFormat={}[{0}]}" />
         </TextBlock>
       </content:HeaderedGroup.Header>
-      <gridControl:SimulationBaseControlView DataContext="{Binding SelectedItem}"/>
+      <gridControl:SimulationBaseControlView DataContext="{Binding SelectedItem}" />
     </content:HeaderedGroup>
 
     <content:HeaderedGroup Grid.Column="2" Grid.Row="2"
                            HeaderToolTip="{StaticResource Local.ToolTip.KineticSettings}">
       <content:HeaderedGroup.Header>
         <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
-          <Run Text="KMC Fallback Values:"/>
-          <Run Text="{Binding SelectedItem.Name, StringFormat={}[{0}]}"/>
+          <Run Text="KMC Fallback Values:" />
+          <Run Text="{Binding SelectedItem.Name, StringFormat={}[{0}]}" />
         </TextBlock>
       </content:HeaderedGroup.Header>
       <Grid>
 
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="*" />
-          <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}"/>
+          <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}" />
           <ColumnDefinition Width="*" />
-          <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}"/>
+          <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}" />
           <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
           <RowDefinition Height="*" />
-          <RowDefinition Height="{StaticResource App.Default.GridLength.Splitter}"/>
+          <RowDefinition Height="{StaticResource App.Default.GridLength.Splitter}" />
           <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <content:HeaderedGroup Grid.Row="0" Grid.Column="0" Header="Relaxation Steps per Particle (MCSP):">
-          <TextBox Text="{Binding SelectedItem.PreRunMcsp, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
+          <TextBox
+            Text="{Binding SelectedItem.PreRunMcsp, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
             <TextBox.InputBindings>
               <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
-                          CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+                          CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
             </TextBox.InputBindings>
           </TextBox>
         </content:HeaderedGroup>
 
         <content:HeaderedGroup Grid.Row="0" Grid.Column="2" Header="Normalization Probability:">
-          <TextBox Text="{Binding SelectedItem.NormalizationProbability, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
+          <TextBox
+            Text="{Binding SelectedItem.NormalizationProbability, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
             <TextBox.InputBindings>
               <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
-                          CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+                          CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
             </TextBox.InputBindings>
           </TextBox>
         </content:HeaderedGroup>
 
         <content:HeaderedGroup Grid.Row="0" Grid.Column="4" Header="Electric field modulus [V/m]:">
-          <TextBox Text="{Binding SelectedItem.ElectricFieldMagnitude, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
+          <TextBox
+            Text="{Binding SelectedItem.ElectricFieldMagnitude, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
             <TextBox.InputBindings>
               <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
-                          CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+                          CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
             </TextBox.InputBindings>
           </TextBox>
         </content:HeaderedGroup>
@@ -191,29 +194,32 @@
         <content:HeaderedGroup Grid.Row="2" Grid.Column="0" Header="Electric field vector (A,B,C):">
           <Grid>
             <Grid.ColumnDefinitions>
-              <ColumnDefinition Width="*"/>
-              <ColumnDefinition Width="*"/>
-              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="*" />
+              <ColumnDefinition Width="*" />
+              <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <TextBox Text="{Binding SelectedItem.ElectricFieldVector.A, Converter={StaticResource App.Converter.NumericExpressionToValue}, StringFormat={}{0:0.0000}}"
-                     Grid.Column="0">
+            <TextBox
+              Text="{Binding SelectedItem.ElectricFieldVector.A, Converter={StaticResource App.Converter.NumericExpressionToValue}, StringFormat={}{0:0.0000}}"
+              Grid.Column="0">
               <TextBox.InputBindings>
                 <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
-                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
               </TextBox.InputBindings>
             </TextBox>
-            <TextBox Text="{Binding SelectedItem.ElectricFieldVector.B, Converter={StaticResource App.Converter.NumericExpressionToValue}, StringFormat={}{0:0.0000}}"
-                     Grid.Column="1">
+            <TextBox
+              Text="{Binding SelectedItem.ElectricFieldVector.B, Converter={StaticResource App.Converter.NumericExpressionToValue}, StringFormat={}{0:0.0000}}"
+              Grid.Column="1">
               <TextBox.InputBindings>
                 <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
-                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
               </TextBox.InputBindings>
             </TextBox>
-            <TextBox Text="{Binding SelectedItem.ElectricFieldVector.C, Converter={StaticResource App.Converter.NumericExpressionToValue}, StringFormat={}{0:0.0000}}"
-                     Grid.Column="2">
+            <TextBox
+              Text="{Binding SelectedItem.ElectricFieldVector.C, Converter={StaticResource App.Converter.NumericExpressionToValue}, StringFormat={}{0:0.0000}}"
+              Grid.Column="2">
               <TextBox.InputBindings>
                 <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
-                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
               </TextBox.InputBindings>
             </TextBox>
           </Grid>

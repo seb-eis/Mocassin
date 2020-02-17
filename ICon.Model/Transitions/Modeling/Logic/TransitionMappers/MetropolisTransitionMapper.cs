@@ -24,8 +24,10 @@ namespace Mocassin.Model.Transitions
             IList<SetList<CrystalVector4D>> encodedPositions)
         {
             if (!MappingIsPossible(transition, encodedPositions))
+            {
                 throw new InvalidOperationException(
                     "The passed combination of transition and encoded position lists does not yield any valid mapping");
+            }
 
             return MakeMappings(transition, encodedPositions);
         }
@@ -78,10 +80,10 @@ namespace Mocassin.Model.Transitions
         /// <returns></returns>
         protected bool MappingIsPossible(IMetropolisTransition transition, IList<SetList<CrystalVector4D>> encodedPositions)
         {
-            if (transition == null) 
+            if (transition == null)
                 throw new ArgumentNullException(nameof(transition));
 
-            if (encodedPositions == null) 
+            if (encodedPositions == null)
                 throw new ArgumentNullException(nameof(encodedPositions));
 
             if (encodedPositions.Count <= Math.Max(transition.FirstCellReferencePosition.Index, transition.SecondCellReferencePosition.Index))

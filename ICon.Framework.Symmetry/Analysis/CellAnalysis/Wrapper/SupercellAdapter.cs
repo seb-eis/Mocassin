@@ -65,6 +65,20 @@ namespace Mocassin.Symmetry.Analysis
             return new UnitCellAdapter<T1>(CellEntries[trimmedOffset.A, trimmedOffset.B, trimmedOffset.C], VectorEncoder, offset);
         }
 
+        /// <inheritdoc />
+        public CellEntry<T1> GetCellEntry(in CrystalVector4D vector)
+        {
+            return GetCellEntry(vector.A, vector.B, vector.C, vector.P);
+        }
+
+        /// <inheritdoc />
+        public T1 GetEntryValueAt(in Fractional3D vector)
+        {
+            return !VectorEncoder.TryEncode(vector, out var encoded)
+                ? default
+                : CellEntries[encoded.A, encoded.B, encoded.C][encoded.P];
+        }
+
         /// <summary>
         ///     Corrects set of offset coordinates into the supercell by applying the periodic boundary conditions
         /// </summary>
@@ -103,20 +117,6 @@ namespace Mocassin.Symmetry.Analysis
         {
             return new Coordinates4I(entries.GetLength(0), entries.GetLength(1), entries.GetLength(2),
                 entries[0, 0, 0].GetLength(0));
-        }
-
-        /// <inheritdoc />
-        public CellEntry<T1> GetCellEntry(in CrystalVector4D vector)
-        {
-            return GetCellEntry(vector.A, vector.B, vector.C, vector.P);
-        }
-
-        /// <inheritdoc />
-        public T1 GetEntryValueAt(in Fractional3D vector)
-        {
-            return !VectorEncoder.TryEncode(vector, out var encoded)
-                ? default
-                : CellEntries[encoded.A, encoded.B, encoded.C][encoded.P];
         }
     }
 }

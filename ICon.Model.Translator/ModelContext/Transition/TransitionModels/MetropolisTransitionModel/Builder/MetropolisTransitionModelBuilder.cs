@@ -109,7 +109,8 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        ///     Creates a single mapping model for a metropolis transition mapping object and links it to the passed transition model
+        ///     Creates a single mapping model for a metropolis transition mapping object and links it to the passed transition
+        ///     model
         /// </summary>
         /// <param name="mapping"></param>
         /// <param name="transitionModel"></param>

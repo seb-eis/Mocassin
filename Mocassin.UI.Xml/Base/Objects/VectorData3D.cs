@@ -43,6 +43,18 @@ namespace Mocassin.UI.Xml.Base
             set => SetProperty(ref c, value);
         }
 
+        /// <inheritdoc />
+        public VectorData3D Duplicate()
+        {
+            return new VectorData3D {a = a, b = b, c = c};
+        }
+
+        /// <inheritdoc />
+        object IDuplicable.Duplicate()
+        {
+            return Duplicate();
+        }
+
         /// <summary>
         ///     Get the data as a <see cref="Fractional3D" />
         /// </summary>
@@ -63,21 +75,9 @@ namespace Mocassin.UI.Xml.Base
         }
 
         /// <inheritdoc />
-        public VectorData3D Duplicate()
-        {
-            return new VectorData3D {a = a, b = b, c = c};
-        }
-
-        /// <inheritdoc />
         public override string ToString()
         {
             return $"({A.ToString(DefaultCultureInfo)}, {B.ToString(DefaultCultureInfo)}, {C.ToString(DefaultCultureInfo)})";
-        }
-
-        /// <inheritdoc />
-        object IDuplicable.Duplicate()
-        {
-            return Duplicate();
         }
     }
 }

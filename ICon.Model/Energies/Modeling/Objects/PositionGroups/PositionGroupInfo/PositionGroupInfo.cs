@@ -53,10 +53,7 @@ namespace Mocassin.Model.Energies
         {
             foreach (var outerPair in GroupInteraction.GetEnergyDictionarySet())
             {
-                foreach (var innerPair in outerPair.Value)
-                {
-                    ExtendedPositionGroup.UniqueEnergyDictionary[outerPair.Key][innerPair.Key] = innerPair.Value;
-                }
+                foreach (var innerPair in outerPair.Value) ExtendedPositionGroup.UniqueEnergyDictionary[outerPair.Key][innerPair.Key] = innerPair.Value;
             }
         }
     }

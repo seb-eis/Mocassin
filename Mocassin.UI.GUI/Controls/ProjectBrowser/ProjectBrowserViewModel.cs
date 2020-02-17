@@ -13,12 +13,12 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser
     public class ProjectBrowserViewModel : PrimaryControlViewModel
     {
         /// <summary>
-        ///     Get the <see cref="ProjectGraphBrowserViewModel"/> used by the tab system
+        ///     Get the <see cref="ProjectGraphBrowserViewModel" /> used by the tab system
         /// </summary>
         private ProjectGraphBrowserViewModel GraphBrowserViewModel { get; }
 
         /// <summary>
-        ///     Get the <see cref="ProjectLibraryBrowserViewModel"/> used by the tab system
+        ///     Get the <see cref="ProjectLibraryBrowserViewModel" /> used by the tab system
         /// </summary>
         private ProjectLibraryBrowserViewModel LibraryBrowserViewModel { get; }
 
@@ -40,7 +40,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser
         }
 
         /// <summary>
-        ///     Retrieves the currently user selected <see cref="MocassinProject"/>
+        ///     Retrieves the currently user selected <see cref="MocassinProject" />
         /// </summary>
         /// <returns></returns>
         public MocassinProject GetWorkProject()

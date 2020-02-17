@@ -40,31 +40,10 @@ namespace Mocassin.Model.Structures
         /// <inheritdoc />
         public double GammaDegree => MocassinMath.RadianToDegree(Gamma);
 
-        /// <summary>
-        ///     Implicit cast of crystal parameter set to the wrapper object
-        /// </summary>
-        /// <param name="paramSet"></param>
-        public static implicit operator CellParameters(CrystalParameterSet paramSet)
-        {
-            return new CellParameters {ParameterSet = paramSet};
-        }
-
         /// <inheritdoc />
         public override string GetParameterName()
         {
             return "Cell Parameters";
-        }
-
-        /// <inheritdoc />
-        public override ModelParameter PopulateObject(IModelParameter modelParameter)
-        {
-            if (!(modelParameter is ICellParameters cellParameters))
-                return null;
-
-            ParameterSet =
-                new CrystalParameterSet(cellParameters.ParamA, cellParameters.ParamB, cellParameters.ParamC, cellParameters.Alpha,
-                    cellParameters.Beta, cellParameters.Gamma);
-            return this;
         }
 
         /// <inheritdoc />
@@ -88,6 +67,27 @@ namespace Mocassin.Model.Structures
         public CrystalParameterSet AsParameterSet()
         {
             return new CrystalParameterSet(ParamA, ParamB, ParamC, Alpha, Beta, Gamma);
+        }
+
+        /// <summary>
+        ///     Implicit cast of crystal parameter set to the wrapper object
+        /// </summary>
+        /// <param name="paramSet"></param>
+        public static implicit operator CellParameters(CrystalParameterSet paramSet)
+        {
+            return new CellParameters {ParameterSet = paramSet};
+        }
+
+        /// <inheritdoc />
+        public override ModelParameter PopulateObject(IModelParameter modelParameter)
+        {
+            if (!(modelParameter is ICellParameters cellParameters))
+                return null;
+
+            ParameterSet =
+                new CrystalParameterSet(cellParameters.ParamA, cellParameters.ParamB, cellParameters.ParamC, cellParameters.Alpha,
+                    cellParameters.Beta, cellParameters.Gamma);
+            return this;
         }
     }
 }

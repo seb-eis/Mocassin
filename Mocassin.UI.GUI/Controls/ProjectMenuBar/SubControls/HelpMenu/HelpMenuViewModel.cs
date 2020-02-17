@@ -6,7 +6,8 @@ using Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.FileMenu;
 namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.HelpMenu
 {
     /// <summary>
-    ///     The <see cref="PrimaryControlViewModel"/> for the <see cref="HelpMenuView"/> that supplies help and update commands
+    ///     The <see cref="PrimaryControlViewModel" /> for the <see cref="HelpMenuView" /> that supplies help and update
+    ///     commands
     /// </summary>
     public class HelpMenuViewModel : PrimaryControlViewModel
     {

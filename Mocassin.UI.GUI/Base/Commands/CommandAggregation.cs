@@ -7,8 +7,7 @@ using System.Windows.Input;
 namespace Mocassin.UI.Base.Commands
 {
     /// <summary>
-    ///     Generic <see cref="ICommand" /> wrapper to form a single <see cref="ICommand" /> interface for multiple unordered
-    ///     commands
+    ///     Generic <see cref="ICommand" /> wrapper to form a single <see cref="ICommand" /> interface for multiple unordered commands
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public sealed class CommandAggregation<T> : Command, IList<T> where T : ICommand
@@ -17,6 +16,19 @@ namespace Mocassin.UI.Base.Commands
         ///     The <see cref="ICollection{T}" /> of sub commands
         /// </summary>
         private readonly IList<T> commandList;
+
+        /// <inheritdoc />
+        public int Count => commandList.Count;
+
+        /// <inheritdoc />
+        public bool IsReadOnly => commandList.IsReadOnly;
+
+        /// <inheritdoc />
+        public T this[int index]
+        {
+            get => commandList[index];
+            set => commandList[index] = value;
+        }
 
         /// <summary>
         ///     Creates a new <see cref="CommandAggregation{T}" /> with the passed parameters
@@ -27,18 +39,6 @@ namespace Mocassin.UI.Base.Commands
             if (commands == null) throw new ArgumentNullException(nameof(commands));
 
             commandList = commands.ToList();
-        }
-
-        /// <inheritdoc />
-        public override void Execute(object parameter)
-        {
-            foreach (var command in commandList) command.Execute(parameter);
-        }
-
-        /// <inheritdoc />
-        public override bool CanExecute(object parameter)
-        {
-            return commandList.All(x => x.CanExecute(parameter));
         }
 
         /// <inheritdoc />
@@ -84,12 +84,6 @@ namespace Mocassin.UI.Base.Commands
         }
 
         /// <inheritdoc />
-        public int Count => commandList.Count;
-
-        /// <inheritdoc />
-        public bool IsReadOnly => commandList.IsReadOnly;
-
-        /// <inheritdoc />
         public int IndexOf(T item)
         {
             return commandList.IndexOf(item);
@@ -108,10 +102,15 @@ namespace Mocassin.UI.Base.Commands
         }
 
         /// <inheritdoc />
-        public T this[int index]
+        public override void Execute(object parameter)
         {
-            get => commandList[index];
-            set => commandList[index] = value;
+            foreach (var command in commandList) command.Execute(parameter);
+        }
+
+        /// <inheritdoc />
+        public override bool CanExecute(object parameter)
+        {
+            return commandList.All(x => x.CanExecute(parameter));
         }
     }
 }

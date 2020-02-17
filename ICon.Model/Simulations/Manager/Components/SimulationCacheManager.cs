@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using Mocassin.Model.Basic;
+﻿using Mocassin.Model.Basic;
 using Mocassin.Model.ModelProject;
-using Mocassin.Model.Particles;
 
 namespace Mocassin.Model.Simulations
 {

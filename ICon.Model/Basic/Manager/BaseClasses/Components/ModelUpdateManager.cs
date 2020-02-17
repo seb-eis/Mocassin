@@ -26,24 +26,23 @@ namespace Mocassin.Model.Basic
         /// <inheritdoc />
         public bool Connect(IModelEventPort eventPort)
         {
-            if (!(Connections.Keys.SingleOrDefault(key => key.IsInstanceOfType(eventPort)) is Type type))
+            if (!(Connections.Keys.SingleOrDefault(key => key.IsInstanceOfType(eventPort)) is { } type))
                 return false;
 
             if (Connections[type] != null)
                 return false;
 
-            if (!(ConnectionPipeline.Process(eventPort) is IDisposable subscription))
+            if (!(ConnectionPipeline.Process(eventPort) is { } subscription))
                 return false;
 
             Connections[type] = subscription;
             return true;
-
         }
 
         /// <inheritdoc />
         public void Disconnect(IModelEventPort eventPort)
         {
-            if (!(Connections.Keys.SingleOrDefault(key => key.IsInstanceOfType(eventPort)) is Type type))
+            if (!(Connections.Keys.SingleOrDefault(key => key.IsInstanceOfType(eventPort)) is { } type))
                 return;
 
             Connections[type]?.Dispose();
@@ -53,7 +52,7 @@ namespace Mocassin.Model.Basic
         /// <inheritdoc />
         public void DisconnectAll()
         {
-            foreach (var item in Connections) 
+            foreach (var item in Connections)
                 item.Value?.Dispose();
         }
 
@@ -80,10 +79,10 @@ namespace Mocassin.Model.Basic
             var result = new Dictionary<Type, List<PropertyInfo>>();
             foreach (var propertyInfo in GetType().GetProperties(BindingFlags.Instance | BindingFlags.NonPublic))
             {
-                if (!(propertyInfo.GetCustomAttribute(typeof(UpdateHandlerAttribute)) is UpdateHandlerAttribute attribute)) 
+                if (!(propertyInfo.GetCustomAttribute(typeof(UpdateHandlerAttribute)) is UpdateHandlerAttribute attribute))
                     continue;
 
-                if (!result.Keys.Contains(attribute.EventSourceType)) 
+                if (!result.Keys.Contains(attribute.EventSourceType))
                     result[attribute.EventSourceType] = new List<PropertyInfo>();
 
                 result[attribute.EventSourceType].Add(propertyInfo);
@@ -123,7 +122,8 @@ namespace Mocassin.Model.Basic
         }
 
         /// <summary>
-        ///     Get the empty processor handler that always returns a null disposables as reaction to not required connection requests
+        ///     Get the empty processor handler that always returns a null disposables as reaction to not required connection
+        ///     requests
         /// </summary>
         /// <returns></returns>
         protected virtual IObjectProcessor<IDisposable> GetOnCannotProcessConnection()
@@ -165,7 +165,7 @@ namespace Mocassin.Model.Basic
         /// <param name="modelProject"></param>
         protected ModelUpdateManager(TData modelData, TEventManager eventManager, IModelProject modelProject)
         {
-            if (modelData == null) 
+            if (modelData == null)
                 throw new ArgumentNullException(nameof(modelData));
 
             ModelProject = modelProject ?? throw new ArgumentNullException(nameof(modelProject));

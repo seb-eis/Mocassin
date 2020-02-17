@@ -1,9 +1,9 @@
-﻿using Mocassin.UI.GUI.Base.DataContext;
+﻿using System;
+using System.Collections.Generic;
+using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Base.Objects;
 using Mocassin.UI.GUI.Controls.Base.Commands;
 using Mocassin.UI.GUI.Controls.ProjectWorkControl;
-using System;
-using System.Collections.Generic;
 
 namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.FileMenu.Commands
 {

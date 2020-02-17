@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 namespace Mocassin.UI.Xml.Base
 {
     /// <summary>
-    ///     Base class for all objects that provide basic <see cref="INotifyPropertyChanged"/> functionality
+    ///     Base class for all objects that provide basic <see cref="INotifyPropertyChanged" /> functionality
     /// </summary>
     public class PropertyChangeNotifier : INotifyPropertyChanged
     {

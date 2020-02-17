@@ -60,7 +60,8 @@
         <LineBreak />
         <LineBreak />
         <Run Text="Chiral Partner Interaction: " />
-        <Run Text="{Binding ChiralPairEnergySet, Mode=OneWay, TargetNullValue=None}" Style="{StaticResource App.Style.Run.Keyword}" />
+        <Run Text="{Binding ChiralPairEnergySet, Mode=OneWay, TargetNullValue=None}"
+             Style="{StaticResource App.Style.Run.Keyword}" />
         <Run Text="[?]" Style="{StaticResource App.Style.Run.Keyword}">
           <Run.ToolTip>
             <TextBlock TextAlignment="Justify" TextWrapping="Wrap" MaxWidth="400">

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Mocassin.Mathematics.Coordinates;
+﻿using Mocassin.Mathematics.Coordinates;
 using Mocassin.Mathematics.ValueTypes;
 using Moccasin.Mathematics.ValueTypes;
 

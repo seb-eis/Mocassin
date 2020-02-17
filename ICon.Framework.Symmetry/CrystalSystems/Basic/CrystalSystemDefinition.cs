@@ -10,17 +10,17 @@ namespace Mocassin.Symmetry.CrystalSystems
     public class CrystalSystemDefinition
     {
         /// <summary>
-        ///     Stores default <see cref="Func{TResult}"/> factory delegate
+        ///     Stores default <see cref="Func{TResult}" /> factory delegate
         /// </summary>
         public Func<CrystalSystem> Factory { get; set; }
 
         /// <summary>
-        ///     The specific <see cref="CrystalSystemVariation"/>
+        ///     The specific <see cref="CrystalSystemVariation" />
         /// </summary>
         public CrystalSystemVariation CrystalVariation { get; set; }
 
         /// <summary>
-        ///     The specific <see cref="CrystalSystemType"/>
+        ///     The specific <see cref="CrystalSystemType" />
         /// </summary>
         public CrystalSystemType CrystalType { get; set; }
 
@@ -30,32 +30,32 @@ namespace Mocassin.Symmetry.CrystalSystems
         public string SystemName { get; set; }
 
         /// <summary>
-        ///     Get or set the <see cref="CrystalParameterRange"/> for the parameter A
+        ///     Get or set the <see cref="CrystalParameterRange" /> for the parameter A
         /// </summary>
         public CrystalParameterRange ParamARange { get; set; }
 
         /// <summary>
-        ///     Get or set the <see cref="CrystalParameterRange"/> for the parameter B
+        ///     Get or set the <see cref="CrystalParameterRange" /> for the parameter B
         /// </summary>
         public CrystalParameterRange ParamBRange { get; set; }
 
         /// <summary>
-        ///     Get or set the <see cref="CrystalParameterRange"/> for the parameter C
+        ///     Get or set the <see cref="CrystalParameterRange" /> for the parameter C
         /// </summary>
         public CrystalParameterRange ParamCRange { get; set; }
 
         /// <summary>
-        ///     Get or set the <see cref="CrystalParameterRange"/> for the alpha angle (in radian)
+        ///     Get or set the <see cref="CrystalParameterRange" /> for the alpha angle (in radian)
         /// </summary>
         public CrystalParameterRange AlphaRange { get; set; }
 
         /// <summary>
-        ///     Get or set the <see cref="CrystalParameterRange"/> for the beta angle (in radian)
+        ///     Get or set the <see cref="CrystalParameterRange" /> for the beta angle (in radian)
         /// </summary>
         public CrystalParameterRange BetaRange { get; set; }
 
         /// <summary>
-        ///     Get or set the <see cref="CrystalParameterRange"/> for the gamma angle (in radian)
+        ///     Get or set the <see cref="CrystalParameterRange" /> for the gamma angle (in radian)
         /// </summary>
         public CrystalParameterRange GammaRange { get; set; }
 
@@ -67,7 +67,7 @@ namespace Mocassin.Symmetry.CrystalSystems
         }
 
         /// <summary>
-        ///     Get a <see cref="CrystalSystemIdentification"/> for the system definition
+        ///     Get a <see cref="CrystalSystemIdentification" /> for the system definition
         /// </summary>
         /// <returns></returns>
         public CrystalSystemIdentification GetIdentification()
@@ -106,7 +106,8 @@ namespace Mocassin.Symmetry.CrystalSystems
         }
 
         /// <summary>
-        ///     Creates and sets the resulting <see cref="NumericConstraint"/> instances on a <see cref="CrystalSystem"/> with a limited max unit cell length
+        ///     Creates and sets the resulting <see cref="NumericConstraint" /> instances on a <see cref="CrystalSystem" /> with a
+        ///     limited max unit cell length
         /// </summary>
         /// <param name="system"></param>
         /// <param name="parameterMaxValue"></param>

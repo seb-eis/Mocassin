@@ -46,13 +46,22 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
         /// <returns></returns>
         private ICommand CreateCloseAndDisposeCommand()
         {
-            void CloseTab() => TabHost.RemoveAndDispose(this);
-            bool CanCloseTab() => TabHost.Contains(this);
+            void CloseTab()
+            {
+                TabHost.RemoveAndDispose(this);
+            }
+
+            bool CanCloseTab()
+            {
+                return TabHost.Contains(this);
+            }
+
             return new RelayCommand(CloseTab, CanCloseTab);
         }
 
         /// <summary>
-        ///     Detaches the <see cref="DynamicControlTabItem" /> from its current <see cref="IControlTabHost" /> and reattaches it to a new one
+        ///     Detaches the <see cref="DynamicControlTabItem" /> from its current <see cref="IControlTabHost" /> and reattaches it
+        ///     to a new one
         /// </summary>
         /// <param name="newTabHost"></param>
         /// <param name="insertIndex"></param>
@@ -71,12 +80,13 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
                 newTabHost.MoveTab(tabIndex, realInsertIndex);
                 tabIndex = realInsertIndex;
             }
+
             newTabHost.SetActiveTabByIndex(tabIndex);
             TabHost = newTabHost;
         }
 
         /// <summary>
-        ///     Determines the current index of the <see cref="DynamicControlTabItem"/> in its <see cref="IControlTabHost"/>
+        ///     Determines the current index of the <see cref="DynamicControlTabItem" /> in its <see cref="IControlTabHost" />
         /// </summary>
         /// <returns></returns>
         public int GetIndexInHost()

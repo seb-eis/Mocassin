@@ -14,7 +14,7 @@ namespace ICon.Framework.Random
     public class UniquePoolSampler<T1>
     {
         /// <summary>
-        ///     Select a subset of defined size from a <see cref="IEnumerable{T}"/>
+        ///     Select a subset of defined size from a <see cref="IEnumerable{T}" />
         /// </summary>
         /// <param name="pool"></param>
         /// <param name="samplingSize"></param>

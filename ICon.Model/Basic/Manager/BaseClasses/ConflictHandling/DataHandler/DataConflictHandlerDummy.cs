@@ -1,5 +1,4 @@
-﻿using System;
-using Mocassin.Framework.Operations;
+﻿using Mocassin.Framework.Operations;
 
 namespace Mocassin.Model.Basic
 {

@@ -35,7 +35,8 @@ namespace Mocassin.Symmetry.SpaceGroups
         CrystalSystem CreateCrystalSystem(ICrystalSystemSource source);
 
         /// <summary>
-        ///     Creates a <see cref="IPositionOperationDictionary"/> for the provided source vector that informs about which operations can be
+        ///     Creates a <see cref="IPositionOperationDictionary" /> for the provided source vector that informs about which
+        ///     operations can be
         ///     used to create which position
         /// </summary>
         /// <param name="sourceVector"></param>
@@ -68,7 +69,8 @@ namespace Mocassin.Symmetry.SpaceGroups
         IList<Fractional3D[]> GetFullP1PathExtension(IEnumerable<Fractional3D> refSequence);
 
         /// <summary>
-        ///     Gets the ordered, filtered and trimmed list of all extended position sequences that begin in the (0,0,0) origin unit
+        ///     Gets the ordered, filtered and trimmed list of all extended position sequences that begin in the (0,0,0) origin
+        ///     unit
         ///     cell
         /// </summary>
         /// <param name="refSequence"></param>
@@ -216,7 +218,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         IList<Fractional3D> GetPositionsInCuboid(in Fractional3D source, in Fractional3D start, in Fractional3D end);
 
         /// <summary>
-        ///     Gets all symmetry equivalent positions to the source that are within the provided <see cref="FractionalBox3D"/>
+        ///     Gets all symmetry equivalent positions to the source that are within the provided <see cref="FractionalBox3D" />
         /// </summary>
         /// <param name="source"></param>
         /// <param name="boundingBox"></param>

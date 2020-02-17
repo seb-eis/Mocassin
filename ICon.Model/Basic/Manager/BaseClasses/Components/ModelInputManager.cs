@@ -108,6 +108,15 @@ namespace Mocassin.Model.Basic
             return Task.Run(TryResetManagerDataToDefault);
         }
 
+        /// <inheritdoc />
+        public IEnumerable<Type> GetSupportedModelTypes()
+        {
+            return GetSupportedModelObjects().Concat(GetSupportedModelParameters());
+        }
+
+        /// <inheritdoc />
+        public abstract IDataReader<IModelDataPort> GetDataReader();
+
         /// <summary>
         ///     Tries to reset the manager data to its default state
         /// </summary>
@@ -227,15 +236,6 @@ namespace Mocassin.Model.Basic
         /// <returns></returns>
         public abstract Type[] GetSupportedModelParameters();
 
-        /// <inheritdoc />
-        public IEnumerable<Type> GetSupportedModelTypes()
-        {
-            return GetSupportedModelObjects().Concat(GetSupportedModelParameters());
-        }
-
-        /// <inheritdoc />
-        public abstract IDataReader<IModelDataPort> GetDataReader();
-
         /// <summary>
         ///     Searches the input manager for all non public methods marked as data operations of the specified type and creates
         ///     a sequence of object processors
@@ -269,20 +269,6 @@ namespace Mocassin.Model.Basic
         where TPort : class, IModelDataPort
         where TEventManager : ModelEventManager
     {
-        /// <summary>
-        ///     Defines a generic delegate for data operations with specific return value
-        /// </summary>
-        /// <param name="dataAccess"></param>
-        /// <param name="report"></param>
-        internal delegate TResult DataOperation<out TResult>(DataAccessor<TData> dataAccess, OperationReport report);
-
-        /// <summary>
-        ///     Defines a delegate for data operations with no return value
-        /// </summary>
-        /// <param name="dataAccess"></param>
-        /// <param name="report"></param>
-        internal delegate void DataOperation(DataAccessor<TData> dataAccess, OperationReport report);
-
         /// <summary>
         ///     Provider for safe accessors to the data object
         /// </summary>
@@ -787,7 +773,7 @@ namespace Mocassin.Model.Basic
         {
             message = null;
 
-            if (!(ModelObject.BuildInternalObject<T>(obj) is T tmpObj))
+            if (!(ModelObject.BuildInternalObject<T>(obj) is { } tmpObj))
             {
                 message = $"Could not convert [{obj}] to internal model object!";
                 modelObject = null;
@@ -824,7 +810,7 @@ namespace Mocassin.Model.Basic
         {
             message = null;
 
-            if (!(ModelParameter.BuildInternalObject<T>(obj) is T tmpObj))
+            if (!(ModelParameter.BuildInternalObject<T>(obj) is { } tmpObj))
             {
                 message = $"Could not convert interface [{obj?.GetParameterName()}] to internal parameter!";
                 modelObject = null;
@@ -846,5 +832,19 @@ namespace Mocassin.Model.Basic
             modelObject = tmpObj;
             return true;
         }
+
+        /// <summary>
+        ///     Defines a generic delegate for data operations with specific return value
+        /// </summary>
+        /// <param name="dataAccess"></param>
+        /// <param name="report"></param>
+        internal delegate TResult DataOperation<out TResult>(DataAccessor<TData> dataAccess, OperationReport report);
+
+        /// <summary>
+        ///     Defines a delegate for data operations with no return value
+        /// </summary>
+        /// <param name="dataAccess"></param>
+        /// <param name="report"></param>
+        internal delegate void DataOperation(DataAccessor<TData> dataAccess, OperationReport report);
     }
 }

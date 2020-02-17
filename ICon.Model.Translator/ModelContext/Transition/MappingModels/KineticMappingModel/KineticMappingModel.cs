@@ -1,8 +1,8 @@
-﻿using Mocassin.Mathematics.ValueTypes;
-using Mocassin.Model.Transitions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Transitions;
 
 namespace Mocassin.Model.Translator.ModelContext
 {

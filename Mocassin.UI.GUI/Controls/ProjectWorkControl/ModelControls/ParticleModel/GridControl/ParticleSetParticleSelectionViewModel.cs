@@ -19,7 +19,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ParticleMode
             : base(hostObject, true)
         {
             Items = GetTargetCollection(hostObject);
-            HandleDropAddCommand = GetDropAddObjectCommand<ParticleData>();
+            ProcessDataObjectCommand = GetDropAddObjectCommand<ParticleData>();
         }
 
         /// <inheritdoc />

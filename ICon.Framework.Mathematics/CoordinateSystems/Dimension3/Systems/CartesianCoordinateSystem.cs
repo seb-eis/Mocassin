@@ -19,6 +19,10 @@ namespace Mocassin.Mathematics.Coordinates
         /// <inheritdoc />
         public override (Coordinates3D A, Coordinates3D B, Coordinates3D C) ReferenceBaseVectors => BaseCoordinates;
 
+
+        /// <inheritdoc />
+        public override Type ReferenceSystemType => typeof(CartesianCoordinateSystem);
+
         /// <summary>
         ///     Static constructor, initializes the static cartesian base vectors
         /// </summary>
@@ -26,10 +30,6 @@ namespace Mocassin.Mathematics.Coordinates
         {
             BaseCoordinates = (new Coordinates3D(1.0, 0.0, 0.0), new Coordinates3D(0.0, 1.0, 0.0), new Coordinates3D(0.0, 0.0, 1.0));
         }
-
-
-        /// <inheritdoc />
-        public override Type ReferenceSystemType => typeof(CartesianCoordinateSystem);
 
         /// <inheritdoc />
         public override Coordinates3D ToReferenceSystem(in Coordinates3D original)

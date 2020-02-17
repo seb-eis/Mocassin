@@ -63,7 +63,8 @@
           <Run Text="{StaticResource App.String.ParticleSet}" Style="{StaticResource App.Style.Run.ModelObject}" />
           <Run Text="objects describe groupings of" />
           <Run Text="{StaticResource App.String.Particle}" Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="objects that define the permutation basis for cases where the system requires information about allowed particle options." />
+          <Run
+            Text="objects that define the permutation basis for cases where the system requires information about allowed particle options." />
           <Run Text="When used as unstable/transition position occupation options, the" />
           <Run Text="{StaticResource App.String.Particle.Void}" Style="{StaticResource App.Style.Run.ModelObject}" />
           <Run Text="state is implicitly included. Add objects by drag &amp; drop." />
@@ -91,20 +92,20 @@
         <Grid>
           <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}"/>
+            <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}" />
             <ColumnDefinition Width="*" />
           </Grid.ColumnDefinitions>
 
           <content:HeaderedGroup Grid.Column="0" Style="{StaticResource App.Style.HeaderedGroup.BoldText}"
-                                              HeaderToolTip="{StaticResource Local.ToolTip.Particle}"
-                                              Header="Particle Definitions:">
-            <dataControl:ParticleControlView DataContext="{Binding ParticleControlViewModel}"/>
+                                 HeaderToolTip="{StaticResource Local.ToolTip.Particle}"
+                                 Header="Particle Definitions:">
+            <dataControl:ParticleControlView DataContext="{Binding ParticleControlViewModel}" />
           </content:HeaderedGroup>
-          <GridSplitter Grid.Column="1"/>
+          <GridSplitter Grid.Column="1" />
           <content:HeaderedGroup Grid.Column="2" Style="{StaticResource App.Style.HeaderedGroup.BoldText}"
-                                              HeaderToolTip="{StaticResource Local.ToolTip.ParticleSet}"
-                                              Header="Particle Set Definitions:">
-            <dataControl:ParticleSetControlView DataContext="{Binding ParticleSetControlViewModel}"/>
+                                 HeaderToolTip="{StaticResource Local.ToolTip.ParticleSet}"
+                                 Header="Particle Set Definitions:">
+            <dataControl:ParticleSetControlView DataContext="{Binding ParticleSetControlViewModel}" />
           </content:HeaderedGroup>
         </Grid>
       </TabItem>

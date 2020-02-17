@@ -15,12 +15,12 @@ namespace Mocassin.UI.Xml.Main
     [XmlRoot]
     public class SimulationDbBuildTemplate : ProjectChildEntity<MocassinProject>
     {
-        private ProjectJobSetTemplate projectJobSetTemplate;
-        private ProjectCustomizationTemplate projectCustomizationTemplate;
-        private ProjectModelData projectModelData;
-        private string modelKey;
         private string customizationKey;
         private string jobTranslationKey;
+        private string modelKey;
+        private ProjectCustomizationTemplate projectCustomizationTemplate;
+        private ProjectJobSetTemplate projectJobSetTemplate;
+        private ProjectModelData projectModelData;
 
         /// <inheritdoc />
         [NotMapped]

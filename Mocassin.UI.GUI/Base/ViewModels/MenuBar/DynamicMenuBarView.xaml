@@ -14,8 +14,8 @@
     <ItemsControl ItemsSource="{Binding ObservableItems}">
       <ItemsControl.ItemsPanel>
         <ItemsPanelTemplate>
-          <DockPanel Dock="{Binding DockPanelDock}" 
-                     Background="Transparent"/>
+          <DockPanel Dock="{Binding DockPanelDock}"
+                     Background="Transparent" />
         </ItemsPanelTemplate>
       </ItemsControl.ItemsPanel>
     </ItemsControl>

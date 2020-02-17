@@ -17,7 +17,7 @@
       <ColumnDefinition Width="*" />
       <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}" />
       <ColumnDefinition Width="*" />
-      </Grid.ColumnDefinitions>
+    </Grid.ColumnDefinitions>
     <DataGrid Name="GroupEnergySetDataGrid" Grid.Column="0"
               ItemsSource="{Binding Items}"
               SelectedItem="{Binding SelectedItem}"
@@ -30,7 +30,7 @@
                                      PreviewMouseLeftButtonDown="RowHeaderLogo_OnPreviewMouseLeftButtonDown"
                                      PreviewMouseLeftButtonUp="RowHeaderLogo_OnPreviewMouseLeftButtonUp"
                                      PreviewMouseMove="RowHeaderLogo_OnPreviewMouseMove"
-                                     Cursor="Hand"/>
+                                     Cursor="Hand" />
         </DataTemplate>
       </DataGrid.RowHeaderTemplate>
 
@@ -45,9 +45,9 @@
       </DataGrid.Columns>
 
     </DataGrid>
-    <GridSplitter Grid.Column="1"/>
+    <GridSplitter Grid.Column="1" />
     <gridControl:GroupEnergySetControlView Grid.Column="2"
-      DataContext="{Binding SelectedItem}"
-      Visibility="{Binding Converter={converter:NullToVisibilityConverter}}"/>
+                                           DataContext="{Binding SelectedItem}"
+                                           Visibility="{Binding Converter={converter:NullToVisibilityConverter}}" />
   </Grid>
 </UserControl>

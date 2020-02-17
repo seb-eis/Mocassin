@@ -28,30 +28,30 @@
               DisplayMemberPath="Name"
               ToolTip="Search permutation"
               IsTextSearchEnabled="True"
-              IsEditable="True"/>
+              IsEditable="True" />
 
     <content:HeaderedGroup Grid.Row="2">
       <content:HeaderedGroup.Header>
         <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
-          <Run Text="Description:"/>
-          <Run Text="{Binding SelectedItem.Name, StringFormat={}[{0}]}"/>
+          <Run Text="Description:" />
+          <Run Text="{Binding SelectedItem.Name, StringFormat={}[{0}]}" />
         </TextBlock>
       </content:HeaderedGroup.Header>
       <TextBlock TextWrapping="Wrap" TextAlignment="Justify" Margin="0,0,1,0">
-          <Run Text="Group interaction for" />
-          <Run Text="{Binding SelectedItem.CenterParticle.Name, Mode=OneWay}"
-               Style="{StaticResource App.Style.Run.Keyword}" />
-          <Run Text="occupying the" />
-          <Run Text="{Binding Path=GroupEnergySet.CenterPosition.Name, Mode=OneWay}"
-               Style="{StaticResource App.Style.Run.Keyword}" />
-          <Run Text="center position. Surrounding symmetry reduced reference geometry" />
-          <Run Text="{Binding BaseGeometryDescription, Mode=OneWay}"
-               Style="{StaticResource App.Style.Run.Keyword}" />
-          <Run Text="is occupied by the particle sequence" />
-          <Run Text="{Binding SelectedItem.OccupationState, Mode=OneWay}"
-               Style="{StaticResource App.Style.Run.Keyword}" />
-          <Run Text="in order of appearance." />
-        </TextBlock>
+        <Run Text="Group interaction for" />
+        <Run Text="{Binding SelectedItem.CenterParticle.Name, Mode=OneWay}"
+             Style="{StaticResource App.Style.Run.Keyword}" />
+        <Run Text="occupying the" />
+        <Run Text="{Binding Path=GroupEnergySet.CenterPosition.Name, Mode=OneWay}"
+             Style="{StaticResource App.Style.Run.Keyword}" />
+        <Run Text="center position. Surrounding symmetry reduced reference geometry" />
+        <Run Text="{Binding BaseGeometryDescription, Mode=OneWay}"
+             Style="{StaticResource App.Style.Run.Keyword}" />
+        <Run Text="is occupied by the particle sequence" />
+        <Run Text="{Binding SelectedItem.OccupationState, Mode=OneWay}"
+             Style="{StaticResource App.Style.Run.Keyword}" />
+        <Run Text="in order of appearance." />
+      </TextBlock>
     </content:HeaderedGroup>
 
     <content:HeaderedGroup Grid.Row="4">
@@ -77,8 +77,8 @@
 
         <DataGrid.Columns>
           <DataGridTextColumn Binding="{Binding Name}" Header="Name"
-                              IsReadOnly="True"/>
-          <DataGridTextColumn Binding="{Binding CenterParticle.Name}" Header="Center Particle" 
+                              IsReadOnly="True" />
+          <DataGridTextColumn Binding="{Binding CenterParticle.Name}" Header="Center Particle"
                               IsReadOnly="True" />
           <DataGridTextColumn
             Binding="{Binding Energy, Converter={StaticResource App.Converter.NumericExpressionToValue}}"

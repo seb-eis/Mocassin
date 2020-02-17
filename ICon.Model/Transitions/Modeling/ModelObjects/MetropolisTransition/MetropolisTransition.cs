@@ -26,6 +26,10 @@ namespace Mocassin.Model.Transitions
         [UseTrackedData]
         public List<MetropolisRule> TransitionRules { get; set; }
 
+
+        /// <inheritdoc />
+        public override string ObjectName => "Metropolis Transition";
+
         /// <inheritdoc />
         public IEnumerable<IMetropolisRule> GetTransitionRules()
         {
@@ -59,9 +63,11 @@ namespace Mocassin.Model.Transitions
                    && AbstractTransition == other.AbstractTransition;
         }
 
-
         /// <inheritdoc />
-        public override string ObjectName => "Metropolis Transition";
+        public bool MappingsContainInversion()
+        {
+            return FirstCellReferencePosition == SecondCellReferencePosition;
+        }
 
         /// <inheritdoc />
         public override ModelObject PopulateFrom(IModelObject obj)
@@ -73,12 +79,6 @@ namespace Mocassin.Model.Transitions
             SecondCellReferencePosition = transition.SecondCellReferencePosition;
             AbstractTransition = transition.AbstractTransition;
             return this;
-        }
-
-        /// <inheritdoc />
-        public bool MappingsContainInversion()
-        {
-            return FirstCellReferencePosition == SecondCellReferencePosition;
         }
     }
 }

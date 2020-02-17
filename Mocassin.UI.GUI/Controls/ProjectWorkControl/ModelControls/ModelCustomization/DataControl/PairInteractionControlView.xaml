@@ -37,11 +37,11 @@
 
       <DataGrid.Columns>
         <DataGridTextColumn Header="Name" Binding="{Binding PairEnergySet.Name}" />
-        <DataGridTextColumn Header="Center Cell Position" Binding="{Binding PairEnergySet.CenterPosition.Name}" 
+        <DataGridTextColumn Header="Center Cell Position" Binding="{Binding PairEnergySet.CenterPosition.Name}"
                             IsReadOnly="True" />
         <DataGridTextColumn Header="Partner Cell Position" Binding="{Binding PairEnergySet.PartnerPosition.Name}"
                             IsReadOnly="True" />
-        <DataGridTextColumn Header="Distance [&#x212b;]" Binding="{Binding PairEnergySet.Distance}" 
+        <DataGridTextColumn Header="Distance [&#x212b;]" Binding="{Binding PairEnergySet.Distance}"
                             IsReadOnly="True" />
         <DataGridTextColumn Header="Chiral Partner" Binding="{Binding ChiralPairEnergySet.Name}"
                             IsReadOnly="True" />
@@ -49,7 +49,7 @@
 
     </DataGrid>
 
-    <GridSplitter Grid.Column="1"/>
+    <GridSplitter Grid.Column="1" />
 
     <gridControl:PairEnergySetControlView Grid.Column="2"
                                           DataContext="{Binding SelectedItem}"

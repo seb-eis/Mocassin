@@ -11,6 +11,12 @@ namespace Mocassin.Model.Particles
     internal class ParticleDataManager : ModelDataManager<ParticleModelData>, IParticleDataPort
     {
         /// <inheritdoc />
+        public int ParticleCount => Data.Particles?.Count ?? 0;
+
+        /// <inheritdoc />
+        public int ParticleSetCount => Data.ParticleSets?.Count ?? 0;
+
+        /// <inheritdoc />
         public ParticleDataManager(ParticleModelData modelData)
             : base(modelData)
         {
@@ -29,12 +35,6 @@ namespace Mocassin.Model.Particles
         }
 
         /// <inheritdoc />
-        public int ParticleCount => Data.Particles?.Count ?? 0;
-
-        /// <inheritdoc />
-        public int ParticleSetCount => Data.ParticleSets?.Count ?? 0;
-
-        /// <inheritdoc />
         public int GetValidParticleCount()
         {
             var count = 0;
@@ -48,7 +48,7 @@ namespace Mocassin.Model.Particles
         public int GetValidParticleSetCount()
         {
             var count = 0;
-            foreach (var item in Data.ParticleSets) 
+            foreach (var item in Data.ParticleSets)
                 count += item.IsDeprecated ? 0 : 1;
 
             return count;
@@ -63,7 +63,7 @@ namespace Mocassin.Model.Particles
         /// <inheritdoc />
         public IParticle GetParticle(int index)
         {
-            if (index >= Data.Particles.Count) 
+            if (index >= Data.Particles.Count)
                 throw new ArgumentOutOfRangeException(nameof(index), "Particle index out of range");
 
             return Data.Particles[index];

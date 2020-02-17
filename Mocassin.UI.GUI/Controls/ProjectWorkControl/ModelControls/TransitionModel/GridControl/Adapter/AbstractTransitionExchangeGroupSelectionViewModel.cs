@@ -20,7 +20,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
         public AbstractTransitionExchangeGroupSelectionViewModel(AbstractTransitionData hostObject)
             : base(hostObject, false)
         {
-            HandleDropAddCommand = GetDropAddObjectCommand<StateExchangeGroupData>();
+            ProcessDataObjectCommand = GetDropAddObjectCommand<StateExchangeGroupData>();
             Items = GetTargetCollection(hostObject);
         }
 

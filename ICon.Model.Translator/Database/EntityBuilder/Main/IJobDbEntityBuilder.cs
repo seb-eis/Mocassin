@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reactive;
 using System.Threading;
 using System.Threading.Tasks;
 using Mocassin.Model.Translator.Jobs;
@@ -15,7 +14,7 @@ namespace Mocassin.Model.Translator.EntityBuilder
     public interface IJobDbEntityBuilder
     {
         /// <summary>
-        ///    Get the <see cref="IObservable{T}" /> that informs about every build job
+        ///     Get the <see cref="IObservable{T}" /> that informs about every build job
         /// </summary>
         IObservable<int> WhenJobIsBuild { get; }
 

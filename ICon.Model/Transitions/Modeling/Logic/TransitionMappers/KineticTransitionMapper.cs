@@ -75,8 +75,10 @@ namespace Mocassin.Model.Transitions
                 if (VectorEncoder.TryEncode(fractionalSequence, out var encodedSequence))
                     yield return new KineticMapping(transition, start, end, encodedSequence.ToArray(), fractionalSequence);
                 else
+                {
                     throw new InvalidOperationException(
                         "Mapping encoding from 3D to 4D failed. Vector encoder and space group service are not synchronized!");
+                }
             }
         }
     }

@@ -14,9 +14,9 @@ namespace Mocassin.UI.Xml.EnergyModel
     [XmlRoot]
     public class UnstableEnvironmentData : ModelDataObject
     {
-        private double maxInteractionRange;
         private ModelObjectReference<CellReferencePosition> cellReferencePosition = new ModelObjectReference<CellReferencePosition>();
         private ObservableCollection<RadialInteractionFilterData> interactionFilters = new ObservableCollection<RadialInteractionFilterData>();
+        private double maxInteractionRange;
 
         /// <summary>
         ///     Get or set the maximum interaction range

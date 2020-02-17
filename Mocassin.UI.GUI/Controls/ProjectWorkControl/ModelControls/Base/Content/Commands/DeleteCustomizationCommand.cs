@@ -36,13 +36,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         public override async Task ExecuteAsync(ProjectCustomizationTemplate parameter)
         {
             var isRemoved = false;
-            await Task.Run(() =>
-            {
-                ProjectControl.ExecuteOnAppThread(() =>
-                {
-                    isRemoved = parameter.Parent.CustomizationTemplates.Remove(parameter);
-                });
-            });
+            await Task.Run(() => { ProjectControl.ExecuteOnAppThread(() => { isRemoved = parameter.Parent.CustomizationTemplates.Remove(parameter); }); });
             if (isRemoved) OnRemovalAction?.Invoke();
         }
     }

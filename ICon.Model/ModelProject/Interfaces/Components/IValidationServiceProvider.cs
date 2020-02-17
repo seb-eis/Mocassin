@@ -39,7 +39,7 @@ namespace Mocassin.Model.ModelProject
         /// </summary>
         /// <param name="modelObject"></param>
         /// <returns></returns>
-        /// <remarks> Required <see cref="IDataReader{TPort}"/> has to be looked up internally </remarks>
+        /// <remarks> Required <see cref="IDataReader{TPort}" /> has to be looked up internally </remarks>
         IValidationReport ValidateObject<T>(T modelObject) where T : IModelObject;
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace Mocassin.Model.ModelProject
         /// </summary>
         /// <param name="modelParameter"></param>
         /// <returns></returns>
-        /// <remarks> Required <see cref="IDataReader{TPort}"/> has to be looked up internally </remarks>
+        /// <remarks> Required <see cref="IDataReader{TPort}" /> has to be looked up internally </remarks>
         IValidationReport ValidateParameter<T>(T modelParameter) where T : IModelParameter;
     }
 }

@@ -5,12 +5,12 @@ using System.Linq;
 namespace Mocassin.Framework.Extensions
 {
     /// <summary>
-    /// ICon shared struct extensions that provide generic extension methods specifically fro struct types
+    ///     ICon shared struct extensions that provide generic extension methods specifically fro struct types
     /// </summary>
     public static class MocassinStructExtensions
     {
         /// <summary>
-        /// Counts how many of the passed parameter values compare equal to the reference value
+        ///     Counts how many of the passed parameter values compare equal to the reference value
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <param name="value"></param>
@@ -22,11 +22,11 @@ namespace Mocassin.Framework.Extensions
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return testValues.Sum(item => (comparer.Equals(value, item) ? 1 : 0));
+            return testValues.Sum(item => comparer.Equals(value, item) ? 1 : 0);
         }
 
         /// <summary>
-        /// Counts how many values compare equal to the reference value
+        ///     Counts how many values compare equal to the reference value
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <param name="value"></param>
@@ -41,7 +41,7 @@ namespace Mocassin.Framework.Extensions
             if (values == null)
                 throw new ArgumentNullException(nameof(values));
 
-            return values.Sum(item => (comparer.Equals(value, item) ? 1 : 0));
+            return values.Sum(item => comparer.Equals(value, item) ? 1 : 0);
         }
     }
 }

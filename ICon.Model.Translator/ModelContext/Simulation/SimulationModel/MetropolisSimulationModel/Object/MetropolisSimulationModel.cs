@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Simulations;
@@ -21,6 +20,12 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <inheritdoc />
         public IList<IMetropolisLocalJumpModel> LocalJumpModels { get; set; }
 
+        /// <inheritdoc />
+        public override double MaxAttemptFrequency { get; set; }
+
+        /// <inheritdoc />
+        public override Cartesian3D NormalizedElectricFieldVector { get; set; }
+
         /// <summary>
         ///     Create new metropolis simulation model with empty tracking model
         /// </summary>
@@ -28,12 +33,6 @@ namespace Mocassin.Model.Translator.ModelContext
         {
             SimulationTrackingModel = ModelContext.SimulationTrackingModel.GetEmpty();
         }
-
-        /// <inheritdoc />
-        public override double MaxAttemptFrequency { get; set; }
-
-        /// <inheritdoc />
-        public override Cartesian3D NormalizedElectricFieldVector { get; set; }
 
         /// <inheritdoc />
         public override IEnumerable<ITransitionModel> GetTransitionModels()

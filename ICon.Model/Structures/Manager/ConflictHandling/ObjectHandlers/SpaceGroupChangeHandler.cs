@@ -54,7 +54,8 @@ namespace Mocassin.Model.Structures.ConflictHandling
         }
 
         /// <summary>
-        ///     Checks the unit cell position list from first to last and marks later duplicates as deprecated if they produce equal sequences to former positions
+        ///     Checks the unit cell position list from first to last and marks later duplicates as deprecated if they produce
+        ///     equal sequences to former positions
         /// </summary>
         /// <param name="report"></param>
         protected void MatchCellReferencePositionsToSpaceGroup(ConflictReport report)

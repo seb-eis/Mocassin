@@ -89,7 +89,8 @@
     <Prefer32Bit>true</Prefer32Bit>
     <LangVersion>8</LangVersion>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <DocumentationFile>bin\x64\Release\Mocassin.UI.GUI.xml</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>891FEFAE322DFEBA8EB4B22EB5031CCE2EE5371B</ManifestCertificateThumbprint>
@@ -101,7 +102,7 @@
     <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>mocassin.ico</ApplicationIcon>
@@ -762,8 +763,8 @@
     <Compile Include="Base\Commands\AsyncRelayCommand.cs" />
     <Compile Include="Base\Commands\Command.cs" />
     <Compile Include="Base\Commands\CommandDictionary.cs" />
-    <Compile Include="Base\Commands\ParameterlessAsyncCommand.cs" />
-    <Compile Include="Base\Commands\ParameterlessCommand.cs" />
+    <Compile Include="Base\Commands\AsyncVoidParameterCommand.cs" />
+    <Compile Include="Base\Commands\VoidParameterCommand.cs" />
     <Compile Include="Base\Commands\RelayCommand.cs" />
     <Compile Include="Base\Commands\UiCommands\UpdateTextBoxSourceCommand.cs" />
     <Compile Include="Base\Converter\NumericExpressionToValueConverter.cs" />
@@ -773,10 +774,10 @@
     <Compile Include="Base\Converter\StringToNullableConverter.cs" />
     <Compile Include="Base\Converter\NullToVisibilityConverter.cs" />
     <Compile Include="Base\Converter\ValueConverter.cs" />
-    <Compile Include="Base\DataContext\IObjectDropAcceptor.cs" />
+    <Compile Include="Base\DataContext\IDataObjectAcceptor.cs" />
     <Compile Include="Base\DataContext\IMocassinProjectControl.cs" />
     <Compile Include="Base\DragHandler.cs" />
-    <Compile Include="Base\Loading\AsyncWindowedBackgroundTask.cs" />
+    <Compile Include="Base\Loading\WindowedBackgroundTask.cs" />
     <Compile Include="Base\Loading\LoadingWindow.xaml.cs">
       <DependentUpon>LoadingWindow.xaml</DependentUpon>
     </Compile>

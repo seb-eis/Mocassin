@@ -38,19 +38,15 @@ namespace Mocassin.Model.Basic
         /// <inheritdoc />
         public virtual void Query(Action<TPort> action)
         {
-            using (var reader = DataReaderSource.Create())
-            {
-                action(reader.Access);
-            }
+            using var reader = DataReaderSource.Create();
+            action(reader.Access);
         }
 
         /// <inheritdoc />
         public virtual TResult Query<TResult>(Func<TPort, TResult> function)
         {
-            using (var reader = DataReaderSource.Create())
-            {
-                return function(reader.Access);
-            }
+            using var reader = DataReaderSource.Create();
+            return function(reader.Access);
         }
 
         /// <inheritdoc />
@@ -71,7 +67,8 @@ namespace Mocassin.Model.Basic
     }
 
     /// <summary>
-    ///     Generic base class for model query manager implementations that support read only queries to both reference data and
+    ///     Generic base class for model query manager implementations that support read only queries to both reference data
+    ///     and
     ///     extended cached data
     /// </summary>
     /// <typeparam name="TData"></typeparam>
@@ -105,19 +102,15 @@ namespace Mocassin.Model.Basic
         /// <inheritdoc />
         public virtual void Query(Action<TCachePort> action)
         {
-            using (var reader = CacheReaderSource.Create())
-            {
-                action(reader.Access);
-            }
+            using var reader = CacheReaderSource.Create();
+            action(reader.Access);
         }
 
         /// <inheritdoc />
         public virtual TResult Query<TResult>(Func<TCachePort, TResult> function)
         {
-            using (var reader = CacheReaderSource.Create())
-            {
-                return function(reader.Access);
-            }
+            using var reader = CacheReaderSource.Create();
+            return function(reader.Access);
         }
 
         /// <inheritdoc />

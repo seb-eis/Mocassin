@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using Mocassin.Framework.Collections;
-using Mocassin.Framework.Extensions;
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Particles;
 using Mocassin.UI.GUI.Controls.Base.Interfaces;
@@ -16,7 +14,8 @@ using Mocassin.UI.Xml.StructureModel;
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureModel.DataControl
 {
     /// <summary>
-    ///     The <see cref="CollectionControlViewModel{T}" /> for controlling sets of <see cref="CellReferencePositionData" /> of a
+    ///     The <see cref="CollectionControlViewModel{T}" /> for controlling sets of <see cref="CellReferencePositionData" />
+    ///     of a
     ///     selectable <see cref="MocassinProject" />
     /// </summary>
     public class CellPositionControlViewModel : CollectionControlViewModel<CellReferencePositionData>,
@@ -25,7 +24,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureMod
         private IList<Fractional3D> selectedVectorExpansion;
 
         /// <summary>
-        ///     Get the <see cref="ParameterControlViewModel"/> that controls the space group
+        ///     Get the <see cref="ParameterControlViewModel" /> that controls the space group
         /// </summary>
         private StructureParameterControlViewModel ParameterControlViewModel { get; }
 
@@ -38,7 +37,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureMod
         public int SelectedVectorExpansionCount => selectedVectorExpansion?.Count ?? 0;
 
         /// <summary>
-        ///     Get or set a <see cref="IList{T}"/> of the expanded <see cref="Fractional3D"/> of the current graph selection
+        ///     Get or set a <see cref="IList{T}" /> of the expanded <see cref="Fractional3D" /> of the current graph selection
         /// </summary>
         public IList<Fractional3D> SelectedVectorExpansion
         {
@@ -51,14 +50,14 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureMod
         }
 
         /// <summary>
-        ///     Get the <see cref="IEnumerable{T}"/> of possible occupation <see cref="ParticleSetData"/>
+        ///     Get the <see cref="IEnumerable{T}" /> of possible occupation <see cref="ParticleSetData" />
         /// </summary>
         public IEnumerable<ModelObjectReference<ParticleSet>> OccupationSetOptions => EnumerateOccupationSetOptions();
 
         /// <inheritdoc />
         public CellPositionControlViewModel(StructureParameterControlViewModel parameterControlViewModel)
         {
-            ParameterControlViewModel = parameterControlViewModel 
+            ParameterControlViewModel = parameterControlViewModel
                                         ?? throw new ArgumentNullException(nameof(parameterControlViewModel));
             PropertyChanged += UpdateVectorsOnSelectionChange;
         }
@@ -72,20 +71,20 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureMod
         }
 
         /// <summary>
-        ///     Get the expanded vector <see cref="IList{T}"/> of the passed <see cref="CellReferencePositionData"/>
+        ///     Get the expanded vector <see cref="IList{T}" /> of the passed <see cref="CellReferencePositionData" />
         /// </summary>
         /// <param name="referencePositionData"></param>
         /// <returns></returns>
         public IList<Fractional3D> GetExpandedVectorCollection(CellReferencePositionData referencePositionData)
         {
             if (referencePositionData == null) return new List<Fractional3D>();
-            
-            var vector = new Fractional3D(referencePositionData.A,referencePositionData.B,referencePositionData.C);
+
+            var vector = new Fractional3D(referencePositionData.A, referencePositionData.B, referencePositionData.C);
             return ParameterControlViewModel.SpaceGroupService.GetUnitCellP1PositionExtension(vector);
         }
 
         /// <summary>
-        ///     Action that is called if the selected <see cref="CellReferencePositionData"/> changes
+        ///     Action that is called if the selected <see cref="CellReferencePositionData" /> changes
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
@@ -96,7 +95,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureMod
         }
 
         /// <summary>
-        ///     Get the <see cref="IEnumerable{T}"/> of selectable <see cref="ModelObjectReference{T}"/> for <see cref="ParticleSet"/> model objects
+        ///     Get the <see cref="IEnumerable{T}" /> of selectable <see cref="ModelObjectReference{T}" /> for
+        ///     <see cref="ParticleSet" /> model objects
         /// </summary>
         /// <returns></returns>
         private IEnumerable<ModelObjectReference<ParticleSet>> EnumerateOccupationSetOptions()

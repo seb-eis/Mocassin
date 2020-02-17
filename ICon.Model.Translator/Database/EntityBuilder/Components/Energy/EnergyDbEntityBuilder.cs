@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Mocassin.Framework.Extensions;
 using Mocassin.Model.Structures;
@@ -114,33 +113,26 @@ namespace Mocassin.Model.Translator.EntityBuilder
         /// <param name="simulationEnergyModel"></param>
         public void LinkModel(SimulationEnergyModel simulationEnergyModel)
         {
-            foreach (var entity in simulationEnergyModel.PairEnergyTables)
-            {
-                entity.SimulationEnergyModel = simulationEnergyModel;
-            }
+            foreach (var entity in simulationEnergyModel.PairEnergyTables) entity.SimulationEnergyModel = simulationEnergyModel;
 
-            foreach (var entity in simulationEnergyModel.ClusterEnergyTables)
-            {
-                entity.SimulationEnergyModel = simulationEnergyModel;
-            }
+            foreach (var entity in simulationEnergyModel.ClusterEnergyTables) entity.SimulationEnergyModel = simulationEnergyModel;
         }
 
         /// <summary>
-        ///     Get the <see cref="DefectBackgroundEntity"/> for the current <see cref="IProjectModelContext"/> and passed <see cref="ISimulationEncodingModel"/>
+        ///     Get the <see cref="DefectBackgroundEntity" /> for the current <see cref="IProjectModelContext" /> and passed
+        ///     <see cref="ISimulationEncodingModel" />
         /// </summary>
         /// <returns></returns>
         public DefectBackgroundEntity GetDefectBackgroundEntity(ISimulationEncodingModel encodingModel)
         {
             var defects = ModelContext.EnergyModelContext.DefectEnergies;
             var ucpList = ModelContext.ModelProject.GetManager<IStructureManager>().QueryPort.Query(x => x.GetExtendedIndexToPositionList());
-            var array = new double[encodingModel.JumpCountMappingTable.GetLength(0),encodingModel.JumpCountMappingTable.GetLength(1)];
+            var array = new double[encodingModel.JumpCountMappingTable.GetLength(0), encodingModel.JumpCountMappingTable.GetLength(1)];
 
             for (var positionId = 0; positionId < ucpList.Count; positionId++)
             {
                 foreach (var defect in defects.Where(x => x.CellReferencePosition.Index == ucpList[positionId].Index))
-                {
                     array[positionId, defect.Particle.Index] = defect.Energy;
-                }
             }
 
             return new DefectBackgroundEntity(array);

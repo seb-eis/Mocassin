@@ -14,13 +14,13 @@ namespace Mocassin.UI.Xml.StructureModel
     [XmlRoot]
     public class CellParametersData : ModelParameterObject
     {
+        private double alpha;
+        private double beta;
+        private double gamma;
         private bool isRadian;
         private double paramA;
         private double paramB;
         private double paramC;
-        private double alpha;
-        private double beta;
-        private double gamma;
 
         /// <summary>
         ///     Boolean flag to enable radian based angle definition

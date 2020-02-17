@@ -9,17 +9,17 @@ namespace Mocassin.Model.Translator
     public class MocsimExtensionComponentAttribute : Attribute
     {
         /// <summary>
-        ///     Get the <see cref="Guid"/> that identifies the simulator extension
+        ///     Get the <see cref="Guid" /> that identifies the simulator extension
         /// </summary>
         public Guid ExtensionGuid { get; }
 
         /// <summary>
-        ///     Get the extension alias <see cref="string"/>
+        ///     Get the extension alias <see cref="string" />
         /// </summary>
         public string ExtensionAlias { get; }
 
         /// <summary>
-        ///     Creates new <see cref="MocsimExtensionComponentAttribute"/> from a guid and alias <see cref="string"/>
+        ///     Creates new <see cref="MocsimExtensionComponentAttribute" /> from a guid and alias <see cref="string" />
         /// </summary>
         /// <param name="guidStr"></param>
         /// <param name="extensionAlias"></param>

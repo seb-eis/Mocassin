@@ -1,7 +1,7 @@
 ﻿using Mocassin.Framework.Operations;
 using Mocassin.Model.Basic;
-using Mocassin.Model.Particles.ConflictHandling;
 using Mocassin.Model.ModelProject;
+using Mocassin.Model.Particles.ConflictHandling;
 
 namespace Mocassin.Model.Particles
 {

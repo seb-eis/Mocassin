@@ -10,18 +10,31 @@ namespace Mocassin.Model.Structures
         public SpaceGroupEntry GroupEntry { get; set; }
 
         /// <inheritdoc />
-        public int GroupIndex => GroupEntry.Index;
+        public int GroupNumber => GroupEntry.GroupNumber;
 
         /// <inheritdoc />
         public string GroupLiteral => GroupEntry.Literal;
 
         /// <inheritdoc />
-        public string SpecifierName => GroupEntry.Specifier;
+        public string SpecifierName => GroupEntry.CrystalVariation.ToString();
 
         /// <inheritdoc />
         public override string GetParameterName()
         {
             return "Space Group Info";
+        }
+
+        /// <inheritdoc />
+        public override bool Equals(IModelParameter other)
+        {
+            if (other is ISpaceGroupInfo otherInfo)
+            {
+                return GroupNumber == otherInfo.GroupNumber
+                       && GroupLiteral == otherInfo.GroupLiteral
+                       && SpecifierName == otherInfo.SpecifierName;
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -39,21 +52,8 @@ namespace Mocassin.Model.Structures
             if (!(modelParameter is ISpaceGroupInfo groupInfo))
                 return null;
 
-            GroupEntry = new SpaceGroupEntry(groupInfo.GroupIndex, groupInfo.GroupLiteral, groupInfo.SpecifierName);
+            GroupEntry = new SpaceGroupEntry(groupInfo.GroupNumber, groupInfo.GroupLiteral, groupInfo.GroupEntry.CrystalVariation);
             return this;
-        }
-
-        /// <inheritdoc />
-        public override bool Equals(IModelParameter other)
-        {
-            if (other is ISpaceGroupInfo otherInfo)
-            {
-                return GroupIndex == otherInfo.GroupIndex
-                       && GroupLiteral == otherInfo.GroupLiteral
-                       && SpecifierName == otherInfo.SpecifierName;
-            }
-
-            return false;
         }
     }
 }

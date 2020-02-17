@@ -1,4 +1,4 @@
-﻿namespace Mocassin.Mathematics.Bitmasks
+﻿namespace Mocassin.Mathematics.Bitmask
 {
     /// <summary>
     ///     Abstract base class for all bitmask of arbitrary size

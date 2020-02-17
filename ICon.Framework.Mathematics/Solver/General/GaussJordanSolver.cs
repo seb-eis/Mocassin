@@ -55,10 +55,10 @@ namespace Mocassin.Mathematics.Solver
         /// <returns></returns>
         private static bool CheckStartConditionsAndFixZeros(double[,] leftMatrix, double[,] rightMatrix, IComparer<double> comparer)
         {
-            if (!leftMatrix.IsQuadratic()) 
+            if (!leftMatrix.IsQuadratic())
                 return false;
 
-            if (leftMatrix.GetUpperBound(0) != rightMatrix.GetUpperBound(0)) 
+            if (leftMatrix.GetUpperBound(0) != rightMatrix.GetUpperBound(0))
                 return false;
 
             leftMatrix.CleanAlmostZeroEntries(comparer);

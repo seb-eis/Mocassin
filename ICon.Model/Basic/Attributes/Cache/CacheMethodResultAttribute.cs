@@ -27,7 +27,7 @@ namespace Mocassin.Model.Basic
         /// <param name="genericDataWrapperType"></param>
         public CacheMethodResultAttribute(Type genericDataWrapperType)
         {
-            if (genericDataWrapperType == null) 
+            if (genericDataWrapperType == null)
                 throw new ArgumentNullException(nameof(genericDataWrapperType));
 
             if (!genericDataWrapperType.IsGenericType)

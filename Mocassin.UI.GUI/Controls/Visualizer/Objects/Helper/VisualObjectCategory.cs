@@ -9,7 +9,7 @@
         ///     Category for unknown objects
         /// </summary>
         Unknown,
-        
+
         /// <summary>
         ///     Category for set of 2D lines
         /// </summary>

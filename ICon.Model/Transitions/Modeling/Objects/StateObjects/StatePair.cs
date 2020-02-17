@@ -69,8 +69,8 @@ namespace Mocassin.Model.Transitions
         public int CompareTo(StatePair other)
         {
             var donorComp = DonorIndex.CompareTo(other.DonorIndex);
-            return donorComp == 0 
-                ? AcceptorIndex.CompareTo(other.AcceptorIndex) 
+            return donorComp == 0
+                ? AcceptorIndex.CompareTo(other.AcceptorIndex)
                 : donorComp;
         }
     }

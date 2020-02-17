@@ -1,12 +1,12 @@
-﻿using System.Runtime.Serialization;
-using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 using Mocassin.Mathematics.Extensions;
 using Newtonsoft.Json;
 
 namespace Mocassin.Symmetry.CrystalSystems
 {
     /// <summary>
-    ///     Defines a set of lattice parameters values a, b, c with angles alpha, beta, gamma without the crystal context or fixing information
+    ///     Defines a set of lattice parameters values a, b, c with angles alpha, beta, gamma without the crystal context or
+    ///     fixing information
     /// </summary>
     [XmlRoot]
     public class CrystalParameterSet

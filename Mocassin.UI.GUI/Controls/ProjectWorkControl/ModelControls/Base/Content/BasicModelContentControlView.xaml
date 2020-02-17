@@ -28,8 +28,7 @@
               ToolTip="{StaticResource App.ToolTip.ProjectSelection}"
               DisplayMemberPath="Name"
               IsEditable="True"
-              IsTextSearchEnabled="True">
-    </ComboBox>
+              IsTextSearchEnabled="True" />
     <ContentPresenter Content="{Binding DataContentControl}"
                       Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3"
                       VerticalAlignment="Stretch"

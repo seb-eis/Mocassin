@@ -10,7 +10,7 @@
   <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="10*" />
-      <ColumnDefinition Width="1*" MinWidth="20"/>
+      <ColumnDefinition Width="1*" MinWidth="20" />
       <ColumnDefinition Width="10*" MinWidth="130" />
     </Grid.ColumnDefinitions>
     <Grid.RowDefinitions>
@@ -218,8 +218,10 @@
                Margin="{StaticResource App.Margin.VerticalStack}">
       <TextBlock.ToolTip>
         <TextBlock TextAlignment="Justify" TextWrapping="Wrap" Width="500">
-          <Run Text="Set how much model batching the scene controller can do to reduce draw-calls and scene management time."/>
-          <Run Text="Recommendation: Use 'None/Low' for GPUs with a very small VRAM size (e.g. iGPUs) and avoid using 'None' when displaying 1000+ objects."/>
+          <Run
+            Text="Set how much model batching the scene controller can do to reduce draw-calls and scene management time." />
+          <Run
+            Text="Recommendation: Use 'None/Low' for GPUs with a very small VRAM size (e.g. iGPUs) and avoid using 'None' when displaying 1000+ objects." />
         </TextBlock>
       </TextBlock.ToolTip>
     </TextBlock>
@@ -228,23 +230,23 @@
 
     <TextBlock Grid.Row="23" Grid.Column="0" Text="Manual camera" VerticalAlignment="Center"
                Margin="{StaticResource App.Margin.VerticalStack}"
-               ToolTip="Allows manual vector definition for position, up-direction and look-direction of the camera."/>
+               ToolTip="Allows manual vector definition for position, up-direction and look-direction of the camera." />
     <CheckBox Grid.Row="23" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center"
               Margin="{StaticResource App.Margin.VerticalStack}"
               IsChecked="False" Name="EnableManualCameraCheckBox" />
 
     <TextBlock Grid.Row="24" Grid.Column="0" Text="Camera (Position)" VerticalAlignment="Center"
-               Margin="{StaticResource App.Margin.VerticalStack}"/>
+               Margin="{StaticResource App.Margin.VerticalStack}" />
     <TextBox Grid.Row="24" Grid.Column="2" Margin="{StaticResource App.Margin.VerticalStack}" TextAlignment="Right"
              IsEnabled="{Binding ElementName=EnableManualCameraCheckBox, Path=IsChecked}">
       <TextBox.Style>
         <Style TargetType="{x:Type TextBox}">
           <Style.Triggers>
             <Trigger Property="IsEnabled" Value="True">
-              <Setter Property="Text" Value="{Binding Camera.Position, StringFormat={}{0:f1}}"/>
+              <Setter Property="Text" Value="{Binding Camera.Position, StringFormat={}{0:f1}}" />
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
-              <Setter Property="Text" Value="{x:Null}"/>
+              <Setter Property="Text" Value="{x:Null}" />
             </Trigger>
           </Style.Triggers>
         </Style>
@@ -256,17 +258,17 @@
     </TextBox>
 
     <TextBlock Grid.Row="25" Grid.Column="0" Text="Camera (Look Dir.)" VerticalAlignment="Center"
-               Margin="{StaticResource App.Margin.VerticalStack}"/>
+               Margin="{StaticResource App.Margin.VerticalStack}" />
     <TextBox Grid.Row="25" Grid.Column="2" Margin="{StaticResource App.Margin.VerticalStack}" TextAlignment="Right"
              IsEnabled="{Binding ElementName=EnableManualCameraCheckBox, Path=IsChecked}">
       <TextBox.Style>
         <Style TargetType="{x:Type TextBox}">
           <Style.Triggers>
             <Trigger Property="IsEnabled" Value="True">
-              <Setter Property="Text" Value="{Binding Camera.LookDirection, StringFormat={}{0:f1}}"/>
+              <Setter Property="Text" Value="{Binding Camera.LookDirection, StringFormat={}{0:f1}}" />
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
-              <Setter Property="Text" Value="{x:Null}"/>
+              <Setter Property="Text" Value="{x:Null}" />
             </Trigger>
           </Style.Triggers>
         </Style>
@@ -278,17 +280,17 @@
     </TextBox>
 
     <TextBlock Grid.Row="26" Grid.Column="0" Text="Camera (Up Dir.)" VerticalAlignment="Center"
-               Margin="{StaticResource App.Margin.VerticalStack}"/>
+               Margin="{StaticResource App.Margin.VerticalStack}" />
     <TextBox Grid.Row="26" Grid.Column="2" Margin="{StaticResource App.Margin.VerticalStack}" TextAlignment="Right"
              IsEnabled="{Binding ElementName=EnableManualCameraCheckBox, Path=IsChecked}">
       <TextBox.Style>
         <Style TargetType="{x:Type TextBox}">
           <Style.Triggers>
             <Trigger Property="IsEnabled" Value="True">
-              <Setter Property="Text" Value="{Binding Camera.UpDirection, StringFormat={}{0:f1}}"/>
+              <Setter Property="Text" Value="{Binding Camera.UpDirection, StringFormat={}{0:f1}}" />
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
-              <Setter Property="Text" Value="{x:Null}"/>
+              <Setter Property="Text" Value="{x:Null}" />
             </Trigger>
           </Style.Triggers>
         </Style>

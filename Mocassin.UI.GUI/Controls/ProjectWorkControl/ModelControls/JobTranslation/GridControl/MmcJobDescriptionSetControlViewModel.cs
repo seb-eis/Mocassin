@@ -20,12 +20,12 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         public MmcJobPackageData MmcJobPackage { get; }
 
         /// <summary>
-        ///     The parent <see cref="MocassinProject"/>
+        ///     The parent <see cref="MocassinProject" />
         /// </summary>
         public MocassinProject Project { get; }
 
         /// <summary>
-        ///     Get the <see cref="DuplicateCollectionItemCommand{T}"/> for the collection
+        ///     Get the <see cref="DuplicateCollectionItemCommand{T}" /> for the collection
         /// </summary>
         public DuplicateCollectionItemCommand<MmcJobConfigData> DuplicateItemCommand { get; }
 

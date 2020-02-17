@@ -50,17 +50,17 @@ namespace Mocassin.Symmetry.Analysis
         /// <returns></returns>
         public static IComparer<CellEntry<T1>> MakeComparer(IComparer<Fractional3D> vectorComparer, IComparer<T1> entryComparer)
         {
-            if (vectorComparer == null) 
+            if (vectorComparer == null)
                 throw new ArgumentNullException(nameof(vectorComparer));
 
-            if (entryComparer == null) 
+            if (entryComparer == null)
                 throw new ArgumentNullException(nameof(entryComparer));
 
             return Comparer<CellEntry<T1>>.Create((lhs, rhs) =>
             {
                 var vectorCompare = vectorComparer.Compare(lhs.AbsoluteVector, rhs.AbsoluteVector);
-                return vectorCompare == 0 
-                    ? entryComparer.Compare(lhs.Entry, rhs.Entry) 
+                return vectorCompare == 0
+                    ? entryComparer.Compare(lhs.Entry, rhs.Entry)
                     : vectorCompare;
             });
         }

@@ -37,7 +37,7 @@ namespace Mocassin.Model.Energies
         bool IsApplicable(double distance, ICellReferencePosition centerCellReferencePosition, ICellReferencePosition partnerCellReferencePosition);
 
         /// <summary>
-        /// Check if the passed pair interaction falls within the constraints of the interaction filter
+        ///     Check if the passed pair interaction falls within the constraints of the interaction filter
         /// </summary>
         /// <param name="pairInteraction"></param>
         /// <returns></returns>

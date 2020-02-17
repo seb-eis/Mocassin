@@ -53,6 +53,40 @@ namespace Mocassin.UI.Xml.Customization
             set => SetProperty(ref occupationState, value);
         }
 
+        /// <inheritdoc />
+        public int CompareTo(GroupEnergyData other)
+        {
+            if (ReferenceEquals(this, other))
+                return 0;
+
+            if (other is null)
+                return 1;
+
+            var centerParticleKeyComparison = string.Compare(CenterParticle?.Key, other.CenterParticle?.Key, StringComparison.Ordinal);
+            return centerParticleKeyComparison != 0
+                ? centerParticleKeyComparison
+                : Energy.CompareTo(other.Energy);
+        }
+
+        /// <inheritdoc />
+        public GroupEnergyData Duplicate()
+        {
+            var copy = new GroupEnergyData
+            {
+                Name = Name,
+                energy = energy,
+                centerParticle = centerParticle.Duplicate(),
+                occupationState = occupationState.Duplicate()
+            };
+            return copy;
+        }
+
+        /// <inheritdoc />
+        object IDuplicable.Duplicate()
+        {
+            return Duplicate();
+        }
+
         /// <summary>
         ///     Get the contained information as a <see cref="GroupEnergyEntry" /> entry that is valid in the context of the passed
         ///     <see cref="IModelProject" /> and describes an occupation permutation an <see cref="IGroupInteraction" />
@@ -90,21 +124,6 @@ namespace Mocassin.UI.Xml.Customization
             return obj;
         }
 
-        /// <inheritdoc />
-        public int CompareTo(GroupEnergyData other)
-        {
-            if (ReferenceEquals(this, other))
-                return 0;
-
-            if (other is null)
-                return 1;
-
-            var centerParticleKeyComparison = string.Compare(CenterParticle?.Key, other.CenterParticle?.Key, StringComparison.Ordinal);
-            return centerParticleKeyComparison != 0
-                ? centerParticleKeyComparison
-                : Energy.CompareTo(other.Energy);
-        }
-
         /// <summary>
         ///     Creates a short <see cref="string" /> description for a <see cref="IOccupationState" /> interface and center
         ///     <see cref="IParticle" />
@@ -118,25 +137,6 @@ namespace Mocassin.UI.Xml.Customization
             foreach (var particle in center.AsSingleton().Concat(state)) builder.Append($"[{particle.GetIonString()}]");
 
             return builder.ToString();
-        }
-
-        /// <inheritdoc />
-        public GroupEnergyData Duplicate()
-        {
-            var copy = new GroupEnergyData
-            {
-                Name = Name,
-                energy = energy,
-                centerParticle = centerParticle.Duplicate(),
-                occupationState = occupationState.Duplicate()
-            };
-            return copy;
-        }
-
-        /// <inheritdoc />
-        object IDuplicable.Duplicate()
-        {
-            return Duplicate();
         }
     }
 }

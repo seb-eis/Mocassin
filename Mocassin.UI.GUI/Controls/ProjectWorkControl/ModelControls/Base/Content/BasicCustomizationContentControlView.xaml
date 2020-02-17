@@ -28,8 +28,7 @@
               ToolTip="{StaticResource App.ToolTip.ProjectSelection}"
               DisplayMemberPath="Name"
               IsEditable="True"
-              IsTextSearchEnabled="True">
-    </ComboBox>
+              IsTextSearchEnabled="True" />
 
     <ComboBox Grid.Column="2" Grid.Row="0"
               ItemsSource="{Binding CustomizationGraphs}"
@@ -40,13 +39,13 @@
               IsTextSearchEnabled="True">
       <ComboBox.ContextMenu>
         <ContextMenu>
-          <MenuItem Header="Add Customization" Command="{Binding AddCustomizationCommand}"/>
-          <Separator/>
+          <MenuItem Header="Add Customization" Command="{Binding AddCustomizationCommand}" />
+          <Separator />
           <MenuItem Header="Migrate Selected" Command="{Binding MigrateCustomizationCommand}"
                     CommandParameter="{Binding SelectedCustomizationTemplate}" />
           <MenuItem Header="Duplicate Selected" Command="{Binding DuplicateCustomizationCommand}"
-                    CommandParameter="{Binding SelectedCustomizationTemplate}"/>
-          <Separator/>
+                    CommandParameter="{Binding SelectedCustomizationTemplate}" />
+          <Separator />
           <MenuItem Header="Delete Selected" Command="{Binding DeleteCustomizationCommand}"
                     CommandParameter="{Binding SelectedCustomizationTemplate}" />
         </ContextMenu>

@@ -5,7 +5,8 @@ using Mocassin.Model.ModelProject;
 namespace Mocassin.Model.Structures.Validators
 {
     /// <summary>
-    ///     Validator for new structure info model parameter that checks for compatibility with existing data and general object
+    ///     Validator for new structure info model parameter that checks for compatibility with existing data and general
+    ///     object
     ///     constraints
     /// </summary>
     public class StructureInfoValidator : DataValidator<IStructureInfo, MocassinStructureSettings, IStructureDataPort>

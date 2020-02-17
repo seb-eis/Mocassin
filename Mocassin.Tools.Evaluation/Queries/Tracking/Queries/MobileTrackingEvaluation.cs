@@ -11,6 +11,13 @@ namespace Mocassin.Tools.Evaluation.Queries
     public class MobileTrackingEvaluation : JobEvaluation<IReadOnlyList<MobileTrackerResult>>
     {
         /// <inheritdoc />
+        public MobileTrackingEvaluation(IEvaluableJobSet jobSet)
+            : base(jobSet)
+        {
+            ExecuteParallel = true;
+        }
+
+        /// <inheritdoc />
         protected override IReadOnlyList<MobileTrackerResult> GetValue(JobContext context)
         {
             var lattice = context.McsReader.ReadLattice();
@@ -28,13 +35,6 @@ namespace Mocassin.Tools.Evaluation.Queries
             }
 
             return result;
-        }
-
-        /// <inheritdoc />
-        public MobileTrackingEvaluation(IEvaluableJobSet jobSet)
-            : base(jobSet)
-        {
-            ExecuteParallel = true;
         }
     }
 }

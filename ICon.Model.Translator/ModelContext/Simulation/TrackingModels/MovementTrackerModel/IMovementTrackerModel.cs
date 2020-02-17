@@ -3,7 +3,8 @@
 namespace Mocassin.Model.Translator.ModelContext
 {
     /// <summary>
-    ///     Represents a movement tracker model that describes and indexes a tracked physical movement property of the simulation
+    ///     Represents a movement tracker model that describes and indexes a tracked physical movement property of the
+    ///     simulation
     /// </summary>
     public interface IMovementTrackerModel : IModelComponent
     {

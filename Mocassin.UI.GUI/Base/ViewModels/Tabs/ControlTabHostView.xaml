@@ -27,51 +27,55 @@
                 Drop="HeaderItemGrid_OnDrop"
                 DragOver="HeaderItemGrid_OnDragOver">
             <Grid.ColumnDefinitions>
-              <ColumnDefinition Width="Auto"/>
-              <ColumnDefinition Width="Auto"/>
+              <ColumnDefinition Width="Auto" />
+              <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Column="0" x:Name="HeaderTextBlock" VerticalAlignment="Center">
               <TextBlock.InputBindings>
                 <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding CloseTabCommand, Mode=OneTime}" />
-                <MouseBinding MouseAction="MiddleClick" Command="{Binding CloseTabCommand, Mode=OneTime}"/>
+                <MouseBinding MouseAction="MiddleClick" Command="{Binding CloseTabCommand, Mode=OneTime}" />
               </TextBlock.InputBindings>
-              <Run Text="{Binding TabName, Mode=OneTime}"/>
+              <Run Text="{Binding TabName, Mode=OneTime}" />
             </TextBlock>
             <Grid Grid.Column="1"
-                    Width="{Binding ElementName=HeaderTextBlock, Path=ActualHeight}"
-                    Height="{Binding ElementName=HeaderTextBlock, Path=ActualHeight}"
-                    Margin="10,0,0,0" ToolTip="Close Tab"
-                    SnapsToDevicePixels="True">
+                  Width="{Binding ElementName=HeaderTextBlock, Path=ActualHeight}"
+                  Height="{Binding ElementName=HeaderTextBlock, Path=ActualHeight}"
+                  Margin="10,0,0,0" ToolTip="Close Tab"
+                  SnapsToDevicePixels="True">
               <Grid.Style>
                 <Style TargetType="{x:Type Grid}">
                   <Style.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
-                      <Setter Property="Opacity" Value="1"/>
+                      <Setter Property="Opacity" Value="1" />
                     </Trigger>
                     <Trigger Property="IsMouseOver" Value="False">
-                      <Setter Property="Opacity" Value=".5"/>
+                      <Setter Property="Opacity" Value=".5" />
                     </Trigger>
-                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabItem}}, Path=IsSelected}" Value="False">
-                      <Setter Property="Visibility" Value="Hidden"/>
+                    <DataTrigger
+                      Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabItem}}, Path=IsSelected}"
+                      Value="False">
+                      <Setter Property="Visibility" Value="Hidden" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabItem}}, Path=IsMouseOver}" Value="True">
-                      <Setter Property="Visibility" Value="Visible"/>
+                    <DataTrigger
+                      Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabItem}}, Path=IsMouseOver}"
+                      Value="True">
+                      <Setter Property="Visibility" Value="Visible" />
                     </DataTrigger>
                   </Style.Triggers>
                 </Style>
               </Grid.Style>
 
               <Button Command="{Binding CloseTabCommand}" BorderThickness="2" BorderBrush="Transparent">
-                <Path Stroke="{x:Static SystemColors.ControlTextBrush}" StrokeThickness="1" Stretch="Uniform" 
+                <Path Stroke="{x:Static SystemColors.ControlTextBrush}" StrokeThickness="1" Stretch="Uniform"
                       VerticalAlignment="Center" HorizontalAlignment="Center">
                   <Path.Data>
                     <PathGeometry>
                       <PathGeometry.Figures>
                         <PathFigure StartPoint="0,0">
-                          <LineSegment Point="1,1"/>
+                          <LineSegment Point="1,1" />
                         </PathFigure>
                         <PathFigure StartPoint="0,1">
-                          <LineSegment Point="1,0"/>
+                          <LineSegment Point="1,0" />
                         </PathFigure>
                       </PathGeometry.Figures>
                     </PathGeometry>
@@ -86,15 +90,15 @@
                 Drop="HeaderItemGrid_OnDrop"
                 DragOver="HeaderItemGrid_OnDragOver">
             <Grid.ColumnDefinitions>
-              <ColumnDefinition Width="Auto"/>
+              <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="0" Text="{Binding TabName, Mode=OneTime}"/>
+            <TextBlock Grid.Column="0" Text="{Binding TabName, Mode=OneTime}" />
           </Grid>
         </DataTemplate>
       </TabControl.Resources>
       <TabControl.ContentTemplate>
         <DataTemplate DataType="{x:Type local:ControlTabItem}">
-          <ContentPresenter Content="{Binding Content, Mode=OneTime}" Visibility="{Binding Visibility}"/>
+          <ContentPresenter Content="{Binding Content, Mode=OneTime}" Visibility="{Binding Visibility}" />
         </DataTemplate>
       </TabControl.ContentTemplate>
     </TabControl>

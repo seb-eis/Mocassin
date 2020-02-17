@@ -6,13 +6,14 @@ using Mocassin.Framework.Collections;
 namespace Mocassin.Framework.Extensions
 {
     /// <summary>
-    /// Extension class for objects that implement the generic IList interface, provides e.g. extended C++ style search functionality
+    ///     Extension class for objects that implement the generic IList interface, provides e.g. extended C++ style search
+    ///     functionality
     /// </summary>
     public static class MocassinListExtensions
     {
         /// <summary>
-        /// C++ Style lower bound binary search for sorted (provided comparer) collections:
-        /// O log(n) complexity search of first entry that does not compare less than value (Returns Count if non found)
+        ///     C++ Style lower bound binary search for sorted (provided comparer) collections:
+        ///     O log(n) complexity search of first entry that does not compare less than value (Returns Count if non found)
         /// </summary>
         /// <typeparam name="TList"></typeparam>
         /// <typeparam name="TValue"></typeparam>
@@ -38,12 +39,13 @@ namespace Mocassin.Framework.Extensions
                 else
                     counter = step;
             }
+
             return firstIndex;
         }
 
         /// <summary>
-        /// C++ Style lower bound binary search for sorted (default comparer) collections:
-        /// O log(n) complexity search of first entry that does not compare less than value (Returns Count if non found)
+        ///     C++ Style lower bound binary search for sorted (default comparer) collections:
+        ///     O log(n) complexity search of first entry that does not compare less than value (Returns Count if non found)
         /// </summary>
         /// <typeparam name="TList"></typeparam>
         /// <typeparam name="TValue"></typeparam>
@@ -57,8 +59,8 @@ namespace Mocassin.Framework.Extensions
         }
 
         /// <summary>
-        /// C++ Style upper bound binary search for sorted (provided comparer) collections:
-        /// O log(n) complexity search of first entry that does not compare less than value (Returns Count if non found)
+        ///     C++ Style upper bound binary search for sorted (provided comparer) collections:
+        ///     O log(n) complexity search of first entry that does not compare less than value (Returns Count if non found)
         /// </summary>
         /// <typeparam name="TList"></typeparam>
         /// <typeparam name="TValue"></typeparam>
@@ -68,7 +70,7 @@ namespace Mocassin.Framework.Extensions
         /// <param name="comparer"></param>
         /// <returns></returns>
         public static int CppUpperBound<TList, TValue, TComp>(this TList list, TValue value, TComp comparer)
-            where TList : IList<TValue> 
+            where TList : IList<TValue>
             where TComp : IComparer<TValue>
         {
             var (firstIndex, counter) = (0, list.Count);
@@ -84,12 +86,13 @@ namespace Mocassin.Framework.Extensions
                 else
                     counter = step;
             }
+
             return firstIndex;
         }
 
         /// <summary>
-        /// C++ Style upper bound binary search for sorted (default comparer) collections:
-        /// O log(n) complexity search of first entry that does compare greater than value (Returns Count if non found)
+        ///     C++ Style upper bound binary search for sorted (default comparer) collections:
+        ///     O log(n) complexity search of first entry that does compare greater than value (Returns Count if non found)
         /// </summary>
         /// <typeparam name="TList"></typeparam>
         /// <typeparam name="TValue"></typeparam>
@@ -102,8 +105,9 @@ namespace Mocassin.Framework.Extensions
         }
 
         /// <summary>
-        /// C++ style lower and upper bound binary range search for sorted (provided comparer) collections:
-        /// 2* O log(n) search for first entry not lesser and first entry greater than value (Returns Count for non existing indexes)
+        ///     C++ style lower and upper bound binary range search for sorted (provided comparer) collections:
+        ///     2* O log(n) search for first entry not lesser and first entry greater than value (Returns Count for non existing
+        ///     indexes)
         /// </summary>
         /// <typeparam name="TList"></typeparam>
         /// <typeparam name="TValue"></typeparam>
@@ -120,8 +124,8 @@ namespace Mocassin.Framework.Extensions
         }
 
         /// <summary>
-        /// C++ style lower and upper bound binary range search for sorted (default comparer) collections:
-        /// 2* O log(n) search for first entry not lesser and first entry greater than value (Returns Count if non are found)
+        ///     C++ style lower and upper bound binary range search for sorted (default comparer) collections:
+        ///     2* O log(n) search for first entry not lesser and first entry greater than value (Returns Count if non are found)
         /// </summary>
         /// <typeparam name="TList"></typeparam>
         /// <typeparam name="TValue"></typeparam>
@@ -135,7 +139,7 @@ namespace Mocassin.Framework.Extensions
         }
 
         /// <summary>
-        /// Creates a new sorted multiset list from an IEnumerable interface with the default comparer of that type
+        ///     Creates a new sorted multiset list from an IEnumerable interface with the default comparer of that type
         /// </summary>
         /// <typeparam name="TValue"></typeparam>
         /// <param name="enumerable"></param>
@@ -146,7 +150,7 @@ namespace Mocassin.Framework.Extensions
         }
 
         /// <summary>
-        /// Creates a new sorted multiset list from an IEnumerable interface with the provided comparer
+        ///     Creates a new sorted multiset list from an IEnumerable interface with the provided comparer
         /// </summary>
         /// <typeparam name="TValue"></typeparam>
         /// <typeparam name="TComp"></typeparam>
@@ -163,7 +167,7 @@ namespace Mocassin.Framework.Extensions
         }
 
         /// <summary>
-        /// Creates a new sorted duplicate free set list from IEnumerable interface and default comparer of type T1
+        ///     Creates a new sorted duplicate free set list from IEnumerable interface and default comparer of type T1
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <param name="enumerable"></param>
@@ -174,7 +178,7 @@ namespace Mocassin.Framework.Extensions
         }
 
         /// <summary>
-        /// Creates a new sorted duplicate free set list from IEnumerable interface and the provided comparer of that type
+        ///     Creates a new sorted duplicate free set list from IEnumerable interface and the provided comparer of that type
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <typeparam name="TComp"></typeparam>
@@ -192,8 +196,8 @@ namespace Mocassin.Framework.Extensions
         }
 
         /// <summary>
-        /// Replaces the first element matching the predicate and returns the index, if non is found list.Add()
-        /// is called and the new last index is returned
+        ///     Replaces the first element matching the predicate and returns the index, if non is found list.Add()
+        ///     is called and the new last index is returned
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <param name="list"></param>
@@ -210,12 +214,14 @@ namespace Mocassin.Framework.Extensions
                 list[i] = item;
                 return i;
             }
+
             list.Add(item);
             return list.Count - 1;
         }
 
         /// <summary>
-        /// RemoveAll implementation of the default list for the list interface that removes all items that compare to true in the defined predicate
+        ///     RemoveAll implementation of the default list for the list interface that removes all items that compare to true in
+        ///     the defined predicate
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <param name="list"></param>
@@ -232,12 +238,14 @@ namespace Mocassin.Framework.Extensions
                 list.RemoveAt(i);
                 ++removed;
             }
+
             return removed;
         }
 
         /// <summary>
-        /// Gets the sequence equality direction for list one to the second. Returns 1 for positive or -1 for inverted direction. Retruns 0 if sequences are not equal in
-        /// either direction
+        ///     Gets the sequence equality direction for list one to the second. Returns 1 for positive or -1 for inverted
+        ///     direction. Retruns 0 if sequences are not equal in
+        ///     either direction
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <param name="lhs"></param>
@@ -249,7 +257,7 @@ namespace Mocassin.Framework.Extensions
             if (lhs.Count != rhs.Count)
                 return 0;
 
-            if (ReferenceEquals(lhs, rhs)) 
+            if (ReferenceEquals(lhs, rhs))
                 return 1;
 
             if (lhs.SequenceEqual(rhs, comparer))
@@ -261,11 +269,12 @@ namespace Mocassin.Framework.Extensions
                 if (!comparer.Equals(value, rhs[--rhsIndex]))
                     return 0;
             }
+
             return -1;
         }
 
         /// <summary>
-        /// Removes all duplicates from a list based upon the provided equality comparer and returns removed indices
+        ///     Removes all duplicates from a list based upon the provided equality comparer and returns removed indices
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <param name="list"></param>
@@ -286,7 +295,7 @@ namespace Mocassin.Framework.Extensions
         }
 
         /// <summary>
-        /// Removes all duplicates from a list based upon the provided equality compare function and returns removed indices
+        ///     Removes all duplicates from a list based upon the provided equality compare function and returns removed indices
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <param name="list"></param>
@@ -307,7 +316,7 @@ namespace Mocassin.Framework.Extensions
         }
 
         /// <summary>
-        /// Removes the duplicates from a list based upon the passed equality comparer
+        ///     Removes the duplicates from a list based upon the passed equality comparer
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <param name="list"></param>
@@ -327,7 +336,7 @@ namespace Mocassin.Framework.Extensions
         }
 
         /// <summary>
-        /// Populates a generic list with a default value
+        ///     Populates a generic list with a default value
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <typeparam name="TList"></typeparam>
@@ -335,7 +344,7 @@ namespace Mocassin.Framework.Extensions
         /// <param name="value"></param>
         /// <param name="counts"></param>
         /// <returns></returns>
-        public static TList Populate<TList,T1>(this TList values, T1 value, int counts) where TList : IList<T1>
+        public static TList Populate<TList, T1>(this TList values, T1 value, int counts) where TList : IList<T1>
         {
             values.Clear();
             for (var i = 0; i < counts; i++)
@@ -345,7 +354,7 @@ namespace Mocassin.Framework.Extensions
         }
 
         /// <summary>
-        /// Populates a generic list from a provider function to the specified size
+        ///     Populates a generic list from a provider function to the specified size
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <typeparam name="TList"></typeparam>
@@ -353,7 +362,7 @@ namespace Mocassin.Framework.Extensions
         /// <param name="provider"></param>
         /// <param name="count"></param>
         /// <returns></returns>
-        public static TList Populate<TList,T1>(this TList list, Func<T1> provider, int count) where TList : IList<T1>
+        public static TList Populate<TList, T1>(this TList list, Func<T1> provider, int count) where TList : IList<T1>
         {
             list.Clear();
             for (var i = 0; i < count; i++)
@@ -363,7 +372,7 @@ namespace Mocassin.Framework.Extensions
         }
 
         /// <summary>
-        /// Shuffles the entries of a list multiple times using the provided random number generator
+        ///     Shuffles the entries of a list multiple times using the provided random number generator
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <param name="list"></param>
@@ -376,11 +385,12 @@ namespace Mocassin.Framework.Extensions
             {
                 for (var j = list.Count; j > 1;) list.Swap(random.Next(j), --j);
             }
+
             return list;
         }
 
         /// <summary>
-        /// Swap the values at the provided indices within a list
+        ///     Swap the values at the provided indices within a list
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <param name="list"></param>
@@ -394,7 +404,7 @@ namespace Mocassin.Framework.Extensions
         }
 
         /// <summary>
-        /// Selects entries from an index-able list interface in the order of a passed indexing
+        ///     Selects entries from an index-able list interface in the order of a passed indexing
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <param name="list"></param>
@@ -406,7 +416,7 @@ namespace Mocassin.Framework.Extensions
         }
 
         /// <summary>
-        /// Selects entries from an index-able list interface in the order of a passed indexing
+        ///     Selects entries from an index-able list interface in the order of a passed indexing
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <param name="list"></param>

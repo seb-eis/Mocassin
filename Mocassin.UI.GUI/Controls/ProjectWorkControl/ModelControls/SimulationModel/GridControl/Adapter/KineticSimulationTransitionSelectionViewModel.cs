@@ -20,7 +20,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.SimulationMo
             : base(hostObject, true)
         {
             Items = GetTargetCollection(hostObject);
-            HandleDropAddCommand = GetDropAddObjectCommand<KineticTransitionData>();
+            ProcessDataObjectCommand = GetDropAddObjectCommand<KineticTransitionData>();
         }
 
         /// <inheritdoc />

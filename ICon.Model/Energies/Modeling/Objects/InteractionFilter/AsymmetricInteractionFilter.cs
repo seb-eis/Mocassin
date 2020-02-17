@@ -25,6 +25,15 @@ namespace Mocassin.Model.Energies
         public double EndRadius { get; set; }
 
         /// <inheritdoc />
+        public bool Equals(AsymmetricInteractionFilter other)
+        {
+            return other != null
+                   && PartnerCellReferencePosition == other.PartnerCellReferencePosition
+                   && EndRadius.AlmostEqualByRange(other.EndRadius)
+                   && StartRadius.AlmostEqualByRange(other.StartRadius);
+        }
+
+        /// <inheritdoc />
         public bool IsApplicable(double distance, ICellReferencePosition centerCellReferencePosition, ICellReferencePosition partnerCellReferencePosition)
         {
             var result = partnerCellReferencePosition == PartnerCellReferencePosition;
@@ -48,15 +57,6 @@ namespace Mocassin.Model.Energies
         public bool IsEqualFilter(IInteractionFilter other)
         {
             return Equals(FromInterface(other));
-        }
-
-        /// <inheritdoc />
-        public bool Equals(AsymmetricInteractionFilter other)
-        {
-            return other != null
-                   && PartnerCellReferencePosition == other.PartnerCellReferencePosition
-                   && EndRadius.AlmostEqualByRange(other.EndRadius)
-                   && StartRadius.AlmostEqualByRange(other.StartRadius);
         }
 
         /// <summary>

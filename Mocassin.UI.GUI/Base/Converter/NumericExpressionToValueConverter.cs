@@ -5,7 +5,8 @@ using NCalc;
 namespace Mocassin.UI.GUI.Base.Converter
 {
     /// <summary>
-    ///     A <see cref="ValueConverter" /> that converts numeric <see cref="string" /> expressions into <see cref="string" /> values with
+    ///     A <see cref="ValueConverter" /> that converts numeric <see cref="string" /> expressions into <see cref="string" />
+    ///     values with
     ///     backward conversion trough NCalc expression interpreter
     /// </summary>
     public class NumericExpressionToValueConverter : ValueConverter

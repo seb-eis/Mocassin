@@ -14,7 +14,7 @@
   <UserControl.Resources>
     <CollectionViewSource x:Key="Local.MessageCollectionViewSource" Source="{Binding ObservableItems}">
       <CollectionViewSource.SortDescriptions>
-        <componentModel:SortDescription PropertyName="TimeStamp" Direction="Descending"/>
+        <componentModel:SortDescription PropertyName="TimeStamp" Direction="Descending" />
       </CollectionViewSource.SortDescriptions>
     </CollectionViewSource>
   </UserControl.Resources>
@@ -30,21 +30,22 @@
       <DataGrid.RowHeaderTemplate>
         <DataTemplate>
           <Grid>
-            <views:ObjectRowHeaderLogo/>
-            <TextBlock Text="M" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <views:ObjectRowHeaderLogo />
+            <TextBlock Text="M" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" />
           </Grid>
         </DataTemplate>
       </DataGrid.RowHeaderTemplate>
       <DataGrid.Columns>
-        <DataGridTextColumn Header="Time" Width="Auto" Binding="{Binding TimeStamp, Mode=OneTime}" Foreground="Gray" FontWeight="DemiBold" />
+        <DataGridTextColumn Header="Time" Width="Auto" Binding="{Binding TimeStamp, Mode=OneTime}" Foreground="Gray"
+                            FontWeight="DemiBold" />
         <DataGridTextColumn Header="Type" Binding="{Binding ShortInfo, Mode=OneTime}" />
-        <DataGridTextColumn Header="Content" Binding="{Binding DetailsJson, Mode=OneTime}"/>
+        <DataGridTextColumn Header="Content" Binding="{Binding DetailsJson, Mode=OneTime}" />
       </DataGrid.Columns>
       <DataGrid.RowStyle>
         <Style TargetType="{x:Type DataGridRow}">
           <Setter Property="ToolTip">
             <Setter.Value>
-              <TextBox Text="{Binding IndentedDetailsJson, Mode=OneTime}" TextWrapping="Wrap" IsReadOnly="True"/>
+              <TextBox Text="{Binding IndentedDetailsJson, Mode=OneTime}" TextWrapping="Wrap" IsReadOnly="True" />
             </Setter.Value>
           </Setter>
         </Style>

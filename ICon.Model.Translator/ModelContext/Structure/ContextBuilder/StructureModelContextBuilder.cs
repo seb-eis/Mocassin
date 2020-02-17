@@ -22,6 +22,12 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <inheritdoc />
+        public override bool CheckBuildRequirements()
+        {
+            return ModelProject?.GetAllManagers().Any(x => x is IStructureManager) ?? false;
+        }
+
+        /// <inheritdoc />
         protected override IStructureModelContext PopulateContext(IStructureModelContext modelContext)
         {
             if (!CheckBuildRequirements()) return modelContext;
@@ -50,12 +56,6 @@ namespace Mocassin.Model.Translator.ModelContext
             EnvironmentModelBuilder ??= new EnvironmentModelBuilder(ModelProject);
             PositionModelBuilder ??= new PositionModelBuilder(ModelProject);
             InteractionRangeModelBuilder ??= new InteractionRangeModelBuilder();
-        }
-
-        /// <inheritdoc />
-        public override bool CheckBuildRequirements()
-        {
-            return ModelProject?.GetAllManagers().Any(x => x is IStructureManager) ?? false;
         }
     }
 }

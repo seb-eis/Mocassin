@@ -19,13 +19,16 @@ namespace Mocassin.Model.Translator.ModelContext
         IKineticRuleModel RuleModel { get; set; }
 
         /// <summary>
-        /// Defines the electric normalized influence the jump model sees during simulation 
+        ///     Defines the electric normalized influence the jump model sees during simulation
         /// </summary>
-        /// <remarks> Is defined in [eV m / V] in field direction, so multiplication with the field magnitude yields the field influence </remarks>
+        /// <remarks>
+        ///     Is defined in [eV m / V] in field direction, so multiplication with the field magnitude yields the field
+        ///     influence
+        /// </remarks>
         double NormalizedElectricFieldInfluence { get; set; }
 
         /// <summary>
-        /// The cartesian charge transport vector of the local jump model that describes [charge*movement] in units of [C*Ang]
+        ///     The cartesian charge transport vector of the local jump model that describes [charge*movement] in units of [C*Ang]
         /// </summary>
         Cartesian3D ChargeTransportVector { get; set; }
     }

@@ -39,7 +39,8 @@ namespace Mocassin.Model.ModelProject
         NumericComparer RelativeComparer { get; }
 
         /// <summary>
-        ///     The combined comparer that uses the range comparer for zero checks and the relative factor comparer as a main comparer
+        ///     The combined comparer that uses the range comparer for zero checks and the relative factor comparer as a main
+        ///     comparer
         /// </summary>
         NumericComparer ComboComparer { get; }
     }

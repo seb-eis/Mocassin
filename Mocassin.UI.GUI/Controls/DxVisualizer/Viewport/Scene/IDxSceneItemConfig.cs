@@ -56,7 +56,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Scene
         bool CheckSupport(SceneNode sceneNode);
 
         /// <summary>
-        ///     Attaches the provided <see cref="SceneNode" /> and begins managing its properties. An optional flag indicates if the node is pre-configured
+        ///     Attaches the provided <see cref="SceneNode" /> and begins managing its properties. An optional flag indicates if
+        ///     the node is pre-configured
         /// </summary>
         /// <param name="sceneNode"></param>
         /// <param name="isPreConfigured"></param>

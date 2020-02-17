@@ -52,9 +52,9 @@ namespace Mocassin.UI.GUI.Logic.Validation
     /// </summary>
     public class ModelValidatorViewModel : PrimaryControlViewModel
     {
-        private bool isValidating;
         private readonly object lockObject = new object();
         private bool isIgnoreContentChange;
+        private bool isValidating;
 
         /// <summary>
         ///     Get the <see cref="IModelProject" /> interface that provides the validation functionality
@@ -203,7 +203,7 @@ namespace Mocassin.UI.GUI.Logic.Validation
                 return;
             }
 
-            if (!TryGenerateModelCustomization(ModelProject, out var customization))
+            if (!TryGenerateModelCustomization(ModelProject, out _))
             {
                 ModelValidationStatusChangedEvent.OnNext(ModelValidationStatus.CustomizationTemplateBuildFailure);
                 IsValidating = false;

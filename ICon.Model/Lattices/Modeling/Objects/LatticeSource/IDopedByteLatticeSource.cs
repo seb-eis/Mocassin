@@ -5,7 +5,7 @@ using Moccasin.Mathematics.ValueTypes;
 namespace Mocassin.Model.Lattices
 {
     /// <summary>
-    ///     Represents a source for doped byte[,,,] based 4D lattices based on <see cref="IDoping"/> information
+    ///     Represents a source for doped byte[,,,] based 4D lattices based on <see cref="IDoping" /> information
     /// </summary>
     public interface IDopedByteLatticeSource
     {

@@ -3,7 +3,7 @@
     /// <summary>
     ///     Represents a conflict resolver provider that offers resolvers for manager intern data updating induced by changes
     /// </summary>
-    public interface IDataConflictHandlerProvider<T1> where T1 : ModelData
+    public interface IDataConflictHandlerProvider<in T1> where T1 : ModelData
     {
         /// <summary>
         ///     The handler access for newly added model objects

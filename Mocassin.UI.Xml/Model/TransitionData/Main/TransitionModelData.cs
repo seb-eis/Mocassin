@@ -15,11 +15,11 @@ namespace Mocassin.UI.Xml.TransitionModel
     [XmlRoot]
     public class TransitionModelData : ModelManagerData
     {
-        private ObservableCollection<StateExchangePairData> stateExchangePairs;
-        private ObservableCollection<StateExchangeGroupData> stateExchangeGroups;
         private ObservableCollection<AbstractTransitionData> abstractTransitions;
         private ObservableCollection<KineticTransitionData> kineticTransitions;
         private ObservableCollection<MetropolisTransitionData> metropolisTransitions;
+        private ObservableCollection<StateExchangeGroupData> stateExchangeGroups;
+        private ObservableCollection<StateExchangePairData> stateExchangePairs;
 
         /// <summary>
         ///     Get or set the list of state exchange input objects

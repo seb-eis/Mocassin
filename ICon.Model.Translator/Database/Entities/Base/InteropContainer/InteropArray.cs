@@ -7,12 +7,13 @@ using Mocassin.Framework.Extensions;
 namespace Mocassin.Model.Translator
 {
     /// <summary>
-    ///     Provides a wrapper system for <see cref="Array"/> objects to convert from and into the binary layout used by the C simulator
+    ///     Provides a wrapper system for <see cref="Array" /> objects to convert from and into the binary layout used by the C
+    ///     simulator
     /// </summary>
     public abstract class InteropArray<T> : BlobEntityBase where T : struct
     {
         /// <summary>
-        ///     Get the wrapped <see cref="Array"/>
+        ///     Get the wrapped <see cref="Array" />
         /// </summary>
         [NotMapped]
         public Array InternalArray { get; private set; }
@@ -48,7 +49,8 @@ namespace Mocassin.Model.Translator
         }
 
         /// <summary>
-        ///     Get the value at the given indices. Throws if the number of indices does not match dimension (Slow, not intended for frequent usage)
+        ///     Get the value at the given indices. Throws if the number of indices does not match dimension (Slow, not intended
+        ///     for frequent usage)
         /// </summary>
         /// <param name="indices"></param>
         /// <returns></returns>
@@ -58,7 +60,8 @@ namespace Mocassin.Model.Translator
         }
 
         /// <summary>
-        ///     Set the value at the given indices. Throws if the number of indices does not match dimension (Slow, not intended for frequent usage)
+        ///     Set the value at the given indices. Throws if the number of indices does not match dimension (Slow, not intended
+        ///     for frequent usage)
         /// </summary>
         /// <param name="value"></param>
         /// <param name="indices"></param>

@@ -3,7 +3,6 @@
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel.DataControl"
   xmlns:comboBox="clr-namespace:Mocassin.UI.GUI.Base.UiElements.ComboBox"
@@ -20,34 +19,34 @@
               ColumnWidth="*">
       <DataGrid.RowHeaderTemplate>
         <DataTemplate>
-          <views:ObjectRowHeaderLogo x:Name="RowHeaderLogo" 
+          <views:ObjectRowHeaderLogo x:Name="RowHeaderLogo"
                                      PreviewMouseLeftButtonDown="RowHeaderLogo_OnPreviewMouseLeftButtonDown"
                                      PreviewMouseLeftButtonUp="RowHeaderLogo_OnPreviewMouseLeftButtonUp"
                                      PreviewMouseMove="RowHeaderLogo_OnPreviewMouseMove"
-                                     Cursor="Hand"/>
+                                     Cursor="Hand" />
         </DataTemplate>
       </DataGrid.RowHeaderTemplate>
 
       <DataGrid.Columns>
         <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
         <DataGridCheckBoxColumn Header="Auto Change Balance" Binding="{Binding UseCounterDoping}" />
-        <DataGridTextColumn Header="Order of Application" 
+        <DataGridTextColumn Header="Order of Application"
                             Binding="{Binding Priority, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
 
         <comboBox:BindableDataGridComboBoxColumn Header="Primary Exchange"
                                                  ItemsSource="{Binding ElementName=DopingDataGrid, Path=DataContext.SelectablePrimaryDopingCombinations}"
                                                  SelectedItemBinding="{Binding PrimaryDoping}"
-                                                 DisplayMemberPath="Name"/>
+                                                 DisplayMemberPath="Name" />
 
         <comboBox:BindableDataGridComboBoxColumn Header="Dependent Exchange"
                                                  ItemsSource="{Binding ElementName=DopingDataGrid, Path=DataContext.SelectableCounterDopingCombinations}"
                                                  SelectedItemBinding="{Binding CounterDoping}"
-                                                 DisplayMemberPath="Name"/>
+                                                 DisplayMemberPath="Name" />
 
         <comboBox:BindableDataGridComboBoxColumn Header="Building Block Binding"
                                                  ItemsSource="{Binding ElementName=DopingDataGrid, Path=DataContext.SelectableBuildingBlocks}"
                                                  SelectedItemBinding="{Binding BuildingBlock}"
-                                                 DisplayMemberPath="Name"/>
+                                                 DisplayMemberPath="Name" />
 
       </DataGrid.Columns>
     </DataGrid>

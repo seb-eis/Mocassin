@@ -10,22 +10,22 @@ namespace Mocassin.UI.Xml.Helper.Migration
     public class MigrationReport
     {
         /// <summary>
-        ///     Get the <see cref="IList{T}"/> of <see cref="MigrationReportEntry"/> items that store successful data migrations
+        ///     Get the <see cref="IList{T}" /> of <see cref="MigrationReportEntry" /> items that store successful data migrations
         /// </summary>
         public IReadOnlyList<MigrationReportEntry> Entries { get; }
 
         /// <summary>
-        ///     Get the <see cref="ProjectDataObject"/> that served as the data source
+        ///     Get the <see cref="ProjectDataObject" /> that served as the data source
         /// </summary>
         public ProjectDataObject MigrationSource { get; set; }
 
         /// <summary>
-        ///     Get the <see cref="ProjectDataObject"/> that served as the data target
+        ///     Get the <see cref="ProjectDataObject" /> that served as the data target
         /// </summary>
         public ProjectDataObject MigrationTarget { get; set; }
 
         /// <summary>
-        ///     Creates a new <see cref="MigrationReport"/>
+        ///     Creates a new <see cref="MigrationReport" />
         /// </summary>
         /// <param name="reportEntries"></param>
         /// <param name="migrationSource"></param>

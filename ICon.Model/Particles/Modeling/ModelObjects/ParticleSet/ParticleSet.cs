@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Mocassin.Framework.Collections;
 using Mocassin.Framework.Extensions;
-using Mocassin.Mathematics.Bitmasks;
+using Mocassin.Mathematics.Bitmask;
 using Mocassin.Model.Basic;
 
 namespace Mocassin.Model.Particles
@@ -20,6 +19,9 @@ namespace Mocassin.Model.Particles
         /// </summary>
         [UseTrackedData]
         public List<IParticle> Particles { get; set; }
+
+        /// <inheritdoc />
+        public override string ObjectName => "Particle Set";
 
         /// <inheritdoc />
         public IEnumerable<IParticle> GetParticles()
@@ -41,31 +43,10 @@ namespace Mocassin.Model.Particles
             return new Bitmask64(mask);
         }
 
-        /// <summary>
-        ///     Creates new empty particle set that does not allow any occupants (Always has the index 0)
-        /// </summary>
-        /// <returns></returns>
-        public static ParticleSet CreateEmpty()
-        {
-            return new ParticleSet {Particles = new List<IParticle>(), Index = 0, Key = "ParticleSet.Void"};
-        }
-
         /// <inheritdoc />
         public bool EqualsInModelProperties(IParticleSet other)
         {
             return AsBitmask().Equals(other.AsBitmask());
-        }
-
-		/// <inheritdoc />
-		public override string ObjectName => "Particle Set";
-
-		/// <inheritdoc />
-		public override ModelObject PopulateFrom(IModelObject obj)
-        {
-            if (!(CastIfNotDeprecated<IParticleSet>(obj) is { } particleSet)) return null;
-
-            Particles = particleSet.GetParticles().ToList();
-            return this;
         }
 
 
@@ -78,7 +59,7 @@ namespace Mocassin.Model.Particles
         /// <inheritdoc />
         public long AsLong()
         {
-            return Particles.Where(x => !x.IsVoid).Aggregate(0L, (current, particle) => current | 1L << particle.Index);
+            return Particles.Where(x => !x.IsVoid).Aggregate(0L, (current, particle) => current | (1L << particle.Index));
         }
 
         /// <inheritdoc />
@@ -91,6 +72,24 @@ namespace Mocassin.Model.Particles
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        /// <summary>
+        ///     Creates new empty particle set that does not allow any occupants (Always has the index 0)
+        /// </summary>
+        /// <returns></returns>
+        public static ParticleSet CreateEmpty()
+        {
+            return new ParticleSet {Particles = new List<IParticle>(), Index = 0, Key = "ParticleSet.Void"};
+        }
+
+        /// <inheritdoc />
+        public override ModelObject PopulateFrom(IModelObject obj)
+        {
+            if (!(CastIfNotDeprecated<IParticleSet>(obj) is { } particleSet)) return null;
+
+            Particles = particleSet.GetParticles().ToList();
+            return this;
         }
 
         /// <summary>

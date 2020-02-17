@@ -1,18 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using Mocassin.Mathematics.Comparer;
+﻿using System.Collections.Generic;
 using Mocassin.Mathematics.Extensions;
 using Mocassin.Mathematics.ValueTypes;
 
 namespace Mocassin.Symmetry.Analysis
 {
     /// <summary>
-    ///     Provides extension methods for cell analysis with <see cref="IUnitCellProvider{T1}"/> interfaces
+    ///     Provides extension methods for cell analysis with <see cref="IUnitCellProvider{T1}" /> interfaces
     /// </summary>
     public static class CellAnalysisExtensions
     {
         /// <summary>
-        ///     Get an <see cref="IEnumerable{T}"/> sequence for a subset of a unit cell provider defined by a cuboid start and end point
+        ///     Get an <see cref="IEnumerable{T}" /> sequence for a subset of a unit cell provider defined by a cuboid start and
+        ///     end point
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="cellProvider"></param>
@@ -23,14 +22,8 @@ namespace Mocassin.Symmetry.Analysis
         {
             var comparer = cellProvider.VectorEncoder.Transformer.FractionalSystem.Comparer;
 
-            var (aMin, bMin, cMin) = (
-                MocassinMath.FloorToInt(start.A, comparer), 
-                MocassinMath.FloorToInt(start.B, comparer), 
-                MocassinMath.FloorToInt(start.C, comparer));
-            var (aMax, bMax, cMax) = (
-                MocassinMath.FloorToInt(end.A, comparer), 
-                MocassinMath.FloorToInt(end.B, comparer), 
-                MocassinMath.FloorToInt(end.C, comparer));
+            var (aMin, bMin, cMin) = (start.A.FloorToInt(comparer), start.B.FloorToInt(comparer), start.C.FloorToInt(comparer));
+            var (aMax, bMax, cMax) = (end.A.FloorToInt(comparer), end.B.FloorToInt(comparer), end.C.FloorToInt(comparer));
 
             for (var a = aMin; a <= aMax; a++)
             {

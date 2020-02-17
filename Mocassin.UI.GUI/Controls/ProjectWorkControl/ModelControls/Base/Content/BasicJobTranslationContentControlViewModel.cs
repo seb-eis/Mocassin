@@ -12,7 +12,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
     ///     Basic customization content control that extends <see cref="BasicModelContentControlViewModel" /> with a
     ///     <see cref="ProjectJobSetTemplate" /> selection
     /// </summary>
-    public class BasicJobTranslationContentControlViewModel : BasicModelContentControlViewModel
+    public sealed class BasicJobTranslationContentControlViewModel : BasicModelContentControlViewModel
     {
         private ObservableCollection<ProjectJobSetTemplate> jobTranslationGraphs;
         private ProjectJobSetTemplate selectedJobSetTemplate;
@@ -33,7 +33,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         public ObservableCollection<ProjectJobSetTemplate> JobTranslationGraphs
         {
             get => jobTranslationGraphs;
-            protected set => SetProperty(ref jobTranslationGraphs, value);
+            private set => SetProperty(ref jobTranslationGraphs, value);
         }
 
         /// <summary>
@@ -43,12 +43,14 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         public AddNewJobTranslationCommand AddJobTranslationCommand { get; }
 
         /// <summary>
-        ///     Get the <see cref="DeleteJobTranslationCommand"/> to remove a <see cref="ProjectJobSetTemplate"/> from the current project
+        ///     Get the <see cref="DeleteJobTranslationCommand" /> to remove a <see cref="ProjectJobSetTemplate" /> from the
+        ///     current project
         /// </summary>
         public DeleteJobTranslationCommand DeleteTranslationCommand { get; }
 
         /// <summary>
-        ///     Get the <see cref="DuplicateJobTranslationCommand"/> to add a <see cref="ProjectJobSetTemplate"/> duplicate to the current project
+        ///     Get the <see cref="DuplicateJobTranslationCommand" /> to add a <see cref="ProjectJobSetTemplate" /> duplicate to
+        ///     the current project
         /// </summary>
         public DuplicateJobTranslationCommand DuplicateTranslationCommand { get; }
 
@@ -80,9 +82,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         }
 
         /// <summary>
-        ///     Nulls the currently selected <see cref="ProjectJobSetTemplate"/> and reloads the option list
+        ///     Nulls the currently selected <see cref="ProjectJobSetTemplate" /> and reloads the option list
         /// </summary>
-        protected void ReloadSelectionSource(bool nullSelected = true, bool selectLast = false)
+        private void ReloadSelectionSource(bool nullSelected = true, bool selectLast = false)
         {
             ExecuteOnAppThread(() =>
             {

@@ -58,8 +58,20 @@ namespace Mocassin.UI.Xml.Jobs
             return JobPackageDescription.GetManualOptimizers().Select(x => x.ToInternal(ModelProject));
         }
 
+        /// <inheritdoc />
+        public IEnumerator<JobConfiguration> GetEnumerator()
+        {
+            return GetJobConfigurations().GetEnumerator();
+        }
+
+        /// <inheritdoc />
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
         /// <summary>
-        ///     Get the sequence of <see cref="JobConfiguration"/> instances of the <see cref="IJobCollection"/>
+        ///     Get the sequence of <see cref="JobConfiguration" /> instances of the <see cref="IJobCollection" />
         /// </summary>
         /// <returns></returns>
         public IEnumerable<JobConfiguration> GetJobConfigurations()
@@ -151,18 +163,6 @@ namespace Mocassin.UI.Xml.Jobs
             };
 
             return obj;
-        }
-
-        /// <inheritdoc />
-        public IEnumerator<JobConfiguration> GetEnumerator()
-        {
-            return GetJobConfigurations().GetEnumerator();
-        }
-
-        /// <inheritdoc />
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
         }
     }
 }

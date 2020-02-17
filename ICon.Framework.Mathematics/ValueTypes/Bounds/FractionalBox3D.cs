@@ -4,27 +4,28 @@ using System.Collections.Generic;
 namespace Mocassin.Mathematics.ValueTypes
 {
     /// <summary>
-    ///     Describes a rectangular box in the fractional coordinates that supports <see cref="Fractional3D"/> bounds checking without converting to a cartesian context
+    ///     Describes a rectangular box in the fractional coordinates that supports <see cref="Fractional3D" /> bounds checking
+    ///     without converting to a cartesian context
     /// </summary>
     public readonly struct FractionalBox3D
     {
         /// <summary>
-        ///     Get the <see cref="Fractional3D"/> that describes the start point
+        ///     Get the <see cref="Fractional3D" /> that describes the start point
         /// </summary>
         public Fractional3D Start { get; }
 
         /// <summary>
-        ///     Get the <see cref="Fractional3D"/> that describes the A,B,C sizes
+        ///     Get the <see cref="Fractional3D" /> that describes the A,B,C sizes
         /// </summary>
         public Fractional3D Size { get; }
 
         /// <summary>
-        ///     Get the <see cref="Fractional3D"/> that describes the end point
+        ///     Get the <see cref="Fractional3D" /> that describes the end point
         /// </summary>
         public Fractional3D End { get; }
 
         /// <summary>
-        ///     Creates a new <see cref="FractionalBox3D"/> with start point and size information
+        ///     Creates a new <see cref="FractionalBox3D" /> with start point and size information
         /// </summary>
         /// <param name="start"></param>
         /// <param name="size"></param>
@@ -35,7 +36,8 @@ namespace Mocassin.Mathematics.ValueTypes
         }
 
         /// <summary>
-        ///     Performs a within bounds check for the provided a,b,c coordinates using direct double comparison (Strictly within bounds)
+        ///     Performs a within bounds check for the provided a,b,c coordinates using direct double comparison (Strictly within
+        ///     bounds)
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
@@ -49,7 +51,8 @@ namespace Mocassin.Mathematics.ValueTypes
         }
 
         /// <summary>
-        ///     Performs a within bounds check for the provided <see cref="Fractional3D"/> using direct double comparison (Strictly within bounds)
+        ///     Performs a within bounds check for the provided <see cref="Fractional3D" /> using direct double comparison
+        ///     (Strictly within bounds)
         /// </summary>
         /// <param name="point"></param>
         /// <returns></returns>
@@ -74,7 +77,8 @@ namespace Mocassin.Mathematics.ValueTypes
         }
 
         /// <summary>
-        ///     Performs a within bounds check for the provided <see cref="Fractional3D"/> using a double <see cref="IComparer{T}"/>
+        ///     Performs a within bounds check for the provided <see cref="Fractional3D" /> using a double
+        ///     <see cref="IComparer{T}" />
         /// </summary>
         /// <param name="point"></param>
         /// <param name="comparer"></param>
@@ -85,13 +89,13 @@ namespace Mocassin.Mathematics.ValueTypes
         }
 
         /// <summary>
-        ///     Performs an almost within bounds check for the provided <see cref="Fractional3D"/> using a range tolerance
+        ///     Performs an almost within bounds check for the provided <see cref="Fractional3D" /> using a range tolerance
         /// </summary>
         /// <param name="c"></param>
         /// <param name="tolerance"></param>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        public bool IsWithinBounds(double a,double b,double c, double tolerance)
+        public bool IsWithinBounds(double a, double b, double c, double tolerance)
         {
             tolerance = Math.Abs(tolerance);
             return a >= Start.A + tolerance && a <= End.A - tolerance &&
@@ -100,7 +104,7 @@ namespace Mocassin.Mathematics.ValueTypes
         }
 
         /// <summary>
-        ///     Performs an almost within bounds check for the provided <see cref="Fractional3D"/> using a range tolerance
+        ///     Performs an almost within bounds check for the provided <see cref="Fractional3D" /> using a range tolerance
         /// </summary>
         /// <param name="point"></param>
         /// <param name="tolerance"></param>
@@ -110,7 +114,8 @@ namespace Mocassin.Mathematics.ValueTypes
         }
 
         /// <summary>
-        ///     Calculates the <see cref="Fractional3D"/> start and end points of the <see cref="FractionalBox3D"/> from an arbitrary start point and a size information
+        ///     Calculates the <see cref="Fractional3D" /> start and end points of the <see cref="FractionalBox3D" /> from an
+        ///     arbitrary start point and a size information
         /// </summary>
         /// <param name="start"></param>
         /// <param name="size"></param>

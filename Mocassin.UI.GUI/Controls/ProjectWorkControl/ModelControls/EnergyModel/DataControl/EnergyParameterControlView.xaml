@@ -29,8 +29,9 @@
                Style="{StaticResource App.Style.Run.ModelObject}" />
           <Run Text="instances defined as 'stable'." />
           <LineBreak />
-          <Run Text="Keep in mind: All pair interactions around 'stable' positions have implicit symmetric (A-B = B-A)' behavior."
-               Style="{StaticResource App.Style.Run.Important}" />
+          <Run
+            Text="Keep in mind: All pair interactions around 'stable' positions have implicit symmetric (A-B = B-A)' behavior."
+            Style="{StaticResource App.Style.Run.Important}" />
           <Run Text="You cannot overwrite this behavior or define discrete cutoff ranges for each 'stable' position."
                Style="{StaticResource App.Style.Run.Important}" />
         </TextBlock>
@@ -117,7 +118,7 @@
                Text="{Binding InteractionRadius, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
         <TextBox.InputBindings>
           <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
-                      CommandParameter="{Binding ElementName=CutoffTextBox}"/>
+                      CommandParameter="{Binding ElementName=CutoffTextBox}" />
         </TextBox.InputBindings>
       </TextBox>
     </content:HeaderedGroup>
@@ -125,7 +126,7 @@
     <content:HeaderedGroup Grid.Row="1" Style="{StaticResource App.Style.HeaderedGroup.BoldText}"
                            HeaderToolTip="{StaticResource Local.ToolTip.InteractionFilters}"
                            Header="Stable Interaction Filter Definitions:">
-      <gridControl:InteractionFilterGridControlView DataContext="{Binding InteractionFilterGridViewModel}"/>
+      <gridControl:InteractionFilterGridControlView DataContext="{Binding InteractionFilterGridViewModel}" />
     </content:HeaderedGroup>
   </Grid>
 </UserControl>

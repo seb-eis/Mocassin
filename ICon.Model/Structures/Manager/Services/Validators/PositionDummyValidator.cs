@@ -40,7 +40,7 @@ namespace Mocassin.Model.Structures.Validators
                 NumericComparer.CreateRanged(ModelProject.CommonNumeric.ComparisonRange));
 
             if (constraint.IsValid(cellDummyPosition.Vector.A) && constraint.IsValid(cellDummyPosition.Vector.B) &&
-                constraint.IsValid(cellDummyPosition.Vector.C)) 
+                constraint.IsValid(cellDummyPosition.Vector.C))
                 return;
 
             var detail = $"The dummy violates the unit cell boundaries {constraint}";
@@ -58,11 +58,11 @@ namespace Mocassin.Model.Structures.Validators
         {
             foreach (var item in DataReader.Access.GetDummyPositions())
             {
-                if (item.IsDeprecated) 
+                if (item.IsDeprecated)
                     continue;
 
                 var extended = ModelProject.SpaceGroupService.GetUnitCellP1PositionExtension(item.Vector);
-                if (extended.GetCppLowerBound(cellDummyPosition.Vector) == extended.Count) 
+                if (extended.GetCppLowerBound(cellDummyPosition.Vector) == extended.Count)
                     continue;
 
                 const string detail = "Provided dummy position is already present or part of the wyckoff set of another existing dummy";

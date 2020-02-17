@@ -16,7 +16,8 @@ namespace Mocassin.UI.GUI.Base.ViewModels.JsonBrowser
         private static Regex CapitalRegex { get; } = new Regex(@"(?:([a-z]{1})([A-Z0-9]))");
 
         /// <summary>
-        ///     Converts the given <see cref="object"/>  to a <see cref="TreeViewItem"/> using the <see cref="JsonConvert"/> system
+        ///     Converts the given <see cref="object" />  to a <see cref="TreeViewItem" /> using the <see cref="JsonConvert" />
+        ///     system
         /// </summary>
         /// <param name="obj"></param>
         /// <param name="rootName"></param>
@@ -118,7 +119,6 @@ namespace Mocassin.UI.GUI.Base.ViewModels.JsonBrowser
         /// <param name="parentViewItem"></param>
         public void AddToTreeView(JToken jToken, TreeViewItem parentViewItem)
         {
-            var viewItem = new TreeViewItem();
             switch (jToken)
             {
                 case JValue jValue:
@@ -139,7 +139,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.JsonBrowser
         }
 
         /// <summary>
-        ///     Creates a <see cref="TreeViewItem"/> for any <see cref="Exception"/>
+        ///     Creates a <see cref="TreeViewItem" /> for any <see cref="Exception" />
         /// </summary>
         /// <param name="e"></param>
         /// <returns></returns>
@@ -150,7 +150,8 @@ namespace Mocassin.UI.GUI.Base.ViewModels.JsonBrowser
         }
 
         /// <summary>
-        ///     Creates the header <see cref="string"/> for the passed <see cref="JValue"/> and <see cref="TreeViewItem"/> parent
+        ///     Creates the header <see cref="string" /> for the passed <see cref="JValue" /> and <see cref="TreeViewItem" />
+        ///     parent
         /// </summary>
         /// <param name="jValue"></param>
         /// <param name="parent"></param>

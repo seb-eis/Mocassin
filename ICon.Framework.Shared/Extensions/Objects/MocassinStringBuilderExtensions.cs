@@ -6,13 +6,14 @@ using System.Text.RegularExpressions;
 namespace Mocassin.Framework.Extensions
 {
     /// <summary>
-    /// ICon string builder extension class that provides specific enumerator converters for compatibility with the C++ XMLNode
-    /// implementation
+    ///     ICon string builder extension class that provides specific enumerator converters for compatibility with the C++
+    ///     XMLNode
+    ///     implementation
     /// </summary>
     public static class MocassinStringBuilderExtensions
     {
         /// <summary>
-        /// Appends a comma separated value list to the builder based upon an enumerator and the ToString() method
+        ///     Appends a comma separated value list to the builder based upon an enumerator and the ToString() method
         /// </summary>
         /// <typeparam name="TValue"></typeparam>
         /// <param name="builder"></param>
@@ -24,7 +25,7 @@ namespace Mocassin.Framework.Extensions
         }
 
         /// <summary>
-        /// Appends multiple values by ToString call and a separator
+        ///     Appends multiple values by ToString call and a separator
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <param name="builder"></param>
@@ -37,11 +38,12 @@ namespace Mocassin.Framework.Extensions
                 builder.Append(item);
                 builder.Append(separator);
             }
+
             builder.PopBack(1);
         }
 
         /// <summary>
-        /// Creates comma separated value string from parameter list
+        ///     Creates comma separated value string from parameter list
         /// </summary>
         /// <typeparam name="TValue"></typeparam>
         /// <param name="builder"></param>
@@ -55,21 +57,21 @@ namespace Mocassin.Framework.Extensions
         }
 
         /// <summary>
-        /// Appends a set of convertibles as comma separated invariant strings
+        ///     Appends a set of convertibles as comma separated invariant strings
         /// </summary>
         /// <param name="builder"></param>
         /// <param name="separator"></param>
         /// <param name="convertibles"></param>
         public static void AppendSeparated(this StringBuilder builder, char separator, IEnumerable<IConvertible> convertibles)
         {
-            foreach (var item in convertibles) 
+            foreach (var item in convertibles)
                 builder.Append(item.PrimitiveToString() + separator);
 
             builder.PopBack(1);
         }
 
         /// <summary>
-        /// Removes all consecutive line break duplicates
+        ///     Removes all consecutive line break duplicates
         /// </summary>
         /// <param name="builder"></param>
         public static void RemoveConsecutiveNewLines(this StringBuilder builder)
@@ -80,7 +82,7 @@ namespace Mocassin.Framework.Extensions
         }
 
         /// <summary>
-        /// Removes the specified number of characters from the end of the current builder content
+        ///     Removes the specified number of characters from the end of the current builder content
         /// </summary>
         /// <param name="builder"></param>
         /// <param name="count"></param>
@@ -93,7 +95,8 @@ namespace Mocassin.Framework.Extensions
         }
 
         /// <summary>
-        /// Removes the specified number of characters from the end of the builder content and replaces them with a new end string
+        ///     Removes the specified number of characters from the end of the builder content and replaces them with a new end
+        ///     string
         /// </summary>
         /// <param name="builder"></param>
         /// <param name="count"></param>

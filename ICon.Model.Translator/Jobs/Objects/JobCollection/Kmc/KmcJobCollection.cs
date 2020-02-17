@@ -22,7 +22,7 @@ namespace Mocassin.Model.Translator.Jobs
         public IList<KmcJobConfiguration> JobConfigurations { get; set; }
 
         /// <summary>
-        /// Get or set the list of used <see cref="IPostBuildOptimizer"/>
+        ///     Get or set the list of used <see cref="IPostBuildOptimizer" />
         /// </summary>
         public IList<IPostBuildOptimizer> PostBuildOptimizers { get; set; }
 

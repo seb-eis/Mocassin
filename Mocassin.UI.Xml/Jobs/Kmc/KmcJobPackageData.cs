@@ -17,9 +17,9 @@ namespace Mocassin.UI.Xml.Jobs
     [XmlRoot]
     public class KmcJobPackageData : JobPackageData, IDuplicable<KmcJobPackageData>
     {
-        private ModelObjectReference<KineticSimulation> simulation;
         private KmcJobConfigData jobBaseDescription;
         private ObservableCollection<KmcJobConfigData> jobConfigurations;
+        private ModelObjectReference<KineticSimulation> simulation;
 
         /// <summary>
         ///     Get or set the <see cref="ModelObjectReference{T}" /> to the target <see cref="KineticSimulation" />
@@ -59,6 +59,25 @@ namespace Mocassin.UI.Xml.Jobs
         }
 
         /// <inheritdoc />
+        public KmcJobPackageData Duplicate()
+        {
+            var result = new KmcJobPackageData
+            {
+                Simulation = Simulation?.Duplicate(),
+                JobBaseDescription = JobBaseDescription.Duplicate(),
+                JobConfigurations = JobConfigurations.Select(x => x.Duplicate()).ToObservableCollection()
+            };
+            CopyBaseDataTo(result);
+            return result;
+        }
+
+        /// <inheritdoc />
+        object IDuplicable.Duplicate()
+        {
+            return Duplicate();
+        }
+
+        /// <inheritdoc />
         public override IJobCollection ToInternal(IModelProject modelProject, int collectionId)
         {
             if (modelProject == null) throw new ArgumentNullException(nameof(modelProject));
@@ -90,25 +109,6 @@ namespace Mocassin.UI.Xml.Jobs
             return int.TryParse(JobCountPerConfig, out var count)
                 ? count
                 : modelProject.DataTracker.FindObjectByKey<IKineticSimulation>(Simulation.Key).JobCount;
-        }
-
-        /// <inheritdoc />
-        public KmcJobPackageData Duplicate()
-        {
-            var result = new KmcJobPackageData
-            {
-                Simulation = Simulation?.Duplicate(),
-                JobBaseDescription = JobBaseDescription.Duplicate(),
-                JobConfigurations = JobConfigurations.Select(x => x.Duplicate()).ToObservableCollection()
-            };
-            CopyBaseDataTo(result);
-            return result;
-        }
-
-        /// <inheritdoc />
-        object IDuplicable.Duplicate()
-        {
-            return Duplicate();
         }
     }
 }

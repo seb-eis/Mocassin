@@ -22,8 +22,10 @@ namespace Mocassin.Framework.Processing
         static ObjectProcessor()
         {
             if (ObjectProcessorFactory.AnyIsTuple(typeof(T1)))
+            {
                 throw new InvalidGenericTypeException(
                     "Object handlers cannot directly be used for tuple types due to casting issues within C#", typeof(T1));
+            }
         }
 
         /// <summary>

@@ -28,6 +28,9 @@ namespace Mocassin.Model.Energies
         public Dictionary<IParticle, Dictionary<OccupationState, double>> EnergyDictionarySet { get; set; }
 
         /// <inheritdoc />
+        public override string ObjectName => "Group Interaction";
+
+        /// <inheritdoc />
         public IEnumerable<Fractional3D> GetBaseGeometry()
         {
             return (GeometryVectors ?? new List<Fractional3D>()).AsEnumerable();
@@ -47,7 +50,14 @@ namespace Mocassin.Model.Energies
         }
 
         /// <inheritdoc />
-        public override string ObjectName => "Group Interaction";
+        public IEnumerable<GroupEnergyEntry> GetEnergyEntries()
+        {
+            foreach (var outerItem in EnergyDictionarySet)
+            {
+                foreach (var innerItem in outerItem.Value)
+                    yield return new GroupEnergyEntry(outerItem.Key, innerItem.Key, innerItem.Value);
+            }
+        }
 
         /// <inheritdoc />
         public override ModelObject PopulateFrom(IModelObject obj)
@@ -85,16 +95,6 @@ namespace Mocassin.Model.Energies
 
             innerDictionary[searchEntry] = energyEntry.Energy;
             return true;
-        }
-
-        /// <inheritdoc />
-        public IEnumerable<GroupEnergyEntry> GetEnergyEntries()
-        {
-            foreach (var outerItem in EnergyDictionarySet)
-            {
-                foreach (var innerItem in outerItem.Value)
-                    yield return new GroupEnergyEntry(outerItem.Key, innerItem.Key, innerItem.Value);
-            }
         }
     }
 }

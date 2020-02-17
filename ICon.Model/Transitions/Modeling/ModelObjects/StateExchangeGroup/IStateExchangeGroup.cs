@@ -20,7 +20,7 @@ namespace Mocassin.Model.Transitions
         bool IsVacancyGroup { get; }
 
         /// <summary>
-        /// Flag if the exchange group is only valid for unstable positions
+        ///     Flag if the exchange group is only valid for unstable positions
         /// </summary>
         bool IsUnstablePositionGroup { get; }
 

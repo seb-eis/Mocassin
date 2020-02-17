@@ -26,6 +26,36 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
     /// </summary>
     public class DxViewportViewModel : ViewModelBase, IDxSceneHost
     {
+        private Color backgroundColor = Colors.Transparent;
+
+        private Camera camera = new PerspectiveCamera();
+        private double cameraFarPlaneDistance = 10000;
+        private double cameraFieldOfView = 45;
+        private CameraMode cameraMode = CameraMode.Inspect;
+        private double cameraNearPlaneDistance = 0.1;
+        private CameraRotationMode cameraRotationMode = CameraRotationMode.Turntable;
+        private bool disableMsaaOnInteraction = true;
+        private DxCameraType dxCameraType = DxCameraType.Perspective;
+        private bool enableInfiniteSpin;
+        private FXAALevel fxaaLevel = FXAALevel.None;
+        private int imageExportHeight;
+        private int imageExportWidth;
+        private Brush infoBackgroundBrush = Brushes.Transparent;
+        private Brush infoForegroundBrush = Brushes.Black;
+        private ICommand invalidateSceneCommand;
+        private bool isControlHostOverlayActive;
+        private bool isInteracting;
+        private bool isSettingsOverlayActive;
+        private bool isSsaoEnabled;
+        private Color lightColor = Colors.White;
+        private DxSceneLightSetting lightSetting = DxSceneLightSetting.None;
+        private MSAALevel msaaLevel = MSAALevel.Four;
+        private DxSceneBatchingMode sceneBatchingMode = DxSceneBatchingMode.Low;
+        private bool showCoordinateSystem = true;
+        private bool showRenderInformation;
+        private bool showViewCube = true;
+        private SSAOQuality ssaoQuality = SSAOQuality.Low;
+
         /// <summary>
         ///     Get or set the maximal supported image height of the image exporter. Default is 2160 pixels
         /// </summary>
@@ -36,35 +66,6 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
         /// </summary>
         public static int MaxImageWidth { get; set; } = 3840;
 
-        private Camera camera = new PerspectiveCamera();
-        private CameraMode cameraMode = CameraMode.Inspect;
-        private CameraRotationMode cameraRotationMode = CameraRotationMode.Turntable;
-        private bool showViewCube = true;
-        private bool showCoordinateSystem = true;
-        private bool showRenderInformation;
-        private MSAALevel msaaLevel = MSAALevel.Four;
-        private FXAALevel fxaaLevel = FXAALevel.None;
-        private bool isSsaoEnabled;
-        private SSAOQuality ssaoQuality = SSAOQuality.Low;
-        private bool disableMsaaOnInteraction = true;
-        private bool isInteracting;
-        private Brush infoBackgroundBrush = Brushes.Transparent;
-        private Brush infoForegroundBrush = Brushes.Black;
-        private Color backgroundColor = Colors.Transparent;
-        private bool enableInfiniteSpin;
-        private DxCameraType dxCameraType = DxCameraType.Perspective;
-        private double cameraFarPlaneDistance = 10000;
-        private double cameraNearPlaneDistance = 0.1;
-        private double cameraFieldOfView = 45;
-        private DxSceneLightSetting lightSetting = DxSceneLightSetting.None;
-        private Color lightColor = Colors.White;
-        private bool isSettingsOverlayActive;
-        private int imageExportHeight;
-        private int imageExportWidth;
-        private bool isControlHostOverlayActive;
-        private DxSceneBatchingMode sceneBatchingMode = DxSceneBatchingMode.Low;
-        private ICommand invalidateSceneCommand;
-
         /// <summary>
         ///     Get the <see cref="HelixToolkit.Wpf.SharpDX.EffectsManager" /> for the 3D system
         /// </summary>
@@ -74,7 +75,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
         public IDxSceneController SceneController { get; protected set; }
 
         /// <summary>
-        ///     Get the <see cref="IControlTabHost"/> that provides control tabs in the overlay
+        ///     Get the <see cref="IControlTabHost" /> that provides control tabs in the overlay
         /// </summary>
         public IControlTabHost ControlTabHost { get; }
 
@@ -419,9 +420,9 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
         public ObservableElement3DCollection SceneElements { get; }
 
         /// <summary>
-        ///     Get a <see cref="ParameterlessCommand" /> to reset the camera
+        ///     Get a <see cref="VoidParameterCommand" /> to reset the camera
         /// </summary>
-        public ParameterlessCommand ResetCameraCommand { get; }
+        public VoidParameterCommand ResetCameraCommand { get; }
 
         /// <summary>
         ///     Get the <see cref="ExportDxViewportImageCommand" /> to export a viewport to an image
@@ -452,6 +453,86 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
             ResetScene(true);
         }
 
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            ClearSceneCollections();
+            EffectsManager.Dispose();
+        }
+
+        /// <inheritdoc />
+        public void ResetScene(bool resetCamera)
+        {
+            void ResetInternal()
+            {
+                ClearSceneCollections();
+                ResetLight();
+                if (resetCamera) ResetCamera();
+            }
+
+            ExecuteOnAppThread(ResetInternal);
+        }
+
+        /// <inheritdoc />
+        public void ClearScene()
+        {
+            ExecuteOnAppThread(ClearSceneCollections);
+        }
+
+        /// <inheritdoc />
+        public void AddSceneItem(Element3D element)
+        {
+            ExecuteOnAppThread(() => SceneElements.Add(element));
+        }
+
+        /// <inheritdoc />
+        public void AddSceneItems(IEnumerable<Element3D> elements)
+        {
+            ExecuteOnAppThread(() => SceneElements.AddRange(elements));
+        }
+
+        /// <inheritdoc />
+        public bool RemoveSceneItem(Element3D element)
+        {
+            return ExecuteOnAppThread(() => SceneElements.Remove(element));
+        }
+
+        /// <inheritdoc />
+        public void AttachController(IDxSceneController controller)
+        {
+            DetachController();
+            if (controller == null) return;
+            SceneController = controller;
+            InvalidateSceneCommand = controller.InvalidateSceneCommand;
+            HostControlTabs(controller.GetControlContainers());
+        }
+
+        /// <inheritdoc />
+        public void DetachController()
+        {
+            if (SceneController == null) return;
+            SceneController = null;
+            InvalidateSceneCommand = null;
+            ControlTabHost.DisposeAndClearItems();
+        }
+
+        /// <summary>
+        ///     Resets the <see cref="Camera" /> to default settings
+        /// </summary>
+        public virtual void ResetCamera()
+        {
+            CameraFieldOfView = 45;
+            CameraFarPlaneDistance = 10000;
+            CameraNearPlaneDistance = .1;
+            DxCameraType = DxCameraType.Perspective;
+            Camera = new PerspectiveCamera
+            {
+                FarPlaneDistance = CameraFarPlaneDistance,
+                NearPlaneDistance = CameraNearPlaneDistance,
+                FieldOfView = CameraFieldOfView
+            };
+        }
+
         /// <summary>
         ///     Cleans all <see cref="ObservableElement3DCollection" /> containers
         /// </summary>
@@ -459,13 +540,6 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
         {
             SceneElements.Clear();
             SceneLights.Clear();
-        }
-
-        /// <inheritdoc />
-        public void Dispose()
-        {
-            ClearSceneCollections();
-            EffectsManager.Dispose();
         }
 
         /// <summary>
@@ -577,64 +651,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
             OnLightSettingChanged(LightSetting);
         }
 
-        /// <inheritdoc />
-        public void ResetScene(bool resetCamera)
-        {
-            void ResetInternal()
-            {
-                ClearSceneCollections();
-                ResetLight();
-                if (resetCamera) ResetCamera();
-            }
-
-            ExecuteOnAppThread(ResetInternal);
-        }
-
-        /// <inheritdoc />
-        public void ClearScene()
-        {
-            ExecuteOnAppThread(ClearSceneCollections);
-        }
-
-        /// <inheritdoc />
-        public void AddSceneItem(Element3D element)
-        {
-            ExecuteOnAppThread(() => SceneElements.Add(element));
-        }
-
-        /// <inheritdoc />
-        public void AddSceneItems(IEnumerable<Element3D> elements)
-        {
-            ExecuteOnAppThread(() => SceneElements.AddRange(elements));
-        }
-
-        /// <inheritdoc />
-        public bool RemoveSceneItem(Element3D element)
-        {
-            return ExecuteOnAppThread(() => SceneElements.Remove(element));
-        }
-
-        /// <inheritdoc />
-        public void AttachController(IDxSceneController controller)
-        {
-            DetachController();
-            if (controller == null) return;
-            SceneController = controller;
-            InvalidateSceneCommand = controller.InvalidateSceneCommand;
-            HostControlTabs(controller.GetControlContainers());
-        }
-
-        /// <inheritdoc />
-        public void DetachController()
-        {
-            if (SceneController == null) return;
-            SceneController = null;
-            InvalidateSceneCommand = null;
-            ControlTabHost.DisposeAndClearItems();
-        }
-
         /// <summary>
-        ///     Host the provided set of <see cref="VvmContainer"/> instances in the control tab system
+        ///     Host the provided set of <see cref="VvmContainer" /> instances in the control tab system
         /// </summary>
         /// <param name="containers"></param>
         /// <param name="cleanCurrent"></param>
@@ -643,23 +661,6 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
             if (cleanCurrent) ControlTabHost.Clear();
             foreach (var container in containers) ControlTabHost.AddStaticTab(container.Name, container.ViewModel, container.View);
             ControlTabHost.SetActiveTabByIndex(0);
-        }
-
-        /// <summary>
-        ///     Resets the <see cref="Camera" /> to default settings
-        /// </summary>
-        public virtual void ResetCamera()
-        {
-            CameraFieldOfView = 45;
-            CameraFarPlaneDistance = 10000;
-            CameraNearPlaneDistance = .1;
-            DxCameraType = DxCameraType.Perspective;
-            Camera = new PerspectiveCamera
-            {
-                FarPlaneDistance = CameraFarPlaneDistance,
-                NearPlaneDistance = CameraNearPlaneDistance,
-                FieldOfView = CameraFieldOfView
-            };
         }
 
         /// <summary>

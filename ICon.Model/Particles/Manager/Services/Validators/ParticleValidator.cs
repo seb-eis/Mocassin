@@ -35,7 +35,7 @@ namespace Mocassin.Model.Particles.Validators
         /// <param name="report"></param>
         protected void AddStringPropertyValidations(IParticle particle, ValidationReport report)
         {
-            if (!Settings.SymbolNaming.ParseValue(particle.Symbol, out var warnings)) 
+            if (!Settings.SymbolNaming.ParseValue(particle.Symbol, out var warnings))
                 report.AddWarnings(warnings);
         }
 
@@ -46,7 +46,7 @@ namespace Mocassin.Model.Particles.Validators
         /// <param name="report"></param>
         protected void AddChargeValidation(IParticle particle, ValidationReport report)
         {
-            if (Settings.ParticleCharge.ParseValue(particle.Charge, out var warnings) != 0) 
+            if (Settings.ParticleCharge.ParseValue(particle.Charge, out var warnings) != 0)
                 report.AddWarnings(warnings);
         }
 
@@ -70,7 +70,7 @@ namespace Mocassin.Model.Particles.Validators
         {
             foreach (var item in DataReader.Access.GetParticles())
             {
-                if (item.IsDeprecated) 
+                if (item.IsDeprecated)
                     continue;
 
                 if (particle.EqualsInModelProperties(item, ModelProject.CommonNumeric.RangeComparer))
@@ -86,7 +86,7 @@ namespace Mocassin.Model.Particles.Validators
                     report.AddWarning(ModelMessageSource.CreateRedundantContentWarning(this, detail0));
                 }
 
-                if (item.Symbol != particle.Symbol) 
+                if (item.Symbol != particle.Symbol)
                     continue;
 
                 var detail1 = $"Particle symbol is identical to the particle with index ({item.Index})";

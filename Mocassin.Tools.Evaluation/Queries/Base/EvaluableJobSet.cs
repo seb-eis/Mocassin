@@ -20,24 +20,6 @@ namespace Mocassin.Tools.Evaluation.Context
         public MslEvaluationContext EvaluationContext { get; }
 
         /// <inheritdoc />
-        public bool CompatibleTo(IEvaluableJobSet other)
-        {
-            return ReferenceEquals(EvaluationContext, other?.EvaluationContext);
-        }
-
-        /// <inheritdoc />
-        public IEnumerator<JobContext> GetEnumerator()
-        {
-            return JobContexts.GetEnumerator();
-        }
-
-        /// <inheritdoc />
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return ((IEnumerable) JobContexts).GetEnumerator();
-        }
-
-        /// <inheritdoc />
         public int Count => JobContexts.Count;
 
         /// <inheritdoc />
@@ -54,6 +36,24 @@ namespace Mocassin.Tools.Evaluation.Context
         public EvaluableJobSet(IEnumerable<JobContext> jobContexts)
             : this(jobContexts?.ToList())
         {
+        }
+
+        /// <inheritdoc />
+        public bool CompatibleTo(IEvaluableJobSet other)
+        {
+            return ReferenceEquals(EvaluationContext, other?.EvaluationContext);
+        }
+
+        /// <inheritdoc />
+        public IEnumerator<JobContext> GetEnumerator()
+        {
+            return JobContexts.GetEnumerator();
+        }
+
+        /// <inheritdoc />
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return ((IEnumerable) JobContexts).GetEnumerator();
         }
     }
 }

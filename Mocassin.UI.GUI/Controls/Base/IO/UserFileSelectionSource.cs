@@ -23,7 +23,7 @@ namespace Mocassin.UI.GUI.Controls.Base.IO
         public string FileFilter { get; }
 
         /// <summary>
-        ///     Get a boolean flag if the <see cref="SaveFileDialog"/> is used
+        ///     Get a boolean flag if the <see cref="SaveFileDialog" /> is used
         /// </summary>
         public bool UseSaveDialog { get; }
 
@@ -100,7 +100,7 @@ namespace Mocassin.UI.GUI.Controls.Base.IO
         }
 
         /// <summary>
-        ///     Get a new <see cref="FileDialog"/> based on the settings
+        ///     Get a new <see cref="FileDialog" /> based on the settings
         /// </summary>
         /// <param name="checkFileExists"></param>
         /// <returns></returns>

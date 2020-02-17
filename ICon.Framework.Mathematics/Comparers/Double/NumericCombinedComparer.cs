@@ -1,19 +1,20 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Mocassin.Mathematics.Comparer
 {
     /// <summary>
-    ///     A <see cref="NumericComparer"/> that is build from one zero safe comparer and a main comparer
+    ///     A <see cref="NumericComparer" /> that is build from one zero safe comparer and a main comparer
     /// </summary>
     public class NumericCombinedComparer : NumericComparer
     {
         /// <summary>
-        ///     Get the <see cref="NumericComparer"/> for zero values
+        ///     Get the <see cref="NumericComparer" /> for zero values
         /// </summary>
         public NumericComparer ZeroComparer { get; }
 
         /// <summary>
-        ///     Get the main <see cref="NumericComparer"/>
+        ///     Get the main <see cref="NumericComparer" />
         /// </summary>
         public NumericComparer MainComparer { get; }
 
@@ -21,7 +22,8 @@ namespace Mocassin.Mathematics.Comparer
         public override bool IsZeroCompatible => true;
 
         /// <summary>
-        ///     Combines a zero safe and any other main <see cref="NumericComparer"/> to a combined multi purpose one that can handle all cases
+        ///     Combines a zero safe and any other main <see cref="NumericComparer" /> to a combined multi purpose one that can
+        ///     handle all cases
         /// </summary>
         /// <param name="zeroComparer"></param>
         /// <param name="mainComparer"></param>
@@ -33,6 +35,7 @@ namespace Mocassin.Mathematics.Comparer
         }
 
         /// <inheritdoc />
+        [SuppressMessage("ReSharper", "CompareOfFloatsByEqualityOperator")]
         public override int Compare(double lhs, double rhs)
         {
             if (lhs == rhs) return 0;

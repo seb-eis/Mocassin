@@ -11,8 +11,6 @@ namespace Mocassin.UI.GUI.Base.Converter
     /// </summary>
     public class StringToNullableConverter : ValueConverter
     {
-        private delegate T ParseDelegate<out T>(string str, IFormatProvider provider);
-
         /// <summary>
         ///     <see cref="Dictionary{TKey,TValue}" /> to cache already created parsing delegates
         /// </summary>
@@ -65,5 +63,7 @@ namespace Mocassin.UI.GUI.Base.Converter
 
             return ParsingDictionary[targetType];
         }
+
+        private delegate T ParseDelegate<out T>(string str, IFormatProvider provider);
     }
 }

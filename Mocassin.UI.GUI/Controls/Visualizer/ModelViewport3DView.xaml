@@ -197,7 +197,7 @@
                                           SelectedValueBinding="{Binding Color, Converter={StaticResource ColorConverter}, ConverterParameter={StaticResource ColorProvider}}"
                                           SelectedValuePath="."
                                           ElementStyle="{StaticResource App.Style.ColorSelectionComboBox}"
-                                          EditingElementStyle="{StaticResource App.Style.ColorSelectionComboBox}"/>
+                                          EditingElementStyle="{StaticResource App.Style.ColorSelectionComboBox}" />
                   <DataGridCheckBoxColumn Header="Visible (Default)" Binding="{Binding IsVisible}" />
                 </DataGrid.Columns>
               </DataGrid>

@@ -17,9 +17,9 @@ namespace Mocassin.UI.Xml.Customization
     [XmlRoot]
     public class EnergyModelCustomizationData : ModelCustomizationData, IDuplicable<EnergyModelCustomizationData>
     {
+        private ObservableCollection<GroupEnergySetData> groupEnergyParameterSets;
         private ObservableCollection<PairEnergySetData> stablePairEnergyParameterSets;
         private ObservableCollection<PairEnergySetData> unstablePairEnergyParameterSets;
-        private ObservableCollection<GroupEnergySetData> groupEnergyParameterSets;
 
         /// <summary>
         ///     Get or set the list of <see cref="Mocassin.Model.Energies.ISymmetricPairInteraction" /> customization data sets
@@ -49,6 +49,26 @@ namespace Mocassin.UI.Xml.Customization
         {
             get => groupEnergyParameterSets;
             set => SetProperty(ref groupEnergyParameterSets, value);
+        }
+
+        /// <inheritdoc />
+        public EnergyModelCustomizationData Duplicate()
+        {
+            var copy = new EnergyModelCustomizationData
+            {
+                Parent = Parent,
+                Name = Name,
+                stablePairEnergyParameterSets = stablePairEnergyParameterSets.Select(x => x.Duplicate()).ToObservableCollection(),
+                unstablePairEnergyParameterSets = unstablePairEnergyParameterSets.Select(x => x.Duplicate()).ToObservableCollection(),
+                groupEnergyParameterSets = groupEnergyParameterSets.Select(x => x.Duplicate()).ToObservableCollection()
+            };
+            return copy;
+        }
+
+        /// <inheritdoc />
+        object IDuplicable.Duplicate()
+        {
+            return Duplicate();
         }
 
         /// <inheritdoc />
@@ -107,26 +127,6 @@ namespace Mocassin.UI.Xml.Customization
             };
 
             return obj;
-        }
-
-        /// <inheritdoc />
-        public EnergyModelCustomizationData Duplicate()
-        {
-            var copy = new EnergyModelCustomizationData
-            {
-                Parent = Parent,
-                Name = Name,
-                stablePairEnergyParameterSets = stablePairEnergyParameterSets.Select(x => x.Duplicate()).ToObservableCollection(),
-                unstablePairEnergyParameterSets = unstablePairEnergyParameterSets.Select(x => x.Duplicate()).ToObservableCollection(),
-                groupEnergyParameterSets = groupEnergyParameterSets.Select(x => x.Duplicate()).ToObservableCollection()
-            };
-            return copy;
-        }
-
-        /// <inheritdoc />
-        object IDuplicable.Duplicate()
-        {
-            return Duplicate();
         }
     }
 }

@@ -46,6 +46,13 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
             SwitchLibraryEntityChangeSubscription(ProjectControl.OpenProjectLibrary);
         }
 
+        /// <inheritdoc />
+        public virtual void Dispose()
+        {
+            ProjectLibraryChangeSubscription?.Dispose();
+            ProjectEntityChangeSubscription?.Dispose();
+        }
+
         /// <summary>
         ///     Action that is executed when the <see cref="IMocassinProjectLibrary" /> changes
         /// </summary>
@@ -89,13 +96,6 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
         /// </summary>
         protected virtual void OnProjectContentChangedInternal()
         {
-        }
-
-        /// <inheritdoc />
-        public virtual void Dispose()
-        {
-            ProjectLibraryChangeSubscription?.Dispose();
-            ProjectEntityChangeSubscription?.Dispose();
         }
 
         /// <summary>

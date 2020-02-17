@@ -9,7 +9,7 @@ using Mocassin.UI.GUI.Base.ViewModels.Content;
 namespace Mocassin.UI.GUI.Controls.Base.Commands
 {
     /// <summary>
-    ///     An abstract <see cref="AsyncProjectControlCommand"/> to implement content window open commands
+    ///     An abstract <see cref="AsyncProjectControlCommand" /> to implement content window open commands
     /// </summary>
     public abstract class OpenDefaultContentWindowCommand : ProjectControlCommand
     {
@@ -63,10 +63,7 @@ namespace Mocassin.UI.GUI.Controls.Base.Commands
         {
             void OnPropertyChanged(object sender, PropertyChangedEventArgs args)
             {
-                if (args.PropertyName == nameof(ProjectControl.WindowDescription))
-                {
-                    viewModel.WindowDescription = BuildWindowDescription();
-                }
+                if (args.PropertyName == nameof(ProjectControl.WindowDescription)) viewModel.WindowDescription = BuildWindowDescription();
             }
 
             ProjectControl.PropertyChanged += OnPropertyChanged;
@@ -74,7 +71,8 @@ namespace Mocassin.UI.GUI.Controls.Base.Commands
         }
 
         /// <summary>
-        ///     Implementation dependent supply of the new <see cref="VvmContainer"/> that supplies the window content and view model
+        ///     Implementation dependent supply of the new <see cref="VvmContainer" /> that supplies the window content and view
+        ///     model
         /// </summary>
         /// <returns></returns>
         protected abstract VvmContainer CreateVvmContainer();

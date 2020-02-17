@@ -26,7 +26,7 @@ namespace Mocassin.Model.Basic
     ///     Reindexing event arguments for a specific type of model objects
     /// </summary>
     /// <typeparam name="T1"></typeparam>
-    public class ModelReindexingEventArgs<T1> : ModelReindexingEventArgs 
+    public class ModelReindexingEventArgs<T1> : ModelReindexingEventArgs
         where T1 : IModelObject
     {
         /// <summary>

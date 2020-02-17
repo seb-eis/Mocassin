@@ -98,11 +98,13 @@
   <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="*" />
-      <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}"/>
+      <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}" />
       <ColumnDefinition Width="*" />
     </Grid.ColumnDefinitions>
-    <content:HeaderedGroup Grid.Column="0" x:Name="PositionContentControl" Style="{StaticResource App.Style.HeaderedGroup.BoldText}"
-                           Header="Cell Position Definitions:" HeaderToolTip="{StaticResource Local.ToolTip.UnitCellPosition}">
+    <content:HeaderedGroup Grid.Column="0" x:Name="PositionContentControl"
+                           Style="{StaticResource App.Style.HeaderedGroup.BoldText}"
+                           Header="Cell Position Definitions:"
+                           HeaderToolTip="{StaticResource Local.ToolTip.UnitCellPosition}">
       <DataGrid Name="PositionDataGrid"
                 ItemsSource="{Binding Items}"
                 SelectedItem="{Binding SelectedItem}"
@@ -141,14 +143,15 @@
 
     </content:HeaderedGroup>
 
-    <GridSplitter Grid.Column="1"/>
+    <GridSplitter Grid.Column="1" />
 
-    <content:HeaderedGroup Grid.Column="2" x:Name="ExpansionContentControl" HeaderToolTip="{StaticResource Local.ToolTip.ExtendedPositions}">
+    <content:HeaderedGroup Grid.Column="2" x:Name="ExpansionContentControl"
+                           HeaderToolTip="{StaticResource Local.ToolTip.ExtendedPositions}">
 
       <HeaderedContentControl.Header>
         <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
           <Run Text="Equivalent Cell Positions:" />
-          <Run Text="{Binding SelectedItem.Name, StringFormat={}[{0}], TargetNullValue=???}"/>
+          <Run Text="{Binding SelectedItem.Name, StringFormat={}[{0}], TargetNullValue=???}" />
           <Run Text="{Binding SelectedVectorExpansionCount, Mode=OneWay, StringFormat={}(#{0})}" />
         </TextBlock>
       </HeaderedContentControl.Header>
@@ -159,7 +162,7 @@
                 ColumnWidth="*">
         <DataGrid.RowHeaderTemplate>
           <DataTemplate>
-            <views:ObjectRowHeaderLogo/>
+            <views:ObjectRowHeaderLogo />
           </DataTemplate>
         </DataGrid.RowHeaderTemplate>
 

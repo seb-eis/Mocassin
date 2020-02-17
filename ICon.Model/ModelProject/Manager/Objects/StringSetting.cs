@@ -49,7 +49,9 @@ namespace Mocassin.Model.ModelProject
             IsNullAllowing = isNullAllowing;
             DisplayName = displayName ?? throw new ArgumentNullException(nameof(displayName));
             RegexPattern = regexPattern ?? throw new ArgumentNullException(nameof(regexPattern));
-            Regex.IsMatch("", regexPattern); // Enforce exception on invalid regex pattern that is not null!
+            // Enforce Exception throw if the pattern is not valid
+            // ReSharper disable once ReturnValueOfPureMethodIsNotUsed
+            Regex.IsMatch("", regexPattern);
         }
 
         /// <summary>

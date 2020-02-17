@@ -4,7 +4,8 @@ using System.Windows.Controls;
 namespace Mocassin.UI.GUI.Base.UiElements.Content
 {
     /// <summary>
-    ///     Provides an <see cref="HeaderedContentControl" /> implementation that has a slightly different behavior than <see cref="GroupBox"/>
+    ///     Provides an <see cref="HeaderedContentControl" /> implementation that has a slightly different behavior than
+    ///     <see cref="GroupBox" />
     /// </summary>
     public class HeaderedGroup : HeaderedContentControl
     {
@@ -49,7 +50,7 @@ namespace Mocassin.UI.GUI.Base.UiElements.Content
         /// </summary>
         public Thickness ContentMargin
         {
-            get =>  (Thickness) GetValue(ContentMarginProperty);
+            get => (Thickness) GetValue(ContentMarginProperty);
             set => SetValue(ContentMarginProperty, value);
         }
 

@@ -10,7 +10,8 @@ namespace Mocassin.UI.GUI.Helper
     public static class TypeSearchExtensions
     {
         /// <summary>
-        ///     Searches a set of <see cref="Type" /> for attributed types and returns the affiliated <see cref="KeyValuePair{TKey,TValue}" /> set
+        ///     Searches a set of <see cref="Type" /> for attributed types and returns the affiliated
+        ///     <see cref="KeyValuePair{TKey,TValue}" /> set
         /// </summary>
         /// <typeparam name="TAttribute"></typeparam>
         /// <param name="types"></param>
@@ -26,7 +27,8 @@ namespace Mocassin.UI.GUI.Helper
         }
 
         /// <summary>
-        ///     Searches an <see cref="Assembly" /> for attributed types and returns the affiliated <see cref="KeyValuePair{TKey,TValue}" /> set
+        ///     Searches an <see cref="Assembly" /> for attributed types and returns the affiliated
+        ///     <see cref="KeyValuePair{TKey,TValue}" /> set
         /// </summary>
         /// <typeparam name="TAttribute"></typeparam>
         /// <param name="assembly"></param>

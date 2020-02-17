@@ -69,6 +69,25 @@ namespace Mocassin.UI.Xml.Jobs
             Key = Guid.NewGuid().ToString();
         }
 
+        /// <inheritdoc />
+        public ProjectJobSetTemplate Duplicate()
+        {
+            var duplicate = new ProjectJobSetTemplate
+            {
+                Parent = Parent,
+                Name = $"{Name}(copy)",
+                KmcJobPackageDescriptions = KmcJobPackageDescriptions.ToObservableCollection(),
+                MmcJobPackageDescriptions = MmcJobPackageDescriptions.ToObservableCollection()
+            };
+            return duplicate;
+        }
+
+        /// <inheritdoc />
+        object IDuplicable.Duplicate()
+        {
+            return Duplicate();
+        }
+
         /// <summary>
         ///     Get the sequence of <see cref="IJobCollection" /> objects defined in the object
         /// </summary>
@@ -96,27 +115,8 @@ namespace Mocassin.UI.Xml.Jobs
                 .Sum(x => x.GetTotalJobCount(modelProject));
         }
 
-        /// <inheritdoc />
-        public ProjectJobSetTemplate Duplicate()
-        {
-            var duplicate = new ProjectJobSetTemplate
-            {
-                Parent = Parent,
-                Name = $"{Name}(copy)",
-                KmcJobPackageDescriptions = KmcJobPackageDescriptions.ToObservableCollection(),
-                MmcJobPackageDescriptions = MmcJobPackageDescriptions.ToObservableCollection()
-            };
-            return duplicate;
-        }
-
-        /// <inheritdoc />
-        object IDuplicable.Duplicate()
-        {
-            return Duplicate();
-        }
-
         /// <summary>
-        ///     Creates  anew <see cref="ProjectJobSetTemplate"/> that belongs to the passed parent <see cref="MocassinProject"/>
+        ///     Creates  anew <see cref="ProjectJobSetTemplate" /> that belongs to the passed parent <see cref="MocassinProject" />
         /// </summary>
         /// <param name="parentProject"></param>
         /// <returns></returns>

@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Globalization;
 
 namespace Mocassin.Framework.Extensions
 {
     /// <summary>
-    /// ICon extension class for strings
+    ///     ICon extension class for strings
     /// </summary>
     public static class MocassinStringExtensions
     {
         /// <summary>
-        /// Splits a string by the given delimiter and sets the result if the specified entry count is matched
+        ///     Splits a string by the given delimiter and sets the result if the specified entry count is matched
         /// </summary>
         /// <param name="literal"></param>
         /// <param name="entryCount"></param>
@@ -26,12 +24,13 @@ namespace Mocassin.Framework.Extensions
                 result = null;
                 return false;
             }
+
             result = split;
             return true;
         }
 
         /// <summary>
-        /// Parse a character separated string into the actual values using the provided converter delegate.
+        ///     Parse a character separated string into the actual values using the provided converter delegate.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="separated"></param>
@@ -41,12 +40,11 @@ namespace Mocassin.Framework.Extensions
         public static List<T> ParseToValueList<T>(this string separated, Func<string, T> converter, char separator)
         {
             int index = 0, numOfValues = 1;
-            var workSpan = separated.AsSpan();            
+            var workSpan = separated.AsSpan();
 
             foreach (var value in workSpan)
-            {
-                if (value == separator) numOfValues++;
-            }
+                if (value == separator)
+                    numOfValues++;
 
             var results = new List<T>(numOfValues);
 
@@ -56,8 +54,8 @@ namespace Mocassin.Framework.Extensions
                 index = workSpan.IndexOf(separator);
                 if (index == -1) index = workSpan.Length;
                 results.Add(converter(separated.Substring(separated.Length - workSpan.Length, index++)));
-
             }
+
             return results;
         }
     }

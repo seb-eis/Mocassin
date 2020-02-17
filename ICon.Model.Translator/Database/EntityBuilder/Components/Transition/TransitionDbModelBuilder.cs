@@ -197,6 +197,7 @@ namespace Mocassin.Model.Translator.EntityBuilder
                 jumpRule.StateCode1 = ruleModel.TransitionStateCode;
                 jumpRule.AttemptFrequencyFraction = ruleModel.AttemptFrequency / simulationModel.MaxAttemptFrequency;
                 jumpRule.ElectricFieldFactor = simulationModel.SimulationEncodingModel.TransitionRuleToElectricFieldFactors[ruleModel];
+                jumpRule.StaticVirtualJumpEnergyCorrection = double.NaN;
                 jumpRules.Add(jumpRule);
             }
 

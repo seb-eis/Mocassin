@@ -13,9 +13,9 @@ namespace Mocassin.UI.Xml.EnergyModel
     [XmlRoot]
     public class DefectEnergyData : ProjectDataObject, IComparable<DefectEnergyData>
     {
-        private ModelObjectReference<Particle> particle;
         private ModelObjectReference<CellReferencePosition> cellReferencePosition;
         private double energy;
+        private ModelObjectReference<Particle> particle;
 
         /// <summary>
         ///     Get or set the <see cref="ModelObjectReference{T}" /> for the defect <see cref="Particle" />
@@ -47,6 +47,15 @@ namespace Mocassin.UI.Xml.EnergyModel
             set => SetProperty(ref energy, value);
         }
 
+        /// <inheritdoc />
+        public int CompareTo(DefectEnergyData other)
+        {
+            if (other == null) return -1;
+            if (ReferenceEquals(this, other)) return 0;
+            var positionComp = string.CompareOrdinal(CellReferencePosition?.Key, other.CellReferencePosition?.Key);
+            return positionComp == 0 ? string.CompareOrdinal(Particle?.Key, other.Particle?.Key) : positionComp;
+        }
+
         /// <summary>
         ///     Get an <see cref="DefectEnergy" /> object for the model input pipeline
         /// </summary>
@@ -59,15 +68,6 @@ namespace Mocassin.UI.Xml.EnergyModel
                 Particle = (IParticle) Particle.GetInputObject(),
                 CellReferencePosition = (ICellReferencePosition) CellReferencePosition.GetInputObject()
             };
-        }
-
-        /// <inheritdoc />
-        public int CompareTo(DefectEnergyData other)
-        {
-            if (other == null) return -1;
-            if (ReferenceEquals(this, other)) return 0;
-            var positionComp = string.CompareOrdinal(CellReferencePosition?.Key, other.CellReferencePosition?.Key);
-            return positionComp == 0 ? string.CompareOrdinal(Particle?.Key, other.Particle?.Key) : positionComp;
         }
     }
 }

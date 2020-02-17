@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Mocassin.Framework.Extensions;
 using Mocassin.Framework.Collections;
+using Mocassin.Framework.Extensions;
 using Mocassin.Framework.Operations;
 using Mocassin.Mathematics.Comparer;
 using Mocassin.Mathematics.ValueTypes;
@@ -76,7 +76,7 @@ namespace Mocassin.Model.Energies.ConflictHandling
             var dataList = DataAccess.Query(data => data.UnstablePairInteractions);
             var uniquePairs = new MultisetList<AsymmetricPairInteraction>(GetInteractionComparer(), 100) {newPairs};
 
-            foreach (var item in dataList.Where(value => value.Position0 != envInfo.CellReferencePosition)) 
+            foreach (var item in dataList.Where(value => value.Position0 != envInfo.CellReferencePosition))
                 uniquePairs.Add(item);
 
             dataList.Clear();
@@ -105,7 +105,7 @@ namespace Mocassin.Model.Energies.ConflictHandling
             }
 
             envInfo.PairInteractions.Clear();
-            foreach (var item in usedPairs) 
+            foreach (var item in usedPairs)
                 envInfo.PairInteractions.Add(item);
         }
 
@@ -174,7 +174,7 @@ namespace Mocassin.Model.Energies.ConflictHandling
 
             environment.GroupInteractions.Clear();
 
-            if (counter == 0) 
+            if (counter == 0)
                 return;
 
             const string detail0 = "Recovery of group interaction definitions on unstable environment changes is currently not supported";

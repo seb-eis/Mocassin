@@ -4,7 +4,6 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-  xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.SimulationModel.GridControl"
   xmlns:simulationModel="clr-namespace:Mocassin.UI.Xml.SimulationModel;assembly=Mocassin.UI.Xml"
   xmlns:content="clr-namespace:Mocassin.UI.GUI.Base.UiElements.Content"
   d:DataContext="{d:DesignInstance simulationModel:SimulationBaseData, IsDesignTimeCreatable=True}"
@@ -23,9 +22,9 @@
 
     <Grid.RowDefinitions>
       <RowDefinition Height="*" />
-      <RowDefinition Height="{StaticResource App.Default.GridLength.Splitter}"/>
+      <RowDefinition Height="{StaticResource App.Default.GridLength.Splitter}" />
       <RowDefinition Height="*" />
-      <RowDefinition Height="{StaticResource App.Default.GridLength.Splitter}"/>
+      <RowDefinition Height="{StaticResource App.Default.GridLength.Splitter}" />
       <RowDefinition Height="*" />
     </Grid.RowDefinitions>
 
@@ -33,7 +32,7 @@
       <TextBox Text="{Binding Temperature, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
         <TextBox.InputBindings>
           <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
-                      CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+                      CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
         </TextBox.InputBindings>
       </TextBox>
     </content:HeaderedGroup>
@@ -42,7 +41,7 @@
       <TextBox Text="{Binding TargetMcsp, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
         <TextBox.InputBindings>
           <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
-                      CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+                      CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
         </TextBox.InputBindings>
       </TextBox>
     </content:HeaderedGroup>
@@ -51,7 +50,7 @@
       <TextBox Text="{Binding SimulationBlockCount, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
         <TextBox.InputBindings>
           <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
-                      CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+                      CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
         </TextBox.InputBindings>
       </TextBox>
     </content:HeaderedGroup>
@@ -60,7 +59,7 @@
       <TextBox Text="{Binding CustomRngSeed}">
         <TextBox.InputBindings>
           <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
-                      CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+                      CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
         </TextBox.InputBindings>
       </TextBox>
     </content:HeaderedGroup>
@@ -69,16 +68,17 @@
       <TextBox Text="{Binding SaveRunTimeLimit}">
         <TextBox.InputBindings>
           <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
-                      CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+                      CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
         </TextBox.InputBindings>
       </TextBox>
     </content:HeaderedGroup>
 
     <content:HeaderedGroup Grid.Row="2" Grid.Column="4" Header="Minimal Step Rate [Hz]:">
-      <TextBox Text="{Binding LowerSuccessRateLimit, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
+      <TextBox
+        Text="{Binding LowerSuccessRateLimit, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
         <TextBox.InputBindings>
           <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
-                      CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+                      CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
         </TextBox.InputBindings>
       </TextBox>
     </content:HeaderedGroup>
@@ -87,7 +87,7 @@
       <TextBox Text="{Binding JobCount, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
         <TextBox.InputBindings>
           <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
-                      CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+                      CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
         </TextBox.InputBindings>
       </TextBox>
     </content:HeaderedGroup>

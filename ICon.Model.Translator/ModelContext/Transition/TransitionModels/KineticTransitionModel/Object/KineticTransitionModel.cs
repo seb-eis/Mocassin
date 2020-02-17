@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Particles;
 using Mocassin.Model.Structures;
 using Mocassin.Model.Transitions;
@@ -62,7 +61,7 @@ namespace Mocassin.Model.Translator.ModelContext
             for (var i = 0; i < MappingModels.Count; i++)
             {
                 var relPath = MappingModels[i].PositionSequence4D.Reverse().ToList();
-                for (var j = i+1; j < MappingModels.Count; j++)
+                for (var j = i + 1; j < MappingModels.Count; j++)
                 {
                     var otherPath = MappingModels[j].PositionSequence4D;
                     if (relPath.Zip(otherPath, (first, second) => second.P - first.P).Any(value => value != 0))

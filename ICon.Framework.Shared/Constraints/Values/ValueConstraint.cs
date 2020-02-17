@@ -1,17 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Mocassin.Framework.Constraints
 {
     /// <summary>
-    /// Generic value constraint for cases where source and target type of the constraint are identical
+    ///     Generic value constraint for cases where source and target type of the constraint are identical
     /// </summary>
     /// <typeparam name="TSource"></typeparam>
     public class ValueConstraint<TSource> : IValueConstraint<TSource, TSource> where TSource : IComparable<TSource>
     {
+        /// <inheritdoc />
+        public TSource MaxValue { get; set; }
+
+        /// <inheritdoc />
+        public TSource MinValue { get; set; }
+
+        /// <inheritdoc />
+        public bool MinIsIncluded { get; set; }
+
+        /// <inheritdoc />
+        public bool MaxIsIncluded { get; set; }
+
         /// <summary>
-        /// Creates new basic value constraint with the given limitation information
+        ///     Creates new basic value constraint with the given limitation information
         /// </summary>
         /// <param name="maxValue"></param>
         /// <param name="minValue"></param>
@@ -27,18 +38,6 @@ namespace Mocassin.Framework.Constraints
             MinIsIncluded = minIsIncluded;
             MaxIsIncluded = maxIsIncluded;
         }
-
-        /// <inheritdoc />
-        public TSource MaxValue { get; set; }
-
-        /// <inheritdoc />
-        public TSource MinValue { get; set; }
-
-        /// <inheritdoc />
-        public bool MinIsIncluded { get; set; }
-
-        /// <inheritdoc />
-        public bool MaxIsIncluded { get; set; }
 
         /// <inheritdoc />
         public virtual bool IsValid(TSource sourceValue)
@@ -61,7 +60,7 @@ namespace Mocassin.Framework.Constraints
         }
 
         /// <summary>
-        /// Display the value constraint
+        ///     Display the value constraint
         /// </summary>
         /// <returns></returns>
         public override string ToString()
@@ -79,7 +78,7 @@ namespace Mocassin.Framework.Constraints
         /// <returns></returns>
         public static TSource EnsureLimit(TSource value, TSource lower, TSource upper, IComparer<TSource> comparer = null)
         {
-            comparer = comparer ?? Comparer<TSource>.Default;
+            comparer ??= Comparer<TSource>.Default;
             if (comparer.Compare(value, lower) < 0) return lower;
             return comparer.Compare(value, upper) > 0 ? upper : value;
         }

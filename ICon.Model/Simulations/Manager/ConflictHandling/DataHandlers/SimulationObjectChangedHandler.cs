@@ -1,5 +1,4 @@
-﻿using System;
-using Mocassin.Framework.Operations;
+﻿using Mocassin.Framework.Operations;
 using Mocassin.Model.Basic;
 using Mocassin.Model.ModelProject;
 
@@ -18,7 +17,7 @@ namespace Mocassin.Model.Simulations.ConflictHandling
         }
 
         /// <summary>
-        ///     Resolver method that handles the required internal changes if the <see cref="KineticSimulation"/> changes
+        ///     Resolver method that handles the required internal changes if the <see cref="KineticSimulation" /> changes
         /// </summary>
         /// <param name="simulation"></param>
         /// <param name="dataAccess"></param>
@@ -30,7 +29,7 @@ namespace Mocassin.Model.Simulations.ConflictHandling
         }
 
         /// <summary>
-        ///     Resolver method that handles the required internal changes if the <see cref="MetropolisSimulation"/> changes
+        ///     Resolver method that handles the required internal changes if the <see cref="MetropolisSimulation" /> changes
         /// </summary>
         /// <param name="simulation"></param>
         /// <param name="dataAccess"></param>

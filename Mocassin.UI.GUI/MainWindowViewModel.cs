@@ -30,13 +30,6 @@ namespace Mocassin.UI.GUI
     /// </summary>
     public class MainWindowViewModel : ViewModelBase, IMocassinProjectControl
     {
-        private string windowDescription;
-
-        /// <summary>
-        ///     Get the <see cref="ReactiveEvent{TSubject}" /> for changes in the open <see cref="IMocassinProjectLibrary" />
-        /// </summary>
-        private ReactiveEvent<IMocassinProjectLibrary> ProjectLibraryChangedEvent { get; }
-
         /// <summary>
         ///     The <see cref="OpenProjectLibrary" /> backing field
         /// </summary>
@@ -46,6 +39,13 @@ namespace Mocassin.UI.GUI
         ///     The <see cref="ProjectGraphs" /> backing field
         /// </summary>
         private ObservableCollection<MocassinProject> projectGraphs;
+
+        private string windowDescription;
+
+        /// <summary>
+        ///     Get the <see cref="ReactiveEvent{TSubject}" /> for changes in the open <see cref="IMocassinProjectLibrary" />
+        /// </summary>
+        private ReactiveEvent<IMocassinProjectLibrary> ProjectLibraryChangedEvent { get; }
 
         /// <inheritdoc />
         public IPushMessageSystem PushMessageSystem { get; set; }
@@ -76,18 +76,6 @@ namespace Mocassin.UI.GUI
         {
             get => windowDescription;
             set => SetProperty(ref windowDescription, value);
-        }
-
-        /// <inheritdoc />
-        public void ChangeOpenProjectLibrary(IMocassinProjectLibrary projectLibrary)
-        {
-            StopServices();
-            OpenProjectLibrary?.Dispose();
-            ProjectGraphs = projectLibrary?.MocassinProjectGraphs.Local.ToObservableCollection();
-            OpenProjectLibrary = projectLibrary;
-            ProjectLibraryChangedEvent.OnNext(projectLibrary);
-            WindowDescription = MakeWindowDescription();
-            StartServices();
         }
 
         /// <inheritdoc />
@@ -132,14 +120,16 @@ namespace Mocassin.UI.GUI
             ProjectManagerViewModel = new ProjectManagerViewModel(this);
         }
 
-        /// <summary>
-        ///     Creates <see cref="IModelProject" /> that supplies access to most model services with the custom project config.
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>Will return a default config project without any attached model managers</remarks>
-        public IModelProject CreateServiceModelProject()
+        /// <inheritdoc />
+        public void ChangeOpenProjectLibrary(IMocassinProjectLibrary projectLibrary)
         {
-            return ModelProject.Create(LoadProjectSettings());
+            StopServices();
+            OpenProjectLibrary?.Dispose();
+            ProjectGraphs = projectLibrary?.MocassinProjectGraphs.Local.ToObservableCollection();
+            OpenProjectLibrary = projectLibrary;
+            ProjectLibraryChangedEvent.OnNext(projectLibrary);
+            WindowDescription = MakeWindowDescription();
+            StartServices();
         }
 
         /// <inheritdoc />
@@ -161,6 +151,16 @@ namespace Mocassin.UI.GUI
         /// <inheritdoc />
         public void StartServices()
         {
+        }
+
+        /// <summary>
+        ///     Creates <see cref="IModelProject" /> that supplies access to most model services with the custom project config.
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks>Will return a default config project without any attached model managers</remarks>
+        public IModelProject CreateServiceModelProject()
+        {
+            return ModelProject.Create(LoadProjectSettings());
         }
 
         /// <summary>

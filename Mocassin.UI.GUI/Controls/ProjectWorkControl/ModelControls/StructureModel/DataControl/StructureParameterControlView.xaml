@@ -22,11 +22,15 @@
           <Run Text="The" />
           <Run Text="{StaticResource App.String.SpaceGroup}" Style="{StaticResource App.Style.Run.ModelObject}" />
           <Run Text="is a unique entity of your model that defines the existing symmetry operations for the unit cell." />
-          <Run Text="Mocassin ships with a basic database supporting all 230 existing groups with multiple axis and origin choices." />
+          <Run
+            Text="Mocassin ships with a basic database supporting all 230 existing groups with multiple axis and origin choices." />
           <LineBreak />
-          <Run Text="Keep in mind: All model input has to be done symmetry reduced and is expanded to P1 using your " Style="{StaticResource App.Style.Run.Important}"/>
+          <Run Text="Keep in mind: All model input has to be done symmetry reduced and is expanded to P1 using your "
+               Style="{StaticResource App.Style.Run.Important}" />
           <Run Text="{StaticResource App.String.SpaceGroup}" Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="choice. Inversely, geometric and permutation analysis/searches will yield only symmetry reduced results." Style="{StaticResource App.Style.Run.Important}" />
+          <Run
+            Text="choice. Inversely, geometric and permutation analysis/searches will yield only symmetry reduced results."
+            Style="{StaticResource App.Style.Run.Important}" />
           <LineBreak />
         </TextBlock>
 
@@ -147,7 +151,7 @@
       <Grid>
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="2*" />
-          <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}"/>
+          <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}" />
           <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -165,7 +169,7 @@
                   SelectionChanged="SpaceGroupDataGrid_OnSelectionChanged">
           <DataGrid.RowHeaderTemplate>
             <DataTemplate>
-              <views:ObjectRowHeaderLogo/>
+              <views:ObjectRowHeaderLogo />
             </DataTemplate>
           </DataGrid.RowHeaderTemplate>
 
@@ -184,7 +188,7 @@
                   ItemsSource="{Binding CurrentSymmetryOperations}">
           <DataGrid.RowHeaderTemplate>
             <DataTemplate>
-              <views:ObjectRowHeaderLogo/>
+              <views:ObjectRowHeaderLogo />
             </DataTemplate>
           </DataGrid.RowHeaderTemplate>
 
@@ -192,8 +196,9 @@
             <DataGridTextColumn Binding="{Binding Literal, Mode=OneTime}" Width="*">
               <DataGridTextColumn.HeaderTemplate>
                 <DataTemplate>
-                  <TextBlock DataContext="{Binding ElementName=SpaceGroupDataGrid, Path=DataContext.SelectedSpaceGroup}">
-                    <Run Text="{Binding InternationalIndex, Mode=OneTime, StringFormat={}#{0}}"/>
+                  <TextBlock
+                    DataContext="{Binding ElementName=SpaceGroupDataGrid, Path=DataContext.SelectedSpaceGroup}">
+                    <Run Text="{Binding InternationalIndex, Mode=OneTime, StringFormat={}#{0}}" />
                     <Run Text="&#x2794;" />
                     <Run Text="{Binding MauguinNotation, Mode=OneTime}" />
                     <Run Text="&#x2794;" />
@@ -210,7 +215,8 @@
             <DataGridCheckBoxColumn IsReadOnly="True" Binding="{Binding FlipsOrientation, Mode=OneTime}" Width="Auto">
               <DataGridCheckBoxColumn.HeaderTemplate>
                 <DataTemplate>
-                  <TextBlock Text="Det(T) &lt; 0" ToolTip="Marks if the equivalent 4x4 transform matrix has a negative determinant (Causes orientation change)."/>
+                  <TextBlock Text="Det(T) &lt; 0"
+                             ToolTip="Marks if the equivalent 4x4 transform matrix has a negative determinant (Causes orientation change)." />
                 </DataTemplate>
               </DataGridCheckBoxColumn.HeaderTemplate>
             </DataGridCheckBoxColumn>
@@ -220,13 +226,13 @@
     </content:HeaderedGroup>
 
     <content:HeaderedGroup Grid.Row="1" Grid.Column="0" Style="{StaticResource App.Style.HeaderedGroup.BoldText}"
-                                        HeaderToolTip="{StaticResource Local.ToolTip.Parameters}"
-                                        Header="Cell Settings:">
+                           HeaderToolTip="{StaticResource Local.ToolTip.Parameters}"
+                           Header="Cell Settings:">
       <StackPanel>
         <content:HeaderedGroup Header="Structure Name:">
           <TextBox Text="{Binding StructureInfo.Name}"
                    HorizontalAlignment="Left"
-                   Width="{Binding ElementName=CellParameterATextBox, Path=ActualWidth}"/>
+                   Width="{Binding ElementName=CellParameterATextBox, Path=ActualWidth}" />
         </content:HeaderedGroup>
 
         <Grid DataContext="{Binding ParameterSetter}">
@@ -244,7 +250,7 @@
                        IsReadOnly="{Binding IsReadOnlyParamA}">
                 <TextBox.InputBindings>
                   <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
-                              CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+                              CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
                 </TextBox.InputBindings>
               </TextBox>
             </content:HeaderedGroup>
@@ -253,7 +259,7 @@
                        IsReadOnly="{Binding IsReadOnlyParamB}">
                 <TextBox.InputBindings>
                   <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
-                              CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+                              CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
                 </TextBox.InputBindings>
               </TextBox>
             </content:HeaderedGroup>
@@ -262,7 +268,7 @@
                        IsReadOnly="{Binding IsReadOnlyParamC}">
                 <TextBox.InputBindings>
                   <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
-                              CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+                              CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
                 </TextBox.InputBindings>
               </TextBox>
             </content:HeaderedGroup>
@@ -273,7 +279,7 @@
                        IsReadOnly="{Binding IsReadOnlyAlpha}">
                 <TextBox.InputBindings>
                   <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
-                              CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+                              CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
                 </TextBox.InputBindings>
               </TextBox>
             </content:HeaderedGroup>
@@ -282,7 +288,7 @@
                        IsReadOnly="{Binding IsReadOnlyBeta}">
                 <TextBox.InputBindings>
                   <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
-                              CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+                              CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
                 </TextBox.InputBindings>
               </TextBox>
             </content:HeaderedGroup>
@@ -291,7 +297,7 @@
                        IsReadOnly="{Binding IsReadOnlyGamma}">
                 <TextBox.InputBindings>
                   <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
-                              CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+                              CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
                 </TextBox.InputBindings>
               </TextBox>
             </content:HeaderedGroup>

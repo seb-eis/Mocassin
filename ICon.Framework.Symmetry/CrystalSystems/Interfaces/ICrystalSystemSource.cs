@@ -18,14 +18,14 @@ namespace Mocassin.Symmetry.CrystalSystems
         double Tolerance { get; set; }
 
         /// <summary>
-        ///     Get a <see cref="CrystalSystem"/> for the provided <see cref="ISpaceGroup"/>
+        ///     Get a <see cref="CrystalSystem" /> for the provided <see cref="ISpaceGroup" />
         /// </summary>
         /// <param name="group"></param>
         /// <returns></returns>
         CrystalSystem GetSystem(ISpaceGroup group);
 
         /// <summary>
-        ///     Get a <see cref="CrystalSystem"/> based oon a <see cref="CrystalSystemIdentification"/>
+        ///     Get a <see cref="CrystalSystem" /> based oon a <see cref="CrystalSystemIdentification" />
         /// </summary>
         /// <param name="identification"></param>
         /// <returns></returns>

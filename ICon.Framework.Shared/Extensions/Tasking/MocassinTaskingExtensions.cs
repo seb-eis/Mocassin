@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Mocassin.Framework.Extensions
 {
     /// <summary>
-    /// Contains ICon extension methods for threading and tasking
+    ///     Contains ICon extension methods for threading and tasking
     /// </summary>
     public static class MocassinTaskingExtensions
     {

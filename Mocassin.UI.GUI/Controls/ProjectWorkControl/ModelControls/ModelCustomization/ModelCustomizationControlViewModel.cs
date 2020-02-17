@@ -53,16 +53,6 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
         }
 
         /// <inheritdoc />
-        public override void ChangeContentSource(MocassinProject contentSource)
-        {
-            ContentSource = contentSource;
-            TransitionCustomizationViewModel.ChangeContentSource(null);
-            StablePairInteractionViewModel.ChangeContentSource(null);
-            UnstablePairInteractionViewModel.ChangeContentSource(null);
-            GroupInteractionViewModel.ChangeContentSource(null);
-        }
-
-        /// <inheritdoc />
         void IContentSupplier<ProjectCustomizationTemplate>.ChangeContentSource(ProjectCustomizationTemplate contentSource)
         {
             TransitionCustomizationViewModel.ChangeContentSource(contentSource);
@@ -70,6 +60,16 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
             UnstablePairInteractionViewModel.ChangeContentSource(contentSource);
             GroupInteractionViewModel.ChangeContentSource(contentSource);
             CustomizationContentSource = contentSource;
+        }
+
+        /// <inheritdoc />
+        public override void ChangeContentSource(MocassinProject contentSource)
+        {
+            ContentSource = contentSource;
+            TransitionCustomizationViewModel.ChangeContentSource(null);
+            StablePairInteractionViewModel.ChangeContentSource(null);
+            UnstablePairInteractionViewModel.ChangeContentSource(null);
+            GroupInteractionViewModel.ChangeContentSource(null);
         }
 
         /// <inheritdoc />

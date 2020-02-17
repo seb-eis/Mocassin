@@ -37,31 +37,31 @@
         </TextBlock>
       </content:HeaderedGroup.Header>
       <TextBlock TextWrapping="Wrap" TextAlignment="Justify" Margin="0,0,1,0">
-          <Run Text="Auto-generated transition rule for the" />
-          <Run Text="{Binding KineticRuleSet.Transition.Name, Mode=OneWay}"
-               Style="{StaticResource App.Style.Run.Keyword}" />
-          <Run Text="transition" />
-          <Run Text="set. State change behavior is flagged with" />
-          <Run Text="{Binding SelectedItem.RuleFlags, Mode=OneWay}"
-               Style="{StaticResource App.Style.Run.Keyword}" />
-          <Run Text="and describes" />
-          <Run Text="{Binding SelectedItem.DependencyRuleCount, Mode=OneWay}"
-               Style="{StaticResource App.Style.Run.Keyword}" />
-          <Run Text="hidden rule(s) that will receive the same settings." />
-          <Run Text="The reference state change behavior is:" />
-          <LineBreak />
-          <Run Text="(State-0) &#x2794;" />
-          <Run Text="{Binding SelectedItem.StartState, Mode=OneWay}"
-               Style="{StaticResource App.Style.Run.Keyword}" />
-          <LineBreak />
-          <Run Text="(State-1) &#x2794;" />
-          <Run Text="{Binding SelectedItem.TransitionState, Mode=OneWay}"
-               Style="{StaticResource App.Style.Run.Keyword}" />
-          <LineBreak />
-          <Run Text="(State-2) &#x2794;" />
-          <Run Text="{Binding SelectedItem.FinalState, Mode=OneWay}"
-               Style="{StaticResource App.Style.Run.Keyword}" />
-        </TextBlock>
+        <Run Text="Auto-generated transition rule for the" />
+        <Run Text="{Binding KineticRuleSet.Transition.Name, Mode=OneWay}"
+             Style="{StaticResource App.Style.Run.Keyword}" />
+        <Run Text="transition" />
+        <Run Text="set. State change behavior is flagged with" />
+        <Run Text="{Binding SelectedItem.RuleFlags, Mode=OneWay}"
+             Style="{StaticResource App.Style.Run.Keyword}" />
+        <Run Text="and describes" />
+        <Run Text="{Binding SelectedItem.DependencyRuleCount, Mode=OneWay}"
+             Style="{StaticResource App.Style.Run.Keyword}" />
+        <Run Text="hidden rule(s) that will receive the same settings." />
+        <Run Text="The reference state change behavior is:" />
+        <LineBreak />
+        <Run Text="(State-0) &#x2794;" />
+        <Run Text="{Binding SelectedItem.StartState, Mode=OneWay}"
+             Style="{StaticResource App.Style.Run.Keyword}" />
+        <LineBreak />
+        <Run Text="(State-1) &#x2794;" />
+        <Run Text="{Binding SelectedItem.TransitionState, Mode=OneWay}"
+             Style="{StaticResource App.Style.Run.Keyword}" />
+        <LineBreak />
+        <Run Text="(State-2) &#x2794;" />
+        <Run Text="{Binding SelectedItem.FinalState, Mode=OneWay}"
+             Style="{StaticResource App.Style.Run.Keyword}" />
+      </TextBlock>
     </content:HeaderedGroup>
     <content:HeaderedGroup Grid.Row="4">
       <content:HeaderedGroup.Header>

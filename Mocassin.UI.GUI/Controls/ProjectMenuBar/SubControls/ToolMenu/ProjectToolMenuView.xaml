@@ -13,11 +13,11 @@
     <Menu Background="Transparent">
       <MenuItem Header="Tools">
 
-        <MenuItem Header="Model Validator" Command="{Binding CommandSource}" 
-                  CommandParameter="{x:Type commands:AddLiveOperationConsoleCommand}"/>
+        <MenuItem Header="Model Validator" Command="{Binding CommandSource}"
+                  CommandParameter="{x:Type commands:AddLiveOperationConsoleCommand}" />
 
         <MenuItem Header="Simulation Builder" Command="{Binding CommandSource}"
-                  CommandParameter="{x:Type commands:AddProjectDeploymentTabCommand}"/>
+                  CommandParameter="{x:Type commands:AddProjectDeploymentTabCommand}" />
 
       </MenuItem>
     </Menu>

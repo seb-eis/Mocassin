@@ -44,14 +44,15 @@ using SharpDX.Direct3D11;
 namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
 {
     /// <summary>
-    ///     The <see cref="ProjectGraphControlViewModel" /> that controls object generation and supply for model components to a <see cref="DxViewportViewModel" />
+    ///     The <see cref="ProjectGraphControlViewModel" /> that controls object generation and supply for model components to
+    ///     a <see cref="DxViewportViewModel" />
     /// </summary>
     public class DxModelSceneViewModel : ProjectGraphControlViewModel, IDxSceneController
     {
-        private ProjectCustomizationTemplate selectedCustomization;
         private bool canInvalidateScene = true;
         private bool isInvalidScene;
         private bool isMatchInteractionToHit;
+        private ProjectCustomizationTemplate selectedCustomization;
 
         /// <summary>
         ///     Get or set the <see cref="IDisposable" /> that cancels the content synchronization for selectable
@@ -135,13 +136,6 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         /// </summary>
         public ICommand InvalidateSceneCommand { get; }
 
-        /// <inheritdoc />
-        public IEnumerable<VvmContainer> GetControlContainers()
-        {
-            yield return new VvmContainer(new DxModelControlView(), ModelControlViewModel) {Name = "Model control"};
-            yield return new VvmContainer(new DxCustomizationControlView(), CustomizationControlViewModel) {Name = "Customization control"};
-        }
-
         /// <summary>
         ///     Get or set the selected <see cref="ProjectCustomizationTemplate" />
         /// </summary>
@@ -152,7 +146,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         }
 
         /// <summary>
-        ///     Get or set a boolean flag that indicates if interaction configurations should be overwritten by the position configs affiliated with them
+        ///     Get or set a boolean flag that indicates if interaction configurations should be overwritten by the position
+        ///     configs affiliated with them
         /// </summary>
         public bool IsMatchInteractionToHit
         {
@@ -191,6 +186,24 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
             ModelControlViewModel = new DxModelControlViewModel(projectControl, this);
             CustomizationControlViewModel = new DxCustomizationControlViewModel(projectControl, this);
             SceneHost.AttachController(this);
+        }
+
+        /// <inheritdoc />
+        public IEnumerable<VvmContainer> GetControlContainers()
+        {
+            yield return new VvmContainer(new DxModelControlView(), ModelControlViewModel) {Name = "Model control"};
+            yield return new VvmContainer(new DxCustomizationControlView(), CustomizationControlViewModel) {Name = "Customization control"};
+        }
+
+        /// <inheritdoc />
+        public override void Dispose()
+        {
+            ClearContent();
+            ModelControlViewModel.Dispose();
+            CustomizationControlViewModel.Dispose();
+            SceneHost.DetachController();
+            SceneHost.Dispose();
+            base.Dispose();
         }
 
         /// <inheritdoc />
@@ -611,7 +624,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
             var itemConfig = GetMeshItemConfigLazy(referencePositionData);
             if (itemConfig.IsInactive) return;
 
-            var matrices = GetPositionSceneItemTransforms(new Fractional3D(referencePositionData.A, referencePositionData.B, referencePositionData.C), renderBox);
+            var matrices = GetPositionSceneItemTransforms(new Fractional3D(referencePositionData.A, referencePositionData.B, referencePositionData.C),
+                renderBox);
             var geometry = CreateAtomGeometry(itemConfig);
             var material = itemConfig.CreateMaterial();
             var configurator = GetSceneNodeConfigurator(itemConfig, true);
@@ -854,9 +868,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
             var thetaDiv = (Settings.Default.Default_Render_Sphere_ThetaDiv * itemConfig.MeshQuality).RoundToInt();
             var phiDiv = (Settings.Default.Default_Render_Sphere_PhiDiv * itemConfig.MeshQuality).RoundToInt();
             if (thetaDiv < 4 || phiDiv < 4)
-            {
                 meshBuilder.AddBox(Vector3.Zero, radius, radius, radius, BoxFaces.All);
-            }
             else
                 meshBuilder.AddSphere(Vector3.Zero, radius, thetaDiv, phiDiv);
 
@@ -927,7 +939,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         }
 
         /// <summary>
-        ///     Creates a new polygon fan <see cref="MeshGeometry3D" /> using a set of <see cref="Fractional3D"/> positions
+        ///     Creates a new polygon fan <see cref="MeshGeometry3D" /> using a set of <see cref="Fractional3D" /> positions
         /// </summary>
         /// <param name="positions"></param>
         /// <returns></returns>
@@ -943,6 +955,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
                     for (var k = j + 1; k < positions.Count; k++) meshBuilder.AddTriangle(dxVectors[i], dxVectors[j], dxVectors[k]);
                 }
             }
+
             return meshBuilder.ToMesh();
         }
 
@@ -1050,6 +1063,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
                         meshNode.RenderWireframe = isWireFrameVisible;
                         break;
                 }
+
                 baseConfigurator.Invoke(sceneNode);
             }
 
@@ -1057,7 +1071,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         }
 
         /// <summary>
-        ///     Get the optimal <see cref="CullMode" /> for a <see cref="VisualObjectCategory" /> when using the basic <see cref="MeshBuilder" />
+        ///     Get the optimal <see cref="CullMode" /> for a <see cref="VisualObjectCategory" /> when using the basic
+        ///     <see cref="MeshBuilder" />
         /// </summary>
         /// <param name="objectCategory"></param>
         /// <param name="noOrientationFlips"></param>
@@ -1118,17 +1133,6 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         {
             var vectorComparer = new VectorComparer3D<Fractional3D>(ModelProject.GeometryNumeric.RangeComparer);
             return Comparer<KeyValuePair<Fractional3D, CellReferencePositionData>>.Create((a, b) => vectorComparer.Compare(a.Key, b.Key));
-        }
-
-        /// <inheritdoc />
-        public override void Dispose()
-        {
-            ClearContent();
-            ModelControlViewModel.Dispose();
-            CustomizationControlViewModel.Dispose();
-            SceneHost.DetachController();
-            SceneHost.Dispose();
-            base.Dispose();
         }
     }
 }

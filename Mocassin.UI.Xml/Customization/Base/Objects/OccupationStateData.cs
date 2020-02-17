@@ -31,6 +31,23 @@ namespace Mocassin.UI.Xml.Customization
             set => SetProperty(ref particles, value);
         }
 
+        /// <inheritdoc />
+        public OccupationStateData Duplicate()
+        {
+            var copy = new OccupationStateData
+            {
+                Name = Name,
+                particles = particles.Select(x => x.Duplicate()).ToObservableCollection()
+            };
+            return copy;
+        }
+
+        /// <inheritdoc />
+        object IDuplicable.Duplicate()
+        {
+            return Duplicate();
+        }
+
         /// <summary>
         ///     Get the object as an <see cref="IOccupationState" /> interface that is valid in the context of the passed
         ///     <see cref="IModelProject" />
@@ -49,7 +66,8 @@ namespace Mocassin.UI.Xml.Customization
         }
 
         /// <summary>
-        ///     Creates a new <see cref="OccupationStateData" /> from the passed <see cref="IOccupationState" /> interface and <see cref="ParticleModel.ParticleModelData"/> parent collection
+        ///     Creates a new <see cref="OccupationStateData" /> from the passed <see cref="IOccupationState" /> interface and
+        ///     <see cref="ParticleModel.ParticleModelData" /> parent collection
         /// </summary>
         /// <param name="occupationState"></param>
         /// <param name="parents"></param>
@@ -61,7 +79,7 @@ namespace Mocassin.UI.Xml.Customization
 
         /// <summary>
         ///     Creates a new <see cref="OccupationStateData" /> from the passed sequence of <see cref="IParticle" /> model object
-        ///     interfaces and <see cref="ParticleData"/> parent instances
+        ///     interfaces and <see cref="ParticleData" /> parent instances
         /// </summary>
         /// <param name="occupationParticles"></param>
         /// <param name="parents"></param>
@@ -74,49 +92,30 @@ namespace Mocassin.UI.Xml.Customization
             var obj = new OccupationStateData
             {
                 Particles = occupationParticles.Select(
-                    x => new ModelObjectReference<Particle> {Target = parents.Concat(ParticleData.VoidParticle.AsSingleton()).SingleOrDefault(y => y.Key == x.Key)})
+                        x => new ModelObjectReference<Particle>
+                            {Target = parents.Concat(ParticleData.VoidParticle.AsSingleton()).SingleOrDefault(y => y.Key == x.Key)})
                     .ToObservableCollection()
             };
             return obj;
         }
 
         /// <inheritdoc />
-        public OccupationStateData Duplicate()
-        {
-            var copy = new OccupationStateData
-            {
-                Name = Name,
-                particles = particles.Select(x => x.Duplicate()).ToObservableCollection()
-            };
-            return copy;
-        }
-
-        /// <inheritdoc />
         public override string ToString()
         {
             var builder = new StringBuilder(200);
-            foreach (var particle in Particles)
-            {
-                builder.Append($"[{particle?.Target?.Name ?? "Error@Ref"}]");
-            }
+            foreach (var particle in Particles) builder.Append($"[{particle?.Target?.Name ?? "Error@Ref"}]");
 
             return builder.ToString();
         }
 
         /// <summary>
-        ///     Checks if the occupation describes by the other <see cref="OccupationStateData"/> is equal to this one
+        ///     Checks if the occupation describes by the other <see cref="OccupationStateData" /> is equal to this one
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
         public bool HasEqualState(OccupationStateData other)
         {
             return other != null && (ReferenceEquals(this, other) || Particles.SequenceEqual(other.Particles));
-        }
-
-        /// <inheritdoc />
-        object IDuplicable.Duplicate()
-        {
-            return Duplicate();
         }
     }
 }

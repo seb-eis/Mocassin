@@ -60,7 +60,7 @@ namespace Mocassin.Model.Energies.ConflictHandling
             {
                 switch (newPairs.FirstOrDefault(value => IsEquivalentInteraction(value, oldPair, vectorComparer)))
                 {
-                    case SymmetricPairInteraction newPair:
+                    case { } newPair:
                         newPair.EnergyDictionary = oldPair.EnergyDictionary;
 
                         var detail = $"Reused energy definition from pair ({oldPair.Index}) in new pair ({newPair.Index})";
@@ -69,7 +69,7 @@ namespace Mocassin.Model.Energies.ConflictHandling
                 }
             }
 
-            if (warning.Details.Count == 0) 
+            if (warning.Details.Count == 0)
                 return;
 
             warning.AddDetails($"Recycled ({warning.Details.Count}) of ({newPairs.Count}) energy definitions");

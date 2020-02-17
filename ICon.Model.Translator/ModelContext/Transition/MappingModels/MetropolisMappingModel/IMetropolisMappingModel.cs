@@ -10,7 +10,7 @@ namespace Mocassin.Model.Translator.ModelContext
     public interface IMetropolisMappingModel : ITransitionMappingModel
     {
         /// <summary>
-        /// The transition model this mapping model belongs to
+        ///     The transition model this mapping model belongs to
         /// </summary>
         IMetropolisTransitionModel TransitionModel { get; set; }
 

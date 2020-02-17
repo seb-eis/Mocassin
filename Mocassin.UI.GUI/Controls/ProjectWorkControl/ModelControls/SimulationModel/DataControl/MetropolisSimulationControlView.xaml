@@ -75,12 +75,12 @@
   <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="1*" />
-      <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}"/>
+      <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}" />
       <ColumnDefinition Width="2*" />
     </Grid.ColumnDefinitions>
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto" />
-      <RowDefinition Height="{StaticResource App.Default.GridLength.Splitter}"/>
+      <RowDefinition Height="{StaticResource App.Default.GridLength.Splitter}" />
       <RowDefinition Height="Auto" />
       <RowDefinition Height="*" />
     </Grid.RowDefinitions>
@@ -95,11 +95,11 @@
                 ColumnWidth="*">
         <DataGrid.RowHeaderTemplate>
           <DataTemplate>
-            <views:ObjectRowHeaderLogo x:Name="RowHeaderLogo" 
+            <views:ObjectRowHeaderLogo x:Name="RowHeaderLogo"
                                        PreviewMouseLeftButtonDown="RowHeaderLogo_OnPreviewMouseLeftButtonDown"
                                        PreviewMouseLeftButtonUp="RowHeaderLogo_OnPreviewMouseLeftButtonUp"
                                        PreviewMouseMove="RowHeaderLogo_OnPreviewMouseMove"
-                                       Cursor="Hand"/>
+                                       Cursor="Hand" />
           </DataTemplate>
         </DataGrid.RowHeaderTemplate>
 
@@ -130,19 +130,20 @@
     <content:HeaderedGroup Grid.Column="2" Grid.Row="0" HeaderToolTip="{StaticResource Local.ToolTip.GeneralSettings}">
       <content:HeaderedGroup.Header>
         <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
-          <Run Text="General Fallback Values:"/>
-          <Run Text="{Binding SelectedItem.Name, StringFormat={}[{0}]}"/>
+          <Run Text="General Fallback Values:" />
+          <Run Text="{Binding SelectedItem.Name, StringFormat={}[{0}]}" />
         </TextBlock>
       </content:HeaderedGroup.Header>
 
-      <gridControl:SimulationBaseControlView DataContext="{Binding SelectedItem}"/>
+      <gridControl:SimulationBaseControlView DataContext="{Binding SelectedItem}" />
     </content:HeaderedGroup>
 
-    <content:HeaderedGroup Grid.Column="2" Grid.Row="2" HeaderToolTip="{StaticResource Local.ToolTip.MetropolisSettings}">
+    <content:HeaderedGroup Grid.Column="2" Grid.Row="2"
+                           HeaderToolTip="{StaticResource Local.ToolTip.MetropolisSettings}">
       <content:HeaderedGroup.Header>
         <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
-          <Run Text="MMC Fallback Values:"/>
-          <Run Text="{Binding SelectedItem.Name, StringFormat={}[{0}]}"/>
+          <Run Text="MMC Fallback Values:" />
+          <Run Text="{Binding SelectedItem.Name, StringFormat={}[{0}]}" />
         </TextBlock>
       </content:HeaderedGroup.Header>
 
@@ -150,31 +151,33 @@
 
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="*" />
-          <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}"/>
+          <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}" />
           <ColumnDefinition Width="*" />
-          <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}"/>
+          <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}" />
           <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
           <RowDefinition Height="*" />
-          <RowDefinition Height="{StaticResource App.Default.GridLength.Splitter}"/>
+          <RowDefinition Height="{StaticResource App.Default.GridLength.Splitter}" />
           <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <content:HeaderedGroup Grid.Row="0" Grid.Column="0" Header="Relative Energy Break Tolerance:">
-          <TextBox Text="{Binding SelectedItem.RelativeBreakTolerance, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
+          <TextBox
+            Text="{Binding SelectedItem.RelativeBreakTolerance, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
             <TextBox.InputBindings>
               <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
-                          CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+                          CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
             </TextBox.InputBindings>
           </TextBox>
         </content:HeaderedGroup>
 
         <content:HeaderedGroup Grid.Row="0" Grid.Column="2" Header="Break Check Sample [MCS]:">
-          <TextBox Text="{Binding SelectedItem.BreakSampleLength, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
+          <TextBox
+            Text="{Binding SelectedItem.BreakSampleLength, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
             <TextBox.InputBindings>
               <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
-                          CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+                          CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
             </TextBox.InputBindings>
           </TextBox>
         </content:HeaderedGroup>

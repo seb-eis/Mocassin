@@ -1,9 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Mocassin.Framework.Collections;
-using Mocassin.Framework.Extensions;
 using Mocassin.Mathematics.ValueTypes;
-using Mocassin.Model.Particles;
 using Mocassin.Model.Simulations;
 
 namespace Mocassin.Model.Translator.ModelContext
@@ -17,7 +14,7 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <inheritdoc />
         public override double MaxAttemptFrequency { get; set; }
 
-        /// <inheritdoc cref="IKineticSimulationModel.NormalizedElectricFieldVector"/>
+        /// <inheritdoc cref="IKineticSimulationModel.NormalizedElectricFieldVector" />
         public override Cartesian3D NormalizedElectricFieldVector { get; set; }
 
         /// <inheritdoc />

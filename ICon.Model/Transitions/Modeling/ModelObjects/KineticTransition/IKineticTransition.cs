@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Basic;
-using Mocassin.Model.Particles;
 
 namespace Mocassin.Model.Transitions
 {

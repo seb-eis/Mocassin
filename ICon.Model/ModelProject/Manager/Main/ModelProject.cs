@@ -50,19 +50,19 @@ namespace Mocassin.Model.ModelProject
 
         /// <inheritdoc />
         public INumericService GeometryNumeric { get; protected set; }
-        
+
         /// <inheritdoc />
         public INumericService CommonNumeric { get; protected set; }
-        
+
         /// <inheritdoc />
         public ISpaceGroupService SpaceGroupService { get; protected set; }
-        
+
         /// <inheritdoc />
         public ICrystalSystemService CrystalSystemService { get; protected set; }
-        
+
         /// <inheritdoc />
         public ISymmetryAnalysisService SymmetryAnalysisService { get; protected set; }
-        
+
         /// <inheritdoc />
         public IModelDataTracker DataTracker { get; protected set; }
 
@@ -73,14 +73,14 @@ namespace Mocassin.Model.ModelProject
         {
             ActiveManagers = new List<IModelManager>();
         }
-      
+
         /// <inheritdoc />
         public bool TryGetInputLock(out IDisposable projectLocker)
         {
             lock (ProjectLock)
             {
                 projectLocker = null;
-                if (IsInputInProgress) 
+                if (IsInputInProgress)
                     return false;
 
                 IsInputInProgress = true;
@@ -95,7 +95,7 @@ namespace Mocassin.Model.ModelProject
 
             return true;
         }
-        
+
         /// <inheritdoc />
         public IModelManager CreateAndRegister(IModelManagerFactory factory)
         {
@@ -129,24 +129,8 @@ namespace Mocassin.Model.ModelProject
             ValidationServiceProvider.RegisterService(manager.CreateValidationService(Settings));
         }
 
-        /// <summary>
-        ///     Distributes all existing event ports to a new manager and vise versa
-        /// </summary>
-        /// <param name="manager"></param>
-        public void ShareAndConnectEventPorts(IModelManager manager)
-        {
-            foreach (var otherManager in ActiveManagers)
-            {
-                if (otherManager != manager && manager.EventPort != null)
-                    otherManager.TryConnectManager(manager.EventPort);
-
-                if (otherManager.EventPort != null) 
-                    manager.TryConnectManager(otherManager.EventPort);
-            }
-        }
-      
         /// <inheritdoc />
-        public TManager GetManager<TManager>() 
+        public TManager GetManager<TManager>()
             where TManager : class, IModelManager
         {
             foreach (var manager in ActiveManagers)
@@ -158,14 +142,14 @@ namespace Mocassin.Model.ModelProject
             throw new InvalidOperationException("Requested manager is not registered with the project services");
         }
 
-        
+
         /// <inheritdoc />
         public IModelManager GetManager(Type interfaceType)
         {
             return ActiveManagers.SingleOrDefault(interfaceType.IsInstanceOfType);
         }
 
-        
+
         /// <inheritdoc />
         public IEnumerable<IModelManager> GetAllManagers()
         {
@@ -175,8 +159,24 @@ namespace Mocassin.Model.ModelProject
         /// <inheritdoc />
         public void ResetProject()
         {
-            foreach (var modelManager in GetAllManagers()) 
-                modelManager.InputPort.ResetManager().Wait();   
+            foreach (var modelManager in GetAllManagers())
+                modelManager.InputPort.ResetManager().Wait();
+        }
+
+        /// <summary>
+        ///     Distributes all existing event ports to a new manager and vise versa
+        /// </summary>
+        /// <param name="manager"></param>
+        public void ShareAndConnectEventPorts(IModelManager manager)
+        {
+            foreach (var otherManager in ActiveManagers)
+            {
+                if (otherManager != manager && manager.EventPort != null)
+                    otherManager.TryConnectManager(manager.EventPort);
+
+                if (otherManager.EventPort != null)
+                    manager.TryConnectManager(otherManager.EventPort);
+            }
         }
 
         /// <summary>

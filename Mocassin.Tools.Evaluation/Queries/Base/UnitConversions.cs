@@ -1,6 +1,4 @@
-﻿using System.Dynamic;
-
-namespace Mocassin.Tools.Evaluation.Queries
+﻿namespace Mocassin.Tools.Evaluation.Queries
 {
     /// <summary>
     ///     Stores the unit conversion information required to convert the internally used unit to typical SI representation

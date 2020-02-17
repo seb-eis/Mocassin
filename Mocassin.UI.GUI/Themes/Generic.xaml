@@ -1,7 +1,6 @@
 <ResourceDictionary
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:local="clr-namespace:Mocassin.UI.GUI"
   xmlns:content="clr-namespace:Mocassin.UI.GUI.Base.UiElements.Content">
 
   <Style TargetType="{x:Type content:HeaderedGroup}" BasedOn="{StaticResource {x:Type HeaderedContentControl}}">
@@ -20,7 +19,7 @@
                                 ContentSource="Header"
                                 ToolTip="{TemplateBinding HeaderToolTip}"
                                 ContentTemplate="{TemplateBinding HeaderTemplate}" />
-              <Border Grid.Row="1" 
+              <Border Grid.Row="1"
                       Background="{TemplateBinding Background}"
                       BorderBrush="{TemplateBinding BorderBrush}"
                       BorderThickness="{TemplateBinding BorderThickness}">

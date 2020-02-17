@@ -13,7 +13,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
     ///     The <see cref="CollectionControlViewModel{T}" /> for the <see cref="PairInteractionControlView" /> that control
     ///     <see cref="PairEnergySetData" /> customization data
     /// </summary>
-    public class PairInteractionControlViewModel : CollectionControlViewModel<PairEnergySetControlViewModel>, IContentSupplier<ProjectCustomizationTemplate>, IDisposable
+    public class PairInteractionControlViewModel : CollectionControlViewModel<PairEnergySetControlViewModel>, IContentSupplier<ProjectCustomizationTemplate>,
+        IDisposable
     {
         /// <summary>
         ///     Get the <see cref="Func{T,TResult}" /> getter that provides the <see cref="IReadOnlyList{T}" /> of
@@ -41,6 +42,12 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
             CreateSetControlViewModels();
         }
 
+        /// <inheritdoc />
+        public virtual void Dispose()
+        {
+            foreach (var item in Items ?? Enumerable.Empty<PairEnergySetControlViewModel>()) item?.Dispose();
+        }
+
         /// <summary>
         ///     Creates and sets the new <see cref="PairEnergySetControlViewModel" /> collection
         /// </summary>
@@ -52,14 +59,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
                 SetCollection(null);
                 return;
             }
+
             var viewModels = interactionSets.Select(x => new PairEnergySetControlViewModel(x, interactionSets)).ToList(interactionSets.Count);
             SetCollection(viewModels);
-        }
-
-        /// <inheritdoc />
-        public void Dispose()
-        {
-            foreach (var item in Items ?? Enumerable.Empty<PairEnergySetControlViewModel>()) item?.Dispose();
         }
     }
 }

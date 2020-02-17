@@ -74,7 +74,7 @@ namespace Mocassin.Mathematics.Permutation
             {
                 var advanceNext = Slots[i].NextWithPeriodicCheck();
                 Value[i] = Slots[i].Value;
-                if (!advanceNext) 
+                if (!advanceNext)
                     break;
             }
         }
@@ -86,7 +86,7 @@ namespace Mocassin.Mathematics.Permutation
             {
                 var reducePrevious = Slots[i].PreviousWithPeriodicCheck();
                 Value[i] = Slots[i].Value;
-                if (!reducePrevious) 
+                if (!reducePrevious)
                     break;
             }
         }
@@ -95,15 +95,6 @@ namespace Mocassin.Mathematics.Permutation
         public void Reset()
         {
             Slots.ForEach(slot => slot.Reset());
-        }
-
-        /// <summary>
-        ///     Linq style for each method over all permutations in lexicographical order
-        /// </summary>
-        /// <param name="action"></param>
-        public void ForEach(Action<T1[]> action)
-        {
-            foreach (var item in this) action(item);
         }
 
         /// <inheritdoc />
@@ -121,6 +112,15 @@ namespace Mocassin.Mathematics.Permutation
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        /// <summary>
+        ///     Linq style for each method over all permutations in lexicographical order
+        /// </summary>
+        /// <param name="action"></param>
+        public void ForEach(Action<T1[]> action)
+        {
+            foreach (var item in this) action(item);
         }
     }
 }

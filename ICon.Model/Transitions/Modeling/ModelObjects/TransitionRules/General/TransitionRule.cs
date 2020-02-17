@@ -60,27 +60,6 @@ namespace Mocassin.Model.Transitions
                 : startComp;
         }
 
-        /// <summary>
-        ///     Performs a lexicographic compare of start and end states while detecting inverted equivalency as well
-        /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
-        public int CompareToWithCodeInversion(ITransitionRule other)
-        {
-            return CompareTo(other) != 0
-                ? StartState.Select(a => a.Index).LexicographicCompare(other.GetFinalStateOccupation().Select(a => a.Index))
-                : 0;
-        }
-
-        /// <summary>
-        ///     Checks if the rule is marked as physically invalid
-        /// </summary>
-        /// <returns></returns>
-        public bool IsPhysicallyInvalid()
-        {
-            return (TransitionRuleFlags & TransitionRuleFlags.PhysicallyInvalid) != 0;
-        }
-
         /// <inheritdoc />
         public IEnumerable<IParticle> GetStartStateOccupation()
         {
@@ -103,6 +82,27 @@ namespace Mocassin.Model.Transitions
         public IEnumerable<int> GetMovementDescription()
         {
             return (MovementCode ?? new MovementCode()).AsEnumerable();
+        }
+
+        /// <summary>
+        ///     Performs a lexicographic compare of start and end states while detecting inverted equivalency as well
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public int CompareToWithCodeInversion(ITransitionRule other)
+        {
+            return CompareTo(other) != 0
+                ? StartState.Select(a => a.Index).LexicographicCompare(other.GetFinalStateOccupation().Select(a => a.Index))
+                : 0;
+        }
+
+        /// <summary>
+        ///     Checks if the rule is marked as physically invalid
+        /// </summary>
+        /// <returns></returns>
+        public bool IsPhysicallyInvalid()
+        {
+            return (TransitionRuleFlags & TransitionRuleFlags.PhysicallyInvalid) != 0;
         }
 
         /// <inheritdoc />

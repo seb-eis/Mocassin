@@ -5,7 +5,7 @@ using Mocassin.Model.Basic;
 
 namespace Mocassin.Model.Energies
 {
-    /// <inheritdoc cref="IPairEnergySetter"/>
+    /// <inheritdoc cref="IPairEnergySetter" />
     public class PairEnergySetter : ValueSetter, IPairEnergySetter
     {
         /// <inheritdoc />
@@ -53,7 +53,7 @@ namespace Mocassin.Model.Energies
             {
                 foreach (var item in EnergyEntries)
                 {
-                    if (PairInteraction.TrySetEnergyEntry(item)) 
+                    if (PairInteraction.TrySetEnergyEntry(item))
                         continue;
 
                     OnValuesPushed.OnError(new InvalidOperationException("The state of the setter contains invalid objects"));
@@ -89,7 +89,7 @@ namespace Mocassin.Model.Energies
         /// <inheritdoc />
         public void SetEnergyValues(IEnumerable<PairEnergyEntry> energyEntries)
         {
-            foreach (var item in energyEntries) 
+            foreach (var item in energyEntries)
                 SetEnergyValue(item);
         }
 

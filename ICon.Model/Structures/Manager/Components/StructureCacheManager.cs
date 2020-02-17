@@ -10,7 +10,6 @@ using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Basic;
 using Mocassin.Model.ModelProject;
 using Mocassin.Symmetry.Analysis;
-using Mocassin.Symmetry.SpaceGroups;
 
 namespace Mocassin.Model.Structures
 {
@@ -187,7 +186,7 @@ namespace Mocassin.Model.Structures
             var result = new SetList<FractionalPosition>(
                 new VectorComparer3D<FractionalPosition>(ModelProject.GeometryNumeric.RangeComparer));
 
-            foreach (var subList in GetExtendedPositionLists()) 
+            foreach (var subList in GetExtendedPositionLists())
                 result.Add(subList);
 
             return result;
@@ -308,7 +307,8 @@ namespace Mocassin.Model.Structures
                 if (isDeprecated)
                     return new SetList<FractionalPosition>(ModelProject.SpaceGroupService.GetSpecialVectorComparer<FractionalPosition>());
                 var comparer = ModelProject.SpaceGroupService.GetSpecialVectorComparer<FractionalPosition>();
-                var result = ModelProject.SpaceGroupService.GetUnitCellP1PositionExtension(position.Vector).Select(x => new FractionalPosition(x, position.OccupationIndex, position.Stability)).ToSetList(comparer);
+                var result = ModelProject.SpaceGroupService.GetUnitCellP1PositionExtension(position.Vector)
+                    .Select(x => new FractionalPosition(x, position.OccupationIndex, position.Stability)).ToSetList(comparer);
                 return result;
             }
 

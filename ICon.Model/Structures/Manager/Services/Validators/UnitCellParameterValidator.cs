@@ -42,6 +42,7 @@ namespace Mocassin.Model.Structures.Validators
                 message.Details.Add($"Constraint for angle alpha : {crystalSystem.AlphaConstraint}");
                 message.Details.Add($"Constraint for angle beta : {crystalSystem.BetaConstraint}");
                 message.Details.Add($"Constraint for angle gamma : {crystalSystem.GammaConstraint}");
+                report.AddWarning(message);
             }
 
             if (!crystalSystem.ValidateParameterConditions(parameters.ParamA, parameters.ParamB, parameters.ParamC))
@@ -49,6 +50,7 @@ namespace Mocassin.Model.Structures.Validators
                 var message = new WarningMessage(this, "Cell parameter validation failure");
                 message.Details.Add($"The {crystalSystem.SystemName} parameter constraints are violated");
                 message.Details.Add($"General parameter constraint : {crystalSystem.ParameterConstraint}");
+                report.AddWarning(message);
             }
         }
     }

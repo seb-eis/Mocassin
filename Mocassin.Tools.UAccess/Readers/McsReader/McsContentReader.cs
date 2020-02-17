@@ -6,7 +6,8 @@ using Mocassin.Tools.UAccess.Readers.McsReader.Components;
 namespace Mocassin.Tools.UAccess.Readers
 {
     /// <summary>
-    ///     Provides fast read only access to the unmanaged binary state raw output 'mcs' data file of the 'C' Mocassin.Simulator
+    ///     Provides fast read only access to the unmanaged binary state raw output 'mcs' data file of the 'C'
+    ///     Mocassin.Simulator
     /// </summary>
     /// <remarks>The access is context free and requires the affiliated model context for evaluation</remarks>
     public class McsContentReader : IDisposable
@@ -14,12 +15,17 @@ namespace Mocassin.Tools.UAccess.Readers
         private readonly McsHeader header;
 
         /// <summary>
+        ///     Get the value that indicates if data is not set on the <see cref="McsHeader"/>
+        /// </summary>
+        public static int DataNotPresentOffsetIndicator { get; } = -1;
+
+        /// <summary>
         ///     Get the <see cref="BinaryReader" /> to access the byte array contents
         /// </summary>
         private BinaryStructureReader BinaryReader { get; }
 
         /// <summary>
-        ///     Get a reference to the <see cref="McsHeader"/> read from the buffer at object creation
+        ///     Get a reference to the <see cref="McsHeader" /> read from the buffer at object creation
         /// </summary>
         public ref readonly McsHeader Header => ref header;
 
@@ -29,7 +35,7 @@ namespace Mocassin.Tools.UAccess.Readers
         public bool IsReadingMmcState { get; }
 
         /// <summary>
-        ///     Create a new <see cref="McsContentReader"/> that uses the passed <see cref="BinaryStructureReader"/>
+        ///     Create a new <see cref="McsContentReader" /> that uses the passed <see cref="BinaryStructureReader" />
         /// </summary>
         /// <param name="binaryStructureReader"></param>
         private McsContentReader(BinaryStructureReader binaryStructureReader)
@@ -37,6 +43,12 @@ namespace Mocassin.Tools.UAccess.Readers
             BinaryReader = binaryStructureReader ?? throw new ArgumentNullException(nameof(binaryStructureReader));
             header = ReadHeader();
             IsReadingMmcState = header.MobileTrackerOffset < 0;
+        }
+
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            BinaryReader.Dispose();
         }
 
         /// <summary>
@@ -78,8 +90,8 @@ namespace Mocassin.Tools.UAccess.Readers
         /// </summary>
         public ReadOnlySpan<McsMovementTracker> ReadGlobalTrackers()
         {
-            return IsReadingMmcState 
-                ? ReadOnlySpan<McsMovementTracker>.Empty 
+            return IsReadingMmcState
+                ? ReadOnlySpan<McsMovementTracker>.Empty
                 : BinaryReader.ReadAreaAs<McsMovementTracker>(Header.GlobalTrackerOffset, Header.MobileTrackerOffset);
         }
 
@@ -89,8 +101,8 @@ namespace Mocassin.Tools.UAccess.Readers
         /// </summary>
         public ReadOnlySpan<McsMovementTracker> ReadMobileTrackers()
         {
-            return IsReadingMmcState 
-                ? ReadOnlySpan<McsMovementTracker>.Empty 
+            return IsReadingMmcState
+                ? ReadOnlySpan<McsMovementTracker>.Empty
                 : BinaryReader.ReadAreaAs<McsMovementTracker>(Header.MobileTrackerOffset, Header.StaticTrackerOffset);
         }
 
@@ -100,8 +112,8 @@ namespace Mocassin.Tools.UAccess.Readers
         /// </summary>
         public ReadOnlySpan<McsMovementTracker> ReadStaticTrackers()
         {
-            return IsReadingMmcState 
-                ? ReadOnlySpan<McsMovementTracker>.Empty 
+            return IsReadingMmcState
+                ? ReadOnlySpan<McsMovementTracker>.Empty
                 : BinaryReader.ReadAreaAs<McsMovementTracker>(Header.StaticTrackerOffset, Header.MobileTrackerIndexingOffset);
         }
 
@@ -111,8 +123,8 @@ namespace Mocassin.Tools.UAccess.Readers
         /// </summary>
         public ReadOnlySpan<int> ReadMobileTrackerMapping()
         {
-            return IsReadingMmcState 
-                ? ReadOnlySpan<int>.Empty 
+            return IsReadingMmcState
+                ? ReadOnlySpan<int>.Empty
                 : BinaryReader.ReadAreaAs<int>(Header.MobileTrackerIndexingOffset, Header.JumpStatisticsOffset);
         }
 
@@ -122,8 +134,9 @@ namespace Mocassin.Tools.UAccess.Readers
         /// </summary>
         public ReadOnlySpan<McsJumpStatistic> ReadJumpStatistics()
         {
-            return IsReadingMmcState 
-                ? ReadOnlySpan<McsJumpStatistic>.Empty 
+            if (Header.JumpStatisticsOffset == DataNotPresentOffsetIndicator) return ReadOnlySpan<McsJumpStatistic>.Empty;
+            return IsReadingMmcState
+                ? ReadOnlySpan<McsJumpStatistic>.Empty
                 : BinaryReader.ReadAreaAs<McsJumpStatistic>(Header.JumpStatisticsOffset, BinaryReader.ByteCount);
         }
 
@@ -149,12 +162,6 @@ namespace Mocassin.Tools.UAccess.Readers
 
             if (bytes.Length == 0) throw new ArgumentException("File is empty.", nameof(filename));
             return Create(bytes);
-        }
-
-        /// <inheritdoc />
-        public void Dispose()
-        {
-            BinaryReader.Dispose();
         }
     }
 }

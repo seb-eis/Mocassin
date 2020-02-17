@@ -27,17 +27,17 @@ namespace Mocassin.Model.Lattices
         [UseTrackedData]
         public ICellReferencePosition CellReferencePosition { get; set; }
 
-        /// <inheritdoc />
-        public double GetChargeDelta()
-        {
-            return Dopant.Charge - Dopable.Charge;
-        }
-
         /// <summary>
         ///     Get the type name string
         /// </summary>
         /// <returns></returns>
         public override string ObjectName => "DopingCombination";
+
+        /// <inheritdoc />
+        public double GetChargeDelta()
+        {
+            return Dopant.Charge - Dopable.Charge;
+        }
 
         /// <summary>
         ///     Copies the information from the provided parameter interface and returns the object (Returns null if type mismatch)

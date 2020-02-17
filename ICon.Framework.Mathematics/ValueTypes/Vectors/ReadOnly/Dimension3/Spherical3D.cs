@@ -6,7 +6,7 @@
     public readonly struct Spherical3D : ISpherical3D
     {
         /// <summary>
-        ///     The readonly <see cref="Coordinates3D"/> backing field
+        ///     The readonly <see cref="Coordinates3D" /> backing field
         /// </summary>
         public readonly Coordinates3D Coordinates;
 

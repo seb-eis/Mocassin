@@ -10,7 +10,8 @@ using Mocassin.UI.Xml.Main;
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content.Commands
 {
     /// <summary>
-    ///     The <see cref="AsyncProjectControlCommand" /> to add a new <see cref="ProjectCustomizationTemplate" /> to the selected
+    ///     The <see cref="AsyncProjectControlCommand" /> to add a new <see cref="ProjectCustomizationTemplate" /> to the
+    ///     selected
     ///     project
     /// </summary>
     public class AddNewCustomizationCommand : AsyncProjectControlCommand

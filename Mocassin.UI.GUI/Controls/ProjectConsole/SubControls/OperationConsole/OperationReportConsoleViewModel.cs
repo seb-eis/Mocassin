@@ -29,8 +29,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.OperationConsole
         private readonly object lockObject = new object();
         private bool isErrorContentFiltered;
         private bool isSoftUpdateStop;
-        private IOperationReport selectedReport;
         private MocassinProject selectedProject = DummyProject;
+        private IOperationReport selectedReport;
         private ModelValidatorViewModel validatorViewModel;
 
         /// <summary>

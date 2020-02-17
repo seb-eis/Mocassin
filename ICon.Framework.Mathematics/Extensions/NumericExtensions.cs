@@ -79,8 +79,11 @@ namespace Mocassin.Mathematics.Extensions
             }
 
             if (factor == 0.0)
+            {
                 throw new ArgumentException(paramName: nameof(value),
                     message: "Factor comparisons cannot be used if the multiplication factor is 0.0");
+            }
+
             return value.AlmostEqualByRange(other, value * factor);
         }
 
@@ -143,7 +146,7 @@ namespace Mocassin.Mathematics.Extensions
         /// <param name="comparer"></param>
         public static double PeriodicTrim(this double value, double lowerBound, double upperBound, IComparer<double> comparer)
         {
-            if (comparer == null) 
+            if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
             if (lowerBound > upperBound)
@@ -174,8 +177,10 @@ namespace Mocassin.Mathematics.Extensions
             for (var row = 0; row < matrix.GetUpperBound(0) + 1; row++)
             {
                 for (var col = row + 1; col < matrix.GetUpperBound(1) + 1; col++)
+                {
                     if (comparer.Compare(matrix[row, col], matrix[col, row]) != 0)
                         return false;
+                }
             }
 
             return true;
@@ -202,8 +207,10 @@ namespace Mocassin.Mathematics.Extensions
             for (var row = 0; row < array.GetUpperBound(0) + 1; row++)
             {
                 for (var col = 0; col < array.GetUpperBound(1) + 1; col++)
+                {
                     if (comparer.Compare(array[row, col], 0.0) == 0)
                         array[row, col] = 0.0;
+                }
             }
         }
 
@@ -219,8 +226,10 @@ namespace Mocassin.Mathematics.Extensions
             var (rhsRows, rhsCols) = rhs.GetDimensions();
 
             if (lhsCols != rhsRows)
+            {
                 throw new ArgumentException(
                     $"The array dimensions (lhsCols = {lhsCols}, rhsRows = {rhsRows}) are incompatible for matrix multiplication");
+            }
 
             var resultValues = new double[lhsRows, rhsCols];
             for (var outerRow = 0; outerRow < lhsRows; outerRow++)
@@ -281,12 +290,15 @@ namespace Mocassin.Mathematics.Extensions
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            if (value != 0.0 && other != 0.0) 
+            if (value != 0.0 && other != 0.0)
                 return comparer.Equals(value, other) ? other : value;
 
             if (comparer.IsZeroCompatible == false)
+            {
                 throw new ArgumentException("One of the values is equal to 0.0 and comparer does not support zero safe comparisons",
                     nameof(comparer));
+            }
+
             return comparer.Equals(value, other) ? other : value;
         }
     }

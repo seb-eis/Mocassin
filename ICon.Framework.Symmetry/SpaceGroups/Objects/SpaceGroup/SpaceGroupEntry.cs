@@ -1,37 +1,33 @@
 ﻿using System;
-using System.Runtime.Serialization;
 using Mocassin.Framework.Constraints;
+using Mocassin.Symmetry.CrystalSystems;
 
 namespace Mocassin.Symmetry.SpaceGroups
 {
     /// <summary>
     ///     Space group entry class that contains all information required to fully define a space group
     /// </summary>
-    [DataContract(Name = "SpaceGroupEntry")]
     public class SpaceGroupEntry : IComparable<SpaceGroupEntry>, IEquatable<SpaceGroupEntry>
     {
         /// <summary>
         ///     The group number constraint from 1 to 230
         /// </summary>
-        private static readonly ValueConstraint<int> IndexConstraint = new ValueConstraint<int>(true, 1, 230, true);
+        private static ValueConstraint<int> GroupNumberConstraint { get; } = new ValueConstraint<int>(true, 1, 230, true);
 
         /// <summary>
         ///     The group number
         /// </summary>
-        [DataMember]
-        public int Index { get; }
+        public int GroupNumber { get; }
 
         /// <summary>
         ///     The name of the space group
         /// </summary>
-        [DataMember]
         public string Literal { get; }
 
         /// <summary>
-        ///     The specifier name, does only exist for groups with multiple specified versions
+        ///     The <see cref="CrystalSystemVariation"/> that identifies special versions of a group
         /// </summary>
-        [DataMember]
-        public string Specifier { get; }
+        public CrystalSystemVariation CrystalVariation { get; }
 
         /// <summary>
         ///     Default constructor for a space group entry (Should be used for serialization only)
@@ -41,19 +37,19 @@ namespace Mocassin.Symmetry.SpaceGroups
         }
 
         /// <summary>
-        ///     Create from values
+        ///     Creates a new <see cref="SpaceGroupEntry"/> from group number, literal and variation
         /// </summary>
-        /// <param name="index"></param>
+        /// <param name="groupNumber"></param>
         /// <param name="literal"></param>
-        /// <param name="specifier"></param>
-        public SpaceGroupEntry(int index, string literal, string specifier)
+        /// <param name="crystalVariation"></param>
+        public SpaceGroupEntry(int groupNumber, string literal, CrystalSystemVariation crystalVariation)
         {
-            if (IndexConstraint.IsValid(index) == false) 
-                throw new ArgumentOutOfRangeException(nameof(index));
+            if (GroupNumberConstraint.IsValid(groupNumber) == false)
+                throw new ArgumentOutOfRangeException(nameof(groupNumber));
 
-            Index = index;
+            GroupNumber = groupNumber;
             Literal = literal ?? throw new ArgumentNullException(nameof(literal));
-            Specifier = specifier ?? throw new ArgumentNullException(nameof(specifier));
+            CrystalVariation = crystalVariation;
         }
 
         /// <summary>
@@ -61,10 +57,9 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// </summary>
         /// <param name="group"></param>
         public SpaceGroupEntry(ISpaceGroup group)
-            : this(group.InternationalIndex, group.MauguinNotation, group.VariationName)
+            : this(group.InternationalIndex, group.MauguinNotation, group.CrystalVariation)
         {
-            if (group == null)
-                throw new ArgumentNullException(nameof(group));
+            if (group == null) throw new ArgumentNullException(nameof(group));
         }
 
         /// <summary>
@@ -74,14 +69,19 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// <returns></returns>
         public int CompareTo(SpaceGroupEntry other)
         {
-            var numberCompare = Index.CompareTo(other.Index);
-            if (numberCompare != 0)
-                return numberCompare;
+            var numberCompare = GroupNumber.CompareTo(other.GroupNumber);
+            if (numberCompare != 0) return numberCompare;
 
             var nameCompare = string.Compare(Literal, other.Literal, StringComparison.Ordinal);
-            return nameCompare == 0 
-                ? string.Compare(Specifier, other.Specifier, StringComparison.Ordinal)
+            return nameCompare == 0
+                ? CrystalVariation.CompareTo(other.CrystalVariation)
                 : nameCompare;
+        }
+
+        /// <inheritdoc />
+        public bool Equals(SpaceGroupEntry other)
+        {
+            return CompareTo(other) == 0;
         }
 
         /// <summary>
@@ -90,13 +90,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// <returns></returns>
         public static SpaceGroupEntry CreateDefault()
         {
-            return new SpaceGroupEntry(1, "P1", "None");
-        }
-
-        /// <inheritdoc />
-        public bool Equals(SpaceGroupEntry other)
-        {
-            return CompareTo(other) == 0;
+            return new SpaceGroupEntry(1, "P1", CrystalSystemVariation.NoneOrOriginChoice);
         }
     }
 }

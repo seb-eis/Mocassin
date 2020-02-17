@@ -24,6 +24,30 @@ namespace Mocassin.Mathematics.Comparer
             ValueComparer = valueComparer;
         }
 
+        /// <summary>
+        ///     Implementation of generic 3D vector interface comparison
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        int IComparer<IVector3D>.Compare(IVector3D x, IVector3D y)
+        {
+            if (x == null)
+                throw new ArgumentNullException(nameof(x));
+
+            if (y == null)
+                throw new ArgumentNullException(nameof(y));
+
+            var compareA = ValueComparer.Compare(x.Coordinates.A, y.Coordinates.A);
+            if (compareA != 0)
+                return compareA;
+
+            var compareB = ValueComparer.Compare(x.Coordinates.B, y.Coordinates.B);
+            return compareB == 0
+                ? ValueComparer.Compare(x.Coordinates.C, y.Coordinates.C)
+                : compareB;
+        }
+
         /// <inheritdoc />
         public bool Equals(T x, T y)
         {
@@ -44,6 +68,8 @@ namespace Mocassin.Mathematics.Comparer
         /// <returns></returns>
         public override int Compare(T x, T y)
         {
+            if (x == null) throw new ArgumentNullException(nameof(x));
+            if (y == null) throw new ArgumentNullException(nameof(y));
             var compareA = ValueComparer.Compare(x.Coordinates.A, y.Coordinates.A);
             if (compareA != 0)
                 return compareA;
@@ -82,30 +108,6 @@ namespace Mocassin.Mathematics.Comparer
         public VectorComparer3D<TVector> ToCompatibleComparer<TVector>() where TVector : IVector3D
         {
             return new VectorComparer3D<TVector>(ValueComparer);
-        }
-
-        /// <summary>
-        ///     Implementation of generic 3D vector interface comparison
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <returns></returns>
-        int IComparer<IVector3D>.Compare(IVector3D x, IVector3D y)
-        {
-            if (x == null)
-                throw new ArgumentNullException(nameof(x));
-
-            if (y == null)
-                throw new ArgumentNullException(nameof(y));
-
-            var compareA = ValueComparer.Compare(x.Coordinates.A, y.Coordinates.A);
-            if (compareA != 0)
-                return compareA;
-
-            var compareB = ValueComparer.Compare(x.Coordinates.B, y.Coordinates.B);
-            return compareB == 0
-                ? ValueComparer.Compare(x.Coordinates.C, y.Coordinates.C)
-                : compareB;
         }
     }
 

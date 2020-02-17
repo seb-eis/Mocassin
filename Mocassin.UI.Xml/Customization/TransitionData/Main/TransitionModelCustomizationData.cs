@@ -31,6 +31,23 @@ namespace Mocassin.UI.Xml.Customization
         }
 
         /// <inheritdoc />
+        public TransitionModelCustomizationData Duplicate()
+        {
+            var copy = new TransitionModelCustomizationData
+            {
+                Name = Name,
+                kineticTransitionParameterSets = kineticTransitionParameterSets.Select(x => x.Duplicate()).ToObservableCollection()
+            };
+            return copy;
+        }
+
+        /// <inheritdoc />
+        object IDuplicable.Duplicate()
+        {
+            return Duplicate();
+        }
+
+        /// <inheritdoc />
         public override void PushToModel(IModelProject modelProject)
         {
             var setterProvider = modelProject.GetManager<ITransitionManager>().QueryPort.Query(x => x.GetRuleSetterProvider());
@@ -64,23 +81,6 @@ namespace Mocassin.UI.Xml.Customization
             };
 
             return obj;
-        }
-
-        /// <inheritdoc />
-        public TransitionModelCustomizationData Duplicate()
-        {
-            var copy = new TransitionModelCustomizationData
-            {
-                Name = Name,
-                kineticTransitionParameterSets = kineticTransitionParameterSets.Select(x => x.Duplicate()).ToObservableCollection()
-            };
-            return copy;
-        }
-
-        /// <inheritdoc />
-        object IDuplicable.Duplicate()
-        {
-            return Duplicate();
         }
     }
 }

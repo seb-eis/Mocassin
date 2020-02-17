@@ -1,6 +1,4 @@
 ﻿using Mocassin.Model.Basic;
-using Mocassin.Model.Particles;
-using Mocassin.Symmetry.Analysis;
 
 namespace Mocassin.Model.Lattices
 {
@@ -10,9 +8,9 @@ namespace Mocassin.Model.Lattices
     public interface ILatticeCachePort : IModelCachePort
     {
         /// <summary>
-        ///     Get the default <see cref="IDopedByteLatticeSource"/> for doped lattice provision
+        ///     Get the default <see cref="IDopedByteLatticeSource" /> for doped lattice provision
         /// </summary>
         /// <returns></returns>
-	    IDopedByteLatticeSource GetDefaultByteLatticeSource();
+        IDopedByteLatticeSource GetDefaultByteLatticeSource();
     }
 }

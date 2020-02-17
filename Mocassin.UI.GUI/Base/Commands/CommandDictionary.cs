@@ -6,8 +6,7 @@ using System.Windows.Input;
 namespace Mocassin.UI.Base.Commands
 {
     /// <summary>
-    ///     Adapter that supplies <see cref="Command{T}" /> implementation where the parameter relays to a parameterless
-    ///     <see cref="Command" />
+    ///     Adapter that supplies <see cref="Command{T}" /> implementation where the parameter identifies the parameterless <see cref="Command" /> to execute
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TCommand"></typeparam>
@@ -50,18 +49,6 @@ namespace Mocassin.UI.Base.Commands
         public CommandDictionary(IDictionary<TKey, TCommand> values)
         {
             Dictionary = values ?? throw new ArgumentNullException(nameof(values));
-        }
-
-        /// <inheritdoc />
-        public override void Execute(TKey parameter)
-        {
-            Dictionary[parameter].Execute(null);
-        }
-
-        /// <inheritdoc />
-        public override bool CanExecute(TKey parameter)
-        {
-            return Dictionary.TryGetValue(parameter, out var relayCommand) && relayCommand.CanExecute(null);
         }
 
         /// <inheritdoc />
@@ -128,6 +115,18 @@ namespace Mocassin.UI.Base.Commands
         public bool TryGetValue(TKey key, out TCommand value)
         {
             return Dictionary.TryGetValue(key, out value);
+        }
+
+        /// <inheritdoc />
+        public override void Execute(TKey parameter)
+        {
+            Dictionary[parameter].Execute(null);
+        }
+
+        /// <inheritdoc />
+        public override bool CanExecute(TKey parameter)
+        {
+            return Dictionary.TryGetValue(parameter, out var relayCommand) && relayCommand.CanExecute(null);
         }
     }
 }

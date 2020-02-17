@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Net;
 using System.Text.RegularExpressions;
 using Mocassin.Framework.SQLiteCore;
 using Mocassin.Mathematics.Comparer;
@@ -39,7 +38,7 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         ///     Get a <see cref="IReadOnlyList{T}" /> of all <see cref="MmcfeEnergyDataPoint" /> entries. Getting this value will
         ///     force load all data points
         /// </summary>
-        public IReadOnlyList<MmcfeEnergyDataPoint> DataPoints => dataPoints ?? (dataPoints = SelectEnergyDataPoints().ToList());
+        public IReadOnlyList<MmcfeEnergyDataPoint> DataPoints => dataPoints ??= SelectEnergyDataPoints().ToList();
 
         /// <summary>
         ///     Creates a new <see cref="MmcfeEnergyDataPointEvaluator" /> using the provided
@@ -52,6 +51,12 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
             DataSource = dataSource ?? throw new ArgumentNullException(nameof(dataSource));
             IsDataSourceDisposeWithObject = isDataSourceDisposeWithObject;
             EnergyEvaluator = new MmcfeEnergyEvaluator();
+        }
+
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            if (IsDataSourceDisposeWithObject) (DataSource as IDisposable)?.Dispose();
         }
 
         /// <summary>
@@ -100,7 +105,7 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         public IDictionary<string, IDictionary<double, MmcfeEnergyDataPoint>> GroupDataPointsByDopingByTemperature(
             IEqualityComparer<double> temperatureComparer = null)
         {
-            temperatureComparer = temperatureComparer ?? NumericComparer.CreateRangedCombined();
+            temperatureComparer ??= NumericComparer.CreateRangedCombined();
             return DataPoints
                 .GroupBy(x => x.MetaEntry.DopingInfo)
                 .ToDictionary(x => x.Key,
@@ -114,7 +119,7 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         public IDictionary<double, IDictionary<string, MmcfeEnergyDataPoint>> GroupDataPointsByTemperatureByDoping(
             IEqualityComparer<double> temperatureComparer = null)
         {
-            temperatureComparer = temperatureComparer ?? NumericComparer.CreateRangedCombined();
+            temperatureComparer ??= NumericComparer.CreateRangedCombined();
             return DataPoints
                 .GroupBy(x => x.EnergyState.Temperature, temperatureComparer)
                 .ToDictionary(x => x.Key, y => (IDictionary<string, MmcfeEnergyDataPoint>) y.ToDictionary(arg => arg.MetaEntry.DopingInfo, arg => arg),
@@ -134,17 +139,17 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         ///     Gets a per defect <see cref="MmcfeEnergyState" /> plot information where all values are relative to entry with the
         ///     lowest defect particle count (Normalized by affiliated defect counts)
         /// </summary>
-        /// <param name="dataPoints"></param>
+        /// <param name="data"></param>
         /// <param name="fixedDopingValue"></param>
         /// <param name="variableDopingId"></param>
         /// <param name="defectParticleId"></param>
         /// <param name="fixedDopingId"></param>
         /// <returns></returns>
-        public PlotData2D<double, MmcfeEnergyState> GetRelativeChangePerDefectPlotData2D(IDictionary<string, MmcfeEnergyDataPoint> dataPoints,
+        public PlotData2D<double, MmcfeEnergyState> GetRelativeChangePerDefectPlotData2D(IDictionary<string, MmcfeEnergyDataPoint> data,
             int fixedDopingId, double fixedDopingValue, int variableDopingId, int defectParticleId)
         {
             var keySelectorFunction = GetDopingSelectorFunction(fixedDopingId, fixedDopingValue);
-            var baseData = dataPoints.Where(x => keySelectorFunction(x.Key)).OrderBy(x => x.Value.ParticleCounts[defectParticleId]).ToList();
+            var baseData = data.Where(x => keySelectorFunction(x.Key)).OrderBy(x => x.Value.ParticleCounts[defectParticleId]).ToList();
             var baseState = baseData[0].Value.EnergyState;
 
             var result = new PlotData2D<double, MmcfeEnergyState>(baseData.Count);
@@ -165,17 +170,17 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         ///     Gets the absolute <see cref="MmcfeEnergyState" /> plot information where all values are relative to entry with the
         ///     lowest defect particle count (No normalization)
         /// </summary>
-        /// <param name="dataPoints"></param>
+        /// <param name="data"></param>
         /// <param name="fixedDopingValue"></param>
         /// <param name="variableDopingId"></param>
         /// <param name="defectParticleId"></param>
         /// <param name="fixedDopingId"></param>
         /// <returns></returns>
-        public PlotData2D<double, MmcfeEnergyState> GetAbsoluteChangePlotData2D(IDictionary<string, MmcfeEnergyDataPoint> dataPoints,
+        public PlotData2D<double, MmcfeEnergyState> GetAbsoluteChangePlotData2D(IDictionary<string, MmcfeEnergyDataPoint> data,
             int fixedDopingId, double fixedDopingValue, int variableDopingId, int defectParticleId)
         {
             var keySelectorFunction = GetDopingSelectorFunction(fixedDopingId, fixedDopingValue);
-            var baseData = dataPoints.Where(x => keySelectorFunction(x.Key)).OrderBy(x => x.Value.ParticleCounts[defectParticleId]).ToList();
+            var baseData = data.Where(x => keySelectorFunction(x.Key)).OrderBy(x => x.Value.ParticleCounts[defectParticleId]).ToList();
             var baseState = baseData[0].Value.EnergyState;
 
             var result = new PlotData2D<double, MmcfeEnergyState>(baseData.Count);
@@ -194,24 +199,23 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         /// </summary>
         /// <param name="plotData"></param>
         /// <param name="filePath"></param>
+        /// <param name="entropyInKb"></param>
         /// <param name="skipLineCount"></param>
         /// <param name="doubleFormat"></param>
         public void WriteEnergyStateOverConcentrationPlotData2DToFile(PlotData2D<double, MmcfeEnergyState> plotData, string filePath, bool entropyInKb = true,
             int skipLineCount = 1, string doubleFormat = "e13")
         {
             if (File.Exists(filePath)) File.Delete(filePath);
-            using (var writer = File.AppendText(filePath))
+            using var writer = File.AppendText(filePath);
+            var entropyFactor = entropyInKb ? 1.0 / Equations.Constants.BlotzmannEv : 1.0;
+            writer.WriteLine("c u error-u f error-f s error-s");
+            foreach (var (x, errorX, y, errorY) in plotData.Skip(skipLineCount))
             {
-                var entropyFactor = entropyInKb ? 1.0 / Equations.Constants.BlotzmannEv : 1.0;
-                writer.WriteLine("c u error-u f error-f s error-s");
-                foreach (var (x, errorX, y, errorY) in plotData.Skip(skipLineCount))
-                {
-                    writer.Write(x.ToString(doubleFormat));
-                    writer.Write(" ");
-                    WriteValueWithError(writer, y.InnerEnergy, errorY.InnerEnergy, false, doubleFormat);
-                    WriteValueWithError(writer, y.FreeEnergy, errorY.FreeEnergy, false, doubleFormat);
-                    WriteValueWithError(writer, y.Entropy * entropyFactor, errorY.Entropy * entropyFactor, true, doubleFormat);
-                }
+                writer.Write(x.ToString(doubleFormat));
+                writer.Write(" ");
+                WriteValueWithError(writer, y.InnerEnergy, errorY.InnerEnergy, false, doubleFormat);
+                WriteValueWithError(writer, y.FreeEnergy, errorY.FreeEnergy, false, doubleFormat);
+                WriteValueWithError(writer, y.Entropy * entropyFactor, errorY.Entropy * entropyFactor, true, doubleFormat);
             }
         }
 
@@ -273,18 +277,14 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         ///     <see cref="MmcfeLogMetaEntry" /> into a <see cref="MmcfeEnergyDataPoint" />
         /// </summary>
         /// <param name="grouping"></param>
+        /// <param name="sel1"></param>
+        /// <param name="sel2"></param>
         /// <returns></returns>
         protected MmcfeEnergyDataPoint CreateDataPoint<T1, T2>(IGrouping<T1, T2> grouping, Func<T2, MmcfeLogMetaEntry> sel1, Func<T2, MmcfeLogEnergyEntry> sel2)
         {
             var data = grouping.ToList();
             var (energyState, energyStateError) = EnergyEvaluator.AverageWithSem(data.Select(x => sel2(x).AsStruct()));
             return new MmcfeEnergyDataPoint(data.Count, energyState, energyStateError, sel1(data[0]));
-        }
-
-        /// <inheritdoc />
-        public void Dispose()
-        {
-            if (IsDataSourceDisposeWithObject) (DataSource as IDisposable)?.Dispose();
         }
     }
 }

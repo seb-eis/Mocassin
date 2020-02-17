@@ -15,11 +15,11 @@ namespace Mocassin.UI.Xml.StructureModel
     [XmlRoot]
     public class StructureModelData : ModelManagerData
     {
-        private StructureInfoData structureInfo;
-        private SpaceGroupInfoData spaceGroupInfo;
         private CellParametersData cellParameters;
         private ObservableCollection<CellReferencePositionData> cellReferencePositions;
         private ObservableCollection<DummyPositionData> dummyPositions;
+        private SpaceGroupInfoData spaceGroupInfo;
+        private StructureInfoData structureInfo;
 
         /// <summary>
         ///     Get or set the xml structure info

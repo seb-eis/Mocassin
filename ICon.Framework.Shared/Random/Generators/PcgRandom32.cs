@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
-using System.Runtime.Serialization;
 using System.Security.Cryptography;
 
 // This implementation is based upon:
@@ -17,11 +17,6 @@ namespace Mocassin.Framework.Random
     public sealed class PcgRandom32 : System.Random
     {
         /// <summary>
-        ///     The global pcg 32 random number generator
-        /// </summary>
-        public static readonly PcgRandom32 Global = new PcgRandom32();
-
-        /// <summary>
         ///     The default state increment value
         /// </summary>
         public const ulong DefaultIncrement = 0x853c49e6748fea9bUL;
@@ -30,6 +25,11 @@ namespace Mocassin.Framework.Random
         ///     The factor used to create a random double from a random uint
         /// </summary>
         public const double DoubleStepping = 1.0 / uint.MaxValue;
+
+        /// <summary>
+        ///     The global pcg 32 random number generator
+        /// </summary>
+        public static readonly PcgRandom32 Global = new PcgRandom32();
 
         /// <summary>
         ///     The increase value of the generator
@@ -61,13 +61,12 @@ namespace Mocassin.Framework.Random
         }
 
         /// <summary>
-        /// Initializes the generator from a single string value
+        ///     Initializes the generator from a single string value
         /// </summary>
         /// <param name="seed"></param>
-        public PcgRandom32(string seed) 
+        public PcgRandom32(string seed)
             : this(seed.GetHashCode())
         {
-
         }
 
         /// <summary>
@@ -136,7 +135,7 @@ namespace Mocassin.Framework.Random
                 for (var j = 0; j < 4; j++)
                 {
                     if (i + 1 == buffer.Length) return;
-                    buffer[i++] = (byte) ((random >> j * 8) & 0xFF);
+                    buffer[i++] = (byte) ((random >> (j * 8)) & 0xFF);
                 }
             }
         }
@@ -152,6 +151,7 @@ namespace Mocassin.Framework.Random
         /// </summary>
         /// <param name="state"></param>
         /// <param name="increment"></param>
+        [SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed")]
         private void Seed(ulong state, ulong increment)
         {
             Increment = (increment << 1) | 1;

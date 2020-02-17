@@ -59,6 +59,18 @@ namespace Mocassin.Tools.Evaluation.Context
             FullConfigName = MakeFullConfigName(jobModel);
         }
 
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            McsReader.Dispose();
+        }
+
+        /// <inheritdoc />
+        public bool Equals(JobContext other)
+        {
+            return JobModel.Equals(other?.JobModel);
+        }
+
         /// <summary>
         ///     Creates a new <see cref="JobContext" /> that targets the primary results of the passed
         ///     <see cref="SimulationJobModel" /> within the specified <see cref="MslEvaluationContext" />
@@ -125,12 +137,6 @@ namespace Mocassin.Tools.Evaluation.Context
             return evalContext;
         }
 
-        /// <inheritdoc />
-        public bool Equals(JobContext other)
-        {
-            return JobModel.Equals(other?.JobModel);
-        }
-
         /// <summary>
         ///     Creates a name for a <see cref="SimulationJobModel" /> based on the meta information that can be used to identify
         ///     multiplied jobs
@@ -141,12 +147,6 @@ namespace Mocassin.Tools.Evaluation.Context
         {
             if (JobModel.JobMetaData == null) return null;
             return $"{jobModel.JobMetaData.CollectionName}:{jobModel.JobMetaData.ConfigName}";
-        }
-
-        /// <inheritdoc />
-        public void Dispose()
-        {
-            McsReader.Dispose();
         }
     }
 }

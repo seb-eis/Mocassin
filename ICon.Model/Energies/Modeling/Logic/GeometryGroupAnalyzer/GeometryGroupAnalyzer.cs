@@ -17,7 +17,10 @@ namespace Mocassin.Model.Energies
     /// </summary>
     public enum GroupGeometryValidity
     {
-        IsValid, ContainsNonExistentPositions, ContainsFilteredPositions, ContainsUnstablePositions
+        IsValid,
+        ContainsNonExistentPositions,
+        ContainsFilteredPositions,
+        ContainsUnstablePositions
     }
 
     /// <summary>
@@ -68,7 +71,7 @@ namespace Mocassin.Model.Energies
             extGroup.UniqueOccupationStates =
                 GetUniqueGroupOccupationStates(extGroup.PointOperationGroup, GetGroupStatePermutationSource(groupInteraction)).ToList();
 
-            extGroup.UniqueEnergyDictionary = MakeFullEnergyDictionary(extGroup.UniqueOccupationStates, extGroup.CenterPosition);    
+            extGroup.UniqueEnergyDictionary = MakeFullEnergyDictionary(extGroup.UniqueOccupationStates, extGroup.CenterPosition);
             return extGroup;
         }
 
@@ -104,7 +107,8 @@ namespace Mocassin.Model.Energies
         }
 
         /// <summary>
-        ///     Get the unit cell position sequence described by a group interaction. Will contain null values if any of the fractional vector does not point to a valid position
+        ///     Get the unit cell position sequence described by a group interaction. Will contain null values if any of the
+        ///     fractional vector does not point to a valid position
         /// </summary>
         /// <param name="groupInteraction"></param>
         /// <returns></returns>
@@ -114,13 +118,14 @@ namespace Mocassin.Model.Energies
         }
 
         /// <summary>
-        ///     Determines the <see cref="GroupGeometryValidity"/> of the passed <see cref="IGroupInteraction"/> in the context of the passed <see cref="IInteractionFilter"/> set
+        ///     Determines the <see cref="GroupGeometryValidity" /> of the passed <see cref="IGroupInteraction" /> in the context
+        ///     of the passed <see cref="IInteractionFilter" /> set
         /// </summary>
         /// <param name="groupInteraction"></param>
         /// <param name="filters"></param>
         /// <returns></returns>
         public GroupGeometryValidity CheckGroupGeometryValidity(IGroupInteraction groupInteraction, IEnumerable<IInteractionFilter> filters)
-        {         
+        {
             var partnerPositions = GetGroupCellReferencePositions(groupInteraction).ToList();
             if (partnerPositions.Any(x => x == null)) return GroupGeometryValidity.ContainsNonExistentPositions;
             if (partnerPositions.Any(x => !x.IsValidAndStable())) return GroupGeometryValidity.ContainsUnstablePositions;

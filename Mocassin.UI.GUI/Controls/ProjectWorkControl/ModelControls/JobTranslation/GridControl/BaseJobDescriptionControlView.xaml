@@ -27,7 +27,7 @@
   <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="*" />
-      <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}"/>
+      <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}" />
       <ColumnDefinition Width="*" />
     </Grid.ColumnDefinitions>
 
@@ -89,8 +89,9 @@
         </TextBox>
       </content:HeaderedGroup>
 
-      <content:HeaderedGroup HeaderToolTip="Advanced Option: Attaches a string instruction for the build system (e.g. custom routine data)"
-                             Header="Instruction String:">
+      <content:HeaderedGroup
+        HeaderToolTip="Advanced Option: Attaches a string instruction for the build system (e.g. custom routine data)"
+        Header="Instruction String:">
         <Grid>
           <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />

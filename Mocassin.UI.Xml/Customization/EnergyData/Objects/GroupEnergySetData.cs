@@ -20,14 +20,14 @@ namespace Mocassin.UI.Xml.Customization
     [XmlRoot]
     public class GroupEnergySetData : ExtensibleProjectDataObject, IComparable<GroupEnergySetData>, IDuplicable<GroupEnergySetData>
     {
-        private ModelObjectReference<GroupInteraction> groupInteraction;
-        private ModelObjectReference<CellReferencePosition> centerPosition;
         private ObservableCollection<VectorData3D> baseGeometry;
+        private ModelObjectReference<CellReferencePosition> centerPosition;
         private ObservableCollection<GroupEnergyData> energyEntries;
+        private ModelObjectReference<GroupInteraction> groupInteraction;
         private int modelIndex;
 
         /// <summary>
-        ///     Get or set the <see cref="ModelObjectReference{T}"/> of the group interaction that the graph is based upon
+        ///     Get or set the <see cref="ModelObjectReference{T}" /> of the group interaction that the graph is based upon
         /// </summary>
         [XmlElement]
         public ModelObjectReference<GroupInteraction> GroupInteraction
@@ -37,7 +37,7 @@ namespace Mocassin.UI.Xml.Customization
         }
 
         /// <summary>
-        ///     Get or set the <see cref="ModelObjectReference{T}"/> of the center position that the graph is based upon
+        ///     Get or set the <see cref="ModelObjectReference{T}" /> of the center position that the graph is based upon
         /// </summary>
         [XmlElement]
         public ModelObjectReference<CellReferencePosition> CenterPosition
@@ -76,48 +76,6 @@ namespace Mocassin.UI.Xml.Customization
             set => SetProperty(ref modelIndex, value);
         }
 
-        /// <summary>
-        ///     Set all data on the passed <see cref="IGroupEnergySetter" /> and push the values to the affiliated
-        ///     <see cref="Mocassin.Model.ModelProject.IModelProject" />
-        /// </summary>
-        /// <param name="energySetter"></param>
-        /// <param name="modelProject"></param>
-        public void PushToModel(IModelProject modelProject, IGroupEnergySetter energySetter)
-        {
-            energySetter.SetEnergyEntries(EnergyEntries.Select(x => x.ToInternal(modelProject)));
-            energySetter.PushData();
-        }
-
-        /// <summary>
-        ///     Creates a new serializable <see cref="GroupEnergySetData" /> by pulling all data defined in the passed
-        ///     <see cref="IGroupEnergySetter" /> context and <see cref="ProjectModelData"/> parent
-        /// </summary>
-        /// <param name="energySetter"></param>
-        /// <param name="parent"></param>
-        /// <returns></returns>
-        public static GroupEnergySetData Create(IGroupEnergySetter energySetter, ProjectModelData parent)
-        {
-            if (energySetter == null) throw new ArgumentNullException(nameof(energySetter));
-            if (parent == null) throw new ArgumentNullException(nameof(parent));
-
-            var groupInteraction = 
-                parent.EnergyModelData.GroupInteractions.Single(x => x.Key == energySetter.GroupInteraction.Key);
-
-            var centerPosition =
-                parent.StructureModelData.CellReferencePositions.Single(x => x.Key == energySetter.GroupInteraction.CenterCellReferencePosition.Key);
-
-            var obj = new GroupEnergySetData
-            {
-                Name = $"Group.Energy.Set.{energySetter.GroupInteraction.Index}",
-                ModelIndex = energySetter.GroupInteraction.Index,
-                BaseGeometry = energySetter.GroupInteraction.GetBaseGeometry().Select(x => VectorData3D.Create(x)).ToObservableCollection(),
-                GroupInteraction = new ModelObjectReference<GroupInteraction>(groupInteraction),
-                CenterPosition = new ModelObjectReference<CellReferencePosition>(centerPosition),
-                EnergyEntries = energySetter.EnergyEntries.Select(x => GroupEnergyData.Create(x, parent)).ToObservableCollection()
-            };
-            return obj;
-        }
-
         /// <inheritdoc />
         public int CompareTo(GroupEnergySetData other)
         {
@@ -146,8 +104,57 @@ namespace Mocassin.UI.Xml.Customization
             return copy;
         }
 
+        /// <inheritdoc />
+        object IDuplicable.Duplicate()
+        {
+            return Duplicate();
+        }
+
         /// <summary>
-        ///     Gets the surrounding geometry as a <see cref="IEnumerable{T}"/> of <see cref="Fractional3D"/> (Center position not included on default)
+        ///     Set all data on the passed <see cref="IGroupEnergySetter" /> and push the values to the affiliated
+        ///     <see cref="Mocassin.Model.ModelProject.IModelProject" />
+        /// </summary>
+        /// <param name="energySetter"></param>
+        /// <param name="modelProject"></param>
+        public void PushToModel(IModelProject modelProject, IGroupEnergySetter energySetter)
+        {
+            energySetter.SetEnergyEntries(EnergyEntries.Select(x => x.ToInternal(modelProject)));
+            energySetter.PushData();
+        }
+
+        /// <summary>
+        ///     Creates a new serializable <see cref="GroupEnergySetData" /> by pulling all data defined in the passed
+        ///     <see cref="IGroupEnergySetter" /> context and <see cref="ProjectModelData" /> parent
+        /// </summary>
+        /// <param name="energySetter"></param>
+        /// <param name="parent"></param>
+        /// <returns></returns>
+        public static GroupEnergySetData Create(IGroupEnergySetter energySetter, ProjectModelData parent)
+        {
+            if (energySetter == null) throw new ArgumentNullException(nameof(energySetter));
+            if (parent == null) throw new ArgumentNullException(nameof(parent));
+
+            var groupInteraction =
+                parent.EnergyModelData.GroupInteractions.Single(x => x.Key == energySetter.GroupInteraction.Key);
+
+            var centerPosition =
+                parent.StructureModelData.CellReferencePositions.Single(x => x.Key == energySetter.GroupInteraction.CenterCellReferencePosition.Key);
+
+            var obj = new GroupEnergySetData
+            {
+                Name = $"Group.Energy.Set.{energySetter.GroupInteraction.Index}",
+                ModelIndex = energySetter.GroupInteraction.Index,
+                BaseGeometry = energySetter.GroupInteraction.GetBaseGeometry().Select(x => VectorData3D.Create(x)).ToObservableCollection(),
+                GroupInteraction = new ModelObjectReference<GroupInteraction>(groupInteraction),
+                CenterPosition = new ModelObjectReference<CellReferencePosition>(centerPosition),
+                EnergyEntries = energySetter.EnergyEntries.Select(x => GroupEnergyData.Create(x, parent)).ToObservableCollection()
+            };
+            return obj;
+        }
+
+        /// <summary>
+        ///     Gets the surrounding geometry as a <see cref="IEnumerable{T}" /> of <see cref="Fractional3D" /> (Center position
+        ///     not included on default)
         /// </summary>
         /// <param name="includeCenter"></param>
         /// <returns></returns>
@@ -155,12 +162,6 @@ namespace Mocassin.UI.Xml.Customization
         {
             var baseEnum = BaseGeometry.Select(x => new Fractional3D(x.A, x.B, x.C));
             return includeCenter ? ((ICellReferencePosition) CenterPosition.Target.GetInputObject()).Vector.AsSingleton().Concat(baseEnum) : baseEnum;
-        }
-
-        /// <inheritdoc />
-        object IDuplicable.Duplicate()
-        {
-            return Duplicate();
         }
     }
 }

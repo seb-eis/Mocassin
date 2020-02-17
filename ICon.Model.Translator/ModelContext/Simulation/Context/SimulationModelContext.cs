@@ -25,6 +25,7 @@ namespace Mocassin.Model.Translator.ModelContext
                 case IMetropolisSimulation metropolisSimulation:
                     return MetropolisSimulationModels?.SingleOrDefault(x => x.Simulation == metropolisSimulation);
             }
+
             throw new ArgumentException("Passed simulation type is not supported");
         }
     }

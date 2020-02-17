@@ -10,7 +10,7 @@ namespace Mocassin.Mathematics.ValueTypes
     public readonly struct Cartesian3D : ICartesian3D
     {
         /// <summary>
-        ///     The readonly <see cref="Coordinates3D"/> backing field
+        ///     The readonly <see cref="Coordinates3D" /> backing field
         /// </summary>
         public readonly Coordinates3D Coordinates;
 

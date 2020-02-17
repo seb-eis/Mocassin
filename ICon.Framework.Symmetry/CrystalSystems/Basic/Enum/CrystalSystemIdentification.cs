@@ -4,28 +4,30 @@ using System.Diagnostics;
 namespace Mocassin.Symmetry.CrystalSystems
 {
     /// <summary>
-    ///     Defines a clear identification for a crystal system by <see cref="CrystalSystemType"/> and <see cref="CrystalSystemVariation"/>
+    ///     Defines a clear identification for a crystal system by <see cref="CrystalSystemType" /> and
+    ///     <see cref="CrystalSystemVariation" />
     /// </summary>
     [DebuggerDisplay("{CrystalType} & {CrystalVariation}")]
     public readonly struct CrystalSystemIdentification : IEquatable<CrystalSystemIdentification>
     {
         /// <summary>
-        ///     Get the default triclinic <see cref="CrystalSystemIdentification"/>
+        ///     Get the default triclinic <see cref="CrystalSystemIdentification" />
         /// </summary>
-        public static CrystalSystemIdentification Triclinic { get; } = new CrystalSystemIdentification(CrystalSystemType.Triclinic, CrystalSystemVariation.NoneOrOriginChoice);
+        public static CrystalSystemIdentification Triclinic { get; } =
+            new CrystalSystemIdentification(CrystalSystemType.Triclinic, CrystalSystemVariation.NoneOrOriginChoice);
 
         /// <summary>
-        ///     Get the <see cref="CrystalSystemType"/>
+        ///     Get the <see cref="CrystalSystemType" />
         /// </summary>
         public CrystalSystemType CrystalType { get; }
 
         /// <summary>
-        ///     Get the <see cref="CrystalSystemVariation"/>
+        ///     Get the <see cref="CrystalSystemVariation" />
         /// </summary>
         public CrystalSystemVariation CrystalVariation { get; }
 
         /// <summary>
-        ///     Creates a new crystal identifier by <see cref="CrystalSystemType"/> and <see cref="CrystalSystemVariation"/>
+        ///     Creates a new crystal identifier by <see cref="CrystalSystemType" /> and <see cref="CrystalSystemVariation" />
         /// </summary>
         /// <param name="crystalType"></param>
         /// <param name="crystalVariation"></param>

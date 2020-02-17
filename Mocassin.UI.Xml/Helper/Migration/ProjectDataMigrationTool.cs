@@ -23,7 +23,8 @@ namespace Mocassin.UI.Xml.Helper.Migration
         private List<MigrationReportEntry> ReportEntries { get; }
 
         /// <summary>
-        ///     Get or set a boolean flag if the system should report redundant data migrations where target and source already match
+        ///     Get or set a boolean flag if the system should report redundant data migrations where target and source already
+        ///     match
         /// </summary>
         public bool IsRedundantReportEnabled { get; set; }
 

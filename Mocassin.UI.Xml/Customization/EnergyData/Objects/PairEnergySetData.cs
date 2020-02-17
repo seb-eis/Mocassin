@@ -21,13 +21,13 @@ namespace Mocassin.UI.Xml.Customization
     public class PairEnergySetData : ExtensibleProjectDataObject, IComparable<PairEnergySetData>, IDuplicable<PairEnergySetData>
     {
         private ModelObjectReference<CellReferencePosition> centerPosition;
-        private ModelObjectReference<CellReferencePosition> partnerPosition;
+        private int chiralPartnerModelIndex = -1;
         private double distance;
-        private VectorData3D startVector;
         private VectorData3D endVector;
         private int modelIndex;
         private ObservableCollection<PairEnergyData> pairEnergyEntries;
-        private int chiralPartnerModelIndex = -1;
+        private ModelObjectReference<CellReferencePosition> partnerPosition;
+        private VectorData3D startVector;
 
         /// <summary>
         ///     Get or set the <see cref="ModelObjectReference{T}" /> that targets the center wyckoff position
@@ -109,6 +109,52 @@ namespace Mocassin.UI.Xml.Customization
             set => SetProperty(ref chiralPartnerModelIndex, value);
         }
 
+        /// <inheritdoc />
+        public int CompareTo(PairEnergySetData other)
+        {
+            if (ReferenceEquals(this, other)) return 0;
+            if (other is null) return 1;
+
+            var distanceComparison = Distance.CompareTo(other.Distance);
+            if (distanceComparison != 0) return distanceComparison;
+
+            var centerPositionKeyComparison =
+                string.Compare(CenterPosition.Key, other.CenterPosition.Key, StringComparison.Ordinal);
+
+            if (centerPositionKeyComparison != 0) return centerPositionKeyComparison;
+
+            var partnerPositionKeyComparison =
+                string.Compare(PartnerPosition.Key, other.PartnerPosition.Key, StringComparison.Ordinal);
+
+            return partnerPositionKeyComparison != 0
+                ? distanceComparison
+                : ModelIndex.CompareTo(other.ModelIndex);
+        }
+
+        /// <inheritdoc />
+        public PairEnergySetData Duplicate()
+        {
+            var copy = new PairEnergySetData
+            {
+                Name = Name,
+                centerPosition = centerPosition.Duplicate(),
+                partnerPosition = partnerPosition.Duplicate(),
+                distance = distance,
+                startVector = startVector.Duplicate(),
+                endVector = endVector.Duplicate(),
+                modelIndex = modelIndex,
+                chiralPartnerModelIndex = chiralPartnerModelIndex,
+                pairEnergyEntries = pairEnergyEntries.Select(x => x.Duplicate()).ToObservableCollection()
+            };
+            return copy;
+        }
+
+        /// <inheritdoc />
+        object IDuplicable.Duplicate()
+        {
+            return Duplicate();
+        }
+
         /// <summary>
         ///     Set all data on the passed <see cref="IPairEnergySetter" /> and push the values to the affiliated
         ///     <see cref="Mocassin.Model.ModelProject.IModelProject" />
@@ -155,60 +201,14 @@ namespace Mocassin.UI.Xml.Customization
             return obj;
         }
 
-        /// <inheritdoc />
-        public int CompareTo(PairEnergySetData other)
-        {
-            if (ReferenceEquals(this, other)) return 0;
-            if (other is null) return 1;
-
-            var distanceComparison = Distance.CompareTo(other.Distance);
-            if (distanceComparison != 0) return distanceComparison;
-
-            var centerPositionKeyComparison =
-                string.Compare(CenterPosition.Key, other.CenterPosition.Key, StringComparison.Ordinal);
-
-            if (centerPositionKeyComparison != 0) return centerPositionKeyComparison;
-
-            var partnerPositionKeyComparison =
-                string.Compare(PartnerPosition.Key, other.PartnerPosition.Key, StringComparison.Ordinal);
-
-            return partnerPositionKeyComparison != 0
-                ? distanceComparison
-                : ModelIndex.CompareTo(other.ModelIndex);
-        }
-
-        /// <inheritdoc />
-        public PairEnergySetData Duplicate()
-        {
-            var copy = new PairEnergySetData
-            {
-                Name = Name,
-                centerPosition = centerPosition.Duplicate(),
-                partnerPosition = partnerPosition.Duplicate(),
-                distance = distance,
-                startVector = startVector.Duplicate(),
-                endVector = endVector.Duplicate(),
-                modelIndex = modelIndex,
-                chiralPartnerModelIndex = chiralPartnerModelIndex,
-                pairEnergyEntries = pairEnergyEntries.Select(x => x.Duplicate()).ToObservableCollection()
-            };
-            return copy;
-        }
-
         /// <summary>
-        ///     Gets the interaction geometry as a <see cref="Fractional3D"/> path (Yields always two positions)
+        ///     Gets the interaction geometry as a <see cref="Fractional3D" /> path (Yields always two positions)
         /// </summary>
         /// <returns></returns>
         public IEnumerable<Fractional3D> AsVectorPath()
         {
             yield return new Fractional3D(StartVector.A, StartVector.B, StartVector.C);
             yield return new Fractional3D(EndVector.A, EndVector.B, EndVector.C);
-        }
-
-        /// <inheritdoc />
-        object IDuplicable.Duplicate()
-        {
-            return Duplicate();
         }
     }
 }

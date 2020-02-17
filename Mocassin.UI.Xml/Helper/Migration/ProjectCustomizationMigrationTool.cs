@@ -28,7 +28,8 @@ namespace Mocassin.UI.Xml.Helper.Migration
         }
 
         /// <summary>
-        ///     Overwrites all data of the target <see cref="ProjectCustomizationTemplate" /> by values that also exist on the source
+        ///     Overwrites all data of the target <see cref="ProjectCustomizationTemplate" /> by values that also exist on the
+        ///     source
         /// </summary>
         /// <param name="source"></param>
         /// <param name="target"></param>
@@ -126,13 +127,13 @@ namespace Mocassin.UI.Xml.Helper.Migration
         /// <param name="target"></param>
         private void Migrate(ICollection<GroupEnergySetData> source, ICollection<GroupEnergySetData> target)
         {
-           source.Select(x => (SourceItem: x, TargetItem: target.FirstOrDefault(y => AreModelCompatible(x, y))))
+            source.Select(x => (SourceItem: x, TargetItem: target.FirstOrDefault(y => AreModelCompatible(x, y))))
                 .Where(pair => pair.TargetItem != null)
                 .Action(pair => Migrate(pair.SourceItem, pair.TargetItem))
                 .Load();
         }
 
-        
+
         /// <summary>
         ///     Overwrites all data of the target <see cref="GroupEnergySetData" /> by values that also exist on the source
         /// </summary>
@@ -149,7 +150,8 @@ namespace Mocassin.UI.Xml.Helper.Migration
         }
 
         /// <summary>
-        ///     Overwrites all data of the target <see cref="PairEnergyData" /> by values that also exist on the source and reports the action with the provided reporter delegate
+        ///     Overwrites all data of the target <see cref="PairEnergyData" /> by values that also exist on the source and reports
+        ///     the action with the provided reporter delegate
         /// </summary>
         /// <param name="source"></param>
         /// <param name="target"></param>
@@ -157,7 +159,7 @@ namespace Mocassin.UI.Xml.Helper.Migration
         private void Migrate(PairEnergyData source, PairEnergyData target, DataMigrationReporter reporter)
         {
             if (!IsRedundantReportEnabled && source.Name == target.Name && VectorComparer.ValueComparer.Compare(source.Energy, target.Energy) == 0) return;
-            
+
             var comment = $"Energy: \"{source.Energy}\", Name: \"{source.Name}\"";
             target.Energy = source.Energy;
             target.Name = source.Name;
@@ -165,7 +167,8 @@ namespace Mocassin.UI.Xml.Helper.Migration
         }
 
         /// <summary>
-        ///     Overwrites all data of the target <see cref="GroupEnergyData" /> by values that also exist on the source and reports the action with the provided reporter delegate
+        ///     Overwrites all data of the target <see cref="GroupEnergyData" /> by values that also exist on the source and
+        ///     reports the action with the provided reporter delegate
         /// </summary>
         /// <param name="source"></param>
         /// <param name="target"></param>
@@ -173,7 +176,7 @@ namespace Mocassin.UI.Xml.Helper.Migration
         private void Migrate(GroupEnergyData source, GroupEnergyData target, DataMigrationReporter reporter)
         {
             if (!IsRedundantReportEnabled && source.Name == target.Name && VectorComparer.ValueComparer.Compare(source.Energy, target.Energy) == 0) return;
-            
+
             var comment = $"Energy: \"{source.Energy}\", Name: \"{source.Name}\"";
             target.Energy = source.Energy;
             target.Name = source.Name;
@@ -181,15 +184,17 @@ namespace Mocassin.UI.Xml.Helper.Migration
         }
 
         /// <summary>
-        ///     Overwrites all data of the target <see cref="KineticRuleData" /> by values that also exist on the source and reports the action with the provided reporter delegate
+        ///     Overwrites all data of the target <see cref="KineticRuleData" /> by values that also exist on the source and
+        ///     reports the action with the provided reporter delegate
         /// </summary>
         /// <param name="source"></param>
         /// <param name="target"></param>
         /// <param name="reporter"></param>
         private void Migrate(KineticRuleData source, KineticRuleData target, DataMigrationReporter reporter)
         {
-            if (!IsRedundantReportEnabled && source.Name == target.Name && VectorComparer.ValueComparer.Compare(source.AttemptFrequency, target.AttemptFrequency) == 0) return;
-            
+            if (!IsRedundantReportEnabled && source.Name == target.Name &&
+                VectorComparer.ValueComparer.Compare(source.AttemptFrequency, target.AttemptFrequency) == 0) return;
+
             var comment = $"Frequency: \"{source.AttemptFrequency}\", Name: \"{source.Name}\"";
             target.AttemptFrequency = source.AttemptFrequency;
             target.Name = source.Name;
@@ -197,7 +202,8 @@ namespace Mocassin.UI.Xml.Helper.Migration
         }
 
         /// <summary>
-        ///     Overwrites the name of the source <see cref="ProjectDataObject"/> to the target and reports the action with the provided delegate
+        ///     Overwrites the name of the source <see cref="ProjectDataObject" /> to the target and reports the action with the
+        ///     provided delegate
         /// </summary>
         /// <param name="source"></param>
         /// <param name="target"></param>
@@ -211,7 +217,7 @@ namespace Mocassin.UI.Xml.Helper.Migration
         }
 
         /// <summary>
-        ///     Searches for a matching <see cref="PairEnergyData" /> in the provided target <see cref="ICollection{T}"/>
+        ///     Searches for a matching <see cref="PairEnergyData" /> in the provided target <see cref="ICollection{T}" />
         /// </summary>
         /// <param name="source"></param>
         /// <param name="targets"></param>
@@ -222,7 +228,7 @@ namespace Mocassin.UI.Xml.Helper.Migration
         }
 
         /// <summary>
-        ///     Searches for a matching <see cref="GroupEnergyData" /> in the provided target <see cref="ICollection{T}"/>
+        ///     Searches for a matching <see cref="GroupEnergyData" /> in the provided target <see cref="ICollection{T}" />
         /// </summary>
         /// <param name="source"></param>
         /// <param name="targets"></param>
@@ -233,7 +239,7 @@ namespace Mocassin.UI.Xml.Helper.Migration
         }
 
         /// <summary>
-        ///     Searches for a matching <see cref="KineticRuleData" /> in the provided target <see cref="ICollection{T}"/>
+        ///     Searches for a matching <see cref="KineticRuleData" /> in the provided target <see cref="ICollection{T}" />
         /// </summary>
         /// <param name="source"></param>
         /// <param name="targets"></param>

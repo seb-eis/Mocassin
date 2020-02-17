@@ -16,11 +16,11 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureMod
     /// </summary>
     public class StructureParameterControlViewModel : ProjectGraphControlViewModel
     {
-        private static IList<ISpaceGroup> CachedGroups { get; set; }
-        private StructureModelData structureModelData;
-        private ISpaceGroup selectedSpaceGroup;
         private CrystalParameterSetter parameterSetter;
+        private ISpaceGroup selectedSpaceGroup;
         private StructureInfoData structureInfo;
+        private StructureModelData structureModelData;
+        private static IList<ISpaceGroup> CachedGroups { get; set; }
 
         /// <summary>
         ///     Get or set the current <see cref="StructureModelData" />
@@ -48,7 +48,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureMod
         }
 
         /// <summary>
-        ///     Get the <see cref="IEnumerable{T}"/> of the current <see cref="ISymmetryOperation"/> collection
+        ///     Get the <see cref="IEnumerable{T}" /> of the current <see cref="ISymmetryOperation" /> collection
         /// </summary>
         public IEnumerable<ISymmetryOperation> CurrentSymmetryOperations => SelectedSpaceGroup?.Operations;
 
@@ -115,7 +115,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureMod
         }
 
         /// <summary>
-        ///     Creates a <see cref="CrystalParameterSetter" /> for the current <see cref="MocassinProject" /> using the provided <see cref="ISpaceGroup" />
+        ///     Creates a <see cref="CrystalParameterSetter" /> for the current <see cref="MocassinProject" /> using the provided
+        ///     <see cref="ISpaceGroup" />
         /// </summary>
         /// <param name="spaceGroup"></param>
         /// <returns></returns>

@@ -18,7 +18,7 @@ namespace Mocassin.Model.Particles
         /// <inheritdoc />
         public override IParticleCachePort AsReadOnly()
         {
-            return CachePort ?? (CachePort = new ParticleCacheManager(this, ModelProject));
+            return CachePort ??= new ParticleCacheManager(this, ModelProject);
         }
     }
 }

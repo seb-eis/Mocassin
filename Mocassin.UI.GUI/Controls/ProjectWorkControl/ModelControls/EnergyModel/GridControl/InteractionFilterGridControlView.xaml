@@ -14,26 +14,26 @@
 
   <Grid>
     <DataGrid Name="FilterDataGrid"
-      ItemsSource="{Binding Items}"
-      SelectedItem="{Binding SelectedItem}"
-      AutoGenerateColumns="False"
-      ColumnWidth="*">
+              ItemsSource="{Binding Items}"
+              SelectedItem="{Binding SelectedItem}"
+              AutoGenerateColumns="False"
+              ColumnWidth="*">
 
       <DataGrid.RowHeaderTemplate>
         <DataTemplate>
-          <views:ObjectRowHeaderLogo x:Name="RowHeaderLogo" 
+          <views:ObjectRowHeaderLogo x:Name="RowHeaderLogo"
                                      PreviewMouseLeftButtonDown="RowHeaderLogo_OnPreviewMouseLeftButtonDown"
                                      PreviewMouseLeftButtonUp="RowHeaderLogo_OnPreviewMouseLeftButtonUp"
                                      PreviewMouseMove="RowHeaderLogo_OnPreviewMouseMove"
-                                     Cursor="Hand"/>
+                                     Cursor="Hand" />
         </DataTemplate>
       </DataGrid.RowHeaderTemplate>
 
       <DataGrid.Columns>
         <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
-        <DataGridTextColumn Header="Min. Radius [&#x212b;]" 
+        <DataGridTextColumn Header="Min. Radius [&#x212b;]"
                             Binding="{Binding StartRadius, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
-        <DataGridTextColumn Header="Max. Radius [&#x212b;]" 
+        <DataGridTextColumn Header="Max. Radius [&#x212b;]"
                             Binding="{Binding EndRadius, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
 
         <comboBox:BindableDataGridComboBoxColumn

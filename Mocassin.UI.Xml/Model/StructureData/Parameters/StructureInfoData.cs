@@ -9,7 +9,7 @@ namespace Mocassin.UI.Xml.StructureModel
     ///     Serializable data object for <see cref="Mocassin.Model.Structures.IStructureInfo" /> model parameter creation
     /// </summary>
     [XmlRoot]
-    public class StructureInfoData : ModelParameterObject
+    public sealed class StructureInfoData : ModelParameterObject
     {
         /// <summary>
         ///     Creates new default <see cref="StructureInfoData" />

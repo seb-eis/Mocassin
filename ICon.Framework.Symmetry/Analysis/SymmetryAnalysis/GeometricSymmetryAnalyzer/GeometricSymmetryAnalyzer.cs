@@ -29,10 +29,10 @@ namespace Mocassin.Symmetry.Analysis
         /// <returns></returns>
         public SymmetryIndicator GetSymmetryIndicator(MassPointGeometryInfo info, IComparer<double> comparer)
         {
-            if (info == null) 
+            if (info == null)
                 throw new ArgumentNullException(nameof(info));
 
-            if (comparer == null) 
+            if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
             var tensorLength = new InertiaTensorSolver().GetPrincipalTensorLength(info.MassCenterInertiaTensor.Values, comparer);

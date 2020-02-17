@@ -13,51 +13,56 @@
   <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="*" />
-      <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}"/>
+      <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}" />
       <ColumnDefinition Width="*" />
     </Grid.ColumnDefinitions>
     <Grid.RowDefinitions>
-      <RowDefinition Height="Auto"/>
-      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
     </Grid.RowDefinitions>
 
     <local:BaseJobDescriptionControlView Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3"
                                          DataContext="{Binding}" />
     <StackPanel Grid.Column="0" Grid.Row="1">
       <content:HeaderedGroup Header="Relative Energy Break Tolerance:">
-        <TextBox Text="{Binding BreakTolerance, Converter={StaticResource App.Converter.NumericExpressionToValue}, TargetNullValue=...}">
+        <TextBox
+          Text="{Binding BreakTolerance, Converter={StaticResource App.Converter.NumericExpressionToValue}, TargetNullValue=...}">
           <TextBox.InputBindings>
             <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
-                        CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+                        CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
           </TextBox.InputBindings>
         </TextBox>
       </content:HeaderedGroup>
 
       <content:HeaderedGroup Header="Break Sample Size:">
-        <TextBox Text="{Binding BreakSampleLength, Converter={StaticResource App.Converter.NumericExpressionToValue}, TargetNullValue=...}">
+        <TextBox
+          Text="{Binding BreakSampleLength, Converter={StaticResource App.Converter.NumericExpressionToValue}, TargetNullValue=...}">
           <TextBox.InputBindings>
             <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
-                        CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+                        CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
           </TextBox.InputBindings>
         </TextBox>
-        </content:HeaderedGroup>
+      </content:HeaderedGroup>
     </StackPanel>
 
     <StackPanel Grid.Column="2" Grid.Row="1">
-      <content:HeaderedGroup Header="Break Sample Interval:"  Opacity=".5" HeaderToolTip="Info: Currently not implemented!">
-        <TextBox Text="{Binding BreakSampleInterval, Converter={StaticResource App.Converter.NumericExpressionToValue}, TargetNullValue=...}">
+      <content:HeaderedGroup Header="Break Sample Interval:" Opacity=".5"
+                             HeaderToolTip="Info: Currently not implemented!">
+        <TextBox
+          Text="{Binding BreakSampleInterval, Converter={StaticResource App.Converter.NumericExpressionToValue}, TargetNullValue=...}">
           <TextBox.InputBindings>
             <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
-                        CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+                        CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
           </TextBox.InputBindings>
         </TextBox>
       </content:HeaderedGroup>
 
       <content:HeaderedGroup Header="Result Sample Size:" Opacity=".5" HeaderToolTip="Info: Currently not implemented!">
-        <TextBox Text="{Binding ResultSampleMcs, Converter={StaticResource App.Converter.NumericExpressionToValue}, TargetNullValue=...}">
+        <TextBox
+          Text="{Binding ResultSampleMcs, Converter={StaticResource App.Converter.NumericExpressionToValue}, TargetNullValue=...}">
           <TextBox.InputBindings>
             <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
-                        CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+                        CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
           </TextBox.InputBindings>
         </TextBox>
       </content:HeaderedGroup>

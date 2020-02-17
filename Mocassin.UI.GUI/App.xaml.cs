@@ -50,7 +50,7 @@ namespace Mocassin.UI.GUI
             if (mainWindowViewModel == null) throw new ArgumentNullException(nameof(mainWindowViewModel));
             var mainWindow = new MainWindow
             {
-                DataContext = mainWindowViewModel, 
+                DataContext = mainWindowViewModel,
                 Resources = {["App.Default.FontSize"] = Settings.Default.Default_FontSize}
             };
             return mainWindow;

@@ -23,17 +23,6 @@ namespace Mocassin.Framework.Collections
             CompareFunction = compareFunction;
         }
 
-        /// <summary>
-        ///     Compares two values
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <returns></returns>
-        public override int Compare(T1 x, T1 y)
-        {
-            return CompareFunction(x, y);
-        }
-
         /// <inheritdoc />
         public bool Equals(T1 x, T1 y)
         {
@@ -44,6 +33,17 @@ namespace Mocassin.Framework.Collections
         public int GetHashCode(T1 obj)
         {
             return obj.GetHashCode();
+        }
+
+        /// <summary>
+        ///     Compares two values
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        public override int Compare(T1 x, T1 y)
+        {
+            return CompareFunction(x, y);
         }
     }
 }

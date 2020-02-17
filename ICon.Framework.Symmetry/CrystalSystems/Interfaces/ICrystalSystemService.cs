@@ -34,20 +34,20 @@ namespace Mocassin.Symmetry.CrystalSystems
         bool LoadNewSystem(ISpaceGroup group);
 
         /// <summary>
-        ///     Get a <see cref="ActiveCrystalSystem"/> for the passed <see cref="ISpaceGroup"/>
+        ///     Get a <see cref="ActiveCrystalSystem" /> for the passed <see cref="ISpaceGroup" />
         /// </summary>
         /// <param name="group"></param>
         /// <returns></returns>
         CrystalSystem GetSystem(ISpaceGroup group);
 
         /// <summary>
-        ///     Load a new crystal system into the service by a <see cref="CrystalSystemIdentification"/>
+        ///     Load a new crystal system into the service by a <see cref="CrystalSystemIdentification" />
         /// </summary>
         /// <returns></returns>
         bool LoadNewSystem(CrystalSystemIdentification identification);
 
         /// <summary>
-        ///     Get a copy of the current <see cref="CrystalParameterSet"/>
+        ///     Get a copy of the current <see cref="CrystalParameterSet" />
         /// </summary>
         /// <returns></returns>
         CrystalParameterSet CopyCurrentParameterSet();

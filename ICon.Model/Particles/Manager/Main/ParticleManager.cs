@@ -4,7 +4,7 @@ using Mocassin.Model.ModelProject;
 
 namespace Mocassin.Model.Particles
 {
-    /// <inheritdoc cref="IParticleManager"/>
+    /// <inheritdoc cref="IParticleManager" />
     internal class ParticleManager : ModelManager<ParticleModelData, ParticleModelCache, ParticleDataManager, ParticleCacheManager,
         ParticleInputManager, ParticleQueryManager, ParticleEventManager, ParticleUpdateManager>, IParticleManager
     {

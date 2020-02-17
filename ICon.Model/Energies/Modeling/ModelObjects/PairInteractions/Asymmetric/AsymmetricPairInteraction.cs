@@ -16,6 +16,10 @@ namespace Mocassin.Model.Energies
         /// <inheritdoc />
         public override IPairInteraction ChiralPartner => null;
 
+
+        /// <inheritdoc />
+        public override string ObjectName => "Asymmetric Pair Interaction";
+
         /// <inheritdoc />
         public AsymmetricPairInteraction()
         {
@@ -34,9 +38,11 @@ namespace Mocassin.Model.Energies
             return EnergyDictionary ?? new Dictionary<AsymmetricParticlePair, double>();
         }
 
-
         /// <inheritdoc />
-        public override string ObjectName => "Asymmetric Pair Interaction";
+        public override IEnumerable<PairEnergyEntry> GetEnergyEntries()
+        {
+            return EnergyDictionary.Select(item => new PairEnergyEntry(item.Key, item.Value));
+        }
 
         /// <inheritdoc />
         public override ModelObject PopulateFrom(IModelObject obj)
@@ -64,12 +70,6 @@ namespace Mocassin.Model.Energies
 
             EnergyDictionary[particlePair] = energyEntry.Energy;
             return true;
-        }
-
-        /// <inheritdoc />
-        public override IEnumerable<PairEnergyEntry> GetEnergyEntries()
-        {
-            return EnergyDictionary.Select(item => new PairEnergyEntry(item.Key, item.Value));
         }
     }
 }

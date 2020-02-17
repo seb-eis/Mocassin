@@ -39,7 +39,7 @@ namespace Mocassin.Model.Particles
         bool EqualsInModelProperties(IParticle other, IComparer<double> comparer);
 
         /// <summary>
-        ///     Get the <see cref="IParticle"/> as a typical ion description <see cref="string"/> used in chemistry
+        ///     Get the <see cref="IParticle" /> as a typical ion description <see cref="string" /> used in chemistry
         /// </summary>
         /// <returns></returns>
         string GetIonString();

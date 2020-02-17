@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Runtime.Serialization;
 using Mocassin.Mathematics.Extensions;
 
-namespace Mocassin.Mathematics.Bitmasks
+namespace Mocassin.Mathematics.Bitmask
 {
     /// <summary>
     ///     Wrapped 32 bit unsigned integer to be used as 32 entry bitmask (Waring: Mutable struct!)

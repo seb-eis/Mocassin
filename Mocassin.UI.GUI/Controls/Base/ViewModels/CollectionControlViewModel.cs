@@ -11,8 +11,8 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
     /// <typeparam name="T"></typeparam>
     public class CollectionControlViewModel<T> : ViewModelBase
     {
-        private T selectedItem;
         private ICollection<T> items;
+        private T selectedItem;
 
         /// <summary>
         ///     Get or set the <see cref="ICollection{T}" /> fo

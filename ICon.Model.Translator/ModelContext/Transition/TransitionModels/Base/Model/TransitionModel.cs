@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Mocassin.Framework.Collections;
-using Mocassin.Framework.Extensions;
 using Mocassin.Model.Particles;
 
 namespace Mocassin.Model.Translator.ModelContext

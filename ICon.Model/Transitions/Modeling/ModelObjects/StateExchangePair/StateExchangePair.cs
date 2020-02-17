@@ -24,17 +24,6 @@ namespace Mocassin.Model.Transitions
         public override string ObjectName => "State Exchange Pair";
 
         /// <inheritdoc />
-        public override ModelObject PopulateFrom(IModelObject obj)
-        {
-            if (!(CastIfNotDeprecated<IStateExchangePair>(obj) is { } statePair))
-                return null;
-
-            DonorParticle = statePair.DonorParticle;
-            AcceptorParticle = statePair.AcceptorParticle;
-            return this;
-        }
-
-        /// <inheritdoc />
         public bool Equals(IStateExchangePair other)
         {
             if (other == null)
@@ -63,6 +52,17 @@ namespace Mocassin.Model.Transitions
             return donorComp == 0
                 ? AcceptorParticle.Index.CompareTo(other.AcceptorParticle)
                 : donorComp;
+        }
+
+        /// <inheritdoc />
+        public override ModelObject PopulateFrom(IModelObject obj)
+        {
+            if (!(CastIfNotDeprecated<IStateExchangePair>(obj) is { } statePair))
+                return null;
+
+            DonorParticle = statePair.DonorParticle;
+            AcceptorParticle = statePair.AcceptorParticle;
+            return this;
         }
     }
 }

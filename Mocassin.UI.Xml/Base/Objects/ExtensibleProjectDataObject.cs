@@ -4,7 +4,7 @@ using System.Xml.Serialization;
 namespace Mocassin.UI.Xml.Base
 {
     /// <summary>
-    ///     Base class for all <see cref="ProjectDataObject"/> instances that support a resource container
+    ///     Base class for all <see cref="ProjectDataObject" /> instances that support a resource container
     /// </summary>
     public class ExtensibleProjectDataObject : ProjectDataObject
     {
@@ -22,7 +22,7 @@ namespace Mocassin.UI.Xml.Base
         }
 
         /// <summary>
-        ///     Creates a new <see cref="ExtensibleProjectDataObject"/> with empty resources
+        ///     Creates a new <see cref="ExtensibleProjectDataObject" /> with empty resources
         /// </summary>
         protected ExtensibleProjectDataObject()
         {

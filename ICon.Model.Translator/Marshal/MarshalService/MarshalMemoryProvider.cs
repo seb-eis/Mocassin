@@ -15,6 +15,16 @@ namespace Mocassin.Model.Translator
         public object LockObj { get; } = new object();
 
         /// <summary>
+        ///     Pointer to unmanaged memory
+        /// </summary>
+        public IntPtr Pointer { get; }
+
+        /// <summary>
+        ///     Size of the unmanaged memory
+        /// </summary>
+        public int TypeSize { get; }
+
+        /// <summary>
         ///     Creates new marshal memory provider
         /// </summary>
         /// <param name="pointer"></param>
@@ -25,15 +35,11 @@ namespace Mocassin.Model.Translator
             TypeSize = typeSize;
         }
 
-        /// <summary>
-        ///     Pointer to unmanaged memory
-        /// </summary>
-        public IntPtr Pointer { get; }
-
-        /// <summary>
-        ///     Size of the unmanaged memory
-        /// </summary>
-        public int TypeSize { get; }
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            Marshal.FreeHGlobal(Pointer);
+        }
 
         /// <summary>
         ///     Tries to get an exclusive lock on the target
@@ -53,12 +59,6 @@ namespace Mocassin.Model.Translator
         {
             Monitor.Exit(LockObj);
         }
-
-        /// <inheritdoc />
-        public void Dispose()
-        {
-            Marshal.FreeHGlobal(Pointer);
-        }
     }
 
     /// <summary>
@@ -66,11 +66,6 @@ namespace Mocassin.Model.Translator
     /// </summary>
     public class LockedMarshalMemory : IDisposable
     {
-        public LockedMarshalMemory(MarshalMemoryProvider memoryProvider)
-        {
-            MemoryProvider = memoryProvider ?? throw new ArgumentNullException(nameof(memoryProvider));
-        }
-
         /// <summary>
         ///     The locked marshal memory provider
         /// </summary>
@@ -85,6 +80,11 @@ namespace Mocassin.Model.Translator
         ///     Get the size of the structure
         /// </summary>
         public int TypeSize => MemoryProvider.TypeSize;
+
+        public LockedMarshalMemory(MarshalMemoryProvider memoryProvider)
+        {
+            MemoryProvider = memoryProvider ?? throw new ArgumentNullException(nameof(memoryProvider));
+        }
 
         /// <inheritdoc />
         public void Dispose()

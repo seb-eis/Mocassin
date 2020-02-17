@@ -52,7 +52,7 @@ namespace Mocassin.Model.Basic
         ///     Searches the class for all conflict resolver creation methods and assigns them to their affiliated property.
         ///     Assigns empty resolvers if no creation method is specified
         /// </summary>
-        protected virtual void InitializeConflictResolvers()
+        protected void InitializeConflictResolvers()
         {
             const BindingFlags flags = BindingFlags.Public | BindingFlags.Instance;
             foreach (var propertyInfo in GetType().GetProperties(flags)
@@ -72,10 +72,8 @@ namespace Mocassin.Model.Basic
                     nameof(propertyInfo));
             }
 
-            if (FindResolverSourceMethod(propertyInfo) is Func<object> resolverSource)
-                propertyInfo.SetValue(this, resolverSource.Invoke());
-            else
-                propertyInfo.SetValue(this, MakeEmptyResolver(propertyInfo));
+            propertyInfo.SetValue(this,
+                FindResolverSourceMethod(propertyInfo) is { } resolverSource ? resolverSource.Invoke() : MakeEmptyResolver(propertyInfo));
         }
 
         /// <summary>
@@ -110,7 +108,7 @@ namespace Mocassin.Model.Basic
             }
 
             const BindingFlags flags = BindingFlags.NonPublic | BindingFlags.Instance;
-            if (!(new DelegateCreator().CreateWhere(this, SourceDelegateSearchPredicate, flags).SingleOrDefault() is Delegate @delegate)
+            if (!(new DelegateCreator().CreateWhere(this, SourceDelegateSearchPredicate, flags).SingleOrDefault() is { } @delegate)
             ) return null;
 
             if (@delegate.Method.ReturnParameter != null && @delegate.Method.ReturnParameter.ParameterType != typeof(object))
@@ -125,7 +123,7 @@ namespace Mocassin.Model.Basic
                     "Marked provider delegate does not have an empty parameter list and cannot be cast to Func<object>");
             }
 
-            if (@delegate is Func<object> creator) 
+            if (@delegate is Func<object> creator)
                 return creator;
 
             throw new InvalidOperationException("Cast of provider delegate to Func<object> failed due to unknown reason");

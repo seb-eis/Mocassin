@@ -23,6 +23,12 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <inheritdoc />
+        public override bool CheckBuildRequirements()
+        {
+            return ModelProject?.GetAllManagers().Any(x => x is ITransitionManager) ?? false;
+        }
+
+        /// <inheritdoc />
         protected override ITransitionModelContext PopulateContext(ITransitionModelContext modelContext)
         {
             if (!CheckBuildRequirements()) return modelContext;
@@ -53,15 +59,9 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <inheritdoc />
         protected override void SetNullBuildersToDefault()
         {
-            MetropolisTransitionModelBuilder = MetropolisTransitionModelBuilder ?? new MetropolisTransitionModelBuilder(ModelProject);
-            KineticTransitionModelBuilder = KineticTransitionModelBuilder ?? new KineticTransitionModelBuilder(ModelProject);
-            PositionTransitionModelBuilder = PositionTransitionModelBuilder ?? new PositionTransitionModelBuilder(ModelProject);
-        }
-
-        /// <inheritdoc />
-        public override bool CheckBuildRequirements()
-        {
-            return ModelProject?.GetAllManagers().Any(x => x is ITransitionManager) ?? false;
+            MetropolisTransitionModelBuilder ??= new MetropolisTransitionModelBuilder(ModelProject);
+            KineticTransitionModelBuilder ??= new KineticTransitionModelBuilder(ModelProject);
+            PositionTransitionModelBuilder ??= new PositionTransitionModelBuilder(ModelProject);
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Xml.Serialization;
@@ -17,10 +16,10 @@ namespace Mocassin.UI.Xml.Jobs
     [XmlRoot]
     public class LatticeConfigData : ProjectDataObject, IDuplicable<LatticeConfigData>
     {
+        private ObservableCollection<DopingValueData> dopingValues;
         private int sizeA;
         private int sizeB;
         private int sizeC;
-        private ObservableCollection<DopingValueData> dopingValues;
 
         /// <summary>
         ///     Get or set the number of unit cells in 'A' direction
@@ -71,6 +70,25 @@ namespace Mocassin.UI.Xml.Jobs
             DopingValues = new ObservableCollection<DopingValueData>();
         }
 
+        /// <inheritdoc />
+        public LatticeConfigData Duplicate()
+        {
+            var result = new LatticeConfigData
+            {
+                SizeA = SizeA,
+                SizeB = SizeB,
+                SizeC = SizeC,
+                DopingValues = DopingValues.Select(x => x.Duplicate()).ToObservableCollection()
+            };
+            return result;
+        }
+
+        /// <inheritdoc />
+        object IDuplicable.Duplicate()
+        {
+            return Duplicate();
+        }
+
         /// <summary>
         ///     Creates an internal <see cref="LatticeConfiguration" /> from the serializable data object
         /// </summary>
@@ -90,25 +108,6 @@ namespace Mocassin.UI.Xml.Jobs
             };
 
             return result;
-        }
-
-        /// <inheritdoc />
-        public LatticeConfigData Duplicate()
-        {
-            var result = new LatticeConfigData
-            {
-                SizeA = SizeA,
-                SizeB = SizeB,
-                SizeC = SizeC,
-                DopingValues = DopingValues.Select(x => x.Duplicate()).ToObservableCollection()
-            };
-            return result;
-        }
-
-        /// <inheritdoc />
-        object IDuplicable.Duplicate()
-        {
-            return Duplicate();
         }
     }
 }

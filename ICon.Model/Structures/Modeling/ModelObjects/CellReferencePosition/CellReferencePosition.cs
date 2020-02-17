@@ -23,17 +23,6 @@ namespace Mocassin.Model.Structures
         public override string ObjectName => "Unit Cell Position";
 
         /// <inheritdoc />
-        public override ModelObject PopulateFrom(IModelObject obj)
-        {
-            if (!(CastIfNotDeprecated<ICellReferencePosition>(obj) is { } position)) return null;
-
-            Stability = position.Stability;
-            Vector = position.Vector;
-            OccupationSet = position.OccupationSet;
-            return this;
-        }
-
-        /// <inheritdoc />
         public FractionalPosition AsPosition()
         {
             return new FractionalPosition(Vector, OccupationSet.Index, Stability);
@@ -49,6 +38,17 @@ namespace Mocassin.Model.Structures
         public bool IsValidAndUnstable()
         {
             return !IsDeprecated && Stability == PositionStability.Unstable;
+        }
+
+        /// <inheritdoc />
+        public override ModelObject PopulateFrom(IModelObject obj)
+        {
+            if (!(CastIfNotDeprecated<ICellReferencePosition>(obj) is { } position)) return null;
+
+            Stability = position.Stability;
+            Vector = position.Vector;
+            OccupationSet = position.OccupationSet;
+            return this;
         }
     }
 }

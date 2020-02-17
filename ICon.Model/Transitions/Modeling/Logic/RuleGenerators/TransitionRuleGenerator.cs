@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Mocassin.Framework.Collections;
 using Mocassin.Framework.Extensions;
-using Mocassin.Framework.Xml;
 using Mocassin.Mathematics.Permutation;
 using Mocassin.Model.Particles;
 using Mocassin.Model.Structures;
@@ -448,7 +446,7 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <summary>
-        /// Checks if a rule movement description is like the intersticialcy type mechanism
+        ///     Checks if a rule movement description is like the intersticialcy type mechanism
         /// </summary>
         /// <param name="movement"></param>
         /// <returns></returns>
@@ -500,7 +498,7 @@ namespace Mocassin.Model.Transitions
 
             for (var i = 0; i < rule.PathLength; i++)
             {
-                if (rule.StartState[i].IsVoid) 
+                if (rule.StartState[i].IsVoid)
                     continue;
 
                 if (statePairMap[i].Count(x => x.DonorParticle == rule.StartState[i]) == 0)

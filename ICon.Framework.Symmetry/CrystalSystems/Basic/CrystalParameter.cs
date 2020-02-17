@@ -13,10 +13,10 @@
         /// <summary>
         ///     Defines if the value is immutable in te current context
         /// </summary>
-        public  bool IsContextImmutable { get; }
+        public bool IsContextImmutable { get; }
 
         /// <summary>
-        ///     Creates new <see cref="CrystalParameter"/> from value and optional constant flag
+        ///     Creates new <see cref="CrystalParameter" /> from value and optional constant flag
         /// </summary>
         /// <param name="value"></param>
         /// <param name="isContextImmutable"></param>
@@ -27,7 +27,7 @@
         }
 
         /// <summary>
-        ///     Creates a new <see cref="CrystalParameter"/> with a changed value
+        ///     Creates a new <see cref="CrystalParameter" /> with a changed value
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>

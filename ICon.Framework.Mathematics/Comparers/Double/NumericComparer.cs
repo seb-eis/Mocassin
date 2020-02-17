@@ -12,6 +12,15 @@ namespace Mocassin.Mathematics.Comparer
         /// </summary>
         public abstract bool IsZeroCompatible { get; }
 
+        /// <inheritdoc />
+        public abstract bool Equals(double x, double y);
+
+        /// <inheritdoc />
+        public int GetHashCode(double obj)
+        {
+            return obj.GetHashCode();
+        }
+
         /// <summary>
         ///     Creates a new ULP comparator object with the specified step count
         /// </summary>
@@ -69,14 +78,5 @@ namespace Mocassin.Mathematics.Comparer
         /// <param name="rhs"></param>
         /// <returns></returns>
         public abstract override int Compare(double lhs, double rhs);
-
-        /// <inheritdoc />
-        public abstract bool Equals(double x, double y);
-
-        /// <inheritdoc />
-        public int GetHashCode(double obj)
-        {
-            return obj.GetHashCode();
-        }
     }
 }

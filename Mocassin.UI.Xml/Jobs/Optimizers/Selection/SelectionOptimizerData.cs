@@ -15,8 +15,8 @@ namespace Mocassin.UI.Xml.Jobs
     [XmlRoot]
     public class SelectionOptimizerData : ManualOptimizerData, IDuplicable<SelectionOptimizerData>
     {
-        private ModelObjectReference<CellReferencePosition> startReferencePosition;
         private ModelObjectReference<Particle> removedParticle;
+        private ModelObjectReference<CellReferencePosition> startReferencePosition;
 
         /// <summary>
         ///     Get or set the <see cref="ModelObjectReference{T}" /> to the <see cref="CellReferencePosition" /> that the
@@ -41,17 +41,6 @@ namespace Mocassin.UI.Xml.Jobs
         }
 
         /// <inheritdoc />
-        public override IPostBuildOptimizer ToInternal(IModelProject modelProject)
-        {
-            var particle = modelProject.DataTracker.FindObjectByKey<IParticle>(RemovedParticle.Key);
-            var cellReferencePosition = modelProject.DataTracker.FindObjectByKey<ICellReferencePosition>(StartReferencePosition.Key);
-            return new JumpSelectionOptimizer
-            {
-                RemoveCombinations = new List<(IParticle, ICellReferencePosition)> {(particle, cellReferencePosition)}
-            };
-        }
-
-        /// <inheritdoc />
         public SelectionOptimizerData Duplicate()
         {
             return new SelectionOptimizerData
@@ -66,6 +55,17 @@ namespace Mocassin.UI.Xml.Jobs
         object IDuplicable.Duplicate()
         {
             return Duplicate();
+        }
+
+        /// <inheritdoc />
+        public override IPostBuildOptimizer ToInternal(IModelProject modelProject)
+        {
+            var particle = modelProject.DataTracker.FindObjectByKey<IParticle>(RemovedParticle.Key);
+            var cellReferencePosition = modelProject.DataTracker.FindObjectByKey<ICellReferencePosition>(StartReferencePosition.Key);
+            return new JumpSelectionOptimizer
+            {
+                RemoveCombinations = new List<(IParticle, ICellReferencePosition)> {(particle, cellReferencePosition)}
+            };
         }
     }
 }

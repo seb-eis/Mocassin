@@ -89,14 +89,6 @@ namespace Mocassin.Framework.Collections
             return List.GetEnumerator();
         }
 
-        /// <summary>
-        ///     Calls excess trim on the internal list object
-        /// </summary>
-        public void TrimExcess()
-        {
-            List.TrimExcess();
-        }
-
         /// <inheritdoc />
         public abstract int IndexOf(T1 item);
 
@@ -110,16 +102,24 @@ namespace Mocassin.Framework.Collections
         public abstract bool Remove(T1 item);
 
         /// <summary>
+        ///     Calls excess trim on the internal list object
+        /// </summary>
+        public void TrimExcess()
+        {
+            List.TrimExcess();
+        }
+
+        /// <summary>
         ///     C++ Style lower bound binary search for sorted (provided comparer) collections: O log(n) complexity search of first
         ///     entry that does not compare less than value
         /// </summary>
         public int GetCppLowerBound(T1 item)
         {
-            var (currentIndex, firstIndex, lastIndex, step, counter) = (0, 0, List.Count, 0, List.Count);
+            var (firstIndex, counter) = (0, List.Count);
             while (counter > 0)
             {
-                step = counter / 2;
-                currentIndex = firstIndex + step;
+                var step = counter / 2;
+                var currentIndex = firstIndex + step;
                 if (Comparer.Compare(List[currentIndex], item) == -1)
                 {
                     firstIndex = ++currentIndex;
@@ -138,11 +138,11 @@ namespace Mocassin.Framework.Collections
         /// </summary>
         public int GetCppUpperBound(T1 item)
         {
-            var (currentIndex, firstIndex, lastIndex, step, counter) = (0, 0, List.Count, 0, List.Count);
+            var (firstIndex, counter) = (0, List.Count);
             while (counter > 0)
             {
-                step = counter / 2;
-                currentIndex = firstIndex + step;
+                var step = counter / 2;
+                var currentIndex = firstIndex + step;
                 if (Comparer.Compare(item, List[currentIndex]) > -1)
                 {
                     firstIndex = ++currentIndex;

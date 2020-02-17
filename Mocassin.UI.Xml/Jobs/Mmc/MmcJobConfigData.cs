@@ -13,9 +13,9 @@ namespace Mocassin.UI.Xml.Jobs
     [XmlRoot]
     public class MmcJobConfigData : JobConfigData, IDuplicable<MmcJobConfigData>
     {
-        private string breakTolerance;
-        private string breakSampleLength;
         private string breakSampleInterval;
+        private string breakSampleLength;
+        private string breakTolerance;
         private string resultSampleMcs;
 
         /// <summary>
@@ -56,6 +56,26 @@ namespace Mocassin.UI.Xml.Jobs
         {
             get => resultSampleMcs;
             set => SetProperty(ref resultSampleMcs, value);
+        }
+
+        /// <inheritdoc />
+        public MmcJobConfigData Duplicate()
+        {
+            var result = new MmcJobConfigData
+            {
+                BreakTolerance = BreakTolerance,
+                BreakSampleInterval = BreakSampleInterval,
+                BreakSampleLength = BreakSampleLength,
+                ResultSampleMcs = ResultSampleMcs
+            };
+            CopyBaseDataTo(result);
+            return result;
+        }
+
+        /// <inheritdoc />
+        object IDuplicable.Duplicate()
+        {
+            return Duplicate();
         }
 
         /// <inheritdoc />
@@ -112,26 +132,6 @@ namespace Mocassin.UI.Xml.Jobs
             };
 
             return obj;
-        }
-
-        /// <inheritdoc />
-        public MmcJobConfigData Duplicate()
-        {
-            var result = new MmcJobConfigData
-            {
-                BreakTolerance = BreakTolerance,
-                BreakSampleInterval = BreakSampleInterval,
-                BreakSampleLength = BreakSampleLength,
-                ResultSampleMcs = ResultSampleMcs
-            };
-            CopyBaseDataTo(result);
-            return result;
-        }
-
-        /// <inheritdoc />
-        object IDuplicable.Duplicate()
-        {
-            return Duplicate();
         }
     }
 }

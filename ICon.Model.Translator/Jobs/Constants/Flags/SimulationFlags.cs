@@ -3,7 +3,7 @@
 namespace Mocassin.Model.Translator.Jobs
 {
     /// <summary>
-    ///     Basic simulation job flags that are shared between the different simulation types
+    ///     Basic simulation job flags that are shared between the different simulation types. These flags are used by the internal system
     /// </summary>
     [Flags]
     public enum SimulationExecutionFlags
@@ -34,27 +34,46 @@ namespace Mocassin.Model.Translator.Jobs
         NoSaving = 1 << 3,
 
         /// <summary>
-        ///     Marks a simulation to correct the dual-definition of degrees of freedom (Only relevant to KMC time-stepping calculation)
+        ///     Marks a simulation to correct the dual-definition of degrees of freedom (Only relevant to KMC time-stepping
+        ///     calculation)
         /// </summary>
-        /// <remarks> In a completely unoptimized simulation every degree of freedom exists twice in the system which causes invalid time calculation</remarks>
-        UseDualDofCorrection =  1 << 4
+        /// <remarks>
+        ///     In a completely unoptimized simulation every degree of freedom exists twice in the system which causes
+        ///     invalid time calculation
+        /// </remarks>
+        UseDualDofCorrection = 1 << 4,
+
+        /// <summary>
+        ///     Marks a simulation to skip the time expensive jump logging step into a histogram (KMC only)
+        /// </summary>
+        NoJumpLogging = 1 << 5,
+
+        /// <summary>
+        ///     Marks a simulation to use the fast exponential approximation by N. Schraudolph
+        /// </summary>
+        UseFastExp = 1 << 6
     }
 
     /// <summary>
-    ///     Custom simulation job flags that provides customizable parts of <see cref="SimulationExecutionFlags"/>
+    ///     Custom simulation job flags that provides customizable parts of <see cref="SimulationExecutionFlags" /> as overwrites
     /// </summary>
     [Flags]
     public enum SimulationExecutionOverwriteFlags
     {
         /// <summary>
-        ///     Marks nothing
+        ///     Marks the simulation to not generate state dumps as checkpoints
         /// </summary>
-        None = 0,
+        NoSaving = SimulationExecutionFlags.NoSaving,
 
         /// <summary>
-        ///     Marks the skip the simulation to generate state dumps as checkpoints
+        ///     Marks a simulation to skip the time expensive jump logging step into a histogram (KMC only)
         /// </summary>
-        NoSaving = SimulationExecutionFlags.NoSaving
+        NoJumpLogging = SimulationExecutionFlags.NoJumpLogging,
+
+        /// <summary>
+        ///     Marks a simulation to use the fast exponential approximation by N. Schraudolph
+        /// </summary>
+        UseFastExp = SimulationExecutionFlags.UseFastExp
     }
 
     /// <summary>

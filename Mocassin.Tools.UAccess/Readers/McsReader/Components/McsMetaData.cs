@@ -11,61 +11,51 @@ namespace Mocassin.Tools.UAccess.Readers.McsReader.Components
         /// <summary>
         ///     Get the simulated time span in [s]
         /// </summary>
-        [MarshalAs(UnmanagedType.R8)]
-        public readonly double SimulatedTime;
+        [MarshalAs(UnmanagedType.R8)] public readonly double SimulatedTime;
 
         /// <summary>
         ///     Get the jump normalization during simulation
         /// </summary>
-        [MarshalAs(UnmanagedType.R8)]
-        public readonly double JumpNormalization;
+        [MarshalAs(UnmanagedType.R8)] public readonly double JumpNormalization;
 
         /// <summary>
         ///     Get the raw max jump probability used for normalization calculation
         /// </summary>
-        [MarshalAs(UnmanagedType.R8)]
-        public readonly double MaxRawJumpProbability;
+        [MarshalAs(UnmanagedType.R8)] public readonly double MaxRawJumpProbability;
 
         /// <summary>
         ///     Get the lattice energy in [eV]
         /// </summary>
-        [MarshalAs(UnmanagedType.R8)]
-        public readonly double LatticeEnergy;
+        [MarshalAs(UnmanagedType.R8)] public readonly double LatticeEnergy;
 
         /// <summary>
         ///     Get the total program execution time in [s]
         /// </summary>
-        [MarshalAs(UnmanagedType.R8)]
-        public readonly double TotalExecutionTime;
+        [MarshalAs(UnmanagedType.R8)] public readonly double TotalExecutionTime;
 
         /// <summary>
         ///     Get the simulation cycle execution rate in [Hz]
         /// </summary>
-        [MarshalAs(UnmanagedType.R8)]
-        public readonly double SimulationCycleRate;
+        [MarshalAs(UnmanagedType.R8)] public readonly double SimulationCycleRate;
 
         /// <summary>
         ///     Get the simulation cycle success rate in [Hz]
         /// </summary>
-        [MarshalAs(UnmanagedType.R8)]
-        public readonly double SimulationSuccessRate;
+        [MarshalAs(UnmanagedType.R8)] public readonly double SimulationSuccessRate;
 
         /// <summary>
         ///     Get the execution time per block in [s]
         /// </summary>
-        [MarshalAs(UnmanagedType.R8)]
-        public readonly double BlockExecutionTime;
+        [MarshalAs(UnmanagedType.R8)] public readonly double BlockExecutionTime;
 
         /// <summary>
-        ///     Get the 64 bit state of the PCG32 random number generator as a <see cref="long"/> value
+        ///     Get the 64 bit state of the PCG32 random number generator as a <see cref="long" /> value
         /// </summary>
-        [MarshalAs(UnmanagedType.I8)]
-        public readonly long Pcg32State;
+        [MarshalAs(UnmanagedType.I8)] public readonly long Pcg32State;
 
         /// <summary>
-        ///     Get the 64 bit increase of the PCG32 random number generator as a <see cref="long"/> value
+        ///     Get the 64 bit increase of the PCG32 random number generator as a <see cref="long" /> value
         /// </summary>
-        [MarshalAs(UnmanagedType.I8)]
-        public readonly long Pcg32Increase;
+        [MarshalAs(UnmanagedType.I8)] public readonly long Pcg32Increase;
     }
 }

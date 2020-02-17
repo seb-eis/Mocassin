@@ -17,9 +17,9 @@ namespace Mocassin.UI.Xml.Customization
     [XmlRoot("TransitionModelParametrization")]
     public class KineticRuleSetData : ProjectDataObject, IDuplicable<KineticRuleSetData>
     {
+        private ObservableCollection<KineticRuleData> kineticRules;
         private ModelObjectReference<KineticTransition> transition;
         private int transitionIndex;
-        private ObservableCollection<KineticRuleData> kineticRules;
 
         /// <summary>
         ///     Get or set the <see cref="ModelObjectReference{T}" /> for the affiliated <see cref="KineticTransition" />
@@ -50,6 +50,25 @@ namespace Mocassin.UI.Xml.Customization
         {
             get => kineticRules;
             set => SetProperty(ref kineticRules, value);
+        }
+
+        /// <inheritdoc />
+        public KineticRuleSetData Duplicate()
+        {
+            var copy = new KineticRuleSetData
+            {
+                Name = Name,
+                transition = transition.Duplicate(),
+                transitionIndex = transitionIndex,
+                kineticRules = kineticRules.Select(x => x.Duplicate()).ToObservableCollection()
+            };
+            return copy;
+        }
+
+        /// <inheritdoc />
+        object IDuplicable.Duplicate()
+        {
+            return Duplicate();
         }
 
         /// <summary>
@@ -91,25 +110,6 @@ namespace Mocassin.UI.Xml.Customization
             };
 
             return obj;
-        }
-
-        /// <inheritdoc />
-        public KineticRuleSetData Duplicate()
-        {
-            var copy = new KineticRuleSetData
-            {
-                Name = Name,
-                transition = transition.Duplicate(),
-                transitionIndex = transitionIndex,
-                kineticRules = kineticRules.Select(x => x.Duplicate()).ToObservableCollection()
-            };
-            return copy;
-        }
-
-        /// <inheritdoc />
-        object IDuplicable.Duplicate()
-        {
-            return Duplicate();
         }
     }
 }

@@ -6,16 +6,10 @@ using System.Windows.Markup;
 namespace Mocassin.UI.GUI.Base.Converter
 {
     /// <summary>
-    ///     Base class for all <see cref="IMultiValueConverter"/> implementations that are a <see cref="MarkupExtension"/>
+    ///     Base class for all <see cref="IMultiValueConverter" /> implementations that are a <see cref="MarkupExtension" />
     /// </summary>
     public abstract class MultiValueConverter : MarkupExtension, IMultiValueConverter
     {
-        /// <inheritdoc />
-        public override object ProvideValue(IServiceProvider serviceProvider)
-        {
-            return this;
-        }
-
         /// <inheritdoc />
         public abstract object Convert(object[] values, Type targetType, object parameter, CultureInfo culture);
 
@@ -23,6 +17,12 @@ namespace Mocassin.UI.GUI.Base.Converter
         public virtual object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
             throw new NotSupportedException("Back conversion is not supported by this converter");
+        }
+
+        /// <inheritdoc />
+        public override object ProvideValue(IServiceProvider serviceProvider)
+        {
+            return this;
         }
     }
 }

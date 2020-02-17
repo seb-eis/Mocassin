@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Linq;
+using System.Globalization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -11,7 +11,6 @@ using Mocassin.UI.GUI.Base.ViewModels;
 using Mocassin.UI.GUI.Base.ViewModels.JsonBrowser;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
 using Mocassin.UI.GUI.Properties;
-using Mocassin.UI.Xml.Base;
 using Mocassin.UI.Xml.ProjectLibrary;
 using Newtonsoft.Json;
 
@@ -20,7 +19,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.LibraryBrowser
     /// <summary>
     ///     The <see cref="ViewModelBase" /> for <see cref="ProjectLibraryBrowserView" />
     /// </summary>
-    public class ProjectLibraryBrowserViewModel : PrimaryControlViewModel, IObjectDropAcceptor
+    public class ProjectLibraryBrowserViewModel : PrimaryControlViewModel, IDataObjectAcceptor
     {
         private JsonBrowserViewModel jsonBrowserViewModel;
         private string objectJson;
@@ -37,7 +36,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.LibraryBrowser
         }
 
         /// <summary>
-        ///     Get or set the json <see cref="string"/> of a passed object
+        ///     Get or set the json <see cref="string" /> of a passed object
         /// </summary>
         public string ObjectJson
         {
@@ -45,9 +44,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.LibraryBrowser
             set => SetProperty(ref objectJson, value);
         }
 
-        
+
         /// <summary>
-        ///     Get or set the Xml <see cref="string"/> of a passed object
+        ///     Get or set the Xml <see cref="string" /> of a passed object
         /// </summary>
         public string ObjectXml
         {
@@ -56,7 +55,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.LibraryBrowser
         }
 
         /// <summary>
-        ///     Get a <see cref="AsyncRelayCommand{T}" /> to set a <see cref="TreeViewItem"/> representation of the parameter
+        ///     Get a <see cref="AsyncRelayCommand{T}" /> to set a <see cref="TreeViewItem" /> representation of the parameter
         /// </summary>
         public AsyncRelayCommand<object> SetObjectTreeViewCommand { get; }
 
@@ -73,22 +72,27 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.LibraryBrowser
         public AsyncRelayCommand<object> SetObjectXmlCommand { get; }
 
         /// <inheritdoc />
-        public Command<IDataObject> HandleDropAddCommand { get; }
+        public Command<IDataObject> ProcessDataObjectCommand { get; }
 
         /// <inheritdoc />
         public ProjectLibraryBrowserViewModel(IMocassinProjectControl projectControl)
             : base(projectControl)
         {
             JsonBrowserViewModel = new JsonBrowserViewModel();
-            Func<object, bool> canExecute = obj => obj != null;
-            SetObjectTreeViewCommand = new AsyncRelayCommand<object>(SetActiveObjectTreeViewAsync, canExecute);
-            SetObjectXmlCommand = new AsyncRelayCommand<object>(SetActiveObjectXmlAsync, canExecute);
-            SetObjectJsonCommand = new AsyncRelayCommand<object>(SetActiveObjectJsonAsync, canExecute);
-            HandleDropAddCommand = new RelayCommand<IDataObject>(SetObjectDropByFormat, canExecute);
+
+            bool CanExecute(object obj)
+            {
+                return obj != null;
+            }
+
+            SetObjectTreeViewCommand = new AsyncRelayCommand<object>(SetActiveObjectTreeViewAsync, CanExecute);
+            SetObjectXmlCommand = new AsyncRelayCommand<object>(SetActiveObjectXmlAsync, CanExecute);
+            SetObjectJsonCommand = new AsyncRelayCommand<object>(SetActiveObjectJsonAsync, CanExecute);
+            ProcessDataObjectCommand = new RelayCommand<IDataObject>(SetObjectDropByFormat, CanExecute);
         }
 
         /// <summary>
-        ///     Rebuilds the <see cref="TreeViewItem" /> collection of the passed <see cref="object"/>
+        ///     Rebuilds the <see cref="TreeViewItem" /> collection of the passed <see cref="object" />
         /// </summary>
         private async Task SetActiveObjectTreeViewAsync(object obj)
         {
@@ -115,11 +119,11 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.LibraryBrowser
         /// <returns></returns>
         private async Task SetActiveObjectJsonAsync(object obj)
         {
-            var  settings = new JsonSerializerSettings
+            var settings = new JsonSerializerSettings
             {
                 PreserveReferencesHandling = PreserveReferencesHandling.Objects,
                 TypeNameHandling = TypeNameHandling.None,
-                Culture = System.Globalization.CultureInfo.InvariantCulture,
+                Culture = CultureInfo.InvariantCulture
             };
 
             try
@@ -135,23 +139,14 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.LibraryBrowser
         }
 
         /// <summary>
-        ///     Sets the passed object <see cref="IDataObject"/> contents based upon the contained set view format key
+        ///     Sets the passed object <see cref="IDataObject" /> contents based upon the contained set view format key
         /// </summary>
         /// <param name="dataObject"></param>
         private async void SetObjectDropByFormat(IDataObject dataObject)
         {
-            if (dataObject.GetData(Resources.DataObjectFormatKey_ViewFormat_Json) is object jsonConvertible)
-            {
-                await SetActiveObjectJsonAsync(jsonConvertible);
-            }
-            if (dataObject.GetData(Resources.DataObjectFormatKey_ViewFormat_Xml) is object xmlConvertible)
-            {
-                await SetActiveObjectXmlAsync(xmlConvertible);
-            }
-            if (dataObject.GetData(Resources.DataObjectFormatKey_ViewFormat_Tree) is object treeConvertible)
-            {
-                await SetActiveObjectTreeViewAsync(treeConvertible);
-            }
+            if (dataObject.GetData(Resources.DataObjectFormatKey_ViewFormat_Json) is { } jsonConvertible) await SetActiveObjectJsonAsync(jsonConvertible);
+            if (dataObject.GetData(Resources.DataObjectFormatKey_ViewFormat_Xml) is { } xmlConvertible) await SetActiveObjectXmlAsync(xmlConvertible);
+            if (dataObject.GetData(Resources.DataObjectFormatKey_ViewFormat_Tree) is { } treeConvertible) await SetActiveObjectTreeViewAsync(treeConvertible);
         }
 
         /// <inheritdoc />

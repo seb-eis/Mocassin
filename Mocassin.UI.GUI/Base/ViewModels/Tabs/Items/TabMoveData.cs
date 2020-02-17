@@ -3,7 +3,7 @@
 namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
 {
     /// <summary>
-    ///     Provides the data required for moving <see cref="DynamicControlTabItem"/> instances between or within tab hosters
+    ///     Provides the data required for moving <see cref="DynamicControlTabItem" /> instances between or within tab hosters
     /// </summary>
     public class TabMoveData
     {
@@ -13,12 +13,12 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
         public int InsertIndex { get; }
 
         /// <summary>
-        ///     The <see cref="DynamicControlTabItem"/> that is moved
+        ///     The <see cref="DynamicControlTabItem" /> that is moved
         /// </summary>
         public DynamicControlTabItem ControlTabItem { get; }
 
         /// <summary>
-        ///     Creates a new <see cref="TabMoveData"/> with a <see cref="DynamicControlTabItem"/> and insert index
+        ///     Creates a new <see cref="TabMoveData" /> with a <see cref="DynamicControlTabItem" /> and insert index
         /// </summary>
         /// <param name="controlTabItem"></param>
         /// <param name="insertIndex"></param>

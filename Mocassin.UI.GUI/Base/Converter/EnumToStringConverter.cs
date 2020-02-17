@@ -4,7 +4,7 @@ using System.Globalization;
 namespace Mocassin.UI.GUI.Base.Converter
 {
     /// <summary>
-    ///     <see cref="ValueConverter"/> that converts from <see cref="string"/> to an <see cref="Enum"/> member
+    ///     <see cref="ValueConverter" /> that converts from <see cref="string" /> to an <see cref="Enum" /> member
     /// </summary>
     public class EnumToStringConverter : ValueConverter
     {

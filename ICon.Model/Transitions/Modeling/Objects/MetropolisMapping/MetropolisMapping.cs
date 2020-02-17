@@ -43,8 +43,8 @@ namespace Mocassin.Model.Transitions
         public int CompareTo(MetropolisMapping other)
         {
             var firstComp = PositionIndex0.CompareTo(other.PositionIndex0);
-            return firstComp == 0 
-                ? PositionIndex1.CompareTo(other.PositionIndex1) 
+            return firstComp == 0
+                ? PositionIndex1.CompareTo(other.PositionIndex1)
                 : firstComp;
         }
 
@@ -55,7 +55,7 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <summary>
-        ///     Creates the geometric inversion of the <see cref="MetropolisMapping"/>
+        ///     Creates the geometric inversion of the <see cref="MetropolisMapping" />
         /// </summary>
         /// <returns></returns>
         public MetropolisMapping CreateGeometricInversion()

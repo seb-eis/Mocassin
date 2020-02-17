@@ -49,13 +49,13 @@ namespace Mocassin.Model.Simulations
         /// <param name="report"></param>
         protected virtual void AddCounterValidations(ISimulation simulation, ValidationReport report)
         {
-            if (Settings.JobCount.ParseValue(simulation.JobCount, out var warnings) != 0) 
+            if (Settings.JobCount.ParseValue(simulation.JobCount, out var warnings) != 0)
                 report.AddWarnings(warnings);
 
             if (Settings.TargetMcsp.ParseValue(simulation.TargetMcsp, out warnings) != 0)
                 report.AddWarnings(warnings);
 
-            if (Settings.WriteCallCount.ParseValue(simulation.WriteOutCount, out warnings) != 0) 
+            if (Settings.WriteCallCount.ParseValue(simulation.WriteOutCount, out warnings) != 0)
                 report.AddWarnings(warnings);
         }
 

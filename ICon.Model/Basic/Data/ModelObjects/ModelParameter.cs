@@ -12,6 +12,9 @@ namespace Mocassin.Model.Basic
         /// <inheritdoc />
         public abstract string GetParameterName();
 
+        /// <inheritdoc />
+        public abstract bool Equals(IModelParameter other);
+
         /// <summary>
         ///     Basic string representation with name and json format serialization values
         /// </summary>
@@ -28,7 +31,7 @@ namespace Mocassin.Model.Basic
         /// <typeparam name="TParam"></typeparam>
         /// <param name="modelParameter"></param>
         /// <returns></returns>
-        public static TParam BuildInternalObject<TParam>(IModelParameter modelParameter) 
+        public static TParam BuildInternalObject<TParam>(IModelParameter modelParameter)
             where TParam : ModelParameter, new()
         {
             return new TParam().PopulateObject(modelParameter) as TParam;
@@ -40,8 +43,5 @@ namespace Mocassin.Model.Basic
         /// </summary>
         /// <param name="modelParameter"></param>
         public abstract ModelParameter PopulateObject(IModelParameter modelParameter);
-
-        /// <inheritdoc />
-        public abstract bool Equals(IModelParameter other);
     }
 }

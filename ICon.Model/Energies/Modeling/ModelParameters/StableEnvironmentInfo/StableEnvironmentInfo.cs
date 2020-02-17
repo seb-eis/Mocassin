@@ -42,18 +42,6 @@ namespace Mocassin.Model.Energies
         }
 
         /// <inheritdoc />
-        public override ModelParameter PopulateObject(IModelParameter modelParameter)
-        {
-            if (!(modelParameter is IStableEnvironmentInfo info))
-                return null;
-
-            MaxInteractionRange = info.MaxInteractionRange;
-            InteractionFilters = info.GetInteractionFilters().Select(SymmetricInteractionFilter.FromInterface).ToList();
-            DefectEnergies = info.GetDefectEnergies().Select(DefectEnergy.FromInterface).ToList();
-            return this;
-        }
-
-        /// <inheritdoc />
         public override bool Equals(IModelParameter other)
         {
             if (!(other is IStableEnvironmentInfo info))
@@ -72,6 +60,18 @@ namespace Mocassin.Model.Energies
             }
 
             return MaxInteractionRange.AlmostEqualByRange(info.MaxInteractionRange);
+        }
+
+        /// <inheritdoc />
+        public override ModelParameter PopulateObject(IModelParameter modelParameter)
+        {
+            if (!(modelParameter is IStableEnvironmentInfo info))
+                return null;
+
+            MaxInteractionRange = info.MaxInteractionRange;
+            InteractionFilters = info.GetInteractionFilters().Select(SymmetricInteractionFilter.FromInterface).ToList();
+            DefectEnergies = info.GetDefectEnergies().Select(DefectEnergy.FromInterface).ToList();
+            return this;
         }
 
         /// <summary>

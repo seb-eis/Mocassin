@@ -1,5 +1,4 @@
 ﻿using System.Runtime.Serialization;
-using Newtonsoft.Json;
 
 namespace Mocassin.Model.Basic
 {
@@ -24,8 +23,11 @@ namespace Mocassin.Model.Basic
         [DataMember]
         public string Name { get; set; }
 
+        /// <inheritdoc />
+        public abstract string ObjectName { get; }
+
         /// <summary>
-        /// Construct new model object that has an invalid index
+        ///     Construct new model object that has an invalid index
         /// </summary>
         protected ModelObject()
         {
@@ -54,9 +56,6 @@ namespace Mocassin.Model.Basic
         {
             return $"{ObjectName}:{Name ?? "??"}";
         }
-
-		/// <inheritdoc />
-		public abstract string ObjectName { get; }
 
         /// <summary>
         ///     Builds the specified object and populates it by the passed interface

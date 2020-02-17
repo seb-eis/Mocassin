@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using System.Threading.Tasks;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Controls.Base.Interfaces;
@@ -32,7 +31,8 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
         public abstract void ChangeContentSource(MocassinProject contentSource);
 
         /// <summary>
-        ///     Delayed execution of the passed <see cref="Action"/>. Action is not performed if the <see cref="ContentSource"/> property changes within the delay
+        ///     Delayed execution of the passed <see cref="Action" />. Action is not performed if the <see cref="ContentSource" />
+        ///     property changes within the delay
         /// </summary>
         /// <param name="delay"></param>
         /// <param name="action"></param>

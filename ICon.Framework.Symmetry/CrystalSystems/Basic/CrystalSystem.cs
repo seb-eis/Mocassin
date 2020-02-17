@@ -34,57 +34,57 @@ namespace Mocassin.Symmetry.CrystalSystems
         public bool IsReady { get; internal set; }
 
         /// <summary>
-        ///     The <see cref="NumericConstraint"/> for the crystal parameters
+        ///     The <see cref="NumericConstraint" /> for the crystal parameters
         /// </summary>
         public NumericConstraint ParameterConstraint { get; internal set; }
 
         /// <summary>
-        ///     The basic <see cref="NumericConstraint"/> for vector lengths, vector entries and calculations
+        ///     The basic <see cref="NumericConstraint" /> for vector lengths, vector entries and calculations
         /// </summary>
         public NumericConstraint BasicConstraint { get; internal set; }
 
         /// <summary>
-        ///     The <see cref="NumericConstraint"/> for the angle alpha
+        ///     The <see cref="NumericConstraint" /> for the angle alpha
         /// </summary>
         public NumericConstraint AlphaConstraint { get; internal set; }
 
         /// <summary>
-        ///     The <see cref="NumericConstraint"/> for the angle beta
+        ///     The <see cref="NumericConstraint" /> for the angle beta
         /// </summary>
         public NumericConstraint BetaConstraint { get; internal set; }
 
         /// <summary>
-        ///     The <see cref="NumericConstraint"/> for the angle gamma
+        ///     The <see cref="NumericConstraint" /> for the angle gamma
         /// </summary>
         public NumericConstraint GammaConstraint { get; internal set; }
 
         /// <summary>
-        ///     The <see cref="CrystalParameter"/> for the A direction
+        ///     The <see cref="CrystalParameter" /> for the A direction
         /// </summary>
         public CrystalParameter ParamA { get; internal set; }
 
         /// <summary>
-        ///     The <see cref="CrystalParameter"/> for the B direction
+        ///     The <see cref="CrystalParameter" /> for the B direction
         /// </summary>
         public CrystalParameter ParamB { get; internal set; }
 
         /// <summary>
-        ///     The <see cref="CrystalParameter"/> for the C direction
+        ///     The <see cref="CrystalParameter" /> for the C direction
         /// </summary>
         public CrystalParameter ParamC { get; internal set; }
 
         /// <summary>
-        ///     The <see cref="CrystalParameter"/> for the Alpha angle in radian
+        ///     The <see cref="CrystalParameter" /> for the Alpha angle in radian
         /// </summary>
         public CrystalParameter Alpha { get; internal set; }
 
         /// <summary>
-        ///     The <see cref="CrystalParameter"/> for the Beta angle in radian
+        ///     The <see cref="CrystalParameter" /> for the Beta angle in radian
         /// </summary>
         public CrystalParameter Beta { get; internal set; }
 
         /// <summary>
-        ///     The <see cref="CrystalParameter"/> for the Gamma angle in radian
+        ///     The <see cref="CrystalParameter" /> for the Gamma angle in radian
         /// </summary>
         public CrystalParameter Gamma { get; internal set; }
 
@@ -107,7 +107,7 @@ namespace Mocassin.Symmetry.CrystalSystems
         }
 
         /// <summary>
-        ///     Sets the parameters and angles from a <see cref="CrystalParameterSet"/> without checking the validity
+        ///     Sets the parameters and angles from a <see cref="CrystalParameterSet" /> without checking the validity
         /// </summary>
         /// <param name="paramSet"></param>
         protected void SetParameterValues(CrystalParameterSet paramSet)

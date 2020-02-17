@@ -107,7 +107,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        ///     Creates an inverted state code for the passed <see cref="IParticle"/> sequence
+        ///     Creates an inverted state code for the passed <see cref="IParticle" /> sequence
         /// </summary>
         /// <param name="state"></param>
         /// <returns></returns>

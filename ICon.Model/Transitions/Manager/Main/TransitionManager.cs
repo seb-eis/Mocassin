@@ -4,7 +4,7 @@ using Mocassin.Model.ModelProject;
 
 namespace Mocassin.Model.Transitions
 {
-    /// <inheritdoc cref="Mocassin.Model.Transitions.ITransitionManager"/>
+    /// <inheritdoc cref="Mocassin.Model.Transitions.ITransitionManager" />
     internal class TransitionManager :
         ModelManager<TransitionModelData, TransitionModelCache, TransitionDataManager, TransitionCacheManager, TransitionInputManager,
             TransitionQueryManager, TransitionEventManager, TransitionUpdateManager>, ITransitionManager

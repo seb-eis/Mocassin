@@ -42,6 +42,13 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
             SelectedItem = Items?.FirstOrDefault();
         }
 
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            if (ChiralPairEnergySet == null) return;
+            foreach (var item in ChiralPairEnergySet.PairEnergyEntries) item.PropertyChanged -= RelayPartnerEnergyChange;
+        }
+
         /// <summary>
         ///     Finds the chiral partner <see cref="PairEnergySetData" /> within the provided <see cref="IReadOnlyList{T}" />.
         ///     Returns null if it doesn't exist
@@ -84,13 +91,6 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
             var match = PairEnergySet.PairEnergyEntries.FirstOrDefault(x => PairGraphsAreEqual(x, source));
             if (match == null) throw new InvalidOperationException("Relay to chiral partner failed, no match for the source was found.");
             match.Energy = source.Energy;
-        }
-
-        /// <inheritdoc />
-        public void Dispose()
-        {
-            if (ChiralPairEnergySet == null) return;
-            foreach (var item in ChiralPairEnergySet.PairEnergyEntries) item.PropertyChanged -= RelayPartnerEnergyChange;
         }
     }
 }

@@ -79,7 +79,7 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe.Importer
         /// <inheritdoc />
         public void Import(Expression<Func<JobMetaDataEntity, bool>> predicate = null)
         {
-            predicate = predicate ?? (x => true);
+            predicate ??= x => true;
             if (ImportDbContext == null) throw new InvalidOperationException("Target database context is not specified.");
 
             var importTasks = new List<Task<IList<object>>>(ImportsPerSave);

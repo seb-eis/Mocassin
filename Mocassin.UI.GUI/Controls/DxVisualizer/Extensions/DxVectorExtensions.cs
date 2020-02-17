@@ -4,12 +4,14 @@ using SharpDX;
 namespace Mocassin.UI.GUI.Controls.DxVisualizer.Extensions
 {
     /// <summary>
-    ///     Provides extensions methods to handle interaction between SharpDX single precision vectors and Mocassin.Mathematics double precision vectors
+    ///     Provides extensions methods to handle interaction between SharpDX single precision vectors and Mocassin.Mathematics
+    ///     double precision vectors
     /// </summary>
     public static class DxVectorExtensions
     {
         /// <summary>
-        ///     Narrowing conversion of a double precision <see cref="Cartesian3D"/> to a SharpDX single precision <see cref="Vector3"/>
+        ///     Narrowing conversion of a double precision <see cref="Cartesian3D" /> to a SharpDX single precision
+        ///     <see cref="Vector3" />
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
@@ -19,7 +21,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Extensions
         }
 
         /// <summary>
-        ///     Narrowing conversion of a double precision <see cref="Fractional3D"/> to a SharpDX single precision <see cref="Vector3"/>
+        ///     Narrowing conversion of a double precision <see cref="Fractional3D" /> to a SharpDX single precision
+        ///     <see cref="Vector3" />
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
@@ -29,7 +32,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Extensions
         }
 
         /// <summary>
-        ///     Narrowing conversion of a double precision <see cref="Coordinates3D"/> to a SharpDX single precision <see cref="Vector3"/>
+        ///     Narrowing conversion of a double precision <see cref="Coordinates3D" /> to a SharpDX single precision
+        ///     <see cref="Vector3" />
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>

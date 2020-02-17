@@ -32,7 +32,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
         public virtual bool IsUserMovable => false;
 
         /// <summary>
-        ///     Get or set the <see cref="System.Windows.Visibility"/> of the tab
+        ///     Get or set the <see cref="System.Windows.Visibility" /> of the tab
         /// </summary>
         public Visibility Visibility
         {
@@ -55,7 +55,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
         }
 
         /// <inheritdoc />
-        public void Dispose()
+        public virtual void Dispose()
         {
             (ContentViewModel as IDisposable)?.Dispose();
             (Content as IDisposable)?.Dispose();

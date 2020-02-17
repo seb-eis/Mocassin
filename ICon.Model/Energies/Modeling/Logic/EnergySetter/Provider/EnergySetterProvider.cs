@@ -27,7 +27,7 @@ namespace Mocassin.Model.Energies
 
         /// <summary>
         ///     Creates new energy setter provider that uses the provided <see cref="IDataAccessorSource{TData}" /> for data
-        ///     manipulation and <see cref="IEnergyQueryPort"/> for cache invalidation
+        ///     manipulation and <see cref="IEnergyQueryPort" /> for cache invalidation
         /// </summary>
         /// <param name="dataAccessorSource"></param>
         /// <param name="energyQueryPort"></param>
@@ -40,71 +40,59 @@ namespace Mocassin.Model.Energies
         /// <inheritdoc />
         public IReadOnlyList<IPairEnergySetter> GetStablePairEnergySetters()
         {
-            using (var accessor = DataAccessorSource.CreateUnsafe())
-            {
-                return accessor.Query(x => x.StablePairInteractions.Select(y => GetStablePairEnergySetter(y.Index)).ToList());
-            }
+            using var accessor = DataAccessorSource.CreateUnsafe();
+            return accessor.Query(x => x.StablePairInteractions.Select(y => GetStablePairEnergySetter(y.Index)).ToList());
         }
 
         /// <inheritdoc />
         public IPairEnergySetter GetStablePairEnergySetter(int index)
         {
-            using (var accessor = DataAccessorSource.CreateUnsafe())
+            using var accessor = DataAccessorSource.CreateUnsafe();
+            return new PairEnergySetter(accessor.Query(x => x.StablePairInteractions[index]), EnergyQueryPort)
             {
-                return new PairEnergySetter(accessor.Query(x => x.StablePairInteractions[index]), EnergyQueryPort)
-                {
-                    DataAccessorSource = DataAccessorSource,
-                    EnergyConstraint = PairEnergyConstraint
-                };
-            }
+                DataAccessorSource = DataAccessorSource,
+                EnergyConstraint = PairEnergyConstraint
+            };
         }
 
         /// <inheritdoc />
         public IReadOnlyList<IPairEnergySetter> GetUnstablePairEnergySetters()
         {
-            using (var accessor = DataAccessorSource.CreateUnsafe())
-            {
-                return accessor.Query(x => x.UnstablePairInteractions.Select(y => GetUnstablePairEnergySetter(y.Index)).ToList());
-            }
+            using var accessor = DataAccessorSource.CreateUnsafe();
+            return accessor.Query(x => x.UnstablePairInteractions.Select(y => GetUnstablePairEnergySetter(y.Index)).ToList());
         }
 
         /// <inheritdoc />
         public IPairEnergySetter GetUnstablePairEnergySetter(int index)
         {
-            using (var accessor = DataAccessorSource.CreateUnsafe())
+            using var accessor = DataAccessorSource.CreateUnsafe();
+            return new PairEnergySetter(accessor.Query(x => x.UnstablePairInteractions[index]), EnergyQueryPort)
             {
-                return new PairEnergySetter(accessor.Query(x => x.UnstablePairInteractions[index]), EnergyQueryPort)
-                {
-                    DataAccessorSource = DataAccessorSource,
-                    EnergyConstraint = PairEnergyConstraint
-                };
-            }
+                DataAccessorSource = DataAccessorSource,
+                EnergyConstraint = PairEnergyConstraint
+            };
         }
 
         /// <inheritdoc />
         public IReadOnlyList<IGroupEnergySetter> GetGroupEnergySetters()
         {
-            using (var accessor = DataAccessorSource.CreateUnsafe())
-            {
-                return accessor.Query(x => x.GroupInteractions.Select(y => GetGroupEnergySetter(y.Index)).ToList());
-            }
+            using var accessor = DataAccessorSource.CreateUnsafe();
+            return accessor.Query(x => x.GroupInteractions.Select(y => GetGroupEnergySetter(y.Index)).ToList());
         }
 
         /// <inheritdoc />
         public IGroupEnergySetter GetGroupEnergySetter(int index)
         {
-            using (var accessor = DataAccessorSource.CreateUnsafe())
-            {
-                var groupInteraction = accessor.Query(x => x.GroupInteractions[index]);
-                if (groupInteraction.IsDeprecated)
-                    return GroupEnergySetter.CreateEmpty();
+            using var accessor = DataAccessorSource.CreateUnsafe();
+            var groupInteraction = accessor.Query(x => x.GroupInteractions[index]);
+            if (groupInteraction.IsDeprecated)
+                return GroupEnergySetter.CreateEmpty();
 
-                return new GroupEnergySetter(groupInteraction, EnergyQueryPort)
-                {
-                    DataAccessorSource = DataAccessorSource,
-                    EnergyConstraint = GroupEnergyConstraint
-                };
-            }
+            return new GroupEnergySetter(groupInteraction, EnergyQueryPort)
+            {
+                DataAccessorSource = DataAccessorSource,
+                EnergyConstraint = GroupEnergyConstraint
+            };
         }
     }
 }

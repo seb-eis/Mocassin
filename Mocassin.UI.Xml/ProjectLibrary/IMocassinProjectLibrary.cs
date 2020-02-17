@@ -30,6 +30,11 @@ namespace Mocassin.UI.Xml.ProjectLibrary
         DbSet<MocassinProject> MocassinProjectGraphs { get; }
 
         /// <summary>
+        ///     Get a <see cref="IObservable{T}" /> that informs that a model change happened in the library
+        /// </summary>
+        IObservable<Unit> ModelChangedNotification { get; }
+
+        /// <summary>
         ///     Adds the given <see cref="TEntity" /> objects to the <see cref="IMocassinProjectLibrary" />
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
@@ -58,11 +63,6 @@ namespace Mocassin.UI.Xml.ProjectLibrary
         /// </summary>
         /// <returns></returns>
         bool HasUnsavedChanges();
-
-        /// <summary>
-        ///     Get a <see cref="IObservable{T}" /> that informs that a model change happened in the library
-        /// </summary>
-        IObservable<Unit> ModelChangedNotification { get; }
 
         /// <summary>
         ///     Get a hash value for the entire project content

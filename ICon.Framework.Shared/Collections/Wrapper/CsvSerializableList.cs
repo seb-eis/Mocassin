@@ -2,24 +2,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using System.Linq;
 using Mocassin.Framework.Extensions;
 
 namespace Mocassin.Framework.Collections
 {
     /// <summary>
-    /// Generic string convertible list wrapper that supplies serializing and deserializing the list into a string in a csv style
+    ///     Generic string convertible list wrapper that supplies serializing and deserializing the list into a string in a csv
+    ///     style
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class CsvSerializableList<T> : IList<T>
     {
         /// <summary>
-        /// The separator for the values
+        ///     The separator for the values
         /// </summary>
         public char Separator { get; set; }
 
         /// <summary>
-        /// The inner list of values
+        ///     The inner list of values
         /// </summary>
         protected List<T> Values { get; set; }
 
@@ -30,8 +30,14 @@ namespace Mocassin.Framework.Collections
             set => Values[index] = value;
         }
 
+        /// <inheritdoc />
+        public int Count => Values.Count;
+
+        /// <inheritdoc />
+        public bool IsReadOnly => false;
+
         /// <summary>
-        /// Default construct a new string convertible list. Default separator is a comma
+        ///     Default construct a new string convertible list. Default separator is a comma
         /// </summary>
         public CsvSerializableList()
         {
@@ -40,19 +46,14 @@ namespace Mocassin.Framework.Collections
         }
 
         /// <summary>
-        /// Default construct new convertible list with initial capacity
+        ///     Default construct new convertible list with initial capacity
         /// </summary>
         /// <param name="capacity"></param>
-        public CsvSerializableList(int capacity) : this()
+        public CsvSerializableList(int capacity)
+            : this()
         {
             Values.Capacity = capacity;
         }
-
-        /// <inheritdoc />
-        public int Count => Values.Count;
-
-        /// <inheritdoc />
-        public bool IsReadOnly => false;
 
         /// <inheritdoc />
         public void Add(T item)
@@ -115,7 +116,7 @@ namespace Mocassin.Framework.Collections
         }
 
         /// <summary>
-        /// Creates a single string from the list where values are separated by the defined separator
+        ///     Creates a single string from the list where values are separated by the defined separator
         /// </summary>
         /// <returns></returns>
         public override string ToString()
@@ -130,7 +131,8 @@ namespace Mocassin.Framework.Collections
         }
 
         /// <summary>
-        /// Loads the list from a single separated value string and a converter delegate that converts a substring to the correct type
+        ///     Loads the list from a single separated value string and a converter delegate that converts a substring to the
+        ///     correct type
         /// </summary>
         /// <param name="linearized"></param>
         /// <param name="converter"></param>
@@ -140,7 +142,8 @@ namespace Mocassin.Framework.Collections
         }
 
         /// <summary>
-        /// Parse a string of separated values into a csv list of the specified type using the provided string to value converter and separator
+        ///     Parse a string of separated values into a csv list of the specified type using the provided string to value
+        ///     converter and separator
         /// </summary>
         /// <param name="linearized"></param>
         /// <param name="converter"></param>
@@ -148,13 +151,14 @@ namespace Mocassin.Framework.Collections
         /// <returns></returns>
         public static CsvSerializableList<T> Parse(string linearized, Func<string, T> converter, char separator)
         {
-            var list = new CsvSerializableList<T>() { Separator = separator };
+            var list = new CsvSerializableList<T> {Separator = separator};
             list.FromString(linearized, converter);
             return list;
         }
 
         /// <summary>
-        /// Parses a string of separated values into a csv list of the specified type using the provided converter and default separator ','
+        ///     Parses a string of separated values into a csv list of the specified type using the provided converter and default
+        ///     separator ','
         /// </summary>
         /// <param name="linearized"></param>
         /// <param name="converter"></param>

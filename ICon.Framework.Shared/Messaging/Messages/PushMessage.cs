@@ -17,7 +17,7 @@ namespace Mocassin.Framework.Messaging
         public object Sender { get; }
 
         /// <summary>
-        ///     Get an <see cref="IEnumerable{T}"/> sequence of <see cref="string"/> that describe details fo the message
+        ///     Get an <see cref="IEnumerable{T}" /> sequence of <see cref="string" /> that describe details fo the message
         /// </summary>
         [JsonIgnore]
         public abstract IEnumerable<string> DetailSequence { get; }

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -17,7 +16,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels
     public abstract class ViewModelBase : INotifyPropertyChanged
     {
         /// <summary>
-        ///     Get or set a <see cref="Dictionary{TKey,TValue}"/> for property backups
+        ///     Get or set a <see cref="Dictionary{TKey,TValue}" /> for property backups
         /// </summary>
         private Dictionary<string, object> PropertyBackups { get; set; }
 
@@ -51,7 +50,8 @@ namespace Mocassin.UI.GUI.Base.ViewModels
         }
 
         /// <summary>
-        ///     Sets a property value. Executes the provided callback and raises the change event only if the value was actually changed
+        ///     Sets a property value. Executes the provided callback and raises the change event only if the value was actually
+        ///     changed
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="backingField"></param>
@@ -67,7 +67,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels
         }
 
         /// <summary>
-        ///     Forwards a property set using a <see cref="PropertyInfo"/> and a target <see cref="object"/>
+        ///     Forwards a property set using a <see cref="PropertyInfo" /> and a target <see cref="object" />
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="propertyInfo"></param>
@@ -139,7 +139,8 @@ namespace Mocassin.UI.GUI.Base.ViewModels
         }
 
         /// <summary>
-        ///     Async executes an <see cref="Action" /> on the UI thread. This method should be used when the UI action requires awaiting
+        ///     Async executes an <see cref="Action" /> on the UI thread. This method should be used when the UI action requires
+        ///     awaiting
         /// </summary>
         /// <param name="action"></param>
         /// <param name="priority"></param>
@@ -149,7 +150,8 @@ namespace Mocassin.UI.GUI.Base.ViewModels
         }
 
         /// <summary>
-        ///     Async executes a <see cref="Func{TResult}" /> on the UI thread. This method should be used when the UI action requires awaiting
+        ///     Async executes a <see cref="Func{TResult}" /> on the UI thread. This method should be used when the UI action
+        ///     requires awaiting
         /// </summary>
         /// <param name="function"></param>
         /// <param name="priority"></param>
@@ -159,7 +161,8 @@ namespace Mocassin.UI.GUI.Base.ViewModels
         }
 
         /// <summary>
-        ///     Queues an <see cref="Action" /> for execution on the UI thread. This method should be used when the UI action is low priority fire-and-forget
+        ///     Queues an <see cref="Action" /> for execution on the UI thread. This method should be used when the UI action is
+        ///     low priority fire-and-forget
         /// </summary>
         /// <param name="action"></param>
         /// <param name="priority"></param>
@@ -170,7 +173,8 @@ namespace Mocassin.UI.GUI.Base.ViewModels
         }
 
         /// <summary>
-        ///     Attaches a single <see cref="Action"/> invoke to the next property change that fulfills the <see cref="Predicate{T}"/>. The optional flag controls if an already matched predicate causes immediate execution
+        ///     Attaches a single <see cref="Action" /> invoke to the next property change that fulfills the
+        ///     <see cref="Predicate{T}" />. The optional flag controls if an already matched predicate causes immediate execution
         /// </summary>
         /// <typeparam name="TProperty"></typeparam>
         /// <param name="action"></param>
@@ -203,7 +207,8 @@ namespace Mocassin.UI.GUI.Base.ViewModels
         }
 
         /// <summary>
-        ///     Attaches a single <see cref="Action"/> invoke to the next property change. The optional flag controls if an already matched predicate causes immediate execution
+        ///     Attaches a single <see cref="Action" /> invoke to the next property change. The optional flag controls if an
+        ///     already matched predicate causes immediate execution
         /// </summary>
         /// <param name="action"></param>
         /// <param name="propertyName"></param>
@@ -214,7 +219,8 @@ namespace Mocassin.UI.GUI.Base.ViewModels
         }
 
         /// <summary>
-        ///     Performs a delayed execution of the passed <see cref="Action"/> if the property with the provided name does not change within the delay
+        ///     Performs a delayed execution of the passed <see cref="Action" /> if the property with the provided name does not
+        ///     change within the delay
         /// </summary>
         /// <param name="delay"></param>
         /// <param name="action"></param>

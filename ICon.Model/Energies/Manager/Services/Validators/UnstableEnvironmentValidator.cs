@@ -73,7 +73,7 @@ namespace Mocassin.Model.Energies.Validators
             if (Settings.PositionsPerUnstable.ParseValue(approxInteractionCount, out var warnings) >= 0) report.AddWarnings(warnings);
         }
 
-                /// <summary>
+        /// <summary>
         ///     Validates the interaction filters of the stable environments and adds the results to the validation report
         /// </summary>
         /// <param name="envInfo"></param>
@@ -85,7 +85,7 @@ namespace Mocassin.Model.Energies.Validators
         }
 
         /// <summary>
-        /// Validates that the interaction filter definitions of the environment are unique
+        ///     Validates that the interaction filter definitions of the environment are unique
         /// </summary>
         /// <param name="envInfo"></param>
         /// <param name="report"></param>
@@ -105,7 +105,7 @@ namespace Mocassin.Model.Energies.Validators
         }
 
         /// <summary>
-        /// Validates that the interaction filter definitions of the environment have valid range definitions
+        ///     Validates that the interaction filter definitions of the environment have valid range definitions
         /// </summary>
         /// <param name="envInfo"></param>
         /// <param name="report"></param>
@@ -117,13 +117,8 @@ namespace Mocassin.Model.Energies.Validators
             foreach (var filter in envInfo.GetInteractionFilters())
             {
                 if (!constraint.IsValid(filter.StartRadius) || !constraint.IsValid(filter.EndRadius))
-                {
                     details.Add($"Range ({filter.StartRadius} to {filter.EndRadius}) of filter ({index}) is out of constraint {constraint}");
-                }
-                if (filter.StartRadius > filter.EndRadius)
-                {
-                    details.Add($"Start radius of filter ({index}) is below its end radius!");
-                }
+                if (filter.StartRadius > filter.EndRadius) details.Add($"Start radius of filter ({index}) is below its end radius!");
 
                 index++;
             }

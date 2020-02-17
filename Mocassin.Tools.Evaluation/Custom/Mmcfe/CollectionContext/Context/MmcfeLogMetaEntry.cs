@@ -122,9 +122,9 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         }
 
         /// <summary>
-        ///     Get or set a  <see cref="string"/> that describes the particle counts for each ID (comma separated)
+        ///     Get or set a  <see cref="string" /> that describes the particle counts for each ID (comma separated)
         /// </summary>
-        public string ParticleCountInfo { get; set; } 
+        public string ParticleCountInfo { get; set; }
 
         /// <summary>
         ///     Creates new empty <see cref="MmcfeLogMetaEntry" />

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reflection;
-using Mocassin.Framework.Messaging;
 using Mocassin.Framework.Operations;
 using Mocassin.Framework.Processing;
 using Mocassin.Framework.Reflection;
@@ -14,8 +13,8 @@ namespace Mocassin.Model.Basic
     /// <summary>
     ///     Abstract base class for all model data event handler that handle event based updating through processing pipelines
     /// </summary>
-    internal abstract class ModelEventHandler<T1, T2, T3> 
-        where T1 : IModelEventPort 
+    internal abstract class ModelEventHandler<T1, T2, T3>
+        where T1 : IModelEventPort
         where T2 : ModelData
         where T3 : ModelEventManager
     {

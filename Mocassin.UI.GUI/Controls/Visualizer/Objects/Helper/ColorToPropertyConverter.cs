@@ -33,8 +33,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
         public override object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (!(value is PropertyInfo propertyInfo)) return Colors.Black;
-            if (!(parameter is ObjectDataProvider objectDataProvider)) return null;
-            return propertyInfo.GetValue(null);
+            return !(parameter is ObjectDataProvider) ? null : propertyInfo.GetValue(null);
         }
     }
 }

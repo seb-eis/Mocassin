@@ -139,7 +139,8 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         }
 
         /// <summary>
-        ///     Calculates an average and deviation from an <see cref="IEnumerable{T}" /> of <see cref="MmcfeEnergyState" /> items (Temperature is excluded)
+        ///     Calculates an average and deviation from an <see cref="IEnumerable{T}" /> of <see cref="MmcfeEnergyState" /> items
+        ///     (Temperature is excluded)
         /// </summary>
         /// <param name="energyStates"></param>
         /// <returns></returns>

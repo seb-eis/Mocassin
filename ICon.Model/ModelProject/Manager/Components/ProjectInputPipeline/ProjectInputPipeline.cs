@@ -13,12 +13,12 @@ namespace Mocassin.Model.ModelProject
         /// <summary>
         ///     The input port delegate dictionary that assigns <see cref="IModelObject" /> the correct input delegate
         /// </summary>
-        private readonly Dictionary<Type, Func<IModelObject, Task<IOperationReport>>> _objectInputDictionary;
+        private readonly Dictionary<Type, Func<IModelObject, Task<IOperationReport>>> objectInputDictionary;
 
         /// <summary>
         ///     The input port delegate dictionary that assigns <see cref="IModelParameter" /> the correct input delegate
         /// </summary>
-        private readonly Dictionary<Type, Func<IModelParameter, Task<IOperationReport>>> _parameterInputDictionary;
+        private readonly Dictionary<Type, Func<IModelParameter, Task<IOperationReport>>> parameterInputDictionary;
 
         /// <inheritdoc />
         public IModelProject ModelProject { get; }
@@ -30,8 +30,8 @@ namespace Mocassin.Model.ModelProject
         public ProjectInputPipeline(IModelProject modelProject)
         {
             ModelProject = modelProject ?? throw new ArgumentNullException(nameof(modelProject));
-            _objectInputDictionary = new Dictionary<Type, Func<IModelObject, Task<IOperationReport>>>();
-            _parameterInputDictionary = new Dictionary<Type, Func<IModelParameter, Task<IOperationReport>>>();
+            objectInputDictionary = new Dictionary<Type, Func<IModelObject, Task<IOperationReport>>>();
+            parameterInputDictionary = new Dictionary<Type, Func<IModelParameter, Task<IOperationReport>>>();
         }
 
 
@@ -99,7 +99,7 @@ namespace Mocassin.Model.ModelProject
         /// <returns></returns>
         public Func<IModelParameter, Task<IOperationReport>> GetInputDelegate(IModelParameter modelParameter)
         {
-            var func = _parameterInputDictionary.FirstOrDefault(x => x.Key.IsInstanceOfType(modelParameter)).Value;
+            var func = parameterInputDictionary.FirstOrDefault(x => x.Key.IsInstanceOfType(modelParameter)).Value;
             if (func != null)
                 return func;
 
@@ -110,7 +110,7 @@ namespace Mocassin.Model.ModelProject
                     continue;
 
                 func = MakeParameterInputDelegate(modelManager.InputPort);
-                _parameterInputDictionary.Add(type, func);
+                parameterInputDictionary.Add(type, func);
                 return func;
             }
 
@@ -124,7 +124,7 @@ namespace Mocassin.Model.ModelProject
         /// <returns></returns>
         public Func<IModelObject, Task<IOperationReport>> GetInputDelegate(IModelObject modelObject)
         {
-            var func = _objectInputDictionary.FirstOrDefault(x => x.Key.IsInstanceOfType(modelObject)).Value;
+            var func = objectInputDictionary.FirstOrDefault(x => x.Key.IsInstanceOfType(modelObject)).Value;
             if (func != null)
                 return func;
 
@@ -135,7 +135,7 @@ namespace Mocassin.Model.ModelProject
                     continue;
 
                 func = MakeObjectInputDelegate(modelManager.InputPort);
-                _objectInputDictionary.Add(type, func);
+                objectInputDictionary.Add(type, func);
                 return func;
             }
 

@@ -23,23 +23,12 @@ namespace Mocassin.Model.Transitions
         public int StatePairCount => StateExchangePairs.Count;
 
         /// <inheritdoc />
-        public IEnumerable<IStateExchangePair> GetStateExchangePairs()
-        {
-            return (StateExchangePairs ?? new List<IStateExchangePair>()).AsEnumerable();
-        }
-
-        /// <inheritdoc />
         public override string ObjectName => "State Exchange Group";
 
         /// <inheritdoc />
-        public override ModelObject PopulateFrom(IModelObject obj)
+        public IEnumerable<IStateExchangePair> GetStateExchangePairs()
         {
-            if (!(CastIfNotDeprecated<IStateExchangeGroup>(obj) is { } group))
-                return null;
-
-            Index = group.Index;
-            StateExchangePairs = group.GetStateExchangePairs().ToList();
-            return this;
+            return (StateExchangePairs ?? new List<IStateExchangePair>()).AsEnumerable();
         }
 
         /// <inheritdoc />
@@ -57,6 +46,17 @@ namespace Mocassin.Model.Transitions
                 .All(index => other.GetStateExchangePairs().Select(a => a.Index).Contains(index));
 
             return firstContainsSecond || secondContainsFirst;
+        }
+
+        /// <inheritdoc />
+        public override ModelObject PopulateFrom(IModelObject obj)
+        {
+            if (!(CastIfNotDeprecated<IStateExchangeGroup>(obj) is { } group))
+                return null;
+
+            Index = group.Index;
+            StateExchangePairs = group.GetStateExchangePairs().ToList();
+            return this;
         }
     }
 }
