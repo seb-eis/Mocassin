@@ -19,7 +19,7 @@
 typedef Vector3_t Tracker_t;
 
 // Type for the state header information
-// Layout@ggc_x86_64 => 56@[8,8,4,4,4,4,4,4,4,4,4,{4}]
+// Layout@ggc_x86_64 => 56@[8,8,8,4,4,4,4,4,4,4,4]
 typedef struct StateHeaderData
 {
     // The number of successful steps
@@ -29,7 +29,7 @@ typedef struct StateHeaderData
     int64_t Cycles;
 
     // The simulation runtime flags
-    int32_t Flags;
+    Bitmask_t Flags;
 
     // The start byte number of the state meta data
     int32_t MetaStartByte;
@@ -54,9 +54,6 @@ typedef struct StateHeaderData
 
     // The start byte number of the state jump statistics data
     int32_t JumpStatisticsStartByte;
-
-    // Explicit Padding
-    int32_t Padding:32;
 
 } StateHeaderData_t;
 

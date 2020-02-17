@@ -27,7 +27,7 @@ int wmain(int argc, wchar_t const* const* argv)
     for (var i = 0; i < argc; ++i)
     {
         let error = Win32ConvertUtf16ToUtf8(argv[i], &utf8Argv[i]) <= 0 ? ERR_VALIDATION : ERR_OK;
-        error_assert(error, "Failure on converting UTF16 argument set to UTF8.");
+        assert_success(error, "Failure on converting UTF16 argument set to UTF8.");
     }
     return _main(argc, (const char *const *) utf8Argv);
 }
@@ -42,24 +42,24 @@ int main(int argc, char const * const *argv)
 int _main(int argc, char const * const *argv)
 {
     // General preparations for routine execution
-    var SCONTEXT = ctor_SimulationContext();
-    ResolveCommandLineArguments(&SCONTEXT, argc, argv);
-    JobLoader_LoadDatabaseModelToContext(&SCONTEXT);
-    PrepareForMainRoutine(&SCONTEXT);
+    var simContext = ctor_SimulationContext();
+    ResolveCommandLineArguments(&simContext, argc, argv);
+    JobLoader_LoadDatabaseModelToContext(&simContext);
+    PrepareForMainRoutine(&simContext);
 
     // Load and jump into a custom extension routine if valid data exists
-    var routine = MocExt_TryFindExtensionRoutine(getCustomRoutineUuid(&SCONTEXT), getFileInformation(&SCONTEXT)->ExtensionLookupPath);
+    var routine = MocExt_TryFindExtensionRoutine(getCustomRoutineUuid(&simContext), getFileInformation(&simContext)->ExtensionLookupPath);
     if (routine != NULL)
     {
-        ProgressPrint_OnSimulationStart(&SCONTEXT, stdout);
+        ProgressPrint_OnSimulationStart(&simContext, stdout);
         fprintf(stdout, "\nINFO  => Regular progress prints may be suppressed in custom routines.\n");
         fflush(stdout);
-        return (routine(&SCONTEXT), 0);
+        return (routine(&simContext), 0);
     }
 
     // Jump into the usual KMC/MMM system if no extension routine data exist
-    StartMainSimulationRoutine(&SCONTEXT);
-    ProgressPrint_OnSimulationFinish(&SCONTEXT, stdout);
+    StartMainSimulationRoutine(&simContext);
+    ProgressPrint_OnSimulationFinish(&simContext, stdout);
 
     #if defined(MC_AWAIT_TERMINATION_OK)
     getchar();

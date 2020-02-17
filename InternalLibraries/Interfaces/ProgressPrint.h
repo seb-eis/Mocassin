@@ -13,13 +13,13 @@
 #include "Simulator/Data/SimContext/ContextAccess.h"
 
 // Print action that is called on blocks finished
-void ProgressPrint_OnBlockFinish(SCONTEXT_PARAM, file_t *fstream, bool_t onlyMobiles);
+void ProgressPrint_OnBlockFinish(SCONTEXT_PARAMETER, file_t *fstream, bool_t onlyMobiles);
 
 // Print action that is called on simulation start
-void ProgressPrint_OnSimulationStart(SCONTEXT_PARAM, file_t *fstream);
+void ProgressPrint_OnSimulationStart(SCONTEXT_PARAMETER, file_t *fstream);
 
 // Print action that is called on context reset (pre-run -> run switch)
-void ProgressPrint_OnContextReset(SCONTEXT_PARAM, file_t *fstream);
+void ProgressPrint_OnContextReset(SCONTEXT_PARAMETER, file_t *fstream);
 
 // Print action that is called on simulation finish
-void ProgressPrint_OnSimulationFinish(SCONTEXT_PARAM, file_t *fstream);
+void ProgressPrint_OnSimulationFinish(SCONTEXT_PARAMETER, file_t *fstream);

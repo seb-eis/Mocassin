@@ -12,5 +12,5 @@
 #include "Simulator/Data/SimContext/ContextAccess.h"
 
 // Loads the database model of the job to the passed simulation context
-void JobLoader_LoadDatabaseModelToContext(SCONTEXT_PARAM);
+void JobLoader_LoadDatabaseModelToContext(SCONTEXT_PARAMETER);
 

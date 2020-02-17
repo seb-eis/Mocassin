@@ -17,8 +17,8 @@
 
 /* General definitions */
 
-// Type for encoding state occupations with 64 bits (8 Particles max)
-typedef int64_t OccupationCode64_t;
+// Union type for encoding state occupations with 64 bit integers (8 Particles max)
+typedef union OccupationCode64 { int64_t Value; byte_t ParticleIds[8]; } OccupationCode64_t;
 
 // Type for 1D index mappings
 // Layout@ggc_x86_64 => 16@[8,8]
@@ -79,7 +79,7 @@ typedef Span_t(ClusterInteraction_t, ClusterInteractions) ClusterInteractions_t;
 typedef struct EnvironmentDefinition
 {
     // The object id of the environment. Is equal to the position id
-    int32_t                     ObjectId;
+    int32_t                     PositionId;
 
     // Padding
     int32_t                     Padding:32;
@@ -291,7 +291,7 @@ typedef struct JumpDirection
 typedef Span_t(JumpDirection_t, JumpDirections) JumpDirections_t;
 
 // Type for a transition jump rule
-// Layout@ggc_x86_64 => 48@[8,8,8,8,8,8]
+// Layout@ggc_x86_64 => 56@[8,8,8,8,8,8,8]
 typedef struct JumpRule
 {
     // The occupation code for the start state
@@ -308,6 +308,9 @@ typedef struct JumpRule
 
     // The electric field rule factor that encodes direction
     double               ElectricFieldFactor;
+
+    // The virtual path jump energy correction value that corrects the biased S2 calculation. Is NaN if no universally valid values exists for the transition
+    double               StaticVirtualJumpEnergyCorrection;
 
     // The tracker order code that encodes the tracker reordering
     byte_t               TrackerOrderCode[JUMPS_JUMPLENGTH_MAX];

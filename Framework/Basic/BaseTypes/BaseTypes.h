@@ -47,5 +47,5 @@ typedef sbyte_t bool_t;
 // Defines the values for true and false
 enum BooleanValuesEnum { false = 0, true = 1 };
 
-// Defines the basic bitmask to be a signed 64 bit integer
-typedef int64_t Bitmask_t;
+// Defines the basic bitmask to be a unsigned 64 bit integer
+typedef uint64_t Bitmask_t;

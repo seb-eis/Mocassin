@@ -20,17 +20,17 @@
 // Set a code byte at the provided index to the provided value
 static inline void SetCodeByteAt(OccupationCode64_t* restrict code, const int32_t id, const byte_t value)
 {
-    accessPtrAs(byte_t, code)[id] = value;
+    code->ParticleIds[id] = value;
 }
 
 // Get the code byte value at the provided index
 static inline byte_t GetCodeByteAt(OccupationCode64_t* restrict code, const int32_t id)
 {
-    return accessPtrAs(byte_t, code)[id];
+    return code->ParticleIds[id];
 }
 
 // Adds two 4D vectors and trims the result into the unit cell
-static inline Vector4_t AddAndTrimVector4(const Vector4_t* restrict lhs, const Vector4_t* restrict rhs, const Vector4_t* sizes)
+static inline Vector4_t AddAndTrimVector4(const Vector4_t* restrict lhs, const Vector4_t* restrict rhs, const Vector4_t*restrict sizes)
 {
     var result = AddVector4(lhs, rhs);
     PeriodicTrimVector4(&result, sizes);
@@ -45,23 +45,11 @@ static inline int32_t FindMaxJumpDirectionCount(const JumpCountTable_t* restrict
     return max;
 }
 
-// Get the next compare double between [0,1] from the RNG
-static inline double GetNextRandomDouble(SCONTEXT_PARAM)
-{
-    return Pcg32NextDouble(getMainRng(SCONTEXT));
-}
-
-// Get a ceiled random number from the main RNG
-static inline int32_t GetNextCeiledRandom(SCONTEXT_PARAM, const int32_t upperLimit)
-{
-    return (int32_t) Pcg32NextCeiled(getMainRng(SCONTEXT), upperLimit);
-}
-
 // Resolves the passed pair definition and start environment to the target environment state
-static inline EnvironmentState_t* GetPairDefinitionTargetEnvironment(SCONTEXT_PARAM, const PairInteraction_t *restrict pairDef, const EnvironmentState_t *startEnv)
+static inline EnvironmentState_t* GetPairDefinitionTargetEnvironment(SCONTEXT_PARAMETER, const PairInteraction_t *restrict pairDef, const EnvironmentState_t *startEnv)
 {
-    let target = AddAndTrimVector4(&startEnv->PositionVector, &pairDef->RelativeVector, getLatticeSizeVector(SCONTEXT));
-    return getEnvironmentStateByVector4(SCONTEXT, &target);
+    let target = AddAndTrimVector4(&startEnv->LatticeVector, &pairDef->RelativeVector, getLatticeSizeVector(simContext));
+    return getEnvironmentStateByVector4(simContext, &target);
 }
 
 // Get the highest index within the update particle set of an environment definition
@@ -88,42 +76,42 @@ static inline byte_t GetEnvironmentMaxParticleId(EnvironmentDefinition_t *restri
 }
 
 // Check if the job info has the passed flags set to true
-static inline bool_t JobInfoFlagsAreSet(SCONTEXT_PARAM, const Bitmask_t flgs)
+static inline bool_t JobInfoFlagsAreSet(SCONTEXT_PARAMETER, const Bitmask_t flgs)
 {
-    return flagsAreTrue(getDbModelJobInfo(SCONTEXT)->JobFlags, flgs);
+    return flagsAreTrue(getDbModelJobInfo(simContext)->JobFlags, flgs);
 }
 
 // Check if the job header has the passed flags set to true
-static inline bool_t JobHeaderFlagsAreSet(SCONTEXT_PARAM, const Bitmask_t flgs)
+static inline bool_t JobHeaderFlagsAreSet(SCONTEXT_PARAMETER, const Bitmask_t flgs)
 {
-    return flagsAreTrue(getJobHeaderFlagsMmc(SCONTEXT), flgs);
+    return flagsAreTrue(getJobHeaderFlagsMmc(simContext), flgs);
 }
 
 // Check if the main state has the passed flags set
-static inline bool_t StateFlagsAreSet(SCONTEXT_PARAM, const int32_t flgs)
+static inline bool_t StateFlagsAreSet(SCONTEXT_PARAMETER, const int32_t flgs)
 {
-    return flagsAreTrue(getMainStateHeader(SCONTEXT)->Data->Flags, flgs);
+    return flagsAreTrue(getMainStateHeader(simContext)->Data->Flags, flgs);
 }
 
 // Get the total position count of the lattice
-static inline int32_t GetLatticePositionCount(SCONTEXT_PARAM)
+static inline int32_t GetLatticePositionCount(SCONTEXT_PARAMETER)
 {
-    let sizes = getLatticeSizeVector(SCONTEXT);
+    let sizes = getLatticeSizeVector(simContext);
     return sizes->A * sizes->B * sizes->C * sizes->D;
 }
 
 // Get tha maximum particle id defined in the simulation
-static inline byte_t GetMaxParticleId(SCONTEXT_PARAM)
+static inline byte_t GetMaxParticleId(SCONTEXT_PARAMETER)
 {
     int32_t dimensions[2];
-    GetArrayDimensions((VoidArray_t*) getJumpCountMapping(SCONTEXT), &dimensions[0]);
+    GetArrayDimensions((VoidArray_t*) getJumpCountMapping(simContext), &dimensions[0]);
     return (byte_t) dimensions[1] - 1;
 }
 
 // Get the number of unit cells in the lattice
-static inline int32_t GetUnitCellCount(SCONTEXT_PARAM)
+static inline int32_t GetUnitCellCount(SCONTEXT_PARAMETER)
 {
-    let sizes = getLatticeSizeVector(SCONTEXT);
+    let sizes = getLatticeSizeVector(simContext);
     return sizes->A * sizes->B * sizes->C;
 }
 
@@ -135,11 +123,11 @@ static inline int32_t GetPeriodicPointDistance(const int32_t pointA, const int32
 }
 
 // Get a boolean value indicating if the two passed 4D positions are in interaction range
-static inline bool_t PositionAreInInteractionRange(SCONTEXT_PARAM, const Vector4_t* vector0, const Vector4_t* vector1)
+static inline bool_t PositionAreInInteractionRange(SCONTEXT_PARAMETER, const Vector4_t* vector0, const Vector4_t* vector1)
 {
     // To be in interaction range all distances (x,y,z) on their affiliated periodic 1D axis have to be in range
-    let interactionRange = &getDbStructureModel(SCONTEXT)->InteractionRange;
-    let latticeSizes = getLatticeSizeVector(SCONTEXT);
+    let interactionRange = &getDbStructureModel(simContext)->InteractionRange;
+    let latticeSizes = getLatticeSizeVector(simContext);
 
     var result = GetPeriodicPointDistance(vector0->A, vector1->A, latticeSizes->A) > interactionRange->A;
     return_if(result, false);
@@ -149,10 +137,10 @@ static inline bool_t PositionAreInInteractionRange(SCONTEXT_PARAM, const Vector4
 }
 
 // Count the number of particles in the simulation lattice that have the provided particle id
-static inline int32_t GetParticleCountInLattice(SCONTEXT_PARAM, const byte_t particleId)
+static inline int32_t GetParticleCountInLattice(SCONTEXT_PARAMETER, const byte_t particleId)
 {
     int32_t result = 0;
-    cpp_foreach(envState, *getEnvironmentLattice(SCONTEXT))
+    cpp_foreach(envState, *getEnvironmentLattice(simContext))
         if (envState->ParticleId == particleId)
             result++;
 
@@ -163,4 +151,16 @@ static inline int32_t GetParticleCountInLattice(SCONTEXT_PARAM, const byte_t par
 static inline double GetEnvironmentStateEnergy(const EnvironmentState_t* restrict envState)
 {
     return span_Get(envState->EnergyStates, envState->ParticleId);
+}
+
+// Get the next compare double between [0,1] from the RNG
+static inline double GetNextRandomDouble(SCONTEXT_PARAMETER)
+{
+    return Pcg32NextDouble(getMainRng(simContext));
+}
+
+// Get a ceiled random number from the main RNG
+static inline int32_t GetNextCeiledRandom(SCONTEXT_PARAMETER, const int32_t upperLimit)
+{
+    return Pcg32NextCeiled(getMainRng(simContext), upperLimit);
 }

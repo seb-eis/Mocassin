@@ -27,13 +27,13 @@
 #define MC_OUTVEC_FORMAT MC_OUTF64_FORMAT" "MC_OUTF64_FORMAT" "MC_OUTF64_FORMAT
 #define MC_UNIT_FORMAT "[%-13s]"
 #define MC_DEFAULT_FORMAT(VALUEFORMAT,...) MC_OUTTAG_FORMAT ": " MC_UNIT_FORMAT " " VALUEFORMAT " " __VA_ARGS__ "\n"
-#define MC_STATHEADER_FORMAT "\n== Particle statistics for (Id=%i, Charge=%+.2e [e], Count=%i) ==\n"
+#define MC_STATHEADER_FORMAT "<PARTICLE_DUMP ID=%i CHARGE=%+.2e COUNT=%i)>\n"
 
 // Calculates an eta in [s] for the remaining program duration
-static inline int64_t GetRemainingRunTimeEta(SCONTEXT_PARAM)
+static inline int64_t GetRemainingRunTimeEta(SCONTEXT_PARAMETER)
 {
-    let metaData = getMainStateMetaData(SCONTEXT);
-    let counters = getMainCycleCounters(SCONTEXT);
+    let metaData = getMainStateMetaData(simContext);
+    let counters = getMainCycleCounters(simContext);
 
     var result = ((double) (counters->TotalSimulationGoalMcsCount - counters->McsCount) / metaData->SuccessRate);
     return (isfinite(result)) ? (int64_t) result : 0;
@@ -48,9 +48,9 @@ static inline int64_t  GetCounterCollectionCycleCount(const StateCounterCollecti
 }
 
 // Checks if a particle id is potentially marked as mobile in any environment definition
-static inline bool_t ParticleIsMarkedAsMobile(SCONTEXT_PARAM, const byte_t particleId)
+static inline bool_t ParticleIsMarkedAsMobile(SCONTEXT_PARAMETER, const byte_t particleId)
 {
-    cpp_foreach(jumpCollection, *getJumpCollections(SCONTEXT))
+    cpp_foreach(jumpCollection, *getJumpCollections(simContext))
         return_if(flagsAreTrue(jumpCollection->MobileParticlesMask, 1 << particleId), true);
 
     return false;
@@ -127,42 +127,42 @@ static void PrintParticleMobility(const ParticleMobilityData_t* restrict data, f
 
     fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTVEC_FORMAT), "Movement => Mean <R^2>", "m^2",
             data->MeanMoveR2.A, data->MeanMoveR2.B, data->MeanMoveR2.C);
-
+    fprintf(fstream, "\n");
     fflush(fstream);
 }
 
 // Prints the particle information (optional only mobile skip) about the passed context to the passed stream
-static void PrintParticleInformation(SCONTEXT_PARAM, FILE *fstream, const bool_t onlyMobiles)
+static void PrintParticleInformation(SCONTEXT_PARAMETER, FILE *fstream, const bool_t onlyMobiles)
 {
-    let meta = getDbStructureModelMetaData(SCONTEXT);
+    let meta = getDbStructureModelMetaData(simContext);
     for (byte_t i = 1; isfinite(meta->ParticleCharges[i]);++i)
     {
-        continue_if(!ParticleIsMarkedAsMobile(SCONTEXT, i) && onlyMobiles);
+        continue_if(!ParticleIsMarkedAsMobile(simContext, i) && onlyMobiles);
 
         var particleStatistics = (ParticleStatistics_t) { .ParticleId = i, .ParticleCharge = meta->ParticleCharges[i] };
-        PopulateParticleStatistics(SCONTEXT, &particleStatistics);
+        PopulateParticleStatistics(simContext, &particleStatistics);
         PrintParticleStatistics(&particleStatistics, fstream);
 
-        continue_if(JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_MMC));
+        continue_if(JobInfoFlagsAreSet(simContext, INFO_FLG_MMC));
 
         var conductivityData = (ParticleMobilityData_t) { .ParticleStatistics = &particleStatistics };
-        PopulateMobilityData(SCONTEXT, &conductivityData);
+        PopulateMobilityData(simContext, &conductivityData);
         PrintParticleMobility(&conductivityData, fstream);
     }
 }
 
 // Prints the basic run statistics information about the passed context to the passes stream
-static void PrintRunStatisticsMetaInfo(SCONTEXT_PARAM, FILE* fstream)
+static void PrintRunStatisticsMetaInfo(SCONTEXT_PARAMETER, FILE* fstream)
 {
     char runTimeBuffer[100];
     char etaBuffer[100];
 
-    var jobInfo = getDbModelJobInfo(SCONTEXT);
-    var metaData = getMainStateMetaData(SCONTEXT);
-    var stateHeaderData = getMainStateHeader(SCONTEXT)->Data;
-    var fluctuationBuffer = getLatticeEnergyBuffer(SCONTEXT);
-    var cycleCounters = getMainCycleCounters(SCONTEXT);
-    let remainingRunTimeEta = GetRemainingRunTimeEta(SCONTEXT);
+    var jobInfo = getDbModelJobInfo(simContext);
+    var metaData = getMainStateMetaData(simContext);
+    var stateHeaderData = getMainStateHeader(simContext)->Data;
+    var fluctuationBuffer = getLatticeEnergyBuffer(simContext);
+    var cycleCounters = getMainCycleCounters(simContext);
+    let remainingRunTimeEta = GetRemainingRunTimeEta(simContext);
 
     SecondsToISO8601TimeSpan(runTimeBuffer, (int64_t) metaData->ProgramRunTime);
     SecondsToISO8601TimeSpan(etaBuffer, remainingRunTimeEta);
@@ -208,10 +208,7 @@ static void PrintRunStatisticsMetaInfo(SCONTEXT_PARAM, FILE* fstream)
     fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTF64_FORMAT, MC_OUTPRC_FORMAT), "Energy => Abort fluctuation", "eV",
             fluctuationBuffer->LastSum, getPercent(fluctuationBuffer->LastSum, metaData->LatticeEnergy));
 
-    fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTF64_FORMAT), "Probability => Max value", "",
-            metaData->RawMaxJumpProbability);
-
-    fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTF64_FORMAT), "Probability => Normalization", "",
+    fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTF64_FORMAT), "Probability => Norm. Factor", "",
             metaData->JumpNormalization);
 
     fprintf(fstream, "\n");
@@ -219,41 +216,41 @@ static void PrintRunStatisticsMetaInfo(SCONTEXT_PARAM, FILE* fstream)
 
 }
 
-void ProgressPrint_OnBlockFinish(SCONTEXT_PARAM, FILE *fstream, bool_t onlyMobiles)
+void ProgressPrint_OnBlockFinish(SCONTEXT_PARAMETER, FILE *fstream, bool_t onlyMobiles)
 {
-    fprintf(fstream, "\n\n=== Simulation statistics status ===\n\n");
-    PrintRunStatisticsMetaInfo(SCONTEXT, fstream);
-    PrintParticleInformation(SCONTEXT, fstream, onlyMobiles);
+    fprintf(fstream, "<STATISTICS_DUMP>\n");
+    PrintRunStatisticsMetaInfo(simContext, fstream);
+    PrintParticleInformation(simContext, fstream, onlyMobiles);
     fflush(fstream);
 }
 
 //  Prints the simulation copyright and basic data information
 static void PrintCopyrightInfo(file_t* fstream)
 {
-    fprintf(fstream, "Authors       - Sebastian Eisele [1], John Arnold [2]\n");
+    fprintf(fstream, "Authors       - Sebastian Eisele [1,2]\n");
     fprintf(fstream, "Copyright     - [1] Helmholtz Institute Muenster, HIMS, IEK-12 Juelich Research Center, Germany\n");
     fprintf(fstream, "              - [2] Institute Of Physical Chemistry, RWTH Aachen University, Germany\n");
     fprintf(fstream, "SQLite C/C++  - https://www.sqlite.org/copyright.html\n\n");
-    fprintf(fstream, "Notes         - Software is in alpha state and provided as is. Please report errors to the contacts!\n");
+    fprintf(fstream, "Notes         - Software is provided as is with no warranty. Please report errors to the contacts!\n");
     fprintf(fstream, "              - Metric space of output is euclidean!\n");
-    fprintf(fstream, "Contacts      - s.eisele@fz-juelich.de, arnold@pc.rwth-aachen.de\n");
+    fprintf(fstream, "Contacts      - s.eisele@fz-juelich.de\n");
     fflush(fstream);
 }
 
 // Prints the general job information to a stream
-static void PrintGeneralJobInfo(SCONTEXT_PARAM, file_t *fstream)
+static void PrintGeneralJobInfo(SCONTEXT_PARAMETER, file_t *fstream)
 {
     char buffer[100], extName[9];
-    let jobInfo = getDbModelJobInfo(SCONTEXT);
-    let cmdArgs = getCommandArguments(SCONTEXT);
+    let jobInfo = getDbModelJobInfo(simContext);
+    let cmdArgs = getCommandArguments(simContext);
     let executionPath = cmdArgs->Values[0];
 
-    let jobType = JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_MMC) ? "METROPOLIS" : "KINETIC";
-    let routineUuid = getCustomRoutineUuid(SCONTEXT);
-    let runType = StateFlagsAreSet(SCONTEXT, STATE_FLG_PRERUN) ? "PRERUN" : "MAIN";
-    let stateLoaded = StateFlagsAreSet(SCONTEXT, STATE_FLG_FIRSTCYCLE) ? "FALSE" : "TRUE";
-
+    let jobType = JobInfoFlagsAreSet(simContext, INFO_FLG_MMC) ? "METROPOLIS" : "KINETIC";
+    let routineUuid = getCustomRoutineUuid(simContext);
+    let runType = StateFlagsAreSet(simContext, STATE_FLG_PRERUN) ? "PRERUN" : "MAIN";
+    let stateLoaded = StateFlagsAreSet(simContext, STATE_FLG_FIRSTCYCLE) ? "FALSE" : "TRUE";
     GetCurrentTimeStampISO8601UTC(buffer);
+    fprintf(fstream, "<JOB_INFORMATION>\n");
     fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTSTR_FORMAT), "Job => Start time", "ISO8601", buffer);
 
     SecondsToISO8601TimeSpan(buffer, jobInfo->TimeLimit);
@@ -264,9 +261,10 @@ static void PrintGeneralJobInfo(SCONTEXT_PARAM, file_t *fstream)
     memset(buffer,0, sizeof(buffer));
     memcpy(extName,routineUuid->D,8);
     extName[8]=0;
-    sprintf(buffer, "%s [%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x]", extName, routineUuid->A, routineUuid->B, routineUuid->C,
+
+    sprintf(buffer, "[%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x] (%s)", routineUuid->A, routineUuid->B, routineUuid->C,
             routineUuid->D[0], routineUuid->D[1], routineUuid->D[2], routineUuid->D[3],
-            routineUuid->D[4], routineUuid->D[5], routineUuid->D[6], routineUuid->D[7]);
+            routineUuid->D[4], routineUuid->D[5], routineUuid->D[6], routineUuid->D[7], extName);
     fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTSTR_FORMAT), "Job => Extension info", "", buffer);
 
     fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTSTR_FORMAT), "Job => Current status", "", runType);
@@ -275,64 +273,45 @@ static void PrintGeneralJobInfo(SCONTEXT_PARAM, file_t *fstream)
 
     fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTCMD_FORMAT), "CMD => Execution path", "", executionPath);
 
-    fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTCMD_FORMAT), "CMD => Main state", "", getMainRunStateFile(SCONTEXT));
+    fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTCMD_FORMAT), "CMD => Main state dump", "", getMainRunStateFile(simContext));
 
-    fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTCMD_FORMAT), "CMD => Pre-Run state", "", getPreRunStateFile(SCONTEXT));
+    fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTCMD_FORMAT), "CMD => Pre-Run state dump", "", getPreRunStateFile(simContext));
 
     fflush(fstream);
     for (int32_t i = 1; i < cmdArgs->Count; i=i+2)
     {
-        fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTCMD_FORMAT, MC_OUTCMD_FORMAT), "CMD => Argument ", "",
+        fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTCMD_FORMAT, MC_OUTCMD_FORMAT), "CMD => Argument", "",
                 cmdArgs->Values[i], cmdArgs->Values[i+1]);
     }
-
     fprintf(fstream, "\n");
     fflush(fstream);
 }
 
-void ProgressPrint_OnSimulationStart(SCONTEXT_PARAM, file_t *fstream)
+void ProgressPrint_OnSimulationStart(SCONTEXT_PARAMETER, file_t *fstream)
 {
-
-    fprintf(fstream, "=== MOCASSIN SIMULATION START NOTIFICATION ===\n\n");
-
-    fprintf(fstream, "(C11) MOCASSIN SIMULATOR for HPC\n\n");
+    fprintf(fstream, "\n(C11) MOCASSIN SIMULATOR for HPC\n");
     PrintCopyrightInfo(fstream);
 
-    fprintf(fstream, "=== JOB INFORMATION ===\n\n");
-    PrintGeneralJobInfo(SCONTEXT, fstream);
+    fprintf(fstream, "\n");
+    PrintGeneralJobInfo(simContext, fstream);
 
-    fprintf(fstream, "=== MOCASSIN SIMULATION START STATE STATUS ===\n\n");
-    ProgressPrint_OnBlockFinish(SCONTEXT, fstream, false);
-    fprintf(fstream, "==============================================\n\n");
+    ProgressPrint_OnBlockFinish(simContext, fstream, false);
     fflush(fstream);
 }
 
-void ProgressPrint_OnContextReset(SCONTEXT_PARAM, file_t *fstream)
+void ProgressPrint_OnContextReset(SCONTEXT_PARAMETER, file_t *fstream)
 {
-    fprintf(fstream, "\n\n=== MOCASSIN PRE-RUN COMPLETION NOTIFICATION ===\n\n");
-    ProgressPrint_OnBlockFinish(SCONTEXT, fstream, true);
+    fprintf(fstream, "\n<END_OF_PRE_RUN>\n");
+    ProgressPrint_OnBlockFinish(simContext, fstream, true);
     fflush(fstream);
 }
-
-#define STATE_FLG_PRERUN        1
-#define STATE_FLG_CONTINUE      1 << 1
-#define STATE_FLG_COMPLETED     1 << 2
-#define STATE_FLG_TIMEOUT       1 << 3
-#define STATE_FLG_SIMABORT      1 << 4
-#define STATE_FLG_CONDABORT     1 << 5
-#define STATE_FLG_RATEABORT     1 << 6
-#define STATE_FLG_FIRSTCYCLE    1 << 7
-#define STATE_FLG_INITIALIZED   1 << 8
-#define STATE_FLG_SIMERROR      1 << 9
-#define STATE_FLG_PRERUN_RESET  1 << 10
-#define STATE_FLG_ENERGYABORT   1 << 11
 
 //  Prints all set state flags of the context as a readable string to the passed file-stream
-static void PrintStatusFlagCollection(SCONTEXT_PARAM, file_t* fstream)
+static void PrintStatusFlagCollection(SCONTEXT_PARAMETER, file_t* fstream)
 {
-    debug_assert(fstream == NULL && SCONTEXT != NULL);
+    debug_assert(fstream == NULL && simContext != NULL);
 
-    let flags = getMainStateHeader(SCONTEXT)->Data->Flags;
+    let flags = getMainStateHeader(simContext)->Data->Flags;
     fprintf(fstream, "Abort-flags: ");
 
     if (flagsAreTrue(flags, STATE_FLG_COMPLETED)) fprintf(fstream, "ABORT_REASON_COMPLETED ");
@@ -344,16 +323,16 @@ static void PrintStatusFlagCollection(SCONTEXT_PARAM, file_t* fstream)
     fflush(fstream);
 }
 
-void ProgressPrint_OnSimulationFinish(SCONTEXT_PARAM, file_t *fstream)
+void ProgressPrint_OnSimulationFinish(SCONTEXT_PARAMETER, file_t *fstream)
 {
     char buffer[100];
     let waitTime = 1;
-    let flags = getMainStateHeader(SCONTEXT)->Data->Flags;
-    SecondsToISO8601TimeSpan(buffer, (int64_t) getMainStateMetaData(SCONTEXT)->ProgramRunTime);
+    let flags = getMainStateHeader(simContext)->Data->Flags;
+    SecondsToISO8601TimeSpan(buffer, (int64_t) getMainStateMetaData(simContext)->ProgramRunTime);
 
-    ProgressPrint_OnBlockFinish(SCONTEXT, fstream, true);
+    ProgressPrint_OnBlockFinish(simContext, fstream, true);
     fprintf(fstream, "Main routine reached end @ %s  (ERR_CODE=0x%08x, STATE_FLAGS=0x%08x)\n", buffer, SIMERROR, flags);
-    PrintStatusFlagCollection(SCONTEXT, fstream);
+    PrintStatusFlagCollection(simContext, fstream);
     fprintf(fstream, "Auto termination in %i seconds...", waitTime);
     fflush(fstream);
     sleep(waitTime);

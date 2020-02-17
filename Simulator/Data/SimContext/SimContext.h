@@ -106,10 +106,16 @@ typedef Span_t(ClusterState_t, ClusterStates) ClusterStates_t;
 // Layout@ggc_x86_64 => 16@[8,8]
 typedef Span_t(double, EnergyStates) EnergyStates_t;
 
-// Type for a full environment state definition (Does not support 16 bit alignment)
-// Layout@ggc_x86_64 => 100@[1,1,1,1,4,4,4,16,4,,16,16,24,8]
+// Type for a full environment state definition (Supports 16 bit alignment)
+// Layout@ggc_x86_64 => 96@[16,1,1,1,1,4,4,4,,16,16,24,8]
 typedef struct EnvironmentState
 {
+    // Absolute 4D position vector of the environment in the lattice
+    Vector4_t                   LatticeVector;
+
+    // Current id of the environment in the jump path
+    byte_t                      PathId;
+
     // Boolean flag if the environment center is mobile
     bool_t                      IsMobile;
 
@@ -119,20 +125,14 @@ typedef struct EnvironmentState
     // Current occupation particle id
     byte_t                      ParticleId;
 
-    // Current id of the environment in the jump path
-    byte_t                      PathId;
-
-    // Environment id in the linearized lattice
-    int32_t                     EnvironmentId;
+    // Pointer to the affiliated environment definition
+    EnvironmentDefinition_t*    EnvironmentDefinition;
 
     // Current direction pool id the environment is registered in
     int32_t                     PoolId;
 
     // Current relative position id in the affiliated direction pool environment list
     int32_t                     PoolPositionId;
-
-    // Absolute 4D position vector of the environment
-    Vector4_t                   PositionVector;
 
     // Current mobile tracker id of the environment
     int32_t                     MobileTrackerId;
@@ -145,9 +145,6 @@ typedef struct EnvironmentState
 
     // Set of registered links to other environments
     EnvironmentLinks_t          EnvironmentLinks;
-
-    // Pointer to the affiliated environment definition
-    EnvironmentDefinition_t*    EnvironmentDefinition;
 
 } EnvironmentState_t;
 
@@ -162,11 +159,11 @@ typedef struct JumpSelectionInfo
     // The selected environment id
     int32_t EnvironmentId;
 
-    // The global jump id of the selection
-    int32_t GlobalJumpId;
-
     // The selected relative jump id within the selected environment
     int32_t RelativeJumpId;
+
+    // The global jump id of the selection
+    int32_t GlobalJumpId;
 
     // The selected offset source environment id (MMC only)
     int32_t MmcOffsetSourceId;
@@ -561,9 +558,12 @@ typedef struct SimulationContext
     // Stores the last cycle outcome type (accepted, rejected, blocked, skipped, start unstable, end unstable)
     int32_t             CycleResult;
 
-    // Indicates if the simulation should approximate EXP
-    bool_t              UseExpApproximation;
-    
+    // Marks if the simulation uses approximate EXP calculation
+    bool_t              IsExpApproximationActive;
+
+    //  Marks if the simulation does not log jump events into histograms
+    bool_t              IsJumpLoggingDisabled;
+
 } SimulationContext_t;
 
 // Construct a new raw simulation context struct with relative path as IO and math.h exp as exp function
