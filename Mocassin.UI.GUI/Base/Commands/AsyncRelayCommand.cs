@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 namespace Mocassin.UI.Base.Commands
 {
     /// <summary>
-    ///     Adapter class that wraps <see cref="Delegate" /> objects into a <see cref="ParameterlessAsyncCommand" />
+    ///     Adapter class that wraps <see cref="Delegate" /> objects into a <see cref="AsyncVoidParameterCommand" />
     /// </summary>
-    public sealed class AsyncRelayCommand : ParameterlessAsyncCommand
+    public sealed class AsyncRelayCommand : AsyncVoidParameterCommand
     {
         /// <summary>
         ///     The <see cref="Delegate" /> to call on command execution

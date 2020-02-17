@@ -3,9 +3,9 @@ using System;
 namespace Mocassin.UI.Base.Commands
 {
     /// <summary>
-    ///     Adapter base class to wrap <see cref="Delegate" /> objects into a <see cref="ParameterlessCommand" />
+    ///     Adapter base class to wrap <see cref="Delegate" /> objects into a <see cref="VoidParameterCommand" />
     /// </summary>
-    public sealed class RelayCommand : ParameterlessCommand
+    public sealed class RelayCommand : VoidParameterCommand
     {
         /// <summary>
         ///     The <see cref="Action" /> to call on command execution
