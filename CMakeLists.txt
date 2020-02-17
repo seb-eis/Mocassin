@@ -25,7 +25,7 @@ file(GLOB_RECURSE UTILITY_HEADER ./Utility/*.h)
 file(GLOB_RECURSE UTILITY_SOURCE ./Utility/*.c)
 
 set(VAR_LIBRARY_TYPE "SHARED")
-set(VAR_COMPILE_SQLITE "FALSE")
+set(VAR_COMPILE_SQLITE "TRUE")
 
 # Library and executable definitions
 add_executable(Mocassin.Simulator ./Main/main.c)
@@ -75,10 +75,15 @@ if (WIN32)
     # Set the flags to allow unicode and wmain
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -municode")
     add_compile_definitions(UNICODE _UNICODE)
+    if (CMAKE_BUILD_TYPE STREQUAL "Release")
+        message(STATUS "** Win Relase build, setting removal of debug information**")
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -s")
+        set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -s")
+    endif()
 
     # Advanced compiler settings, small performance improvement
-    set(CMAKE_C_FLAGS_DEBUG "${COMPILE_FLAGS_SSE_GNU} -g -march=native -mtune=native")
-    set(CMAKE_C_FLAGS_RELEASE "${COMPILE_FLAGS_SSE_GNU} -O3 -w -fno-cx-limited-range -funroll-loops -march=native -mtune=native")
+    set(CMAKE_C_FLAGS_RELEASE "${COMPILE_FLAGS_SSE_GNU} -O3 -w -fno-cx-limited-range -funroll-loops -march=native -mtune=native -m64 -s")
+    set(CMAKE_C_FLAGS_DEBUG "${COMPILE_FLAGS_SSE_GNU} -g -m64")
 
 elseif (UNIX)
     # Set the linker flags to use origin linking
@@ -87,13 +92,13 @@ elseif (UNIX)
     # Advanced gnu compiler settings
     if ("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU")
         message(STATUS "** Compiling with GNU settings **")
-        set(CMAKE_C_FLAGS_RELEASE "-O3 ${COMPILE_FLAGS_SSE_GNU} -w -fno-cx-limited-range -funroll-loops -march=native -mtune=native -lm -ldl -pthread")
+        set(CMAKE_C_FLAGS_RELEASE "-O3 ${COMPILE_FLAGS_SSE_GNU} -w -fno-cx-limited-range -funroll-loops -march=native -mtune=native -lm -ldl -pthread -s")
         set(CMAKE_C_FLAGS_DEBUG "-g ${COMPILE_FLAGS_SSE_GNU} -fno-cx-limited-range -funroll-loops -march=native -mtune=native -lm -ldl -pthread")
 
     # Advanced intel compiler settings
     elseif("${CMAKE_C_COMPILER_ID}" STREQUAL "Intel")
         message(STATUS "** Compiling with Intel settings **")
-        set(CMAKE_C_FLAGS_RELEASE "-O3 ${COMPILE_FLAGS_SSE_INTEL} -w -fno-cx-limited-range -funroll-loops -ldl -pthread")
+        set(CMAKE_C_FLAGS_RELEASE "-O3 ${COMPILE_FLAGS_SSE_INTEL} -w -fno-cx-limited-range -funroll-loops -ldl -pthread -s")
         set(CMAKE_C_FLAGS_DEBUG "-g ${COMPILE_FLAGS_SSE_INTEL} -fno-cx-limited-range -funroll-loops -ldl -pthread")
 
     # Fallback settings

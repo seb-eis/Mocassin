@@ -112,18 +112,17 @@ class MocassinBuilder:
 
         raise Exception("The CMakeList file does not or could not be found!")
 
-    def ValidateCleanRebuild(self):
-        if self.Arguments["cleanBuild"] == "True":
+    def ValidateCleanRebuild(self, isForced = False):
+        if self.Arguments["cleanBuild"] == "True" or isForced:
             print("Cleaning build directory for clean rebuild")
             shutil.rmtree(self.Arguments["buildDirectory"])
             os.mkdir(self.Arguments["buildDirectory"])
 
-    def ExecuteCMake(self):
-        self.ValidateCleanRebuild()
+    def ExecuteCMake(self, isForcedClean = False):
+        self.ValidateCleanRebuild(isForcedClean)
         print("Changing to build directory: {0}".format(self.Arguments["buildDirectory"]))
         os.chdir(self.Arguments["buildDirectory"])
-
-        cfgCommand = "CC={0} cmake -DCMAKE_BUILD_TYPE={1} {2}".format(self.Arguments["compilerName"], self.Arguments["buildType"], self.Arguments["sourceDirectory"])
+        cfgCommand = "CC={0} CXX={0} cmake -DCMAKE_BUILD_TYPE={1} {2}".format(self.Arguments["compilerName"], self.Arguments["buildType"], self.Arguments["sourceDirectory"])
         print("Invoking configuration command: {0}".format(cfgCommand))
         p = subprocess.Popen(cfgCommand, shell=True)
         p.wait()
@@ -158,7 +157,25 @@ class MocassinBuilder:
         self.ReadConfigFromFile(cfgFile)
         self.ValidateSourceDirectory()
         self.MakeMissingDirectories()
-        self.ExecuteCMake()
+        self.Compile()
+
+    def Compile(self):
+        if self.Arguments["compilerName"] == "icc":
+            self.CompileWith("icc")
+            return
+        if self.Arguments["compilerName"] == "gcc":
+            self.CompileWith("gcc")
+            return
+        if self.Arguments["compilerName"] == "all":
+            self.CompileWith("icc", True)
+            self.CompileWith("gcc", True)
+        return
+
+    def CompileWith(self, compiler="icc", isForceClean=False):
+        print("Switching to '{}' compiler settings.".format(compiler))
+        self.Arguments["deployDirectory"] = self.Arguments[compiler + "DeployDirectory"]
+        self.Arguments["compilerName"] = compiler
+        self.ExecuteCMake(isForceClean)
         self.CopyCompiledObjectsToDeploy()
 
 

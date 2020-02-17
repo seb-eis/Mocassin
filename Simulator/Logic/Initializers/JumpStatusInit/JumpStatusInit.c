@@ -209,7 +209,6 @@ static error_t AssignPossibleStaticCorrectionValuesToRules(SCONTEXT_PARAMETER)
     return ERR_OK;
 }
 
-// Builds the KMC jump status collection on an initialized simulation context
 void BuildJumpStatusCollection(SCONTEXT_PARAMETER)
 {
     return_if(JobInfoFlagsAreSet(simContext, INFO_FLG_MMC));
@@ -219,6 +218,7 @@ void BuildJumpStatusCollection(SCONTEXT_PARAMETER)
     AllocateJumpStatusArray(simContext);
     error = ConstructJumpStatusCollection(simContext);
     assert_success(error, "Fatal error during construction of the jump status collection.");
+
     error = AssignPossibleStaticCorrectionValuesToRules(simContext);
     assert_success(error, "Fatal error during attempt to determine virtual jump bias optimization.");
 }

@@ -1,4 +1,3 @@
-
 //////////////////////////////////////////
 // Project: C Monte Carlo Simulator		//
 // File:	EnvRoutines.h        		//
@@ -6,7 +5,7 @@
 //			Workgroup Martin, IPC       //
 //			RWTH Aachen University      //
 //			© 2018 Sebastian Eisele     //
-// Short:   Inlinable helper routines   //
+// Short:   Set of helper routines      //
 //////////////////////////////////////////
 
 #pragma once
@@ -164,3 +163,12 @@ static inline int32_t GetNextCeiledRandom(SCONTEXT_PARAMETER, const int32_t uppe
 {
     return Pcg32NextCeiled(getMainRng(simContext), upperLimit);
 }
+
+// Checks if the passed pair table is constant and has always the same energy value independent of context
+bool_t CheckPairEnergyTableIsConstant(SCONTEXT_PARAMETER, const PairTable_t *restrict table);
+
+// Checks if the passed cluster table is constant and has always the same energy value independent of context
+bool_t CheckClusterEnergyTableIsConstant(SCONTEXT_PARAMETER, const ClusterTable_t *restrict table);
+
+// Checks if the pair interaction of a environment definition is link irrelevant (Is const value and has not cluster dependencies)
+bool_t CheckPairInteractionIsLinkIrrelevantByIndex(SCONTEXT_PARAMETER, const EnvironmentDefinition_t *restrict environment, int32_t pairId);

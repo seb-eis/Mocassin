@@ -82,7 +82,7 @@ typedef struct EnvironmentDefinition
     int32_t                     PositionId;
 
     // Padding
-    int32_t                     Padding:32;
+    uint32_t                     Padding;
 
     // The particle mask of center positions that should be put into the selection pool
     Bitmask_t                   SelectionParticleMask;
@@ -180,7 +180,7 @@ typedef struct PairTable
     int32_t         ObjectId;
 
     // Padding
-    int32_t         Padding:32;
+    uint32_t         Padding;
 
 } PairTable_t;
 
@@ -203,7 +203,7 @@ typedef struct ClusterTable
     byte_t                  ParticleTableMapping[PARTICLE_IDLIMIT];
 
     // Padding
-    int32_t                 Padding:32;
+    uint32_t                 Padding;
     
 } ClusterTable_t;
 
@@ -338,7 +338,7 @@ typedef struct JumpCollection
     int32_t             ObjectId;
 
     // Padding
-    int32_t             Padding:32;
+    uint32_t             Padding;
 
 } JumpCollection_t;
 
@@ -392,7 +392,7 @@ typedef struct MmcHeader
     int32_t     AbortSampleInterval;
 
     // Padding
-    int32_t     Padding:32;
+    uint32_t     Padding;
     
 } MmcHeader_t;
 
@@ -416,7 +416,7 @@ typedef struct KmcHeader
     int32_t     PreRunMcsp;
 
     // Padding
-    int32_t     Padding:32;
+    uint32_t     Padding;
 
 } KmcHeader_t;
 
@@ -458,7 +458,7 @@ typedef struct JobInfo
     int32_t     ObjectId;
 
     // Padding
-    int32_t     Padding:32;
+    uint32_t     Padding;
     
 } JobInfo_t;
 
@@ -536,7 +536,7 @@ typedef struct LatticeModel
     EnergyBackground_t  EnergyBackground;
 
     // Padding
-    int64_t             Padding:64;
+    uint64_t             Padding;
 
 } LatticeModel_t;
 

@@ -53,7 +53,6 @@ class MocsimExecutionController:
                 "ExtensionPath": "auto",
                 "JobFolderFormat": "{0:s}/Job{1:05d}",
                 "SimulationStdoutLog": "stdout.log",
-                "ExponentialMode": "exact",
                 "ExecutionMode": "auto",
                 "AutoSearchPath": "auto",
                 "EnableTestMode": "True",
@@ -94,6 +93,8 @@ class MocsimExecutionController:
         searchPattern = self.GetSimulatorSearchPattern()
         for item in glob.iglob(searchPattern, recursive=True):
             self.Parameters["ExecutablePath"] = item
+            if self.mpirank() == 0:
+                print("[{}] [MPI_RANK {} / {}] - Target: {}".format(time.asctime(), self.mpirank(), self.mpisize(), item))
             return
 
     def FindExtensionPath(self):
@@ -148,7 +149,6 @@ class MocsimExecutionController:
                 "-jobId", str(jobId),
                 "-ioPath", jobFolder,
                 "-stdout", self.Parameters["SimulationStdoutLog"],
-                "-fexp", "true" if self.Parameters["ExponentialMode"] == "fast" else "false",
                 "-extDir", self.Parameters["ExtensionPath"]]
 
     def PopenSimulator(self, jobId, wait=False):

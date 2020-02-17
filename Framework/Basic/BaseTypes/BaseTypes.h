@@ -42,7 +42,7 @@ typedef uint8_t byte_t;
 typedef int8_t sbyte_t;
 
 // Defines the bool to be one unsigned byte
-typedef sbyte_t bool_t;
+typedef byte_t bool_t;
 
 // Defines the values for true and false
 enum BooleanValuesEnum { false = 0, true = 1 };

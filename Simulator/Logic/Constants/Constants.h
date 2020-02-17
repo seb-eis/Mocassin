@@ -58,9 +58,9 @@
 
 /* Monte Carlo constants */
 
-#define MC_CONST_JUMPLIMIT_TOL 1.0e-10
-#define MC_CONST_JUMPLIMIT_MIN 0.0e+00 - MC_CONST_JUMPLIMIT_TOL
-#define MC_CONST_JUMPLIMIT_MAX 1.0e+00 + MC_CONST_JUMPLIMIT_TOL
+#define MC_CONST_FLP_TOLERANCE 1.0e-10
+#define MC_CONST_JUMPLIMIT_MIN 0.0e+00 - MC_CONST_FLP_TOLERANCE
+#define MC_CONST_JUMPLIMIT_MAX 1.0e+00 + MC_CONST_FLP_TOLERANCE
 #define MC_CONST_BACKJUMP_NULL 0.0
 #define MC_CONST_BACKJUMP_INF  INFINITY
 
@@ -95,8 +95,9 @@
 #define JPOOL_DIRCOUNT_PASSIVE   0
 #define JPOOL_NOT_SELECTABLE    -1
 
-/* Cluster defines */
+/* Cluster and energy defines */
 #define CLUSTER_MAXLINK_COUNT   256
+#define ENERGY_FLG_CONST_TABLE  1U
 
 /* Particle/position/index constants */
 

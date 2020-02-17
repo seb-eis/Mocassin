@@ -140,15 +140,23 @@ static void ResolvePairTargetAndIncreaseLinkCounter(SCONTEXT_PARAMETER, const En
 // Sets all link counters of the environment state lattice to the required number of linkers
 static error_t SetAllLinkListCountersToRequiredSize(SCONTEXT_PARAMETER)
 {
+    var isMMC = JobInfoFlagsAreSet(simContext, INFO_FLG_MMC);
     cpp_foreach(environment, *getEnvironmentLattice(simContext))
     {
         // Immobility OPT Part 1 and 2 - Immobile centers (or unstables in MMC) to not need to receive updates from their surroundings
         #if defined(OPT_LINK_ONLY_MOBILES)
-            continue_if(JobInfoFlagsAreSet(simContext, INFO_FLG_MMC) && !environment->IsStable);
+            continue_if(isMMC && !environment->IsStable);
             continue_if(environment->IsStable && !environment->IsMobile);
         #endif
+
+        int32_t pairId = -1;
         cpp_foreach(pairDefinition, environment->EnvironmentDefinition->PairInteractions)
+        {
+            pairId++;
+            let isLinkIrrelevant = CheckPairInteractionIsLinkIrrelevantByIndex(simContext, environment->EnvironmentDefinition, pairId);
+            continue_if(isLinkIrrelevant);
             ResolvePairTargetAndIncreaseLinkCounter(simContext, environment, pairDefinition);
+        }
     }
 
     return ERR_OK;
@@ -184,22 +192,30 @@ static error_t PrepareLinkingSystemConstruction(SCONTEXT_PARAMETER)
     return error;
 }
 
-// Links an environment to its surroundings by sending a link to each one that requires one
-static error_t LinkEnvironmentToSurroundings(SCONTEXT_PARAMETER, EnvironmentState_t* restrict environment)
+// Links an environment to its surroundings by sending a link to each one that requires one and counts the passed ignore counters up depending on the reason for ignoring a link
+static error_t LinkEnvironmentToSurroundings(SCONTEXT_PARAMETER, EnvironmentState_t* restrict environment, int32_t* mobiliyIgnoreCount, int32_t* energyIgnoreCount)
 {
     error_t error;
-    int32_t pairId = 0;
-
+    int32_t pairId = -1;
+    let envId = getEnvironmentStateIdByPointer(simContext, environment);
     cpp_foreach(pairDefinition, environment->EnvironmentDefinition->PairInteractions)
     {
-        var environmentLink = GetNextLinkFromTargetEnvironment(simContext, pairDefinition, environment);
-        if (environmentLink != NULL)
-        {
-            let envId = getEnvironmentStateIdByPointer(simContext, environment);
-            error = InPlaceConstructEnvironmentLink(environment->EnvironmentDefinition, envId, pairId, environmentLink);
-            return_if(error, error);
-        }
         pairId++;
+        let isLinkIrrelevant = CheckPairInteractionIsLinkIrrelevantByIndex(simContext, environment->EnvironmentDefinition, pairId);
+        if (isLinkIrrelevant)
+        {
+            (*energyIgnoreCount)++;
+            continue;
+        }
+
+        var environmentLink = GetNextLinkFromTargetEnvironment(simContext, pairDefinition, environment);
+        if (environmentLink == NULL)
+        {
+            (*mobiliyIgnoreCount)++;
+            continue;
+        }
+        error = InPlaceConstructEnvironmentLink(environment->EnvironmentDefinition, envId, pairId, environmentLink);
+        return_if(error, error);
     }
 
     return ERR_OK;
@@ -223,18 +239,24 @@ static void SortEnvironmentLinkingSystem(SCONTEXT_PARAMETER, EnvironmentState_t*
 static error_t ConstructPreparedLinkingSystem(SCONTEXT_PARAMETER)
 {
     error_t error;
-    int64_t linkCount = 0;
+    int32_t linkCount = 0;
+    int32_t mobilityIgnoredCount = 0;
+    int32_t energyIgnoredCount = 0;
+    bool_t isMMC = JobInfoFlagsAreSet(simContext, INFO_FLG_MMC);
     var environmentLattice = getEnvironmentLattice(simContext);
     cpp_foreach(environment, *environmentLattice)
     {
         // Immobility OPT Part 1 -> Incoming updates are not required, the state energy of immobile particles is not used during mc routine
         // Effect:    Causes all immobile particles to remain at their initial energy state during simulation (can be resynchronized by dynamic lookup)
         #if defined(OPT_LINK_ONLY_MOBILES)
-            continue_if(!environment->IsMobile && environment->IsStable);
-            continue_if(JobInfoFlagsAreSet(simContext, INFO_FLG_MMC) && !environment->IsStable);
+        if((!environment->IsMobile && environment->IsStable) || (isMMC && !environment->IsStable))
+        {
+            mobilityIgnoredCount++;
+            continue;
+        }
         #endif
 
-        error = LinkEnvironmentToSurroundings(simContext, environment);
+        error = LinkEnvironmentToSurroundings(simContext, environment, &mobilityIgnoredCount, &energyIgnoredCount);
         return_if(error, error);
     }
 
@@ -243,14 +265,48 @@ static error_t ConstructPreparedLinkingSystem(SCONTEXT_PARAMETER)
         SortEnvironmentLinkingSystem(simContext, environment);
         linkCount += span_Length(environment->EnvironmentLinks);
     }
-    printf("[Init-Info]: Constructed environment update network [LINK_COUNT=" FORMAT_I64() ", LINK_COUNT_AVERAGE=" FORMAT_I64() "]\n", linkCount, linkCount / span_Length(*environmentLattice));
+    printf("[Init-Info]: Optimized required state dependency network [TOTAL_LINKS_CREATED=%i, SKIPPED_CONST_ENERGY_LINKS=%i, SKIPPED_CONST_PARTICLE_LINKS=%i]\n",
+            linkCount, energyIgnoredCount, mobilityIgnoredCount);
     return ERR_OK;
+}
+
+// Checks all pair interactions and cluster interactions for constant tables and sets the required flags if required
+static error_t DetectAndTagConstantInteractionDefinitions(SCONTEXT_PARAMETER)
+{
+    error_t error = ERR_OK;
+    let energyModel = getDbEnergyModel(simContext);
+    var fixPairCount = 0;
+    var fixClusterCount = 0;
+    cpp_foreach(table, energyModel->PairTables)
+    {
+        let isConst = CheckPairEnergyTableIsConstant(simContext, table);
+        continue_if(!isConst);
+        setFlags(table->Padding, ENERGY_FLG_CONST_TABLE);
+        fixPairCount++;
+    }
+    if (fixPairCount != 0) printf("[Init-Info]: Optimized pair energy table behavior => No dynamic effect on energy landscape [%i of %i].\n",
+            fixPairCount, (int32_t) span_Length(energyModel->PairTables));
+
+    cpp_foreach(table, energyModel->ClusterTables)
+    {
+        let isConst = CheckClusterEnergyTableIsConstant(simContext, table);
+        continue_if(!isConst);
+        setFlags(table->Padding, ENERGY_FLG_CONST_TABLE);
+        fixClusterCount++;
+    }
+
+    if (fixClusterCount != 0) printf("[Init-Info]: Optimized cluster energy table behavior => No dynamic effect on energy landscape [%i of %i].\n",
+            fixClusterCount, (int32_t) span_Length(energyModel->ClusterTables));
+    return error;
 }
 
 // Builds the environment linking system of the environment state lattice
 void BuildEnvironmentLinkingSystem(SCONTEXT_PARAMETER)
 {
     error_t error;
+
+    error = DetectAndTagConstantInteractionDefinitions(simContext);
+    assert_success(error, "Failed to detect and tag constant energy tables.");
 
     error = PrepareLinkingSystemConstruction(simContext);
     assert_success(error, "Failed to prepare the environment linking system for construction.");
