@@ -7,6 +7,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.DataControl
     /// </summary>
     public partial class DxCustomizationControlView : UserControl
     {
+        /// <inheritdoc />
         public DxCustomizationControlView()
         {
             InitializeComponent();

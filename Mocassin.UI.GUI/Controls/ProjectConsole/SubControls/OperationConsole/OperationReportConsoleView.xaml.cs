@@ -8,6 +8,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.OperationConsole
     /// </summary>
     public partial class OperationReportConsoleView : UserControl
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public OperationReportConsoleView()
         {
             InitializeComponent();
@@ -15,12 +18,12 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.OperationConsole
 
         private void ReportDataGrid_OnMouseEnter(object sender, MouseEventArgs e)
         {
-            (DataContext as OperationReportConsoleViewModel).IsSoftUpdateStop = true;
+            ((OperationReportConsoleViewModel) DataContext).IsSoftUpdateStop = true;
         }
 
         private void ReportDataGrid_OnMouseLeave(object sender, MouseEventArgs e)
         {
-            (DataContext as OperationReportConsoleViewModel).IsSoftUpdateStop = false;
+            ((OperationReportConsoleViewModel) DataContext).IsSoftUpdateStop = false;
         }
     }
 }

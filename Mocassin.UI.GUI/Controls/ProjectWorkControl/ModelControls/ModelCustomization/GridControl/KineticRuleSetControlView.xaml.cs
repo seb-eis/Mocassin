@@ -7,6 +7,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
     /// </summary>
     public partial class KineticRuleSetControlView : UserControl
     {
+        /// <inheritdoc />
         public KineticRuleSetControlView()
         {
             InitializeComponent();

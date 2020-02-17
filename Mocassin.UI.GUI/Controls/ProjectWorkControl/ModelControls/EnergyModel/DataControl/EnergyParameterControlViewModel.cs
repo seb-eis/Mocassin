@@ -21,7 +21,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.
         public InteractionFilterGridControlViewModel InteractionFilterGridViewModel { get; }
 
         /// <summary>
-        ///     Get the <see cref="StableEnvironmentData" /> of the currently < set <see cref="MocassinProject" />
+        ///     Get the <see cref="StableEnvironmentData" /> of the currently se <see cref="MocassinProject" />
         /// </summary>
         public StableEnvironmentData Environment => ContentSource?.ProjectModelData?.EnergyModelData?.StableEnvironment;
 

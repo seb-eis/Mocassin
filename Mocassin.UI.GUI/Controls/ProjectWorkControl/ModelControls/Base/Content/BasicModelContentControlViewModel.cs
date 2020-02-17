@@ -68,7 +68,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         }
 
         /// <summary>
-        ///     Action that is invoked if a selected object of type <see cref="T" /> has changed
+        ///     Action that is invoked if a selected object of a generic type has changed
         /// </summary>
         /// <param name="value"></param>
         protected void OnSelectionChanged<T>(T value)

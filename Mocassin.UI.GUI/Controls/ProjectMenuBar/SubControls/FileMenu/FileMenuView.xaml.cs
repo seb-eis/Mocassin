@@ -7,6 +7,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.FileMenu
     /// </summary>
     public partial class FileMenuView : UserControl
     {
+        /// <inheritdoc />
         public FileMenuView()
         {
             InitializeComponent();

@@ -100,7 +100,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Collections
         }
 
         /// <summary>
-        ///     Get the first occurence of item <see cref="T"/> that matches the predicate or creates a new one if no match is found. By default the new item is added to the collection
+        ///     Get the first occurence of an item that matches the predicate or creates a new one if no match is found. By default the new item is added to the collection
         /// </summary>
         /// <param name="predicate"></param>
         /// <param name="constructor"></param>

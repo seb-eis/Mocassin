@@ -18,13 +18,13 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.GridCon
     ///     <see cref="ModelObjectReference{T}" /> collection selections for a hosting <see cref="ModelDataObject" />
     /// </summary>
     /// <typeparam name="TModelObject"></typeparam>
-    /// <typeparam name="TObjectGraph"></typeparam>
-    public abstract class HostGraphModelObjectSelectionViewModel<TModelObject, TObjectGraph> :
+    /// <typeparam name="TDataObject"></typeparam>
+    public abstract class HostGraphModelObjectSelectionViewModel<TModelObject, TDataObject> :
         CollectionControlViewModel<ModelObjectReference<TModelObject>>,
         IContentSupplier<MocassinProject>,
         IObjectDropAcceptor
         where TModelObject : ModelObject, new()
-        where TObjectGraph : ModelDataObject
+        where TDataObject : ModelDataObject
     {
         /// <summary>
         ///     Get or set the <see cref="IReadOnlyCollection{T}" /> of <see cref="MocassinProject" /> instances that can be
@@ -38,9 +38,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.GridCon
         public bool IsDuplicateFiltered { get; }
 
         /// <summary>
-        ///     Get the hosting <see cref="TObjectGraph" />
+        ///     Get the hosting <see cref="ModelDataObject"/>
         /// </summary>
-        public TObjectGraph HostObject { get; }
+        public TDataObject HostObject { get; }
 
         /// <inheritdoc />
         public Command<IDataObject> HandleDropAddCommand { get; set; }
@@ -60,7 +60,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.GridCon
         /// </summary>
         /// <param name="hostObject"></param>
         /// <param name="isDuplicateFiltered"></param>
-        protected HostGraphModelObjectSelectionViewModel(TObjectGraph hostObject, bool isDuplicateFiltered)
+        protected HostGraphModelObjectSelectionViewModel(TDataObject hostObject, bool isDuplicateFiltered)
         {
             IsDuplicateFiltered = isDuplicateFiltered;
             HostObject = hostObject;
@@ -104,11 +104,10 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.GridCon
         /// </summary>
         /// <param name="sourceObject"></param>
         /// <returns></returns>
-        protected abstract ICollection<ModelObjectReference<TModelObject>> GetTargetCollection(TObjectGraph sourceObject);
+        protected abstract ICollection<ModelObjectReference<TModelObject>> GetTargetCollection(TDataObject sourceObject);
 
         /// <summary>
-        ///     Get a <see cref="Command{T}" /> to add a <see cref="TGraph" /> reference from a <see cref="IDataObject" /> drop to
-        ///     the host collection
+        ///     Get a <see cref="Command{T}" /> to add a reference from a <see cref="IDataObject" /> drop to the host collection
         /// </summary>
         /// <returns></returns>
         public Command<IDataObject> GetDropAddObjectCommand<TGraph>() where TGraph : ModelDataObject

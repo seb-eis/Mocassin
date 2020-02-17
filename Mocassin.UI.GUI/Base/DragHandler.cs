@@ -20,8 +20,7 @@ namespace Mocassin.UI.GUI.Base
         public Point? StartPoint { get; private set; }
 
         /// <summary>
-        ///     Get or set the <see cref="Func{TResult}" /> to package data from the <see cref="TElement" /> into a
-        ///     <see cref="IDataObject" />
+        ///     Get or set the <see cref="Func{TResult}" /> to package data from the source into a <see cref="IDataObject" />
         /// </summary>
         public Func<TElement, IDataObject> PackerFunction { get; set; }
 

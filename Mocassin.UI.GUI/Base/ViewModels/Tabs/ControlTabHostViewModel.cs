@@ -41,6 +41,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
             set => SetProperty(ref isFrontInsertMode, value);
         }
 
+        /// <inheritdoc />
         public ControlTabHostViewModel()
         {
             HandleDropAddCommand = new RelayCommand<IDataObject>(HandleDataDrop, CanHandleDataDrop);

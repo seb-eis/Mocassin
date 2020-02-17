@@ -603,7 +603,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         ///     <see cref="DxSceneBuilder" />
         /// </summary>
         /// <param name="sceneBuilder"></param>
-        /// <param name="positionDatah"></param>
+        /// <param name="referencePositionData"></param>
         /// <param name="renderBox"></param>
         /// <returns></returns>
         private void AddCellPositionNodeToScene(DxSceneBuilder sceneBuilder, CellReferencePositionData referencePositionData, in FractionalBox3D renderBox)
@@ -1099,7 +1099,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         ///     <see cref="CellReferencePositionData" /> if true
         /// </summary>
         /// <param name="vector"></param>
-        /// <param name="positionDatah"></param>
+        /// <param name="referencePositionData"></param>
         /// <returns></returns>
         protected bool CheckCellPositionHit(in Fractional3D vector, out CellReferencePositionData referencePositionData)
         {

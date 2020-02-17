@@ -7,6 +7,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.
     /// </summary>
     public partial class EnergyParameterControlView : UserControl
     {
+        /// <inheritdoc />
         public EnergyParameterControlView()
         {
             InitializeComponent();

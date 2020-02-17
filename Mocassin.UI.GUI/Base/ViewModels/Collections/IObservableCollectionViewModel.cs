@@ -16,31 +16,31 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Collections
         ObservableCollection<T> ObservableItems { get; }
 
         /// <summary>
-        ///     Inserts and item <see cref="T" /> into the view model collection at the given index
+        ///     Inserts and item into the view model collection at the given index
         /// </summary>
         /// <param name="index"></param>
         /// <param name="value"></param>
         void InsertItem(int index, T value);
 
         /// <summary>
-        ///     Appends an item <see cref="T" /> to the end of the view model collection
+        ///     Appends an item to the end of the view model collection
         /// </summary>
         /// <param name="value"></param>
         void AddItem(T value);
 
         /// <summary>
-        ///     Appends an <see cref="IEnumerable{T}" /> sequence of item <see cref="T" /> to the end of the view model collection
+        ///     Appends an <see cref="IEnumerable{T}" /> sequence of items to the end of the view model collection
         /// </summary>
         void AddItems(IEnumerable<T> values);
 
         /// <summary>
-        ///     Removes the first occurence of <see cref="T" /> from the view model collection
+        ///     Removes the first occurence of an item from the view model collection
         /// </summary>
         /// <param name="value"></param>
         void RemoveItem(T value);
 
         /// <summary>
-        ///     Checks if the value <see cref="T" /> is part of the view model collection
+        ///     Checks if the value is part of the view model collection
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>

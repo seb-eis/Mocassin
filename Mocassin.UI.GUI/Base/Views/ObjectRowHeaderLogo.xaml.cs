@@ -7,6 +7,7 @@ namespace Mocassin.UI.GUI.Base.Views
     /// </summary>
     public partial class ObjectRowHeaderLogo : UserControl
     {
+        /// <inheritdoc />
         public ObjectRowHeaderLogo()
         {
             InitializeComponent();

@@ -72,7 +72,7 @@ namespace Mocassin.UI.Base.Commands
         }
 
         /// <summary>
-        ///     Execute the command with the passed parameter of type <see cref="T" />
+        ///     Execute the command with the passed parameter
         /// </summary>
         /// <param name="parameter"></param>
         public abstract void Execute(T parameter);

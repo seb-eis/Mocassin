@@ -24,7 +24,7 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
         }
 
         /// <summary>
-        ///     Get or set the selected collection item <see cref="T" />
+        ///     Get or set the selected collection item
         /// </summary>
         public T SelectedItem
         {

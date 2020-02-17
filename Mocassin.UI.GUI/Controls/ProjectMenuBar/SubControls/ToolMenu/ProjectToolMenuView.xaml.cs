@@ -7,6 +7,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ToolMenu
     /// </summary>
     public partial class ProjectToolMenuView : UserControl
     {
+        /// <inheritdoc />
         public ProjectToolMenuView()
         {
             InitializeComponent();

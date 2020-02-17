@@ -31,7 +31,6 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
         /// <param name="tabName"></param>
         /// <param name="contentViewModel"></param>
         /// <param name="content"></param>
-        /// <param name=""></param>
         /// <param name="tabHost"></param>
         public DynamicControlTabItem(string tabName, ViewModelBase contentViewModel, Control content, IControlTabHost tabHost)
             : base(tabName, contentViewModel, content)

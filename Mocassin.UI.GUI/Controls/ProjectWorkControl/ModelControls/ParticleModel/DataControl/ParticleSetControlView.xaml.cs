@@ -17,6 +17,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ParticleMode
         private DragHandler<DataGrid> RowHeaderDragHandler { get; set; }
 
 
+        /// <inheritdoc />
         public ParticleSetControlView()
         {
             InitializeDragHandlers();

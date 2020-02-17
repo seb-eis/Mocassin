@@ -6,7 +6,7 @@ using HelixToolkit.Wpf.SharpDX;
 namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
 {
     /// <summary>
-    ///     Static class that provides helper methods for creating <see cref="Light3D"/> and <see cref="LightNode"/>
+    ///     Static class that provides helper methods for creating light objects with and without dependency property layer
     /// </summary>
     public static class DxLightFactory
     {
@@ -39,6 +39,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
         ///     Builds a default weak <see cref="AmbientLight3D"/> using the provided <see cref="Color"/>
         /// </summary>
         /// <param name="color"></param>
+        /// <param name="intensity"></param>
         /// <returns></returns>
         public static AmbientLight3D DefaultAmbientLight3D(in Color color, double intensity = 1.0)
         {

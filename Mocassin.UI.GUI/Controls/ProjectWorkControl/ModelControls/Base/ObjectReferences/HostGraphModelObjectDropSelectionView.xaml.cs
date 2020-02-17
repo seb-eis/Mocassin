@@ -9,6 +9,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.GridCon
     /// </summary>
     public partial class HostGraphModelObjectDropSelectionView : UserControl
     {
+        /// <inheritdoc />
         public HostGraphModelObjectDropSelectionView()
         {
             InitializeComponent();

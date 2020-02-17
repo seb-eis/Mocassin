@@ -7,6 +7,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
     /// </summary>
     public partial class DxViewportSettingsView : UserControl
     {
+        /// <inheritdoc />
         public DxViewportSettingsView()
         {
             InitializeComponent();

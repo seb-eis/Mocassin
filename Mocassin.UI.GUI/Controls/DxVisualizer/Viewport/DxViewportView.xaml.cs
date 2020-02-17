@@ -10,6 +10,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
     /// </summary>
     public partial class DxViewportView : UserControl, IDisposable
     {
+        /// <inheritdoc />
         public DxViewportView()
         {
             InitializeComponent();

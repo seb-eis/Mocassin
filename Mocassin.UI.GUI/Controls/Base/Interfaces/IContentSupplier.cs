@@ -14,7 +14,7 @@ namespace Mocassin.UI.GUI.Controls.Base.Interfaces
         T ContentSource { get; }
 
         /// <summary>
-        ///     Notify the receiver that a selection has been changed to the passed object with type <see cref="T"/>
+        ///     Notify the receiver that a selection has been changed to the passed object
         /// </summary>
         /// <param name="contentSource"></param>
         void ChangeContentSource(T contentSource);

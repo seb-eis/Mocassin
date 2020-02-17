@@ -4,10 +4,11 @@ using System.Windows.Controls;
 namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
 {
     /// <summary>
-    /// Interaction logic for DxModelSceneView.xaml
+    ///     Interaction logic for DxModelSceneView.xaml
     /// </summary>
     public partial class DxModelSceneView : UserControl, IDisposable
     {
+        /// <inheritdoc />
         public DxModelSceneView()
         {
             InitializeComponent();

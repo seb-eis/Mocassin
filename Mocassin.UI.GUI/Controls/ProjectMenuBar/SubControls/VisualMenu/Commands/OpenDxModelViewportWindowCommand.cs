@@ -9,7 +9,7 @@ using System.Collections.Generic;
 namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.VisualMenu.Commands
 {
     /// <summary>
-    ///     A <see cref="OpenDefaultContentWindowCommand" /> to open the <see cref="Dx" />
+    ///     A <see cref="OpenDefaultContentWindowCommand" /> to open the <see cref="DxModelSceneView" /> in a new window
     /// </summary>
     public class OpenDxModelViewportWindowCommand : OpenDefaultContentWindowCommand
     {

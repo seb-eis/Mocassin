@@ -7,6 +7,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.JsonBrowser
     /// </summary>
     public partial class JsonBrowserView : UserControl
     {
+        /// <inheritdoc />
         public JsonBrowserView()
         {
             InitializeComponent();

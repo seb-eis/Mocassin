@@ -15,6 +15,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
         /// </summary>
         private DragHandler<DataGrid> RowHeaderDragHandler { get; set; }
 
+        /// <inheritdoc />
         public ProjectBuildGraphControlView()
         {
             InitializeDragHandlers();

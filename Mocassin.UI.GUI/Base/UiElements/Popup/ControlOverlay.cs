@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Interop;
 using System.Windows.Media;
+// ReSharper disable InconsistentNaming
 
 namespace Mocassin.UI.GUI.Base.UiElements.Popup
 {
@@ -15,11 +16,6 @@ namespace Mocassin.UI.GUI.Base.UiElements.Popup
     /// </summary>
     public class ControlOverlay : System.Windows.Controls.Primitives.Popup
     {
-        private static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
-        private static readonly IntPtr HWND_NOTOPMOST = new IntPtr(-2);
-        private static readonly IntPtr HWND_TOP = new IntPtr(0);
-        private static readonly IntPtr HWND_BOTTOM = new IntPtr(1);
-
         /// <summary>
         ///     The <see cref="Topmost" /> <see cref="DependencyProperty" />
         /// </summary>
@@ -178,7 +174,7 @@ namespace Mocassin.UI.GUI.Base.UiElements.Popup
         }
 
         /// <summary>
-        ///     Finds the parent control of type <see cref="T"/> that hosts the provided <see cref="DependencyObject"/>
+        ///     Finds the parent control that hosts the provided <see cref="DependencyObject"/>
         /// </summary>
         /// <returns></returns>
         protected T FindParent<T>(DependencyObject child = null) where  T : class
@@ -204,20 +200,25 @@ namespace Mocassin.UI.GUI.Base.UiElements.Popup
             Debug.WriteLineIf(!callOk, $"Cannot set window position: {nameof(GetWindowRect)} returned false.");
             if (!callOk) return;
 
-            callOk = SetWindowPos(hwndSource.Handle, Topmost ? HWND_TOPMOST : HWND_NOTOPMOST, rect.Left, rect.Top, (int) Width, (int) Height, 0);
+            callOk = SetWindowPos(hwndSource.Handle, Topmost ? HWND_TOPMOST : HWND_NOTOPMOST, rect.left, rect.top, (int) Width, (int) Height, 0);
             Debug.WriteLineIf(!callOk, $"Cannot set window position: {nameof(SetWindowPos)} returned false.");
         }
 
         #region dllimport
 
+        private static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
+        private static readonly IntPtr HWND_NOTOPMOST = new IntPtr(-2);
+        private static readonly IntPtr HWND_TOP = new IntPtr(0);
+        private static readonly IntPtr HWND_BOTTOM = new IntPtr(1);
+
         [StructLayout(LayoutKind.Sequential)]
-        [DebuggerDisplay("L:{Left},T:{Top},R:{Right},B:{Bottom}")]
-        public struct RECT
+        [DebuggerDisplay("L:{left},T:{top},R:{right},B:{bottom}")]
+        internal struct RECT
         {
-            public int Left;
-            public int Top;
-            public int Right;
-            public int Bottom;
+            internal int left;
+            internal int top;
+            internal int right;
+            internal int bottom;
         }
 
         [DllImport("user32.dll")]

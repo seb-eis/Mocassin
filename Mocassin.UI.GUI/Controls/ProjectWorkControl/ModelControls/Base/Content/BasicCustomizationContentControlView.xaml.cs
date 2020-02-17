@@ -7,6 +7,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
     /// </summary>
     public partial class BasicCustomizationContentControlView : UserControl
     {
+        /// <inheritdoc />
         public BasicCustomizationContentControlView()
         {
             InitializeComponent();

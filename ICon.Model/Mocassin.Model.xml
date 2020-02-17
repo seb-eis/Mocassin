@@ -152,7 +152,32 @@
         </member>
         <member name="T:Mocassin.Model.Basic.DataOperationType">
             <summary>
-                Enum for data operation types that can be applied to the model data
+                Enum for data operation types that can be applied to the model data and are supported by the automated pipeline build system
+            </summary>
+        </member>
+        <member name="F:Mocassin.Model.Basic.DataOperationType.NewObject">
+            <summary>
+                Defines an operation that registers a new object
+            </summary>
+        </member>
+        <member name="F:Mocassin.Model.Basic.DataOperationType.ObjectChange">
+            <summary>
+                Defines an operation that changes an existing object
+            </summary>
+        </member>
+        <member name="F:Mocassin.Model.Basic.DataOperationType.ObjectRemoval">
+            <summary>
+                Defines an operation that removes an existing object
+            </summary>
+        </member>
+        <member name="F:Mocassin.Model.Basic.DataOperationType.ParameterChange">
+            <summary>
+                Defines an operation that changes a unique parameter
+            </summary>
+        </member>
+        <member name="F:Mocassin.Model.Basic.DataOperationType.ObjectCleaning">
+            <summary>
+                Defines an operation that performs object cleanup
             </summary>
         </member>
         <member name="T:Mocassin.Model.Basic.DataOperationAttribute">
@@ -173,7 +198,17 @@
         </member>
         <member name="T:Mocassin.Model.Basic.ValidationType">
             <summary>
-                Enum that is used to specify the type of validation performed
+                Enum that is used to specify the type of validation that is performed
+            </summary>
+        </member>
+        <member name="F:Mocassin.Model.Basic.ValidationType.Object">
+            <summary>
+                The validation handles an indexed model object
+            </summary>
+        </member>
+        <member name="F:Mocassin.Model.Basic.ValidationType.Parameter">
+            <summary>
+                The validation handles a unique model parameter
             </summary>
         </member>
         <member name="T:Mocassin.Model.Basic.ValidationOperationAttribute">
@@ -1327,6 +1362,11 @@
         </member>
         <member name="M:Mocassin.Model.Basic.DataAccessTimeoutException.ToString">
             <inheritdoc />
+        </member>
+        <member name="T:Mocassin.Model.Basic.ManagerFactory">
+            <summary>
+                Defines a static helper class for generating <see cref="T:Mocassin.Model.Basic.ManagerPackage"/> instances
+            </summary>
         </member>
         <member name="T:Mocassin.Model.Basic.ManagerFactory.DebugFactory">
             <summary>
@@ -2662,9 +2702,12 @@
         </member>
         <member name="T:Mocassin.Model.Basic.ObjectIndexingChangedEventHandler`3">
             <summary>
-            Abstract base class for event handlers that handle object list reindex operations provided by the specified event port
+                Abstract base class for event handlers that handle object list reindex operations provided by the specified event
+                port
             </summary>
             <typeparam name="T1"></typeparam>
+            <typeparam name="T2"></typeparam>
+            <typeparam name="T3"></typeparam>
         </member>
         <member name="M:Mocassin.Model.Basic.ObjectIndexingChangedEventHandler`3.#ctor(Mocassin.Model.ModelProject.IModelProject,Mocassin.Model.Basic.DataAccessorSource{`1},`2)">
             <inheritdoc />
@@ -3042,6 +3085,7 @@
                 Serialize the data as a data contract with the specified settings to the provided stream
             </summary>
             <param name="stream"></param>
+            <param name="settings"></param>
         </member>
         <member name="M:Mocassin.Model.Basic.IModelDataPort.GetDataCopy">
             <summary>
@@ -3219,7 +3263,6 @@
             <summary>
                 Disconnects from event port if this specific port exists
             </summary>
-            <typeparam name="T1"></typeparam>
             <param name="eventPort"></param>
         </member>
         <member name="T:Mocassin.Model.Basic.IModelManager">
@@ -3311,7 +3354,7 @@
         </member>
         <member name="M:Mocassin.Model.Basic.IValidationService.TryValidate``1(``0,Mocassin.Model.Basic.IDataReader{Mocassin.Model.Basic.IModelDataPort},Mocassin.Framework.Operations.IValidationReport@)">
             <summary>
-                Tries to validate a generic object of type <see cref="!:T" /> using the passed <see cref="T:Mocassin.Model.Basic.IDataReader`1" />
+                Tries to validate a generic object using the passed <see cref="T:Mocassin.Model.Basic.IDataReader`1" />
             </summary>
             <typeparam name="T"></typeparam>
             <param name="obj"></param>
@@ -3321,7 +3364,7 @@
         </member>
         <member name="M:Mocassin.Model.Basic.IValidationService.CanValidate``1(``0,Mocassin.Model.Basic.IDataReader{Mocassin.Model.Basic.IModelDataPort})">
             <summary>
-                Check if the passed combination of object type <see cref="!:T" /> and <see cref="T:Mocassin.Model.Basic.IDataReader`1" /> can be used
+                Check if the passed combination of object and <see cref="T:Mocassin.Model.Basic.IDataReader`1" /> can be used
                 for a validation
             </summary>
             <typeparam name="T"></typeparam>
@@ -3356,8 +3399,17 @@
         </member>
         <member name="T:Mocassin.Model.Basic.ReferenceCorrectionLevel">
             <summary>
-                Defines the type of linking action performed. Use 'Content' reference level if only the content of the object or
-                list of objects requires linking and not the objects itself
+                Defines the level of reference correction for properties marked with <see cref="T:Mocassin.Model.Basic.UseTrackedDataAttribute"/>
+            </summary>
+        </member>
+        <member name="F:Mocassin.Model.Basic.ReferenceCorrectionLevel.Full">
+            <summary>
+                Defines a full correction where also the property or list content itself is replaced if required
+            </summary>
+        </member>
+        <member name="F:Mocassin.Model.Basic.ReferenceCorrectionLevel.IgnoreTopLevel">
+            <summary>
+                Defines a content only correction where the property or list content itself is not replaced, only the properties on these instances
             </summary>
         </member>
         <member name="T:Mocassin.Model.Basic.UseTrackedDataAttribute">

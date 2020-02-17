@@ -7,6 +7,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
     /// </summary>
     public partial class LocalProjectDeployControlView : UserControl
     {
+        /// <inheritdoc />
         public LocalProjectDeployControlView()
         {
             InitializeComponent();

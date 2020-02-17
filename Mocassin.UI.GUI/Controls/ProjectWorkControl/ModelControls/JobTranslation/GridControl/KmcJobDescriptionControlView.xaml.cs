@@ -7,6 +7,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
     /// </summary>
     public partial class KmcJobDescriptionControlView : UserControl
     {
+        /// <inheritdoc />
         public KmcJobDescriptionControlView()
         {
             InitializeComponent();

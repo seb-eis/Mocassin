@@ -9,6 +9,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Content
     /// </summary>
     public partial class ContentWindow : Window
     {
+        /// <inheritdoc />
         public ContentWindow()
         {
             InitializeComponent();

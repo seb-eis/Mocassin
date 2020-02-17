@@ -10,12 +10,12 @@ namespace Mocassin.UI.Base.Commands
         /// <summary>
         ///     The <see cref="Action" /> to call on command execution
         /// </summary>
-        private readonly Action _action;
+        private readonly Action action;
 
         /// <summary>
         ///     The <see cref="Func{TResult}" /> object to call to check for can execute
         /// </summary>
-        private readonly Func<bool> _canExecuteFunc;
+        private readonly Func<bool> canExecuteFunction;
 
         /// <summary>
         ///     Creates new <see cref="RelayCommand" /> using the passed <see cref="Action" />
@@ -31,22 +31,23 @@ namespace Mocassin.UI.Base.Commands
         ///     execute check
         /// </summary>
         /// <param name="execute"></param>
-        public RelayCommand(Action execute, Func<bool> canExecuteFunc)
+        /// <param name="canExecuteFunction"></param>
+        public RelayCommand(Action execute, Func<bool> canExecuteFunction)
         {
-            _action = execute ?? throw new ArgumentNullException(nameof(execute));
-            _canExecuteFunc = canExecuteFunc;
+            action = execute ?? throw new ArgumentNullException(nameof(execute));
+            this.canExecuteFunction = canExecuteFunction;
         }
 
         /// <inheritdoc />
         public override bool CanExecute()
         {
-            return _canExecuteFunc?.Invoke() ?? base.CanExecute();
+            return canExecuteFunction?.Invoke() ?? base.CanExecute();
         }
 
         /// <inheritdoc />
         public override void Execute()
         {
-            _action.Invoke();
+            action.Invoke();
         }
 
         /// <summary>
@@ -106,12 +107,12 @@ namespace Mocassin.UI.Base.Commands
         /// <summary>
         ///     The <see cref="Func{TResult}" /> to call on execution
         /// </summary>
-        private readonly Action<T> _action;
+        private readonly Action<T> action;
 
         /// <summary>
         ///     The <see cref="Func{TResult}" /> to
         /// </summary>
-        private readonly Func<T, bool> _canExecuteFunc;
+        private readonly Func<T, bool> canExecuteFunction;
 
         /// <summary>
         ///     Creates new <see cref="RelayCommand{T}" /> using the passed <see cref="Action" />
@@ -126,22 +127,22 @@ namespace Mocassin.UI.Base.Commands
         ///     Creates new <see cref="RelayCommand{T}" /> using the passed <see cref="Action" /> and
         ///     <see cref="Func{TResult, T1}" /> can execute check
         /// </summary>
-        public RelayCommand(Action<T> execute, Func<T, bool> canExecuteFunc)
+        public RelayCommand(Action<T> execute, Func<T, bool> canExecuteFunction)
         {
-            _action = execute ?? throw new ArgumentNullException(nameof(execute));
-            _canExecuteFunc = canExecuteFunc;
+            action = execute ?? throw new ArgumentNullException(nameof(execute));
+            this.canExecuteFunction = canExecuteFunction;
         }
 
         /// <inheritdoc />
         public override bool CanExecute(T parameter)
         {
-            return _canExecuteFunc?.Invoke(parameter) ?? base.CanExecute(parameter);
+            return canExecuteFunction?.Invoke(parameter) ?? base.CanExecute(parameter);
         }
 
         /// <inheritdoc />
         public override void Execute(T parameter)
         {
-            _action.Invoke(parameter);
+            action.Invoke(parameter);
         }
     }
 }

@@ -7,6 +7,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel
     /// </summary>
     public partial class BuildingBlockContentControlView : UserControl
     {
+        /// <inheritdoc />
         public BuildingBlockContentControlView()
         {
             InitializeComponent();

@@ -10,6 +10,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.LibraryBrowser
     /// </summary>
     public partial class ProjectLibraryBrowserView : UserControl
     {
+        /// <inheritdoc />
         public ProjectLibraryBrowserView()
         {
             InitializeComponent();
@@ -37,15 +38,14 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.LibraryBrowser
                 e.Data.SetData(Properties.Resources.DataObjectFormatKey_ViewFormat_Json, obj);
                 return;
             }
+
             if (ReferenceEquals(sender, XmlViewerTab))
             {
                 e.Data.SetData(Properties.Resources.DataObjectFormatKey_ViewFormat_Xml, obj);
                 return;
             }
-            if (ReferenceEquals(sender, TreeViewerTab))
-            {
-                e.Data.SetData(Properties.Resources.DataObjectFormatKey_ViewFormat_Tree, obj);
-            }
+
+            if (ReferenceEquals(sender, TreeViewerTab)) e.Data.SetData(Properties.Resources.DataObjectFormatKey_ViewFormat_Tree, obj);
         }
     }
 }

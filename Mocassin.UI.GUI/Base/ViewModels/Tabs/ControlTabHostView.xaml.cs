@@ -16,6 +16,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
         /// </summary>
         private DragHandler<Grid> TabItemDragHandler { get; }
 
+        /// <inheritdoc />
         public ControlTabHostView()
         {
             TabItemDragHandler = new DragHandler<Grid>(arg => new DataObject(arg?.DataContext ?? new object()));

@@ -7,6 +7,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser
     /// </summary>
     public partial class ProjectBrowserView : UserControl
     {
+        /// <inheritdoc />
         public ProjectBrowserView()
         {
             InitializeComponent();

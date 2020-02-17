@@ -5,6 +5,9 @@ using Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel;
 
 namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ControlMenu.Commands
 {
+	/// <summary>
+	///		A <see cref="AddDefaultLayoutControlTabCommand"/> to add a new <see cref="LatticeModelControlView"/> as a work tab
+	/// </summary>
 	public class AddLatticeControlTabCommand : AddDefaultLayoutControlTabCommand
 	{
 		/// <inheritdoc />

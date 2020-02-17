@@ -2376,6 +2376,9 @@
                 The raw mass value of the mass point
             </summary>
         </member>
+        <member name="P:Mocassin.Mathematics.ValueTypes.FractionalMassPoint3D.Vector">
+            <inheritdoc />
+        </member>
         <member name="P:Mocassin.Mathematics.ValueTypes.FractionalMassPoint3D.A">
             <inheritdoc />
         </member>

@@ -23,6 +23,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         /// </summary>
         public LatticeConfigData ParentLatticeConfiguration { get; }
 
+        /// <inheritdoc />
         public DopingValueControlViewModel(LatticeConfigData parentLatticeConfiguration)
         {
             ParentLatticeConfiguration = parentLatticeConfiguration ?? throw new ArgumentNullException(nameof(parentLatticeConfiguration));
