@@ -95,7 +95,7 @@ error_t KMC_StartPreRunRoutine(SCONTEXT_PARAMETER)
     var abortFlag = KMC_UpdateAndCheckAbortConditions(simContext);
     while(abortFlag == STATE_FLG_CONTINUE)
     {
-        SIMERROR = KMC_EnterSOPExecutionPhase(simContext);
+        SIMERROR = KMC_EnterAutoOptimizationExecutionPhase(simContext);
         assert_success(SIMERROR, "Simulation abort due to error in KMC cycle block execution.");
 
         SIMERROR = KMC_FinishExecutionPhase(simContext);
@@ -366,7 +366,7 @@ error_t KMC_EnterExecutionPhase(SCONTEXT_PARAMETER)
     return SIMERROR;
 }
 
-error_t KMC_EnterSOPExecutionPhase(SCONTEXT_PARAMETER)
+error_t KMC_EnterAutoOptimizationExecutionPhase(SCONTEXT_PARAMETER)
 {
     var counters = getMainCycleCounters(simContext);
     for (;counters->McsCount < counters->NextExecutionPhaseGoalMcsCount;)
@@ -727,6 +727,9 @@ static inline void KMC_SetJumpPathPropertyByIndex(SCONTEXT_PARAMETER, int32_t st
 
 void KMC_SetJumpPathProperties(SCONTEXT_PARAMETER)
 {
+    // Note: Jump paths could be cached, but profiling showed that dynamically calculating them is faster, especially when
+    // cache misses are to be expected in larger simulation systems
+
     let latticeSizes = getLatticeSizeVector(simContext);
     let jumpSequence = &getActiveJumpDirection(simContext)->JumpSequence;
     let length = span_Length(*jumpSequence);
@@ -773,6 +776,7 @@ static inline void LinearSearchAndSetActiveJumpRule(SCONTEXT_PARAMETER)
 
 static inline void FindAndSetActiveJumpRule(SCONTEXT_PARAMETER)
 {
+    // ToDo: Potentially change this to use either linear or binary search, depending on the number of rules
     LinearSearchAndSetActiveJumpRule(simContext);
 }
 

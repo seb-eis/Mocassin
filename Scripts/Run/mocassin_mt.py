@@ -26,12 +26,12 @@ class MpiCommDummy:
 class MocsimExecutionController:
 
     def __init__(self, config=None, mpiComm=None):
+        self.MpiComm = mpiComm
         self.Parameters = self.GetDefaultParameters()
         config = config if config is not None else self.AutoSelectConfigFile()
         if config is not None:
             self.ParseAndLoadParameters(config)
         self.TranslateAutoSettings()
-        self.MpiComm = mpiComm
 
     def mpicomm(self):
         if self.MpiComm is None:

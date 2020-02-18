@@ -25,8 +25,9 @@ static void AllocateJumpStatusArray(SCONTEXT_PARAMETER)
 static error_t PrepareJumpPathForLinkSearch(SCONTEXT_PARAMETER, const Vector4_t*restrict jumpStatusVector, const JumpDirection_t*restrict jumpDirection)
 {
     return_if(jumpStatusVector->D != jumpDirection->ObjectId, ERR_ARGUMENT);
-
     let latticeSizes = getLatticeSizeVector(simContext);
+
+    memset(JUMPPATH, 0, sizeof(JUMPPATH));
     JUMPPATH[0] = getEnvironmentStateByIds(simContext, jumpStatusVector->A, jumpStatusVector->B, jumpStatusVector->C, jumpDirection->PositionId);
     for (int32_t i = 1; i < jumpDirection->JumpLength; i++)
     {
@@ -105,7 +106,6 @@ static error_t BuildJumpStatusByStatusVector(SCONTEXT_PARAMETER, const Vector4_t
     return_if(error, error);
 
     error = ConstructJumpStatusFromLinkBuffer(jumpStatus, linkCount, linkBuffer);
-
     return error;
 }
 

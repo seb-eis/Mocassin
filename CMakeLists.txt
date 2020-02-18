@@ -23,12 +23,17 @@ file(GLOB_RECURSE FRAMEWORK_HEADER ./Framework/*.h)
 file(GLOB_RECURSE SIMULATOR_HEADER ./Simulator/*.c)
 file(GLOB_RECURSE UTILITY_HEADER ./Utility/*.h)
 file(GLOB_RECURSE UTILITY_SOURCE ./Utility/*.c)
+file(GLOB_RECURSE EXE_RESOURCES ./Main/Resources/*.rc)
 
 set(VAR_LIBRARY_TYPE "SHARED")
 set(VAR_COMPILE_SQLITE "TRUE")
 
 # Library and executable definitions
-add_executable(Mocassin.Simulator ./Main/main.c)
+if (WIN32)
+    add_executable(Mocassin.Simulator ./Main/main.c ${EXE_RESOURCES})
+elseif()
+    add_executable(Mocassin.Simulator ./Main/main.c)
+endif()
 set_target_properties(Mocassin.Simulator PROPERTIES C_STANDARD 11)
 
 add_library(simulator ${VAR_LIBRARY_TYPE} ${SIMULATOR_SOURCE})
@@ -54,7 +59,7 @@ add_library(progressprint.minimal ${VAR_LIBRARY_TYPE} InternalLibraries/Interfac
 set_target_properties(progressprint.minimal PROPERTIES PUBLIC_HEADER InternalLibraries/Interfaces/ProgressPrint.h C_STANDARD 11)
 
 # Utility executables and library
-add_executable(Mocassin.Utility Main/UtilityMain.c)
+add_executable(Mocassin.Utility Main/UtilityMain.c ${EXE_RESOURCES})
 set_target_properties(Mocassin.Utility PROPERTIES C_STANDARD 11)
 
 add_library(utility SHARED ${UTILITY_SOURCE})

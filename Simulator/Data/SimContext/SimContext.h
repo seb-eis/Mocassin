@@ -262,7 +262,7 @@ typedef struct JumpLink
 typedef Span_t(JumpLink_t, JumpLinks) JumpLinks_t;
 
 // Type for the jump status that holds the jump link information of a single KMC jump
-// Layout@ggc_x86_64 => 48@[16]
+// Layout@ggc_x86_64 => 80@[16]
 typedef struct JumpStatus
 {
     // The jump links of the jump status

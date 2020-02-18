@@ -96,8 +96,9 @@
 #define JPOOL_NOT_SELECTABLE    -1
 
 /* Cluster and energy defines */
-#define CLUSTER_MAXLINK_COUNT   256
-#define ENERGY_FLG_CONST_TABLE  1U
+#define CLUSTER_MAXLINK_COUNT           256
+#define CLUSTER_MAXSIZE_LINEAR_SERACH   8
+#define ENERGY_FLG_CONST_TABLE          1U
 
 /* Particle/position/index constants */
 

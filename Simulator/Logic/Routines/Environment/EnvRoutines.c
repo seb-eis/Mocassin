@@ -19,22 +19,35 @@
 
 /* Local helper routines */
 
-// Finds a cluster code id by linear searching the passed occupation code (Safe search, returns an invalid index if the code cannot be found)
-static inline int32_t SaveLinearSearchClusterCodeId(const ClusterTable_t *restrict clusterTable, const OccupationCode64_t occupationCode)
-{
-    int32_t index = 0;
-    let numOfCodes = span_Length(clusterTable->OccupationCodes);
-    for (;(span_Get(clusterTable->OccupationCodes, index).Value != occupationCode.Value) && (index < numOfCodes); index++);
-
-    return (index < numOfCodes) ? index : INVALID_INDEX;
-}
-
-// Finds a cluster code id by linear searching the passed occupation code (Unsafe search, infinite loop if code does not exist)
+// Finds a cluster code id by linear searching the passed occupation code (Unsafe search, infinite loop if code does not exist, very fast for small cluster code sets)
 static inline int32_t LinearSearchClusterCodeId(const ClusterTable_t *restrict clusterTable, const OccupationCode64_t occupationCode)
 {
     int32_t index = 0;
-    for (;span_Get(clusterTable->OccupationCodes, index).Value != occupationCode.Value; index++);
+    while (span_Get(clusterTable->OccupationCodes, index).Value != occupationCode.Value) index++;
     return index;
+}
+
+// Finds a cluster code id by binary searching the passed occupation code (Save search, faster for large cluster code sets)
+static inline int32_t BinarySearchClusterCodeId(const ClusterTable_t *restrict clusterTable, const OccupationCode64_t occupationCode)
+{
+    int32_t length = span_Length(clusterTable->OccupationCodes);
+    int32_t firstIndex = 0;
+    int32_t counter = length;
+    while (counter > 0)
+    {
+        int32_t step = counter / 2;
+        int32_t currentIndex = firstIndex + step;
+        let currentValue = span_Get(clusterTable->OccupationCodes, currentIndex).Value;
+        if (currentValue < occupationCode.Value)
+        {
+            firstIndex = ++currentIndex;
+            counter -= step + 1;
+        }
+        else counter = step;
+    }\
+    firstIndex = (length != firstIndex) ? firstIndex : -1;
+    debug_assert(firstIndex != -1);
+    return firstIndex;
 }
 
 // Set the cluster state backup on the passed cluster state to the current value fields
@@ -376,9 +389,8 @@ static void AddEnvPairEnergyByOccupation(SCONTEXT_PARAMETER, EnvironmentState_t*
 // Initializes the passed cluster state status (code id) and sets the backups to the current values
 static error_t InitializeClusterStateStatus(SCONTEXT_PARAMETER, ClusterState_t* restrict cluster, const ClusterTable_t* restrict clusterTable)
 {
-    cluster->CodeId = SaveLinearSearchClusterCodeId(clusterTable, cluster->OccupationCode);
+    cluster->CodeId = BinarySearchClusterCodeId(clusterTable, cluster->OccupationCode);
     return_if(cluster->CodeId == INVALID_INDEX, ERR_DATACONSISTENCY);
-
     SetClusterStateBackup(cluster);
     return ERR_OK;
 }
@@ -526,10 +538,12 @@ static inline void SetActiveWorkClusterTable(SCONTEXT_PARAMETER, EnvironmentStat
     simContext->CycleState.WorkClusterTable = getClusterEnergyTableAt(simContext, clusterDefinition->EnergyTableId);
 }
 
-// Finds a cluster code ID in a cluster table
+// Finds a cluster code ID in a cluster table. Search is linear for very small occupation sets and binary for larger ones
 static inline int32_t SearchClusterCodeIdInTable(const ClusterTable_t *restrict clusterTable,const OccupationCode64_t code)
 {
-    return LinearSearchClusterCodeId(clusterTable, code);
+    return (span_Length(clusterTable->OccupationCodes) < CLUSTER_MAXSIZE_LINEAR_SERACH)
+        ? LinearSearchClusterCodeId(clusterTable, code)
+        : BinarySearchClusterCodeId(clusterTable, code);
 }
 
 #if defined(OPT_USE_3D_PAIRTABLES)

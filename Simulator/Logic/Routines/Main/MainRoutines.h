@@ -50,7 +50,7 @@ void MC_DoCommonPhaseFinish(SCONTEXT_PARAMETER);
 error_t KMC_StartPreRunRoutine(SCONTEXT_PARAMETER);
 
 // Run the kmc simulation for one execution phase using the self optimizing pre run routine
-error_t KMC_EnterSOPExecutionPhase(SCONTEXT_PARAMETER);
+error_t KMC_EnterAutoOptimizationExecutionPhase(SCONTEXT_PARAMETER);
 
 // Finishes the KMC pre run routine
 error_t KMC_FinishPreRun(SCONTEXT_PARAMETER);
