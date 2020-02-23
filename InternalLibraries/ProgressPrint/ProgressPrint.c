@@ -10,7 +10,7 @@
 
 #include <math.h>
 
-#include "Framework/Basic/BaseTypes/Buffers.h"
+#include "Framework/Basic/Buffers/Buffers.h"
 #include "Simulator/Logic/Routines/Helper/HelperRoutines.h"
 #include "Simulator/Logic/Routines/Statistics/McStatistics.h"
 #include "InternalLibraries/Interfaces/ProgressPrint.h"
@@ -164,8 +164,8 @@ static void PrintRunStatisticsMetaInfo(SCONTEXT_PARAMETER, FILE* fstream)
     var cycleCounters = getMainCycleCounters(simContext);
     let remainingRunTimeEta = GetRemainingRunTimeEta(simContext);
 
-    SecondsToISO8601TimeSpan(runTimeBuffer, (int64_t) metaData->ProgramRunTime);
-    SecondsToISO8601TimeSpan(etaBuffer, remainingRunTimeEta);
+    SecondsToIso8601FormattedTimePeriod(runTimeBuffer, (int64_t) metaData->ProgramRunTime);
+    SecondsToIso8601FormattedTimePeriod(etaBuffer, remainingRunTimeEta);
 
     fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTCOM_FORMAT, MC_OUTPRC_FORMAT), "Status => Completion", "",
             stateHeaderData->Mcs, cycleCounters->TotalSimulationGoalMcsCount,
@@ -216,7 +216,7 @@ static void PrintRunStatisticsMetaInfo(SCONTEXT_PARAMETER, FILE* fstream)
 
 }
 
-void ProgressPrint_OnBlockFinish(SCONTEXT_PARAMETER, FILE *fstream, bool_t onlyMobiles)
+void PrintMocassinSimulationBlockInfo(SCONTEXT_PARAMETER, FILE *fstream, bool_t onlyMobiles)
 {
     fprintf(fstream, "<STATISTICS_DUMP>\n");
     PrintRunStatisticsMetaInfo(simContext, fstream);
@@ -249,11 +249,11 @@ static void PrintGeneralJobInfo(SCONTEXT_PARAMETER, file_t *fstream)
     let routineUuid = getCustomRoutineUuid(simContext);
     let runType = StateFlagsAreSet(simContext, STATE_FLG_PRERUN) ? "PRERUN" : "MAIN";
     let stateLoaded = StateFlagsAreSet(simContext, STATE_FLG_FIRSTCYCLE) ? "FALSE" : "TRUE";
-    GetCurrentTimeStampISO8601UTC(buffer);
+    GetCurrentIso8601UtcTimeStamp(buffer);
     fprintf(fstream, "<JOB_INFORMATION>\n");
     fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTSTR_FORMAT), "Job => Start time", "ISO8601", buffer);
 
-    SecondsToISO8601TimeSpan(buffer, jobInfo->TimeLimit);
+    SecondsToIso8601FormattedTimePeriod(buffer, jobInfo->TimeLimit);
     fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTSTR_FORMAT), "Job => Runtime limit", "ISO8601", buffer);
 
     fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTSTR_FORMAT), "Job => Simulation type", "", jobType);
@@ -287,7 +287,7 @@ static void PrintGeneralJobInfo(SCONTEXT_PARAMETER, file_t *fstream)
     fflush(fstream);
 }
 
-void ProgressPrint_OnSimulationStart(SCONTEXT_PARAMETER, file_t *fstream)
+void PrintMocassinSimulationStartInfo(SCONTEXT_PARAMETER, file_t *fstream)
 {
     fprintf(fstream, "\n(C11) MOCASSIN SIMULATOR for HPC\n");
     PrintCopyrightInfo(fstream);
@@ -295,14 +295,14 @@ void ProgressPrint_OnSimulationStart(SCONTEXT_PARAMETER, file_t *fstream)
     fprintf(fstream, "\n");
     PrintGeneralJobInfo(simContext, fstream);
 
-    ProgressPrint_OnBlockFinish(simContext, fstream, false);
+    PrintMocassinSimulationBlockInfo(simContext, fstream, false);
     fflush(fstream);
 }
 
-void ProgressPrint_OnContextReset(SCONTEXT_PARAMETER, file_t *fstream)
+void PrintMocassinSimulationContextResetInfo(SCONTEXT_PARAMETER, file_t *fstream)
 {
     fprintf(fstream, "\n<END_OF_PRE_RUN>\n");
-    ProgressPrint_OnBlockFinish(simContext, fstream, true);
+    PrintMocassinSimulationBlockInfo(simContext, fstream, true);
     fflush(fstream);
 }
 
@@ -323,14 +323,14 @@ static void PrintStatusFlagCollection(SCONTEXT_PARAMETER, file_t* fstream)
     fflush(fstream);
 }
 
-void ProgressPrint_OnSimulationFinish(SCONTEXT_PARAMETER, file_t *fstream)
+void PrintMocassinSimulationFinishInfo(SCONTEXT_PARAMETER, file_t *fstream)
 {
     char buffer[100];
     let waitTime = 1;
     let flags = getMainStateHeader(simContext)->Data->Flags;
-    SecondsToISO8601TimeSpan(buffer, (int64_t) getMainStateMetaData(simContext)->ProgramRunTime);
+    SecondsToIso8601FormattedTimePeriod(buffer, (int64_t) getMainStateMetaData(simContext)->ProgramRunTime);
 
-    ProgressPrint_OnBlockFinish(simContext, fstream, true);
+    PrintMocassinSimulationBlockInfo(simContext, fstream, true);
     fprintf(fstream, "Main routine reached end @ %s  (ERR_CODE=0x%08x, STATE_FLAGS=0x%08x)\n", buffer, SIMERROR, flags);
     PrintStatusFlagCollection(simContext, fstream);
     fprintf(fstream, "Auto termination in %i seconds...", waitTime);

@@ -12,7 +12,7 @@
 #include "Framework/Basic/FileIO/FileIO.h"
 
 #if !defined(MC_USE_PLUGIN_SUPPORT)
-    void* ImportFunction(const char* restrict libraryPath, const char* restrict exportName, error_t* restrict error)
+    void* LibraryLoadingImportFunction(const char* restrict libraryPath, const char* restrict exportName, error_t* restrict error)
     {
         return NULL;
     }
@@ -24,12 +24,12 @@
             fflush(stream);
         }
 
-        void* DlLoading_ImportFunction(const char* restrict libraryPath, const char* restrict exportName, error_t* restrict error)
+        void* LibraryLoadingImportFunction(const char* restrict libraryPath, const char* restrict exportName, error_t* restrict error)
         {
             HMODULE module;
             void* function = NULL;
 
-            if ((module = DlLoading_GetLibraryHandle(libraryPath)) == NULL)
+            if ((module = LibraryLoadingGetLibraryHandle(libraryPath)) == NULL)
             {
                 LogOsApiError(stderr, "Call to 'LoadLibrary(<FILENAME>)' returned NULL. Could not load library.");
                 *error = ERR_LIBRARYLOADING;
@@ -53,7 +53,7 @@
             return libraryName16;
         }
 
-        bool_t DlLoading_UnloadDynamicLibrary(const char* restrict libraryName)
+        bool_t LibraryLoadingUnloadLibrary(const char* restrict libraryName)
         {
             var libraryName16 = GetUnicodeLibraryName(libraryName);
 
@@ -64,7 +64,7 @@
             return (bool_t) FreeLibrary(module);
         }
 
-        LIBHANDLE DlLoading_GetLibraryHandle(const char *restrict libraryPath)
+        LIBHANDLE LibraryLoadingGetLibraryHandle(const char *restrict libraryPath)
         {
             var libraryName16 = GetUnicodeLibraryName(libraryPath);
             HMODULE module;
@@ -82,11 +82,11 @@
             fflush(stream);
         }
 
-        void* DlLoading_ImportFunction(const char* restrict libraryPath, const char* restrict exportName, error_t* restrict error)
+        void* LibraryLoadingImportFunction(const char* restrict libraryPath, const char* restrict exportName, error_t* restrict error)
         {
             void* dlHandle, *function;
             
-            if ((dlHandle = DlLoading_GetLibraryHandle(libraryPath)) == NULL)
+            if ((dlHandle = LibraryLoadingGetLibraryHandle(libraryPath)) == NULL)
             {
                 LogOsApiError(stderr, "Call to 'dlopen(<FILENAME>, <FLAGS>)' returned NULL. Could not load library.");
                 *error = ERR_LIBRARYLOADING;
@@ -102,7 +102,7 @@
             return function;
         }
 
-        LIBHANDLE DlLoading_GetLibraryHandle(const char *restrict libraryPath)
+        LIBHANDLE LibraryLoadingGetLibraryHandle(const char *restrict libraryPath)
         {
             void* dlHandle;
             if ((dlHandle = dlopen(libraryPath, RTLD_NOLOAD)) == NULL)
@@ -111,7 +111,7 @@
             return dlHandle;
         }
 
-        bool_t DlLoading_UnloadDynamicLibrary(const char* restrict libraryName)
+        bool_t LibraryLoadingGetLibraryHandle(const char* restrict libraryName)
         {
 	        void* dlHandle = DlLoading_GetLibraryHandle(libraryName);
             return_if(dlHandle == NULL, false);

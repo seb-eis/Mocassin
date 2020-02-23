@@ -138,7 +138,7 @@ static inline void UpdatePathEnvironmentTrackingData(SCONTEXT_PARAMETER, const i
     UpdatePathEnvironmentJumpStatistics(simContext, pathId);
 }
 
-void KMC_AddCurrentJumpDataToHistograms(SCONTEXT_PARAMETER)
+void AddCurrentKmcTransitionDataToHistograms(SCONTEXT_PARAMETER)
 {
     return_if(simContext->IsJumpLoggingDisabled);
     let length = getActiveJumpDirection(simContext)->JumpLength;
@@ -164,7 +164,7 @@ void KMC_AddCurrentJumpDataToHistograms(SCONTEXT_PARAMETER)
     }
 }
 
-void KMC_AdvanceTransitionTrackingSystem(SCONTEXT_PARAMETER)
+void AdvanceKmcTransitionTrackingSystem(SCONTEXT_PARAMETER)
 {
     let length = getActiveJumpDirection(simContext)->JumpLength;
 

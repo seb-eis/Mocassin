@@ -12,8 +12,8 @@
 #include "Extensions/Interface/MocsimExtesionTypes.h"
 
 // Get the pointer to the start of the 16 byte routine identification guid/uuid
-const moc_uuid_t* MOCEXT_IDENTIFICATION_FUNC();
+const mocuuid_t* MOCEXTENSION_GET_IDENTIFICATION_FUNC();
 
 // Get the pointer to the routine execution entry function that will accept an initialized simulation context
-FMocExtEntry_t MOCEXT_ENTRYPOINTGET_FUNC();
+FMocassinRoutine_t MOCEXTENSION_GET_ROUTINE_FUNC();
 

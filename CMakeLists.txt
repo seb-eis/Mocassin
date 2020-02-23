@@ -14,7 +14,7 @@ include_directories(${PROJECT_SOURCE_DIR})
 
 # SSE Variables
 set(COMPILE_FLAGS_SSE_INTEL "-axSSE4.2 -xSSE2")
-set(COMPILE_FLAGS_SSE_GNU "-msse2 -msse3 -msse4.2")
+set(COMPILE_FLAGS_SSE_GNU "-msse2 -msse3 -msse4.2 -mavx")
 
 # Resursive search for source files
 file(GLOB_RECURSE FRAMEWORK_SOURCE ./Framework/*.c)
@@ -29,11 +29,7 @@ set(VAR_LIBRARY_TYPE "SHARED")
 set(VAR_COMPILE_SQLITE "TRUE")
 
 # Library and executable definitions
-if (WIN32)
-    add_executable(Mocassin.Simulator ./Main/main.c ${EXE_RESOURCES})
-elseif()
-    add_executable(Mocassin.Simulator ./Main/main.c)
-endif()
+add_executable(Mocassin.Simulator ./Main/main.c ${EXE_RESOURCES})
 set_target_properties(Mocassin.Simulator PROPERTIES C_STANDARD 11)
 
 add_library(simulator ${VAR_LIBRARY_TYPE} ${SIMULATOR_SOURCE})

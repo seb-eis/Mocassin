@@ -23,15 +23,15 @@
 
 /* Extension interface implementation */
 
-const moc_uuid_t* MocExtRoutine_GetUUID()
+const mocuuid_t* MOCEXTENSION_GET_IDENTIFICATION_FUNC()
 {
-    const static moc_uuid_t routineGuid = {.A = 0xb7f2dded, .B =0xdaf1, .C =0x40c0, .D = {0x4d, 0x4d, 0x43, 0x46, 0x45, 0x00, 0x00, 0x00}};
+    const static mocuuid_t routineGuid = {.A = 0xb7f2dded, .B =0xdaf1, .C =0x40c0, .D = {0x4d, 0x4d, 0x43, 0x46, 0x45, 0x00, 0x00, 0x00}};
     return &routineGuid;
 }
 
-FMocExtEntry_t MocExtRoutine_GetEntryPoint()
+FMocassinRoutine_t MOCEXTENSION_GET_ROUTINE_FUNC()
 {
-    return MMCFE_StartRoutine;
+    return StartMmcfeRoutine;
 }
 
 /* Internal routine implementation */
@@ -110,7 +110,7 @@ sqlite3* MMCFE_OpenLogDb(const char* dbPath, MmcfeLog_t*restrict outLog)
     return db;
 }
 
-error_t MMCFE_WriteEntryToLogDb(sqlite3* db, const MmcfeLog_t*restrict logEntry)
+error_t WriteMmcfeEntryToLogDb(sqlite3* db, const MmcfeLog_t*restrict logEntry)
 {
     let sqlQuery = "INSERT INTO " MMCFE_LOGTABLE_NAME " ("
                    MMCFE_TIMECOL_NAME       ", "
@@ -125,7 +125,7 @@ error_t MMCFE_WriteEntryToLogDb(sqlite3* db, const MmcfeLog_t*restrict logEntry)
     return_if(error != SQLITE_OK, (sqlite3_finalize(sqlStmt), ERR_DATABASE));
 
     char timeStamp[TIME_ISO8601_BYTECOUNT];
-    GetCurrentTimeStampISO8601UTC(timeStamp);
+    GetCurrentIso8601UtcTimeStamp(timeStamp);
     error = sqlite3_bind_text(sqlStmt, 1, timeStamp, -1, NULL);
     return_if(error != SQLITE_OK, (sqlite3_finalize(sqlStmt), ERR_DATABASE));
 
@@ -177,7 +177,7 @@ static error_t TryLoadRoutineParameters(SCONTEXT_PARAMETER, MmcfeParams_t*restri
     let routineData = getCustomRoutineData(simContext);
 
     let testGuid = MocExtRoutine_GetUUID();
-    return_if(CompareUUID(routineData->Guid, testGuid) != 0, ERR_DATACONSISTENCY);
+    return_if(CompareMocuuid(routineData->Guid, testGuid) != 0, ERR_DATACONSISTENCY);
 
     let length = span_Length(routineData->ParamData);
     return_if(length != sizeof(MmcfeParams_t), ERR_DATACONSISTENCY);
@@ -206,7 +206,7 @@ static inline void CycleSimulationTillNextLogEvent(SCONTEXT_PARAMETER, const Mmc
     // Cycle till the next accepted or rejected case
     for (int32_t test = MC_BLOCKED_CYCLE; test == MC_BLOCKED_CYCLE; test = simContext->CycleResult)
     {
-        MMC_ExecuteSimulationCycle_WithAlpha(simContext, log->ParamsState.AlphaCurrent);
+        ExecuteMmcSimulationCycleWithAlpha(simContext, log->ParamsState.AlphaCurrent);
     }
 
     // Update energy if required and count the cycle
@@ -261,10 +261,10 @@ static inline void PrintRoutineProgress(SCONTEXT_PARAMETER, const MmcfeLog_t*res
     let tempEquiv = getDbModelJobInfo(simContext)->Temperature / log->ParamsState.AlphaCurrent;
 
     char stampBuffer[TIME_ISO8601_BYTECOUNT], runBuffer[TIME_ISO8601_BYTECOUNT], etaBuffer[TIME_ISO8601_BYTECOUNT];
-    GetCurrentTimeStampISO8601UTC(stampBuffer);
-    SecondsToISO8601TimeSpan(runBuffer, meta->ProgramRunTime);
+    GetCurrentIso8601UtcTimeStamp(stampBuffer);
+    SecondsToIso8601FormattedTimePeriod(runBuffer, meta->ProgramRunTime);
     let timeEta = CalculateRuntimeEtaInSeconds(simContext, log);
-    SecondsToISO8601TimeSpan(etaBuffer, timeEta);
+    SecondsToIso8601FormattedTimePeriod(etaBuffer, timeEta);
 
     fprintf(stdout, "MMCFE  => Logtime: %s [  ] (Runtime = %s, ETA = %s)\n", stampBuffer, runBuffer, etaBuffer);
     fprintf(stdout, "MMCFE  => Lograte: %+.6e [Hz] (Succesrate = %+.6e [Hz])\n", meta->CycleRate, meta->SuccessRate);
@@ -275,9 +275,9 @@ static inline void PrintRoutineProgress(SCONTEXT_PARAMETER, const MmcfeLog_t*res
 // Finishes one logging phase of the MMCFE routine
 static inline void FinishLoggingPhase(SCONTEXT_PARAMETER, MmcfeLog_t*restrict log, sqlite3*restrict db)
 {
-    MMC_UpdateAndCheckAbortConditions(simContext);
-    MC_DoCommonPhaseFinish(simContext);
-    MMCFE_WriteEntryToLogDb(db, log);
+    UpdateAndEvaluateMmcAbortConditions(simContext);
+    ExecuteSharedMcBlockFinisher(simContext);
+    WriteMmcfeEntryToLogDb(db, log);
     PrintRoutineProgress(simContext, log);
 }
 
@@ -328,7 +328,7 @@ static error_t EnterExecutionLoop(SCONTEXT_PARAMETER, MmcfeLog_t*restrict log, s
     let alphaStep = (log->ParamsState.AlphaMax - log->ParamsState.AlphaMin) / log->ParamsState.AlphaCount;
     if (logLoaded) log->ParamsState.AlphaCurrent += alphaStep;
 
-    MMC_UpdateAndCheckAbortConditions(simContext);
+    UpdateAndEvaluateMmcAbortConditions(simContext);
 
     for (;log->ParamsState.AlphaCurrent <= log->ParamsState.AlphaMax + 1.0e-6;)
     {
@@ -368,7 +368,7 @@ static error_t StartRoutineInternal(SCONTEXT_PARAMETER)
     return sqlite3_close(db) != SQLITE_OK ? ERR_DATABASE : ERR_OK;
 }
 
-void MMCFE_StartRoutine(void* context)
+void StartMmcfeRoutine(void* context)
 {
     let error = StartRoutineInternal((SimulationContext_t *) context);
     assert_success(error, "Unhandled internal error in MMCFE execution routine.");

@@ -10,9 +10,9 @@
 
 #include <string.h>
 #include <stdlib.h>
-#include "Framework/Basic/BaseTypes/Buffers.h"
+#include "Buffers.h"
 
-int32_t CompareUUID(const void* lhs, const void* rhs)
+int32_t CompareMocuuid(const void* lhs, const void* rhs)
 {
     var comp = compareLhsToRhs(*(int64_t*)lhs, *(int64_t*)rhs);
     if (comp != 0) return comp;

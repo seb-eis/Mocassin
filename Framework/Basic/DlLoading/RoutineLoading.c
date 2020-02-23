@@ -12,17 +12,17 @@
 #include "Framework/Basic/DlLoading/RoutineLoading.h"
 #include "Framework/Basic/FileIO/FileIO.h"
 
-FMocExtEntry_t MocExt_TryFindExtensionRoutine(const moc_uuid_t* routineUuid, const char* searchPath)
+FMocassinRoutine_t TryFindMocassinExtensionRoutine(const mocuuid_t* routineUuid, const char* searchPath)
 {
     return_if(searchPath == NULL || !IsAccessibleDirectory(searchPath), NULL);
     StringList_t libList;
-    FMocExtEntry_t entryFunc = NULL;
+    FMocassinRoutine_t entryFunc = NULL;
 
     if (ListAllFilesByPattern(searchPath, MOCEXT_EXTROUTINE_LIBNAME, true, &libList) == ERR_OK)
     {
         cpp_foreach(item, libList)
         {
-            entryFunc = MocExt_TryLoadExtensionRoutine(routineUuid, *item);
+            entryFunc = TryLoadMocassinExtensionRoutine(routineUuid, *item);
             break_if(entryFunc != NULL);
         }
     }
@@ -32,17 +32,18 @@ FMocExtEntry_t MocExt_TryFindExtensionRoutine(const moc_uuid_t* routineUuid, con
     return entryFunc;
 }
 
-FMocExtEntry_t MocExt_TryLoadExtensionRoutine(const moc_uuid_t* routineUuid, const char* libraryPath)
+FMocassinRoutine_t TryLoadMocassinExtensionRoutine(const mocuuid_t* routineUuid, const char* libraryPath)
 {
     error_t error = ERR_OK;
-    moc_uuid_t* (*uuidGetter)(void) = DlLoading_ImportFunction(libraryPath, MOCEXT_IDENTIFICATION_FUNCNAME, &error);
-    return_if(uuidGetter == NULL || error != ERR_OK, (DlLoading_UnloadDynamicLibrary(libraryPath), NULL));
+    mocuuid_t* (*uuidGetter)(void) = LibraryLoadingImportFunction(libraryPath, MOCEXTENSION_GET_IDENTIFICATION_FUNC_NAME, &error);
+    return_if(uuidGetter == NULL || error != ERR_OK, (LibraryLoadingUnloadLibrary(libraryPath), NULL));
 
     let libUuid = uuidGetter();
-    return_if(CompareUUID(routineUuid, libUuid) != 0 || error != ERR_OK, (DlLoading_UnloadDynamicLibrary(libraryPath), NULL));
+    return_if(CompareMocuuid(routineUuid, libUuid) != 0 || error != ERR_OK, (LibraryLoadingUnloadLibrary(libraryPath), NULL));
 
-    FMocExtEntry_t (*entryGetter)(void) = DlLoading_ImportFunction(libraryPath, MOCEXT_ENTRYPOINTGET_FUNCNAME, &error);
-    return_if(entryGetter == NULL || error != ERR_OK, (DlLoading_UnloadDynamicLibrary(libraryPath), NULL));
+    FMocassinRoutine_t (*entryGetter)(void) = LibraryLoadingImportFunction(libraryPath, MOCEXTENSION_GET_ROUTINE_FUNC_NAME,
+                                                                           &error);
+    return_if(entryGetter == NULL || error != ERR_OK, (LibraryLoadingUnloadLibrary(libraryPath), NULL));
 
     return entryGetter();
 }

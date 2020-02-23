@@ -314,7 +314,7 @@ static error_t DetectAndTagConstantInteractionDefinitions(SCONTEXT_PARAMETER)
 }
 
 // Builds the environment linking system of the environment state lattice
-void BuildEnvironmentLinkingSystem(SCONTEXT_PARAMETER)
+void InitializeEnvironmentLinkingSystem(SCONTEXT_PARAMETER)
 {
     error_t error;
 
@@ -411,7 +411,7 @@ static error_t AddEnvClusterEnergyByOccupation(SCONTEXT_PARAMETER, EnvironmentSt
         for (byte_t i = 0; clusterDefinition->PairInteractionIds[i] != POSITION_NULL; i++)
         {
             let codeByteId = clusterDefinition->PairInteractionIds[i];
-            SetCodeByteAt(&clusterState->OccupationCode, i, span_Get(*occupationBuffer, codeByteId));
+            SetOccupationCodeByteAt(&clusterState->OccupationCode, i, span_Get(*occupationBuffer, codeByteId));
         }
         error = InitializeClusterStateStatus(simContext, clusterState, clusterTable);
         return_if(error != ERR_OK, ERR_DATACONSISTENCY);
@@ -573,7 +573,7 @@ static inline double GetClusterEnergyDelta(const ClusterTable_t *restrict cluste
 // Updates the cluster state to a new particle id using the provided cluster link
 static inline void UpdateClusterState(const ClusterTable_t* restrict clusterTable, const ClusterLink_t* restrict clusterLink, ClusterState_t* restrict cluster, const byte_t newParticleId)
 {
-    SetCodeByteAt(&cluster->OccupationCode, clusterLink->CodeByteId, newParticleId);
+    SetOccupationCodeByteAt(&cluster->OccupationCode, clusterLink->CodeByteId, newParticleId);
     cluster->CodeId = SearchClusterCodeIdInTable(clusterTable, cluster->OccupationCode);
 }
 
@@ -665,10 +665,10 @@ static inline void PrepareJumpLinkClusterStateChanges(SCONTEXT_PARAMETER, const 
     var jumpRule = getActiveJumpRule(simContext);
     cpp_foreach(clusterLink, environmentLink->ClusterLinks)
     {
-        let newCodeByte = GetCodeByteAt(&jumpRule->StateCode2, jumpLink->SenderPathId);
+        let newCodeByte = GetOccupationCodeByteAt(&jumpRule->StateCode2, jumpLink->SenderPathId);
         SetActiveWorkCluster(simContext, workEnvironment, clusterLink->ClusterId);
         var workCluster = getActiveWorkCluster(simContext);
-        SetCodeByteAt(&workCluster->OccupationCode, clusterLink->CodeByteId, newCodeByte);
+        SetOccupationCodeByteAt(&workCluster->OccupationCode, clusterLink->CodeByteId, newCodeByte);
     }
 }
 
@@ -683,8 +683,8 @@ static void InvokeJumpLinkDeltas(SCONTEXT_PARAMETER, const JumpLink_t* restrict 
     SetActiveWorkPairTable(simContext, sourceWorkEnvironment, environmentLink);
     SetActiveWorkEnvironment(simContext, environmentLink);
 
-    let newParticleId = GetCodeByteAt(&jumpRule->StateCode2, jumpLink->SenderPathId);
-    let updateParticleId = GetCodeByteAt(&jumpRule->StateCode2, getActiveWorkEnvironment(simContext)->PathId);
+    let newParticleId = GetOccupationCodeByteAt(&jumpRule->StateCode2, jumpLink->SenderPathId);
+    let updateParticleId = GetOccupationCodeByteAt(&jumpRule->StateCode2, getActiveWorkEnvironment(simContext)->PathId);
 
     InvokeActiveLocalPairDelta(simContext, updateParticleId, JUMPPATH[jumpLink->SenderPathId]->ParticleId, newParticleId);
     InvokeLocalEnvironmentLinkClusterDeltas(simContext, environmentLink, updateParticleId);
@@ -707,7 +707,7 @@ static void DistributeEnvironmentUpdate(SCONTEXT_PARAMETER, EnvironmentState_t *
 static inline void SetFinalStateEnergyBackup(SCONTEXT_PARAMETER, const byte_t pathId)
 {
     let jumpRule = getActiveJumpRule(simContext);
-    let updateParticleId = GetCodeByteAt(&jumpRule->StateCode2, pathId);
+    let updateParticleId = GetOccupationCodeByteAt(&jumpRule->StateCode2, pathId);
     *getEnvStateEnergyBackupById(simContext, pathId) = *getPathStateEnergyByIds(simContext, pathId, updateParticleId);
 }
 
@@ -715,13 +715,13 @@ static inline void SetFinalStateEnergyBackup(SCONTEXT_PARAMETER, const byte_t pa
 static inline void LoadFinalStateEnergyBackup(SCONTEXT_PARAMETER, const byte_t pathId)
 {
     let stateCode = &getActiveJumpRule(simContext)->StateCode2;
-    let updateParticleId = GetCodeByteAt(stateCode, pathId);
+    let updateParticleId = GetOccupationCodeByteAt(stateCode, pathId);
     *getPathStateEnergyByIds(simContext, pathId, updateParticleId) = *getEnvStateEnergyBackupById(simContext, pathId);
 }
 
 /* Simulation sub routines */
 
-void KMC_CreateBackupAndJumpDelta(SCONTEXT_PARAMETER)
+void CreateAndBackupKmcTransitionDelta(SCONTEXT_PARAMETER)
 {
     let jumpStatus = getActiveJumpStatus(simContext);
     let JumpDirection = getActiveJumpDirection(simContext);
@@ -739,7 +739,7 @@ void KMC_CreateBackupAndJumpDelta(SCONTEXT_PARAMETER)
         InvokeJumpLinkDeltas(simContext, jumpLink);
 }
 
-void KMC_LoadJumpDeltaBackup(SCONTEXT_PARAMETER)
+void LoadKmcTransitionDeltaBackup(SCONTEXT_PARAMETER)
 {
     let jumpDirection = getActiveJumpDirection(simContext);
     for(int32_t i = 0; i < jumpDirection->JumpLength; i++)
@@ -749,23 +749,23 @@ void KMC_LoadJumpDeltaBackup(SCONTEXT_PARAMETER)
 // Performs the action to set all KMC states in cases where the S2 bias correction is not static and requires dynamic calculation
 static void inline KMC_SetStateEnergiesWithDynamicCorrection(SCONTEXT_PARAMETER)
 {
-    KMC_SetStartTransitionBaseAndFieldEnergyStates(simContext);
-    KMC_CreateBackupAndJumpDelta(simContext);
-    KMC_SetFinalStateEnergy(simContext);
-    KMC_LoadJumpDeltaBackup(simContext);
+    SetKmcStartTransitionBaseAndFieldEnergyStatesOnContext(simContext);
+    CreateAndBackupKmcTransitionDelta(simContext);
+    SetFinalKmcStateEnergyOnContext(simContext);
+    LoadKmcTransitionDeltaBackup(simContext);
 }
 
 // Performs the action to set all KMC states in cases where the S2 bias correction is a known constant value
 static void inline KMC_SetStateEnergiesWithStaticCorrection(SCONTEXT_PARAMETER)
 {
-    KMC_SetStartTransitionBaseAndFieldEnergyStates(simContext);
-    KMC_SetFinalStateEnergy(simContext);
+    SetKmcStartTransitionBaseAndFieldEnergyStatesOnContext(simContext);
+    SetFinalKmcStateEnergyOnContext(simContext);
     let jumpRule = getActiveJumpRule(simContext);
     let energies = getJumpEnergyInfo(simContext);
     energies->S2Energy += jumpRule->StaticVirtualJumpEnergyCorrection;
 }
 
-void KMC_SetStateEnergies(SCONTEXT_PARAMETER)
+void SetKmcStateEnergiesOnContext(SCONTEXT_PARAMETER)
 {
     let jumpRule = getActiveJumpRule(simContext);
     if (jumpRule->StaticVirtualJumpEnergyCorrection == JUMPS_JUMPCORRECTION_NOTSTATIC)
@@ -777,18 +777,18 @@ void KMC_SetStateEnergies(SCONTEXT_PARAMETER)
 //  Adds the current energy contribution to state S0 and S1 for a path id to the energy info
 static inline void AddPathStateS0AndS1EnergyByPathId(SCONTEXT_PARAMETER, const int32_t pathId, JumpRule_t*restrict jumpRule, JumpEnergyInfo_t*restrict energyInfo)
 {
-    var particleId = GetCodeByteAt(&jumpRule->StateCode0, pathId);
+    var particleId = GetOccupationCodeByteAt(&jumpRule->StateCode0, pathId);
     energyInfo->S0Energy += *getPathStateEnergyByIds(simContext, pathId, particleId);
-    particleId = GetCodeByteAt(&jumpRule->StateCode1, pathId);
+    particleId = GetOccupationCodeByteAt(&jumpRule->StateCode1, pathId);
     energyInfo->S1Energy += *getPathStateEnergyByIds(simContext, pathId, particleId);
 }
 
-void KMC_SetStartTransitionBaseAndFieldEnergyStates(SCONTEXT_PARAMETER)
+void SetKmcStartTransitionBaseAndFieldEnergyStatesOnContext(SCONTEXT_PARAMETER)
 {
     let jumpDirection = getActiveJumpDirection(simContext);
     let jumpRule = getActiveJumpRule(simContext);
     var energyInfo = getJumpEnergyInfo(simContext);
-    var particleId = GetCodeByteAt(&jumpRule->StateCode0, 0);
+    var particleId = GetOccupationCodeByteAt(&jumpRule->StateCode0, 0);
 
     // Set the field influence energy for the jump
     energyInfo->ElectricFieldEnergy = GetCurrentElectricFieldJumpInfluence(simContext);
@@ -821,18 +821,18 @@ void KMC_SetStartTransitionBaseAndFieldEnergyStates(SCONTEXT_PARAMETER)
 //  Adds the current energy contribution to state S2 for a path id to the energy info
 static inline void AddPathStateS2EnergyByPathId(SCONTEXT_PARAMETER, const int32_t pathId, JumpRule_t*restrict jumpRule, JumpEnergyInfo_t*restrict energyInfo)
 {
-    var particleId = GetCodeByteAt(&jumpRule->StateCode2, pathId);
+    var particleId = GetOccupationCodeByteAt(&jumpRule->StateCode2, pathId);
     energyInfo->S2Energy += *getPathStateEnergyByIds(simContext, pathId, particleId);
 }
 
-void KMC_SetFinalStateEnergy(SCONTEXT_PARAMETER)
+void SetFinalKmcStateEnergyOnContext(SCONTEXT_PARAMETER)
 {
     let jumpRule = getActiveJumpRule(simContext);
     let jumpDirection = getActiveJumpDirection(simContext);
     var energyInfo = getJumpEnergyInfo(simContext);
 
     // Set the values of the first entry
-    let particleId = GetCodeByteAt(&jumpRule->StateCode2, 0);
+    let particleId = GetOccupationCodeByteAt(&jumpRule->StateCode2, 0);
     energyInfo->S2Energy = *getPathStateEnergyByIds(simContext, 0, particleId);
 
     //  Fallthrough switch of jump length cases
@@ -860,12 +860,12 @@ void KMC_SetFinalStateEnergy(SCONTEXT_PARAMETER)
 static inline void KMC_AdvanceSystemToFinalStateByPathId(SCONTEXT_PARAMETER, const int32_t pathId, OccupationCode64_t*restrict stateCode)
 {
     let envState = JUMPPATH[pathId];
-    let newParticleId = GetCodeByteAt(stateCode, pathId);
+    let newParticleId = GetOccupationCodeByteAt(stateCode, pathId);
     DistributeEnvironmentUpdate(simContext, envState, newParticleId);
     envState->ParticleId = newParticleId;
 }
 
-void KMC_AdvanceSystemToFinalState(SCONTEXT_PARAMETER)
+void AdvanceKmcSystemToFinalState(SCONTEXT_PARAMETER)
 {
     let stateCode = &getActiveJumpRule(simContext)->StateCode2;
     let jumpDirection = getActiveJumpDirection(simContext);
@@ -904,7 +904,7 @@ static inline JumpLink_t MMC_BuildJumpLink(const EnvironmentState_t *restrict en
     return (JumpLink_t){ .SenderPathId = INVALID_INDEX, .LinkId = INVALID_INDEX };
 }
 
-bool_t MMC_TryCreateBackupAndJumpDelta(SCONTEXT_PARAMETER)
+bool_t TryCreateAndBackupMmcTransitionDelta(SCONTEXT_PARAMETER)
 {
     // Check if the positions are potentially close enough to be linked
     return_if(!PositionAreInInteractionRange(simContext, &JUMPPATH[0]->LatticeVector, &JUMPPATH[1]->LatticeVector), false);
@@ -930,55 +930,55 @@ bool_t MMC_TryCreateBackupAndJumpDelta(SCONTEXT_PARAMETER)
     return true;
 }
 
-void MMC_LoadJumpDeltaBackup(SCONTEXT_PARAMETER)
+void LoadMmcTransitionDeltaBackup(SCONTEXT_PARAMETER)
 {
     LoadFinalStateEnergyBackup(simContext, 0);
     LoadFinalStateEnergyBackup(simContext, 1);
 }
 
 
-void MMC_SetStateEnergies(SCONTEXT_PARAMETER)
+void SetMmcStateEnergiesOnContext(SCONTEXT_PARAMETER)
 {
-    MMC_SetStartStateEnergy(simContext);
+    SetMmcStartStateEnergyOnContext(simContext);
 
     // Try to create a backup if required, else the positions do not interact and the final energy can be directly set
-    if (MMC_TryCreateBackupAndJumpDelta(simContext))
+    if (TryCreateAndBackupMmcTransitionDelta(simContext))
     {
-        MMC_SetFinalStateEnergy(simContext);
-        MMC_LoadJumpDeltaBackup(simContext);
+        SetMmcFinalStateEnergyOnContext(simContext);
+        LoadMmcTransitionDeltaBackup(simContext);
         return;
     }
-    MMC_SetFinalStateEnergy(simContext);
+    SetMmcFinalStateEnergyOnContext(simContext);
 }
 
 
-void MMC_SetStartStateEnergy(SCONTEXT_PARAMETER)
+void SetMmcStartStateEnergyOnContext(SCONTEXT_PARAMETER)
 {
     let jumpRule = getActiveJumpRule(simContext);
     var jumpEnergyInfo = getJumpEnergyInfo(simContext);
 
-    let particleId0 = GetCodeByteAt(&jumpRule->StateCode0, 0);
+    let particleId0 = GetOccupationCodeByteAt(&jumpRule->StateCode0, 0);
     jumpEnergyInfo->S0Energy =  *getPathStateEnergyByIds(simContext, 0, particleId0);
-    let particleId1 = GetCodeByteAt(&jumpRule->StateCode0, 1);
+    let particleId1 = GetOccupationCodeByteAt(&jumpRule->StateCode0, 1);
     jumpEnergyInfo->S0Energy += *getPathStateEnergyByIds(simContext, 1, particleId1);
 }
 
-void MMC_SetFinalStateEnergy(SCONTEXT_PARAMETER)
+void SetMmcFinalStateEnergyOnContext(SCONTEXT_PARAMETER)
 {
     let jumpRule = getActiveJumpRule(simContext);
     var jumpEnergyInfo = getJumpEnergyInfo(simContext);
 
-    let particleId0 = GetCodeByteAt(&jumpRule->StateCode2, 0);
+    let particleId0 = GetOccupationCodeByteAt(&jumpRule->StateCode2, 0);
     jumpEnergyInfo->S2Energy =  *getPathStateEnergyByIds(simContext, 0, particleId0);
-    let particleId1 = GetCodeByteAt(&jumpRule->StateCode2, 1);
+    let particleId1 = GetOccupationCodeByteAt(&jumpRule->StateCode2, 1);
     jumpEnergyInfo->S2Energy += *getPathStateEnergyByIds(simContext, 1, particleId1);
 }
 
-void MMC_AdvanceSystemToFinalState(SCONTEXT_PARAMETER)
+void AdvanceMmcSystemToFinalState(SCONTEXT_PARAMETER)
 {
     let jumpRule = getActiveJumpRule(simContext);
-    let newParticleId0 = GetCodeByteAt(&jumpRule->StateCode2, 0);
-    let newParticleId1 = GetCodeByteAt(&jumpRule->StateCode2, 1);
+    let newParticleId0 = GetOccupationCodeByteAt(&jumpRule->StateCode2, 0);
+    let newParticleId1 = GetOccupationCodeByteAt(&jumpRule->StateCode2, 1);
     var envState0 = JUMPPATH[0];
     var envState1 = JUMPPATH[1];
 

@@ -12,7 +12,7 @@
 #include "Framework/Errors/McErrors.h"
 #include "Framework/Basic/BaseTypes/BaseTypes.h"
 #include "Framework/Math/Types/Vector.h"
-#include "Framework/Basic/BaseTypes/Buffers.h"
+#include "Framework/Basic/Buffers/Buffers.h"
 #include "Simulator/Logic/Constants/Constants.h"
 
 /* General definitions */

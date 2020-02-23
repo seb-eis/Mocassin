@@ -25,7 +25,7 @@
 
 #if defined(ENABLE_DEBUG_ASSERTIONS)
     // Active debug assertion macro. Asserts that the condition is true during runtime
-    #define debug_assert(cond) if (!(cond)) { ErrorToStdout(ERR_DEBUGASSERT, __FUNCTION__, __LINE__, #cond); }
+    #define debug_assert(cond) if (!(cond)) { DumpErrorToStderrOut(ERR_DEBUGASSERT, __FUNCTION__, __LINE__, #cond); }
 #else
     // Deactivated assertion macro. Expands to nothing
     #define debug_assert(cond)
@@ -129,13 +129,13 @@ typedef int64_t cerror_t;
 #define ERR_NOMOBILES 21
 
 // Defines the default error display with code and message
-#define error_display(__CODE, __MSG) ErrorToStderrOut(__CODE, __FUNCTION__, __LINE__, __MSG)
+#define error_display(__CODE, __MSG) DumpErrorToStderrOut(__CODE, __FUNCTION__, __LINE__, __MSG)
 
 // Defines the simulator error dump macro. Dumps error information to stderr and quits program with error code
-#define error_exit(__CODE, __MSG) OnErrorExit(__CODE, __FUNCTION__, __LINE__, __MSG)
+#define error_exit(__CODE, __MSG) MocassinErrorExit(__CODE, __FUNCTION__, __LINE__, __MSG)
 
 // Defines the simulator error and memory dump macro. Dumps error information to stderr and quits programm with error code
-#define error_exitdump(__CODE, __MSG, __BSTART, __BEND) OnErrorExitWithMemDump(__CODE, __FUNCTION__, __LINE__, __MSG, __BSTART, __BEND)
+#define error_exitdump(__CODE, __MSG, __BSTART, __BEND) MocassinErrorExitWithMemDump(__CODE, __FUNCTION__, __LINE__, __MSG, __BSTART, __BEND)
 
 // Asserts that the passed condition is true. Calls default error handling if condition is false
 #define assert_true(cond, error, msg) if (!(cond)) default_handle_error((error), (msg))
@@ -153,13 +153,13 @@ typedef int64_t cerror_t;
 #define break_if(cond) if (cond) break
 
 // Get an error description string for the passed error Code
-const char* ErrorCodeToString(error_t errCode);
+const char* ConvertMocassinErrorCodeToString(error_t errCode);
 
 // Error handling call for debugging that dumps the information the stdout
-void ErrorToStderrOut(int32_t errCode, const char *errFunc, int32_t errLine, const char *errMsg);
+void DumpErrorToStderrOut(int32_t errCode, const char *errFunc, int32_t errLine, const char *errMsg);
 
 // Dumps the passed error information to stderr and exists the program with the provided code. 
-void OnErrorExit(int32_t errCode, const char* errFunc, int32_t errLine, const char* errMsg);
+void MocassinErrorExit(int32_t errCode, const char* errFunc, int32_t errLine, const char* errMsg);
 
 // Dumps the passed error information to stderr and exists the program with the provided code. Dumps memory bytes between passed byte pointers
-void OnErrorExitWithMemDump(int32_t errCode, const char* errFunc, int32_t errLine, const char* errMsg, uint8_t* memStart, uint8_t* memEnd);
+void MocassinErrorExitWithMemDump(int32_t errCode, const char* errFunc, int32_t errLine, const char* errMsg, uint8_t* memStart, uint8_t* memEnd);

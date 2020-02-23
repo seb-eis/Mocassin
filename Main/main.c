@@ -16,7 +16,7 @@
 #include "Simulator/Logic/Initializers/CmdArgResolver/CmdArgumentResolver.h"
 
 // Internal main function that requires argv to be in utf8 encoding
-int _main(int argc, char const * const *argv);
+static int InternalMain(int argc, char const * const *argv);
 
 #if defined(WIN32)
 #include <wchar.h>
@@ -26,32 +26,33 @@ int wmain(int argc, wchar_t const* const* argv)
     char* utf8Argv[argc];
     for (var i = 0; i < argc; ++i)
     {
-        let error = Win32ConvertUtf16ToUtf8(argv[i], &utf8Argv[i]) <= 0 ? ERR_VALIDATION : ERR_OK;
+        let error = Win32ConvertUtf16ToUtf8(argv[i], &utf8Argv[i]) < 0 ? ERR_VALIDATION : ERR_OK;
         assert_success(error, "Failure on converting UTF16 argument set to UTF8.");
     }
-    return _main(argc, (const char *const *) utf8Argv);
+    return InternalMain(argc, (const char *const *) utf8Argv);
 }
 #else
 // Normal entry point for OS with native utf8
 int main(int argc, char const * const *argv)
 {
-    return _main(argc, argv);
+    return InternalMain(argc, argv);
 }
 #endif
 
-int _main(int argc, char const * const *argv)
+static int InternalMain(int argc, char const * const *argv)
 {
     // General preparations for routine execution
     var simContext = ctor_SimulationContext();
-    ResolveCommandLineArguments(&simContext, argc, argv);
-    JobLoader_LoadDatabaseModelToContext(&simContext);
-    PrepareForMainRoutine(&simContext);
+    ResolveMocassinCommandLineArguments(&simContext, argc, argv);
+    LoadMocassinSimulationDatabaseModelToContext(&simContext);
+    PrepareSimulationContextForMainRoutine(&simContext);
 
     // Load and jump into a custom extension routine if valid data exists
-    var routine = MocExt_TryFindExtensionRoutine(getCustomRoutineUuid(&simContext), getFileInformation(&simContext)->ExtensionLookupPath);
+    var routine = TryFindMocassinExtensionRoutine(getCustomRoutineUuid(&simContext),
+                                                  getFileInformation(&simContext)->ExtensionLookupPath);
     if (routine != NULL)
     {
-        ProgressPrint_OnSimulationStart(&simContext, stdout);
+        PrintMocassinSimulationStartInfo(&simContext, stdout);
         fprintf(stdout, "\nINFO  => Regular progress prints may be suppressed in custom routines.\n");
         fflush(stdout);
         return (routine(&simContext), 0);
@@ -59,7 +60,7 @@ int _main(int argc, char const * const *argv)
 
     // Jump into the usual KMC/MMM system if no extension routine data exist
     StartMainSimulationRoutine(&simContext);
-    ProgressPrint_OnSimulationFinish(&simContext, stdout);
+    PrintMocassinSimulationFinishInfo(&simContext, stdout);
 
     #if defined(MC_AWAIT_TERMINATION_OK)
     getchar();

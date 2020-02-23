@@ -11,7 +11,7 @@
 #include "Framework/Errors/McErrors.h"
 #include "Framework/Basic/FileIO/FileIO.h"
 
-const char* ErrorCodeToString(error_t errCode)
+const char* ConvertMocassinErrorCodeToString(error_t errCode)
 {
     // Redirect all non-critical errors to FATAL FAILURE since they should never cause an error string lookup
     errCode = (errCode <= 0) ? 0 : errCode;
@@ -71,25 +71,25 @@ static void AwaitErrorResponse(error_t error)
     #endif
 }
 
-void ErrorToStderrOut(int32_t errCode, const char *errFunc, int32_t errLine, const char *errMsg)
+void DumpErrorToStderrOut(int32_t errCode, const char *errFunc, int32_t errLine, const char *errMsg)
 {
-    fprintf(stderr, ERROR_FORMAT, errCode, errFunc, errLine, ErrorCodeToString(errCode), errMsg);
+    fprintf(stderr, ERROR_FORMAT, errCode, errFunc, errLine, ConvertMocassinErrorCodeToString(errCode), errMsg);
     fflush(stderr);
     AwaitErrorResponse(errCode);
 }
 
-void OnErrorExit(int32_t errCode, const char* errFunc, int32_t errLine, const char* errMsg)
+void MocassinErrorExit(int32_t errCode, const char* errFunc, int32_t errLine, const char* errMsg)
 {
     var fileStream = fopen(STDERR_PATH, "w");
-    fprintf(fileStream, ERROR_FORMAT, errCode, errFunc, errLine, ErrorCodeToString(errCode), errMsg);
+    fprintf(fileStream, ERROR_FORMAT, errCode, errFunc, errLine, ConvertMocassinErrorCodeToString(errCode), errMsg);
     fclose(fileStream);
     exit(errCode);
 }
 
-void OnErrorExitWithMemDump(int32_t errCode, const char* errFunc, int32_t errLine, const char* errMsg, uint8_t* memStart, uint8_t* memEnd)
+void MocassinErrorExitWithMemDump(int32_t errCode, const char* errFunc, int32_t errLine, const char* errMsg, uint8_t* memStart, uint8_t* memEnd)
 {
     var fileStream = fopen(STDERR_PATH, "w");
-    fprintf(fileStream, ERROR_FORMAT_WDUMP, errCode, errFunc, errLine, ErrorCodeToString(errCode), errMsg);
+    fprintf(fileStream, ERROR_FORMAT_WDUMP, errCode, errFunc, errLine, ConvertMocassinErrorCodeToString(errCode), errMsg);
 
     let buffer = (Buffer_t) {.Begin = memStart, .End = memEnd};
     WriteBufferHexToStream(fileStream, &buffer, 24);

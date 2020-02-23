@@ -13,7 +13,7 @@
 #include "Extensions/Interface/MocsimExtesionTypes.h"
 #include "Framework/Basic/DlLoading/DlLoading.h"
 #include "Framework/Basic/Macros/Macros.h"
-#include "Framework/Basic/BaseTypes/Buffers.h"
+#include "Framework/Basic/Buffers/Buffers.h"
 
 #if defined(_WIN32)
 #define MOCEXT_EXTROUTINE_LIBNAME ".mocext.dll"
@@ -22,7 +22,7 @@
 #endif
 
 // Tries to find an extension library in the provided search path with the given routine UUID and returns the entry point function pointer
-FMocExtEntry_t MocExt_TryFindExtensionRoutine(const moc_uuid_t* routineUuid, const char* searchPath);
+FMocassinRoutine_t TryFindMocassinExtensionRoutine(const mocuuid_t* routineUuid, const char* searchPath);
 
 // Tries to load the provided path as an extension library with the given routine UUID and returns the entry point function pointer if successful
-FMocExtEntry_t MocExt_TryLoadExtensionRoutine(const moc_uuid_t* routineUuid, const char* libraryPath);
+FMocassinRoutine_t TryLoadMocassinExtensionRoutine(const mocuuid_t* routineUuid, const char* libraryPath);

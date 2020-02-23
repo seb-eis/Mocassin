@@ -19,7 +19,7 @@
 #include <string.h>
 #include "Framework/Errors/McErrors.h"
 #include "Framework/Basic/BaseTypes/BaseTypes.h"
-#include "Framework/Basic/BaseTypes/Buffers.h"
+#include "Framework/Basic/Buffers/Buffers.h"
 
 #define FORMAT_I8(...)   "%" #__VA_ARGS__ PRIi8
 #define FORMAT_I16(...)  "%" #__VA_ARGS__ PRIi16
@@ -34,21 +34,18 @@
 // Defines the file stream type
 typedef FILE file_t;
 
-// Defines the string type
-typedef char* string_t;
-
 // Defines the list type for multiple character arrays
 // Layout@ggc_x86_64 => 24@[8,8,8]
-typedef List_t(string_t, StringList) StringList_t;
+typedef List_t(char*, StringList) StringList_t;
 
 // Wrapper around fopen() that handles the input arguments as utf8 encoded strings
-file_t* fopen_utf8(const char* restrict fileName, const char* restrict fileMode);
+file_t* utf8fopen(const char* restrict fileName, const char* restrict fileMode);
 
 // Wrapper around remove() that handles the input arguments as utf8 encoded strings
-error_t remove_utf8(const char* restrict fileName);
+error_t utf8remove(const char* restrict fileName);
 
 // Wrapper around rename() that handles the input arguments as utf8 encoded strings
-error_t rename_utf8(const char* restrict fileName, const char* restrict newfileName);
+error_t utf8rename(const char* restrict fileName, const char* restrict newfileName);
 
 // Check if a file name points to an existing file that can be accessed
 bool_t IsAccessibleFile(const char* restrict fileName);

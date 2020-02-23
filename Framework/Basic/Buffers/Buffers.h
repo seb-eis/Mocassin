@@ -20,14 +20,14 @@
 
 // Generic type macro for spans of memory enclosed by pointers to begin and end in a cpp style
 // Layout@ggc_x86_64 => 16@[8,8]
-#define Span_t(TYPE, NAMING...) struct NAMING { TYPE* Begin, * End; }
+#define Span_t(TYPE, NAMING...) struct NAMING { TYPE* Begin; TYPE * End; }
 
 // Type for enclosing an undefined buffer. Contains ptr to begin and end in a cpp style
 // Layout@ggc_x86_64 => 16@[8,8]
 typedef Span_t(void, VoidSpan) VoidSpan_t;
 
 // Compares two pointers as 16 byte UUID/GUID values
-int32_t CompareUUID(const void* lhs, const void* rhs);
+int32_t CompareMocuuid(const void* lhs, const void* rhs);
 
 // Allocate a new voi span with the passed number of elements and size of elements
 VoidSpan_t AllocateSpan(size_t numOfElements, size_t sizeOfElement);
@@ -124,7 +124,7 @@ bool_t HaveSameBufferContent(const Buffer_t* lhs, const Buffer_t* rhs);
 
 // Generic type macro for 1d lists that are enclosed by pointers and support cpp style push_back/pop_back operations
 // Layout@ggc_x86_64 => 24@[8,8,8]
-#define List_t(TYPE, NAMING...) struct NAMING { TYPE* Begin, * End, * CapacityEnd; }
+#define List_t(TYPE, NAMING...) struct NAMING { TYPE* Begin; TYPE * End; TYPE * CapacityEnd; }
 
 // Defines the undefined list with void ptr to begin, end and end of capacity
 // Layout@ggc_x86_64 => 24@[8,8,8]
@@ -170,7 +170,7 @@ void* ConstructVoidList(size_t capacity, size_t sizeOfElement, VoidList_t *restr
 
 // Generic type macro for rectangular array access to a span of data supporting multiple index access
 // Layout@ggc_x86_64 => 24@[8,8,8]
-#define Array_t(TYPE, RANK, NAMING...) struct NAMING { struct { int32_t Rank, Size; int32_t Blocks[(RANK)-1]; }* Header; TYPE* Begin, * End; }
+#define Array_t(TYPE, RANK, NAMING...) struct NAMING { struct { int32_t Rank, Size; int32_t Blocks[(RANK)-1]; }* Header; TYPE* Begin; TYPE * End; }
 
 // Type for the undefined void array access with header access to rank, size and the first block entry
 // Layout@ggc_x86_64 => 24@[8,8,8]

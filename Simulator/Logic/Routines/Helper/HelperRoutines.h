@@ -17,13 +17,13 @@
 #include "xmmintrin.h"
 
 // Set a code byte at the provided index to the provided value
-static inline void SetCodeByteAt(OccupationCode64_t* restrict code, const int32_t id, const byte_t value)
+static inline void SetOccupationCodeByteAt(OccupationCode64_t* restrict code, const int32_t id, const byte_t value)
 {
     code->ParticleIds[id] = value;
 }
 
 // Get the code byte value at the provided index
-static inline byte_t GetCodeByteAt(OccupationCode64_t* restrict code, const int32_t id)
+static inline byte_t GetOccupationCodeByteAt(OccupationCode64_t* restrict code, const int32_t id)
 {
     return code->ParticleIds[id];
 }
@@ -153,15 +153,15 @@ static inline double GetEnvironmentStateEnergy(const EnvironmentState_t* restric
 }
 
 // Get the next compare double between [0,1] from the RNG
-static inline double GetNextRandomDouble(SCONTEXT_PARAMETER)
+static inline double GetNextRandomDoubleFromContextRng(SCONTEXT_PARAMETER)
 {
-    return Pcg32NextDouble(getMainRng(simContext));
+    return Pcg32NextRandomDouble(getMainRng(simContext));
 }
 
 // Get a ceiled random number from the main RNG
-static inline int32_t GetNextCeiledRandom(SCONTEXT_PARAMETER, const int32_t upperLimit)
+static inline int32_t GetNextCeiledRandomFromContextRng(SCONTEXT_PARAMETER, const int32_t upperLimit)
 {
-    return Pcg32NextCeiled(getMainRng(simContext), upperLimit);
+    return Pcg32NextCeiledRandom(getMainRng(simContext), upperLimit);
 }
 
 // Checks if the passed pair table is constant and has always the same energy value independent of context

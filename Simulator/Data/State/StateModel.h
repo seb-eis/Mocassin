@@ -11,7 +11,7 @@
 #pragma once
 #include "Framework/Math/Types/Vector.h"
 #include "Framework/Basic/BaseTypes/BaseTypes.h"
-#include "Framework/Basic/BaseTypes/Buffers.h"
+#include "Framework/Basic/Buffers/Buffers.h"
 #include "Simulator/Logic/Constants/Constants.h"
 
 // Type for 3d movement tracking without tracker id (Does currently not support 16 bit alignment!)

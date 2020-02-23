@@ -12,25 +12,25 @@
 #include "Simulator/Logic/Routines/Statistics/McStatistics.h"
 #include "InternalLibraries/Interfaces/ProgressPrint.h"
 
-void ProgressPrint_OnBlockFinish(SCONTEXT_PARAMETER, file_t *fstream, bool_t onlyMobiles)
+void PrintMocassinSimulationBlockInfo(SCONTEXT_PARAMETER, file_t *fstream, bool_t onlyMobiles)
 {
     fprintf(fstream, ".");
     fflush(fstream);
 }
 
-void ProgressPrint_OnSimulationStart(SCONTEXT_PARAMETER, file_t *fstream)
+void PrintMocassinSimulationStartInfo(SCONTEXT_PARAMETER, file_t *fstream)
 {
     fprintf(fstream, "[START]");
     fflush(fstream);
 }
 
-void ProgressPrint_OnContextReset(SCONTEXT_PARAMETER, file_t *fstream)
+void PrintMocassinSimulationContextResetInfo(SCONTEXT_PARAMETER, file_t *fstream)
 {
     fprintf(fstream, "[MAIN-RUN]");
     fflush(fstream);
 }
 
-void ProgressPrint_OnSimulationFinish(SCONTEXT_PARAMETER, file_t *fstream)
+void PrintMocassinSimulationFinishInfo(SCONTEXT_PARAMETER, file_t *fstream)
 {
     let meta = getDbStructureModelMetaData(simContext);
     let stateMeta = getMainStateMetaData(simContext);

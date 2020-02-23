@@ -21,7 +21,7 @@
 #include "Simulator/Logic/Routines/Main/MainRoutines.h"
 #include "Simulator/Logic/Routines/Helper/HelperRoutines.h"
 #include "Simulator/Data/SimContext/ContextAccess.h"
-#include "Framework/Basic/BaseTypes/Buffers.h"
+#include "Framework/Basic/Buffers/Buffers.h"
 #include "Simulator/Logic/Initializers/JumpStatusInit/JumpStatusInit.h"
 #include "Simulator/Logic/Initializers/CmdArgResolver/CmdArgumentResolver.h"
 #include "Simulator/Logic/Routines/Tracking/TransitionTracking.h"
@@ -421,8 +421,8 @@ static error_t TryLoadOutputPlugin(SCONTEXT_PARAMETER)
     var plugins = getPluginCollection(simContext);
 
     return_if((fileInfo->OutputPluginPath) == NULL || (fileInfo->OutputPluginSymbol == NULL), ERR_USEDEFAULT);
-    if ((plugins->OnDataOutput = DlLoading_ImportFunction(fileInfo->OutputPluginPath, fileInfo->OutputPluginSymbol,
-                                                          &error)) == NULL)
+    if ((plugins->OnDataOutput = LibraryLoadingImportFunction(fileInfo->OutputPluginPath, fileInfo->OutputPluginSymbol,
+                                                              &error)) == NULL)
     {
         #if defined(IGNORE_INVALID_PLUGINS)
             fprintf(stdout, "[IGNORE_INVALID_PLUGINS] Error during output plugin loading. Using default settings.\n");
@@ -443,8 +443,8 @@ static error_t TryLoadEnergyPlugin(SCONTEXT_PARAMETER)
     var plugins = getPluginCollection(simContext);
 
     return_if((fileInfo->EnergyPluginPath) == NULL || (fileInfo->EnergyPluginSymbol == NULL), ERR_USEDEFAULT);
-    if ((plugins->OnSetTransitionStateEnergy = DlLoading_ImportFunction(fileInfo->EnergyPluginPath,
-                                                                        fileInfo->EnergyPluginSymbol, &error)) == NULL)
+    if ((plugins->OnSetTransitionStateEnergy = LibraryLoadingImportFunction(fileInfo->EnergyPluginPath,
+                                                                            fileInfo->EnergyPluginSymbol, &error)) == NULL)
     {
         #if defined(IGNORE_INVALID_PLUGINS)
             fprintf(stdout, "[IGNORE_INVALID_PLUGINS] Error during energy plugin loading. Using default settings.\n");
@@ -738,7 +738,7 @@ static void SyncSelectionPoolWithDynamicModel(SCONTEXT_PARAMETER)
 
     for (int32_t i = 0; i < lattice->Header->Size; i++)
     {
-        var error = HandleEnvStatePoolRegistration(simContext, i);
+        var error = RegisterEnvironmentStateInTransitionPool(simContext, i);
         assert_success(error, "Could not register environment on the jump selection pool.");
     }
 
@@ -883,7 +883,7 @@ static error_t ResetTrackingSystemToNull(SCONTEXT_PARAMETER)
     return ERR_OK;
 }
 
-error_t KMC_ResetContextAfterPreRun(SCONTEXT_PARAMETER)
+error_t ResetContextAfterKmcPreRun(SCONTEXT_PARAMETER)
 {
     var error = ResetJumpStatisticsToNull(simContext);
     return_if(error, error);
@@ -910,12 +910,12 @@ static void PopulateSimulationContext(SCONTEXT_PARAMETER)
     PopulateRngFromMainState(simContext);
 }
 
-void PrepareContextForSimulation(SCONTEXT_PARAMETER)
+void InitializeContextForSimulation(SCONTEXT_PARAMETER)
 {
     ConstructSimulationContext(simContext);
     PopulateSimulationContext(simContext);
 
-    BuildEnvironmentLinkingSystem(simContext);
+    InitializeEnvironmentLinkingSystem(simContext);
     BuildJumpStatusCollection(simContext);
     ResynchronizeEnvironmentEnergyStatus(simContext);
 }

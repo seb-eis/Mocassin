@@ -25,7 +25,7 @@
 // Calculates the result of the exponential function depending on the settings
 static inline double GetExpResult(SCONTEXT_PARAMETER, const double exponent)
 {
-    return simContext->IsExpApproximationActive ? Exp_Fast32_Rms(exponent) : exp(exponent);
+    return simContext->IsExpApproximationActive ? FastExp32RmsError(exponent) : exp(exponent);
 }
 
 
@@ -51,11 +51,11 @@ static inline void SetActiveCounterCollection(SCONTEXT_PARAMETER)
     cycleState->ActiveCounterCollection = getMainStateCounterAt(simContext, JUMPPATH[0]->ParticleId);
 }
 
-void PrepareForMainRoutine(SCONTEXT_PARAMETER)
+void PrepareSimulationContextForMainRoutine(SCONTEXT_PARAMETER)
 {
     let cycleCounters = getMainCycleCounters(simContext);
 
-    PrepareContextForSimulation(simContext);
+    InitializeContextForSimulation(simContext);
     while (cycleCounters->NextExecutionPhaseGoalMcsCount <= cycleCounters->McsCount)
         AdvanceMainCycleCounterToNextStepGoal(simContext);
 
@@ -66,108 +66,108 @@ error_t StartMainSimulationRoutine(SCONTEXT_PARAMETER)
 {
     assert_true(!StateFlagsAreSet(simContext, STATE_FLG_SIMERROR), SIMERROR, "Cannot start main simulation routine, state error flag is set.");
 
-    ProgressPrint_OnSimulationStart(simContext, stdout);
+    PrintMocassinSimulationStartInfo(simContext, stdout);
     if (JobInfoFlagsAreSet(simContext, INFO_FLG_KMC))
     {
         if (StateFlagsAreSet(simContext, STATE_FLG_PRERUN))
         {
-            SIMERROR = KMC_StartPreRunRoutine(simContext);
+            SIMERROR = StartKmcPreRunRoutine(simContext);
             assert_success(SIMERROR, "Pre-run execution of main KMC routine aborted with an error");
         }
-        return SIMERROR = KMC_StartMainRoutine(simContext);
+        return SIMERROR = StartKmcMainRoutine(simContext);
     }
     if (JobInfoFlagsAreSet(simContext, INFO_FLG_MMC))
     {
         if (StateFlagsAreSet(simContext, STATE_FLG_PRERUN))
         {
-            SIMERROR = MMC_StartPreRunRoutine(simContext);
+            SIMERROR = StartMmcPreRunRoutine(simContext);
             assert_success(SIMERROR, "Pre-run execution of main KMC routine aborted with an error");
         }
-        return SIMERROR = MMC_StartMainRoutine(simContext);
+        return SIMERROR = StartMmcMainRoutine(simContext);
     }
 
     assert_success(ERR_UNKNOWN, "Main routine starter skipped selection process. Neither MMC nor KMC flags is set.");
     return ERR_UNKNOWN; // GCC [-Wall] expects return value, even with exit(..) statement
 }
 
-error_t KMC_StartPreRunRoutine(SCONTEXT_PARAMETER)
+error_t StartKmcPreRunRoutine(SCONTEXT_PARAMETER)
 {
-    var abortFlag = KMC_UpdateAndCheckAbortConditions(simContext);
+    var abortFlag = UpdateAndEvaluateKmcAbortConditions(simContext);
     while(abortFlag == STATE_FLG_CONTINUE)
     {
-        SIMERROR = KMC_EnterAutoOptimizationExecutionPhase(simContext);
+        SIMERROR = RunOneKmcAutoOptimizationExecutionBlock(simContext);
         assert_success(SIMERROR, "Simulation abort due to error in KMC cycle block execution.");
 
-        SIMERROR = KMC_FinishExecutionPhase(simContext);
+        SIMERROR = FinishKmcExecutionBlock(simContext);
         assert_success(SIMERROR, "Simulation abort due to error in KMC cycle block finisher execution.");
 
-        abortFlag = KMC_UpdateAndCheckAbortConditions(simContext);
-        ProgressPrint_OnBlockFinish(simContext, stdout, true);
+        abortFlag = UpdateAndEvaluateKmcAbortConditions(simContext);
+        PrintMocassinSimulationBlockInfo(simContext, stdout, true);
     }
-    return KMC_FinishPreRun(simContext);
+    return FinishKmcPreRunRoutine(simContext);
 }
 
-error_t KMC_FinishPreRun(SCONTEXT_PARAMETER)
+error_t FinishKmcPreRunRoutine(SCONTEXT_PARAMETER)
 {
-    SIMERROR = KMC_ResetContextAfterPreRun(simContext);
+    SIMERROR = ResetContextAfterKmcPreRun(simContext);
     return_if(SIMERROR, SIMERROR);
 
     setMainStateFlags(simContext, STATE_FLG_PRERUN_RESET);
     unSetMainStateFlags(simContext, STATE_FLG_PRERUN);
 
-    ProgressPrint_OnContextReset(simContext, stdout);
+    PrintMocassinSimulationContextResetInfo(simContext, stdout);
     return ERR_OK;
 }
 
 // Starts the main kinetic simulation routine
-error_t KMC_StartMainRoutine(SCONTEXT_PARAMETER)
+error_t StartKmcMainRoutine(SCONTEXT_PARAMETER)
 {
-    var abortFlag = KMC_UpdateAndCheckAbortConditions(simContext);
+    var abortFlag = UpdateAndEvaluateKmcAbortConditions(simContext);
     while(abortFlag == STATE_FLG_CONTINUE)
     {
-        SIMERROR = KMC_EnterExecutionPhase(simContext);
+        SIMERROR = RunOneKmcExecutionBlock(simContext);
         assert_success(SIMERROR, "Simulation abort due to error in KMC cycle block execution.");
 
-        SIMERROR = KMC_FinishExecutionPhase(simContext);
+        SIMERROR = FinishKmcExecutionBlock(simContext);
         assert_success(SIMERROR, "Simulation abort due to error in KMC cycle block finisher execution.");
 
-        abortFlag = KMC_UpdateAndCheckAbortConditions(simContext);
-        ProgressPrint_OnBlockFinish(simContext, stdout, true);
+        abortFlag = UpdateAndEvaluateKmcAbortConditions(simContext);
+        PrintMocassinSimulationBlockInfo(simContext, stdout, true);
     }
-    return KMC_FinishMainRoutine(simContext);
+    return FinishMainKmcRoutine(simContext);
 }
 
-error_t MMC_StartPreRunRoutine(SCONTEXT_PARAMETER)
+error_t StartMmcPreRunRoutine(SCONTEXT_PARAMETER)
 {
     return ERR_NOTIMPLEMENTED;
 }
 
-error_t MMC_FinishPreRun(SCONTEXT_PARAMETER)
+error_t FinishMmcPreRunRoutine(SCONTEXT_PARAMETER)
 {
     return ERR_NOTIMPLEMENTED;
 }
 
 // Starts the main metropolis simulation routine
-error_t MMC_StartMainRoutine(SCONTEXT_PARAMETER)
+error_t StartMmcMainRoutine(SCONTEXT_PARAMETER)
 {
-    var abortFlag = MMC_UpdateAndCheckAbortConditions(simContext);
+    var abortFlag = UpdateAndEvaluateMmcAbortConditions(simContext);
     while(abortFlag == STATE_FLG_CONTINUE)
     {
-        SIMERROR = MMC_EnterExecutionPhase(simContext);
+        SIMERROR = RunOneMmcExecutionBlock(simContext);
         assert_success(SIMERROR, "Simulation abort due to error in MMC cycle block execution.");
 
-        SIMERROR = MMC_FinishExecutionPhase(simContext);
+        SIMERROR = FinishMmcExecutionBlock(simContext);
         assert_success(SIMERROR, "Simulation abort due to error in MMC cycle block finisher execution.");
 
-        abortFlag = MMC_UpdateAndCheckAbortConditions(simContext);
-        ProgressPrint_OnBlockFinish(simContext, stdout, true);
+        abortFlag = UpdateAndEvaluateMmcAbortConditions(simContext);
+        PrintMocassinSimulationBlockInfo(simContext, stdout, true);
     }
 
-    return MMC_FinishMainRoutine(simContext);
+    return FinishMmcMainRoutine(simContext);
 }
 
 // Calls the output plugin callback if any is set
-static inline error_t CallOutputPlugin(SCONTEXT_PARAMETER)
+static inline error_t TryCallOutputPlugin(SCONTEXT_PARAMETER)
 {
     return_if(simContext->Plugins.OnDataOutput == NULL, ERR_OK);
     let plugins = getPluginCollection(simContext);
@@ -177,7 +177,7 @@ static inline error_t CallOutputPlugin(SCONTEXT_PARAMETER)
 }
 
 // Writes the current jump delta energy of an MMC transition to the abort buffer (If the abort tolerance is equal or below 0, the buffer write is skipped)
-static inline void MMC_WriteJumpEnergyToAbortBuffer(SCONTEXT_PARAMETER)
+static inline void WriteMmcJumpEnergyToAbortBuffer(SCONTEXT_PARAMETER)
 {
     let header = getDbModelJobHeaderAsMMC(simContext);
     return_if(header->AbortTolerance <= 0.0);
@@ -201,25 +201,25 @@ static inline void MMC_WriteJumpEnergyToAbortBuffer(SCONTEXT_PARAMETER)
 }
 
 // Action for cases where the MMC jump selection leads to an unstable end state
-static inline void KMC_OnJumpIsToUnstableState(SCONTEXT_PARAMETER)
+static inline void OnKmcEventEndStateIsUnstable(SCONTEXT_PARAMETER)
 {
     var counters = getActiveCounters(simContext);
 
     ++counters->UnstableEndCount;
-    KMC_AddCurrentJumpDataToHistograms(simContext);
+    AddCurrentKmcTransitionDataToHistograms(simContext);
     AdvanceSimulatedTimeByCurrentStep(simContext);
 }
 
 // Action for cases where the jump selection enables to leave a currently unstable state
-static inline void KMC_OnJumpIsFromUnstableState(SCONTEXT_PARAMETER)
+static inline void OnKmcEventStartStateIsUnstable(SCONTEXT_PARAMETER)
 {
     var counters = getActiveCounters(simContext);
 
     ++counters->UnstableStartCount;
-    KMC_AdvanceTransitionTrackingSystem(simContext);
-    KMC_AdvanceSystemToFinalState(simContext);
+    AdvanceKmcTransitionTrackingSystem(simContext);
+    AdvanceKmcSystemToFinalState(simContext);
 
-    let jumpCountHasChanged = KMC_UpdateJumpPool(simContext);
+    let jumpCountHasChanged = UpdateTransitionPoolAfterKmcSystemAdvance(simContext);
     if (jumpCountHasChanged) UpdateTimeStepPerJumpToCurrent(simContext);
 }
 
@@ -248,7 +248,7 @@ static inline void UpdateMaxJumpProbabilityBackjumpSafe(SCONTEXT_PARAMETER)
 }
 
 // Action for cases where the jump selection has been statistically accepted
-static inline void KMC_OnJumpIsStatisticallyAccepted(SCONTEXT_PARAMETER)
+static inline void OnKmcEventIsAccepted(SCONTEXT_PARAMETER)
 {
     var activeCounters = getActiveCounters(simContext);
     var cycleCounters = getMainCycleCounters(simContext);
@@ -257,26 +257,26 @@ static inline void KMC_OnJumpIsStatisticallyAccepted(SCONTEXT_PARAMETER)
     ++cycleCounters->McsCount;
 
     AdvanceSimulatedTimeByCurrentStep(simContext);
-    KMC_AdvanceTransitionTrackingSystem(simContext);
-    KMC_AdvanceSystemToFinalState(simContext);
+    AdvanceKmcTransitionTrackingSystem(simContext);
+    AdvanceKmcSystemToFinalState(simContext);
 
-    let jumpCountHasChanged = KMC_UpdateJumpPool(simContext);
+    let jumpCountHasChanged = UpdateTransitionPoolAfterKmcSystemAdvance(simContext);
     if (jumpCountHasChanged) UpdateTimeStepPerJumpToCurrent(simContext);
     simContext->CycleResult = MC_ACCEPTED_CYCLE;
 }
 
 // Action for cases where the jump selection has been statistically rejected
-static inline void KMC_OnJumpIsStatisticallyRejected(SCONTEXT_PARAMETER)
+static inline void OnKmcEventIsRejected(SCONTEXT_PARAMETER)
 {
     var counters = getActiveCounters(simContext);
     ++counters->RejectionCount;
     AdvanceSimulatedTimeByCurrentStep(simContext);
-    KMC_AddCurrentJumpDataToHistograms(simContext);
+    AddCurrentKmcTransitionDataToHistograms(simContext);
     simContext->CycleResult = MC_REJECTED_CYCLE;
 }
 
 // Action for cases where the jump selection has no valid rule and is site-blocking
-static inline void KMC_OnJumpIsSiteBlocked(SCONTEXT_PARAMETER)
+static inline void OnKmcEventIsSiteBlocked(SCONTEXT_PARAMETER)
 {
     var counters = getActiveCounters(simContext);
     ++counters->SiteBlockingCount;
@@ -285,7 +285,7 @@ static inline void KMC_OnJumpIsSiteBlocked(SCONTEXT_PARAMETER)
 }
 
 // Action that is called if a KMC jump is pre-skipped due to failed attempt frequency test
-static inline void KMC_OnJumpIsFrequencySkipped(SCONTEXT_PARAMETER)
+static inline void OnKmcEventIsFrequencySkipped(SCONTEXT_PARAMETER)
 {
     SetActiveCounterCollection(simContext);
     let counters = getActiveCounters(simContext);
@@ -295,62 +295,63 @@ static inline void KMC_OnJumpIsFrequencySkipped(SCONTEXT_PARAMETER)
 }
 
 // Pre-check of the attempt frequency factor using another double roll [0;1]
-static inline bool_t KMC_PrecheckAttemptFrequencyFactor(SCONTEXT_PARAMETER)
+static inline bool_t CheckKmcEventFrequencySkip(SCONTEXT_PARAMETER)
 {
     #if defined(OPT_PRECHECK_FREQUENCY)
     let jumpRule = getActiveJumpRule(simContext);
-    return (jumpRule->FrequencyFactor < OPT_FRQPRECHECK_LIMIT) && (jumpRule->FrequencyFactor < GetNextRandomDouble(simContext));
+    return (jumpRule->FrequencyFactor < OPT_FRQPRECHECK_LIMIT) && (jumpRule->FrequencyFactor <
+            GetNextRandomDoubleFromContextRng(simContext));
     #else
     return true;
     #endif
 }
 
-void KMC_ExecuteSimulationCycle(SCONTEXT_PARAMETER)
+void ExecuteKmcSimulationCycle(SCONTEXT_PARAMETER)
 {
-    KMC_SetNextJumpSelection(simContext);
-    KMC_SetJumpPathProperties(simContext);
+    SetNextKmcJumpSelectionOnContext(simContext);
+    SetKmcJumpPathPropertiesOnContext(simContext);
 
-    if (KMC_TrySetActiveJumpRule(simContext))
+    if (TrySetActiveKmcJumpRuleOnContext(simContext))
     {
         #if defined(OPT_PRECHECK_FREQUENCY)
-        if (KMC_PrecheckAttemptFrequencyFactor(simContext))
+        if (CheckKmcEventFrequencySkip(simContext))
         {
-            KMC_OnJumpIsFrequencySkipped(simContext);
+            OnKmcEventIsFrequencySkipped(simContext);
             return;
         }
         #endif
-        KMC_SetJumpProperties(simContext);
-        KMC_OnEnergeticJumpEvaluation(simContext);
+        SetKmcJumpPropertiesOnContext(simContext);
+        SetEnergeticKmcEventEvaluationOnContext(simContext);
         return;
     }
 
-    KMC_OnJumpIsSiteBlocked(simContext);
+    OnKmcEventIsSiteBlocked(simContext);
 }
 
-void KMC_ExecuteSOPSimulationCycle(SCONTEXT_PARAMETER)
+void ExecuteKmcAutoOptimizingSimulationCycle(SCONTEXT_PARAMETER)
 {
-    KMC_SetNextJumpSelection(simContext);
-    KMC_SetJumpPathProperties(simContext);
+    SetNextKmcJumpSelectionOnContext(simContext);
+    SetKmcJumpPathPropertiesOnContext(simContext);
 
-    if (KMC_TrySetActiveJumpRule(simContext))
+    if (TrySetActiveKmcJumpRuleOnContext(simContext))
     {
         #if defined(OPT_PRECHECK_FREQUENCY)
-        if (KMC_PrecheckAttemptFrequencyFactor(simContext))
+        if (CheckKmcEventFrequencySkip(simContext))
         {
-            KMC_OnJumpIsFrequencySkipped(simContext);
+            OnKmcEventIsFrequencySkipped(simContext);
             return;
         }
         #endif
-        KMC_SetJumpProperties(simContext);
-        KMC_OnEnergeticJumpEvaluation(simContext);
+        SetKmcJumpPropertiesOnContext(simContext);
+        SetEnergeticKmcEventEvaluationOnContext(simContext);
         UpdateMaxJumpProbabilityBackjumpSafe(simContext);
         return;
     }
 
-    KMC_OnJumpIsSiteBlocked(simContext);
+    OnKmcEventIsSiteBlocked(simContext);
 }
 
-error_t KMC_EnterExecutionPhase(SCONTEXT_PARAMETER)
+error_t RunOneKmcExecutionBlock(SCONTEXT_PARAMETER)
 {
     var counters = getMainCycleCounters(simContext);
     for (;counters->McsCount < counters->NextExecutionPhaseGoalMcsCount;)
@@ -358,15 +359,15 @@ error_t KMC_EnterExecutionPhase(SCONTEXT_PARAMETER)
         let countPerLoop = counters->CycleCountPerExecutionLoop;
         for (int64_t i = 0; i < countPerLoop; ++i)
         {
-            KMC_ExecuteSimulationCycle(simContext);
+            ExecuteKmcSimulationCycle(simContext);
         }
         counters->CycleCount += countPerLoop;
-        return_if(KMC_UpdateAndCheckAbortConditions(simContext) != STATE_FLG_CONTINUE, ERR_OK);
+        return_if(UpdateAndEvaluateKmcAbortConditions(simContext) != STATE_FLG_CONTINUE, ERR_OK);
     }
     return SIMERROR;
 }
 
-error_t KMC_EnterAutoOptimizationExecutionPhase(SCONTEXT_PARAMETER)
+error_t RunOneKmcAutoOptimizationExecutionBlock(SCONTEXT_PARAMETER)
 {
     var counters = getMainCycleCounters(simContext);
     for (;counters->McsCount < counters->NextExecutionPhaseGoalMcsCount;)
@@ -374,52 +375,52 @@ error_t KMC_EnterAutoOptimizationExecutionPhase(SCONTEXT_PARAMETER)
         let countPerLoop = counters->CycleCountPerExecutionLoop;
         for (int64_t i = 0; i < countPerLoop; ++i)
         {
-            KMC_ExecuteSOPSimulationCycle(simContext);
+            ExecuteKmcAutoOptimizingSimulationCycle(simContext);
         }
         counters->CycleCount += countPerLoop;
-        KMC_UpdateTotalJumpNormalization(simContext);
+        UpdateTotalKmcJumpNormalization(simContext);
     }
     return ERR_OK;
 }
 
-void MC_DoCommonPhaseFinish(SCONTEXT_PARAMETER)
+void ExecuteSharedMcBlockFinisher(SCONTEXT_PARAMETER)
 {
     unSetMainStateFlags(simContext, STATE_FLG_FIRSTCYCLE);
 
     SIMERROR = SyncSimulationStateToRunStatus(simContext);
     assert_success(SIMERROR, "Simulation aborted due to failed synchronization between dynamic model and state object.");
 
-    SIMERROR = SaveSimulationState(simContext);
+    SIMERROR = SaveCurrentSimulationStateToOutDirectory(simContext);
     assert_success(SIMERROR, "Simulation aborted due to error during serialization of the state object.");
 
-    SIMERROR = CallOutputPlugin(simContext);
+    SIMERROR = TryCallOutputPlugin(simContext);
     assert_success(SIMERROR, "Simulation aborted due to error in the external output plugin.");
 }
 
-error_t KMC_FinishExecutionPhase(SCONTEXT_PARAMETER)
+error_t FinishKmcExecutionBlock(SCONTEXT_PARAMETER)
 {
     AdvanceMainCycleCounterToNextStepGoal(simContext);
-    MC_DoCommonPhaseFinish(simContext);
+    ExecuteSharedMcBlockFinisher(simContext);
     return SIMERROR;
 }
 
 // Action for cases where the jump selection has been statistically accepted
-static inline void MMC_OnJumpIsStatisticallyAccepted(SCONTEXT_PARAMETER)
+static inline void OnMmcEventIsAccepted(SCONTEXT_PARAMETER)
 {
-    MMC_WriteJumpEnergyToAbortBuffer(simContext);
+    WriteMmcJumpEnergyToAbortBuffer(simContext);
     var activeCounters = getActiveCounters(simContext);
     var cycleCounters = getMainCycleCounters(simContext);
 
     ++activeCounters->McsCount;
     ++cycleCounters->McsCount;
 
-    MMC_AdvanceSystemToFinalState(simContext);
-    MMC_UpdateJumpPool(simContext);
+    AdvanceMmcSystemToFinalState(simContext);
+    UpdateTransitionPoolAfterMmcSystemAdvance(simContext);
     simContext->CycleResult = MC_ACCEPTED_CYCLE;
 }
 
 // Action for cases where the jump selection has been statistically rejected
-static inline void MMC_OnJumpIsStatisticallyRejected(SCONTEXT_PARAMETER)
+static inline void OnMmcEventIsRejected(SCONTEXT_PARAMETER)
 {
     var counters = getActiveCounters(simContext);
     ++counters->RejectionCount;
@@ -427,29 +428,29 @@ static inline void MMC_OnJumpIsStatisticallyRejected(SCONTEXT_PARAMETER)
 }
 
 // Action for cases where the jump selection has no valid rule and is site-blocking
-static inline void MMC_OnJumpIsSiteBlocked(SCONTEXT_PARAMETER)
+static inline void OnMmcEventIsSiteBlocked(SCONTEXT_PARAMETER)
 {
     var counters = getActiveCounters(simContext);
     ++counters->SiteBlockingCount;
     simContext->CycleResult = MC_BLOCKED_CYCLE;
 }
 
-void MMC_ExecuteSimulationCycle(SCONTEXT_PARAMETER)
+void ExecuteMmcSimulationCycle(SCONTEXT_PARAMETER)
 {
-    MMC_SetNextJumpSelection(simContext);
-    MMC_SetJumpPathProperties(simContext);
+    SetNextMmcJumpSelectionOnContext(simContext);
+    SetMmcJumpPathPropertiesOnContext(simContext);
 
-    if (MMC_TrySetActiveJumpRule(simContext))
+    if (TrySetActiveMmcJumpRuleOnContext(simContext))
     {
-        MMC_SetJumpProperties(simContext);
-        MMC_OnEnergeticJumpEvaluation(simContext);
+        SetMmcJumpPropertiesOnContext(simContext);
+        SetEnergeticMmcEventEvaluationOnContext(simContext);
         return;
     }
 
-    MMC_OnJumpIsSiteBlocked(simContext);
+    OnMmcEventIsSiteBlocked(simContext);
 }
 
-error_t MMC_EnterExecutionPhase(SCONTEXT_PARAMETER)
+error_t RunOneMmcExecutionBlock(SCONTEXT_PARAMETER)
 {
     var counters = getMainCycleCounters(simContext);
     for (;counters->McsCount < counters->NextExecutionPhaseGoalMcsCount;)
@@ -457,18 +458,18 @@ error_t MMC_EnterExecutionPhase(SCONTEXT_PARAMETER)
         let countPerLoop = counters->CycleCountPerExecutionLoop;
         for (int64_t i = 0; i < countPerLoop; i++)
         {
-            MMC_ExecuteSimulationCycle(simContext);
+            ExecuteMmcSimulationCycle(simContext);
         }
         counters->CycleCount += countPerLoop;
-        return_if(MMC_UpdateAndCheckAbortConditions(simContext) != STATE_FLG_CONTINUE, ERR_OK);
+        return_if(UpdateAndEvaluateMmcAbortConditions(simContext) != STATE_FLG_CONTINUE, ERR_OK);
     }
     return SIMERROR;
 }
 
-error_t MMC_FinishExecutionPhase(SCONTEXT_PARAMETER)
+error_t FinishMmcExecutionBlock(SCONTEXT_PARAMETER)
 {
     AdvanceMainCycleCounterToNextStepGoal(simContext);
-    MC_DoCommonPhaseFinish(simContext);
+    ExecuteSharedMcBlockFinisher(simContext);
     return SIMERROR;
 }
 
@@ -545,7 +546,7 @@ static error_t EvaluatePreRunAbortConditions(SCONTEXT_PARAMETER)
     return (counters->McsCount >= counters->PrerunGoalMcs) ? STATE_FLG_PRERUN_RESET : STATE_FLG_CONTINUE;
 }
 
-error_t KMC_UpdateAndCheckAbortConditions(SCONTEXT_PARAMETER)
+error_t UpdateAndEvaluateKmcAbortConditions(SCONTEXT_PARAMETER)
 {
     error_t result = 0;
     result |= EvaluatePreRunAbortConditions(simContext);
@@ -554,7 +555,7 @@ error_t KMC_UpdateAndCheckAbortConditions(SCONTEXT_PARAMETER)
 }
 
 // Checks if the fluctuation in the energy abort buffer indicates a relaxed system
-static inline bool_t MMC_CheckEnergyRelaxationAbortCondition(SCONTEXT_PARAMETER)
+static inline bool_t CheckMmcEnergyRelaxationAbortCondition(SCONTEXT_PARAMETER)
 {
     let metaData = getMainStateMetaData(simContext);
     let jobHeader = getDbModelJobHeaderAsMMC(simContext);
@@ -568,11 +569,11 @@ static inline bool_t MMC_CheckEnergyRelaxationAbortCondition(SCONTEXT_PARAMETER)
     return (isfinite(currentFluctuation)) ? (limitFluctuation >= fabs(currentFluctuation)) : false;
 }
 
-error_t MMC_UpdateAndCheckAbortConditions(SCONTEXT_PARAMETER)
+error_t UpdateAndEvaluateMmcAbortConditions(SCONTEXT_PARAMETER)
 {
     return_if(EvaluateGeneralAbortConditions(simContext) != STATE_FLG_CONTINUE, STATE_FLG_CONDABORT);
 
-    if (MMC_CheckEnergyRelaxationAbortCondition(simContext))
+    if (CheckMmcEnergyRelaxationAbortCondition(simContext))
     {
         setMainStateFlags(simContext, STATE_FLG_ENERGYABORT | STATE_FLG_CONDABORT);
         return STATE_FLG_CONDABORT;
@@ -630,7 +631,7 @@ error_t SyncSimulationStateToRunStatus(SCONTEXT_PARAMETER)
     return error;
 }
 
-error_t SaveSimulationState(SCONTEXT_PARAMETER)
+error_t SaveCurrentSimulationStateToOutDirectory(SCONTEXT_PARAMETER)
 {
     return_if(JobInfoFlagsAreSet(simContext, INFO_FLG_SKIPSAVE), ERR_OK);
     let stateBuffer = getMainStateBuffer(simContext);
@@ -641,23 +642,23 @@ error_t SaveSimulationState(SCONTEXT_PARAMETER)
     return SIMERROR = SaveWriteBufferToFile(targetFile, FMODE_BINARY_W, stateBuffer);
 }
 
-static error_t GeneralSimulationFinish(SCONTEXT_PARAMETER)
+static error_t SharedMcSimulationFinish(SCONTEXT_PARAMETER)
 {
     setMainStateFlags(simContext, STATE_FLG_COMPLETED);
-    SIMERROR = SaveSimulationState(simContext);
+    SIMERROR = SaveCurrentSimulationStateToOutDirectory(simContext);
     return SIMERROR;
 }
 
-error_t KMC_FinishMainRoutine(SCONTEXT_PARAMETER)
+error_t FinishMainKmcRoutine(SCONTEXT_PARAMETER)
 {
-    SIMERROR = GeneralSimulationFinish(simContext);
+    SIMERROR = SharedMcSimulationFinish(simContext);
     assert_success(SIMERROR, "Simulation aborted due to error in general simulation finisher routine execution.");
     return SIMERROR;
 }
 
-error_t MMC_FinishMainRoutine(SCONTEXT_PARAMETER)
+error_t FinishMmcMainRoutine(SCONTEXT_PARAMETER)
 {
-    SIMERROR = GeneralSimulationFinish(simContext);
+    SIMERROR = SharedMcSimulationFinish(simContext);
     assert_success(SIMERROR, "Simulation aborted due to error in general simulation finisher routine execution.");
     return SIMERROR;
 }
@@ -687,7 +688,7 @@ static inline void SetActivePathStartEnvironment(SCONTEXT_PARAMETER)
     let selectionInfo = getJumpSelectionInfo(simContext);
     var cycleState = getCycleState(simContext);
     let envState = getEnvironmentStateAt(simContext, selectionInfo->EnvironmentId);
-    SetCodeByteAt(&cycleState->ActiveStateCode, 0, envState->ParticleId);
+    SetOccupationCodeByteAt(&cycleState->ActiveStateCode, 0, envState->ParticleId);
     envState->PathId = 0;
     JUMPPATH[0] = envState;
 }
@@ -703,29 +704,29 @@ static inline void KMC_SetActiveJumpStatus(SCONTEXT_PARAMETER)
     cycleState->ActiveJumpStatus = &array_Get(*statusArray, vecCoorSet3(JUMPPATH[0]->LatticeVector), direction->ObjectId);
 }
 
-void KMC_SetNextJumpSelection(SCONTEXT_PARAMETER)
+void SetNextKmcJumpSelectionOnContext(SCONTEXT_PARAMETER)
 {
     var cycleState = getCycleState(simContext);
     cycleState->ActiveStateCode.Value = 0ULL;
 
-    KMC_RollNextJumpSelection(simContext);
+    UniformSelectNextKmcJumpSelection(simContext);
     SetActivePathStartEnvironment(simContext);
     SetActiveJumpDirectionAndCollection(simContext);
     SetActiveCounterCollection(simContext);
 }
 
 // Sets the jump path property of one step by the step index
-static inline void KMC_SetJumpPathPropertyByIndex(SCONTEXT_PARAMETER, int32_t stepIndex, const Vector4_t*restrict baseVector, const JumpSequence_t* restrict jumpSequence, const Vector4_t*restrict latticeSizes, OccupationCode64_t*restrict stateCode)
+static inline void SetKmcJumpPathPropertyByIndex(SCONTEXT_PARAMETER, int32_t stepIndex, const Vector4_t*restrict baseVector, const JumpSequence_t* restrict jumpSequence, const Vector4_t*restrict latticeSizes, OccupationCode64_t*restrict stateCode)
 {
     let actVector = AddAndTrimVector4(baseVector, &span_Get(*jumpSequence, stepIndex), latticeSizes);
     var envState = getEnvironmentStateByVector4(simContext, &actVector);
     ++stepIndex;
     envState->PathId = stepIndex;
-    SetCodeByteAt(stateCode, stepIndex, envState->ParticleId);
+    SetOccupationCodeByteAt(stateCode, stepIndex, envState->ParticleId);
     JUMPPATH[stepIndex] = envState;
 }
 
-void KMC_SetJumpPathProperties(SCONTEXT_PARAMETER)
+void SetKmcJumpPathPropertiesOnContext(SCONTEXT_PARAMETER)
 {
     // Note: Jump paths could be cached, but profiling showed that dynamically calculating them is faster, especially when
     // cache misses are to be expected in larger simulation systems
@@ -740,18 +741,18 @@ void KMC_SetJumpPathProperties(SCONTEXT_PARAMETER)
     switch (length)
     {
         case 7:
-            KMC_SetJumpPathPropertyByIndex(simContext, 6, baseVector, jumpSequence, latticeSizes, stateCode);
+            SetKmcJumpPathPropertyByIndex(simContext, 6, baseVector, jumpSequence, latticeSizes, stateCode);
         case 6:
-            KMC_SetJumpPathPropertyByIndex(simContext, 5, baseVector, jumpSequence, latticeSizes, stateCode);
+            SetKmcJumpPathPropertyByIndex(simContext, 5, baseVector, jumpSequence, latticeSizes, stateCode);
         case 5:
-            KMC_SetJumpPathPropertyByIndex(simContext, 4, baseVector, jumpSequence, latticeSizes, stateCode);
+            SetKmcJumpPathPropertyByIndex(simContext, 4, baseVector, jumpSequence, latticeSizes, stateCode);
         case 4:
-            KMC_SetJumpPathPropertyByIndex(simContext, 3, baseVector, jumpSequence, latticeSizes, stateCode);
+            SetKmcJumpPathPropertyByIndex(simContext, 3, baseVector, jumpSequence, latticeSizes, stateCode);
         case 3:
-            KMC_SetJumpPathPropertyByIndex(simContext, 2, baseVector, jumpSequence, latticeSizes, stateCode);
+            SetKmcJumpPathPropertyByIndex(simContext, 2, baseVector, jumpSequence, latticeSizes, stateCode);
         case 2:
-            KMC_SetJumpPathPropertyByIndex(simContext, 0, baseVector, jumpSequence, latticeSizes, stateCode);
-            KMC_SetJumpPathPropertyByIndex(simContext, 1, baseVector, jumpSequence, latticeSizes, stateCode);
+            SetKmcJumpPathPropertyByIndex(simContext, 0, baseVector, jumpSequence, latticeSizes, stateCode);
+            SetKmcJumpPathPropertyByIndex(simContext, 1, baseVector, jumpSequence, latticeSizes, stateCode);
             break;
         default:
             break;
@@ -780,19 +781,19 @@ static inline void FindAndSetActiveJumpRule(SCONTEXT_PARAMETER)
     LinearSearchAndSetActiveJumpRule(simContext);
 }
 
-JumpRule_t* KMC_TrySetActiveJumpRule(SCONTEXT_PARAMETER)
+JumpRule_t* TrySetActiveKmcJumpRuleOnContext(SCONTEXT_PARAMETER)
 {
     FindAndSetActiveJumpRule(simContext);
     return getActiveJumpRule(simContext);
 }
 
-void KMC_SetJumpProperties(SCONTEXT_PARAMETER)
+void SetKmcJumpPropertiesOnContext(SCONTEXT_PARAMETER)
 {
     KMC_SetActiveJumpStatus(simContext);
-    KMC_SetStateEnergies(simContext);
+    SetKmcStateEnergiesOnContext(simContext);
 }
 
-void KMC_SetJumpProbabilities(SCONTEXT_PARAMETER)
+void SetKmcJumpProbabilitiesOnContext(SCONTEXT_PARAMETER)
 {
     var energyInfo = getJumpEnergyInfo(simContext);
     let preFactor = GetCurrentProbabilityPreFactor(simContext);
@@ -805,7 +806,7 @@ void KMC_SetJumpProbabilities(SCONTEXT_PARAMETER)
 }
 
 // Default internal S1 calculation function that uses the 0.5 * (S_2 - S_0) interpolation method
-static inline void KMC_SetTransitionStateEnergyDefault(double* restrict states)
+static inline void SetDefaultKmcTransitionStateEnergy(double* restrict states)
 {
     let deltaConf = states[2] - states[0];
     states[4] = deltaConf;
@@ -820,7 +821,7 @@ static void KMC_SetTransitionStateEnergyAlphaMethod(double* restrict states, con
     states[1] += states[0] + 0.5 * (deltaConf - deltaAbs) + alpha * deltaAbs;
 }
 
-void KMC_OnEnergeticJumpEvaluation(SCONTEXT_PARAMETER)
+void SetEnergeticKmcEventEvaluationOnContext(SCONTEXT_PARAMETER)
 {
     let plugins = getPluginCollection(simContext);
     let energyInfo = getJumpEnergyInfo(simContext);
@@ -828,7 +829,7 @@ void KMC_OnEnergeticJumpEvaluation(SCONTEXT_PARAMETER)
     // Use the internal energy function of no plugin is set
     if (plugins->OnSetTransitionStateEnergy == NULL)
     {
-        KMC_SetTransitionStateEnergyDefault(&energyInfo->S0Energy);
+        SetDefaultKmcTransitionStateEnergy(&energyInfo->S0Energy);
     }
     else
     {
@@ -836,40 +837,40 @@ void KMC_OnEnergeticJumpEvaluation(SCONTEXT_PARAMETER)
     }
 
     // Calculates the probabilities from the set state energies
-    KMC_SetJumpProbabilities(simContext);
+    SetKmcJumpProbabilitiesOnContext(simContext);
 
     // Unstable end: Do not advance system, update counter and simulated time
     if (energyInfo->S2toS0DeltaEnergy < MC_CONST_JUMPLIMIT_MIN)
     {
-        KMC_OnJumpIsToUnstableState(simContext);
+        OnKmcEventEndStateIsUnstable(simContext);
         return;
     }
     // Unstable start: Advance system, update counter but not simulated time, do pool update
     if (energyInfo->NormalizedS0toS2Probability > MC_CONST_JUMPLIMIT_MAX)
     {
-        KMC_OnJumpIsFromUnstableState(simContext);
+        OnKmcEventStartStateIsUnstable(simContext);
         return;
     }
     // Successful jump: Advance system, update counters and simulated time, do pool update
-    let random = GetNextRandomDouble(simContext);
+    let random = GetNextRandomDoubleFromContextRng(simContext);
     if (energyInfo->NormalizedS0toS2Probability >= random)
     {
-        KMC_OnJumpIsStatisticallyAccepted(simContext);
+        OnKmcEventIsAccepted(simContext);
         return;
     }
     // Rejected jump: Do not advance system, update counter and simulated time, no pool update
-    KMC_OnJumpIsStatisticallyRejected(simContext);
+    OnKmcEventIsRejected(simContext);
 }
 
-void MMC_SetNextJumpSelection(SCONTEXT_PARAMETER)
+void SetNextMmcJumpSelectionOnContext(SCONTEXT_PARAMETER)
 {
-    MMC_RollNextJumpSelection(simContext);
+    UniformSelectNextMmcJumpSelection(simContext);
     SetActivePathStartEnvironment(simContext);
     SetActiveCounterCollection(simContext);
     SetActiveJumpDirectionAndCollection(simContext);
 }
 
-void MMC_SetJumpPathProperties(SCONTEXT_PARAMETER)
+void SetMmcJumpPathPropertiesOnContext(SCONTEXT_PARAMETER)
 {
     let selectionInfo = getJumpSelectionInfo(simContext);
     let jumpVector = getActiveJumpDirection(simContext)->JumpSequence.Begin;
@@ -882,22 +883,22 @@ void MMC_SetJumpPathProperties(SCONTEXT_PARAMETER)
     pathState1->PathId = 1;
 
     // Correct the active state code byte and set the path id of the second environment state
-    SetCodeByteAt(&cycleState->ActiveStateCode, 1, pathState1->ParticleId);
+    SetOccupationCodeByteAt(&cycleState->ActiveStateCode, 1, pathState1->ParticleId);
     JUMPPATH[1] = pathState1;
 }
 
-JumpRule_t* MMC_TrySetActiveJumpRule(SCONTEXT_PARAMETER)
+JumpRule_t* TrySetActiveMmcJumpRuleOnContext(SCONTEXT_PARAMETER)
 {
     FindAndSetActiveJumpRule(simContext);
     return getActiveJumpRule(simContext);
 }
 
-void MMC_SetJumpProperties(SCONTEXT_PARAMETER)
+void SetMmcJumpPropertiesOnContext(SCONTEXT_PARAMETER)
 {
-    MMC_SetStateEnergies(simContext);
+    SetMmcStateEnergiesOnContext(simContext);
 }
 
-void MMC_SetJumpProbabilities(SCONTEXT_PARAMETER)
+void SetMmcJumpProbabilitiesOnContext(SCONTEXT_PARAMETER)
 {
     var energyInfo = getJumpEnergyInfo(simContext);
 
@@ -906,41 +907,41 @@ void MMC_SetJumpProbabilities(SCONTEXT_PARAMETER)
     energyInfo->NormalizedS0toS2Probability = energyInfo->RawS0toS2Probability;
 }
 
-void MMC_OnEnergeticJumpEvaluation(SCONTEXT_PARAMETER)
+void SetEnergeticMmcEventEvaluationOnContext(SCONTEXT_PARAMETER)
 {
     let energyInfo = getJumpEnergyInfo(simContext);
 
-    MMC_SetJumpProbabilities(simContext);
+    SetMmcJumpProbabilitiesOnContext(simContext);
 
     // Handle case where the jump is statistically accepted
-    let random = GetNextRandomDouble(simContext);
+    let random = GetNextRandomDoubleFromContextRng(simContext);
     if (energyInfo->NormalizedS0toS2Probability >= random)
     {
-        MMC_OnJumpIsStatisticallyAccepted(simContext);
+        OnMmcEventIsAccepted(simContext);
         return;
     }
     // Handle case where the jump is statistically rejected
-    MMC_OnJumpIsStatisticallyRejected(simContext);
+    OnMmcEventIsRejected(simContext);
 }
 
 /* Special MMC routines with alpha factor */
 
-void MMC_ExecuteSimulationCycle_WithAlpha(SCONTEXT_PARAMETER, const double alpha)
+void ExecuteMmcSimulationCycleWithAlpha(SCONTEXT_PARAMETER, double alpha)
 {
-    MMC_SetNextJumpSelection(simContext);
-    MMC_SetJumpPathProperties(simContext);
+    SetNextMmcJumpSelectionOnContext(simContext);
+    SetMmcJumpPathPropertiesOnContext(simContext);
 
-    if (MMC_TrySetActiveJumpRule(simContext))
+    if (TrySetActiveMmcJumpRuleOnContext(simContext))
     {
-        MMC_SetJumpProperties(simContext);
-        MMC_OnEnergeticJumpEvaluation_WithAlpha(simContext, alpha);
+        SetMmcJumpPropertiesOnContext(simContext);
+        OnEnergeticMmcJumpEvaluationWithAlpha(simContext, alpha);
         return;
     }
 
-    MMC_OnJumpIsSiteBlocked(simContext);
+    OnMmcEventIsSiteBlocked(simContext);
 }
 
-void MMC_SetJumpProbabilities_WithAlpha(SCONTEXT_PARAMETER, const double alpha)
+void SetMmcJumpProbabilitiesOnContextWithAlpha(SCONTEXT_PARAMETER, double alpha)
 {
     var energyInfo = getJumpEnergyInfo(simContext);
 
@@ -949,19 +950,19 @@ void MMC_SetJumpProbabilities_WithAlpha(SCONTEXT_PARAMETER, const double alpha)
     energyInfo->NormalizedS0toS2Probability = energyInfo->RawS0toS2Probability;
 }
 
-void MMC_OnEnergeticJumpEvaluation_WithAlpha(SCONTEXT_PARAMETER, const double alpha)
+void OnEnergeticMmcJumpEvaluationWithAlpha(SCONTEXT_PARAMETER, double alpha)
 {
     let energyInfo = getJumpEnergyInfo(simContext);
 
-    MMC_SetJumpProbabilities_WithAlpha(simContext, alpha);
+    SetMmcJumpProbabilitiesOnContextWithAlpha(simContext, alpha);
 
     // Handle case where the jump is statistically accepted
-    let random = GetNextRandomDouble(simContext);
+    let random = GetNextRandomDoubleFromContextRng(simContext);
     if (energyInfo->NormalizedS0toS2Probability >= random)
     {
-        MMC_OnJumpIsStatisticallyAccepted(simContext);
+        OnMmcEventIsAccepted(simContext);
         return;
     }
     // Handle case where the jump is statistically rejected
-    MMC_OnJumpIsStatisticallyRejected(simContext);
+    OnMmcEventIsRejected(simContext);
 }

@@ -85,10 +85,10 @@ static inline DynamicJumpHistogram_t ctor_DynamicJumpHistogram_FromBuffer(const 
 }
 
 // Updates the tracking system on the simulation state after a successful KMC transition with the current data
-void KMC_AdvanceTransitionTrackingSystem(SCONTEXT_PARAMETER);
+void AdvanceKmcTransitionTrackingSystem(SCONTEXT_PARAMETER);
 
 // Updates the jump histogram data after a KMC jump attempt without advancing to the next state
-void KMC_AddCurrentJumpDataToHistograms(SCONTEXT_PARAMETER);
+void AddCurrentKmcTransitionDataToHistograms(SCONTEXT_PARAMETER);
 
 // Initializes the jump statistics system on the passed simulation context (Has en effect only in KMC runs)
 error_t InitJumpStatisticsTrackingSystem(SCONTEXT_PARAMETER);

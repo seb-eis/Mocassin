@@ -11,13 +11,14 @@
 #include <Simulator/Data/Database/DbModel.h>
 #include "Sqlite3JobLoader.h"
 
-void JobLoader_LoadDatabaseModelToContext(SCONTEXT_PARAMETER)
+void LoadMocassinSimulationDatabaseModelToContext(SCONTEXT_PARAMETER)
 {
     int32_t jobContextId = -1;
     if (sscanf(getFileInformation(simContext)->JobDbQuery, "%i", &jobContextId) != 1)
         error_exit(ERR_VALIDATION, "Job context id is invalid");
 
-    error_t error = PopulateDbModelFromDatabase(&simContext->DbModel, getFileInformation(simContext)->JobDbPath, jobContextId);
+    error_t error = PopulateDbModelFromDatabaseFilePath(&simContext->DbModel, getFileInformation(simContext)->JobDbPath,
+                                                        jobContextId);
     assert_success(error != ERR_OK, "Failed to load the job from the database.");
 }
 
@@ -454,7 +455,7 @@ static error_t AssignDirectionBuffersToJumpCollections(DbModel_t *dbModel)
 }
 
 
-error_t PopulateDbModelFromDatabase(DbModel_t *dbModel, const char *dbFile, int32_t jobContextId)
+error_t PopulateDbModelFromDatabaseFilePath(DbModel_t *dbModel, const char *dbFile, int32_t jobContextId)
 {
     error_t error;
     sqlite3 *db;
@@ -463,19 +464,19 @@ error_t PopulateDbModelFromDatabase(DbModel_t *dbModel, const char *dbFile, int3
     error = sqlite3_open_v2(dbFile, &db, SQLITE_OPEN_READONLY | SQLITE_OPEN_NOMUTEX, NULL);
     SQLCloseAndReturnIf(error != SQLITE_OK, db);
 
-    error = InvokeLoadOperations(db, dbModel, GetParentLoadOperations());
+    error = InvokeLoadOperations(db, dbModel, GetParentObjectLoadOperations());
     SQLCloseAndReturnIf(error != SQLITE_OK, db);
 
-    error = InvokeLoadOperations(db, dbModel, GetChildLoadOperations());
+    error = InvokeLoadOperations(db, dbModel, GetChildObjectLoadOperations());
     SQLCloseAndReturnIf(error != SQLITE_OK, db);
 
-    error = InvokeOnLoadedOperations(dbModel, GetOnLoadedOperations());
+    error = InvokeOnLoadedOperations(dbModel, GetDataLoadedPostOperations());
 
     assert_success(sqlite3_close(db), "Failed to close the database file.");
     return error;
 }
 
-DbModelLoadOperations_t GetChildLoadOperations()
+DbModelLoadOperations_t GetChildObjectLoadOperations()
 {
     static FDbModelLoad_t operations[] =
     {
@@ -488,7 +489,7 @@ DbModelLoadOperations_t GetChildLoadOperations()
     return (DbModelLoadOperations_t) span_CArrayToSpan(operations);
 }
 
-DbModelLoadOperations_t GetParentLoadOperations()
+DbModelLoadOperations_t GetParentObjectLoadOperations()
 {
     static FDbModelLoad_t operations[] =
     {
@@ -501,7 +502,7 @@ DbModelLoadOperations_t GetParentLoadOperations()
     return (DbModelLoadOperations_t) span_CArrayToSpan(operations);
 }
 
-DbModelOnLoadedOperations_t GetOnLoadedOperations()
+DbModelOnLoadedOperations_t GetDataLoadedPostOperations()
 {
     static FDbOnModelLoaded_t operations[] =
     {

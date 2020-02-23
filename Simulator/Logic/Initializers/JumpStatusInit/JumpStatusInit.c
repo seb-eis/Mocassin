@@ -171,9 +171,9 @@ static bool_t TryFindConstVirtualJumpCorrection(SCONTEXT_PARAMETER, JumpCollecti
         // Get the pair contribution from the table of the receiver
         let pairInteraction = span_Get(environment->PairInteractions, environmentLink->TargetPairId);
         let pairTable = getPairEnergyTableAt(simContext, pairInteraction.EnergyTableId);
-        let receiverParticleId = GetCodeByteAt(&jumpRule->StateCode0, receiverId);
-        let oldSenderParticle = GetCodeByteAt(&jumpRule->StateCode0, jumpLink->SenderPathId);
-        let newSenderParticle = GetCodeByteAt(&jumpRule->StateCode2, jumpLink->SenderPathId);
+        let receiverParticleId = GetOccupationCodeByteAt(&jumpRule->StateCode0, receiverId);
+        let oldSenderParticle = GetOccupationCodeByteAt(&jumpRule->StateCode0, jumpLink->SenderPathId);
+        let newSenderParticle = GetOccupationCodeByteAt(&jumpRule->StateCode2, jumpLink->SenderPathId);
         energy += getPairEnergyAt(pairTable, receiverParticleId, newSenderParticle) - getPairEnergyAt(pairTable, receiverParticleId, oldSenderParticle);
     }
     *outValue = -energy;

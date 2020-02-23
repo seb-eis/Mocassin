@@ -64,10 +64,10 @@ typedef struct MmcfeLog
 
 
 // Public routine start for MMCFE that accepts a simulation context as a void pointer
-void MMCFE_StartRoutine(void* context);
+void StartMmcfeRoutine(void* context);
 
 // Opens an sqlite3 MMCFE-Log database context. The method ensures that the database is created if it doesnt exist
-sqlite3* MMCFE_OpenLogDatabase(const char* dbPath);
+sqlite3* OpenMmcfeLogDatabase(const char* dbPath);
 
 // Adds an MMCFE log entry to the passed sqlite3 database connection
-error_t MMCFE_WriteEntryToLogDb(sqlite3* db, const MmcfeLog_t*restrict logEntry);
+error_t WriteMmcfeEntryToLogDb(sqlite3* db, const MmcfeLog_t*restrict logEntry);

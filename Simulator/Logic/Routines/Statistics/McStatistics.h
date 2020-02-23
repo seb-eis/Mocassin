@@ -147,7 +147,7 @@ static inline void UpdateTimeStepPerJumpToCurrent(SCONTEXT_PARAMETER)
 }
 
 // Updates the total jump normalization and affiliated step timing to the current value using the current max probability
-static inline void KMC_UpdateTotalJumpNormalization(SCONTEXT_PARAMETER)
+static inline void UpdateTotalKmcJumpNormalization(SCONTEXT_PARAMETER)
 {
     var factors = getPhysicalFactors(simContext);
     var metaData = getMainStateMetaData(simContext);

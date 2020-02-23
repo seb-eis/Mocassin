@@ -11,7 +11,7 @@
 #include "Framework/Basic/FileIO/FileIO.h"
 #include <dirent.h>
 
-file_t* fopen_utf8(const char* restrict fileName, const char* restrict fileMode)
+file_t* utf8fopen(const char* restrict fileName, const char* restrict fileMode)
 {
 #if defined(WIN32)
     wchar_t * file16, * mode16;
@@ -26,7 +26,7 @@ file_t* fopen_utf8(const char* restrict fileName, const char* restrict fileMode)
 }
 
 // Removes a file by an utf8 encoded file name
-error_t remove_utf8(const char* restrict fileName)
+error_t utf8remove(const char* restrict fileName)
 {
 #if  defined(WIN32)
     wchar_t * file16;
@@ -40,9 +40,9 @@ error_t remove_utf8(const char* restrict fileName)
 }
 
 // Renames a file by two utf8 encoded file names
-error_t rename_utf8(const char* restrict fileName, const char* restrict newFileName)
+error_t utf8rename(const char* restrict fileName, const char* restrict newFileName)
 {
-#if  defined(WIN32)
+#if defined(WIN32)
     wchar_t * file16, * newFile16;
     var error = Win32ConvertUtf8ToUtf16(fileName, &file16);
     return_if(error <= 0, ERR_FILE);
@@ -121,7 +121,7 @@ error_t WriteBufferToFile(const char* restrict fileName, const char* restrict fi
     if (strcmp(fileMode, "wb") != 0 && strcmp(fileMode, "ab") != 0)
         return ERR_FILEMODE;
 
-    if ((fileStream = fopen_utf8(fileName, fileMode)) == NULL)
+    if ((fileStream = utf8fopen(fileName, fileMode)) == NULL)
         return ERR_STREAM;
 
     result = WriteBufferToStream(fileStream, buffer);
@@ -154,7 +154,7 @@ error_t SaveWriteBufferToFile(const char* restrict fileName, const char* restric
             free(tmpName);
             return error;
         }
-        if((error = rename_utf8(fileName, tmpName)) != ERR_OK)
+        if((error = utf8rename(fileName, tmpName)) != ERR_OK)
         {
             free(tmpName);
             return error;
@@ -163,7 +163,7 @@ error_t SaveWriteBufferToFile(const char* restrict fileName, const char* restric
 
     if((error = WriteBufferToFile(fileName, fileMode, buffer)) == ERR_OK)
         if(tmpName != NULL)
-            error = remove_utf8(tmpName);
+            error = utf8remove(tmpName);
 
     free(tmpName);
     return error;
@@ -182,7 +182,7 @@ error_t LoadBufferFromFile(const char* restrict fileName, Buffer_t* restrict out
     int64_t bufferSize;
     error_t error;
 
-    if ((fileStream = fopen_utf8(fileName, "rb")) == NULL || (bufferSize = CalculateFileSize(fileStream)) < 0)
+    if ((fileStream = utf8fopen(fileName, "rb")) == NULL || (bufferSize = CalculateFileSize(fileStream)) < 0)
         return ERR_STREAM;
 
     if (span_Length(*outBuffer) != (size_t)bufferSize)
@@ -213,7 +213,7 @@ error_t WriteBufferHexToStream(file_t* restrict fileStream, const Buffer_t* rest
 bool_t EnsureFileIsDeleted(char const * restrict filePath)
 {
     if (IsAccessibleFile(filePath))
-        return remove_utf8(filePath) == 0;
+        return utf8remove(filePath) == 0;
 
     return false;
 }

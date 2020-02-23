@@ -10,7 +10,7 @@
 
 #include "Utility/JumpHistogram/JumpHistogramPrint.h"
 
-int _main(int argc, char const * const *argv);
+int InternalMain(int argc, char const * const *argv);
 
 #if defined(WIN32)
 #include <wchar.h>
@@ -23,7 +23,7 @@ int wmain(int argc, wchar_t const* const* argv)
         let error = Win32ConvertUtf16ToUtf8(argv[i], &utf8Argv[i]) <= 0 ? ERR_VALIDATION : ERR_OK;
         assert_success(error, "Failure on converting UTF16 argument set to UTF8.");
     }
-    return _main(argc, (const char *const *) utf8Argv);
+    return InternalMain(argc, (const char *const *) utf8Argv);
 }
 #else
 // Normal entry point for OS with native utf8
@@ -45,7 +45,7 @@ UtilityCallbacks_t UtilityCmd_GetCallbackCollection()
     return (UtilityCallbacks_t) span_CArrayToSpan(collection);
 }
 
-int _main(int argc, char const * const *argv)
+int InternalMain(int argc, char const * const *argv)
 {
     assert_success(argc >= 2 ? ERR_OK : ERR_ARGUMENT, "Invalid number of arguments, no command defined!");
     let callbackName = argv[1];

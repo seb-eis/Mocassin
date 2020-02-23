@@ -191,7 +191,7 @@ static error_t BuildAndSetFileTargets(SCONTEXT_PARAMETER)
     return ERR_OK;
 }
 
-void ResolveCommandLineArguments(SCONTEXT_PARAMETER, const int32_t argCount, char const * const * argValues)
+void ResolveMocassinCommandLineArguments(SCONTEXT_PARAMETER, int32_t argCount, char const * const * argValues)
 {
     error_t error;
 

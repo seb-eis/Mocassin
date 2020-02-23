@@ -13,6 +13,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "Framework/Errors/McErrors.h"
+#include "Framework/Basic/BaseTypes/Fundamental.h"
 
 // Defines the void prt compare function type for qsort calls
 typedef int32_t (*FComparer_t)(const void* lhs, const void* rhs);
@@ -34,18 +35,3 @@ typedef struct CmdArgResolver { char const * KeyArgument; const FValidator_t Val
 
 // Defines the command line argument lookup table that contains all supported cmd arg lookups
 typedef struct CmdArgLookup { const CmdArgResolver_t * Begin, * End; } CmdArgLookup_t;
-
-// Defines the default byte to be of unsigned int8 type
-typedef uint8_t byte_t;
-
-// Defines the signed byte to be of unsigned int8 type
-typedef int8_t sbyte_t;
-
-// Defines the bool to be one unsigned byte
-typedef byte_t bool_t;
-
-// Defines the values for true and false
-enum BooleanValuesEnum { false = 0, true = 1 };
-
-// Defines the basic bitmask to be a unsigned 64 bit integer
-typedef uint64_t Bitmask_t;

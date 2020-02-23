@@ -12,7 +12,7 @@
 #include "Simulator/Logic/JumpSelection/JumpSelection.h"
 #include "Simulator/Logic/Routines/Helper/HelperRoutines.h"
 #include "Simulator/Data/SimContext/ContextAccess.h"
-#include "Framework/Basic/BaseTypes/Buffers.h"
+#include "Framework/Basic/Buffers/Buffers.h"
 
 /* Local helper routines */
 
@@ -78,7 +78,7 @@ static error_t AddEnvStateToSelectionPool(SCONTEXT_PARAMETER, EnvironmentState_t
     return ERR_OK;
 }
 
-error_t HandleEnvStatePoolRegistration(SCONTEXT_PARAMETER, const int32_t environmentId)
+error_t RegisterEnvironmentStateInTransitionPool(SCONTEXT_PARAMETER, int32_t environmentId)
 {
     var environment = getEnvironmentStateAt(simContext, environmentId);
     let directionCount = getJumpCountAt(simContext, environment->LatticeVector.D, environment->ParticleId);
@@ -116,7 +116,7 @@ error_t HandleEnvStatePoolRegistration(SCONTEXT_PARAMETER, const int32_t environ
 static inline void RollPositionAndDirectionFromPool(SCONTEXT_PARAMETER)
 {
     var selectionInfo = getJumpSelectionInfo(simContext);
-    var random = GetNextCeiledRandom(simContext, simContext->SelectionPool.SelectableJumpCount);
+    var random = GetNextCeiledRandomFromContextRng(simContext, simContext->SelectionPool.SelectableJumpCount);
 
     cpp_offset_foreach(directionPool, simContext->SelectionPool.DirectionPools, 1)
     {
@@ -134,9 +134,11 @@ static inline void RollPositionAndDirectionFromPool(SCONTEXT_PARAMETER)
 }
 
 // Roll an environment offset id for the MMC selection process
-static inline void MMC_RollEnvironmentOffsetId(SCONTEXT_PARAMETER)
+static inline void RollMmcEnvironmentOffsetId(SCONTEXT_PARAMETER)
 {
-    getJumpSelectionInfo(simContext)->MmcOffsetSourceId = GetNextCeiledRandom(simContext, getEnvironmentLattice(simContext)->Header->Size);
+    getJumpSelectionInfo(simContext)->MmcOffsetSourceId = GetNextCeiledRandomFromContextRng(simContext,
+                                                                                            getEnvironmentLattice(
+                                                                                                    simContext)->Header->Size);
 }
 
 // Replaces the direction pool entry at the passed id by the last entry and updates the id set of the moved environment
@@ -226,7 +228,7 @@ static inline void MakeEnvironmentPoolEntriesUpdate(SCONTEXT_PARAMETER, const Ju
     OnPoolUpdateSelectableToSelectable(simContext, selectionPool, environment, newPoolId);
 }
 
-bool_t KMC_UpdateJumpPool(SCONTEXT_PARAMETER)
+bool_t UpdateTransitionPoolAfterKmcSystemAdvance(SCONTEXT_PARAMETER)
 {
     let oldSelectableJumpCount = getJumpSelectionPool(simContext)->SelectableJumpCount;
     let jumpCountMapping = getJumpCountMapping(simContext);
@@ -237,20 +239,20 @@ bool_t KMC_UpdateJumpPool(SCONTEXT_PARAMETER)
     return oldSelectableJumpCount != getJumpSelectionPool(simContext)->SelectableJumpCount;
 }
 
-void MMC_UpdateJumpPool(SCONTEXT_PARAMETER)
+void UpdateTransitionPoolAfterMmcSystemAdvance(SCONTEXT_PARAMETER)
 {
     let jumpCountMapping = getJumpCountMapping(simContext);
     MakeEnvironmentPoolEntriesUpdate(simContext, jumpCountMapping, JUMPPATH[0]);
     MakeEnvironmentPoolEntriesUpdate(simContext, jumpCountMapping, JUMPPATH[1]);
 }
 
-void KMC_RollNextJumpSelection(SCONTEXT_PARAMETER)
+void UniformSelectNextKmcJumpSelection(SCONTEXT_PARAMETER)
 {
     RollPositionAndDirectionFromPool(simContext);
 }
 
-void MMC_RollNextJumpSelection(SCONTEXT_PARAMETER)
+void UniformSelectNextMmcJumpSelection(SCONTEXT_PARAMETER)
 {
     RollPositionAndDirectionFromPool(simContext);
-    MMC_RollEnvironmentOffsetId(simContext);
+    RollMmcEnvironmentOffsetId(simContext);
 }

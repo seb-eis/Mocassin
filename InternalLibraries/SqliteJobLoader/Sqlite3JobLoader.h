@@ -37,14 +37,14 @@ typedef Span_t(FDbModelLoad_t, DbModelLoadOperations) DbModelLoadOperations_t;
 // Layout@ggc_x86_64 => 24@[8,8,8]
 typedef Span_t(FDbOnModelLoaded_t, DbModelOnLoadedOperations) DbModelOnLoadedOperations_t;
 
-// Get an access struct for the set of parent object operations
-DbModelLoadOperations_t GetParentLoadOperations();
+// Get an access struct for the set of parent object load operations
+DbModelLoadOperations_t GetParentObjectLoadOperations();
 
-// Get an access struct for the set of child object operations
-DbModelLoadOperations_t GetChildLoadOperations();
+// Get an access struct for the set of child object load operations
+DbModelLoadOperations_t GetChildObjectLoadOperations();
 
 // Get an access struct for the set of after loading operations
-DbModelOnLoadedOperations_t GetOnLoadedOperations();
+DbModelOnLoadedOperations_t GetDataLoadedPostOperations();
 
 // Main function - assign the provided DbModel object with the provided database and job context id
-error_t PopulateDbModelFromDatabase(DbModel_t *dbModel, const char *dbFile, int32_t jobContextId);
+error_t PopulateDbModelFromDatabaseFilePath(DbModel_t *dbModel, const char *dbFile, int32_t jobContextId);
