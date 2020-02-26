@@ -10,7 +10,7 @@ namespace Mocassin.Model.Energies
     ///     Represents a group energy entry that is fully described by center particle, a surrounding occupation state and an
     ///     energy value
     /// </summary>
-    public readonly struct GroupEnergyEntry : IEquatable<GroupEnergyEntry>, IComparable<GroupEnergyEntry>
+    public class GroupEnergyEntry : IEquatable<GroupEnergyEntry>, IComparable<GroupEnergyEntry>
     {
         /// <summary>
         ///     The center particle of the group energy entry
@@ -34,7 +34,6 @@ namespace Mocassin.Model.Energies
         /// <param name="groupOccupation"></param>
         /// <param name="energy"></param>
         public GroupEnergyEntry(IParticle centerParticle, IOccupationState groupOccupation, double energy)
-            : this()
         {
             CenterParticle = centerParticle;
             GroupOccupation = groupOccupation;
@@ -63,7 +62,7 @@ namespace Mocassin.Model.Energies
         /// <inheritdoc />
         public bool Equals(GroupEnergyEntry other)
         {
-            return CenterParticle.Equals(other.CenterParticle) && GroupOccupation.Equals(other.GroupOccupation);
+            return other != null && (CenterParticle.Equals(other.CenterParticle) && GroupOccupation.Equals(other.GroupOccupation));
         }
 
         /// <summary>

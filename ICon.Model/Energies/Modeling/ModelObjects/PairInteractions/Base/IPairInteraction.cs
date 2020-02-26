@@ -32,6 +32,11 @@ namespace Mocassin.Model.Energies
         bool IsChiral { get; }
 
         /// <summary>
+        ///     Get a boolean flag if the interaction is symmetric 
+        /// </summary>
+        bool IsSymmetric { get; }
+
+        /// <summary>
         ///     Get the <see cref="IPairInteraction" /> that is the L or R chiral partner
         /// </summary>
         IPairInteraction ChiralPartner { get; }

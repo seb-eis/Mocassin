@@ -79,13 +79,13 @@ namespace Mocassin.Symmetry.SpaceGroups
 
         /// <summary>
         ///     Gets a minimal set of <see cref="ISymmetryOperation" /> instances required to fully describe the passed vector set
-        ///     in a P1 extended unit cell context (Warning: Removing the inverses is only valid for display purposes)
+        ///     in a P1 extended unit cell context (Warning: Removing the duplicates is only valid for display purposes)
         /// </summary>
         /// <param name="refSequence"></param>
-        /// <param name="filterInverses"></param>
+        /// <param name="filterGeometricDuplicates"></param>
         /// <returns></returns>
         IList<ISymmetryOperation> GetMinimalUnitCellP1PathExtensionOperations(IEnumerable<Fractional3D> refSequence,
-            bool filterInverses = false);
+            bool filterGeometricDuplicates = false);
 
         /// <summary>
         ///     Gets a sorted list of unique fractional vectors that represent all positions equivalent to the original

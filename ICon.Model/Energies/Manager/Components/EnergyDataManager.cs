@@ -37,15 +37,15 @@ namespace Mocassin.Model.Energies
         }
 
         /// <inheritdoc />
-        public ISymmetricPairInteraction GetStablePairInteraction(int index)
+        public IStablePairInteraction GetStablePairInteraction(int index)
         {
             return Data.StablePairInteractions[index];
         }
 
         /// <inheritdoc />
-        public ListReadOnlyWrapper<ISymmetricPairInteraction> GetStablePairInteractions()
+        public ListReadOnlyWrapper<IStablePairInteraction> GetStablePairInteractions()
         {
-            return ListReadOnlyWrapper<ISymmetricPairInteraction>.FromEnumerable(Data.StablePairInteractions);
+            return ListReadOnlyWrapper<IStablePairInteraction>.FromEnumerable(Data.StablePairInteractions);
         }
 
         /// <inheritdoc />
@@ -68,15 +68,15 @@ namespace Mocassin.Model.Energies
         }
 
         /// <inheritdoc />
-        public IAsymmetricPairInteraction GetUnstablePairInteractions(int index)
+        public IUnstablePairInteraction GetUnstablePairInteractions(int index)
         {
             return Data.UnstablePairInteractions[index];
         }
 
         /// <inheritdoc />
-        public ListReadOnlyWrapper<IAsymmetricPairInteraction> GetUnstablePairInteractions()
+        public ListReadOnlyWrapper<IUnstablePairInteraction> GetUnstablePairInteractions()
         {
-            return ListReadOnlyWrapper<IAsymmetricPairInteraction>.FromEnumerable(Data.UnstablePairInteractions);
+            return ListReadOnlyWrapper<IUnstablePairInteraction>.FromEnumerable(Data.UnstablePairInteractions);
         }
 
         /// <inheritdoc />

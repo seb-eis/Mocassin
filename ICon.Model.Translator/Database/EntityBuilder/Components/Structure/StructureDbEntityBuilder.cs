@@ -100,7 +100,7 @@ namespace Mocassin.Model.Translator.EntityBuilder
 
             if (environmentModel.PairInteractionModels.Select(x => x.PairEnergyModel)
                 .Any(energyModel => energyModel.EnergyEntries.Any(x =>
-                    x.ParticlePair.Particle0.Index == particleId && comparer.Compare(x.Energy, 0.0) != 0)))
+                    x.ParticleInteractionPair.Particle0.Index == particleId && comparer.Compare(x.Energy, 0.0) != 0)))
                 return true;
 
             return environmentModel.GroupInteractionModels.Select(x => x.GroupEnergyModel).Any(energyModel =>

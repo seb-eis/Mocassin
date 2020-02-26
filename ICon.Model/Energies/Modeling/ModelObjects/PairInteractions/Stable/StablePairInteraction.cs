@@ -5,15 +5,15 @@ using Mocassin.Model.Basic;
 
 namespace Mocassin.Model.Energies
 {
-    /// <inheritdoc cref="ISymmetricPairInteraction" />
-    public class SymmetricPairInteraction : PairInteraction, ISymmetricPairInteraction
+    /// <inheritdoc cref="IStablePairInteraction" />
+    public class StablePairInteraction : PairInteraction, IStablePairInteraction
     {
-        private SymmetricPairInteraction ChiralPartnerInternal { get; set; }
+        private StablePairInteraction ChiralPartnerInternal { get; set; }
 
         /// <summary>
         ///     The symmetric pair energy dictionary that assigns each possible particle pair an energy value
         /// </summary>
-        public Dictionary<SymmetricParticlePair, double> EnergyDictionary { get; set; }
+        public Dictionary<ParticleInteractionPair, double> EnergyDictionary { get; set; }
 
         /// <inheritdoc />
         public override IPairInteraction ChiralPartner => ChiralPartnerInternal;
@@ -22,21 +22,21 @@ namespace Mocassin.Model.Energies
         public override string ObjectName => "Symmetric Pair Interaction";
 
         /// <inheritdoc />
-        public SymmetricPairInteraction()
+        public StablePairInteraction()
         {
         }
 
         /// <inheritdoc />
-        public SymmetricPairInteraction(in PairCandidate candidate, Dictionary<SymmetricParticlePair, double> energyDictionary)
+        public StablePairInteraction(in PairCandidate candidate, Dictionary<ParticleInteractionPair, double> energyDictionary)
             : base(candidate)
         {
             EnergyDictionary = energyDictionary ?? throw new ArgumentNullException(nameof(energyDictionary));
         }
 
         /// <inheritdoc />
-        public IReadOnlyDictionary<SymmetricParticlePair, double> GetEnergyDictionary()
+        public IReadOnlyDictionary<ParticleInteractionPair, double> GetEnergyDictionary()
         {
-            return EnergyDictionary ?? new Dictionary<SymmetricParticlePair, double>();
+            return EnergyDictionary ?? new Dictionary<ParticleInteractionPair, double>();
         }
 
         /// <inheritdoc />
@@ -48,12 +48,12 @@ namespace Mocassin.Model.Energies
         /// <inheritdoc />
         public override ModelObject PopulateFrom(IModelObject obj)
         {
-            if (!(CastIfNotDeprecated<ISymmetricPairInteraction>(obj) is { } interaction))
+            if (!(CastIfNotDeprecated<IStablePairInteraction>(obj) is { } interaction))
                 return null;
 
             base.PopulateFrom(obj);
 
-            EnergyDictionary = new Dictionary<SymmetricParticlePair, double>(interaction.GetEnergyDictionary().Count);
+            EnergyDictionary = new Dictionary<ParticleInteractionPair, double>(interaction.GetEnergyDictionary().Count);
             foreach (var item in interaction.GetEnergyDictionary())
                 EnergyDictionary.Add(item.Key, item.Value);
 
@@ -61,23 +61,19 @@ namespace Mocassin.Model.Energies
         }
 
         /// <inheritdoc />
-        public override bool TrySetEnergyEntry(in PairEnergyEntry energyEntry)
+        public override bool TrySetEnergyEntry(PairEnergyEntry energyEntry)
         {
-            if (!(energyEntry.ParticlePair is SymmetricParticlePair particlePair))
-                return false;
-
-            if (!EnergyDictionary.ContainsKey(particlePair))
-                return false;
-
-            EnergyDictionary[particlePair] = energyEntry.Energy;
+            if (energyEntry == null) throw new ArgumentNullException(nameof(energyEntry));
+            if (!EnergyDictionary.ContainsKey(energyEntry.ParticleInteractionPair)) return false;
+            EnergyDictionary[energyEntry.ParticleInteractionPair] = energyEntry.Energy;
             return true;
         }
 
         /// <summary>
-        ///     Sets the chiral partner <see cref="SymmetricPairInteraction" />
+        ///     Sets the chiral partner <see cref="StablePairInteraction" />
         /// </summary>
         /// <param name="partner"></param>
-        public void SetChiralPartner(SymmetricPairInteraction partner)
+        public void SetChiralPartner(StablePairInteraction partner)
         {
             if (partner == null) throw new ArgumentNullException(nameof(partner));
             if (ReferenceEquals(ChiralPartnerInternal, partner)) return;

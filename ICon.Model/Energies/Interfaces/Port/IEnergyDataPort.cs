@@ -20,27 +20,27 @@ namespace Mocassin.Model.Energies
         ///     Get a read only list of all stable pair infos
         /// </summary>
         /// <returns></returns>
-        ListReadOnlyWrapper<ISymmetricPairInteraction> GetStablePairInteractions();
+        ListReadOnlyWrapper<IStablePairInteraction> GetStablePairInteractions();
 
         /// <summary>
         ///     Get the stable pair info at the specified index
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        ISymmetricPairInteraction GetStablePairInteraction(int index);
+        IStablePairInteraction GetStablePairInteraction(int index);
 
         /// <summary>
         ///     GEt a read only list of all unstable pair interactions
         /// </summary>
         /// <returns></returns>
-        ListReadOnlyWrapper<IAsymmetricPairInteraction> GetUnstablePairInteractions();
+        ListReadOnlyWrapper<IUnstablePairInteraction> GetUnstablePairInteractions();
 
         /// <summary>
         ///     Get the unstable pair interactions at the specified index
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        IAsymmetricPairInteraction GetUnstablePairInteractions(int index);
+        IUnstablePairInteraction GetUnstablePairInteractions(int index);
 
         /// <summary>
         ///     Get a read only list of all existing group interaction definitions

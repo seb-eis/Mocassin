@@ -30,7 +30,7 @@ namespace Mocassin.Model.Energies
         ///     Get all pair interactions affiliated with this environment
         /// </summary>
         /// <returns></returns>
-        IEnumerable<IAsymmetricPairInteraction> GetPairInteractions();
+        IEnumerable<IUnstablePairInteraction> GetPairInteractions();
 
         /// <summary>
         ///     Get all group interactions affiliated with this environment

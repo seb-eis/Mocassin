@@ -57,8 +57,8 @@ namespace Mocassin.Model.Translator.ModelContext
 
             foreach (var entry in energyModel.PairInteraction.GetEnergyEntries())
             {
-                maxCenterIndex = Math.Max(maxCenterIndex, entry.ParticlePair.Particle0.Index);
-                maxPartnerIndex = Math.Max(maxPartnerIndex, entry.ParticlePair.Particle1.Index);
+                maxCenterIndex = Math.Max(maxCenterIndex, entry.ParticleInteractionPair.Particle0.Index);
+                maxPartnerIndex = Math.Max(maxPartnerIndex, entry.ParticleInteractionPair.Particle1.Index);
                 largestIndex = Math.Max(largestIndex, Math.Max(maxPartnerIndex, maxCenterIndex));
                 energyModel.EnergyEntries.Add(entry);
             }
@@ -79,11 +79,11 @@ namespace Mocassin.Model.Translator.ModelContext
 
             foreach (var entry in energyEntries)
             {
-                var id0 = entry.ParticlePair.Particle0.Index;
-                var id1 = entry.ParticlePair.Particle1.Index;
+                var id0 = entry.ParticleInteractionPair.Particle0.Index;
+                var id1 = entry.ParticleInteractionPair.Particle1.Index;
                 table[id0, id1] = entry.Energy;
 
-                if (entry.ParticlePair is SymmetricParticlePair)
+                if (entry.ParticleInteractionPair is SymmetricParticleInteractionPair)
                     table[id1, id0] = entry.Energy;
             }
 

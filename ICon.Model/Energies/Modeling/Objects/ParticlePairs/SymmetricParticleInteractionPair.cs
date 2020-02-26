@@ -5,10 +5,10 @@ namespace Mocassin.Model.Energies
     /// <summary>
     ///     Represents an symmetric pair of particles to identify pair interactions where the order is not relevant
     /// </summary>
-    public class SymmetricParticlePair : ParticlePair, IEquatable<SymmetricParticlePair>
+    public class SymmetricParticleInteractionPair : ParticleInteractionPair, IEquatable<SymmetricParticleInteractionPair>
     {
         /// <inheritdoc />
-        public bool Equals(SymmetricParticlePair other)
+        public bool Equals(SymmetricParticleInteractionPair other)
         {
             if (other == null) return false;
             if (Particle0.Index != other.Particle0.Index)
@@ -18,9 +18,9 @@ namespace Mocassin.Model.Energies
         }
 
         /// <inheritdoc />
-        public override bool Equals(ParticlePair other)
+        public override bool Equals(ParticleInteractionPair other)
         {
-            if (other is SymmetricParticlePair pair) return Equals(pair);
+            if (other is SymmetricParticleInteractionPair pair) return Equals(pair);
             return false;
         }
     }

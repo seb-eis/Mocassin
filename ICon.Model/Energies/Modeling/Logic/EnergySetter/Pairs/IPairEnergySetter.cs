@@ -30,7 +30,7 @@ namespace Mocassin.Model.Energies
         /// </summary>
         /// <param name="energyEntry"></param>
         /// <returns></returns>
-        void SetEnergyValue(in PairEnergyEntry energyEntry);
+        void SetEnergyValue(PairEnergyEntry energyEntry);
 
         /// <summary>
         ///     Set multiple entries within the temporary energy entry list

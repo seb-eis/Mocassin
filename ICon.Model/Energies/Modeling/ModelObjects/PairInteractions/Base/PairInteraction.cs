@@ -28,6 +28,9 @@ namespace Mocassin.Model.Energies
         public bool IsChiral => ChiralPartner != null;
 
         /// <inheritdoc />
+        public bool IsSymmetric => Position0 == Position1;
+
+        /// <inheritdoc />
         public abstract IPairInteraction ChiralPartner { get; }
 
         /// <summary>
@@ -66,11 +69,11 @@ namespace Mocassin.Model.Energies
         }
 
         /// <summary>
-        ///     Tries to set the passed energy entry in the pair interaction energy dictionary. Returns false if value cannot be
+        ///     Tries to set the passed <see cref="PairEnergyEntry"/> in the pair interaction energy dictionary. Returns false if value cannot be
         ///     set
         /// </summary>
         /// <param name="energyEntry"></param>
         /// <returns></returns>
-        public abstract bool TrySetEnergyEntry(in PairEnergyEntry energyEntry);
+        public abstract bool TrySetEnergyEntry(PairEnergyEntry energyEntry);
     }
 }

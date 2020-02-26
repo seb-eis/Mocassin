@@ -66,7 +66,7 @@ namespace Mocassin.Model.Energies
         }
 
         /// <inheritdoc />
-        public void SetEnergyValue(in PairEnergyEntry energyEntry)
+        public void SetEnergyValue(PairEnergyEntry energyEntry)
         {
             if (!EnergyConstraint.IsValid(energyEntry.Energy))
             {

@@ -1,5 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
+using Mocassin.Model.Translator;
 using Mocassin.Model.Translator.Jobs;
+using Mocassin.UI.Base.Commands;
 using Mocassin.UI.GUI.Base.ViewModels;
 using Mocassin.UI.Xml.Jobs;
 
@@ -15,6 +20,11 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         ///     Get the <see cref="JobConfigData" /> that the view model targets
         /// </summary>
         private JobConfigData JobDescription { get; }
+
+        /// <summary>
+        ///  Get the <see cref="Command{T}"/> to parse string instruction commands
+        /// </summary>
+        public Command<string> ExecuteStringInstructionCommand { get; }
 
         /// <summary>
         ///     Get or set the <see cref="SimulationExecutionOverwriteFlags" /> of the targeted <see cref="JobConfigData" />
@@ -109,6 +119,34 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         public BaseJobDescriptionControlViewModel(JobConfigData jobDescription)
         {
             JobDescription = jobDescription ?? throw new ArgumentNullException(nameof(jobDescription));
+            ExecuteStringInstructionCommand = new RelayCommand<string>(ExecuteInstructionSearch);
+        }
+
+        /// <summary>
+        ///     Executes a <see cref="string"/> command for editing the job instruction
+        /// </summary>
+        /// <param name="value"></param>
+        private void ExecuteInstructionSearch(string value)
+        {
+            var match = Regex.Match(value, "-loadroutine\\s+(\\S+)");
+            if (!match.Success) return;
+            FindAndAppendRoutineTemplate(match.Groups[1].Value);
+        }
+
+        /// <summary>
+        ///     Finds and appends a <see cref="RoutineDataEntity"/> template to the instruction string
+        /// </summary>
+        /// <param name="alias"></param>
+        private void FindAndAppendRoutineTemplate(string alias)
+        {
+            var constructor = RoutineDataEntity.RoutineDataConstructors.FirstOrDefault(x => x.Key.ExtensionAlias == alias).Value;
+            if (constructor == null)
+            {
+                Console.WriteLine($"Could not find the routine with alias '{alias}'.");
+                return;
+            }
+            var template = constructor().GetTemplate();
+            Instruction = string.IsNullOrWhiteSpace(Instruction) ? template : Instruction + Environment.NewLine + template;
         }
     }
 }

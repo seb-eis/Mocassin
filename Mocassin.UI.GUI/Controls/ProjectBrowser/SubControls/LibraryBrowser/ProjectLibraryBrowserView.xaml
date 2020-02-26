@@ -6,6 +6,7 @@
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.LibraryBrowser"
   xmlns:jsonBrowser="clr-namespace:Mocassin.UI.GUI.Base.ViewModels.JsonBrowser"
+  xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
   mc:Ignorable="d"
   d:DataContext="{d:DesignInstance local:ProjectLibraryBrowserViewModel, IsDesignTimeCreatable = True}"
   d:DesignHeight="450" d:DesignWidth="800"
@@ -17,7 +18,7 @@
                AllowDrop="True" DragOver="UIElement_OnDragOver" Drop="UIElement_OnDrop">
         <TabItem.ContextMenu>
           <ContextMenu>
-            <MenuItem Header="View project tree" ToolTip="Warning: UI thread blocking action!"
+            <MenuItem Header="Load Project Tree" ToolTip="Warning: UI thread blocking action!"
                       ItemsSource="{Binding ProjectControl.ProjectGraphs}">
               <MenuItem.ItemContainerStyle>
                 <Style TargetType="{x:Type MenuItem}">
@@ -34,48 +35,56 @@
         <jsonBrowser:JsonBrowserView DataContext="{Binding JsonBrowserViewModel}" />
       </TabItem>
 
-      <TabItem Name="XmlViewerTab" Header="Xml Viewer" Style="{StaticResource App.Style.RotatedTabItemLeft}"
-               AllowDrop="True" DragOver="UIElement_OnDragOver" Drop="UIElement_OnDrop">
-        <TabItem.ContextMenu>
-          <ContextMenu>
-            <MenuItem Header="View project Xml"
-                      ItemsSource="{Binding ProjectControl.ProjectGraphs}">
-              <MenuItem.ItemContainerStyle>
-                <Style TargetType="{x:Type MenuItem}">
-                  <Setter Property="Command"
-                          Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.SetObjectXmlCommand}" />
-                  <Setter Property="CommandParameter"
-                          Value="{Binding}" />
-                  <Setter Property="Header" Value="{Binding Path=Name}" />
-                </Style>
-              </MenuItem.ItemContainerStyle>
-            </MenuItem>
-          </ContextMenu>
-        </TabItem.ContextMenu>
-        <TextBox Text="{Binding ObjectXml, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0"
-                 HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" />
+      <TabItem x:Name="XmlViewerTab" Style="{StaticResource App.Style.RotatedTabItemLeft}">
+        <TabItem.Header>
+          <TextBlock Text="XML Viewer" x:Name="XmlHeaderTextBlock" AllowDrop="True" DragOver="UIElement_OnDragOver" Drop="UIElement_OnDrop">
+              <TextBlock.ContextMenu>
+                <ContextMenu>
+                  <MenuItem Header="Load Project XML"
+                            ItemsSource="{Binding ProjectControl.ProjectGraphs}">
+                    <MenuItem.ItemContainerStyle>
+                      <Style TargetType="{x:Type MenuItem}">
+                        <Setter Property="Command"
+                                Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.SetObjectXmlCommand}" />
+                        <Setter Property="CommandParameter"
+                                Value="{Binding}" />
+                        <Setter Property="Header" Value="{Binding Path=Name}" />
+                      </Style>
+                    </MenuItem.ItemContainerStyle>
+                  </MenuItem>
+                  <Separator/>
+                  <MenuItem Header="Generate Folding Markers" Click="XmlMenu_UpdateFolding"></MenuItem>
+                </ContextMenu>
+              </TextBlock.ContextMenu>
+            </TextBlock>
+        </TabItem.Header>
+        <avalonEdit:TextEditor x:Name="XmlTextEditor" Document="{Binding XmlTextDocument}" BorderThickness="0" SyntaxHighlighting="XML" ShowLineNumbers="True"
+                               HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"/>
       </TabItem>
 
-      <TabItem Name="JsonViewerTab" Header="Json Viewer" Style="{StaticResource App.Style.RotatedTabItemLeft}"
-               AllowDrop="True" DragOver="UIElement_OnDragOver" Drop="UIElement_OnDrop">
-        <TabItem.ContextMenu>
-          <ContextMenu>
-            <MenuItem Header="View project Json"
-                      ItemsSource="{Binding ProjectControl.ProjectGraphs}">
-              <MenuItem.ItemContainerStyle>
-                <Style TargetType="{x:Type MenuItem}">
-                  <Setter Property="Command"
-                          Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.SetObjectJsonCommand}" />
-                  <Setter Property="CommandParameter"
-                          Value="{Binding}" />
-                  <Setter Property="Header" Value="{Binding Path=Name}" />
-                </Style>
-              </MenuItem.ItemContainerStyle>
-            </MenuItem>
-          </ContextMenu>
-        </TabItem.ContextMenu>
-        <TextBox Text="{Binding ObjectJson, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0"
-                 HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" />
+      <TabItem Name="JsonViewerTab" Style="{StaticResource App.Style.RotatedTabItemLeft}">
+        <TabItem.Header>
+          <TextBlock Text="JSON Viewer"  x:Name="JsonHeaderTextBlock" AllowDrop="True" DragOver="UIElement_OnDragOver" Drop="UIElement_OnDrop">
+            <TextBlock.ContextMenu>
+              <ContextMenu>
+                <MenuItem Header="Load Project JSON"
+                          ItemsSource="{Binding ProjectControl.ProjectGraphs}">
+                  <MenuItem.ItemContainerStyle>
+                    <Style TargetType="{x:Type MenuItem}">
+                      <Setter Property="Command"
+                              Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.SetObjectJsonCommand}" />
+                      <Setter Property="CommandParameter"
+                              Value="{Binding}" />
+                      <Setter Property="Header" Value="{Binding Path=Name}" />
+                    </Style>
+                  </MenuItem.ItemContainerStyle>
+                </MenuItem>
+              </ContextMenu>
+            </TextBlock.ContextMenu>
+          </TextBlock>
+        </TabItem.Header>
+        <avalonEdit:TextEditor x:Name="JsonTextEditor"  Document="{Binding JsonTextDocument}" BorderThickness="0" SyntaxHighlighting="JavaScript" ShowLineNumbers="True"
+                               HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"/>
       </TabItem>
     </TabControl>
   </Grid>

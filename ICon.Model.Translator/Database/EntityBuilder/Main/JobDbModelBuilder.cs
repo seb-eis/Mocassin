@@ -161,10 +161,22 @@ namespace Mocassin.Model.Translator.EntityBuilder
                 SimulationLatticeModel = LatticeDbEntityBuilder.BuildModel(simulationModel, jobConfiguration.LatticeConfiguration)
             };
 
-            if (jobConfiguration.Instruction == null) result.RoutineData = RoutineDataEntity.CreateEmpty();
-            if (jobConfiguration.Instruction != null && RoutineDataEntity.TryParse(jobConfiguration.Instruction, out var routineData))
-                result.RoutineData = routineData ?? throw new InvalidOperationException("Failed to parse attached routine instruction.");
-
+            if (string.IsNullOrWhiteSpace(jobConfiguration.Instruction)) result.RoutineData = RoutineDataEntity.CreateEmpty();
+            else
+            {
+                var match = RoutineDataEntity.DefaultInstructionRegex.Match(jobConfiguration.Instruction);
+                if (match.Success)
+                {
+                    if (RoutineDataEntity.TryParse(jobConfiguration.Instruction, out var routineData))
+                    {
+                        result.RoutineData = routineData;
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Warning: Routine parser matched '{match.Groups[1].Value}' but data parsing failed. Data definition is invalid or routine alias does not exist.");
+                    }
+                }
+            }
             result.JobMetaData.JobModel = result;
             result.JobResultData.JobModel = result;
             SetSimulationJobInfoFlags(result, simulationModel);

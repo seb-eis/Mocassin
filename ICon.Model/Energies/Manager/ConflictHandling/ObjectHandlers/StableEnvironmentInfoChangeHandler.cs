@@ -51,7 +51,7 @@ namespace Mocassin.Model.Energies.ConflictHandling
         /// <param name="newPairs"></param>
         /// <param name="report"></param>
         /// <param name="comparer"></param>
-        protected void PullEnergyInfoFromOldModel(IList<SymmetricPairInteraction> oldPairs, IList<SymmetricPairInteraction> newPairs,
+        protected void PullEnergyInfoFromOldModel(IList<StablePairInteraction> oldPairs, IList<StablePairInteraction> newPairs,
             ConflictReport report, NumericComparer comparer)
         {
             var vectorComparer = new VectorComparer3D<Fractional3D>(comparer);
@@ -83,7 +83,7 @@ namespace Mocassin.Model.Energies.ConflictHandling
         /// <param name="oldPairs"></param>
         /// <param name="newPairs"></param>
         /// <param name="report"></param>
-        protected void MoveNewPairsToModelList(IList<SymmetricPairInteraction> oldPairs, IList<SymmetricPairInteraction> newPairs,
+        protected void MoveNewPairsToModelList(IList<StablePairInteraction> oldPairs, IList<StablePairInteraction> newPairs,
             ConflictReport report)
         {
             if (oldPairs.Count != newPairs.Count)
@@ -109,7 +109,7 @@ namespace Mocassin.Model.Energies.ConflictHandling
         /// <param name="rhs"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        protected bool IsEquivalentInteraction(SymmetricPairInteraction lhs, SymmetricPairInteraction rhs,
+        protected bool IsEquivalentInteraction(StablePairInteraction lhs, StablePairInteraction rhs,
             VectorComparer3D<Fractional3D> comparer)
         {
             return lhs.Position0 == rhs.Position0
@@ -122,7 +122,7 @@ namespace Mocassin.Model.Energies.ConflictHandling
         /// </summary>
         /// <param name="info"></param>
         /// <returns></returns>
-        protected IList<SymmetricPairInteraction> GetNewPairInteractions(IStableEnvironmentInfo info)
+        protected IList<StablePairInteraction> GetNewPairInteractions(IStableEnvironmentInfo info)
         {
             var structureQueries = ModelProject.GetManager<IStructureManager>().QueryPort;
 
@@ -131,7 +131,7 @@ namespace Mocassin.Model.Energies.ConflictHandling
             var comparer = ModelProject.GeometryNumeric.RangeComparer;
 
             var interactionFinder = new PairInteractionFinder(unitCellProvider, ModelProject.SpaceGroupService);
-            return interactionFinder.CreateUniqueSymmetricPairs(positions, info, comparer).ToList();
+            return interactionFinder.SampleUniqueStablePairs(positions, info, comparer).ToList();
         }
 
         /// <summary>

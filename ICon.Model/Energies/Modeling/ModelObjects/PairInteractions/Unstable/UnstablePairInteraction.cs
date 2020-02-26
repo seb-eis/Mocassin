@@ -5,13 +5,13 @@ using Mocassin.Model.Basic;
 
 namespace Mocassin.Model.Energies
 {
-    /// <inheritdoc cref="IAsymmetricPairInteraction" />
-    public class AsymmetricPairInteraction : PairInteraction, IAsymmetricPairInteraction
+    /// <inheritdoc cref="IUnstablePairInteraction" />
+    public class UnstablePairInteraction : PairInteraction, IUnstablePairInteraction
     {
         /// <summary>
         ///     The polar pair energy dictionary that assigns each possible particle pair an energy value
         /// </summary>
-        public Dictionary<AsymmetricParticlePair, double> EnergyDictionary { get; set; }
+        public Dictionary<ParticleInteractionPair, double> EnergyDictionary { get; set; }
 
         /// <inheritdoc />
         public override IPairInteraction ChiralPartner => null;
@@ -21,21 +21,21 @@ namespace Mocassin.Model.Energies
         public override string ObjectName => "Asymmetric Pair Interaction";
 
         /// <inheritdoc />
-        public AsymmetricPairInteraction()
+        public UnstablePairInteraction()
         {
         }
 
         /// <inheritdoc />
-        public AsymmetricPairInteraction(in PairCandidate candidate, Dictionary<AsymmetricParticlePair, double> energyDictionary)
+        public UnstablePairInteraction(PairCandidate candidate, Dictionary<ParticleInteractionPair, double> energyDictionary)
             : base(candidate)
         {
             EnergyDictionary = energyDictionary ?? throw new ArgumentNullException(nameof(energyDictionary));
         }
 
         /// <inheritdoc />
-        public IReadOnlyDictionary<AsymmetricParticlePair, double> GetEnergyDictionary()
+        public IReadOnlyDictionary<ParticleInteractionPair, double> GetEnergyDictionary()
         {
-            return EnergyDictionary ?? new Dictionary<AsymmetricParticlePair, double>();
+            return EnergyDictionary ?? new Dictionary<ParticleInteractionPair, double>();
         }
 
         /// <inheritdoc />
@@ -47,12 +47,12 @@ namespace Mocassin.Model.Energies
         /// <inheritdoc />
         public override ModelObject PopulateFrom(IModelObject obj)
         {
-            if (!(CastIfNotDeprecated<IAsymmetricPairInteraction>(obj) is { } interaction))
+            if (!(CastIfNotDeprecated<IUnstablePairInteraction>(obj) is { } interaction))
                 return null;
 
             base.PopulateFrom(obj);
 
-            EnergyDictionary = new Dictionary<AsymmetricParticlePair, double>(interaction.GetEnergyDictionary().Count);
+            EnergyDictionary = new Dictionary<ParticleInteractionPair, double>(interaction.GetEnergyDictionary().Count);
             foreach (var item in interaction.GetEnergyDictionary())
                 EnergyDictionary.Add(item.Key, item.Value);
 
@@ -60,15 +60,11 @@ namespace Mocassin.Model.Energies
         }
 
         /// <inheritdoc />
-        public override bool TrySetEnergyEntry(in PairEnergyEntry energyEntry)
+        public override bool TrySetEnergyEntry(PairEnergyEntry energyEntry)
         {
-            if (!(energyEntry.ParticlePair is AsymmetricParticlePair particlePair))
-                return false;
-
-            if (!EnergyDictionary.ContainsKey(particlePair))
-                return false;
-
-            EnergyDictionary[particlePair] = energyEntry.Energy;
+            if (energyEntry == null) throw new ArgumentNullException(nameof(energyEntry));
+            if (!EnergyDictionary.ContainsKey(energyEntry.ParticleInteractionPair)) return false;
+            EnergyDictionary[energyEntry.ParticleInteractionPair] = energyEntry.Energy;
             return true;
         }
     }

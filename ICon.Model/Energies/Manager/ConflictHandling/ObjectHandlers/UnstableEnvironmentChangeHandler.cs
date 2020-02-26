@@ -47,7 +47,7 @@ namespace Mocassin.Model.Energies.ConflictHandling
             {
                 switch (envInfo.PairInteractions.FirstOrDefault(value => IsEquivalentInteraction(value, newPairs[i], comparer)))
                 {
-                    case AsymmetricPairInteraction oldPair:
+                    case UnstablePairInteraction oldPair:
                         newPairs[i] = oldPair;
                         var detail = $"Reassigned energy dictionary from pair ({oldPair.Index}) to ({newPairs[i].Index})";
                         warning.AddDetails(detail);
@@ -71,10 +71,10 @@ namespace Mocassin.Model.Energies.ConflictHandling
         /// </summary>
         /// <param name="envInfo"></param>
         /// <param name="newPairs"></param>
-        protected void UpdateInteractionIndexing(UnstableEnvironment envInfo, IList<AsymmetricPairInteraction> newPairs)
+        protected void UpdateInteractionIndexing(UnstableEnvironment envInfo, IList<UnstablePairInteraction> newPairs)
         {
             var dataList = DataAccess.Query(data => data.UnstablePairInteractions);
-            var uniquePairs = new MultisetList<AsymmetricPairInteraction>(GetInteractionComparer(), 100) {newPairs};
+            var uniquePairs = new MultisetList<UnstablePairInteraction>(GetInteractionComparer(), 100) {newPairs};
 
             foreach (var item in dataList.Where(value => value.Position0 != envInfo.CellReferencePosition))
                 uniquePairs.Add(item);
@@ -94,7 +94,7 @@ namespace Mocassin.Model.Energies.ConflictHandling
         /// <param name="envInfo"></param>
         /// <param name="usedPairs"></param>
         /// <param name="report"></param>
-        protected void UpdateEnvironmentLinking(UnstableEnvironment envInfo, IList<AsymmetricPairInteraction> usedPairs,
+        protected void UpdateEnvironmentLinking(UnstableEnvironment envInfo, IList<UnstablePairInteraction> usedPairs,
             ConflictReport report)
         {
             if (envInfo.PairInteractions.Count != usedPairs.Count)
@@ -115,12 +115,12 @@ namespace Mocassin.Model.Energies.ConflictHandling
         /// <param name="envInfo"></param>
         /// <param name="modelProject"></param>
         /// <returns></returns>
-        protected IEnumerable<AsymmetricPairInteraction> GetNewAsymmetricPairs(IUnstableEnvironment envInfo,
+        protected IEnumerable<UnstablePairInteraction> GetNewAsymmetricPairs(IUnstableEnvironment envInfo,
             IModelProject modelProject)
         {
             var unitCellProvider = modelProject.GetManager<IStructureManager>().QueryPort.Query(port => port.GetFullUnitCellProvider());
             var finder = new PairInteractionFinder(unitCellProvider, modelProject.SpaceGroupService);
-            return finder.CreateUniqueAsymmetricPairs(envInfo.AsSingleton(), modelProject.GeometryNumeric.RangeComparer);
+            return finder.SampleUniqueUnstablePairs(envInfo.AsSingleton(), modelProject.GeometryNumeric.RangeComparer);
         }
 
         /// <summary>
@@ -131,7 +131,7 @@ namespace Mocassin.Model.Energies.ConflictHandling
         /// <param name="rhs"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        protected bool IsEquivalentInteraction(IAsymmetricPairInteraction lhs, IAsymmetricPairInteraction rhs,
+        protected bool IsEquivalentInteraction(IUnstablePairInteraction lhs, IUnstablePairInteraction rhs,
             VectorComparer3D<Fractional3D> comparer)
         {
             return lhs.Position0 == rhs.Position0
@@ -143,15 +143,15 @@ namespace Mocassin.Model.Energies.ConflictHandling
         ///     Makes an asymmetric pair interaction comparer that sorts by unit cell position index and target vector
         /// </summary>
         /// <returns></returns>
-        protected IComparer<AsymmetricPairInteraction> GetInteractionComparer()
+        protected IComparer<UnstablePairInteraction> GetInteractionComparer()
         {
-            int Compare(AsymmetricPairInteraction lhs, AsymmetricPairInteraction rhs)
+            int Compare(UnstablePairInteraction lhs, UnstablePairInteraction rhs)
             {
                 var indexCompare = lhs.Position0.Index.CompareTo(rhs.Position0.Index);
                 return indexCompare == 0 ? lhs.Distance.CompareTo(rhs.Distance) : indexCompare;
             }
 
-            return Comparer<AsymmetricPairInteraction>.Create(Compare);
+            return Comparer<UnstablePairInteraction>.Create(Compare);
         }
 
         /// <summary>

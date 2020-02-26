@@ -7,7 +7,7 @@ namespace Mocassin.Model.Energies
     /// <summary>
     ///     Abstract base class for particle pair implementations that describe a specific pair interaction occupation.
     /// </summary>
-    public abstract class ParticlePair : IEquatable<ParticlePair>
+    public abstract class ParticleInteractionPair : IEquatable<ParticleInteractionPair>
     {
         /// <summary>
         ///     The first particle interface
@@ -22,7 +22,7 @@ namespace Mocassin.Model.Energies
         public IParticle Particle1 { get; set; }
 
         /// <inheritdoc />
-        public abstract bool Equals(ParticlePair other);
+        public abstract bool Equals(ParticleInteractionPair other);
 
         /// <summary>
         ///     Generates the hash code for the particle pair
@@ -34,16 +34,16 @@ namespace Mocassin.Model.Energies
         }
 
         /// <summary>
-        ///     Creates a new particle pair from center and interaction particle and the information if it should behave asymmetric
+        ///     Creates a new particle pair from center and interaction <see cref="IParticle"/> with an information if its symmetric or not
         /// </summary>
         /// <param name="center"></param>
         /// <param name="other"></param>
-        /// <param name="isAsymmetric"></param>
+        /// <param name="isSymmetric"></param>
         /// <returns></returns>
-        public static ParticlePair MakePair(IParticle center, IParticle other, bool isAsymmetric)
+        public static ParticleInteractionPair MakePair(IParticle center, IParticle other, bool isSymmetric)
         {
-            if (isAsymmetric) return new AsymmetricParticlePair {Particle0 = center, Particle1 = other};
-            return new SymmetricParticlePair {Particle0 = center, Particle1 = other};
+            if (!isSymmetric) return new AsymmetricParticleInteractionPair {Particle0 = center, Particle1 = other};
+            return new SymmetricParticleInteractionPair {Particle0 = center, Particle1 = other};
         }
     }
 }

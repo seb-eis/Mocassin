@@ -9,7 +9,7 @@ namespace Mocassin.Model.Translator.ModelContext
     public class PairEnergyModel : ModelComponentBase, IPairEnergyModel
     {
         /// <inheritdoc />
-        public bool IsAsymmetric => PairInteraction is IAsymmetricPairInteraction;
+        public bool IsAsymmetric => PairInteraction is IUnstablePairInteraction;
 
         /// <inheritdoc />
         public IPairInteraction PairInteraction { get; set; }

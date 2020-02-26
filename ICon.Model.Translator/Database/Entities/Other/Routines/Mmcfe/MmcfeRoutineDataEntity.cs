@@ -1,4 +1,7 @@
-﻿namespace Mocassin.Model.Translator.Routines
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace Mocassin.Model.Translator.Routines
 {
     /// <summary>
     ///     The <see cref="RoutineDataEntity{T}" /> for providing parameter data & identification for the the MMCFE routine
@@ -11,6 +14,22 @@
         /// </summary>
         public MmcfeRoutineDataEntity()
         {
+            InternalParameterObject = InteropObject.Create(GetDefaultStructure());
+        }
+
+        /// <inheritdoc />
+        public override IEnumerable<KeyValuePair<string, string>> GetTemplateParameters()
+        {
+            var structure = GetDefaultStructure();
+            return typeof(CMmcfeParams).GetProperties().Select(x => new KeyValuePair<string, string>(x.Name, x.GetValue(structure).ToString()));
+        }
+
+        /// <summary>
+        ///     Get the default <see cref="CMmcfeParams"/> structure
+        /// </summary>
+        /// <returns></returns>
+        public static CMmcfeParams GetDefaultStructure()
+        {
             var structure = new CMmcfeParams
             {
                 HistogramSize = 10000,
@@ -22,7 +41,7 @@
                 RelaxPhaseCycleCount = 20000000,
                 LogPhaseCycleCount = 100000000
             };
-            InternalParameterObject = InteropObject.Create(structure);
+            return structure;
         }
     }
 }

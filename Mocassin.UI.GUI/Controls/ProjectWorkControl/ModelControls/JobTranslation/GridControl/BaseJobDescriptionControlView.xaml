@@ -9,6 +9,7 @@
   xmlns:system="clr-namespace:System;assembly=mscorlib"
   xmlns:jobs="clr-namespace:Mocassin.Model.Translator.Jobs;assembly=Mocassin.Model.Translator"
   xmlns:content="clr-namespace:Mocassin.UI.GUI.Base.UiElements.Content"
+  xmlns:popup="clr-namespace:Mocassin.UI.GUI.Base.UiElements.Popup"
   d:DataContext="{d:DesignInstance local:BaseJobDescriptionControlViewModel, IsDesignTimeCreatable=True}"
   mc:Ignorable="d"
   d:DesignHeight="450" d:DesignWidth="800"
@@ -119,19 +120,30 @@
               </Path>
             </ToggleButton.Content>
           </ToggleButton>
-          <Popup Grid.Column="0" StaysOpen="True" IsOpen="{Binding ElementName=DropToggleButton, Path=IsChecked}"
-                 HorizontalOffset="2" AllowsTransparency="True">
+          <popup:ControlOverlay Grid.Column="0" StaysOpen="True" IsOpen="{Binding ElementName=DropToggleButton, Path=IsChecked}"
+                 HorizontalOffset="0" AllowsTransparency="True">
             <Grid>
-              <Border Margin="0,0,5,5" Background="AliceBlue">
-                <TextBox Text="{Binding Instruction}"
-                         Width="{Binding ElementName=InstructionTextBox, Path=ActualWidth}" Height="300"
-                         TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True" VerticalScrollBarVisibility="Auto" />
+              <Border Background="White" BorderThickness="1" BorderBrush="Gray">
+                <StackPanel Margin="0,2,0,0">
+                  <TextBlock Text="Command Line:"/>
+                  <TextBox ToolTip="Enter a line command, e.g. '-loadroutine name' to load a routine template.">
+                    <TextBox.InputBindings>
+                      <KeyBinding Key="Enter" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}, Path=Text}"
+                                  Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}, Path=DataContext.ExecuteStringInstructionCommand}">
+                      </KeyBinding>
+                    </TextBox.InputBindings>
+                  </TextBox>
+                  <TextBlock Text="Instruction:"/>
+                  <TextBox Text="{Binding Instruction}"
+                           Width="{Binding ElementName=InstructionTextBox, Path=ActualWidth}" Height="300"
+                           TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True" VerticalScrollBarVisibility="Auto" />
+                </StackPanel>
                 <Border.Effect>
                   <DropShadowEffect ShadowDepth="4" Direction="290" Color="Black" Opacity=".5" BlurRadius="4" />
                 </Border.Effect>
               </Border>
             </Grid>
-          </Popup>
+          </popup:ControlOverlay>
         </Grid>
       </content:HeaderedGroup>
     </StackPanel>

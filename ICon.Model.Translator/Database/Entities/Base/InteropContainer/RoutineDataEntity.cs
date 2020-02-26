@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reactive;
 using System.Reflection;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Mocassin.Model.Translator
@@ -22,7 +23,7 @@ namespace Mocassin.Model.Translator
         ///     Get the default <see cref="Regex" /> used to parse routine instructions from a job instruction string
         /// </summary>
         public static Regex DefaultInstructionRegex { get; }
-            = new Regex("routine:\\s*(?<alias>[^=\\s]+)\\s*@\\s*\\{\\s*(?<params>[^}]+)\\s*\\}", RegexOptions.Singleline);
+            = new Regex("routine:\\s*(?<alias>[^=\\s]+)\\s*\\{\\s*(?<params>[^}]+)\\s*\\}", RegexOptions.Singleline);
 
         /// <summary>
         ///     Get the default <see cref="Regex" /> used to parse the routine parameters from a found routine instruction
@@ -33,6 +34,11 @@ namespace Mocassin.Model.Translator
         ///     Get the <see cref="Guid" /> that identifies the routine
         /// </summary>
         public abstract Guid RoutineGuid { get; }
+
+        /// <summary>
+        ///     Get the <see cref="string" /> alias that identifies the routine
+        /// </summary>
+        public abstract string RoutineAlias { get; }
 
         /// <summary>
         ///     Get or set the <see cref="InteropObject{T}" /> that contains the routine parameter data
@@ -106,6 +112,31 @@ namespace Mocassin.Model.Translator
         }
 
         /// <summary>
+        ///     Implementation defined behavior that returns a <see cref="string"/> template for the routine
+        /// </summary>
+        /// <returns></returns>
+        public virtual string GetTemplate()
+        {
+            var builder = new StringBuilder(100);
+            builder.Append("routine:");
+            builder.Append(RoutineAlias);
+            builder.Append(Environment.NewLine + "{" + Environment.NewLine);
+            foreach (var pair in GetTemplateParameters()) builder.Append("\t" + pair.Key + " = " + pair.Value + Environment.NewLine);
+            builder.Append("}" + Environment.NewLine);
+            return builder.ToString();
+        }
+
+        /// <summary>
+        ///     Implementation defined behavior that returns <see cref="KeyValuePair{TKey,TValue}"/> of <see cref="string"/> data that describes parameters and default values
+        /// </summary>
+        /// <returns></returns>
+        public virtual IEnumerable<KeyValuePair<string, string>> GetTemplateParameters()
+        {
+            yield break;
+        }
+
+
+        /// <summary>
         ///     Creates an empty <see cref="RoutineDataEntity" /> with an empty guid and one byte of data (17 total)
         /// </summary>
         /// <returns></returns>
@@ -124,6 +155,7 @@ namespace Mocassin.Model.Translator
         public static bool TryParse(string str, out RoutineDataEntity entity)
         {
             entity = default;
+            if (str == null) return false;
 
             if (!DefaultInstructionRegex.IsMatch(str)) return false;
             var match = DefaultInstructionRegex.Match(str);
@@ -147,7 +179,7 @@ namespace Mocassin.Model.Translator
             var obj = Guid.TryParse(identification, out var guid)
                 ? RoutineDataConstructors.SingleOrDefault(x => x.Key.ExtensionGuid == guid).Value?.Invoke()
                 : RoutineDataConstructors.SingleOrDefault(x => x.Key.ExtensionAlias == identification).Value?.Invoke();
-            return obj ?? CreateEmpty();
+            return obj;
         }
     }
 
@@ -158,6 +190,9 @@ namespace Mocassin.Model.Translator
     {
         /// <inheritdoc />
         public override Guid RoutineGuid => GetGuidInternal();
+
+        /// <inheritdoc />
+        public override string RoutineAlias => GetAliasInternal();
 
         /// <summary>
         ///     Get or set the <see cref="InteropObject{T}" /> that stores the routine parameters
@@ -175,13 +210,23 @@ namespace Mocassin.Model.Translator
         }
 
         /// <summary>
-        ///     Internal GUI lookup that uses the <see cref="MocsimExtensionComponentAttribute" /> marker, returns the empty
+        ///     Internal GUID lookup that uses the <see cref="MocsimExtensionComponentAttribute" /> marker, returns the empty
         ///     <see cref="Guid" /> if the marker is missing
         /// </summary>
         /// <returns></returns>
         protected virtual Guid GetGuidInternal()
         {
             return GetType().GetCustomAttribute<MocsimExtensionComponentAttribute>()?.ExtensionGuid ?? Guid.Empty;
+        }
+
+        /// <summary>
+        ///     Internal alias lookup that uses the <see cref="MocsimExtensionComponentAttribute" /> marker, returns an empty
+        ///     <see cref="string" /> if the marker is missing
+        /// </summary>
+        /// <returns></returns>
+        protected virtual string GetAliasInternal()
+        {
+            return GetType().GetCustomAttribute<MocsimExtensionComponentAttribute>()?.ExtensionAlias ?? "";
         }
 
         /// <summary>

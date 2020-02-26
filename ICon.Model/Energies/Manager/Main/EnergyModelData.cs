@@ -36,16 +36,16 @@ namespace Mocassin.Model.Energies
         ///     input support)
         /// </summary>
         [DataMember]
-        [IndexedModelData(typeof(ISymmetricPairInteraction), IsAutoManaged = true)]
-        public List<SymmetricPairInteraction> StablePairInteractions { get; set; }
+        [IndexedModelData(typeof(IStablePairInteraction), IsAutoManaged = true)]
+        public List<StablePairInteraction> StablePairInteractions { get; set; }
 
         /// <summary>
         ///     The list of asymmetric pair interactions that describe transition pair interactions for unstable positions
         ///     (Auto-managed, no input support)
         /// </summary>
         [DataMember]
-        [IndexedModelData(typeof(IAsymmetricPairInteraction), IsAutoManaged = true)]
-        public List<AsymmetricPairInteraction> UnstablePairInteractions { get; set; }
+        [IndexedModelData(typeof(IUnstablePairInteraction), IsAutoManaged = true)]
+        public List<UnstablePairInteraction> UnstablePairInteractions { get; set; }
 
         /// <inheritdoc />
         public override IEnergyDataPort AsReadOnly()

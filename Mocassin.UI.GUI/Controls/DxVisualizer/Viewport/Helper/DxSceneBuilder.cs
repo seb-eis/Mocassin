@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
@@ -30,7 +31,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
         private HashSet<Task> ActiveBuildTasks { get; }
 
         /// <summary>
-        ///     Get the <see cref="HashSet{T}" /> of <see cref="SceneNode" /> instances. Calling this
+        ///     Get the <see cref="HashSet{T}" /> of <see cref="SceneNode" /> instances
         /// </summary>
         private HashSet<SceneNode> SceneNodes { get; }
 
@@ -95,7 +96,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
         /// <returns></returns>
         public Task<SceneNodeGroupModel3D> ToModelAsync(bool clear = true, Dispatcher dispatcher = null)
         {
-            return ToModelInternal(clear, dispatcher);
+            return Task.Run(async () => await ToModelInternal(clear, dispatcher));
         }
 
         /// <summary>

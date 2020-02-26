@@ -9,6 +9,7 @@ using Mocassin.Framework.Extensions;
 using Mocassin.Framework.SQLiteCore;
 using Mocassin.Mathematics.Comparer;
 using Mocassin.Mathematics.Extensions;
+using Mocassin.Mathematics.Permutation;
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Symmetry.CrystalSystems;
 
@@ -212,7 +213,7 @@ namespace Mocassin.Symmetry.SpaceGroups
 
         /// <inheritdoc />
         public IList<ISymmetryOperation> GetMinimalUnitCellP1PathExtensionOperations(IEnumerable<Fractional3D> refSequence,
-            bool filterInverses = false)
+            bool filterGeometricDuplicates = false)
         {
             var refVectors = refSequence.AsList();
 
@@ -231,10 +232,11 @@ namespace Mocassin.Symmetry.SpaceGroups
                 transformedVectors.Clear();
                 transformedVectors.AddRange(operation.Transform(refVectors));
                 if (sequences.Contains(transformedVectors)) continue;
-                if (filterInverses)
+                if (filterGeometricDuplicates)
                 {
-                    transformedVectors.Reverse();
-                    if (sequences.Contains(transformedVectors)) continue;
+                    var permutationSource = new PermutationSlotMachine<Fractional3D>(VectorComparer, Enumerable.Range(0, refVectors.Count).Select(x => transformedVectors));
+                    var uniquePermutations = permutationSource.GetUniqueSlotPermutations();
+                    if (uniquePermutations.Any(x => sequences.Contains(x))) continue;
                 }
 
                 var transformCopy = transformedVectors.ToList(transformedVectors.Count);

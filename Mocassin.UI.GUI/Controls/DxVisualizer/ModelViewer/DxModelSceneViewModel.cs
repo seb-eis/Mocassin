@@ -506,7 +506,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
 
                 SceneHost.AddSceneItem(sceneModel);
                 var setupTime = watch.Elapsed.TotalMilliseconds;
-                PushInfoMessage($"Scene controller CPU info: {cleanTime:0.0} ms (clean); {buildTime:0.0} ms (model); {setupTime:0.0} ms (setup);");
+                PushInfoMessage($"Scene Rebuilt Report: {cleanTime:0.0} ms for cleanup; {buildTime:0.0} ms for building new models; {setupTime:0.0} ms for viewport setup;");
                 IsInvalidScene = false;
             }
             catch (Exception exception)
@@ -665,7 +665,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
             if (itemConfig.IsInactive) return;
 
             var path = transitionData.PathVectors.Select(x => new Fractional3D(x.A, x.B, x.C)).ToList();
-            var matrices = GetPathSceneItemTransforms(path, renderBox, out var anyFlipsOrientation);
+            var matrices = GetPathSceneItemTransforms(path, renderBox, false, out var anyFlipsOrientation);
             var geometry = CreateTransitionGeometry(itemConfig, path);
             var material = itemConfig.CreateMaterial();
             var configurator = GetSceneNodeConfigurator(itemConfig, !anyFlipsOrientation);
@@ -679,15 +679,16 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         /// </summary>
         /// <param name="path"></param>
         /// <param name="renderBox"></param>
+        /// <param name="filterGeometricDuplicates"></param>
         /// <param name="anyFlipsOrientation"></param>
         /// <returns></returns>
-        private Matrix[] GetPathSceneItemTransforms(IEnumerable<Fractional3D> path, in FractionalBox3D renderBox, out bool anyFlipsOrientation)
+        private Matrix[] GetPathSceneItemTransforms(IEnumerable<Fractional3D> path, in FractionalBox3D renderBox, bool filterGeometricDuplicates, out bool anyFlipsOrientation)
         {
             anyFlipsOrientation = false;
             return ModelControlViewModel.PathSymmetryExtensionMode switch
             {
                 PathSymmetryExtensionMode.None => new[] {Matrix.Identity},
-                PathSymmetryExtensionMode.Local => GetPathSceneItemTransformsLocal(path, out anyFlipsOrientation),
+                PathSymmetryExtensionMode.Local => GetPathSceneItemTransformsLocal(path, filterGeometricDuplicates, out anyFlipsOrientation),
                 PathSymmetryExtensionMode.Full => GetPathSceneItemTransformsFull(path, renderBox, out anyFlipsOrientation),
                 _ => throw new ArgumentOutOfRangeException()
             };
@@ -698,16 +699,17 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         ///     the path vectors on the start position (Local extension)
         /// </summary>
         /// <param name="path"></param>
+        /// <param name="filterGeometricDuplicates"></param>
         /// <param name="anyFlipsOrientation"></param>
         /// <returns></returns>
-        private Matrix[] GetPathSceneItemTransformsLocal(IEnumerable<Fractional3D> path, out bool anyFlipsOrientation)
+        private Matrix[] GetPathSceneItemTransformsLocal(IEnumerable<Fractional3D> path, bool filterGeometricDuplicates, out bool anyFlipsOrientation)
         {
             var pathList = path.AsList();
             var cartesianMatrix = VectorTransformer.FractionalSystem.ToCartesianMatrix.ToDxMatrix();
             var fractionalMatrix = VectorTransformer.FractionalSystem.ToFractionalMatrix.ToDxMatrix();
             var firstVector = pathList[0];
             var vectorComparer = new VectorComparer3D<Fractional3D>(ModelProject.GeometryNumeric.RangeComparer);
-            var result = SpaceGroupService.GetMinimalUnitCellP1PathExtensionOperations(pathList)
+            var result = SpaceGroupService.GetMinimalUnitCellP1PathExtensionOperations(pathList, filterGeometricDuplicates)
                 .Where(x => vectorComparer.Compare(x.Transform(firstVector).TrimToUnitCell(vectorComparer.ValueComparer), firstVector) == 0)
                 .Select(x => fractionalMatrix * x.ToDxMatrix() * cartesianMatrix)
                 .ToArray();
@@ -788,7 +790,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
             var middle = (path[1] + path[0]) * 0.5;
             var geometry1 = CreateCylinderGeometry(itemConfig, path[0], middle);
             var geometry2 = CreateCylinderGeometry(itemConfig, middle, path[1]);
-            var matrices = GetPathSceneItemTransforms(new[] {path[0], path[1]}, renderBox, out var anyOrientationFlips);
+            var matrices = GetPathSceneItemTransforms(new[] {path[0], path[1]}, renderBox, false, out var anyOrientationFlips);
 
             CheckCellPositionHit(path[0], out IDxMeshItemConfig atomConfig1);
             CheckCellPositionHit(path[1], out IDxMeshItemConfig atomConfig2);
@@ -834,7 +836,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
 
             var positions = groupEnergySet.AsVectorPath(true).ToList();
             var geometry = CreatePolygonFanGeometry(positions);
-            var matrices = GetPathSceneItemTransforms(positions, renderBox, out var anyFlipsOrientation);
+            var matrices = GetPathSceneItemTransforms(positions, renderBox, true, out var anyFlipsOrientation);
             var material = itemConfig.CreateMaterial();
             var configurator = GetSceneNodeConfigurator(itemConfig, !anyFlipsOrientation);
 
@@ -939,16 +941,19 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         }
 
         /// <summary>
-        ///     Creates a new polygon fan <see cref="MeshGeometry3D" /> using a set of <see cref="Fractional3D" /> positions
+        ///     Creates a new polygon fan <see cref="MeshGeometry3D" /> using a set of <see cref="Fractional3D" /> positions. If in
+        ///     surround mode then the center will not be considered unless required to reach at least one triangle
         /// </summary>
         /// <param name="positions"></param>
+        /// <param name="surroundMode"></param>
         /// <returns></returns>
-        private MeshGeometry3D CreatePolygonFanGeometry(IList<Fractional3D> positions)
+        private MeshGeometry3D CreatePolygonFanGeometry(ICollection<Fractional3D> positions, bool surroundMode = true)
         {
             if (positions.Count < 3) throw new ArgumentException("At least three positions required.");
             var meshBuilder = new MeshBuilder();
             var dxVectors = positions.Select(x => VectorTransformer.ToCartesianDx(x)).ToList(positions.Count);
-            for (var i = 0; i < positions.Count - 2; i++)
+            var startIndex = surroundMode && positions.Count <= 3 ? 0 : 1;
+            for (var i = startIndex; i < positions.Count - 2; i++)
             {
                 for (var j = i + 1; j < positions.Count - 1; j++)
                 {

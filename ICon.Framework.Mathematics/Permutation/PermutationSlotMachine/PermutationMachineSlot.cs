@@ -7,7 +7,7 @@ namespace Mocassin.Mathematics.Permutation
     /// <summary>
     ///     Single periodic permutation machine slot that lexicographically and periodically goes through all entries of a list
     /// </summary>
-    public class PermutationMachineSlot<T1> where T1 : IComparable<T1>
+    public class PermutationMachineSlot<T1>
     {
         /// <summary>
         ///     The list of possible values

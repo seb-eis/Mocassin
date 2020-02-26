@@ -15,7 +15,7 @@ namespace Mocassin.Model.Energies
         ///     The list of interaction filters for stable environments
         /// </summary>
         [UseTrackedData(ReferenceCorrectionLevel = ReferenceCorrectionLevel.IgnoreTopLevel)]
-        public List<SymmetricInteractionFilter> InteractionFilters { get; set; }
+        public List<StableInteractionFilter> InteractionFilters { get; set; }
 
         /// <summary>
         ///     Get or set the list of defect energy entries
@@ -26,7 +26,7 @@ namespace Mocassin.Model.Energies
         /// <inheritdoc />
         public IEnumerable<IInteractionFilter> GetInteractionFilters()
         {
-            return (InteractionFilters ?? new List<SymmetricInteractionFilter>()).AsEnumerable();
+            return (InteractionFilters ?? new List<StableInteractionFilter>()).AsEnumerable();
         }
 
         /// <inheritdoc />
@@ -69,7 +69,7 @@ namespace Mocassin.Model.Energies
                 return null;
 
             MaxInteractionRange = info.MaxInteractionRange;
-            InteractionFilters = info.GetInteractionFilters().Select(SymmetricInteractionFilter.FromInterface).ToList();
+            InteractionFilters = info.GetInteractionFilters().Select(StableInteractionFilter.FromInterface).ToList();
             DefectEnergies = info.GetDefectEnergies().Select(DefectEnergy.FromInterface).ToList();
             return this;
         }
@@ -82,7 +82,7 @@ namespace Mocassin.Model.Energies
         {
             return new StableEnvironmentInfo
             {
-                InteractionFilters = new List<SymmetricInteractionFilter>(0),
+                InteractionFilters = new List<StableInteractionFilter>(0),
                 DefectEnergies = new List<DefectEnergy>(0),
                 MaxInteractionRange = 1.0
             };

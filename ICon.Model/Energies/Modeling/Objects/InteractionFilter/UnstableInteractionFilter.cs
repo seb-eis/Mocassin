@@ -6,14 +6,12 @@ using Mocassin.Model.Structures;
 namespace Mocassin.Model.Energies
 {
     /// <summary>
-    ///     Asymmetric pair interaction filter to customize ignored interaction in <see cref="IPairInteractionFinder" /> search
-    ///     routines of asymmetric interactions
+    ///     Unstable pair interaction filter to customize ignored interaction in <see cref="IPairInteractionFinder" /> search routines of unstable interactions
     /// </summary>
-    public class SymmetricInteractionFilter : IInteractionFilter, IEquatable<SymmetricInteractionFilter>
+    public class UnstableInteractionFilter : IInteractionFilter, IEquatable<UnstableInteractionFilter>
     {
         /// <inheritdoc />
-        [UseTrackedData]
-        public ICellReferencePosition CenterCellReferencePosition { get; set; }
+        public ICellReferencePosition CenterCellReferencePosition => null;
 
         /// <inheritdoc />
         [UseTrackedData]
@@ -26,11 +24,10 @@ namespace Mocassin.Model.Energies
         public double EndRadius { get; set; }
 
         /// <inheritdoc />
-        public bool Equals(SymmetricInteractionFilter other)
+        public bool Equals(UnstableInteractionFilter other)
         {
             return other != null
                    && PartnerCellReferencePosition == other.PartnerCellReferencePosition
-                   && CenterCellReferencePosition == other.CenterCellReferencePosition
                    && EndRadius.AlmostEqualByRange(other.EndRadius)
                    && StartRadius.AlmostEqualByRange(other.StartRadius);
         }
@@ -38,12 +35,7 @@ namespace Mocassin.Model.Energies
         /// <inheritdoc />
         public bool IsApplicable(double distance, ICellReferencePosition centerCellReferencePosition, ICellReferencePosition partnerCellReferencePosition)
         {
-            var result = partnerCellReferencePosition == PartnerCellReferencePosition
-                         && centerCellReferencePosition == CenterCellReferencePosition;
-
-            result |= partnerCellReferencePosition == CenterCellReferencePosition
-                      && centerCellReferencePosition == PartnerCellReferencePosition;
-
+            var result = partnerCellReferencePosition == PartnerCellReferencePosition;
             result &= distance > StartRadius && distance < EndRadius
                       || distance.AlmostEqualByRange(StartRadius)
                       || distance.AlmostEqualByRange(EndRadius);
@@ -54,10 +46,10 @@ namespace Mocassin.Model.Energies
         /// <inheritdoc />
         public bool IsApplicable(IPairInteraction pairInteraction)
         {
-            if (!(pairInteraction is ISymmetricPairInteraction symmetricPair))
+            if (!(pairInteraction is IUnstablePairInteraction asymmetricPair))
                 return false;
 
-            return IsApplicable(symmetricPair.Distance, symmetricPair.Position0, symmetricPair.Position1);
+            return IsApplicable(asymmetricPair.Distance, asymmetricPair.Position0, asymmetricPair.Position1);
         }
 
         /// <inheritdoc />
@@ -71,15 +63,14 @@ namespace Mocassin.Model.Energies
         /// </summary>
         /// <param name="interactionFilter"></param>
         /// <returns></returns>
-        public static SymmetricInteractionFilter FromInterface(IInteractionFilter interactionFilter)
+        public static UnstableInteractionFilter FromInterface(IInteractionFilter interactionFilter)
         {
             if (interactionFilter == null) throw new ArgumentNullException(nameof(interactionFilter));
-            return new SymmetricInteractionFilter
+            return new UnstableInteractionFilter
             {
                 StartRadius = interactionFilter.StartRadius,
                 EndRadius = interactionFilter.EndRadius,
-                PartnerCellReferencePosition = interactionFilter.PartnerCellReferencePosition,
-                CenterCellReferencePosition = interactionFilter.CenterCellReferencePosition
+                PartnerCellReferencePosition = interactionFilter.PartnerCellReferencePosition
             };
         }
     }

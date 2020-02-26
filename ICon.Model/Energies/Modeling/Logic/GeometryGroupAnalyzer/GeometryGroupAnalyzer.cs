@@ -96,13 +96,13 @@ namespace Mocassin.Model.Energies
         /// </summary>
         /// <param name="group"></param>
         /// <returns></returns>
-        public IEnumerable<SymmetricParticlePair> GetAllGroupPairs(IGroupInteraction group)
+        public IEnumerable<SymmetricParticleInteractionPair> GetAllGroupPairs(IGroupInteraction group)
         {
             var particles =
                 new HashSet<IParticle>(GetGroupCellReferencePositions(group).SelectMany(value => value.OccupationSet.GetParticles()));
             var permutationSource =
                 new PermutationSlotMachine<IParticle>(group.CenterCellReferencePosition.OccupationSet.GetParticles(), particles);
-            return new HashSet<SymmetricParticlePair>(permutationSource.Select(perm => new SymmetricParticlePair
+            return new HashSet<SymmetricParticleInteractionPair>(permutationSource.Select(perm => new SymmetricParticleInteractionPair
                 {Particle0 = perm[0], Particle1 = perm[1]})).AsEnumerable();
         }
 

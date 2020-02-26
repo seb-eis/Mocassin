@@ -23,25 +23,24 @@ namespace Mocassin.Model.Energies
         IUnitCellProvider<ICellReferencePosition> UnitCellProvider { get; }
 
         /// <summary>
-        ///     Create a unique set of asymmetric pair interactions that results from the passed unstable environment information.
+        ///     Create a unique set of <see cref="UnstablePairInteraction"/> objects that results from the passed <see cref="IUnstableEnvironment"/> set.
         ///     Comparer is used for geometric tolerance comparisons
         /// </summary>
         /// <param name="unstableEnvironments"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        IEnumerable<AsymmetricPairInteraction> CreateUniqueAsymmetricPairs(IEnumerable<IUnstableEnvironment> unstableEnvironments,
+        IEnumerable<UnstablePairInteraction> SampleUniqueUnstablePairs(IEnumerable<IUnstableEnvironment> unstableEnvironments,
             NumericComparer comparer);
 
         /// <summary>
-        ///     Searches all provided unit cell position start points for unique symmetric pair interactions that fit the
-        ///     definition within the stable environment info.
+        ///     Create a unique set of <see cref="StablePairInteraction"/> objects that results from the passed <see cref="IStableEnvironmentInfo"/>.
         ///     Comparer is used for geometric tolerance comparisons
         /// </summary>
         /// <param name="positions"></param>
         /// <param name="environmentInfo"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        IEnumerable<SymmetricPairInteraction> CreateUniqueSymmetricPairs(IEnumerable<ICellReferencePosition> positions,
+        IEnumerable<StablePairInteraction> SampleUniqueStablePairs(IEnumerable<ICellReferencePosition> positions,
             IStableEnvironmentInfo environmentInfo, NumericComparer comparer);
     }
 }

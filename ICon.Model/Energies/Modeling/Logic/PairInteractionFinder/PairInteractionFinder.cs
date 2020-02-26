@@ -33,27 +33,27 @@ namespace Mocassin.Model.Energies
         }
 
         /// <inheritdoc />
-        public IEnumerable<SymmetricPairInteraction> CreateUniqueSymmetricPairs(IEnumerable<ICellReferencePosition> positions,
+        public IEnumerable<StablePairInteraction> SampleUniqueStablePairs(IEnumerable<ICellReferencePosition> positions,
             IStableEnvironmentInfo environmentInfo, NumericComparer comparer)
         {
             var radialConstraint = new NumericConstraint(false, 0.0, environmentInfo.MaxInteractionRange, true, comparer);
-            var acceptPredicate = GetSymmetricAcceptancePredicate(environmentInfo);
-            var unfilteredPairs = MakeUniqueSymmetricPairs(positions, radialConstraint);
+            var acceptPredicate = GetStableAcceptancePredicate(environmentInfo);
+            var unfilteredPairs = FindAllStablePairs(positions, radialConstraint);
             var filteredPairs = FilterAndReindex(unfilteredPairs, acceptPredicate, 0);
             return FindAndAssignChiralPartners(filteredPairs, comparer);
         }
 
         /// <inheritdoc />
-        public IEnumerable<AsymmetricPairInteraction> CreateUniqueAsymmetricPairs(IEnumerable<IUnstableEnvironment> unstableEnvironments,
+        public IEnumerable<UnstablePairInteraction> SampleUniqueUnstablePairs(IEnumerable<IUnstableEnvironment> unstableEnvironments,
             NumericComparer comparer)
         {
-            var unfilteredPairs = new List<AsymmetricPairInteraction>();
+            var unfilteredPairs = new List<UnstablePairInteraction>();
 
             foreach (var environment in unstableEnvironments)
             {
                 var radialConstraint = new NumericConstraint(false, 0.0, environment.MaxInteractionRange, true, comparer);
-                var acceptPredicate = MakeAsymmetricAcceptancePredicate(environment);
-                var singleResult = MakeUniqueAsymmetricPairs(new[] {environment.CellReferencePosition}, radialConstraint);
+                var acceptPredicate = GetUnstableAcceptancePredicate(environment);
+                var singleResult = FindAllUnstablePairs(new[] {environment.CellReferencePosition}, radialConstraint);
                 unfilteredPairs.AddRange(singleResult.Where(x => acceptPredicate(x)));
             }
 
@@ -61,12 +61,12 @@ namespace Mocassin.Model.Energies
         }
 
         /// <summary>
-        ///     Fins chiral partner <see cref="SymmetricPairInteraction" /> entries and assigns the affiliated property
+        ///     Fins chiral partner <see cref="StablePairInteraction" /> entries and assigns the affiliated property
         /// </summary>
         /// <param name="source"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        public IEnumerable<SymmetricPairInteraction> FindAndAssignChiralPartners(IEnumerable<SymmetricPairInteraction> source, NumericComparer comparer)
+        public IEnumerable<StablePairInteraction> FindAndAssignChiralPartners(IEnumerable<StablePairInteraction> source, NumericComparer comparer)
         {
             var sourceList = source.AsList();
             for (var i = 0; i < sourceList.Count; i++)
@@ -88,12 +88,12 @@ namespace Mocassin.Model.Energies
         }
 
         /// <summary>
-        ///     Checks if the two provided <see cref="SymmetricPairInteraction" /> entries meet the conditions to be chiral pairs
+        ///     Checks if the two provided <see cref="StablePairInteraction" /> entries meet the conditions to be chiral pairs
         /// </summary>
         /// <param name="first"></param>
         /// <param name="second"></param>
         /// <returns></returns>
-        protected bool CheckIsChiralPair(SymmetricPairInteraction first, SymmetricPairInteraction second)
+        protected bool CheckIsChiralPair(StablePairInteraction first, StablePairInteraction second)
         {
             if (first.Position0 != first.Position1 || second.Position0 != second.Position1 || first.Position0 != second.Position1) return false;
             return SpaceGroupService.CheckInteractionGeometryIsChiralPair(first.Position0.Vector, first.SecondPositionVector,
@@ -101,43 +101,41 @@ namespace Mocassin.Model.Energies
         }
 
         /// <summary>
-        ///     Creates the list of unique symmetric pair interaction objects for all passed unit cell positions within the
-        ///     provided radial constraint
+        ///     Builds the <see cref="IEnumerable{T}"/> of <see cref="StablePairInteraction"/> instances within the provided radial <see cref="NumericConstraint"/>
         /// </summary>
         /// <param name="positions"></param>
         /// <param name="radialConstraint"></param>
         /// <returns></returns>
-        protected IEnumerable<SymmetricPairInteraction> MakeUniqueSymmetricPairs(IEnumerable<ICellReferencePosition> positions,
+        protected IEnumerable<StablePairInteraction> FindAllStablePairs(IEnumerable<ICellReferencePosition> positions,
             NumericConstraint radialConstraint)
         {
-            bool Predicate(ICellReferencePosition position)
+            static bool Predicate(ICellReferencePosition position)
             {
                 return position.IsValidAndStable();
             }
 
             var candidateDictionary = CreateUniquePairCandidateDictionary(positions, radialConstraint, Predicate, false);
-            var values = CreateUniquePairs(candidateDictionary, CreateSymmetricPair);
-            return values.Cast<SymmetricPairInteraction>();
+            var values = CreateUniquePairs(candidateDictionary, CreateStablePairInteraction);
+            return values.Cast<StablePairInteraction>();
         }
 
         /// <summary>
-        ///     Creates the list of unique polar pair interaction objects for all passed unit cell positions within the provided
-        ///     radial constraint
+        ///     Builds the <see cref="IEnumerable{T}"/> of <see cref="UnstablePairInteraction"/> instances within the provided radial <see cref="NumericConstraint"/>
         /// </summary>
         /// <param name="positions"></param>
         /// <param name="radialConstraint"></param>
         /// <returns></returns>
-        public IEnumerable<AsymmetricPairInteraction> MakeUniqueAsymmetricPairs(IEnumerable<ICellReferencePosition> positions,
+        public IEnumerable<UnstablePairInteraction> FindAllUnstablePairs(IEnumerable<ICellReferencePosition> positions,
             NumericConstraint radialConstraint)
         {
-            bool Predicate(ICellReferencePosition position)
+            static bool Predicate(ICellReferencePosition position)
             {
                 return position.IsValidAndStable();
             }
 
             var candidateDictionary = CreateUniquePairCandidateDictionary(positions, radialConstraint, Predicate, true);
-            var values = CreateUniquePairs(candidateDictionary, CreateAsymmetricPair);
-            return values.Cast<AsymmetricPairInteraction>();
+            var values = CreateUniquePairs(candidateDictionary, CreateUnstablePairInteraction);
+            return values.Cast<UnstablePairInteraction>();
         }
 
         /// <summary>
@@ -149,22 +147,19 @@ namespace Mocassin.Model.Energies
         /// <param name="selector"></param>
         /// <param name="startIndex"></param>
         /// <returns></returns>
-        public IEnumerable<T> FilterAndReindex<T>(IEnumerable<T> unfiltered, Predicate<T> selector, int startIndex)
-            where T : PairInteraction
+        public IEnumerable<T> FilterAndReindex<T>(IEnumerable<T> unfiltered, Predicate<T> selector, int startIndex) where T : PairInteraction
         {
             var index = startIndex - 1;
             foreach (var interaction in unfiltered)
             {
-                if (!selector(interaction))
-                    continue;
-
+                if (!selector(interaction)) continue;
                 interaction.Index = ++index;
                 yield return interaction;
             }
         }
 
         /// <summary>
-        ///     Takes a pair candidate dictionary and a selector function to a sequence of unique pair interactions
+        ///     Takes a pair candidate dictionary and a selector function to create the unique set of <see cref="PairInteraction"/> instances
         /// </summary>
         /// <param name="candidateDictionary"></param>
         /// <param name="pairMaker"></param>
@@ -186,33 +181,33 @@ namespace Mocassin.Model.Energies
         }
 
         /// <summary>
-        ///     Creates new symmetric pair interaction from pair candidate and affiliated particle permutation source
+        ///     Creates new <see cref="StablePairInteraction"/> from <see cref="PairCandidate"/> and a <see cref="IPermutationSource{T1}"/> for the occupation sets
         /// </summary>
         /// <param name="candidate"></param>
         /// <param name="particleSource"></param>
         /// <returns></returns>
-        protected SymmetricPairInteraction CreateSymmetricPair(PairCandidate candidate, IPermutationSource<IParticle> particleSource)
+        protected StablePairInteraction CreateStablePairInteraction(PairCandidate candidate, IPermutationSource<IParticle> particleSource)
         {
-            var energyDictionary = new Dictionary<SymmetricParticlePair, double>((int) particleSource.PermutationCount / 2);
-            foreach (var key in particleSource.Select(value => new SymmetricParticlePair {Particle0 = value[0], Particle1 = value[1]}))
+            var energyDictionary = new Dictionary<ParticleInteractionPair, double>((int) particleSource.PermutationCount / 2);
+            foreach (var key in particleSource.Select(value => ParticleInteractionPair.MakePair(value[0], value[1], candidate.IsSymmetric)))
                 energyDictionary[key] = 0.0;
 
-            return new SymmetricPairInteraction(candidate, energyDictionary);
+            return new StablePairInteraction(candidate, energyDictionary);
         }
 
         /// <summary>
-        ///     Creates new polar pair interaction from pair candidate and affiliated particle permutation source
+        ///     Creates new <see cref="UnstablePairInteraction"/> from <see cref="PairCandidate"/> and a <see cref="IPermutationSource{T1}"/> for the occupation sets
         /// </summary>
         /// <param name="candidate"></param>
         /// <param name="particleSource"></param>
         /// <returns></returns>
-        protected AsymmetricPairInteraction CreateAsymmetricPair(PairCandidate candidate, IPermutationSource<IParticle> particleSource)
+        protected UnstablePairInteraction CreateUnstablePairInteraction(PairCandidate candidate, IPermutationSource<IParticle> particleSource)
         {
-            var energyDictionary = new Dictionary<AsymmetricParticlePair, double>((int) particleSource.PermutationCount / 2);
-            foreach (var key in particleSource.Select(value => new AsymmetricParticlePair {Particle0 = value[0], Particle1 = value[1]}))
+            var energyDictionary = new Dictionary<ParticleInteractionPair, double>((int) particleSource.PermutationCount / 2);
+            foreach (var key in particleSource.Select(value => ParticleInteractionPair.MakePair(value[0], value[1], candidate.IsSymmetric)))
                 energyDictionary[key] = 0.0;
 
-            return new AsymmetricPairInteraction(candidate, energyDictionary);
+            return new UnstablePairInteraction(candidate, energyDictionary);
         }
 
         /// <summary>
@@ -230,9 +225,7 @@ namespace Mocassin.Model.Energies
             if (!(positions is ICollection<ICellReferencePosition> positionCollection))
                 positionCollection = positions.ToList();
 
-            var baseCandidateDictionary =
-                CreateCandidateDictionary(positionCollection, radialConstraint, predicate, skipInversionFiltering);
-
+            var baseCandidateDictionary = CreateCandidateDictionary(positionCollection, radialConstraint, predicate, skipInversionFiltering);
             var uniqueCandidateDictionary = CreateUniqueCandidateDictionary(baseCandidateDictionary, positionCollection);
             return uniqueCandidateDictionary;
         }
@@ -261,15 +254,12 @@ namespace Mocassin.Model.Energies
         protected SortedDictionary<double, List<PairCandidate>> CreateCandidateDictionary(IEnumerable<ICellReferencePosition> positions,
             NumericConstraint radialConstraint, Predicate<ICellReferencePosition> predicate, bool skipInversionFiltering)
         {
-            var resultDictionary =
-                new SortedDictionary<double, List<PairCandidate>>(UnitCellProvider.VectorEncoder.Transformer.FractionalSystem.Comparer);
+            var resultDictionary = new SortedDictionary<double, List<PairCandidate>>(UnitCellProvider.VectorEncoder.Transformer.FractionalSystem.Comparer);
             var searchQueries = GetSearchQueries(positions, radialConstraint, predicate, skipInversionFiltering);
 
-            foreach (var item in searchQueries)
-                item.Start();
+            foreach (var item in searchQueries) item.Start();
 
-            foreach (var query in searchQueries)
-                InsertPairCandidates(resultDictionary, MakePairCandidates(query.StartCellEntry.Entry, query.Result));
+            foreach (var query in searchQueries) InsertPairCandidates(resultDictionary, MakePairCandidates(query.StartCellEntry.Entry, query.Result));
 
             return resultDictionary;
         }
@@ -452,14 +442,13 @@ namespace Mocassin.Model.Energies
         }
 
         /// <summary>
-        ///     Takes an unstable environment and creates a predicate that follows the unstable environment asymmetric pair
-        ///     interaction acceptance criteria
+        ///     Creates the acceptance <see cref="Predicate{T}"/> for an <see cref="UnstablePairInteraction"/> from its <see cref="IUnstableEnvironment"/> definition
         /// </summary>
         /// <param name="environment"></param>
         /// <returns></returns>
-        protected Predicate<AsymmetricPairInteraction> MakeAsymmetricAcceptancePredicate(IUnstableEnvironment environment)
+        protected Predicate<UnstablePairInteraction> GetUnstableAcceptancePredicate(IUnstableEnvironment environment)
         {
-            bool AcceptPredicate(AsymmetricPairInteraction interaction)
+            bool AcceptPredicate(UnstablePairInteraction interaction)
             {
                 return !environment.GetInteractionFilters().Any(x => x.IsApplicable(interaction));
             }
@@ -468,13 +457,13 @@ namespace Mocassin.Model.Energies
         }
 
         /// <summary>
-        ///     Get the filter predicate for ignored pair interactions defined in the stable environment info
+        ///     Creates the acceptance <see cref="Predicate{T}"/> for an <see cref="StablePairInteraction"/> from the <see cref="IStableEnvironmentInfo"/>
         /// </summary>
         /// <param name="environment"></param>
         /// <returns></returns>
-        protected Predicate<SymmetricPairInteraction> GetSymmetricAcceptancePredicate(IStableEnvironmentInfo environment)
+        protected Predicate<StablePairInteraction> GetStableAcceptancePredicate(IStableEnvironmentInfo environment)
         {
-            bool AcceptPredicate(SymmetricPairInteraction interaction)
+            bool AcceptPredicate(StablePairInteraction interaction)
             {
                 return !environment.GetInteractionFilters().Any(x => x.IsApplicable(interaction));
             }

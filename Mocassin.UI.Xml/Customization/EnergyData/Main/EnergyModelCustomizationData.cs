@@ -22,7 +22,7 @@ namespace Mocassin.UI.Xml.Customization
         private ObservableCollection<PairEnergySetData> unstablePairEnergyParameterSets;
 
         /// <summary>
-        ///     Get or set the list of <see cref="Mocassin.Model.Energies.ISymmetricPairInteraction" /> customization data sets
+        ///     Get or set the list of <see cref="IStablePairInteraction" /> customization data sets
         /// </summary>
         [XmlArray]
         public ObservableCollection<PairEnergySetData> StablePairEnergyParameterSets
@@ -32,7 +32,7 @@ namespace Mocassin.UI.Xml.Customization
         }
 
         /// <summary>
-        ///     Get or set the list of <see cref="Mocassin.Model.Energies.IAsymmetricPairInteraction" /> customization data sets
+        ///     Get or set the list of <see cref="IUnstablePairInteraction" /> customization data sets
         /// </summary>
         [XmlArray]
         public ObservableCollection<PairEnergySetData> UnstablePairEnergyParameterSets

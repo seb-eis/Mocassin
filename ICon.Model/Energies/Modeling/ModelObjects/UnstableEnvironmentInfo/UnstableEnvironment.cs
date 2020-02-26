@@ -19,14 +19,14 @@ namespace Mocassin.Model.Energies
         ///     The set of defined interaction filters of the unstable environment (Can be empty)
         /// </summary>
         [UseTrackedData(ReferenceCorrectionLevel = ReferenceCorrectionLevel.IgnoreTopLevel)]
-        public List<AsymmetricInteractionFilter> InteractionFilters { get; set; }
+        public List<UnstableInteractionFilter> InteractionFilters { get; set; }
 
         /// <summary>
         ///     The list of generated pair interactions (Can be null, automatically managed and linked property, not part of object
         ///     population)
         /// </summary>
         [UseTrackedData]
-        public List<IAsymmetricPairInteraction> PairInteractions { get; set; }
+        public List<IUnstablePairInteraction> PairInteractions { get; set; }
 
         /// <summary>
         ///     The list of generated group interactions (Can be null, automatically managed and linked property, not part of
@@ -44,21 +44,21 @@ namespace Mocassin.Model.Energies
         /// </summary>
         public UnstableEnvironment()
         {
-            InteractionFilters = new List<AsymmetricInteractionFilter>();
-            PairInteractions = new List<IAsymmetricPairInteraction>();
+            InteractionFilters = new List<UnstableInteractionFilter>();
+            PairInteractions = new List<IUnstablePairInteraction>();
             GroupInteractions = new List<IGroupInteraction>();
         }
 
         /// <inheritdoc />
         public IEnumerable<IInteractionFilter> GetInteractionFilters()
         {
-            return (InteractionFilters ?? new List<AsymmetricInteractionFilter>()).AsEnumerable();
+            return (InteractionFilters ?? new List<UnstableInteractionFilter>()).AsEnumerable();
         }
 
         /// <inheritdoc />
-        public IEnumerable<IAsymmetricPairInteraction> GetPairInteractions()
+        public IEnumerable<IUnstablePairInteraction> GetPairInteractions()
         {
-            return (PairInteractions ?? new List<IAsymmetricPairInteraction>()).AsEnumerable();
+            return (PairInteractions ?? new List<IUnstablePairInteraction>()).AsEnumerable();
         }
 
         /// <inheritdoc />
@@ -75,7 +75,7 @@ namespace Mocassin.Model.Energies
 
             CellReferencePosition = info.CellReferencePosition;
             MaxInteractionRange = info.MaxInteractionRange;
-            InteractionFilters = info.GetInteractionFilters().Select(AsymmetricInteractionFilter.FromInterface).ToList();
+            InteractionFilters = info.GetInteractionFilters().Select(UnstableInteractionFilter.FromInterface).ToList();
             GroupInteractions = info.GetGroupInteractions().ToList();
             return this;
         }

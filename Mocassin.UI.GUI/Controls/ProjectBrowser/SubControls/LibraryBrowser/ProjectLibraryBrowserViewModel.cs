@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using ICSharpCode.AvalonEdit.Document;
 using Mocassin.Framework.Xml;
 using Mocassin.UI.Base.Commands;
 using Mocassin.UI.GUI.Base.DataContext;
@@ -22,8 +23,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.LibraryBrowser
     public class ProjectLibraryBrowserViewModel : PrimaryControlViewModel, IDataObjectAcceptor
     {
         private JsonBrowserViewModel jsonBrowserViewModel;
-        private string objectJson;
-        private string objectXml;
+        private TextDocument xmlTextDocument;
+        private TextDocument jsonTextDocument;
 
         /// <summary>
         ///     Get the <see cref="JsonBrowserViewModel" /> that provides the <see cref="IMocassinProjectLibrary" /> data as a JSON
@@ -36,22 +37,21 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.LibraryBrowser
         }
 
         /// <summary>
-        ///     Get or set the json <see cref="string" /> of a passed object
+        ///     Get or set the <see cref="TextDocument"/> for the XML view
         /// </summary>
-        public string ObjectJson
+        public TextDocument XmlTextDocument
         {
-            get => objectJson;
-            set => SetProperty(ref objectJson, value);
+            get => xmlTextDocument;
+            set => SetProperty(ref xmlTextDocument, value);
         }
 
-
         /// <summary>
-        ///     Get or set the Xml <see cref="string" /> of a passed object
+        ///     Get or set the <see cref="TextDocument"/> for the JSON view
         /// </summary>
-        public string ObjectXml
+        public TextDocument JsonTextDocument
         {
-            get => objectXml;
-            set => SetProperty(ref objectXml, value);
+            get => jsonTextDocument;
+            set => SetProperty(ref jsonTextDocument, value);
         }
 
         /// <summary>
@@ -80,15 +80,32 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.LibraryBrowser
         {
             JsonBrowserViewModel = new JsonBrowserViewModel();
 
-            bool CanExecute(object obj)
+            static bool CanExecute(object obj)
             {
                 return obj != null;
             }
 
+            XmlTextDocument = new TextDocument();
+            JsonTextDocument = new TextDocument();
             SetObjectTreeViewCommand = new AsyncRelayCommand<object>(SetActiveObjectTreeViewAsync, CanExecute);
             SetObjectXmlCommand = new AsyncRelayCommand<object>(SetActiveObjectXmlAsync, CanExecute);
             SetObjectJsonCommand = new AsyncRelayCommand<object>(SetActiveObjectJsonAsync, CanExecute);
             ProcessDataObjectCommand = new RelayCommand<IDataObject>(SetObjectDropByFormat, CanExecute);
+        }
+
+        /// <summary>
+        ///     Clears all viewer contents
+        /// </summary>
+        public void ClearViewers()
+        {
+            void ClearInternal()
+            {
+                XmlTextDocument.Text = "";
+                JsonTextDocument.Text = "";
+                JsonBrowserViewModel.SetRootViewToNoContent();
+            }
+
+            ExecuteOnAppThread(ClearInternal);
         }
 
         /// <summary>
@@ -109,7 +126,16 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.LibraryBrowser
         /// <returns></returns>
         private async Task SetActiveObjectXmlAsync(object obj)
         {
-            ObjectXml = await Task.Run(() => XmlStreamService.Serialize(obj, Encoding.UTF8));
+            try
+            {
+                var xml = await Task.Run(() => XmlStreamService.Serialize(obj, Encoding.UTF8));
+                XmlTextDocument.Text = xml;
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception);
+                XmlTextDocument.Text = "";
+            }
         }
 
         /// <summary>
@@ -129,12 +155,12 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.LibraryBrowser
             try
             {
                 var json = await Task.Run(() => JsonConvert.SerializeObject(obj, Formatting.Indented, settings));
-                ExecuteOnAppThread(() => ObjectJson = json);
+                JsonTextDocument.Text = json;
             }
             catch (Exception exception)
             {
                 Console.WriteLine(exception);
-                ObjectJson = null;
+                JsonTextDocument.Text = "";
             }
         }
 
@@ -152,7 +178,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.LibraryBrowser
         /// <inheritdoc />
         protected override void OnProjectLibraryChangedInternal(IMocassinProjectLibrary newProjectLibrary)
         {
-            QueueOnAppDispatcher(() => JsonBrowserViewModel.SetRootViewToNoContent());
+            ClearViewers();
+            XmlTextDocument.UndoStack.ClearAll();
+            JsonTextDocument.UndoStack.ClearAll();
         }
     }
 }

@@ -60,9 +60,9 @@ namespace Mocassin.UI.Xml.Base
         ///     Creates a symmetric interaction filter from the set information
         /// </summary>
         /// <returns></returns>
-        public SymmetricInteractionFilter AsSymmetric()
+        public StableInteractionFilter AsSymmetric()
         {
-            var obj = new SymmetricInteractionFilter
+            var obj = new StableInteractionFilter
             {
                 StartRadius = StartRadius,
                 EndRadius = EndRadius,
@@ -76,9 +76,9 @@ namespace Mocassin.UI.Xml.Base
         ///     Creates an asymmetric interaction filter from the set information
         /// </summary>
         /// <returns></returns>
-        public AsymmetricInteractionFilter AsAsymmetric()
+        public UnstableInteractionFilter AsAsymmetric()
         {
-            var obj = new AsymmetricInteractionFilter
+            var obj = new UnstableInteractionFilter
             {
                 StartRadius = StartRadius,
                 EndRadius = EndRadius,

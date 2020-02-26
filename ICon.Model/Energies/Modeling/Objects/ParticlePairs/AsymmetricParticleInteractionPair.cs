@@ -5,19 +5,18 @@ namespace Mocassin.Model.Energies
     /// <summary>
     ///     Represents a polar pair of particles to identify pair interactions where the order of the particles is relevant
     /// </summary>
-    public class AsymmetricParticlePair : ParticlePair, IEquatable<AsymmetricParticlePair>
+    public class AsymmetricParticleInteractionPair : ParticleInteractionPair, IEquatable<AsymmetricParticleInteractionPair>
     {
         /// <inheritdoc />
-        public bool Equals(AsymmetricParticlePair other)
+        public bool Equals(AsymmetricParticleInteractionPair other)
         {
             return other != null && Particle0.Index == other.Particle0.Index && Particle1.Index == other.Particle1.Index;
         }
 
         /// <inheritdoc />
-        public override bool Equals(ParticlePair other)
+        public override bool Equals(ParticleInteractionPair other)
         {
-            if (other is AsymmetricParticlePair pair)
-                return Equals(pair);
+            if (other is AsymmetricParticleInteractionPair pair) return Equals(pair);
 
             return false;
         }

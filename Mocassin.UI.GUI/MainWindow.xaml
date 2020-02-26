@@ -27,9 +27,9 @@
       <RowDefinition Height="Auto" />
     </Grid.RowDefinitions>
     <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="Auto" />
+      <ColumnDefinition Width="1*" />
       <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}" />
-      <ColumnDefinition Width="*" />
+      <ColumnDefinition Width="6*" />
     </Grid.ColumnDefinitions>
 
     <projectMenuBar:ProjectMenuBarView Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" SnapsToDevicePixels="True"

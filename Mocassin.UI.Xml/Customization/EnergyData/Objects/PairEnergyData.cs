@@ -98,21 +98,21 @@ namespace Mocassin.UI.Xml.Customization
         {
             return pairInteraction switch
             {
-                ISymmetricPairInteraction _ => ToSymmetricInternal(modelProject),
-                IAsymmetricPairInteraction _ => ToAsymmetricInternal(modelProject),
+                IStablePairInteraction _ => ToSymmetricInternal(modelProject),
+                IUnstablePairInteraction _ => ToAsymmetricInternal(modelProject),
                 _ => throw new ArgumentException("Type of pair interaction is not supported", nameof(pairInteraction)),
             };
         }
 
         /// <summary>
         ///     Get the contained information as a <see cref="PairEnergyEntry" /> entry that is valid in the context of the passed
-        ///     <see cref="IModelProject" /> and describes an interaction between a <see cref="SymmetricParticlePair" />
+        ///     <see cref="IModelProject" /> and describes an interaction between a <see cref="SymmetricParticleInteractionPair" />
         /// </summary>
         /// <param name="modelProject"></param>
         /// <returns></returns>
         public PairEnergyEntry ToSymmetricInternal(IModelProject modelProject)
         {
-            var particlePair = new SymmetricParticlePair
+            var particlePair = new SymmetricParticleInteractionPair
             {
                 Particle0 = modelProject.DataTracker.FindObjectByKey<IParticle>(CenterParticle.Key),
                 Particle1 = modelProject.DataTracker.FindObjectByKey<IParticle>(PartnerParticle.Key)
@@ -123,13 +123,13 @@ namespace Mocassin.UI.Xml.Customization
 
         /// <summary>
         ///     Get the contained information as a <see cref="PairEnergyEntry" /> entry that is valid in the context of the passed
-        ///     <see cref="IModelProject" /> and describes an interaction between a <see cref="AsymmetricParticlePair" />
+        ///     <see cref="IModelProject" /> and describes an interaction between a <see cref="AsymmetricParticleInteractionPair" />
         /// </summary>
         /// <param name="modelProject"></param>
         /// <returns></returns>
         public PairEnergyEntry ToAsymmetricInternal(IModelProject modelProject)
         {
-            var particlePair = new AsymmetricParticlePair
+            var particlePair = new AsymmetricParticleInteractionPair
             {
                 Particle0 = modelProject.DataTracker.FindObjectByKey<IParticle>(CenterParticle.Key),
                 Particle1 = modelProject.DataTracker.FindObjectByKey<IParticle>(PartnerParticle.Key)
@@ -149,14 +149,14 @@ namespace Mocassin.UI.Xml.Customization
         {
             if (parent == null) throw new ArgumentNullException(nameof(parent));
 
-            var (key0, key1) = (energyEntry.ParticlePair.Particle0.Key, energyEntry.ParticlePair.Particle1.Key);
+            var (key0, key1) = (energyEntry.ParticleInteractionPair.Particle0.Key, energyEntry.ParticleInteractionPair.Particle1.Key);
 
             var centerParticle = parent.ParticleModelData.Particles.Single(x => x.Key == key0);
             var partnerParticle = parent.ParticleModelData.Particles.Single(x => x.Key == key1);
 
             var obj = new PairEnergyData
             {
-                Name = $"[{energyEntry.ParticlePair.Particle0.GetIonString()}][{energyEntry.ParticlePair.Particle1.GetIonString()}]",
+                Name = $"[{energyEntry.ParticleInteractionPair.Particle0.GetIonString()}][{energyEntry.ParticleInteractionPair.Particle1.GetIonString()}]",
                 CenterParticle = new ModelObjectReference<Particle>(centerParticle),
                 PartnerParticle = new ModelObjectReference<Particle>(partnerParticle),
                 Energy = energyEntry.Energy

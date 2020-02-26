@@ -206,7 +206,7 @@ namespace Mocassin.Model.Energies
 
                 pairList0.Add(pairInteraction);
 
-                if (pairInteraction is IAsymmetricPairInteraction || pairInteraction.Position0 == pairInteraction.Position1)
+                if (pairInteraction is IUnstablePairInteraction || pairInteraction.Position0 == pairInteraction.Position1)
                     continue;
 
                 if (!localResult.TryGetValue(pairInteraction.Position1, out var pairList1))
