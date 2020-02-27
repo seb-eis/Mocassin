@@ -24,7 +24,7 @@ namespace Mocassin.Tools.Evaluation.Queries.Base
             /// <summary>
             ///     The boltzmann constant in [eV/K]
             /// </summary>
-            public static double BlotzmannEv = 8.617333262145e-5;
+            public static double BlotzmannEv = 8.617333262145e-05;
         }
 
         /// <summary>

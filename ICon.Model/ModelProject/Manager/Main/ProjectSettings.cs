@@ -129,37 +129,11 @@ namespace Mocassin.Model.ModelProject
         {
             var settings = new ProjectSettings
             {
-                CommonNumericSettings = new MocassinNumericSettings
-                {
-                    FactorValue = 1.0e-2,
-                    RangeValue = 1.0e-3,
-                    UlpValue = 10
-                },
-                GeometryNumericSettings = new MocassinNumericSettings
-                {
-                    FactorValue = 1.0e-2,
-                    RangeValue = 1.0e-3,
-                    UlpValue = 10
-                },
-                ConcurrencySettings = new MocassinConcurrencySettings
-                {
-                    AttemptInterval = TimeSpan.FromMilliseconds(100),
-                    MaxAttempts = 20
-                },
-                ConstantsSettings = new MocassinConstantsSettings
-                {
-                    BoltzmannConstantSi = 1.38064852e-23,
-                    UniversalGasConstantSi = 8.3144598,
-                    VacuumPermittivitySi = 8.85418781762e-12,
-                    ElementalChargeSi = 1.6021766208e-19
-                },
-                SymmetrySettings = new MocassinSymmetrySettings
-                {
-                    SpaceGroupDbPath =
-                        $"{Environment.GetEnvironmentVariable("USERPROFILE")}/Documents/Mocassin/Mocassin.Symmetry.db",
-                    VectorTolerance = 1.0e-3,
-                    ParameterTolerance = 1.0e-3
-                },
+                CommonNumericSettings = new MocassinNumericSettings(),
+                GeometryNumericSettings = new MocassinNumericSettings(),
+                ConcurrencySettings = new MocassinConcurrencySettings(),
+                ConstantsSettings = new MocassinConstantsSettings(),
+                SymmetrySettings = new MocassinSymmetrySettings(),
                 DopingToleranceSetting = 5.0e-3
             };
 

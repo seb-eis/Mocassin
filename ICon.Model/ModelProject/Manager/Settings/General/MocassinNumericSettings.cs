@@ -16,20 +16,20 @@ namespace Mocassin.Model.ModelProject
         /// </summary>
         [DataMember]
         [XmlAttribute("UlpCompare")]
-        public int UlpValue { get; set; }
+        public int UlpValue { get; set; } = 10;
 
         /// <summary>
         ///     The maximum absolute tolerance in Angstrom that is allowed in numeric calculations using absolute comparisons
         /// </summary>
         [DataMember]
         [XmlAttribute("RangeCompare")]
-        public double RangeValue { get; set; }
+        public double RangeValue { get; set; } = 1.0e-6;
 
         /// <summary>
         ///     The maximum relative tolerance that is allowed in numeric calculations using relative comparisons
         /// </summary>
         [DataMember]
         [XmlAttribute("FactorCompare")]
-        public double FactorValue { get; set; }
+        public double FactorValue { get; set; } = 1.0e-3;
     }
 }

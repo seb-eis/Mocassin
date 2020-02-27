@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 
 namespace Mocassin.Model.ModelProject
 {
@@ -12,18 +13,18 @@ namespace Mocassin.Model.ModelProject
         ///     The full filepath to the space group database
         /// </summary>
         [DataMember]
-        public string SpaceGroupDbPath { get; set; }
+        public string SpaceGroupDbPath { get; set; } = $"{Environment.GetEnvironmentVariable("USERPROFILE")}/Documents/Mocassin/Mocassin.Symmetry.db";
 
         /// <summary>
         ///     The tolerance value for equality comparisons of the vectors during wyckoff position extension
         /// </summary>
         [DataMember]
-        public double VectorTolerance { get; set; }
+        public double VectorTolerance { get; set; } = 1.0e-6;
 
         /// <summary>
         ///     The tolerance value for equality comparisons of parameters in the crystal systems
         /// </summary>
         [DataMember]
-        public double ParameterTolerance { get; set; }
+        public double ParameterTolerance { get; set; } = 1.0e-3;
     }
 }

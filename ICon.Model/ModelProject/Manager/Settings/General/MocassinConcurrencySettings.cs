@@ -17,14 +17,14 @@ namespace Mocassin.Model.ModelProject
         /// </summary>
         [DataMember]
         [XmlAttribute("MaxAttempts")]
-        public int MaxAttempts { get; set; }
+        public int MaxAttempts { get; set; } = 20;
 
         /// <summary>
         ///     The interval in between locking attempts
         /// </summary>
         [DataMember]
         [XmlIgnore]
-        public TimeSpan AttemptInterval { get; set; }
+        public TimeSpan AttemptInterval { get; set; } = TimeSpan.FromMilliseconds(25);
 
         /// <summary>
         ///     Get or set the time interval as a string representation
