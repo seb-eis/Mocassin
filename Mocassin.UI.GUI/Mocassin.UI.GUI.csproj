@@ -27,7 +27,6 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>false</MapFileExtensions>
-    <UpdateUrl>\\pc1server\allgemein\Sebastian Eisele\Mocassin\Builds\</UpdateUrl>
     <SupportUrl>https://git.rwth-aachen.de/ICon.Project.Team/ICon.Program/issues/23</SupportUrl>
     <ErrorReportUrl>https://git.rwth-aachen.de/ICon.Project.Team/ICon.Program/issues/22</ErrorReportUrl>
     <TargetCulture>en</TargetCulture>
@@ -36,7 +35,7 @@
     <SuiteName>MOCASSIN</SuiteName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>2</ApplicationRevision>
+    <ApplicationRevision>5</ApplicationRevision>
     <ApplicationVersion>1.1.0.%2a</ApplicationVersion>
     <UseApplicationTrust>true</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
