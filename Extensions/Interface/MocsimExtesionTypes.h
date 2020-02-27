@@ -17,8 +17,8 @@
 #define MOCEXTENSION_LIBRARY_FILEMASK "mocext.*.so"
 #endif
 
-#define MOCEXTENSION_GET_IDENTIFICATION_FUNC MocassinExtensionGetRoutineIdentification
-#define MOCEXTENSION_GET_IDENTIFICATION_FUNC_NAME "MocassinExtensionGetRoutineIdentification"
+#define MOCEXTENSION_GET_UUID_FUNC MocassinExtensionGetRoutineIdentification
+#define MOCEXTENSION_GET_UUID_FUNC_NAME "MocassinExtensionGetRoutineIdentification"
 
 #define MOCEXTENSION_GET_ROUTINE_FUNC MocassinExtensionGetRoutineEntry
 #define MOCEXTENSION_GET_ROUTINE_FUNC_NAME "MocassinExtensionGetRoutineEntry"

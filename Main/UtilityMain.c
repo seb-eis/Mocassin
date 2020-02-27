@@ -29,7 +29,7 @@ int wmain(int argc, wchar_t const* const* argv)
 // Normal entry point for OS with native utf8
 int main(int argc, char const * const *argv)
 {
-    return _main(argc, argv);
+    return InternalMain(argc, argv);
 }
 #endif
 

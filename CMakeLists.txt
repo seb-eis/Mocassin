@@ -17,16 +17,16 @@ set(COMPILE_FLAGS_SSE_INTEL "-axSSE4.2 -xSSE2")
 set(COMPILE_FLAGS_SSE_GNU "-msse2 -msse3 -msse4.2 -mavx")
 
 # Resursive search for source files
-file(GLOB_RECURSE FRAMEWORK_SOURCE ./Framework/*.c)
-file(GLOB_RECURSE SIMULATOR_SOURCE ./Simulator/*.c)
 file(GLOB_RECURSE FRAMEWORK_HEADER ./Framework/*.h)
-file(GLOB_RECURSE SIMULATOR_HEADER ./Simulator/*.c)
+file(GLOB_RECURSE FRAMEWORK_SOURCE ./Framework/*.c)
+file(GLOB_RECURSE SIMULATOR_HEADER ./Simulator/*.h)
+file(GLOB_RECURSE SIMULATOR_SOURCE ./Simulator/*.c)
 file(GLOB_RECURSE UTILITY_HEADER ./Utility/*.h)
 file(GLOB_RECURSE UTILITY_SOURCE ./Utility/*.c)
 file(GLOB_RECURSE EXE_RESOURCES ./Main/Resources/*.rc)
 
 set(VAR_LIBRARY_TYPE "SHARED")
-set(VAR_COMPILE_SQLITE "TRUE")
+set(VAR_COMPILE_SQLITE "FALSE")
 
 # Library and executable definitions
 add_executable(Mocassin.Simulator ./Main/main.c ${EXE_RESOURCES})

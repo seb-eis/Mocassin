@@ -35,7 +35,7 @@ FMocassinRoutine_t TryFindMocassinExtensionRoutine(const mocuuid_t* routineUuid,
 FMocassinRoutine_t TryLoadMocassinExtensionRoutine(const mocuuid_t* routineUuid, const char* libraryPath)
 {
     error_t error = ERR_OK;
-    mocuuid_t* (*uuidGetter)(void) = LibraryLoadingImportFunction(libraryPath, MOCEXTENSION_GET_IDENTIFICATION_FUNC_NAME, &error);
+    mocuuid_t* (*uuidGetter)(void) = LibraryLoadingImportFunction(libraryPath, MOCEXTENSION_GET_UUID_FUNC_NAME, &error);
     return_if(uuidGetter == NULL || error != ERR_OK, (LibraryLoadingUnloadLibrary(libraryPath), NULL));
 
     let libUuid = uuidGetter();

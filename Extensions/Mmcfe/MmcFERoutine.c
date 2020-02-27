@@ -23,7 +23,7 @@
 
 /* Extension interface implementation */
 
-const mocuuid_t* MOCEXTENSION_GET_IDENTIFICATION_FUNC()
+const mocuuid_t* MOCEXTENSION_GET_UUID_FUNC()
 {
     const static mocuuid_t routineGuid = {.A = 0xb7f2dded, .B =0xdaf1, .C =0x40c0, .D = {0x4d, 0x4d, 0x43, 0x46, 0x45, 0x00, 0x00, 0x00}};
     return &routineGuid;
@@ -176,7 +176,7 @@ static error_t TryLoadRoutineParameters(SCONTEXT_PARAMETER, MmcfeParams_t*restri
 {
     let routineData = getCustomRoutineData(simContext);
 
-    let testGuid = MocExtRoutine_GetUUID();
+    let testGuid = MOCEXTENSION_GET_UUID_FUNC();
     return_if(CompareMocuuid(routineData->Guid, testGuid) != 0, ERR_DATACONSISTENCY);
 
     let length = span_Length(routineData->ParamData);

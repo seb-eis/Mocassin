@@ -111,12 +111,11 @@
             return dlHandle;
         }
 
-        bool_t LibraryLoadingGetLibraryHandle(const char* restrict libraryName)
+        bool_t LibraryLoadingUnloadLibrary(const char* restrict libraryName)
         {
-	        void* dlHandle = DlLoading_GetLibraryHandle(libraryName);
+	        void* dlHandle = LibraryLoadingGetLibraryHandle(libraryName);
             return_if(dlHandle == NULL, false);
             return (bool_t) dlclose(dlHandle);
-
         }
     #endif
 #endif

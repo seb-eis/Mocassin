@@ -312,6 +312,7 @@ static error_t GetPairEnergyTablesFromDb(char *sqlQuery, sqlite3 *db, DbModel_t 
     var tables = &dbModel->EnergyModel.PairTables;
 
     error_t error = PrepareSqlStatement(sqlQuery, db, &sqlStatement, dbModel->JobModel.EnergyModelId);
+    SQLFinalizeAndReturnIf(error == SQLITE_DONE, sqlStatement, SQLITE_OK);
     SQLFinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement, error);
 
     cpp_foreach(table, *tables)
@@ -340,6 +341,7 @@ static error_t GetClusterEnergyTablesFromDb(char *sqlQuery, sqlite3 *db, DbModel
     var tables = &dbModel->EnergyModel.ClusterTables;
 
     error_t error = PrepareSqlStatement(sqlQuery, db, &sqlStatement, dbModel->JobModel.EnergyModelId);
+    SQLFinalizeAndReturnIf(error == SQLITE_DONE, sqlStatement, SQLITE_OK);
     SQLFinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement, error);
 
     cpp_foreach(table, *tables)

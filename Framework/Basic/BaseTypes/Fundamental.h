@@ -1,6 +1,6 @@
 //////////////////////////////////////////
 // Project: C Monte Carlo Simulator		//
-// File:	BaseTypes.h        		    //
+// File:	Fundamental.h        		//
 // Author:	Sebastian Eisele			//
 //			Workgroup Martin, IPC       //
 //			RWTH Aachen University      //
@@ -10,7 +10,7 @@
 
 #pragma once
 
-#include "stdint.h"
+#include <stdint.h>
 
 /* Auto types */
 
