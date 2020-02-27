@@ -26,7 +26,7 @@ file(GLOB_RECURSE UTILITY_SOURCE ./Utility/*.c)
 file(GLOB_RECURSE EXE_RESOURCES ./Main/Resources/*.rc)
 
 set(VAR_LIBRARY_TYPE "SHARED")
-set(VAR_COMPILE_SQLITE "FALSE")
+set(VAR_COMPILE_SQLITE "TRUE")
 
 # Library and executable definitions
 add_executable(Mocassin.Simulator ./Main/main.c ${EXE_RESOURCES})

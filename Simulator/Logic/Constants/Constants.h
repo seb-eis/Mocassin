@@ -66,8 +66,8 @@
 
 /* Physical constants */
 
-#define NATCONST_BLOTZMANN  8.6173303e-05
-#define NATCONST_ELMCHARGE  1.6021766208e-19
+#define NATCONST_BLOTZMANN  8.617333262145e-05
+#define NATCONST_ELMCHARGE  1.602176634e-19
 
 /* Conversion factors */
 #define CONV_LENGTH_ANG_TO_M 1.0e-10
