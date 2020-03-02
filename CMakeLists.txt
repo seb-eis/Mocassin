@@ -83,8 +83,8 @@ if (WIN32)
     endif()
 
     # Advanced compiler settings, small performance improvement
-    set(CMAKE_C_FLAGS_RELEASE "${COMPILE_FLAGS_SSE_GNU} -O3 -w -fno-cx-limited-range -funroll-loops -march=native -mtune=native -m64 -s")
-    set(CMAKE_C_FLAGS_DEBUG "${COMPILE_FLAGS_SSE_GNU} -g -m64")
+    set(CMAKE_C_FLAGS_RELEASE "${COMPILE_FLAGS_SSE_GNU} -O3 -Wall -fno-cx-limited-range -funroll-loops -march=native -mtune=native -m64 -s")
+    set(CMAKE_C_FLAGS_DEBUG "${COMPILE_FLAGS_SSE_GNU} -g -Wall -m64")
 
 elseif (UNIX)
     # Set the linker flags to use origin linking

@@ -331,7 +331,7 @@ void PrintMocassinSimulationFinishInfo(SCONTEXT_PARAMETER, file_t *fstream)
     SecondsToIso8601FormattedTimePeriod(buffer, (int64_t) getMainStateMetaData(simContext)->ProgramRunTime);
 
     PrintMocassinSimulationBlockInfo(simContext, fstream, true);
-    fprintf(fstream, "Main routine reached end @ %s  (ERR_CODE=0x%08x, STATE_FLAGS=0x%08x)\n", buffer, SIMERROR, flags);
+    fprintf(fstream, "Main routine reached end @ %s  (ERR_CODE=0x%08x, STATE_FLAGS=0x%08I64x)\n", buffer, SIMERROR, flags);
     PrintStatusFlagCollection(simContext, fstream);
     fprintf(fstream, "Auto termination in %i seconds...", waitTime);
     fflush(fstream);

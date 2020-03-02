@@ -264,7 +264,7 @@ error_t ChangeDynamicJumpHistogramSamplingAreaByRange(DynamicJumpHistogram_t*res
 {
     return_if(jumpHistogram->Header == NULL || jumpHistogram->Header->EntryCount <= 0, ERR_ARGUMENT);
     return_if(!isfinite(centerValue) || !isfinite(valueRange), ERR_ARGUMENT);
-    ChangeDynamicJumpHistogramSamplingAreaByMinMax(jumpHistogram, centerValue - valueRange, centerValue + valueRange);
+    return ChangeDynamicJumpHistogramSamplingAreaByMinMax(jumpHistogram, centerValue - valueRange, centerValue + valueRange);
 }
 
 double CalculateDynamicJumpHistogramMeanEnergy(const DynamicJumpHistogram_t*restrict jumpHistogram)

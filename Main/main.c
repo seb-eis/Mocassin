@@ -52,8 +52,8 @@ static int InternalMain(int argc, char const * const *argv)
                                                   getFileInformation(&simContext)->ExtensionLookupPath);
     if (routine != NULL)
     {
+        fprintf(stdout, "[Init-Info]: Entering specified custom routine.\n");
         PrintMocassinSimulationStartInfo(&simContext, stdout);
-        fprintf(stdout, "\nINFO  => Regular progress prints may be suppressed in custom routines.\n");
         fflush(stdout);
         return (routine(&simContext), 0);
     }

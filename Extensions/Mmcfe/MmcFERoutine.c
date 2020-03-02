@@ -225,31 +225,15 @@ static inline void LogCycleOutcome(SCONTEXT_PARAMETER, MmcfeLog_t*restrict log, 
     AddEnergyValueToDynamicJumpHistogram(&log->Histogram, latticeEnergy);
 }
 
-// Calculates the expected average cycle rate for the remaining simulation alpha values
-static double CalculateExpectedAverageCycleRate(SCONTEXT_PARAMETER, const MmcfeLog_t*restrict log)
-{
-    // Estimates the average cycle rate using the fact that the success rate can be expressed as f(a) = k_0(a) * f(0)*exp(k_1 * a)
-    // where the factor k_1 is the logarithm of the average best-rate/worst-rate scenario in MMC (approx. 11)
-    // and the factor k_0(a) is an arbitrary exponential correction for the increasing rate bias when calculating f(0)
-
-    let meta = getMainStateMetaData(simContext);
-    let logValue = 2.398;
-    let frqIntegral = 4.1703;
-    let frqFactor = exp(-logValue * log->ParamsState.AlphaCurrent);
-    let expCorrection = exp(-log->ParamsState.AlphaCurrent);
-    let baseCycleRate = meta->CycleRate * frqFactor * (1.398 + (1.0-pow(expCorrection, logValue)) * logValue);
-
-    return frqIntegral * baseCycleRate * 1.5;
-}
-
 // Calculates an estimated time till completion of the routine using the current log data
 static int64_t CalculateRuntimeEtaInSeconds(SCONTEXT_PARAMETER, const MmcfeLog_t*restrict log)
 {
+    let meta = getMainStateMetaData(simContext);
     let cycleCountPerBlock = log->ParamsState.RelaxPhaseCycleCount + log->ParamsState.LogPhaseCycleCount;
     let alphaStep = (log->ParamsState.AlphaMax - log->ParamsState.AlphaMin) / log->ParamsState.AlphaCount;
     let remainingAlphaCount = (int32_t) round((log->ParamsState.AlphaMax - log->ParamsState.AlphaCurrent) / alphaStep);
 
-    let avgCycleRate = CalculateExpectedAverageCycleRate(simContext, log);
+    let avgCycleRate = meta->CycleRate;
     return (cycleCountPerBlock * remainingAlphaCount) / (int64_t) avgCycleRate;
 }
 
@@ -266,7 +250,7 @@ static inline void PrintRoutineProgress(SCONTEXT_PARAMETER, const MmcfeLog_t*res
     let timeEta = CalculateRuntimeEtaInSeconds(simContext, log);
     SecondsToIso8601FormattedTimePeriod(etaBuffer, timeEta);
 
-    fprintf(stdout, "MMCFE  => Logtime: %s [  ] (Runtime = %s, ETA = %s)\n", stampBuffer, runBuffer, etaBuffer);
+    fprintf(stdout, "MMCFE  => Logtime: %s [  ] (Runtime = %s, ETA = %s [@ current rate])\n", stampBuffer, runBuffer, etaBuffer);
     fprintf(stdout, "MMCFE  => Lograte: %+.6e [Hz] (Succesrate = %+.6e [Hz])\n", meta->CycleRate, meta->SuccessRate);
     fprintf(stdout, "MMCFE  => Log created for E_latt = %+.6e [eV], Alpha = %+.2e, T_eq = %.2f [K]\n\n", peakEnergy, log->ParamsState.AlphaCurrent, tempEquiv);
     fflush(stdout);

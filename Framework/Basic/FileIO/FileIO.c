@@ -14,7 +14,7 @@
 file_t* utf8fopen(const char* restrict fileName, const char* restrict fileMode)
 {
 #if defined(WIN32)
-    wchar_t * file16, * mode16;
+    wchar_t * file16 = NULL, * mode16 = NULL;
     var error = Win32ConvertUtf8ToUtf16(fileName, &file16);
     return_if(error <= 0, NULL);
     error = Win32ConvertUtf8ToUtf16(fileMode, &mode16);
@@ -29,7 +29,7 @@ file_t* utf8fopen(const char* restrict fileName, const char* restrict fileMode)
 error_t utf8remove(const char* restrict fileName)
 {
 #if  defined(WIN32)
-    wchar_t * file16;
+    wchar_t * file16 = NULL;
     var error = Win32ConvertUtf8ToUtf16(fileName, &file16);
     return_if(error <= 0, ERR_FILE);
     error = _wremove(file16);
@@ -43,7 +43,7 @@ error_t utf8remove(const char* restrict fileName)
 error_t utf8rename(const char* restrict fileName, const char* restrict newFileName)
 {
 #if defined(WIN32)
-    wchar_t * file16, * newFile16;
+    wchar_t * file16 = NULL, * newFile16 = NULL;
     var error = Win32ConvertUtf8ToUtf16(fileName, &file16);
     return_if(error <= 0, ERR_FILE);
     error = Win32ConvertUtf8ToUtf16(newFileName, &newFile16);
@@ -71,8 +71,13 @@ cerror_t CalculateFileSize(file_t *restrict fileStream)
 bool_t IsAccessibleFile(const char* restrict fileName)
 {
 #if defined(WIN32)
-    wchar_t * file16;
+    wchar_t * file16 = NULL;
     let error = Win32ConvertUtf8ToUtf16(fileName, &file16);
+    if (error <= 0)
+    {
+        free(file16);
+        return false;
+    }
     let fileAttributes = GetFileAttributesW(file16);
     let result = (fileAttributes != INVALID_FILE_ATTRIBUTES) && !(fileAttributes & FILE_ATTRIBUTE_DIRECTORY);
     free(file16);
@@ -85,8 +90,13 @@ bool_t IsAccessibleFile(const char* restrict fileName)
 bool_t IsAccessibleDirectory(const char* restrict dirName)
 {
 #if defined(WIN32)
-    wchar_t * file16;
+    wchar_t * file16 = NULL;
     let error = Win32ConvertUtf8ToUtf16(dirName, &file16);
+    if (error <= 0)
+    {
+        free(file16);
+        return false;
+    }
     let fileAttributes = GetFileAttributesW(file16);
     let result = (fileAttributes != INVALID_FILE_ATTRIBUTES) && (fileAttributes & FILE_ATTRIBUTE_DIRECTORY);
     free(file16);
@@ -137,8 +147,8 @@ error_t ConcatStrings(const char* lhs, const char* rhs, char** result)
 
     return_if(*result == NULL, ERR_MEMALLOCATION);
 
-    error |= (strncpy(*result, lhs, bufferSize) != NULL) ? ERR_OK : ERR_BUFFEROVERFLOW;
-    error |= (strncat(*result, rhs, bufferSize) != NULL) ? ERR_OK : ERR_BUFFEROVERFLOW;
+    error |= (strcpy(*result, lhs) != NULL) ? ERR_OK : ERR_BUFFEROVERFLOW;
+    error |= (strcat(*result, rhs) != NULL) ? ERR_OK : ERR_BUFFEROVERFLOW;
     return error;
 }
 
@@ -248,11 +258,11 @@ static error_t SaveAddStringEntryToList(StringList_t*restrict list, char * value
 error_t ListAllFilesByPattern(const char* root, const char* pattern, bool_t includeSubdirs, StringList_t*restrict outList)
 {
     *outList = list_New(*outList, 10);
-    wchar_t * root16, * pattern16;
+    wchar_t * root16 = NULL, * pattern16 = NULL;
     var error = Win32ConvertUtf8ToUtf16(root, &root16);
-    return_if(error <= 0, ERR_FILE);
+    return_if(error <= 0, list_Delete(*outList), ERR_FILE);
     error = Win32ConvertUtf8ToUtf16(pattern, &pattern16);
-    return_if(error <= 0, ERR_FILE);
+    return_if(error <= 0, list_Delete(*outList), ERR_FILE);
 
     wchar_t buffer16[260];
     var directory = _wopendir(root16);
@@ -264,10 +274,11 @@ error_t ListAllFilesByPattern(const char* root, const char* pattern, bool_t incl
     {
         continue_if(lstrcmpW(direntry->d_name, L".") == 0 || lstrcmpW(direntry->d_name, L"..") == 0);
 
-        wsprintfW(buffer16, L"%s/%s", root16, direntry->d_name);
-        char * fileName;
+        wsprintfW(buffer16, L"%s\\%s", root16, direntry->d_name);
+        char * fileName = NULL;
         error = Win32ConvertUtf16ToUtf8(buffer16, &fileName);
         return_if(error <= 0, ERR_FILE);
+        error = ERR_OK;
         var fileAtr = GetFileAttributesW(buffer16);
 
         if (includeSubdirs && (fileAtr & FILE_ATTRIBUTE_DIRECTORY))
@@ -275,6 +286,7 @@ error_t ListAllFilesByPattern(const char* root, const char* pattern, bool_t incl
             StringList_t subList;
             error = ListAllFilesByPattern(fileName, pattern, includeSubdirs, &subList);
             free(fileName);
+            return_if(error, error);
             cpp_foreach(item, subList) SaveAddStringEntryToList(outList, *item, false);
             list_Delete(subList);
         }
