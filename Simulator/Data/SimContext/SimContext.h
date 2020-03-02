@@ -572,5 +572,6 @@ static inline SimulationContext_t ctor_SimulationContext()
     SimulationContext_t context;
     memset(&context, 0, sizeof(SimulationContext_t));
     context.DynamicModel.FileInfo.IODirectoryPath = ".";
+    context.DynamicModel.FileInfo.ExtensionLookupPath = ".";
     return context;
 }

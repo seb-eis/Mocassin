@@ -15,7 +15,10 @@ bool_t CheckPairEnergyTableIsConstant(SCONTEXT_PARAMETER, const PairTable_t *tab
     return_if(span_Length(table->EnergyTable) == 0, true);
     let compValue = span_Get(table->EnergyTable, 0);
     cpp_offset_foreach(value,table->EnergyTable, 1)
-        return_if (fabs(compValue - *value) > MC_CONST_FLP_TOLERANCE, false);
+    {
+        let isSignificantDelta = fabs(compValue - *value) > MC_CONST_FLP_TOLERANCE;
+        return_if (isSignificantDelta, false);
+    }
 
     return true;
 }
