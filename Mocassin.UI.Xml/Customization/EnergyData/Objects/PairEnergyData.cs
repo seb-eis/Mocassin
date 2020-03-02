@@ -96,46 +96,10 @@ namespace Mocassin.UI.Xml.Customization
         /// <returns></returns>
         public PairEnergyEntry ToInternal(IModelProject modelProject, IPairInteraction pairInteraction)
         {
-            return pairInteraction switch
-            {
-                IStablePairInteraction _ => ToSymmetricInternal(modelProject),
-                IUnstablePairInteraction _ => ToAsymmetricInternal(modelProject),
-                _ => throw new ArgumentException("Type of pair interaction is not supported", nameof(pairInteraction)),
-            };
-        }
-
-        /// <summary>
-        ///     Get the contained information as a <see cref="PairEnergyEntry" /> entry that is valid in the context of the passed
-        ///     <see cref="IModelProject" /> and describes an interaction between a <see cref="SymmetricParticleInteractionPair" />
-        /// </summary>
-        /// <param name="modelProject"></param>
-        /// <returns></returns>
-        public PairEnergyEntry ToSymmetricInternal(IModelProject modelProject)
-        {
-            var particlePair = new SymmetricParticleInteractionPair
-            {
-                Particle0 = modelProject.DataTracker.FindObjectByKey<IParticle>(CenterParticle.Key),
-                Particle1 = modelProject.DataTracker.FindObjectByKey<IParticle>(PartnerParticle.Key)
-            };
-
-            return new PairEnergyEntry(particlePair, Energy);
-        }
-
-        /// <summary>
-        ///     Get the contained information as a <see cref="PairEnergyEntry" /> entry that is valid in the context of the passed
-        ///     <see cref="IModelProject" /> and describes an interaction between a <see cref="AsymmetricParticleInteractionPair" />
-        /// </summary>
-        /// <param name="modelProject"></param>
-        /// <returns></returns>
-        public PairEnergyEntry ToAsymmetricInternal(IModelProject modelProject)
-        {
-            var particlePair = new AsymmetricParticleInteractionPair
-            {
-                Particle0 = modelProject.DataTracker.FindObjectByKey<IParticle>(CenterParticle.Key),
-                Particle1 = modelProject.DataTracker.FindObjectByKey<IParticle>(PartnerParticle.Key)
-            };
-
-            return new PairEnergyEntry(particlePair, Energy);
+            var center = modelProject.DataTracker.FindObjectByKey<IParticle>(CenterParticle.Key);
+            var partner = modelProject.DataTracker.FindObjectByKey<IParticle>(PartnerParticle.Key);
+            var pair = ParticleInteractionPair.MakePair(center, partner, pairInteraction.IsSymmetric);
+            return new PairEnergyEntry(pair, Energy);
         }
 
         /// <summary>
