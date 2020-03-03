@@ -490,7 +490,7 @@ void ResynchronizeEnvironmentEnergyStatus(SCONTEXT_PARAMETER)
         continue_if(!envState->IsStable);
         energy += GetEnvironmentStateEnergy(envState);
     }
-    metaData->LatticeEnergy = energy * physicalFactors->EnergyFactorKtToEv;
+    metaData->LatticeEnergy = energy * physicalFactors->EnergyFactorKtToEv * 0.5;
     span_Delete(occupationBuffer);
 }
 

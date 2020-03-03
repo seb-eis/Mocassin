@@ -58,4 +58,5 @@ int InternalMain(int argc, char const * const *argv)
     }
 
     assert_success(ERR_ARGUMENT, "No matching command was found!");
+    return 0;
 }

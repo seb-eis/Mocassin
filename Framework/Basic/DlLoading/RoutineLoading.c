@@ -17,7 +17,8 @@ FMocassinRoutine_t TryFindMocassinExtensionRoutine(const mocuuid_t* routineUuid,
     return_if(searchPath == NULL || !IsAccessibleDirectory(searchPath), NULL);
     StringList_t libList;
     FMocassinRoutine_t entryFunc = NULL;
-    if (ListAllFilesByPattern(searchPath, MOCEXT_EXTROUTINE_LIBNAME, true, &libList) == ERR_OK)
+    var error = ListAllFilesByPattern(searchPath, MOCEXT_EXTROUTINE_LIBNAME, true, &libList);
+    if (error == ERR_OK)
     {
         cpp_foreach(item, libList)
         {

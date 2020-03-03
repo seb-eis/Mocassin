@@ -947,7 +947,6 @@ void SetMmcJumpProbabilitiesOnContextWithAlpha(SCONTEXT_PARAMETER, double alpha)
 
     energyInfo->S0toS2DeltaEnergy = energyInfo->S2Energy - energyInfo->S0Energy;
     energyInfo->RawS0toS2Probability = GetExpResult(simContext, -energyInfo->S0toS2DeltaEnergy * alpha);
-    energyInfo->NormalizedS0toS2Probability = energyInfo->RawS0toS2Probability;
 }
 
 void OnEnergeticMmcJumpEvaluationWithAlpha(SCONTEXT_PARAMETER, double alpha)
@@ -958,7 +957,7 @@ void OnEnergeticMmcJumpEvaluationWithAlpha(SCONTEXT_PARAMETER, double alpha)
 
     // Handle case where the jump is statistically accepted
     let random = GetNextRandomDoubleFromContextRng(simContext);
-    if (energyInfo->NormalizedS0toS2Probability >= random)
+    if (energyInfo->RawS0toS2Probability >= random)
     {
         OnMmcEventIsAccepted(simContext);
         return;

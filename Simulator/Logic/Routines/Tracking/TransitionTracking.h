@@ -77,7 +77,7 @@ static inline DynamicJumpHistogram_t ctor_DynamicJumpHistogram(const int32_t num
 // Creates a new dynamic jump histogram by reinterpreting the passed buffer point (Buffer is copied and not freed)
 static inline DynamicJumpHistogram_t ctor_DynamicJumpHistogram_FromBuffer(const void* buffer)
 {
-    if (buffer == NULL) return (DynamicJumpHistogram_t) {0,0,0};
+    if (buffer == NULL) return (DynamicJumpHistogram_t) {0,{0,0}};
     let entryCount = ((DynamicJumpHistogramHeader_t*) buffer)->EntryCount;
     var histogram = ctor_DynamicJumpHistogram(entryCount);
     memcpy(&histogram.Header, buffer, sizeof(DynamicJumpHistogramHeader_t) + span_ByteCount(histogram.Counters));

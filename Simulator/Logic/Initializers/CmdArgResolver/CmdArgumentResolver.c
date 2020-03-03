@@ -28,7 +28,7 @@ static void TerminateOnSetBuildCallFlag(SCONTEXT_PARAMETER)
 static struct _iobuf* freopen_utf8(const char* filename, const char* mode, file_t* file)
 {
 #if defined(WIN32)
-    wchar_t * filename16, * mode16;
+    wchar_t * filename16 = NULL, * mode16 = NULL;
     var error = Win32ConvertUtf8ToUtf16(filename, &filename16);
     return_if(error <= 0, NULL);
     error = Win32ConvertUtf8ToUtf16(mode, &mode16);
