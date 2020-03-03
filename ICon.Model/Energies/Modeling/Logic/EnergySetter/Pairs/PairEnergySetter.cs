@@ -76,8 +76,7 @@ namespace Mocassin.Model.Energies
 
             if (!EnergyEntries.Contains(energyEntry))
             {
-                OnValueChanged.OnError(new ArgumentException("The passed energy entry does not exists in the pair interaction",
-                    nameof(energyEntry)));
+                OnValueChanged.OnError(new ArgumentException("The passed energy entry does not exists in the pair interaction", nameof(energyEntry)));
                 return;
             }
 

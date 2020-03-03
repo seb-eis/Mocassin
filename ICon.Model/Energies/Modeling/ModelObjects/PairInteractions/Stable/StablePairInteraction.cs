@@ -19,7 +19,11 @@ namespace Mocassin.Model.Energies
         public override IPairInteraction ChiralPartner => ChiralPartnerInternal;
 
         /// <inheritdoc />
-        public override string ObjectName => "Symmetric Pair Interaction";
+        public override string ObjectName => "Stable Pair Interaction";
+
+        /// <inheritdoc />
+        /// <remarks>ToDo: Always symmetric stable interactions are a workaround, potentially fix in the future </remarks>
+        public override bool IsSymmetric => true;
 
         /// <inheritdoc />
         public StablePairInteraction()
@@ -27,7 +31,7 @@ namespace Mocassin.Model.Energies
         }
 
         /// <inheritdoc />
-        public StablePairInteraction(in PairCandidate candidate, Dictionary<ParticleInteractionPair, double> energyDictionary)
+        public StablePairInteraction(PairCandidate candidate, Dictionary<ParticleInteractionPair, double> energyDictionary)
             : base(candidate)
         {
             EnergyDictionary = energyDictionary ?? throw new ArgumentNullException(nameof(energyDictionary));

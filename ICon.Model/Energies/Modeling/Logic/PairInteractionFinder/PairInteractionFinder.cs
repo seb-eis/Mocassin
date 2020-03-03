@@ -189,7 +189,8 @@ namespace Mocassin.Model.Energies
         protected StablePairInteraction CreateStablePairInteraction(PairCandidate candidate, IPermutationSource<IParticle> particleSource)
         {
             var energyDictionary = new Dictionary<ParticleInteractionPair, double>((int) particleSource.PermutationCount / 2);
-            foreach (var key in particleSource.Select(value => ParticleInteractionPair.MakePair(value[0], value[1], candidate.IsSymmetric)))
+            // ToDo: Remove the always symmetric workaround as soon as the system supports asymmetric stable interactions
+            foreach (var key in particleSource.Select(value => ParticleInteractionPair.MakePair(value[0], value[1], true)))
                 energyDictionary[key] = 0.0;
 
             return new StablePairInteraction(candidate, energyDictionary);

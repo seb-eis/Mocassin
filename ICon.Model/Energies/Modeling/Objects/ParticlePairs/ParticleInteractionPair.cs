@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Mocassin.Model.Basic;
 using Mocassin.Model.Particles;
 
@@ -7,6 +8,7 @@ namespace Mocassin.Model.Energies
     /// <summary>
     ///     Abstract base class for particle pair implementations that describe a specific pair interaction occupation.
     /// </summary>
+    [DebuggerDisplay("{Particle0} {Particle1}")]
     public abstract class ParticleInteractionPair : IEquatable<ParticleInteractionPair>
     {
         /// <summary>

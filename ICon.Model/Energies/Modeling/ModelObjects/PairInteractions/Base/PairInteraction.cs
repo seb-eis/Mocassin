@@ -28,7 +28,7 @@ namespace Mocassin.Model.Energies
         public bool IsChiral => ChiralPartner != null;
 
         /// <inheritdoc />
-        public bool IsSymmetric => Position0 == Position1;
+        public virtual bool IsSymmetric => Position0 == Position1;
 
         /// <inheritdoc />
         public abstract IPairInteraction ChiralPartner { get; }
@@ -43,7 +43,7 @@ namespace Mocassin.Model.Energies
         /// <summary>
         ///     Construct new pair interaction from pair candidate
         /// </summary>
-        protected PairInteraction(in PairCandidate candidate)
+        protected PairInteraction(PairCandidate candidate)
         {
             Index = candidate.Index;
             Position0 = candidate.Position0;

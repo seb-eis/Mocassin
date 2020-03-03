@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Mocassin.Model.Basic;
 
 namespace Mocassin.Model.Energies
@@ -6,6 +7,7 @@ namespace Mocassin.Model.Energies
     /// <summary>
     ///     Pair energy entry that carries a particle pair and an affiliated energy value
     /// </summary>
+    [DebuggerDisplay("{ParticleInteractionPair}:{Energy}")]
     public class PairEnergyEntry : IEquatable<PairEnergyEntry>
     {
         /// <summary>
@@ -42,7 +44,8 @@ namespace Mocassin.Model.Energies
         /// <inheritdoc />
         public bool Equals(PairEnergyEntry other)
         {
-            return other != null && ParticleInteractionPair.Equals(other.ParticleInteractionPair);
+            var result = other != null && ParticleInteractionPair.Equals(other.ParticleInteractionPair);
+            return result;
         }
 
         /// <summary>
