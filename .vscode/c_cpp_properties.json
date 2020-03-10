@@ -1,47 +1,31 @@
 {
     "configurations": [
         {
-            "name": "Win32",
-            "browse": {
-                "path": [
-                    "${workspaceFolder}"
-                ],
-                "limitSymbolsToIncludedHeaders": true
-            },
+            "name": "Win64",
             "includePath": [
-                "${workspaceFolder}"
+                "additional/paths",
+                "${default}"
             ],
             "defines": [
-                "_DEBUG",
-                "UNICODE",
-                "_UNICODE"
+                "${default}"
             ],
-            "compilerPath": "C:\\Program Files\\DevTools\\MinGw-w64\\mingw32\\bin\\gcc.exe",
-            "cStandard": "c11",
-            "cppStandard": "c++17",
-            "intelliSenseMode": "gcc-x64",
-            "configurationProvider": "vector-of-bool.cmake-tools",
-            "compileCommands": "${workspaceFolder}/build/compile_commands.json"
-        },
-        {
-            "name": "Win32_R",
+            "macFrameworkPath": [
+                "${default}",
+                "additional/paths"
+            ],
+            "compileCommands": "${default}",
             "browse": {
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": "${default}",
                 "path": [
-                    "${workspaceFolder}"
-                ],
-                "limitSymbolsToIncludedHeaders": true
+                    "${default}",
+                    "additional/paths"
+                ]
             },
-            "includePath": [
-                "${workspaceFolder}"
-            ],
-            "defines": [
-                "UNICODE",
-                "_UNICODE"
-            ],
-            "compilerPath": "C:\\Program Files\\DevTools\\MinGw-w64\\mingw32\\bin\\gcc.exe",
+            "intelliSenseMode": "clang-x64",
             "cStandard": "c11",
-            "cppStandard": "c++17",
-            "intelliSenseMode": "gcc-x64"
+            "cppStandard": "${default}",
+            "compilerPath": "${default}"
         }
     ],
     "version": 4

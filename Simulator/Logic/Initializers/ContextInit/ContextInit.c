@@ -715,8 +715,7 @@ static error_t SyncMainCycleCountersWithStateStatus(SCONTEXT_PARAMETER)
     
     counters->CycleCount = stateHeader->Cycles;
     counters->McsCount = stateHeader->Mcs;
-
-    return (counters->McsCount <= counters->TotalSimulationGoalMcsCount) ? ERR_OK : ERR_ALREADYCOMPLETED;
+    return ERR_OK;
 }
 
 // Synchronizes the simulation cycle state to the main simulation state

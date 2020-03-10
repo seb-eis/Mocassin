@@ -47,7 +47,7 @@
 
         static wchar_t * GetUnicodeLibraryName(const char* restrict libraryName)
         {
-            wchar_t * libraryName16;
+            wchar_t * libraryName16 = NULL;
             var error = Win32ConvertUtf8ToUtf16(libraryName, &libraryName16);
             return_if(error <= 0, NULL);
             return libraryName16;

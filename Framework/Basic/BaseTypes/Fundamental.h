@@ -9,15 +9,14 @@
 //////////////////////////////////////////
 
 #pragma once
-
 #include <stdint.h>
-
+#define MC_LET_IS_VAR
 /* Auto types */
 
 // Macro that defines the variable auto type
 #define var __auto_type
 
-#ifdef __INTEL_COMPILER
+#if defined(__INTEL_COMPILER) || defined(MC_LET_IS_VAR)
 // Macro that defines the const auto type to var on the intel compiler
 #define let var
 #else

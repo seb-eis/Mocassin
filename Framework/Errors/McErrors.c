@@ -80,19 +80,14 @@ void DumpErrorToStderrOut(int32_t errCode, const char *errFunc, int32_t errLine,
 
 void MocassinErrorExit(int32_t errCode, const char* errFunc, int32_t errLine, const char* errMsg)
 {
-    var fileStream = fopen(STDERR_PATH, "w");
-    fprintf(fileStream, ERROR_FORMAT, errCode, errFunc, errLine, ConvertMocassinErrorCodeToString(errCode), errMsg);
-    fclose(fileStream);
+    fprintf(stderr, ERROR_FORMAT, errCode, errFunc, errLine, ConvertMocassinErrorCodeToString(errCode), errMsg);
     exit(errCode);
 }
 
 void MocassinErrorExitWithMemDump(int32_t errCode, const char* errFunc, int32_t errLine, const char* errMsg, uint8_t* memStart, uint8_t* memEnd)
 {
-    var fileStream = fopen(STDERR_PATH, "w");
-    fprintf(fileStream, ERROR_FORMAT_WDUMP, errCode, errFunc, errLine, ConvertMocassinErrorCodeToString(errCode), errMsg);
-
+    fprintf(stderr, ERROR_FORMAT_WDUMP, errCode, errFunc, errLine, ConvertMocassinErrorCodeToString(errCode), errMsg);
     let buffer = (Buffer_t) {.Begin = memStart, .End = memEnd};
-    WriteBufferHexToStream(fileStream, &buffer, 24);
-    fclose(fileStream);
+    WriteBufferHexToStream(stderr, &buffer, 24);
     exit(errCode);
 }

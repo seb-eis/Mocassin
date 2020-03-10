@@ -253,8 +253,8 @@ static inline void PrintRoutineProgress(SCONTEXT_PARAMETER, const MmcfeLog_t*res
     let timeEta = CalculateRuntimeEtaInSeconds(simContext, log);
     SecondsToIso8601FormattedTimePeriod(etaBuffer, timeEta);
 
-    fprintf(stdout, "MMCFE  => Logtime: %s [  ] (Runtime=%s, ETA=%s [@ current rate])\n", stampBuffer, runBuffer, etaBuffer);
-    fprintf(stdout, "MMCFE  => Lograte: %+.6e [Hz] (Succesrate=%+.6e [Hz])\n", meta->CycleRate, meta->SuccessRate);
+    fprintf(stdout, "MMCFE  => Logtime: %s [  ] (Runtime=%s, ETA=%s [@ lograte])\n", stampBuffer, runBuffer, etaBuffer);
+    fprintf(stdout, "MMCFE  => Lograte: %+.6e [Hz] (Successrate=%+.6e [Hz])\n", meta->CycleRate, meta->SuccessRate);
     fprintf(stdout, "MMCFE  => Log entry: E(Lattice)=%+.6e [eV] (Peak=%+.6e [eV]), Alpha=%+.2e, T_eq=%.2f [K]\n\n", meanEnergy, peakEnergy, log->ParamsState.AlphaCurrent, tempEquiv);
     fflush(stdout);
 }

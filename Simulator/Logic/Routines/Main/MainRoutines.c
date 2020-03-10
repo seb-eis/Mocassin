@@ -62,9 +62,21 @@ void PrepareSimulationContextForMainRoutine(SCONTEXT_PARAMETER)
     SetRuntimeInfoToCurrent(simContext);
 }
 
+static void ExitIfAlreadyCompleted(SCONTEXT_PARAMETER)
+{
+    let counters = getMainCycleCounters(simContext);
+    if (counters->McsCount >= counters->TotalSimulationGoalMcsCount)
+    {
+        printf("Simulation already completed!\n");
+        exit(0);
+    }
+}
+
 error_t StartMainSimulationRoutine(SCONTEXT_PARAMETER)
 {
     assert_true(!StateFlagsAreSet(simContext, STATE_FLG_SIMERROR), SIMERROR, "Cannot start main simulation routine, state error flag is set.");
+
+    ExitIfAlreadyCompleted(simContext);
 
     PrintMocassinSimulationStartInfo(simContext, stdout);
     if (JobInfoFlagsAreSet(simContext, INFO_FLG_KMC))
@@ -814,7 +826,7 @@ static inline void SetDefaultKmcTransitionStateEnergy(double* restrict states)
 }
 
 // Alternate internal S1 calculation function that uses the factor interpolation method with a shift alpha
-static void KMC_SetTransitionStateEnergyAlphaMethod(double* restrict states, const double alpha)
+static void SetKmcTransitionStateEnergyAlphaMethod(double* restrict states, const double alpha)
 {
     let deltaConf = states[2] - states[0];
     let deltaAbs = fabs(deltaConf);
