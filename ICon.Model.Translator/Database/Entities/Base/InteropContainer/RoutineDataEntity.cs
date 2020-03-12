@@ -121,7 +121,7 @@ namespace Mocassin.Model.Translator
             builder.Append("routine:");
             builder.Append(RoutineAlias);
             builder.Append(Environment.NewLine + "{" + Environment.NewLine);
-            foreach (var pair in GetTemplateParameters()) builder.Append("\t" + pair.Key + " = " + pair.Value + Environment.NewLine);
+            foreach (var pair in GetTemplateParameters()) builder.Append("\t" + pair.Key + " = \"" + pair.Value + "\"" + Environment.NewLine);
             builder.Append("}" + Environment.NewLine);
             return builder.ToString();
         }

@@ -45,7 +45,6 @@ namespace Mocassin.Model.Particles
         {
             ResetAllIndexedData();
             Particles.Add(Particle.CreateVoid());
-            ParticleSets.Add(ParticleSet.CreateEmpty());
         }
     }
 }
