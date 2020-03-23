@@ -194,6 +194,14 @@ void MakeArrayBlocks(int32_t rank, const int32_t dimensions[rank], int32_t*restr
 // Constructs a new array from the passed buffer by interpreting it as a previously build array. Does not free the original buffer!
 void* ConstructArrayFromBlob(const void *restrict buffer, size_t sizeOfElements, VoidArray_t *restrict outArray);
 
+// Calculate the array header size based on the rank and ensures 8 byte alignment
+static inline int32_t CalculateArrayHeaderSize(int32_t rank)
+{
+    var numOfBytes = (rank+1) * sizeof(int32_t);
+    numOfBytes += numOfBytes % sizeof(void*);
+    return numOfBytes;
+}
+
 // Macro to construct a new array of the passed type and dimensions
 #define array_New(ARRAY, ...) *(typeof(ARRAY)*) ConstructVoidArray(sizeof((int32_t[]){__VA_ARGS__})/sizeof(int32_t), sizeof(typeof(*(ARRAY).Begin)), (int32_t[]){ __VA_ARGS__ }, (VoidArray_t*) &(ARRAY))
 
@@ -210,7 +218,7 @@ void* ConstructArrayFromBlob(const void *restrict buffer, size_t sizeOfElements,
 #define array_Rank(ARRAY) ((ARRAY).Header->Rank)
 
 // Get the header size in bytes of any array
-#define array_HeaderByteCount(ARRAY) (1 + array_Rank(ARRAY)) * sizeof(int32_t)
+#define array_HeaderByteCount(ARRAY) CalculateArrayHeaderSize(array_Rank(ARRAY))
 
 // Allocates a new array by interpreting the passed buffer pointer as a formatted array and copies the data. Does not free original buffer!
 #define array_ConstructFromBlob(ARRAY, BUFFER) *(typeof(ARRAY)*) ConstructArrayFromBlob((BUFFER), sizeof(typeof(*(ARRAY).Begin)), (VoidArray_t*) &(ARRAY))

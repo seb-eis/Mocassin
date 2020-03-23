@@ -78,7 +78,7 @@ void* ConstructVoidList(const size_t capacity, const size_t sizeOfElement, VoidL
 
 VoidArray_t AllocateArray(const int32_t rank, const size_t sizeOfElement, const int32_t dimensions[rank])
 {
-    let numOfHeaderBytes = (2 + rank -1) * sizeof(int32_t);
+    let numOfHeaderBytes = CalculateArrayHeaderSize(rank);
     var numOfDataBytes = dimensions[0] * sizeOfElement;
 
     for (int i = 1; i < rank; ++i)
