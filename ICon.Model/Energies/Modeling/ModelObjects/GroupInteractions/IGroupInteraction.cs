@@ -26,7 +26,13 @@ namespace Mocassin.Model.Energies
         ///     Get a sequence of 3D vectors that describe the base geometry of the grouping without the start position
         /// </summary>
         /// <returns></returns>
-        IEnumerable<Fractional3D> GetBaseGeometry();
+        IEnumerable<Fractional3D> GetSurroundingGeometry();
+
+        /// <summary>
+        ///     Get a sequence of 3D vectors that describe the base geometry of the grouping including the start position
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<Fractional3D> GetFullGeometry();
 
         /// <summary>
         ///     Get a read only dictionary that assigns each possible center particle an energy dictionary for the outer

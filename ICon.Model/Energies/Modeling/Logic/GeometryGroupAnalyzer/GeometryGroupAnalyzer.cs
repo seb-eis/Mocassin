@@ -20,7 +20,8 @@ namespace Mocassin.Model.Energies
         IsValid,
         ContainsNonExistentPositions,
         ContainsFilteredPositions,
-        ContainsUnstablePositions
+        ContainsUnstablePositions,
+        ContainsRingDefinition
     }
 
     /// <summary>
@@ -66,7 +67,7 @@ namespace Mocassin.Model.Energies
 
             extGroup.SurroundingCellReferencePositions = GetGroupCellReferencePositions(groupInteraction).ToList();
             extGroup.PointOperationGroup =
-                SpaceGroupService.GetPointOperationGroup(extGroup.CenterPosition.Vector, groupInteraction.GetBaseGeometry());
+                SpaceGroupService.GetPointOperationGroup(extGroup.CenterPosition.Vector, groupInteraction.GetSurroundingGeometry());
 
             extGroup.UniqueOccupationStates =
                 GetUniqueGroupOccupationStates(extGroup.PointOperationGroup, GetGroupStatePermutationSource(groupInteraction)).ToList();
@@ -114,7 +115,7 @@ namespace Mocassin.Model.Energies
         /// <returns></returns>
         public IEnumerable<ICellReferencePosition> GetGroupCellReferencePositions(IGroupInteraction groupInteraction)
         {
-            return groupInteraction.GetBaseGeometry().Select(vector => UnitCellProvider.GetEntryValueAt(vector));
+            return groupInteraction.GetSurroundingGeometry().Select(vector => UnitCellProvider.GetEntryValueAt(vector));
         }
 
         /// <summary>
@@ -130,7 +131,12 @@ namespace Mocassin.Model.Energies
             if (partnerPositions.Any(x => x == null)) return GroupGeometryValidity.ContainsNonExistentPositions;
             if (partnerPositions.Any(x => !x.IsValidAndStable())) return GroupGeometryValidity.ContainsUnstablePositions;
 
-            var distances = groupInteraction.GetBaseGeometry()
+            if (ContainsRing(groupInteraction.GetFullGeometry(), SpaceGroupService.Comparer))
+            {
+                return GroupGeometryValidity.ContainsRingDefinition;
+            }
+
+            var distances = groupInteraction.GetSurroundingGeometry()
                 .Select(vector => vector - groupInteraction.CenterCellReferencePosition.Vector)
                 .Select(x => UnitCellProvider.VectorEncoder.Transformer.ToCartesian(x).GetLength())
                 .ToList();
@@ -139,6 +145,24 @@ namespace Mocassin.Model.Energies
                 distances.Where((t, i) => x.IsApplicable(t, groupInteraction.CenterCellReferencePosition, partnerPositions[i])).Any())
                 ? GroupGeometryValidity.ContainsFilteredPositions
                 : GroupGeometryValidity.IsValid;
+        }
+
+        /// <summary>
+        ///     Checks if the passed geometry contains a ring definition
+        /// </summary>
+        /// <param name="positionGeometry"></param>
+        /// <param name="equalityComparer"></param>
+        /// <returns></returns>
+        public bool ContainsRing(IEnumerable<Fractional3D> positionGeometry, IComparer<Fractional3D> equalityComparer)
+        {
+            var current = new Fractional3D(0, 0, 0);
+            foreach (var vector in positionGeometry.SelectConsecutivePairs((a, b) => b - a))
+            {
+                current += vector;
+                if (equalityComparer.Compare(current, Fractional3D.Zero) == 0) return true;
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -189,7 +213,7 @@ namespace Mocassin.Model.Energies
         /// <returns></returns>
         public IPermutationSource<IParticle> GetGroupStatePermutationSource(IGroupInteraction group)
         {
-            return GetGroupStatePermutationSource(group.GetBaseGeometry());
+            return GetGroupStatePermutationSource(group.GetSurroundingGeometry());
         }
 
         /// <summary>

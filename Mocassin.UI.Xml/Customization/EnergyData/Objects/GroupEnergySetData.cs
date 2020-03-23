@@ -144,7 +144,7 @@ namespace Mocassin.UI.Xml.Customization
             {
                 Name = $"Group.Energy.Set.{energySetter.GroupInteraction.Index}",
                 ModelIndex = energySetter.GroupInteraction.Index,
-                BaseGeometry = energySetter.GroupInteraction.GetBaseGeometry().Select(x => VectorData3D.Create(x)).ToObservableCollection(),
+                BaseGeometry = energySetter.GroupInteraction.GetSurroundingGeometry().Select(x => VectorData3D.Create(x)).ToObservableCollection(),
                 GroupInteraction = new ModelObjectReference<GroupInteraction>(groupInteraction),
                 CenterPosition = new ModelObjectReference<CellReferencePosition>(centerPosition),
                 EnergyEntries = energySetter.EnergyEntries.Select(x => GroupEnergyData.Create(x, parent)).ToObservableCollection()

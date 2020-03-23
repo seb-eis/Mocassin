@@ -90,12 +90,12 @@ namespace Mocassin.Model.Energies.Validators
             var comparer = new VectorComparer3D<Fractional3D>(ModelProject.GeometryNumeric.RangeComparer);
             var currentData = DataReader.Access.GetGroupInteractions()
                 .Where(value => !value.IsDeprecated && value.CenterCellReferencePosition == group.CenterCellReferencePosition)
-                .Select(value => (value, value.GetBaseGeometry().ToArray()));
+                .Select(value => (value, value.GetSurroundingGeometry().ToArray()));
 
             foreach (var (otherGroup, geometry) in currentData)
             {
                 Array.Sort(geometry, comparer);
-                if (geometry.LexicographicCompare(group.GetBaseGeometry(), comparer) != 0)
+                if (geometry.LexicographicCompare(group.GetSurroundingGeometry(), comparer) != 0)
                     continue;
 
                 var detail0 = $"Group interaction has identical geometry to interaction at index ({otherGroup.Index})";
@@ -116,7 +116,6 @@ namespace Mocassin.Model.Energies.Validators
         {
             var groupRange = GetMaxGroupRange(group);
             var envRange = GetGroupEnvironmentRange(group);
-
             if (ModelProject.GeometryNumeric.RangeComparer.Compare(groupRange, envRange) > 0)
             {
                 var detail0 =
@@ -158,7 +157,7 @@ namespace Mocassin.Model.Energies.Validators
             var transformer = ModelProject.CrystalSystemService.VectorTransformer;
             var start = group.CenterCellReferencePosition.AsPosition().Vector;
 
-            return group.GetBaseGeometry()
+            return group.GetSurroundingGeometry()
                 .Select(vector => transformer.ToCartesian(vector - start).GetLength())
                 .Concat(new[] {0.0})
                 .Max();
@@ -172,21 +171,13 @@ namespace Mocassin.Model.Energies.Validators
         protected double GetGroupEnvironmentRange(IGroupInteraction group)
         {
             var envDef = GetGroupAffiliatedEnvironment(group);
-            double envRange;
 
-            switch (envDef)
+            var envRange = envDef switch
             {
-                case IStableEnvironmentInfo stable:
-                    envRange = stable.MaxInteractionRange;
-                    break;
-
-                case IUnstableEnvironment unstable:
-                    envRange = unstable.MaxInteractionRange;
-                    break;
-
-                default:
-                    throw new ArgumentException("Group has unknown or null environment definition");
-            }
+                IStableEnvironmentInfo stable => stable.MaxInteractionRange,
+                IUnstableEnvironment unstable => unstable.MaxInteractionRange,
+                _ => throw new ArgumentException("Group has unknown or null environment definition")
+            };
 
             return envRange;
         }

@@ -183,7 +183,7 @@ namespace Mocassin.Framework.Extensions
         /// </summary>
         /// <param name="array"></param>
         /// <returns></returns>
-        public static int[] GetDimensionIndexSkips(this Array array)
+        public static int[] MakeBlockItemCounts(this Array array)
         {
             var blocks = new int[array.Rank - 1];
             for (var i = array.Rank - 2; i >= 0; i--)

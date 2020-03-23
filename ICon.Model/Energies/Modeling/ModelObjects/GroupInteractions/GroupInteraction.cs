@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Mocassin.Framework.Extensions;
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Basic;
 using Mocassin.Model.Particles;
@@ -31,9 +32,15 @@ namespace Mocassin.Model.Energies
         public override string ObjectName => "Group Interaction";
 
         /// <inheritdoc />
-        public IEnumerable<Fractional3D> GetBaseGeometry()
+        public IEnumerable<Fractional3D> GetSurroundingGeometry()
         {
             return (GeometryVectors ?? new List<Fractional3D>()).AsEnumerable();
+        }
+
+        /// <inheritdoc />
+        public IEnumerable<Fractional3D> GetFullGeometry()
+        {
+            return CenterCellReferencePosition.Vector.AsSingleton().Concat(GetSurroundingGeometry());
         }
 
         /// <inheritdoc />
@@ -66,7 +73,7 @@ namespace Mocassin.Model.Energies
                 return null;
 
             CenterCellReferencePosition = interaction.CenterCellReferencePosition;
-            GeometryVectors = interaction.GetBaseGeometry().ToList();
+            GeometryVectors = interaction.GetSurroundingGeometry().ToList();
             EnergyDictionarySet = new Dictionary<IParticle, Dictionary<OccupationState, double>>();
 
             foreach (var item in interaction.GetEnergyDictionarySet())
