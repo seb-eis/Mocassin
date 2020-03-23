@@ -14,7 +14,10 @@
 
 FMocassinRoutine_t TryFindMocassinExtensionRoutine(const mocuuid_t* routineUuid, const char* searchPath)
 {
+    mocuuid_t nullUuid = {.A = 0, .C = 0, .B = 0, .D = {0,0,0,0,0,0,0,0}};
+    return_if(CompareMocuuid(&nullUuid, routineUuid) == 0, NULL);
     return_if(searchPath == NULL || !IsAccessibleDirectory(searchPath), NULL);
+
     StringList_t libList;
     FMocassinRoutine_t entryFunc = NULL;
     var error = ListAllFilesByPattern(searchPath, MOCEXT_EXTROUTINE_LIBNAME, true, &libList);

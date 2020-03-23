@@ -171,7 +171,7 @@ error_t SetCycleCounterStateToDefault(SCONTEXT_PARAMETER, CycleCounterState_t *c
 // Calculates the physical simulation factors and sets them on the passed factor collection
 error_t SetPhysicalSimulationFactorsToDefault(SCONTEXT_PARAMETER, PhysicalInfo_t *factors);
 
-// Get the linear or square displacement vector of the mobile tracker ensemble of the passed particle
+// Get the linear (fractional) or square displacement (cartesian) vector of the mobile tracker ensemble of the passed particle
 Vector3_t CalculateMobileTrackerEnsembleShift(SCONTEXT_PARAMETER, byte_t particleId, bool_t isSquared);
 
 // Get the linear displacement vector of the static tracker ensemble of the passed particle

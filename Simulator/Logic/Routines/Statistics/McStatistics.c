@@ -13,6 +13,15 @@
 #include "Simulator/Logic/Routines/Statistics/McStatistics.h"
 #include "Simulator/Logic/Routines/Helper/HelperRoutines.h"
 
+static inline Vector3_t TransformFractionalToCartesian(Vector3_t *vector, const UnitCellVectors_t* cellVectors)
+{
+    Vector3_t result;
+    result.A = vector->A * cellVectors->A.A + vector->B * cellVectors->B.A  + vector->C * cellVectors->C.A;
+    result.B = vector->A * cellVectors->A.B + vector->B * cellVectors->B.B  + vector->C * cellVectors->C.B;
+    result.C = vector->A * cellVectors->A.C + vector->B * cellVectors->B.C  + vector->C * cellVectors->C.C;
+    return result;
+}
+
 error_t SetCycleCounterStateToDefault(SCONTEXT_PARAMETER, CycleCounterState_t *counters)
 {
     return_if (counters == NULL, ERR_NULLPOINTER);
@@ -60,6 +69,7 @@ error_t SetPhysicalSimulationFactorsToDefault(SCONTEXT_PARAMETER, PhysicalInfo_t
 Vector3_t CalculateMobileTrackerEnsembleShift(SCONTEXT_PARAMETER, byte_t particleId, bool_t isSquared)
 {
     Vector3_t result = {.A = 0, .B = 0, .C = 0};
+    let meta = getDbStructureModelMetaData(simContext);
 
     cpp_foreach(envState, *getEnvironmentLattice(simContext))
     {
@@ -68,6 +78,7 @@ Vector3_t CalculateMobileTrackerEnsembleShift(SCONTEXT_PARAMETER, byte_t particl
         var tracker = *getMobileTrackerAt(simContext, envState->MobileTrackerId);
         if (isSquared)
         {
+            tracker = TransformFractionalToCartesian(&tracker, &meta->CellVectors);
             vector3VectorOp(tracker, tracker, *=);
         }
         vector3VectorOp(result, tracker, +=);
@@ -147,22 +158,6 @@ double CalculateTotalConductivity(const double mobility, const double charge, co
     return mobility * charge * particleDensity * NATCONST_ELMCHARGE;
 }
 
-static inline Vector3_t TransformFractionalToCartesian(Vector3_t *vector, const UnitCellVectors_t* cellVectors)
-{
-    Vector3_t result;
-    result.A = vector->A * cellVectors->A.A + vector->B * cellVectors->B.A  + vector->C * cellVectors->C.A;
-    result.B = vector->A * cellVectors->A.B + vector->B * cellVectors->B.B  + vector->C * cellVectors->C.B;
-    result.C = vector->A * cellVectors->A.C + vector->B * cellVectors->B.C  + vector->C * cellVectors->C.C;
-    return result;
-}
-
-static inline Vector3_t TransformSquaredFractionalToCartesian(Vector3_t *vector, const UnitCellVectors_t* cellVectors)
-{
-    var result = TransformFractionalToCartesian(vector, cellVectors);
-    result = TransformFractionalToCartesian(&result, cellVectors);
-    return result;
-}
-
 // Get the diffusion coefficient component vector from mean square displacement and time information
 static inline Vector3_t CalculateDiffusionCoefficient(const Vector3_t* vectorR2, const double time)
 {
@@ -200,7 +195,6 @@ void PopulateMobilityData(SCONTEXT_PARAMETER, ParticleMobilityData_t *restrict d
     vector3ScalarOp(data->EnsembleMoveR2, CONV_LENGTH_ANG_TO_M*CONV_LENGTH_ANG_TO_M, *=);
 
     data->EnsembleMoveR1 = TransformFractionalToCartesian(&data->EnsembleMoveR1, &meta->CellVectors);
-    data->EnsembleMoveR2 = TransformSquaredFractionalToCartesian(&data->EnsembleMoveR2, &meta->CellVectors);
 
     data->MeanMoveR1 = data->EnsembleMoveR1;
     data->MeanMoveR2 = data->EnsembleMoveR2;
