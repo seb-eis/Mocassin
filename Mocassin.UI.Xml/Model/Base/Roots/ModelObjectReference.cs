@@ -20,8 +20,6 @@ namespace Mocassin.UI.Xml.Base
         IDuplicable<ModelObjectReference<T>> where T : ModelObject, new()
     {
         private string key;
-
-
         private ModelDataObject target;
 
         /// <summary>
@@ -106,7 +104,8 @@ namespace Mocassin.UI.Xml.Base
         {
             if (other == null) return false;
             if (ReferenceEquals(this, other)) return true;
-            return Key == other.Key || ReferenceEquals(Target, other.Target);
+            if (Target == null || other.Target == null) return Key == other.Key;
+            return ReferenceEquals(Target, other.Target);
         }
 
         /// <summary>

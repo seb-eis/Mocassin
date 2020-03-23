@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text.RegularExpressions;
+using Microsoft.EntityFrameworkCore;
 using Mocassin.Framework.SQLiteCore;
 using Mocassin.Mathematics.Comparer;
 using Mocassin.Tools.Evaluation.PlotData;
@@ -74,7 +75,10 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         /// <returns></returns>
         public IQueryable<MmcfeLogEnergyEntry> SelectEnergyEntries(Expression<Func<MmcfeLogEnergyEntry, bool>> predicate)
         {
-            return DataSource.Set<MmcfeLogEnergyEntry>().Where(predicate);
+            return DataSource.Set<MmcfeLogEnergyEntry>()
+                .Where(predicate)
+                .Include(x => x.LogEntry)
+                .Include(x => x.LogEntry.MetaEntry);
         }
 
         /// <summary>
@@ -91,9 +95,10 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         /// </summary>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public IQueryable<MmcfeEnergyDataPoint> SelectEnergyDataPoints(Expression<Func<MmcfeLogEnergyEntry, bool>> predicate)
+        public IEnumerable<MmcfeEnergyDataPoint> SelectEnergyDataPoints(Expression<Func<MmcfeLogEnergyEntry, bool>> predicate)
         {
             return SelectEnergyEntries(predicate)
+                .AsEnumerable()
                 .GroupBy(x => new {x.LogEntry.MetaEntry.CollectionIndex, x.LogEntry.MetaEntry.ConfigIndex, x.Alpha}, y => new {entry = y, y.LogEntry.MetaEntry})
                 .Select(x => CreateDataPoint(x, y => y.MetaEntry, y => y.entry));
         }
@@ -122,6 +127,7 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
             temperatureComparer ??= NumericComparer.CreateRangedCombined();
             return DataPoints
                 .GroupBy(x => x.EnergyState.Temperature, temperatureComparer)
+                .OrderByDescending(x => x.Key)
                 .ToDictionary(x => x.Key, y => (IDictionary<string, MmcfeEnergyDataPoint>) y.ToDictionary(arg => arg.MetaEntry.DopingInfo, arg => arg),
                     temperatureComparer);
         }
@@ -130,7 +136,7 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         ///     Selects the full set of <see cref="MmcfeEnergyDataPoint" /> entries from the data source
         /// </summary>
         /// <returns></returns>
-        public IQueryable<MmcfeEnergyDataPoint> SelectEnergyDataPoints()
+        public IEnumerable<MmcfeEnergyDataPoint> SelectEnergyDataPoints()
         {
             return SelectEnergyDataPoints(x => x.LogEntry.MetaEntryId >= 1);
         }
