@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Xml.Serialization;
 using Mocassin.Model.Basic;
+using Mocassin.UI.Xml.ParticleModel;
 using Newtonsoft.Json;
 
 namespace Mocassin.UI.Xml.Base
@@ -29,8 +30,12 @@ namespace Mocassin.UI.Xml.Base
         [XmlAttribute]
         public string Key
         {
-            get => key;
-            set => SetProperty(ref key, value);
+            get => key ?? Target?.Key;
+            set
+            {
+                if (key != value && TryTreatStaticKey(value)) return;
+                SetProperty(ref key, value);
+            }
         }
 
         /// <summary>
@@ -51,6 +56,7 @@ namespace Mocassin.UI.Xml.Base
             get => target;
             set
             {
+                if (target != null && target.Equals(value)) return;
                 if (target != null) target.PropertyChanged -= RelayTargetNameChange;
                 if (value != null) value.PropertyChanged += RelayTargetNameChange;
                 SetProperty(ref target, value);
@@ -139,6 +145,22 @@ namespace Mocassin.UI.Xml.Base
         private void RelayTargetNameChange(object sender, PropertyChangedEventArgs args)
         {
             if (args.PropertyName == nameof(target.Name)) OnPropertyChanged(nameof(Name));
+        }
+
+        /// <summary>
+        ///     Reacts to special key values that target static objects
+        /// </summary>
+        /// <param name="value"></param>
+        private bool TryTreatStaticKey(string value)
+        {
+            switch (value)
+            {
+                case "Particle.Void":
+                    Target = ParticleData.VoidParticle;
+                    return true;
+                default:
+                    return false;
+            }
         }
     }
 }

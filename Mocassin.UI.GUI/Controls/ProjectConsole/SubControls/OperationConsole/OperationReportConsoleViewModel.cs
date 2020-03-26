@@ -182,7 +182,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.OperationConsole
                 if (subscription == null && validator == null) return;
                 subscription?.Dispose();
                 validator.Dispose();
-                PushInfoMessage($"Removed a change detector from the [{ValidatorViewModel.ProjectModelData.Parent.ProjectName}] model tree.");
+                PushInfoMessage($"Removed a change detector from the [{validator.ProjectModelData.Parent.ProjectName}] model tree.");
             });
         }
 

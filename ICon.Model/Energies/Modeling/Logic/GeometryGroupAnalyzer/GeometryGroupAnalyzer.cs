@@ -155,11 +155,14 @@ namespace Mocassin.Model.Energies
         /// <returns></returns>
         public bool ContainsRing(IEnumerable<Fractional3D> positionGeometry, IComparer<Fractional3D> equalityComparer)
         {
-            var current = new Fractional3D(0, 0, 0);
-            foreach (var vector in positionGeometry.SelectConsecutivePairs((a, b) => b - a))
+            var positionList = positionGeometry.AsList();
+            for (var i = 0; i < positionList.Count; i++)
             {
-                current += vector;
-                if (equalityComparer.Compare(current, Fractional3D.Zero) == 0) return true;
+                for (var j = i+1; j < positionList.Count; j++)
+                {
+                    if (equalityComparer.Compare(positionList[i], positionList[j]) == 0) 
+                        return true;
+                }
             }
 
             return false;

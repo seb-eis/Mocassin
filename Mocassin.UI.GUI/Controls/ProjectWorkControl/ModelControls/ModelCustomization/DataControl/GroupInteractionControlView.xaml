@@ -36,7 +36,7 @@
 
       <DataGrid.Columns>
         <DataGridTextColumn Header="Name" Binding="{Binding GroupEnergySet.Name}" />
-
+        <DataGridTextColumn Header="Content Count" Binding="{Binding GroupEnergySet.EnergyEntries.Count}"/>
         <DataGridTextColumn Header="Source Interaction" Binding="{Binding GroupEnergySet.GroupInteraction.Name}"
                             IsReadOnly="True" />
 

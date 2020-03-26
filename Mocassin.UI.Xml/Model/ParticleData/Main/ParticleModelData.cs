@@ -18,7 +18,7 @@ namespace Mocassin.UI.Xml.ParticleModel
         private ObservableCollection<ParticleSetData> particleSets;
 
         /// <summary>
-        ///     The list of defines particles
+        ///     The list of defined particles
         /// </summary>
         [XmlArray]
         public ObservableCollection<ParticleData> Particles

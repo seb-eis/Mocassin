@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Mocassin.Framework.Extensions;
 using Mocassin.Model.Particles;
 using Mocassin.UI.GUI.Controls.Base.Interfaces;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
@@ -68,13 +69,11 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
         private IEnumerable<ModelObjectReference<Particle>> EnumerateCurrentAcceptorOptions()
         {
             if (BaseParticleOptions == null) yield break;
-            foreach (var particleData in BaseParticleOptions)
+            foreach (var particleData in BaseParticleOptions.Concat(ParticleData.VoidParticle.AsSingleton()))
             {
                 if (!PairIsAlreadyDefined(Items, SelectedItem?.DonorParticle?.Key, particleData?.Key))
                     yield return new ModelObjectReference<Particle>(particleData);
             }
-
-            yield return new ModelObjectReference<Particle>(ParticleData.VoidParticle);
         }
 
         /// <summary>
@@ -87,6 +86,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
         /// <returns></returns>
         private bool PairIsAlreadyDefined(ICollection<StateExchangePairData> defined, string donorKey, string acceptorKey)
         {
+            if (donorKey == null || acceptorKey == null) return false;
             return donorKey == acceptorKey
                    || defined != null && defined
                        .Where(x => x != SelectedItem)

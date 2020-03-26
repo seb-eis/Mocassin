@@ -232,19 +232,46 @@ namespace Mocassin.Symmetry.SpaceGroups
                 transformedVectors.Clear();
                 transformedVectors.AddRange(operation.Transform(refVectors));
                 if (sequences.Contains(transformedVectors)) continue;
-                if (filterGeometricDuplicates)
-                {
-                    var permutationSource = new PermutationSlotMachine<Fractional3D>(VectorComparer, Enumerable.Range(0, refVectors.Count).Select(x => transformedVectors));
-                    var uniquePermutations = permutationSource.GetUniqueSlotPermutations();
-                    if (uniquePermutations.Any(x => sequences.Contains(x))) continue;
-                }
-
+                if (filterGeometricDuplicates && !CheckSequenceIsGeometricUnique(transformedVectors, sequences)) continue;
                 var transformCopy = transformedVectors.ToList(transformedVectors.Count);
                 sequences.Add(transformCopy);
                 filteredOperations.Add(operation);
             }
 
             return filteredOperations;
+        }
+
+        /// <summary>
+        ///     Checks if a sequence of <see cref="Fractional3D"/> does not describe a sequence in the options set in any order
+        /// </summary>
+        /// <param name="sequence"></param>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        private bool CheckSequenceIsGeometricUnique(IList<Fractional3D> sequence, IList<IList<Fractional3D>> options)
+        {
+            return !options.Any(x => CheckSameGeometryIfOrderIgnored(x, sequence));
+        }
+
+        /// <summary>
+        ///     Checks if two sequences of <see cref="Fractional3D"/> positions can from the same geometry if the order is ignored. This function only works if both collections do not contain duplicates
+        /// </summary>
+        /// <param name="lhs"></param>
+        /// <param name="rhs"></param>
+        /// <returns></returns>
+        private bool CheckSameGeometryIfOrderIgnored(ICollection<Fractional3D> lhs, ICollection<Fractional3D> rhs)
+        {
+            if (rhs.Count != lhs.Count) return false;
+
+            foreach (var lhsItem in lhs)
+            {
+                var itemMatchCount = rhs.Count(rhsItem => VectorComparer.Equals(rhsItem, lhsItem));
+                if (itemMatchCount == 0)
+                    return false;
+                if (itemMatchCount != 1) 
+                    throw new InvalidOperationException("This function does not support sets with position duplicates.");
+            }
+
+            return true;
         }
 
         /// <inheritdoc />

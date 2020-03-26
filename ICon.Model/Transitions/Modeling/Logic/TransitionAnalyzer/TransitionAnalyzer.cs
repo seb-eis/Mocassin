@@ -19,14 +19,14 @@ namespace Mocassin.Model.Transitions
         /// <returns></returns>
         public bool ContainsRingTransition(IEnumerable<CrystalVector4D> geometryVectors)
         {
-            CrystalVector4D relative = new CrystalVector4D(0, 0, 0, 0), last = new CrystalVector4D(0, 0, 0, 0);
-            foreach (var vector in geometryVectors)
+            var positionList = geometryVectors.AsList();
+            for (var i = 0; i < positionList.Count; i++)
             {
-                relative += vector - last;
-                if (relative.Equals(CrystalVector4D.NullVector))
-                    return true;
-
-                last = vector;
+                for (var j = i + 1; j < positionList.Count; j++)
+                {
+                    if (positionList[i].Equals(positionList[j]))
+                        return true;
+                }
             }
 
             return false;
@@ -40,12 +40,14 @@ namespace Mocassin.Model.Transitions
         /// <returns></returns>
         public bool ContainsRingTransition(IEnumerable<Fractional3D> positionGeometry, IComparer<Fractional3D> equalityComparer)
         {
-            var current = new Fractional3D(0, 0, 0);
-            foreach (var vector in positionGeometry.SelectConsecutivePairs((a, b) => b - a))
+            var positionList = positionGeometry.AsList();
+            for (var i = 0; i < positionList.Count; i++)
             {
-                current += vector;
-                if (equalityComparer.Compare(current, Fractional3D.Zero) == 0)
-                    return true;
+                for (var j = i + 1; j < positionList.Count; j++)
+                {
+                    if (equalityComparer.Compare(positionList[i], positionList[j]) == 0)
+                        return true;
+                }
             }
 
             return false;
