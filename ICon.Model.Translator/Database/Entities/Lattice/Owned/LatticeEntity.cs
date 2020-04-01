@@ -6,6 +6,11 @@
     public class LatticeEntity : InteropArray<byte>
     {
         /// <inheritdoc />
+        public LatticeEntity()
+        {
+        }
+
+        /// <inheritdoc />
         public LatticeEntity(byte[,,,] array)
             : base(array)
         {

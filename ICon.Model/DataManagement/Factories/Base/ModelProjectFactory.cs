@@ -38,7 +38,7 @@ namespace Mocassin.Model.DataManagement
         {
             if (projectSettings == null) throw new ArgumentNullException(nameof(projectSettings));
             var modelProject = ModelProject.ModelProject.Create(projectSettings);
-            modelProject.CreateAndRegisterMany(DefaultManagerFactories);
+            modelProject.CreateAndRegister(DefaultManagerFactories);
             return modelProject;
         }
 

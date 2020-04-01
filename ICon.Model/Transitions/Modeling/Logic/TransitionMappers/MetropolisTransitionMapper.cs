@@ -67,8 +67,8 @@ namespace Mocassin.Model.Transitions
         protected IPermutationSource<int> GetMappingPermutationSource(IMetropolisTransition transition,
             IList<SetList<CrystalVector4D>> encodedPositions)
         {
-            var first = encodedPositions[transition.FirstCellReferencePosition.Index].Select(position => position.P).ToList();
-            var second = encodedPositions[transition.SecondCellReferencePosition.Index].Select(position => position.P).ToList();
+            var first = encodedPositions[transition.FirstCellSite.Index].Select(position => position.P).ToList();
+            var second = encodedPositions[transition.SecondCellSite.Index].Select(position => position.P).ToList();
             return new PermutationSlotMachine<int>(first, second);
         }
 
@@ -86,11 +86,11 @@ namespace Mocassin.Model.Transitions
             if (encodedPositions == null)
                 throw new ArgumentNullException(nameof(encodedPositions));
 
-            if (encodedPositions.Count <= Math.Max(transition.FirstCellReferencePosition.Index, transition.SecondCellReferencePosition.Index))
+            if (encodedPositions.Count <= Math.Max(transition.FirstCellSite.Index, transition.SecondCellSite.Index))
                 return false;
 
-            return encodedPositions[transition.FirstCellReferencePosition.Index].Count != 0
-                   && encodedPositions[transition.SecondCellReferencePosition.Index].Count != 0;
+            return encodedPositions[transition.FirstCellSite.Index].Count != 0
+                   && encodedPositions[transition.SecondCellSite.Index].Count != 0;
         }
     }
 }

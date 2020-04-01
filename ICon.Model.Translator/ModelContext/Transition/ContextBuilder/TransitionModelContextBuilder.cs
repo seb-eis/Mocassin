@@ -25,7 +25,7 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <inheritdoc />
         public override bool CheckBuildRequirements()
         {
-            return ModelProject?.GetAllManagers().Any(x => x is ITransitionManager) ?? false;
+            return ModelProject?.Managers().Any(x => x is ITransitionManager) ?? false;
         }
 
         /// <inheritdoc />
@@ -33,9 +33,9 @@ namespace Mocassin.Model.Translator.ModelContext
         {
             if (!CheckBuildRequirements()) return modelContext;
 
-            var manager = ModelProject.GetManager<ITransitionManager>();
-            var metropolisTransitions = manager.QueryPort.Query(port => port.GetMetropolisTransitions());
-            var kineticTransitions = manager.QueryPort.Query(port => port.GetKineticTransitions());
+            var manager = ModelProject.Manager<ITransitionManager>();
+            var metropolisTransitions = manager.DataAccess.Query(port => port.GetMetropolisTransitions());
+            var kineticTransitions = manager.DataAccess.Query(port => port.GetKineticTransitions());
 
             var kineticTask = Task.Run(
                 () => modelContext.KineticTransitionModels = KineticTransitionModelBuilder.BuildModels(kineticTransitions));

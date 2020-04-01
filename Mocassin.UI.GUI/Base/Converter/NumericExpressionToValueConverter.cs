@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Linq;
 using System.Text.RegularExpressions;
 using NCalc;
 
@@ -13,11 +12,6 @@ namespace Mocassin.UI.GUI.Base.Converter
     /// </summary>
     public class NumericExpressionToValueConverter : ValueConverter
     {
-        /// <summary>
-        ///     Get or set a boolean flag if expression evaluation should perform certain auto corrections
-        /// </summary>
-        private static bool UseExpressionAutoCorrection { get; set; } = true;
-
         /// <inheritdoc />
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -31,10 +25,7 @@ namespace Mocassin.UI.GUI.Base.Converter
             if (code == "null" || code == "Null") return null;
             try
             {
-                if (value is IConvertible)
-                {
-                    return System.Convert.ChangeType(value, targetType, culture);
-                }
+                if (value is IConvertible) return System.Convert.ChangeType(value, targetType, culture);
             }
             catch (Exception)
             {
@@ -44,7 +35,7 @@ namespace Mocassin.UI.GUI.Base.Converter
                     var converted = expression.Evaluate();
                     return targetType == typeof(string) ? converted?.ToString() : converted;
                 }
-                catch (Exception exception)
+                catch (Exception)
                 {
                     Console.WriteLine($"The expression [{value}] does not evaluate to [{targetType}].");
                     return null;
@@ -55,7 +46,7 @@ namespace Mocassin.UI.GUI.Base.Converter
         }
 
         /// <summary>
-        ///     Prepares an new <see cref="Expression"/> using the provided <see cref="string"/>
+        ///     Prepares an new <see cref="Expression" /> using the provided <see cref="string" />
         /// </summary>
         /// <param name="code"></param>
         /// <returns></returns>
@@ -75,6 +66,7 @@ namespace Mocassin.UI.GUI.Base.Converter
                     var parameter = args.EvaluateParameters();
                     args.Result = Math.Log(System.Convert.ToDouble(parameter[0]), Math.E);
                 }
+
                 var logMatch = Regex.Match(name, "^[Ll][Oo][Gg]([0-9]+)$");
                 if (logMatch.Success)
                 {
@@ -82,6 +74,7 @@ namespace Mocassin.UI.GUI.Base.Converter
                     var parameter = args.EvaluateParameters();
                     args.Result = Math.Log(System.Convert.ToDouble(parameter[0]), logBase);
                 }
+
                 var rootMatch = Regex.Match(name, "^[Rr][Oo]{2}[Tt]([0-9]+)$");
                 if (!rootMatch.Success) return;
                 {

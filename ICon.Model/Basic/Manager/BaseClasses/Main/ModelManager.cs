@@ -8,10 +8,10 @@ namespace Mocassin.Model.Basic
     internal abstract class ModelManager : IModelManager
     {
         /// <inheritdoc />
-        public IModelEventPort EventPort => EventManagerBase;
+        public IModelEventPort EventAccess => EventManagerBase;
 
         /// <inheritdoc />
-        public IModelInputPort InputPort => InputManagerBase;
+        public IModelInputPort InputAccess => InputManagerBase;
 
         /// <summary>
         ///     Project services instance that is shared between all model managers of a simulation project and offers various
@@ -86,7 +86,7 @@ namespace Mocassin.Model.Basic
         /// <inheritdoc />
         public bool TryConnectManager(IModelEventPort eventPort)
         {
-            if (UpdateManagerBase == null || EventPort == eventPort)
+            if (UpdateManagerBase == null || EventAccess == eventPort)
                 return false;
 
             return UpdateManagerBase.Connect(eventPort);

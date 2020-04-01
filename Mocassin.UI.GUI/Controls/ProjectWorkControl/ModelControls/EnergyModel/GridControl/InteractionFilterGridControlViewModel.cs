@@ -25,18 +25,18 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.
 
         /// <summary>
         ///     Get an <see cref="IEnumerable{T}" /> of <see cref="ModelObjectReference{T}" /> for
-        ///     <see cref="CellReferencePosition" /> instances that can be used as center
+        ///     <see cref="CellSite" /> instances that can be used as center
         ///     <see cref="RadialInteractionFilterData" /> instances
         /// </summary>
-        public IEnumerable<ModelObjectReference<CellReferencePosition>> CenterPositionOptions =>
+        public IEnumerable<ModelObjectReference<CellSite>> CenterPositionOptions =>
             IsStableEnvironment ? EnumerateReferencePositionOptions() : null;
 
         /// <summary>
         ///     Get an <see cref="IEnumerable{T}" /> of <see cref="ModelObjectReference{T}" /> for
-        ///     <see cref="CellReferencePosition" /> instances that can be used as partner
+        ///     <see cref="CellSite" /> instances that can be used as partner
         ///     <see cref="RadialInteractionFilterData" /> instances
         /// </summary>
-        public IEnumerable<ModelObjectReference<CellReferencePosition>> PartnerPositionOptions => EnumerateReferencePositionOptions();
+        public IEnumerable<ModelObjectReference<CellSite>> PartnerPositionOptions => EnumerateReferencePositionOptions();
 
         /// <summary>
         ///     Creates a new <see cref="InteractionFilterGridControlViewModel" /> with the passed stability flag
@@ -55,14 +55,14 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.
 
         /// <summary>
         ///     Get the <see cref="IEnumerable{T}" /> of <see cref="ModelObjectReference{T}" /> for
-        ///     <see cref="CellReferencePosition" /> instances that can be used a filter center or partner position
+        ///     <see cref="CellSite" /> instances that can be used a filter center or partner position
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<ModelObjectReference<CellReferencePosition>> EnumerateReferencePositionOptions()
+        public IEnumerable<ModelObjectReference<CellSite>> EnumerateReferencePositionOptions()
         {
             return ContentSource?.ProjectModelData?.StructureModelData?.CellReferencePositions?
                 .Where(x => x.Stability == PositionStability.Stable)
-                .Select(x => new ModelObjectReference<CellReferencePosition>(x));
+                .Select(x => new ModelObjectReference<CellSite>(x));
         }
     }
 }

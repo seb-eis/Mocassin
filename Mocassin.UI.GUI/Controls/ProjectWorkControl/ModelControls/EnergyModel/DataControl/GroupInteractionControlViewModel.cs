@@ -20,10 +20,10 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.
 
         /// <summary>
         ///     Get the <see cref="IEnumerable{T}" /> of <see cref="ModelObjectReference{T}" /> for
-        ///     <see cref="CellReferencePosition" /> instances that support a interaction group
+        ///     <see cref="CellSite" /> instances that support a interaction group
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<ModelObjectReference<CellReferencePosition>> CenterPositionOptions => EnumerateReferencePositionOptions();
+        public IEnumerable<ModelObjectReference<CellSite>> CenterPositionOptions => EnumerateReferencePositionOptions();
 
         /// <inheritdoc />
         public void ChangeContentSource(MocassinProject contentSource)
@@ -34,13 +34,13 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.
 
         /// <summary>
         ///     Get the <see cref="IEnumerable{T}" /> of <see cref="ModelObjectReference{T}" /> for
-        ///     <see cref="CellReferencePosition" /> instances that support a interaction group
+        ///     <see cref="CellSite" /> instances that support a interaction group
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<ModelObjectReference<CellReferencePosition>> EnumerateReferencePositionOptions()
+        public IEnumerable<ModelObjectReference<CellSite>> EnumerateReferencePositionOptions()
         {
             return ContentSource?.ProjectModelData?.StructureModelData?.CellReferencePositions
-                ?.Select(x => new ModelObjectReference<CellReferencePosition>(x));
+                ?.Select(x => new ModelObjectReference<CellSite>(x));
         }
     }
 }

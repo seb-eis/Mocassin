@@ -20,7 +20,7 @@ namespace Mocassin.Tools.Evaluation.Extensions
         /// <returns></returns>
         public static IEnumerable<TObject> GetModelObjects<TObject>(this IProjectModelContext value) where TObject : IModelObject
         {
-            return value.ModelProject.DataTracker.EnumerateObjects<TObject>();
+            return value.ModelProject.DataTracker.Objects<TObject>();
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace Mocassin.Tools.Evaluation.Extensions
         /// <returns></returns>
         public static TObject GetModelObject<TObject>(this IProjectModelContext value, int index) where TObject : IModelObject
         {
-            return value.ModelProject.DataTracker.FindObjectByIndex<TObject>(index);
+            return value.ModelProject.DataTracker.FindObject<TObject>(index);
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace Mocassin.Tools.Evaluation.Extensions
         /// </summary>
         public static TObject GetModelObject<TObject>(this IProjectModelContext value, string key) where TObject : IModelObject
         {
-            return value.ModelProject.DataTracker.FindObjectByKey<TObject>(key);
+            return value.ModelProject.DataTracker.FindObject<TObject>(key);
         }
 
         /// <summary>
@@ -48,9 +48,9 @@ namespace Mocassin.Tools.Evaluation.Extensions
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static IUnitCellProvider<ICellReferencePosition> GetUnitCellProvider(this IProjectModelContext value)
+        public static IUnitCellProvider<ICellSite> GetUnitCellProvider(this IProjectModelContext value)
         {
-            return value.ModelProject.GetManager<IStructureManager>().QueryPort.Query(x => x.GetFullUnitCellProvider());
+            return value.ModelProject.Manager<IStructureManager>().DataAccess.Query(x => x.GetFullUnitCellProvider());
         }
 
         /// <summary>

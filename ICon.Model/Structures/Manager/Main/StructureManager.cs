@@ -12,13 +12,13 @@ namespace Mocassin.Model.Structures
             StructureQueryManager, StructureEventManager, StructureUpdateManager>, IStructureManager
     {
         /// <inheritdoc />
-        public new IStructureInputPort InputPort => InputManager;
+        public new IStructureInputPort InputAccess => InputManager;
 
         /// <inheritdoc />
-        public IStructureQueryPort QueryPort => QueryManager;
+        public IStructureQueryPort DataAccess => QueryManager;
 
         /// <inheritdoc />
-        public new IStructureEventPort EventPort => EventManager;
+        public new IStructureEventPort EventAccess => EventManager;
 
         /// <inheritdoc />
         public StructureManager(IModelProject modelProject, StructureModelData data)

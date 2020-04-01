@@ -156,12 +156,12 @@ namespace Mocassin.Model.Translator.EntityBuilder
         protected InteropObject<CStructureMetaData> GetStructureMetaData(ISimulationModel simulationModel)
         {
             var (cellVectorA, cellVectorB, cellVectorC) = ModelContext.ModelProject
-                .GetManager<IStructureManager>()
-                .QueryPort.Query(x => x.GetVectorEncoder())
+                .Manager<IStructureManager>()
+                .DataAccess.Query(x => x.GetVectorEncoder())
                 .Transformer.FractionalSystem.GetBaseVectors();
 
             var charges = new double[64].Populate(double.NaN);
-            foreach (var particle in ModelContext.ModelProject.GetManager<IParticleManager>().QueryPort.Query(x => x.GetParticles()))
+            foreach (var particle in ModelContext.ModelProject.Manager<IParticleManager>().DataAccess.Query(x => x.GetParticles()))
                 charges[particle.Index] = particle.Charge;
 
             var cStructure = new CStructureMetaData
@@ -199,7 +199,7 @@ namespace Mocassin.Model.Translator.EntityBuilder
             var entity = new EnvironmentDefinitionEntity
             {
                 ObjectId = positionModel.ModelId,
-                PositionParticleIds = GetParticleIdBuffer(positionModel.CellReferencePosition.OccupationSet),
+                PositionParticleIds = GetParticleIdBuffer(positionModel.CellSite.OccupationSet),
                 PairDefinitionList = GetPairDefinitionList(positionModel),
                 ClusterDefinitionList = GetClusterDefinitionList(positionModel.EnvironmentModel.GroupInteractionModels)
             };
@@ -259,7 +259,7 @@ namespace Mocassin.Model.Translator.EntityBuilder
         /// <returns></returns>
         protected CPairInteraction GetPairDefinitionStruct(IPairInteractionModel pairModel, ITargetPositionInfo positionInfo)
         {
-            var cVector = new CVector4(positionInfo.RelativeVector4D);
+            var cVector = new CVector4(positionInfo.RelativeCrystalVector);
 
             return new CPairInteraction
             {

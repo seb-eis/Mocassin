@@ -25,7 +25,7 @@ namespace Mocassin.Model.Structures
         /// <param name="position"></param>
         /// <returns></returns>
         [DataOperation(DataOperationType.NewObject)]
-        protected IOperationReport TryRegisterCellReferencePosition(ICellReferencePosition position)
+        protected IOperationReport TryRegisterCellReferencePosition(ICellSite position)
         {
             return DefaultRegisterModelObject(position, accessor => accessor.Query(data => data.CellReferencePositions));
         }
@@ -37,7 +37,7 @@ namespace Mocassin.Model.Structures
         /// <param name="position"></param>
         /// <returns></returns>
         [DataOperation(DataOperationType.ObjectRemoval)]
-        protected IOperationReport TryRemoveCellReferencePosition(ICellReferencePosition position)
+        protected IOperationReport TryRemoveCellReferencePosition(ICellSite position)
         {
             return DefaultRemoveModelObject(position, accessor => accessor.Query(data => data.CellReferencePositions));
         }
@@ -50,7 +50,7 @@ namespace Mocassin.Model.Structures
         /// <param name="newPosition"></param>
         /// <returns></returns>
         [DataOperation(DataOperationType.ObjectChange)]
-        protected IOperationReport TryReplaceCellReferencePosition(ICellReferencePosition orgPosition, ICellReferencePosition newPosition)
+        protected IOperationReport TryReplaceCellReferencePosition(ICellSite orgPosition, ICellSite newPosition)
         {
             return DefaultReplaceModelObject(orgPosition, newPosition, accessor => accessor.Query(data => data.CellReferencePositions));
         }

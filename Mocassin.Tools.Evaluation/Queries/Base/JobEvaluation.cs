@@ -20,7 +20,7 @@ namespace Mocassin.Tools.Evaluation.Queries
         public IEvaluableJobSet JobSet { get; }
 
         /// <inheritdoc />
-        public IReadOnlyList<T> Result => ResultTask?.Result ?? InvokeAsync().Result;
+        public IReadOnlyList<T> Result => ResultTask?.Result ?? Run().Result;
 
         /// <inheritdoc />
         public int Count => Result.Count;
@@ -29,7 +29,7 @@ namespace Mocassin.Tools.Evaluation.Queries
         public T this[int index] => Result[index];
 
         /// <summary>
-        ///     Get or set a boolean flag if the system should created results in parallel
+        ///     Get or set a boolean flag if the system should create results in parallel
         /// </summary>
         public bool ExecuteParallel { get; set; }
 
@@ -66,20 +66,20 @@ namespace Mocassin.Tools.Evaluation.Queries
         ///     Get the query result task or generates and invokes the task if required
         /// </summary>
         /// <returns></returns>
-        private Task<IReadOnlyList<T>> InvokeAsync()
+        public Task<IReadOnlyList<T>> Run()
         {
             lock (lockObject)
             {
                 if (ResultTask != null) return ResultTask;
-                return ResultTask = ExecuteParallel ? ExecuteParallelAsync() : ExecuteSequentialAsync();
+                return ResultTask = ExecuteParallel ? RunParallel() : RunSequential();
             }
         }
 
         /// <summary>
-        ///     Executes the query async and sequential
+        ///     Runs the query on the thread pool in sequential mode
         /// </summary>
         /// <returns></returns>
-        private Task<IReadOnlyList<T>> ExecuteSequentialAsync()
+        private async Task<IReadOnlyList<T>> RunSequential()
         {
             IReadOnlyList<T> ExecuteLocal()
             {
@@ -89,14 +89,14 @@ namespace Mocassin.Tools.Evaluation.Queries
                 return resultList.AsReadOnly();
             }
 
-            return Task.Run(ExecuteLocal);
+            return await Task.Run(ExecuteLocal);
         }
 
         /// <summary>
-        ///     Executes the query async and in parallel
+        ///     Runs the query on the thread pool in parallel mode
         /// </summary>
         /// <returns></returns>
-        private Task<IReadOnlyList<T>> ExecuteParallelAsync()
+        private Task<IReadOnlyList<T>> RunParallel()
         {
             IReadOnlyList<T> ExecuteLocal()
             {

@@ -13,7 +13,7 @@ namespace Mocassin.UI.Xml.LatticeModel
     [XmlRoot]
     public class DopingAbstractData : ModelDataObject
     {
-        private ModelObjectReference<CellReferencePosition> cellReferencePosition = new ModelObjectReference<CellReferencePosition>();
+        private ModelObjectReference<CellSite> cellReferencePosition = new ModelObjectReference<CellSite>();
         private ModelObjectReference<Particle> dopable = new ModelObjectReference<Particle>();
         private ModelObjectReference<Particle> dopant = new ModelObjectReference<Particle>();
 
@@ -41,7 +41,7 @@ namespace Mocassin.UI.Xml.LatticeModel
         ///     Unit cell position on which the doping is applied
         /// </summary>
         [XmlElement]
-        public ModelObjectReference<CellReferencePosition> CellReferencePosition
+        public ModelObjectReference<CellSite> CellReferencePosition
         {
             get => cellReferencePosition;
             set => SetProperty(ref cellReferencePosition, value);
@@ -54,7 +54,7 @@ namespace Mocassin.UI.Xml.LatticeModel
             {
                 Dopable = new Particle {Key = Dopable.Key},
                 Dopant = new Particle {Key = Dopant.Key},
-                CellReferencePosition = new CellReferencePosition {Key = CellReferencePosition.Key}
+                CellSite = new CellSite {Key = CellReferencePosition.Key}
             };
             return obj;
         }

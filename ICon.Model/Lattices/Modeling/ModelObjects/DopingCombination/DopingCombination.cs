@@ -25,7 +25,7 @@ namespace Mocassin.Model.Lattices
         ///     Unit cell position that should be doped
         /// </summary>
         [UseTrackedData]
-        public ICellReferencePosition CellReferencePosition { get; set; }
+        public ICellSite CellSite { get; set; }
 
         /// <summary>
         ///     Get the type name string
@@ -50,7 +50,7 @@ namespace Mocassin.Model.Lattices
 
             Dopant = dopingCombination.Dopant;
             Dopable = dopingCombination.Dopable;
-            CellReferencePosition = dopingCombination.CellReferencePosition;
+            CellSite = dopingCombination.CellSite;
             return this;
         }
     }

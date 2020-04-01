@@ -90,18 +90,21 @@ namespace Mocassin.Model.Translator
                 if (!(sourceProperty.GetValue(entity) is InteropObject netObject))
                     return;
 
-                var buffer = new byte[netObject.ByteCount];
-                netObject.ToBinary(buffer, 0, marshalService);
-                targetProperty.SetValue(entity, buffer);
+                var bytes = new byte[netObject.ByteCount];
+                netObject.ToBinary(bytes, 0, marshalService);
+                targetProperty.SetValue(entity, bytes);
+                sourceProperty.SetValue(entity, null);
             }
 
             void HandleFromBinary(InteropEntityBase entity, IMarshalService marshalService)
             {
-                if (!(targetProperty.GetValue(entity) is byte[] binBuffer))
+                if (!(targetProperty.GetValue(entity) is byte[] bytes))
                     return;
 
                 var netObject = (InteropObject) Activator.CreateInstance(sourceProperty.PropertyType);
-                netObject.FromBinary(binBuffer, 0, marshalService);
+                netObject.FromBinary(bytes, 0, marshalService);
+                sourceProperty.SetValue(entity, netObject);
+                targetProperty.SetValue(entity, null);
             }
 
             return (entity, marshalProvider, isToBinary) =>

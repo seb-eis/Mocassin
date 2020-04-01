@@ -12,12 +12,12 @@ namespace Mocassin.Symmetry.Analysis
     ///     Searches unit cell providers for cell entry chains that potentially match the input geometry. The class does not
     ///     perform the actual symmetry comparison
     /// </summary>
-    public class PositionChainSampler<T1>
+    public class PositionChainSampler<T>
     {
         /// <summary>
         ///     Unit cell provider that is searched
         /// </summary>
-        public IUnitCellProvider<T1> UnitCellProvider { get; set; }
+        public IUnitCellProvider<T> UnitCellProvider { get; set; }
 
         /// <summary>
         ///     The double comparer for the tolerance comparison of the distances
@@ -29,7 +29,7 @@ namespace Mocassin.Symmetry.Analysis
         /// </summary>
         /// <param name="unitCellProvider"></param>
         /// <param name="numericComparer"></param>
-        public PositionChainSampler(IUnitCellProvider<T1> unitCellProvider, NumericComparer numericComparer)
+        public PositionChainSampler(IUnitCellProvider<T> unitCellProvider, NumericComparer numericComparer)
         {
             UnitCellProvider = unitCellProvider ?? throw new ArgumentNullException(nameof(unitCellProvider));
             NumericComparer = numericComparer ?? throw new ArgumentNullException(nameof(numericComparer));
@@ -43,8 +43,8 @@ namespace Mocassin.Symmetry.Analysis
         /// <param name="refGeometry"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        public IEnumerable<IList<CellEntry<T1>>> MultiPointSearch(IEnumerable<Fractional3D> vectors, IEnumerable<CellEntry<T1>> refGeometry,
-            IEqualityComparer<T1> comparer)
+        public IEnumerable<IList<LatticePoint<T>>> MultiPointSearch(IEnumerable<Fractional3D> vectors, IEnumerable<LatticePoint<T>> refGeometry,
+            IEqualityComparer<T> comparer)
         {
             var refGeoCollection = refGeometry.ToCollection();
 
@@ -63,8 +63,8 @@ namespace Mocassin.Symmetry.Analysis
         /// <param name="refGeometry"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        public IEnumerable<IList<CellEntry<T1>>> PointSearch(Fractional3D startVector, IEnumerable<CellEntry<T1>> refGeometry,
-            IEqualityComparer<T1> comparer)
+        public IEnumerable<IList<LatticePoint<T>>> PointSearch(Fractional3D startVector, IEnumerable<LatticePoint<T>> refGeometry,
+            IEqualityComparer<T> comparer)
         {
             if (refGeometry == null)
                 throw new ArgumentNullException(nameof(refGeometry));
@@ -73,7 +73,7 @@ namespace Mocassin.Symmetry.Analysis
                 throw new ArgumentNullException(nameof(comparer));
 
             var geometry = refGeometry.ToList();
-            return MakeSearchEnumerable(GetStartSequence(geometry[0].Entry, startVector), GetDefaultConstraints(geometry),
+            return MakeSearchEnumerable(GetStartSequence(geometry[0].Content, startVector), GetDefaultConstraints(geometry),
                 GetDefaultPredicates(geometry, comparer));
         }
 
@@ -85,8 +85,8 @@ namespace Mocassin.Symmetry.Analysis
         /// <param name="constraints"></param>
         /// <param name="predicates"></param>
         /// <returns></returns>
-        protected IEnumerable<IList<CellEntry<T1>>> MakeSearchEnumerable(IEnumerable<IList<CellEntry<T1>>> startSequence,
-            IList<NumericConstraint> constraints, IList<Predicate<T1>> predicates)
+        protected IEnumerable<IList<LatticePoint<T>>> MakeSearchEnumerable(IEnumerable<IList<LatticePoint<T>>> startSequence,
+            IList<NumericConstraint> constraints, IList<Func<T, bool>> predicates)
         {
             if (constraints.Count != predicates.Count)
                 throw new ArgumentException("Incompatible size of the predicate list", nameof(predicates));
@@ -106,7 +106,7 @@ namespace Mocassin.Symmetry.Analysis
         /// <param name="constraint"></param>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        protected IEnumerable<CellEntry<T1>> ShellSearch(Fractional3D start, NumericConstraint constraint, Predicate<T1> predicate)
+        protected IEnumerable<LatticePoint<T>> ShellSearch(Fractional3D start, NumericConstraint constraint, Func<T, bool> predicate)
         {
             return new RadialPositionSampler().Search(UnitCellProvider, start, constraint, predicate);
         }
@@ -118,14 +118,14 @@ namespace Mocassin.Symmetry.Analysis
         /// <param name="radialConstraint"></param>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        protected IEnumerable<IList<CellEntry<T1>>> ExtendSearchSequence(IEnumerable<IList<CellEntry<T1>>> sequences,
-            NumericConstraint radialConstraint, Predicate<T1> predicate)
+        protected IEnumerable<IList<LatticePoint<T>>> ExtendSearchSequence(IEnumerable<IList<LatticePoint<T>>> sequences,
+            NumericConstraint radialConstraint, Func<T, bool> predicate)
         {
             foreach (var sequence in sequences)
             {
-                foreach (var item in ShellSearch(sequence[sequence.Count - 1].AbsoluteVector, radialConstraint, predicate))
+                foreach (var item in ShellSearch(sequence[sequence.Count - 1].Fractional, radialConstraint, predicate))
                 {
-                    var extended = new List<CellEntry<T1>>(sequence.Count + 1);
+                    var extended = new List<LatticePoint<T>>(sequence.Count + 1);
                     extended.AddRange(sequence);
                     extended.Add(item);
                     yield return extended;
@@ -139,13 +139,13 @@ namespace Mocassin.Symmetry.Analysis
         /// <param name="entry"></param>
         /// <param name="vector"></param>
         /// <returns></returns>
-        protected IEnumerable<IList<CellEntry<T1>>> GetStartSequence(T1 entry, in Fractional3D vector)
+        protected IEnumerable<IList<LatticePoint<T>>> GetStartSequence(T entry, in Fractional3D vector)
         {
-            return new List<List<CellEntry<T1>>>
+            return new List<List<LatticePoint<T>>>
             {
-                new List<CellEntry<T1>>
+                new List<LatticePoint<T>>
                 {
-                    new CellEntry<T1>(vector, entry)
+                    new LatticePoint<T>(vector, entry)
                 }
             };
         }
@@ -156,10 +156,10 @@ namespace Mocassin.Symmetry.Analysis
         /// </summary>
         /// <param name="geometry"></param>
         /// <returns></returns>
-        public IList<NumericConstraint> GetDefaultConstraints(List<CellEntry<T1>> geometry)
+        public IList<NumericConstraint> GetDefaultConstraints(List<LatticePoint<T>> geometry)
         {
             var cartesianGeometry = geometry
-                .Select(entry => UnitCellProvider.VectorEncoder.Transformer.ToCartesian(entry.AbsoluteVector))
+                .Select(entry => UnitCellProvider.VectorEncoder.Transformer.ToCartesian(entry.Fractional))
                 .ToList();
 
             var result = new List<NumericConstraint>(cartesianGeometry.Count - 1);
@@ -176,11 +176,11 @@ namespace Mocassin.Symmetry.Analysis
         /// <param name="geometry"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        public IList<Predicate<T1>> GetDefaultPredicates(IList<CellEntry<T1>> geometry, IEqualityComparer<T1> comparer)
+        public IList<Func<T, bool>> GetDefaultPredicates(IList<LatticePoint<T>> geometry, IEqualityComparer<T> comparer)
         {
-            var result = new List<Predicate<T1>>(geometry.Count - 1);
+            var result = new List<Func<T, bool>>(geometry.Count - 1);
             for (var i = 0; i < geometry.Count - 1; i++)
-                result.Add(GetDefaultEntryPredicate(geometry[i + 1].Entry, comparer));
+                result.Add(GetDefaultEntryPredicate(geometry[i + 1].Content, comparer));
 
             return result;
         }
@@ -203,7 +203,7 @@ namespace Mocassin.Symmetry.Analysis
         /// <param name="expectedEntry"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        protected Predicate<T1> GetDefaultEntryPredicate(T1 expectedEntry, IEqualityComparer<T1> comparer)
+        protected Func<T, bool> GetDefaultEntryPredicate(T expectedEntry, IEqualityComparer<T> comparer)
         {
             return value => comparer.Equals(expectedEntry, value);
         }

@@ -8,12 +8,12 @@ namespace Mocassin.Symmetry.Analysis
     ///     Generic super cell wrapper that combines a (a,b,c,p) encoded set of positions with a basic structure information to
     ///     describe a supercell lattice
     /// </summary>
-    public class SupercellAdapter<T1> : IUnitCellProvider<T1>
+    public class SuperCellAdapter<T1> : IUnitCellProvider<T1>
     {
         /// <summary>
         ///     The supercell size information
         /// </summary>
-        protected Coordinates4I SizeInfo;
+        protected Coordinates4I Sizes;
 
         /// <summary>
         ///     The 4D (a,b,c,p) cell entry array that is a three dimensional array of cell entry arrays
@@ -21,7 +21,7 @@ namespace Mocassin.Symmetry.Analysis
         protected T1[,,][] CellEntries { get; set; }
 
         /// <inheritdoc />
-        public ref Coordinates4I CellSizeInfo => ref SizeInfo;
+        public ref Coordinates4I CellSize => ref Sizes;
 
         /// <inheritdoc />
         public IUnitCellVectorEncoder VectorEncoder { get; protected set; }
@@ -31,25 +31,25 @@ namespace Mocassin.Symmetry.Analysis
         /// </summary>
         /// <param name="cellEntries"></param>
         /// <param name="vectorEncoder"></param>
-        public SupercellAdapter(T1[,,][] cellEntries, IUnitCellVectorEncoder vectorEncoder)
+        public SuperCellAdapter(T1[,,][] cellEntries, IUnitCellVectorEncoder vectorEncoder)
         {
             CellEntries = cellEntries;
             VectorEncoder = vectorEncoder;
-            SizeInfo = GetSupercellSizeInfo(cellEntries);
+            Sizes = GetSupercellSizeInfo(cellEntries);
         }
 
         /// <inheritdoc />
-        public CellEntry<T1> GetCellEntry(int a, int b, int c, int p)
+        public LatticePoint<T1> GetCellEntry(int a, int b, int c, int p)
         {
             return GetCellEntry(new VectorI3(a, b, c), p);
         }
 
         /// <inheritdoc />
-        public CellEntry<T1> GetCellEntry(in VectorI3 offset, int p)
+        public LatticePoint<T1> GetCellEntry(in VectorI3 offset, int p)
         {
             var trimmedOffset = TrimByPeriodicBoundary(offset);
             var entry = CellEntries[trimmedOffset.A, trimmedOffset.B, trimmedOffset.C][p];
-            return new CellEntry<T1>(new Fractional3D(offset.A, offset.B, offset.C) + VectorEncoder.PositionList[p], entry);
+            return new LatticePoint<T1>(new Fractional3D(offset.A, offset.B, offset.C) + VectorEncoder.PositionList[p], entry);
         }
 
         /// <inheritdoc />
@@ -66,7 +66,7 @@ namespace Mocassin.Symmetry.Analysis
         }
 
         /// <inheritdoc />
-        public CellEntry<T1> GetCellEntry(in CrystalVector4D vector)
+        public LatticePoint<T1> GetCellEntry(in CrystalVector4D vector)
         {
             return GetCellEntry(vector.A, vector.B, vector.C, vector.P);
         }
@@ -99,12 +99,12 @@ namespace Mocassin.Symmetry.Analysis
         public VectorI3 TrimByPeriodicBoundary(int a, int b, int c)
         {
             // In the majority of cases while loops are much faster than modulo methods because actual required trimming is rare
-            while (a < 0) a += CellSizeInfo.A;
-            while (a >= CellSizeInfo.A) a -= CellSizeInfo.A;
-            while (b < 0) b += CellSizeInfo.B;
-            while (b >= CellSizeInfo.B) b -= CellSizeInfo.B;
-            while (c < 0) c += CellSizeInfo.C;
-            while (c >= CellSizeInfo.C) c -= CellSizeInfo.C;
+            while (a < 0) a += CellSize.A;
+            while (a >= CellSize.A) a -= CellSize.A;
+            while (b < 0) b += CellSize.B;
+            while (b >= CellSize.B) b -= CellSize.B;
+            while (c < 0) c += CellSize.C;
+            while (c >= CellSize.C) c -= CellSize.C;
             return new VectorI3(a, b, c);
         }
 

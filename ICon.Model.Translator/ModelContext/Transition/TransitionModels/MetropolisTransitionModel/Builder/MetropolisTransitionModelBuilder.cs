@@ -94,8 +94,8 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <param name="transitionModel"></param>
         protected void CreateAndAddMappingModels(IMetropolisTransitionModel transitionModel)
         {
-            var transitionManager = ModelProject.GetManager<ITransitionManager>();
-            var mappings = transitionManager.QueryPort
+            var transitionManager = ModelProject.Manager<ITransitionManager>();
+            var mappings = transitionManager.DataAccess
                 .Query(port => port.GetMetropolisMappingList(transitionModel.Transition.Index));
 
             transitionModel.MappingModels = mappings
@@ -117,7 +117,7 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <returns></returns>
         protected IMetropolisMappingModel CreateMappingModel(MetropolisMapping mapping, IMetropolisTransitionModel transitionModel)
         {
-            var vectorEncoder = ModelProject.GetManager<IStructureManager>().QueryPort.Query(port => port.GetVectorEncoder());
+            var vectorEncoder = ModelProject.Manager<IStructureManager>().DataAccess.Query(port => port.GetVectorEncoder());
             var mappingModel = new MetropolisMappingModel
             {
                 Mapping = mapping,

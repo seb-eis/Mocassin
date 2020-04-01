@@ -16,14 +16,14 @@ namespace Mocassin.UI.Xml.Jobs
     public class SelectionOptimizerData : ManualOptimizerData, IDuplicable<SelectionOptimizerData>
     {
         private ModelObjectReference<Particle> removedParticle;
-        private ModelObjectReference<CellReferencePosition> startReferencePosition;
+        private ModelObjectReference<CellSite> startReferencePosition;
 
         /// <summary>
-        ///     Get or set the <see cref="ModelObjectReference{T}" /> to the <see cref="CellReferencePosition" /> that the
+        ///     Get or set the <see cref="ModelObjectReference{T}" /> to the <see cref="CellSite" /> that the
         ///     optimizer targets
         /// </summary>
         [XmlElement]
-        public ModelObjectReference<CellReferencePosition> StartReferencePosition
+        public ModelObjectReference<CellSite> StartReferencePosition
         {
             get => startReferencePosition;
             set => SetProperty(ref startReferencePosition, value);
@@ -60,11 +60,11 @@ namespace Mocassin.UI.Xml.Jobs
         /// <inheritdoc />
         public override IPostBuildOptimizer ToInternal(IModelProject modelProject)
         {
-            var particle = modelProject.DataTracker.FindObjectByKey<IParticle>(RemovedParticle.Key);
-            var cellReferencePosition = modelProject.DataTracker.FindObjectByKey<ICellReferencePosition>(StartReferencePosition.Key);
+            var particle = modelProject.DataTracker.FindObject<IParticle>(RemovedParticle.Key);
+            var cellReferencePosition = modelProject.DataTracker.FindObject<ICellSite>(StartReferencePosition.Key);
             return new JumpSelectionOptimizer
             {
-                RemoveCombinations = new List<(IParticle, ICellReferencePosition)> {(particle, cellReferencePosition)}
+                RemoveCombinations = new List<(IParticle, ICellSite)> {(particle, cellReferencePosition)}
             };
         }
     }

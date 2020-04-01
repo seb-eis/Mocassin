@@ -33,7 +33,7 @@ namespace Mocassin.Model.Energies.ConflictHandling
         /// <param name="report"></param>
         protected void UpdateGroupEnergyDictionary(GroupInteraction group, ConflictReport report)
         {
-            var ucProvider = ModelProject.GetManager<IStructureManager>().QueryPort.Query(port => port.GetFullUnitCellProvider());
+            var ucProvider = ModelProject.Manager<IStructureManager>().DataAccess.Query(port => port.GetFullUnitCellProvider());
             var analyzer = new GeometryGroupAnalyzer(ucProvider, ModelProject.SpaceGroupService);
             var extGroup = analyzer.CreateExtendedPositionGroup(group);
             SalvageAndUpdateEnergyDictionarySet(group, extGroup, report);
@@ -46,10 +46,10 @@ namespace Mocassin.Model.Energies.ConflictHandling
         /// <param name="report"></param>
         protected void LinkToUnstableEnvironment(GroupInteraction group, ConflictReport report)
         {
-            if (group.CenterCellReferencePosition.Stability != PositionStability.Unstable) return;
+            if (group.CenterCellSite.Stability != PositionStability.Unstable) return;
 
             var environment = DataAccess.Query(data =>
-                data.UnstableEnvironments.Find(value => value.CellReferencePosition == group.CenterCellReferencePosition));
+                data.UnstableEnvironments.Find(value => value.CellSite == group.CenterCellSite));
 
             if (environment.GroupInteractions.Contains(group))
                 return;

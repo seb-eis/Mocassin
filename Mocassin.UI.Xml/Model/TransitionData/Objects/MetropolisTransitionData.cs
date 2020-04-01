@@ -14,8 +14,8 @@ namespace Mocassin.UI.Xml.TransitionModel
     public class MetropolisTransitionData : ModelDataObject, IEquatable<MetropolisTransitionData>
     {
         private ModelObjectReference<AbstractTransition> abstractTransition = new ModelObjectReference<AbstractTransition>();
-        private ModelObjectReference<CellReferencePosition> firstCellReferencePosition = new ModelObjectReference<CellReferencePosition>();
-        private ModelObjectReference<CellReferencePosition> secondCellReferencePosition = new ModelObjectReference<CellReferencePosition>();
+        private ModelObjectReference<CellSite> firstCellReferencePosition = new ModelObjectReference<CellSite>();
+        private ModelObjectReference<CellSite> secondCellReferencePosition = new ModelObjectReference<CellSite>();
 
         /// <summary>
         ///     Get or set the abstract transition key for the transition logic
@@ -31,7 +31,7 @@ namespace Mocassin.UI.Xml.TransitionModel
         ///     Get or set the unit cell position key for first involved wyckoff position
         /// </summary>
         [XmlElement]
-        public ModelObjectReference<CellReferencePosition> FirstCellReferencePosition
+        public ModelObjectReference<CellSite> FirstCellReferencePosition
         {
             get => firstCellReferencePosition;
             set => SetProperty(ref firstCellReferencePosition, value);
@@ -41,7 +41,7 @@ namespace Mocassin.UI.Xml.TransitionModel
         ///     Get or set the unit cell position key for second involved wyckoff position
         /// </summary>
         [XmlElement]
-        public ModelObjectReference<CellReferencePosition> SecondCellReferencePosition
+        public ModelObjectReference<CellSite> SecondCellReferencePosition
         {
             get => secondCellReferencePosition;
             set => SetProperty(ref secondCellReferencePosition, value);
@@ -67,8 +67,8 @@ namespace Mocassin.UI.Xml.TransitionModel
             var obj = new MetropolisTransition
             {
                 AbstractTransition = new AbstractTransition {Key = AbstractTransition.Key},
-                FirstCellReferencePosition = new CellReferencePosition {Key = FirstCellReferencePosition.Key},
-                SecondCellReferencePosition = new CellReferencePosition {Key = SecondCellReferencePosition.Key}
+                FirstCellSite = new CellSite {Key = FirstCellReferencePosition.Key},
+                SecondCellSite = new CellSite {Key = SecondCellReferencePosition.Key}
             };
             return obj;
         }

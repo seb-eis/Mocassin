@@ -13,7 +13,7 @@ namespace Mocassin.Symmetry.Analysis
         /// <summary>
         ///     The size information (a,b,c,p) of the supercell by reference
         /// </summary>
-        ref Coordinates4I CellSizeInfo { get; }
+        ref Coordinates4I CellSize { get; }
 
         /// <summary>
         ///     Access the geometric vector encoder that supplies the basic cell position info and conversions between the
@@ -45,7 +45,7 @@ namespace Mocassin.Symmetry.Analysis
         /// <param name="c"></param>
         /// <param name="p"></param>
         /// <returns></returns>
-        CellEntry<T1> GetCellEntry(int a, int b, int c, int p);
+        LatticePoint<T1> GetCellEntry(int a, int b, int c, int p);
 
         /// <summary>
         ///     Get the cell entry at position 'p' with the specified offset coordinates
@@ -53,14 +53,14 @@ namespace Mocassin.Symmetry.Analysis
         /// <param name="offset"></param>
         /// <param name="p"></param>
         /// <returns></returns>
-        CellEntry<T1> GetCellEntry(in VectorI3 offset, int p);
+        LatticePoint<T1> GetCellEntry(in VectorI3 offset, int p);
 
         /// <summary>
         ///     Get the cell entry at the specified 4D crystal vector
         /// </summary>
         /// <param name="vector"></param>
         /// <returns></returns>
-        CellEntry<T1> GetCellEntry(in CrystalVector4D vector);
+        LatticePoint<T1> GetCellEntry(in CrystalVector4D vector);
 
         /// <summary>
         ///     Get the cell entry value at the specified absolute 3d fractional vector

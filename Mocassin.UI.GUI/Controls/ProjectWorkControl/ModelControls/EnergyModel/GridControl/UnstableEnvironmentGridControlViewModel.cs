@@ -29,9 +29,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.
 
         /// <summary>
         ///     Get an <see cref="IEnumerable{T}" /> sequence of <see cref="ModelObjectReference{T}" /> for unstable
-        ///     <see cref="CellReferencePosition" /> instances
+        ///     <see cref="CellSite" /> instances
         /// </summary>
-        public IEnumerable<ModelObjectReference<CellReferencePosition>> UnstablePositionOptions => EnumerateUnstableReferencePositions();
+        public IEnumerable<ModelObjectReference<CellSite>> UnstablePositionOptions => EnumerateUnstableReferencePositions();
 
         /// <summary>
         ///     Get a <see cref="ICommand" /> to resynchronize the environment collection
@@ -88,14 +88,14 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.
 
         /// <summary>
         ///     Get an <see cref="IEnumerable{T}" /> of <see cref="ModelObjectReference{T}" /> for
-        ///     <see cref="CellReferencePosition" /> instances that describes unstable positions
+        ///     <see cref="CellSite" /> instances that describes unstable positions
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<ModelObjectReference<CellReferencePosition>> EnumerateUnstableReferencePositions()
+        public IEnumerable<ModelObjectReference<CellSite>> EnumerateUnstableReferencePositions()
         {
             return ContentSource?.ProjectModelData?.StructureModelData?.CellReferencePositions
                 ?.Where(x => x.Stability == PositionStability.Unstable)
-                .Select(x => new ModelObjectReference<CellReferencePosition>(x));
+                .Select(x => new ModelObjectReference<CellSite>(x));
         }
     }
 }

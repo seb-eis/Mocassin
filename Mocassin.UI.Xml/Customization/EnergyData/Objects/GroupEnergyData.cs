@@ -95,7 +95,7 @@ namespace Mocassin.UI.Xml.Customization
         /// <returns></returns>
         public GroupEnergyEntry ToInternal(IModelProject modelProject)
         {
-            var center = modelProject.DataTracker.FindObjectByKey<IParticle>(CenterParticle.Key);
+            var center = modelProject.DataTracker.FindObject<IParticle>(CenterParticle.Key);
             return new GroupEnergyEntry(center, OccupationState.ToInternal(modelProject), Energy);
         }
 

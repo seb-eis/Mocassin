@@ -19,13 +19,13 @@ namespace Mocassin.Model.Translator.ModelContext
         ///     Get or set the position pair interaction dictionary
         ///     that assigns each unit cell position its existing pair interactions
         /// </summary>
-        protected IReadOnlyDictionary<ICellReferencePosition, IReadOnlyList<IPairInteraction>> PositionPairInteractions { get; set; }
+        protected IReadOnlyDictionary<ICellSite, IReadOnlyList<IPairInteraction>> PositionPairInteractions { get; set; }
 
         /// <summary>
         ///     Get or set the position group interaction dictionary
         ///     that assigns each unit cell position its existing group interactions
         /// </summary>
-        protected IReadOnlyDictionary<ICellReferencePosition, IReadOnlyList<IGroupInteraction>> PositionGroupInteractions { get; set; }
+        protected IReadOnlyDictionary<ICellSite, IReadOnlyList<IGroupInteraction>> PositionGroupInteractions { get; set; }
 
         /// <summary>
         ///     The position group infos for all existing group interactions
@@ -44,7 +44,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <inheritdoc />
-        public IList<IEnvironmentModel> BuildModels(IEnumerable<ICellReferencePosition> cellReferencePositions)
+        public IList<IEnvironmentModel> BuildModels(IEnumerable<ICellSite> cellReferencePositions)
         {
             LoadBuildDataFromProject();
 
@@ -59,24 +59,24 @@ namespace Mocassin.Model.Translator.ModelContext
         /// </summary>
         protected void LoadBuildDataFromProject()
         {
-            var manager = ModelProject.GetManager<IEnergyManager>();
-            VectorEncoder = ModelProject.GetManager<IStructureManager>().QueryPort.Query(port => port.GetVectorEncoder());
-            PositionPairInteractions = manager.QueryPort.Query(port => port.GetPositionPairInteractions());
-            PositionGroupInteractions = manager.QueryPort.Query(port => port.GetPositionGroupInteractions());
-            PositionGroupInfos = manager.QueryPort.Query(port => port.GetPositionGroupInfos());
+            var manager = ModelProject.Manager<IEnergyManager>();
+            VectorEncoder = ModelProject.Manager<IStructureManager>().DataAccess.Query(port => port.GetVectorEncoder());
+            PositionPairInteractions = manager.DataAccess.Query(port => port.GetPositionPairInteractions());
+            PositionGroupInteractions = manager.DataAccess.Query(port => port.GetPositionGroupInteractions());
+            PositionGroupInfos = manager.DataAccess.Query(port => port.GetPositionGroupInfos());
         }
 
         /// <summary>
         ///     Builds a single environment model
         /// </summary>
-        /// <param name="cellReferencePosition"></param>
+        /// <param name="cellSite"></param>
         /// <returns></returns>
-        protected IEnvironmentModel BuildEnvironmentModel(ICellReferencePosition cellReferencePosition)
+        protected IEnvironmentModel BuildEnvironmentModel(ICellSite cellSite)
         {
             var environmentModel = new EnvironmentModel
             {
-                CellReferencePosition = cellReferencePosition,
-                TransformOperations = ModelProject.SpaceGroupService.GetOperationDictionary(cellReferencePosition.Vector)
+                CellSite = cellSite,
+                TransformOperations = ModelProject.SpaceGroupService.GetOperationDictionary(cellSite.Vector)
             };
 
             AddPairInteractionModels(environmentModel);
@@ -90,11 +90,11 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <param name="environmentModel"></param>
         protected void AddPairInteractionModels(IEnvironmentModel environmentModel)
         {
-            if (!PositionPairInteractions.TryGetValue(environmentModel.CellReferencePosition, out var interactions))
+            if (!PositionPairInteractions.TryGetValue(environmentModel.CellSite, out var interactions))
                 throw new InvalidOperationException("Cannot resolve pair interactions for the environment model");
 
             var multiplicityOperations = ModelProject.SpaceGroupService
-                .GetSelfProjectionOperations(environmentModel.CellReferencePosition.Vector, true);
+                .GetSelfProjectionOperations(environmentModel.CellSite.Vector, true);
 
             var index = 0;
             var pairInteractionModels = interactions
@@ -122,7 +122,7 @@ namespace Mocassin.Model.Translator.ModelContext
             };
             pairModel.TargetPositionInfo.PairInteractionModel = pairModel;
 
-            if (pairInteraction.Position0 != environmentModel.CellReferencePosition)
+            if (pairInteraction.Position0 != environmentModel.CellSite)
                 SetInteractionDataAsInverted(pairModel, pairInteraction);
 
             else
@@ -141,15 +141,15 @@ namespace Mocassin.Model.Translator.ModelContext
             var targetInfo = pairModel.TargetPositionInfo;
 
             targetInfo.Distance = pairInteraction.Distance;
-            targetInfo.CellReferencePosition = pairInteraction.Position1;
-            targetInfo.AbsoluteFractional3D = pairInteraction.SecondPositionVector;
-            targetInfo.RelativeFractional3D = targetInfo.AbsoluteFractional3D - pairInteraction.Position0.Vector;
-            targetInfo.AbsoluteCartesian3D = VectorEncoder.Transformer.ToCartesian(targetInfo.AbsoluteFractional3D);
+            targetInfo.CellSite = pairInteraction.Position1;
+            targetInfo.AbsoluteFractional = pairInteraction.SecondPositionVector;
+            targetInfo.RelativeFractional = targetInfo.AbsoluteFractional - pairInteraction.Position0.Vector;
+            targetInfo.AbsoluteCartesian = VectorEncoder.Transformer.ToCartesian(targetInfo.AbsoluteFractional);
 
-            if (!VectorEncoder.TryEncodeAsRelative(pairInteraction.Position0.Vector, targetInfo.RelativeFractional3D, out var relative4D))
+            if (!VectorEncoder.TryEncodeAsRelative(pairInteraction.Position0.Vector, targetInfo.RelativeFractional, out var relative4D))
                 throw new InvalidOperationException("Could not create valid relative 4D interaction target");
 
-            targetInfo.RelativeVector4D = relative4D;
+            targetInfo.RelativeCrystalVector = relative4D;
         }
 
         /// <summary>
@@ -170,15 +170,15 @@ namespace Mocassin.Model.Translator.ModelContext
                 .GetOperationToTarget(invertedPair[0], pairInteraction.Position1.Vector);
 
             targetInfo.Distance = pairInteraction.Distance;
-            targetInfo.CellReferencePosition = pairInteraction.Position0;
-            targetInfo.AbsoluteFractional3D = operation.Transform(invertedPair[1]);
-            targetInfo.RelativeFractional3D = targetInfo.AbsoluteFractional3D - pairInteraction.Position1.Vector;
-            targetInfo.AbsoluteCartesian3D = VectorEncoder.Transformer.ToCartesian(targetInfo.AbsoluteFractional3D);
+            targetInfo.CellSite = pairInteraction.Position0;
+            targetInfo.AbsoluteFractional = operation.Transform(invertedPair[1]);
+            targetInfo.RelativeFractional = targetInfo.AbsoluteFractional - pairInteraction.Position1.Vector;
+            targetInfo.AbsoluteCartesian = VectorEncoder.Transformer.ToCartesian(targetInfo.AbsoluteFractional);
 
-            if (!VectorEncoder.TryEncodeAsRelative(pairInteraction.Position1.Vector, targetInfo.RelativeFractional3D, out var relative4D))
+            if (!VectorEncoder.TryEncodeAsRelative(pairInteraction.Position1.Vector, targetInfo.RelativeFractional, out var relative4D))
                 throw new InvalidOperationException("Could not create valid relative 4D interaction target");
 
-            targetInfo.RelativeVector4D = relative4D;
+            targetInfo.RelativeCrystalVector = relative4D;
         }
 
         /// <summary>
@@ -194,7 +194,7 @@ namespace Mocassin.Model.Translator.ModelContext
             var absoluteVectors = new SetList<Fractional3D>(ModelProject.SpaceGroupService.Comparer, multiplicityOperations.Count);
             foreach (var operation in multiplicityOperations)
             {
-                var vector = operation.Transform(pairInteractionModel.TargetPositionInfo.AbsoluteFractional3D);
+                var vector = operation.Transform(pairInteractionModel.TargetPositionInfo.AbsoluteFractional);
                 absoluteVectors.Add(vector);
             }
 
@@ -213,7 +213,7 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <returns></returns>
         protected IPairInteractionModel CreateEquivalentModelByVector(IPairInteractionModel originalModel, in Fractional3D absoluteVector)
         {
-            var startVector = originalModel.EnvironmentModel.CellReferencePosition.Vector;
+            var startVector = originalModel.EnvironmentModel.CellSite.Vector;
             var relativeVector = absoluteVector - startVector;
             var absoluteCartesian = VectorEncoder.Transformer.ToCartesian(absoluteVector);
 
@@ -226,11 +226,11 @@ namespace Mocassin.Model.Translator.ModelContext
                 EnvironmentModel = originalModel.EnvironmentModel,
                 TargetPositionInfo = new TargetPositionInfo
                 {
-                    AbsoluteFractional3D = absoluteVector,
-                    AbsoluteCartesian3D = absoluteCartesian,
-                    RelativeFractional3D = relativeVector,
-                    RelativeVector4D = relativeVector4D,
-                    CellReferencePosition = originalModel.TargetPositionInfo.CellReferencePosition,
+                    AbsoluteFractional = absoluteVector,
+                    AbsoluteCartesian = absoluteCartesian,
+                    RelativeFractional = relativeVector,
+                    RelativeCrystalVector = relativeVector4D,
+                    CellSite = originalModel.TargetPositionInfo.CellSite,
                     Distance = originalModel.TargetPositionInfo.Distance
                 }
             };
@@ -246,7 +246,7 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <param name="environmentModel"></param>
         protected void AddGroupInteractionModels(IEnvironmentModel environmentModel)
         {
-            if (!PositionGroupInteractions.TryGetValue(environmentModel.CellReferencePosition, out var groupInteractions))
+            if (!PositionGroupInteractions.TryGetValue(environmentModel.CellSite, out var groupInteractions))
                 groupInteractions = new List<IGroupInteraction>();
 
             var index = 0;
@@ -291,7 +291,7 @@ namespace Mocassin.Model.Translator.ModelContext
             var pairInteractions = groupVectors
                 .Select(vectorSet => vectorSet
                     .Select(vector => groupModel.EnvironmentModel.PairInteractionModels
-                        .Single(a => comparer.Compare(a.TargetPositionInfo.AbsoluteFractional3D, vector) == 0))
+                        .Single(a => comparer.Compare(a.TargetPositionInfo.AbsoluteFractional, vector) == 0))
                     .ToList())
                 .ToList();
 

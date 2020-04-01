@@ -118,7 +118,7 @@ namespace Mocassin.UI.Xml.Jobs
             if (modelProject == null) throw new ArgumentNullException(nameof(modelProject));
             if (jobPackageDescription == null) throw new ArgumentNullException(nameof(jobPackageDescription));
 
-            var simulation = modelProject.DataTracker.FindObjectByKey<IKineticSimulation>(jobPackageDescription.Simulation.Key)
+            var simulation = modelProject.DataTracker.FindObject<IKineticSimulation>(jobPackageDescription.Simulation.Key)
                              ?? throw new InvalidOperationException("Kinetic simulation key does not exist in the model");
 
             var baseConfig = (jobPackageDescription.JobBaseDescription ?? new KmcJobConfigData()).ToInternal(simulation);
@@ -148,7 +148,7 @@ namespace Mocassin.UI.Xml.Jobs
             if (modelProject == null) throw new ArgumentNullException(nameof(modelProject));
             if (jobPackageDescription == null) throw new ArgumentNullException(nameof(jobPackageDescription));
 
-            var simulation = modelProject.DataTracker.FindObjectByKey<IMetropolisSimulation>(jobPackageDescription.Simulation.Key)
+            var simulation = modelProject.DataTracker.FindObject<IMetropolisSimulation>(jobPackageDescription.Simulation.Key)
                              ?? throw new InvalidOperationException("Metropolis simulation key does not exist in the model");
             var baseConfig = (jobPackageDescription.JobBaseDescription ?? new MmcJobConfigData()).ToInternal(simulation);
             var random = new PcgRandom32(jobPackageDescription.RngSeed ?? simulation.CustomRngSeed);

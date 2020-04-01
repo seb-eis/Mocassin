@@ -12,7 +12,7 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <summary>
         ///     The unit cell position that the environment is based upon
         /// </summary>
-        ICellReferencePosition CellReferencePosition { get; set; }
+        ICellSite CellSite { get; set; }
 
         /// <summary>
         ///     The list of pair interaction models that belong to the environment

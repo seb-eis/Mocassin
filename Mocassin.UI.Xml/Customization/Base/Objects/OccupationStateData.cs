@@ -56,7 +56,7 @@ namespace Mocassin.UI.Xml.Customization
         /// <returns></returns>
         public IOccupationState ToInternal(IModelProject modelProject)
         {
-            var particleList = Particles.Select(x => modelProject.DataTracker.FindObjectByKey<IParticle>(x.Key)).ToList();
+            var particleList = Particles.Select(x => modelProject.DataTracker.FindObject<IParticle>(x.Key)).ToList();
             var obj = new OccupationState
             {
                 Particles = particleList

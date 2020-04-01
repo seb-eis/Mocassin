@@ -94,7 +94,7 @@ namespace Mocassin.Model.ModelProject
         ///     Creates and registers multiple managers that are created by the provided factories
         /// </summary>
         /// <param name="factories"></param>
-        void CreateAndRegisterMany(IEnumerable<IModelManagerFactory> factories);
+        void CreateAndRegister(IEnumerable<IModelManagerFactory> factories);
 
         /// <summary>
         ///     Registers a new manager with the project services, overwrites existing one of same interface type if present
@@ -107,20 +107,20 @@ namespace Mocassin.Model.ModelProject
         /// </summary>
         /// <typeparam name="TManager"></typeparam>
         /// <returns></returns>
-        TManager GetManager<TManager>() where TManager : class, IModelManager;
+        TManager Manager<TManager>() where TManager : class, IModelManager;
 
         /// <summary>
         ///     Get the registered manager that implements the specified interface (Returns null im manager does not exist)
         /// </summary>
         /// <param name="interfaceType"></param>
         /// <returns></returns>
-        IModelManager GetManager(Type interfaceType);
+        IModelManager Manager(Type interfaceType);
 
         /// <summary>
         ///     Get all currently registered managers
         /// </summary>
         /// <returns></returns>
-        IEnumerable<IModelManager> GetAllManagers();
+        IEnumerable<IModelManager> Managers();
 
         /// <summary>
         ///     Resets the <see cref="IModelProject" /> to mint factory status with default data status

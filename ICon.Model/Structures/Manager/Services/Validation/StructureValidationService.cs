@@ -31,7 +31,7 @@ namespace Mocassin.Model.Structures
         /// <param name="dataReader"></param>
         /// <returns></returns>
         [ValidationOperation(ValidationType.Object)]
-        protected IValidationReport ValidateCellReferencePosition(ICellReferencePosition position, IDataReader<IStructureDataPort> dataReader)
+        protected IValidationReport ValidateCellReferencePosition(ICellSite position, IDataReader<IStructureDataPort> dataReader)
         {
             return new CellReferencePositionValidator(ModelProject, Settings, dataReader).Validate(position);
         }

@@ -597,7 +597,7 @@ namespace Mocassin.Model.Basic
             where T2 : ModelObject, T1, new()
         {
             // Lookup the actual internal object interface and cast it to the internal data type
-            var internalObj = (T2) ModelProject.DataTracker.FindObjectByIndex<T1>(obj.Index);
+            var internalObj = (T2) ModelProject.DataTracker.FindObject<T1>(obj.Index);
 
             bool Operation(DataAccessor<TData> accessor, OperationReport report)
             {
@@ -782,7 +782,7 @@ namespace Mocassin.Model.Basic
 
             try
             {
-                ModelProject.DataTracker.LinkModelObject(tmpObj);
+                ModelProject.DataTracker.LinkObject(tmpObj);
             }
             catch (Exception e)
             {
@@ -819,7 +819,7 @@ namespace Mocassin.Model.Basic
 
             try
             {
-                ModelProject.DataTracker.LinkModelObject(tmpObj);
+                ModelProject.DataTracker.LinkObject(tmpObj);
             }
             catch (Exception e)
             {

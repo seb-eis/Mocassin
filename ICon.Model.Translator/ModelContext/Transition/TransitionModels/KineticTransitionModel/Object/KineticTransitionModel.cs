@@ -75,9 +75,9 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <inheritdoc />
-        public ICellReferencePosition GetStartCellReferencePosition()
+        public ICellSite GetStartCellReferencePosition()
         {
-            return MappingModels.First().Mapping.StartCellReferencePosition;
+            return MappingModels.First().Mapping.StartCellSite;
         }
 
         /// <summary>

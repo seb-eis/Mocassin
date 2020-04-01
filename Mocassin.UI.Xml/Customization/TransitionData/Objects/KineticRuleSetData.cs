@@ -79,7 +79,7 @@ namespace Mocassin.UI.Xml.Customization
         /// <param name="ruleSetter"></param>
         public void PushToModel(IModelProject modelProject, IKineticRuleSetter ruleSetter)
         {
-            var setData = KineticRules.Select(x => (x, modelProject.DataTracker.FindObjectByIndex<IKineticRule>(x.RuleIndex)));
+            var setData = KineticRules.Select(x => (x, modelProject.DataTracker.FindObject<IKineticRule>(x.RuleIndex)));
 
             foreach (var (xmlRule, rule) in setData)
                 ruleSetter.SetAttemptFrequency(rule, xmlRule.AttemptFrequency);

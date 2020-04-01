@@ -103,13 +103,13 @@ namespace Mocassin.Model.ModelProject
             if (func != null)
                 return func;
 
-            foreach (var modelManager in ModelProject.GetAllManagers())
+            foreach (var modelManager in ModelProject.Managers())
             {
-                var type = modelManager.InputPort.GetSupportedModelTypes().FirstOrDefault(x => x.IsInstanceOfType(modelParameter));
+                var type = modelManager.InputAccess.GetSupportedModelTypes().FirstOrDefault(x => x.IsInstanceOfType(modelParameter));
                 if (type == null)
                     continue;
 
-                func = MakeParameterInputDelegate(modelManager.InputPort);
+                func = MakeParameterInputDelegate(modelManager.InputAccess);
                 parameterInputDictionary.Add(type, func);
                 return func;
             }
@@ -128,13 +128,13 @@ namespace Mocassin.Model.ModelProject
             if (func != null)
                 return func;
 
-            foreach (var modelManager in ModelProject.GetAllManagers())
+            foreach (var modelManager in ModelProject.Managers())
             {
-                var type = modelManager.InputPort.GetSupportedModelTypes().FirstOrDefault(x => x.IsInstanceOfType(modelObject));
+                var type = modelManager.InputAccess.GetSupportedModelTypes().FirstOrDefault(x => x.IsInstanceOfType(modelObject));
                 if (type == null)
                     continue;
 
-                func = MakeObjectInputDelegate(modelManager.InputPort);
+                func = MakeObjectInputDelegate(modelManager.InputAccess);
                 objectInputDictionary.Add(type, func);
                 return func;
             }

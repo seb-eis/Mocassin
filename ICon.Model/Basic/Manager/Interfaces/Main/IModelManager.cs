@@ -11,12 +11,12 @@ namespace Mocassin.Model.Basic
         /// <summary>
         ///     Get the event port interface for this manager (General interface)
         /// </summary>
-        IModelEventPort EventPort { get; }
+        IModelEventPort EventAccess { get; }
 
         /// <summary>
         ///     Get the input port for this manager (General interface)
         /// </summary>
-        IModelInputPort InputPort { get; }
+        IModelInputPort InputAccess { get; }
 
         /// <summary>
         ///     Makes a new validation service for this manager from the project settings data
@@ -57,16 +57,16 @@ namespace Mocassin.Model.Basic
         /// <summary>
         ///     The manager input port to add, remove or replace model data
         /// </summary>
-        new TInputPort InputPort { get; }
+        new TInputPort InputAccess { get; }
 
         /// <summary>
         ///     The manager data query port for read only access to model or extended data in the manager
         /// </summary>
-        TQueryPort QueryPort { get; }
+        TQueryPort DataAccess { get; }
 
         /// <summary>
         ///     The manager event port that provides push notifications about internal changes to the model data or the manager
         /// </summary>
-        new TEventPort EventPort { get; }
+        new TEventPort EventAccess { get; }
     }
 }

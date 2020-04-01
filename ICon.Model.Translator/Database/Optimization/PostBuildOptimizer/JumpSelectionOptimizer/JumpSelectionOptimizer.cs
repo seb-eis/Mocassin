@@ -24,9 +24,9 @@ namespace Mocassin.Model.Translator.Optimization
         protected SimulationJobPackageModel JobPackage { get; set; }
 
         /// <summary>
-        ///     The list of <see cref="IParticle" /> objects to remove on their affiliated <see cref="ICellReferencePosition" />
+        ///     The list of <see cref="IParticle" /> objects to remove on their affiliated <see cref="ICellSite" />
         /// </summary>
-        public IList<(IParticle, ICellReferencePosition)> RemoveCombinations { get; set; }
+        public IList<(IParticle, ICellSite)> RemoveCombinations { get; set; }
 
         /// <inheritdoc />
         public SimulationExecutionFlags Run(IProjectModelContext modelContext, SimulationJobPackageModel jobPackage)
@@ -53,7 +53,7 @@ namespace Mocassin.Model.Translator.Optimization
         /// <returns></returns>
         protected virtual IParticleSet GetOptimizedSelectionParticles(EnvironmentDefinitionEntity environmentDefinition)
         {
-            var cellReferencePosition = ModelContext.StructureModelContext.PositionModels[environmentDefinition.ObjectId].CellReferencePosition;
+            var cellReferencePosition = ModelContext.StructureModelContext.PositionModels[environmentDefinition.ObjectId].CellSite;
             var rawSet = DecodeSelectionMask(environmentDefinition.SelectionParticleMask).ToList();
             rawSet.RemoveAll(x => RemoveCombinations.FirstOrDefault(pair => pair.Item1 == x && pair.Item2 == cellReferencePosition).Item1 != null);
             return ParticleSet.ToSortedSet(rawSet);
@@ -66,19 +66,19 @@ namespace Mocassin.Model.Translator.Optimization
         /// <returns></returns>
         protected IParticleSet DecodeSelectionMask(long mask)
         {
-            var particleManager = ModelContext.ModelProject.GetManager<IParticleManager>();
+            var particleManager = ModelContext.ModelProject.Manager<IParticleManager>();
             var result = new ParticleSet {Particles = new List<IParticle>()};
 
             if (mask == 0)
             {
-                result.Particles.Add(particleManager.QueryPort.Query(port => port.GetParticle(0)));
+                result.Particles.Add(particleManager.DataAccess.Query(port => port.GetParticle(0)));
                 return result;
             }
 
             var index = 0;
             while (mask != 0)
             {
-                if ((1L & mask) != 0) result.Particles.Add(particleManager.QueryPort.Query(port => port.GetParticle(index)));
+                if ((1L & mask) != 0) result.Particles.Add(particleManager.DataAccess.Query(port => port.GetParticle(index)));
 
                 mask >>= 1;
                 index++;

@@ -101,8 +101,8 @@ namespace Mocassin.Model.Transitions
         /// <param name="geometries"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        public IEnumerable<IList<CellEntry<int>>> QuickFilterPaths(IEnumerable<CellEntry<int>> reference,
-            IEnumerable<IList<CellEntry<int>>> geometries, NumericComparer comparer)
+        public IEnumerable<IList<LatticePoint<int>>> QuickFilterPaths(IEnumerable<LatticePoint<int>> reference,
+            IEnumerable<IList<LatticePoint<int>>> geometries, NumericComparer comparer)
         {
             var refIdentifier = SymmetryService.GetSymmetryIndicator(GetMassPointPath(reference));
             foreach (var geometry in GetUniquePaths(geometries, comparer))
@@ -119,7 +119,7 @@ namespace Mocassin.Model.Transitions
         /// <param name="geometries"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        protected IEnumerable<IList<CellEntry<int>>> GetUniquePaths(IEnumerable<IList<CellEntry<int>>> geometries, NumericComparer comparer)
+        protected IEnumerable<IList<LatticePoint<int>>> GetUniquePaths(IEnumerable<IList<LatticePoint<int>>> geometries, NumericComparer comparer)
         {
             var sequenceComparer = MakeCellEntrySequenceComparer(new VectorComparer3D<Fractional3D>(comparer), Comparer<int>.Default);
             foreach (var item in ContainerFactory.CreateSetList(sequenceComparer, geometries))
@@ -131,7 +131,7 @@ namespace Mocassin.Model.Transitions
         /// </summary>
         /// <param name="pathGeometry"></param>
         /// <returns></returns>
-        protected IEnumerable<CellEntry<int>> GetGeometricPath(IEnumerable<CrystalVector4D> pathGeometry)
+        protected IEnumerable<LatticePoint<int>> GetGeometricPath(IEnumerable<CrystalVector4D> pathGeometry)
         {
             foreach (var encoded in pathGeometry)
             {
@@ -141,7 +141,7 @@ namespace Mocassin.Model.Transitions
                         nameof(pathGeometry));
                 }
 
-                yield return new CellEntry<int>(decoded, UnitCellProvider.GetCellEntry(encoded).Entry);
+                yield return new LatticePoint<int>(decoded, UnitCellProvider.GetCellEntry(encoded).Content);
             }
         }
 
@@ -150,7 +150,7 @@ namespace Mocassin.Model.Transitions
         /// </summary>
         /// <param name="pathGeometry"></param>
         /// <returns></returns>
-        protected IEnumerable<CellEntry<int>> GetGeometricPath(IEnumerable<Fractional3D> pathGeometry)
+        protected IEnumerable<LatticePoint<int>> GetGeometricPath(IEnumerable<Fractional3D> pathGeometry)
         {
             foreach (var decoded in pathGeometry)
             {
@@ -160,7 +160,7 @@ namespace Mocassin.Model.Transitions
                         nameof(pathGeometry));
                 }
 
-                yield return new CellEntry<int>(decoded, UnitCellProvider.GetCellEntry(encoded).Entry);
+                yield return new LatticePoint<int>(decoded, UnitCellProvider.GetCellEntry(encoded).Content);
             }
         }
 
@@ -170,12 +170,12 @@ namespace Mocassin.Model.Transitions
         /// <typeparam name="T1"></typeparam>
         /// <param name="sequence"></param>
         /// <returns></returns>
-        protected IEnumerable<CartesianMassPoint3D> GetMassPointPath<T1>(IEnumerable<CellEntry<T1>> sequence)
+        protected IEnumerable<CartesianMassPoint3D> GetMassPointPath<T1>(IEnumerable<LatticePoint<T1>> sequence)
             where T1 : struct, IConvertible
         {
             return sequence.Select(value =>
-                new CartesianMassPoint3D(value.Entry.ToDouble(CultureInfo.InvariantCulture),
-                    UnitCellProvider.VectorEncoder.Transformer.ToCartesian(value.AbsoluteVector)));
+                new CartesianMassPoint3D(value.Content.ToDouble(CultureInfo.InvariantCulture),
+                    UnitCellProvider.VectorEncoder.Transformer.ToCartesian(value.Fractional)));
         }
 
         /// <summary>
@@ -184,11 +184,11 @@ namespace Mocassin.Model.Transitions
         /// <typeparam name="T1"></typeparam>
         /// <param name="sequence"></param>
         /// <returns></returns>
-        protected IEnumerable<CrystalVector4D> EncodeGeometry<T1>(IEnumerable<CellEntry<T1>> sequence)
+        protected IEnumerable<CrystalVector4D> EncodeGeometry<T1>(IEnumerable<LatticePoint<T1>> sequence)
         {
             foreach (var item in sequence)
             {
-                if (!UnitCellProvider.VectorEncoder.TryEncode(item.AbsoluteVector, out var encoded))
+                if (!UnitCellProvider.VectorEncoder.TryEncode(item.Fractional, out var encoded))
                 {
                     throw new ArgumentException(
                         "The provided sequence contains fractional vectors that cannot be converted to 4D equivalents", nameof(sequence));
@@ -205,11 +205,11 @@ namespace Mocassin.Model.Transitions
         /// <param name="vectorComparer"></param>
         /// <param name="entryComparer"></param>
         /// <returns></returns>
-        protected IComparer<IEnumerable<CellEntry<T1>>> MakeCellEntrySequenceComparer<T1>(IComparer<Fractional3D> vectorComparer,
+        protected IComparer<IEnumerable<LatticePoint<T1>>> MakeCellEntrySequenceComparer<T1>(IComparer<Fractional3D> vectorComparer,
             IComparer<T1> entryComparer)
         {
-            var comparer = CellEntry<T1>.MakeComparer(vectorComparer, entryComparer);
-            return Comparer<IEnumerable<CellEntry<T1>>>.Create((lhs, rhs) => lhs.LexicographicCompare(rhs, comparer));
+            var comparer = LatticePoint<T1>.MakeComparer(vectorComparer, entryComparer);
+            return Comparer<IEnumerable<LatticePoint<T1>>>.Create((lhs, rhs) => lhs.LexicographicCompare(rhs, comparer));
         }
     }
 }

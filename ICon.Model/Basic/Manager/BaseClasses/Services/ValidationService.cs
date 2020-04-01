@@ -112,7 +112,7 @@ namespace Mocassin.Model.Basic
         protected IValidationReport ValidateAlias<TObject>(TObject obj)
             where TObject : IModelObject
         {
-            if (ModelProject.DataTracker.FindObjectByKey<TObject>(obj.Key) == null)
+            if (ModelProject.DataTracker.FindObject<TObject>(obj.Key) == null)
                 return null;
 
             var detail0 = $"The object [{obj.ObjectName}] with alias [{obj.Key}] is already present.";

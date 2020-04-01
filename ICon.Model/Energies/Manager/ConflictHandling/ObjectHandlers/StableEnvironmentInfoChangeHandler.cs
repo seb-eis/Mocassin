@@ -124,7 +124,7 @@ namespace Mocassin.Model.Energies.ConflictHandling
         /// <returns></returns>
         protected IList<StablePairInteraction> GetNewPairInteractions(IStableEnvironmentInfo info)
         {
-            var structureQueries = ModelProject.GetManager<IStructureManager>().QueryPort;
+            var structureQueries = ModelProject.Manager<IStructureManager>().DataAccess;
 
             var unitCellProvider = structureQueries.Query(port => port.GetFullUnitCellProvider());
             var positions = structureQueries.Query(port => port.GetCellReferencePositions().Where(value => value.IsValidAndStable()));
@@ -145,7 +145,7 @@ namespace Mocassin.Model.Energies.ConflictHandling
             var counter = 0;
             foreach (var item in DataAccess.Query(data => data.GroupInteractions))
             {
-                if (item.CenterCellReferencePosition.Stability != PositionStability.Stable)
+                if (item.CenterCellSite.Stability != PositionStability.Stable)
                     continue;
 
                 counter++;

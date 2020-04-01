@@ -11,13 +11,13 @@ namespace Mocassin.Model.Particles
         /// <summary>
         ///     Particle manager data input access port that handles user defined model data changes to the manager
         /// </summary>
-        public new IParticleInputPort InputPort => InputManager;
+        public new IParticleInputPort InputAccess => InputManager;
 
         /// <inheritdoc />
-        public IParticleQueryPort QueryPort => QueryManager;
+        public IParticleQueryPort DataAccess => QueryManager;
 
         /// <inheritdoc />
-        public new IParticleEventPort EventPort => EventManager;
+        public new IParticleEventPort EventAccess => EventManager;
 
         /// <inheritdoc />
         public ParticleManager(IModelProject modelProject, ParticleModelData data)

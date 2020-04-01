@@ -21,7 +21,7 @@ namespace Mocassin.UI.Xml.Customization
     public class GroupEnergySetData : ExtensibleProjectDataObject, IComparable<GroupEnergySetData>, IDuplicable<GroupEnergySetData>
     {
         private ObservableCollection<VectorData3D> baseGeometry;
-        private ModelObjectReference<CellReferencePosition> centerPosition;
+        private ModelObjectReference<CellSite> centerPosition;
         private ObservableCollection<GroupEnergyData> energyEntries;
         private ModelObjectReference<GroupInteraction> groupInteraction;
         private int modelIndex;
@@ -40,7 +40,7 @@ namespace Mocassin.UI.Xml.Customization
         ///     Get or set the <see cref="ModelObjectReference{T}" /> of the center position that the graph is based upon
         /// </summary>
         [XmlElement]
-        public ModelObjectReference<CellReferencePosition> CenterPosition
+        public ModelObjectReference<CellSite> CenterPosition
         {
             get => centerPosition;
             set => SetProperty(ref centerPosition, value);
@@ -138,7 +138,7 @@ namespace Mocassin.UI.Xml.Customization
                 parent.EnergyModelData.GroupInteractions.Single(x => x.Key == energySetter.GroupInteraction.Key);
 
             var centerPosition =
-                parent.StructureModelData.CellReferencePositions.Single(x => x.Key == energySetter.GroupInteraction.CenterCellReferencePosition.Key);
+                parent.StructureModelData.CellReferencePositions.Single(x => x.Key == energySetter.GroupInteraction.CenterCellSite.Key);
 
             var obj = new GroupEnergySetData
             {
@@ -146,7 +146,7 @@ namespace Mocassin.UI.Xml.Customization
                 ModelIndex = energySetter.GroupInteraction.Index,
                 BaseGeometry = energySetter.GroupInteraction.GetSurroundingGeometry().Select(x => VectorData3D.Create(x)).ToObservableCollection(),
                 GroupInteraction = new ModelObjectReference<GroupInteraction>(groupInteraction),
-                CenterPosition = new ModelObjectReference<CellReferencePosition>(centerPosition),
+                CenterPosition = new ModelObjectReference<CellSite>(centerPosition),
                 EnergyEntries = energySetter.EnergyEntries.Select(x => GroupEnergyData.Create(x, parent)).ToObservableCollection()
             };
             return obj;
@@ -161,7 +161,7 @@ namespace Mocassin.UI.Xml.Customization
         public IEnumerable<Fractional3D> AsVectorPath(bool includeCenter = false)
         {
             var baseEnum = BaseGeometry.Select(x => new Fractional3D(x.A, x.B, x.C));
-            return includeCenter ? ((ICellReferencePosition) CenterPosition.Target.GetInputObject()).Vector.AsSingleton().Concat(baseEnum) : baseEnum;
+            return includeCenter ? ((ICellSite) CenterPosition.Target.GetInputObject()).Vector.AsSingleton().Concat(baseEnum) : baseEnum;
         }
     }
 }

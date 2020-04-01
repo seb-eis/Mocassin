@@ -25,7 +25,7 @@ namespace Mocassin.Model.Transitions.Handler
         /// <param name="eventArgs"></param>
         /// <returns></returns>
         [EventHandlingMethod]
-        protected IConflictReport HandleUnitCellRemoval(IModelObjectEventArgs<ICellReferencePosition> eventArgs)
+        protected IConflictReport HandleUnitCellRemoval(IModelObjectEventArgs<ICellSite> eventArgs)
         {
             Console.WriteLine($"{eventArgs} received on {ToString()}");
             return new ConflictReport();

@@ -16,7 +16,7 @@ namespace Mocassin.Model.Energies
 
         /// <inheritdoc />
         [UseTrackedData]
-        public ICellReferencePosition CenterCellReferencePosition { get; set; }
+        public ICellSite CenterCellSite { get; set; }
 
         /// <summary>
         ///     The list of 3D fractional vectors that describe the group geometry
@@ -40,7 +40,7 @@ namespace Mocassin.Model.Energies
         /// <inheritdoc />
         public IEnumerable<Fractional3D> GetFullGeometry()
         {
-            return CenterCellReferencePosition.Vector.AsSingleton().Concat(GetSurroundingGeometry());
+            return CenterCellSite.Vector.AsSingleton().Concat(GetSurroundingGeometry());
         }
 
         /// <inheritdoc />
@@ -72,7 +72,7 @@ namespace Mocassin.Model.Energies
             if (!(CastIfNotDeprecated<IGroupInteraction>(obj) is { } interaction))
                 return null;
 
-            CenterCellReferencePosition = interaction.CenterCellReferencePosition;
+            CenterCellSite = interaction.CenterCellSite;
             GeometryVectors = interaction.GetSurroundingGeometry().ToList();
             EnergyDictionarySet = new Dictionary<IParticle, Dictionary<OccupationState, double>>();
 

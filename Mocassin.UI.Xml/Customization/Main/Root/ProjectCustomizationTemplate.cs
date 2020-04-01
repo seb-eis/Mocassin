@@ -109,8 +109,8 @@ namespace Mocassin.UI.Xml.Customization
             if (modelProject == null) throw new ArgumentNullException(nameof(modelProject));
             if (parent == null) throw new ArgumentNullException(nameof(parent));
 
-            var energySetterProvider = modelProject.GetManager<IEnergyManager>().QueryPort.Query(x => x.GetEnergySetterProvider());
-            var ruleSetterProvider = modelProject.GetManager<ITransitionManager>().QueryPort.Query(x => x.GetRuleSetterProvider());
+            var energySetterProvider = modelProject.Manager<IEnergyManager>().DataAccess.Query(x => x.GetEnergySetterProvider());
+            var ruleSetterProvider = modelProject.Manager<ITransitionManager>().DataAccess.Query(x => x.GetRuleSetterProvider());
 
             var obj = new ProjectCustomizationTemplate
             {

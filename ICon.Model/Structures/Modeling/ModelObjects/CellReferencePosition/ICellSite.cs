@@ -7,7 +7,7 @@ namespace Mocassin.Model.Structures
     /// <summary>
     ///     Represents a unit cell reference position that carries fractional position information and occupation as an index
     /// </summary>
-    public interface ICellReferencePosition : IModelObject
+    public interface ICellSite : IModelObject
     {
         /// <summary>
         ///     The fractional position vector

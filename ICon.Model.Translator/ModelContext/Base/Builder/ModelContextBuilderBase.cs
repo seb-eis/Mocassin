@@ -67,7 +67,7 @@ namespace Mocassin.Model.Translator.ModelContext
             if (ModelProject is null) return false;
 
             var isOk = true;
-            var managers = ModelProject.GetAllManagers().ToList();
+            var managers = ModelProject.Managers().ToList();
             isOk &= managers.Any(x => x is IParticleManager);
             isOk &= managers.Any(x => x is IStructureManager);
             isOk &= managers.Any(x => x is IEnergyManager);

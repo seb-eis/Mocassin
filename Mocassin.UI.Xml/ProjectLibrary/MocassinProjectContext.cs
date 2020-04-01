@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reactive;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Mocassin.Framework.Events;
 using Mocassin.Framework.SQLiteCore;
+using Mocassin.Model.DataManagement;
+using Mocassin.Model.ModelProject;
 using Mocassin.UI.Xml.Main;
 
 namespace Mocassin.UI.Xml.ProjectLibrary
@@ -77,6 +80,15 @@ namespace Mocassin.UI.Xml.ProjectLibrary
         public Task<bool> CheckForModelChangesAsync()
         {
             return Task.Run(CheckForModelChanges);
+        }
+
+        /// <inheritdoc />
+        public IModelProject LoadDefaultModelProject(Expression<Func<MocassinProject, bool>> selectorExpression, ProjectSettings settings = null)
+        {
+            var project = MocassinProjectGraphs.Single(selectorExpression);
+            var modelProject = ModelProjectFactory.Create(settings ?? ProjectSettings.CreateDefault());
+            modelProject.InputPipeline.PushToProject(project.ProjectModelData.GetInputSequence());
+            return modelProject;
         }
 
         /// <inheritdoc />

@@ -14,14 +14,14 @@ namespace Mocassin.UI.Xml.EnergyModel
     [XmlRoot]
     public class GroupInteractionData : ModelDataObject
     {
-        private ModelObjectReference<CellReferencePosition> centerCellReferencePosition = new ModelObjectReference<CellReferencePosition>();
+        private ModelObjectReference<CellSite> centerCellReferencePosition = new ModelObjectReference<CellSite>();
         private ObservableCollection<VectorData3D> groupGeometry = new ObservableCollection<VectorData3D>();
 
         /// <summary>
         ///     Get or set the key of the center unit cell position
         /// </summary>
         [XmlElement]
-        public ModelObjectReference<CellReferencePosition> CenterCellReferencePosition
+        public ModelObjectReference<CellSite> CenterCellReferencePosition
         {
             get => centerCellReferencePosition;
             set => SetProperty(ref centerCellReferencePosition, value);
@@ -42,7 +42,7 @@ namespace Mocassin.UI.Xml.EnergyModel
         {
             var obj = new GroupInteraction
             {
-                CenterCellReferencePosition = new CellReferencePosition {Key = CenterCellReferencePosition.Key},
+                CenterCellSite = new CellSite {Key = CenterCellReferencePosition.Key},
                 GeometryVectors = GroupGeometry.Select(x => x.AsFractional3D()).ToList()
             };
             return obj;

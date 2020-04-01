@@ -34,10 +34,10 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
             GetSelectableParticleReferences(SelectedItem);
 
         /// <summary>
-        ///     Get the sequence of <see cref="ModelObjectReference{T}" /> instances of <see cref="CellReferencePosition" /> that
+        ///     Get the sequence of <see cref="ModelObjectReference{T}" /> instances of <see cref="CellSite" /> that
         ///     are selectable in the current state of the object
         /// </summary>
-        public IEnumerable<ModelObjectReference<CellReferencePosition>> SelectablePositions =>
+        public IEnumerable<ModelObjectReference<CellSite>> SelectablePositions =>
             GetSelectableCellReferencePositionReferences(SelectedItem);
 
         /// <summary>
@@ -74,18 +74,18 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         }
 
         /// <summary>
-        ///     Get the sequence of <see cref="ModelObjectReference{T}" /> instances of <see cref="CellReferencePosition" /> that
+        ///     Get the sequence of <see cref="ModelObjectReference{T}" /> instances of <see cref="CellSite" /> that
         ///     are selectable in the current state of the object
         /// </summary>
         /// <param name="current"></param>
         /// <returns></returns>
-        public IEnumerable<ModelObjectReference<CellReferencePosition>> GetSelectableCellReferencePositionReferences(
+        public IEnumerable<ModelObjectReference<CellSite>> GetSelectableCellReferencePositionReferences(
             SelectionOptimizerData current)
         {
             var baseCollection = ContentSource?.ProjectModelData?.StructureModelData?.CellReferencePositions;
             return baseCollection
                 ?.Where(x => x.Stability == PositionStability.Stable)
-                .Select(x => new ModelObjectReference<CellReferencePosition>(x));
+                .Select(x => new ModelObjectReference<CellSite>(x));
         }
     }
 }

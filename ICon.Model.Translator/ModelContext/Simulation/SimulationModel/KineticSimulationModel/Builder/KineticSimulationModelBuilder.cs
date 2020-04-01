@@ -130,10 +130,10 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <remarks> Assigns each combination that does not support tracking the value -1 </remarks>
         protected int[,] CreateStaticTrackerMappingTable(IList<IStaticMovementTrackerModel> trackerModels)
         {
-            var maxPositionId = ModelProject.GetManager<IStructureManager>().QueryPort
+            var maxPositionId = ModelProject.Manager<IStructureManager>().DataAccess
                 .Query(port => port.GetLinearizedExtendedPositionCount());
 
-            var maxParticleId = ModelProject.GetManager<IParticleManager>().QueryPort
+            var maxParticleId = ModelProject.Manager<IParticleManager>().DataAccess
                 .Query(port => port.ParticleCount);
 
             var result = new int[maxPositionId, maxParticleId].Populate(() => -1);
@@ -154,7 +154,7 @@ namespace Mocassin.Model.Translator.ModelContext
         protected int[,] CreateGlobalTrackerMappingTable(IList<IGlobalTrackerModel> trackerModels)
         {
             var maxTransitionId = 1 + trackerModels.Select(a => a.KineticTransitionModel.ModelId).Max();
-            var maxParticleId = ModelProject.GetManager<IParticleManager>().QueryPort
+            var maxParticleId = ModelProject.Manager<IParticleManager>().DataAccess
                 .Query(port => port.ParticleCount);
 
             var result = new int[maxTransitionId, maxParticleId].Populate(() => -1);
@@ -171,7 +171,7 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <param name="simulationModel"></param>
         protected void AddNormalizedElectricFieldVector(IKineticSimulationModel simulationModel)
         {
-            var encoder = ModelProject.GetManager<IStructureManager>().QueryPort.Query(port => port.GetVectorEncoder());
+            var encoder = ModelProject.Manager<IStructureManager>().DataAccess.Query(port => port.GetVectorEncoder());
             var fieldVector = encoder.Transformer.ToCartesian(simulationModel.Simulation.ElectricFieldVector);
             simulationModel.NormalizedElectricFieldVector = fieldVector.GetNormalized();
         }
@@ -261,7 +261,7 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <returns></returns>
         protected Cartesian3D GetChargeTransportVector(IKineticMappingModel mappingModel, IKineticRuleModel ruleModel)
         {
-            var transformer = ModelProject.GetManager<IStructureManager>().QueryPort.Query(port => port.GetVectorEncoder()).Transformer;
+            var transformer = ModelProject.Manager<IStructureManager>().DataAccess.Query(port => port.GetVectorEncoder()).Transformer;
             var transportMatrix = mappingModel.PositionMovementMatrix * ruleModel.ChargeTransportMatrix.GetTransposed();
             var transportVector = new Fractional3D(transportMatrix[0, 0], transportMatrix[1, 0], transportMatrix[2, 0]);
             return transformer.ToCartesian(transportVector) * 1.0e-10;

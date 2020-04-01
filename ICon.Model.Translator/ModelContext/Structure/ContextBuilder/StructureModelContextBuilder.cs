@@ -24,7 +24,7 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <inheritdoc />
         public override bool CheckBuildRequirements()
         {
-            return ModelProject?.GetAllManagers().Any(x => x is IStructureManager) ?? false;
+            return ModelProject?.Managers().Any(x => x is IStructureManager) ?? false;
         }
 
         /// <inheritdoc />
@@ -32,8 +32,8 @@ namespace Mocassin.Model.Translator.ModelContext
         {
             if (!CheckBuildRequirements()) return modelContext;
 
-            var manager = ModelProject.GetManager<IStructureManager>();
-            var cellReferencePositions = manager.QueryPort.Query(port => port.GetCellReferencePositions());
+            var manager = ModelProject.Manager<IStructureManager>();
+            var cellReferencePositions = manager.DataAccess.Query(port => port.GetCellReferencePositions());
             var environmentModels = EnvironmentModelBuilder.BuildModels(cellReferencePositions);
             var positionModels = PositionModelBuilder.BuildModels(environmentModels);
             var rangeModel = InteractionRangeModelBuilder.BuildModel(ModelProject);

@@ -11,9 +11,9 @@ namespace Mocassin.UI.Xml.Base
     [XmlRoot("RadialInteractionFilter")]
     public class RadialInteractionFilterData : ProjectDataObject
     {
-        private ModelObjectReference<CellReferencePosition> centerCellReferencePosition;
+        private ModelObjectReference<CellSite> centerCellReferencePosition;
         private double endRadius;
-        private ModelObjectReference<CellReferencePosition> partnerCellReferencePosition;
+        private ModelObjectReference<CellSite> partnerCellReferencePosition;
         private double startRadius;
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace Mocassin.UI.Xml.Base
         ///     Get or set the center unit cell position key
         /// </summary>
         [XmlElement("CenterCellReferencePosition")]
-        public ModelObjectReference<CellReferencePosition> CenterCellReferencePosition
+        public ModelObjectReference<CellSite> CenterCellReferencePosition
         {
             get => centerCellReferencePosition;
             set => SetProperty(ref centerCellReferencePosition, value);
@@ -50,7 +50,7 @@ namespace Mocassin.UI.Xml.Base
         ///     Get or set the partner unit cell position key
         /// </summary>
         [XmlElement("PartnerCellReferencePosition")]
-        public ModelObjectReference<CellReferencePosition> PartnerCellReferencePosition
+        public ModelObjectReference<CellSite> PartnerCellReferencePosition
         {
             get => partnerCellReferencePosition;
             set => SetProperty(ref partnerCellReferencePosition, value);
@@ -66,8 +66,8 @@ namespace Mocassin.UI.Xml.Base
             {
                 StartRadius = StartRadius,
                 EndRadius = EndRadius,
-                CenterCellReferencePosition = new CellReferencePosition {Key = CenterCellReferencePosition.Key},
-                PartnerCellReferencePosition = new CellReferencePosition {Key = PartnerCellReferencePosition.Key}
+                CenterCellSite = new CellSite {Key = CenterCellReferencePosition.Key},
+                PartnerCellSite = new CellSite {Key = PartnerCellReferencePosition.Key}
             };
             return obj;
         }
@@ -82,7 +82,7 @@ namespace Mocassin.UI.Xml.Base
             {
                 StartRadius = StartRadius,
                 EndRadius = EndRadius,
-                PartnerCellReferencePosition = new CellReferencePosition {Key = PartnerCellReferencePosition.Key}
+                PartnerCellSite = new CellSite {Key = PartnerCellReferencePosition.Key}
             };
             return obj;
         }

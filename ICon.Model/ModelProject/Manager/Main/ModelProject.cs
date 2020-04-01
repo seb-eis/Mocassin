@@ -103,7 +103,7 @@ namespace Mocassin.Model.ModelProject
         }
 
         /// <inheritdoc />
-        public void CreateAndRegisterMany(IEnumerable<IModelManagerFactory> factories)
+        public void CreateAndRegister(IEnumerable<IModelManagerFactory> factories)
         {
             if (factories == null) throw new ArgumentNullException(nameof(factories));
             foreach (var item in factories) CreateAndRegister(item);
@@ -130,7 +130,7 @@ namespace Mocassin.Model.ModelProject
         }
 
         /// <inheritdoc />
-        public TManager GetManager<TManager>()
+        public TManager Manager<TManager>()
             where TManager : class, IModelManager
         {
             foreach (var manager in ActiveManagers)
@@ -144,14 +144,14 @@ namespace Mocassin.Model.ModelProject
 
 
         /// <inheritdoc />
-        public IModelManager GetManager(Type interfaceType)
+        public IModelManager Manager(Type interfaceType)
         {
             return ActiveManagers.SingleOrDefault(interfaceType.IsInstanceOfType);
         }
 
 
         /// <inheritdoc />
-        public IEnumerable<IModelManager> GetAllManagers()
+        public IEnumerable<IModelManager> Managers()
         {
             return ActiveManagers;
         }
@@ -159,8 +159,8 @@ namespace Mocassin.Model.ModelProject
         /// <inheritdoc />
         public void ResetProject()
         {
-            foreach (var modelManager in GetAllManagers())
-                modelManager.InputPort.ResetManager().Wait();
+            foreach (var modelManager in Managers())
+                modelManager.InputAccess.ResetManager().Wait();
         }
 
         /// <summary>
@@ -171,11 +171,11 @@ namespace Mocassin.Model.ModelProject
         {
             foreach (var otherManager in ActiveManagers)
             {
-                if (otherManager != manager && manager.EventPort != null)
-                    otherManager.TryConnectManager(manager.EventPort);
+                if (otherManager != manager && manager.EventAccess != null)
+                    otherManager.TryConnectManager(manager.EventAccess);
 
-                if (otherManager.EventPort != null)
-                    manager.TryConnectManager(otherManager.EventPort);
+                if (otherManager.EventAccess != null)
+                    manager.TryConnectManager(otherManager.EventAccess);
             }
         }
 

@@ -143,9 +143,9 @@ namespace Mocassin.Model.ModelProject
         /// <returns></returns>
         protected IDataReader<IModelDataPort> GetMatchingDataReader(object obj)
         {
-            var results = from modelManager in ModelProject.GetAllManagers()
-                where modelManager.InputPort.GetSupportedModelTypes().Any(x => x.IsInstanceOfType(obj))
-                select modelManager.InputPort.GetDataReader();
+            var results = from modelManager in ModelProject.Managers()
+                where modelManager.InputAccess.GetSupportedModelTypes().Any(x => x.IsInstanceOfType(obj))
+                select modelManager.InputAccess.GetDataReader();
 
             return results.FirstOrDefault();
         }

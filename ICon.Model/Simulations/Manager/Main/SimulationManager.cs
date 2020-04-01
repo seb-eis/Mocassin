@@ -14,17 +14,17 @@ namespace Mocassin.Model.Simulations
         /// <summary>
         ///     Get access to the simulation manager query port
         /// </summary>
-        public ISimulationQueryPort QueryPort => QueryManager;
+        public ISimulationQueryPort DataAccess => QueryManager;
 
         /// <summary>
         ///     Get access to the simulation manager input port
         /// </summary>
-        public new ISimulationInputPort InputPort => InputManager;
+        public new ISimulationInputPort InputAccess => InputManager;
 
         /// <summary>
         ///     Get access to the simulatuion manager event port
         /// </summary>
-        public new ISimulationEventPort EventPort => EventManager;
+        public new ISimulationEventPort EventAccess => EventManager;
 
         /// <summary>
         ///     Create new simulation manager with the provided project services and manages the provided simulation data object

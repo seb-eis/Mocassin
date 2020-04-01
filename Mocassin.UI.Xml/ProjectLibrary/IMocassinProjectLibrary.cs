@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Reactive;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Mocassin.Model.ModelProject;
 using Mocassin.UI.Xml.Main;
 
 namespace Mocassin.UI.Xml.ProjectLibrary
@@ -81,5 +83,13 @@ namespace Mocassin.UI.Xml.ProjectLibrary
         /// </summary>
         /// <returns></returns>
         Task<bool> CheckForModelChangesAsync();
+
+        /// <summary>
+        ///     Creates and loads a <see cref="MocassinProject"/> as a default <see cref="IModelProject"/> with the provided <see cref="ProjectSettings"/> (Default settings if null)
+        /// </summary>
+        /// <param name="selectorExpression"></param>
+        /// <param name="settings"></param>
+        /// <returns></returns>
+        IModelProject LoadDefaultModelProject(Expression<Func<MocassinProject, bool>> selectorExpression, ProjectSettings settings = null);
     }
 }

@@ -5,31 +5,30 @@ using Mocassin.Mathematics.ValueTypes;
 namespace Mocassin.Symmetry.Analysis
 {
     /// <summary>
-    ///     Basic cell entry wrapper that contains an entry information and a fractional vector describing its absolute
-    ///     position
+    ///     Generic lattice point wrapper that contains an entry information and a fractional vector describing its absolute position
     /// </summary>
-    public readonly struct CellEntry<T1>
+    public readonly struct LatticePoint<TContent>
     {
         /// <summary>
         ///     The absolute position of the cell entry
         /// </summary>
-        public Fractional3D AbsoluteVector { get; }
+        public Fractional3D Fractional { get; }
 
         /// <summary>
-        ///     The entry affiliated with the position
+        ///     The content affiliated with the position
         /// </summary>
-        public T1 Entry { get; }
+        public TContent Content { get; }
 
         /// <summary>
         ///     Create new unit cell entry
         /// </summary>
-        /// <param name="absoluteVector"></param>
-        /// <param name="entry"></param>
-        public CellEntry(Fractional3D absoluteVector, T1 entry)
+        /// <param name="fractional"></param>
+        /// <param name="content"></param>
+        public LatticePoint(in Fractional3D fractional, TContent content)
             : this()
         {
-            AbsoluteVector = absoluteVector;
-            Entry = entry;
+            Fractional = fractional;
+            Content = content;
         }
 
         /// <summary>
@@ -37,9 +36,9 @@ namespace Mocassin.Symmetry.Analysis
         /// </summary>
         /// <param name="offset"></param>
         /// <returns></returns>
-        public CellEntry<T1> GetShifted(in Fractional3D offset)
+        public LatticePoint<TContent> GetShifted(in Fractional3D offset)
         {
-            return new CellEntry<T1>(AbsoluteVector + offset, Entry);
+            return new LatticePoint<TContent>(Fractional + offset, Content);
         }
 
         /// <summary>
@@ -48,7 +47,7 @@ namespace Mocassin.Symmetry.Analysis
         /// <param name="vectorComparer"></param>
         /// <param name="entryComparer"></param>
         /// <returns></returns>
-        public static IComparer<CellEntry<T1>> MakeComparer(IComparer<Fractional3D> vectorComparer, IComparer<T1> entryComparer)
+        public static IComparer<LatticePoint<TContent>> MakeComparer(IComparer<Fractional3D> vectorComparer, IComparer<TContent> entryComparer)
         {
             if (vectorComparer == null)
                 throw new ArgumentNullException(nameof(vectorComparer));
@@ -56,11 +55,11 @@ namespace Mocassin.Symmetry.Analysis
             if (entryComparer == null)
                 throw new ArgumentNullException(nameof(entryComparer));
 
-            return Comparer<CellEntry<T1>>.Create((lhs, rhs) =>
+            return Comparer<LatticePoint<TContent>>.Create((lhs, rhs) =>
             {
-                var vectorCompare = vectorComparer.Compare(lhs.AbsoluteVector, rhs.AbsoluteVector);
+                var vectorCompare = vectorComparer.Compare(lhs.Fractional, rhs.Fractional);
                 return vectorCompare == 0
-                    ? entryComparer.Compare(lhs.Entry, rhs.Entry)
+                    ? entryComparer.Compare(lhs.Content, rhs.Content)
                     : vectorCompare;
             });
         }

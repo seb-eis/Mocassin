@@ -12,13 +12,13 @@ namespace Mocassin.Model.Energies
         , EnergyQueryManager, EnergyEventManager, EnergyUpdateManager>, IEnergyManager
     {
         /// <inheritdoc />
-        public new IEnergyInputPort InputPort => InputManager;
+        public new IEnergyInputPort InputAccess => InputManager;
 
         /// <inheritdoc />
-        public IEnergyQueryPort QueryPort => QueryManager;
+        public IEnergyQueryPort DataAccess => QueryManager;
 
         /// <inheritdoc />
-        public new IEnergyEventPort EventPort => EventManager;
+        public new IEnergyEventPort EventAccess => EventManager;
 
         /// <inheritdoc />
         public EnergyManager(IModelProject modelProject, EnergyModelData data)

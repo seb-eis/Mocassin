@@ -36,7 +36,7 @@ namespace Mocassin.Framework.SQLiteCore
         /// <returns></returns>
         public IQueryable<TEntity> Set<TEntity>() where TEntity : class
         {
-            return dbContext.Set<TEntity>().AsNoTracking();
+            return dbContext.Set<TEntity>();
         }
     }
 }

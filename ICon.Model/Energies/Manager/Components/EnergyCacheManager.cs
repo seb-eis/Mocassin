@@ -28,13 +28,13 @@ namespace Mocassin.Model.Energies
         }
 
         /// <inheritdoc />
-        public IReadOnlyDictionary<ICellReferencePosition, IReadOnlyList<IPairInteraction>> GetPositionPairInteractions()
+        public IReadOnlyDictionary<ICellSite, IReadOnlyList<IPairInteraction>> GetPositionPairInteractions()
         {
             return GetResultFromCache(CreatePositionPairInteractions);
         }
 
         /// <inheritdoc />
-        public IReadOnlyDictionary<ICellReferencePosition, IReadOnlyList<IGroupInteraction>> GetPositionGroupInteractions()
+        public IReadOnlyDictionary<ICellSite, IReadOnlyList<IGroupInteraction>> GetPositionGroupInteractions()
         {
             return GetResultFromCache(CreatePositionGroupInteractions);
         }
@@ -124,7 +124,7 @@ namespace Mocassin.Model.Energies
         [CacheMethodResult]
         protected IEnergySetterProvider CreateEnergySetterProvider()
         {
-            var queryPort = ModelProject.GetManager<IEnergyManager>().QueryPort;
+            var queryPort = ModelProject.Manager<IEnergyManager>().DataAccess;
             var provider = queryPort.Query(port => port.GetEnergySetterProvider(ModelProject.Settings, queryPort));
             return provider;
         }
@@ -136,7 +136,7 @@ namespace Mocassin.Model.Energies
         [CacheMethodResult]
         protected IPairInteractionFinder CreatePairInteractionFinder()
         {
-            var unitCellProvider = ModelProject.GetManager<IStructureManager>().QueryPort.Query(port => port.GetFullUnitCellProvider());
+            var unitCellProvider = ModelProject.Manager<IStructureManager>().DataAccess.Query(port => port.GetFullUnitCellProvider());
             return new PairInteractionFinder(unitCellProvider, ModelProject.SpaceGroupService);
         }
 
@@ -148,9 +148,9 @@ namespace Mocassin.Model.Energies
         [CacheMethodResult]
         protected List<IPositionGroupInfo> CreateAllPositionGroupInfos()
         {
-            var ucProvider = ModelProject.GetManager<IStructureManager>().QueryPort.Query(port => port.GetFullUnitCellProvider());
+            var ucProvider = ModelProject.Manager<IStructureManager>().DataAccess.Query(port => port.GetFullUnitCellProvider());
             var analyzer = new GeometryGroupAnalyzer(ucProvider, ModelProject.SpaceGroupService);
-            var interactions = ModelProject.GetManager<IEnergyManager>().QueryPort.Query(port => port.GetGroupInteractions());
+            var interactions = ModelProject.Manager<IEnergyManager>().DataAccess.Query(port => port.GetGroupInteractions());
 
             var result = analyzer.CreateExtendedPositionGroups(interactions)
                 .Select(value => (IPositionGroupInfo) new PositionGroupInfo(value))
@@ -165,12 +165,12 @@ namespace Mocassin.Model.Energies
         /// </summary>
         /// <returns></returns>
         [CacheMethodResult]
-        protected IReadOnlyDictionary<ICellReferencePosition, IReadOnlyList<IPairInteraction>> CreatePositionPairInteractions()
+        protected IReadOnlyDictionary<ICellSite, IReadOnlyList<IPairInteraction>> CreatePositionPairInteractions()
         {
-            var energyManager = ModelProject.GetManager<IEnergyManager>();
-            var structureManager = ModelProject.GetManager<IStructureManager>();
-            var symmetricPairs = energyManager.QueryPort.Query(port => port.GetStablePairInteractions());
-            var asymmetricPairs = energyManager.QueryPort.Query(port => port.GetUnstablePairInteractions());
+            var energyManager = ModelProject.Manager<IEnergyManager>();
+            var structureManager = ModelProject.Manager<IStructureManager>();
+            var symmetricPairs = energyManager.DataAccess.Query(port => port.GetStablePairInteractions());
+            var asymmetricPairs = energyManager.DataAccess.Query(port => port.GetUnstablePairInteractions());
             var symmetricResult = AssignPairInteractionsToPosition(symmetricPairs);
             var asymmetricResult = AssignPairInteractionsToPosition(asymmetricPairs);
 
@@ -178,7 +178,7 @@ namespace Mocassin.Model.Energies
                 .Concat(asymmetricResult)
                 .ToDictionary(item => item.Key, item => (IReadOnlyList<IPairInteraction>) item.Value);
 
-            foreach (var referencePosition in structureManager.QueryPort.Query(port => port.GetCellReferencePositions()))
+            foreach (var referencePosition in structureManager.DataAccess.Query(port => port.GetCellReferencePositions()))
                 if (!result.ContainsKey(referencePosition))
                     result.Add(referencePosition, new List<IPairInteraction>());
 
@@ -190,11 +190,11 @@ namespace Mocassin.Model.Energies
         ///     position only
         /// </summary>
         /// <returns></returns>
-        protected IDictionary<ICellReferencePosition, List<IPairInteraction>> AssignPairInteractionsToPosition<T>(
+        protected IDictionary<ICellSite, List<IPairInteraction>> AssignPairInteractionsToPosition<T>(
             IEnumerable<T> pairInteractions)
             where T : IPairInteraction
         {
-            var localResult = new Dictionary<ICellReferencePosition, List<IPairInteraction>>();
+            var localResult = new Dictionary<ICellSite, List<IPairInteraction>>();
 
             foreach (var pairInteraction in pairInteractions)
             {
@@ -226,17 +226,17 @@ namespace Mocassin.Model.Energies
         /// </summary>
         /// <returns></returns>
         [CacheMethodResult]
-        protected IReadOnlyDictionary<ICellReferencePosition, IReadOnlyList<IGroupInteraction>> CreatePositionGroupInteractions()
+        protected IReadOnlyDictionary<ICellSite, IReadOnlyList<IGroupInteraction>> CreatePositionGroupInteractions()
         {
-            var manager = ModelProject.GetManager<IEnergyManager>();
-            var groupInteractions = manager.QueryPort.Query(port => port.GetGroupInteractions());
-            var localResult = new Dictionary<ICellReferencePosition, List<IGroupInteraction>>();
+            var manager = ModelProject.Manager<IEnergyManager>();
+            var groupInteractions = manager.DataAccess.Query(port => port.GetGroupInteractions());
+            var localResult = new Dictionary<ICellSite, List<IGroupInteraction>>();
             foreach (var groupInteraction in groupInteractions)
             {
-                if (!localResult.TryGetValue(groupInteraction.CenterCellReferencePosition, out var list))
+                if (!localResult.TryGetValue(groupInteraction.CenterCellSite, out var list))
                 {
                     list = new List<IGroupInteraction>();
-                    localResult.Add(groupInteraction.CenterCellReferencePosition, list);
+                    localResult.Add(groupInteraction.CenterCellSite, list);
                 }
 
                 list.Add(groupInteraction);

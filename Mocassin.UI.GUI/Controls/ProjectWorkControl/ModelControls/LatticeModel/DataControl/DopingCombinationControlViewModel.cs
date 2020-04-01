@@ -22,9 +22,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel
 
         /// <summary>
         ///     Get the <see cref="IEnumerable{T}" /> sequence of <see cref="ModelObjectReference{T}" /> of selectable
-        ///     <see cref="CellReferencePosition" /> instances
+        ///     <see cref="CellSite" /> instances
         /// </summary>
-        public IEnumerable<ModelObjectReference<CellReferencePosition>> SelectablePositions =>
+        public IEnumerable<ModelObjectReference<CellSite>> SelectablePositions =>
             GetSelectablePositions(SelectedItem);
 
         /// <summary>
@@ -50,12 +50,12 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel
 
         /// <summary>
         ///     Get the <see cref="IEnumerable{T}" /> sequence of <see cref="ModelObjectReference{T}" /> of selectable
-        ///     <see cref="CellReferencePosition" /> instances in the context of the passed <see cref="DopingAbstractData" />
+        ///     <see cref="CellSite" /> instances in the context of the passed <see cref="DopingAbstractData" />
         /// </summary>
-        public IEnumerable<ModelObjectReference<CellReferencePosition>> GetSelectablePositions(DopingAbstractData current)
+        public IEnumerable<ModelObjectReference<CellSite>> GetSelectablePositions(DopingAbstractData current)
         {
             var baseCollection = ContentSource?.ProjectModelData?.StructureModelData?.CellReferencePositions;
-            return baseCollection?.Select(x => new ModelObjectReference<CellReferencePosition>(x));
+            return baseCollection?.Select(x => new ModelObjectReference<CellSite>(x));
         }
 
         /// <summary>

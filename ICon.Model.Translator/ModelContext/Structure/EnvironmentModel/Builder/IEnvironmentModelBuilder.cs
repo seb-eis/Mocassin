@@ -13,6 +13,6 @@ namespace Mocassin.Model.Translator.ModelContext
         /// </summary>
         /// <param name="cellReferencePositions"></param>
         /// <returns></returns>
-        IList<IEnvironmentModel> BuildModels(IEnumerable<ICellReferencePosition> cellReferencePositions);
+        IList<IEnvironmentModel> BuildModels(IEnumerable<ICellSite> cellReferencePositions);
     }
 }

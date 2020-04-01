@@ -14,17 +14,17 @@ namespace Mocassin.Model.Lattices
         /// <summary>
         ///     Access to input port for model requests
         /// </summary>
-        public new ILatticeInputPort InputPort => InputManager;
+        public new ILatticeInputPort InputAccess => InputManager;
 
         /// <summary>
         ///     Access to query port for model data and cache queries
         /// </summary>
-        public ILatticeQueryPort QueryPort => QueryManager;
+        public ILatticeQueryPort DataAccess => QueryManager;
 
         /// <summary>
         ///     Access to the event port for change subscriptions
         /// </summary>
-        public new ILatticeEventPort EventPort => EventManager;
+        public new ILatticeEventPort EventAccess => EventManager;
 
         /// <summary>
         ///     Creates new lattice manager with the provided project services and base data object

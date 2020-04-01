@@ -55,12 +55,12 @@ namespace Mocassin.Symmetry.Analysis
         ///     Performs a radial entry search for entries in the unit cell provider.
         ///     The search is limited by the hollow sphere defined by start and constraint
         /// </summary>
-        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T"></typeparam>
         /// <param name="provider"></param>
         /// <param name="start"></param>
         /// <param name="constraint"></param>
         /// <returns></returns>
-        public IList<CellEntry<T1>> Search<T1>(IUnitCellProvider<T1> provider, in Fractional3D start, NumericConstraint constraint)
+        public IList<LatticePoint<T>> Search<T>(IUnitCellProvider<T> provider, in Fractional3D start, NumericConstraint constraint)
         {
             return Search(provider, start, constraint, value => true);
         }
@@ -70,14 +70,14 @@ namespace Mocassin.Symmetry.Analysis
         ///     The search is limited by the hollow sphere defined by start and constraint and the result sorted using the provided
         ///     comparer
         /// </summary>
-        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T"></typeparam>
         /// <param name="provider"></param>
         /// <param name="start"></param>
         /// <param name="constraint"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        public IList<CellEntry<T1>> Search<T1>(IUnitCellProvider<T1> provider, in Fractional3D start, NumericConstraint constraint,
-            IComparer<CellEntry<T1>> comparer)
+        public IList<LatticePoint<T>> Search<T>(IUnitCellProvider<T> provider, in Fractional3D start, NumericConstraint constraint,
+            IComparer<LatticePoint<T>> comparer)
         {
             return Search(provider, start, constraint, value => true, comparer);
         }
@@ -86,20 +86,20 @@ namespace Mocassin.Symmetry.Analysis
         ///     Performs a radial entry search for all entries fulfilling the predicate in the unit cell provider.
         ///     The search is limited by the hollow sphere defined by start and constraint
         /// </summary>
-        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T"></typeparam>
         /// <param name="provider"></param>
         /// <param name="start"></param>
         /// <param name="constraint"></param>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public IList<CellEntry<T1>> Search<T1>(IUnitCellProvider<T1> provider, in Fractional3D start, NumericConstraint constraint,
-            Predicate<T1> predicate)
+        public IList<LatticePoint<T>> Search<T>(IUnitCellProvider<T> provider, in Fractional3D start, NumericConstraint constraint,
+            Func<T, bool> predicate)
         {
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
             SetBasicCalculationProperties(provider, constraint, start);
-            var results = new List<CellEntry<T1>>(500);
+            var results = new List<LatticePoint<T>>(500);
 
             for (var offset = 0;; offset++)
             {
@@ -116,21 +116,21 @@ namespace Mocassin.Symmetry.Analysis
         ///     The search is limited by the hollow sphere defined by start and constraint and the result sorted by the supplied
         ///     comparer
         /// </summary>
-        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T"></typeparam>
         /// <param name="provider"></param>
         /// <param name="start"></param>
         /// <param name="constraint"></param>
         /// <param name="predicate"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        public IList<CellEntry<T1>> Search<T1>(IUnitCellProvider<T1> provider, in Fractional3D start, NumericConstraint constraint,
-            Predicate<T1> predicate, IComparer<CellEntry<T1>> comparer)
+        public IList<LatticePoint<T>> Search<T>(IUnitCellProvider<T> provider, in Fractional3D start, NumericConstraint constraint,
+            Func<T, bool> predicate, IComparer<LatticePoint<T>> comparer)
         {
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
             SetBasicCalculationProperties(provider, constraint, start);
-            var results = new MultisetList<CellEntry<T1>>(comparer, 500);
+            var results = new MultisetList<LatticePoint<T>>(comparer, 500);
 
             for (var offset = 0;; offset++)
             {
@@ -146,12 +146,12 @@ namespace Mocassin.Symmetry.Analysis
         ///     Searches all unit cells with the specified offset from the start cell for positions within the constraint range
         ///     that match the predicate
         /// </summary>
-        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T"></typeparam>
         /// <param name="results"></param>
         /// <param name="provider"></param>
         /// <param name="predicate"></param>
         /// <param name="offset"></param>
-        protected void SearchCellSet<T1>(IList<CellEntry<T1>> results, IUnitCellProvider<T1> provider, Predicate<T1> predicate, int offset)
+        protected void SearchCellSet<T>(IList<LatticePoint<T>> results, IUnitCellProvider<T> provider, Func<T, bool> predicate, int offset)
         {
             for (var a = -offset; a <= offset; a++)
             {
@@ -175,18 +175,18 @@ namespace Mocassin.Symmetry.Analysis
         /// <summary>
         ///     Searches a single cell that starts at the specified cartesian offset vector for entries matching the radial search
         /// </summary>
-        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T"></typeparam>
         /// <param name="results"></param>
         /// <param name="unitCell"></param>
         /// <param name="predicate"></param>
         /// <param name="cellOffsetVector"></param>
-        protected void SearchUnitCell<T1>(IList<CellEntry<T1>> results, IUnitCell<T1> unitCell, Predicate<T1> predicate,
+        protected void SearchUnitCell<T>(IList<LatticePoint<T>> results, IUnitCell<T> unitCell, Func<T, bool> predicate,
             in Cartesian3D cellOffsetVector)
         {
             var index = 0;
             foreach (var position in unitCell.GetAllEntries())
             {
-                if (predicate(position.Entry))
+                if (predicate(position.Content))
                 {
                     var absoluteVector = cellOffsetVector + VectorEncoder.GetCartesianPosition(index);
                     if (Constraint.IsValid((absoluteVector - StartVector).GetLength()))
@@ -204,7 +204,7 @@ namespace Mocassin.Symmetry.Analysis
         /// <param name="provider"></param>
         /// <param name="constraint"></param>
         /// <param name="start"></param>
-        protected void SetBasicCalculationProperties<T1>(IUnitCellProvider<T1> provider, NumericConstraint constraint,
+        protected void SetBasicCalculationProperties<T>(IUnitCellProvider<T> provider, NumericConstraint constraint,
             in Fractional3D start)
         {
             if (provider == null)
@@ -246,24 +246,24 @@ namespace Mocassin.Symmetry.Analysis
         ///     Creates a combined distance and entry priority comparer that sorts cell entries by distance and than the priority
         ///     of the entry
         /// </summary>
-        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T"></typeparam>
         /// <param name="start"></param>
         /// <param name="entryComparer"></param>
         /// <returns></returns>
-        public IComparer<CellEntry<T1>> MakeDistancePriorityComparer<T1>(Fractional3D start, IComparer<T1> entryComparer)
+        public IComparer<LatticePoint<T>> MakeDistancePriorityComparer<T>(Fractional3D start, IComparer<T> entryComparer)
         {
-            int CompareLengthThanValue(CellEntry<T1> lhs, CellEntry<T1> rhs)
+            int CompareLengthThanValue(LatticePoint<T> lhs, LatticePoint<T> rhs)
             {
-                var lhsLength = VectorEncoder.Transformer.ToCartesian(lhs.AbsoluteVector - start).GetLength();
-                var rhsLength = VectorEncoder.Transformer.ToCartesian(rhs.AbsoluteVector - start).GetLength();
+                var lhsLength = VectorEncoder.Transformer.ToCartesian(lhs.Fractional - start).GetLength();
+                var rhsLength = VectorEncoder.Transformer.ToCartesian(rhs.Fractional - start).GetLength();
                 var radialCompare = VectorEncoder.Transformer.FractionalSystem.Comparer.Compare(lhsLength, rhsLength);
 
                 return radialCompare == 0
-                    ? entryComparer.Compare(lhs.Entry, rhs.Entry)
+                    ? entryComparer.Compare(lhs.Content, rhs.Content)
                     : radialCompare;
             }
 
-            return new CompareAdapter<CellEntry<T1>>(CompareLengthThanValue);
+            return new CompareAdapter<LatticePoint<T>>(CompareLengthThanValue);
         }
     }
 }

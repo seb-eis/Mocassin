@@ -10,11 +10,11 @@ namespace Mocassin.Model.Transitions
     {
         /// <inheritdoc />
         [UseTrackedData]
-        public ICellReferencePosition FirstCellReferencePosition { get; set; }
+        public ICellSite FirstCellSite { get; set; }
 
         /// <inheritdoc />
         [UseTrackedData]
-        public ICellReferencePosition SecondCellReferencePosition { get; set; }
+        public ICellSite SecondCellSite { get; set; }
 
         /// <inheritdoc />
         [UseTrackedData]
@@ -53,20 +53,20 @@ namespace Mocassin.Model.Transitions
         public bool Equals(IMetropolisTransition other)
         {
             if (other != null
-                && FirstCellReferencePosition.Index == other.FirstCellReferencePosition.Index
-                && SecondCellReferencePosition.Index == other.SecondCellReferencePosition.Index)
+                && FirstCellSite.Index == other.FirstCellSite.Index
+                && SecondCellSite.Index == other.SecondCellSite.Index)
                 return AbstractTransition == other.AbstractTransition;
 
             return other != null
-                   && FirstCellReferencePosition.Index == other.SecondCellReferencePosition.Index
-                   && SecondCellReferencePosition.Index == other.FirstCellReferencePosition.Index
+                   && FirstCellSite.Index == other.SecondCellSite.Index
+                   && SecondCellSite.Index == other.FirstCellSite.Index
                    && AbstractTransition == other.AbstractTransition;
         }
 
         /// <inheritdoc />
         public bool MappingsContainInversion()
         {
-            return FirstCellReferencePosition == SecondCellReferencePosition;
+            return FirstCellSite == SecondCellSite;
         }
 
         /// <inheritdoc />
@@ -75,8 +75,8 @@ namespace Mocassin.Model.Transitions
             if (!(CastIfNotDeprecated<IMetropolisTransition>(obj) is { } transition))
                 return null;
 
-            FirstCellReferencePosition = transition.FirstCellReferencePosition;
-            SecondCellReferencePosition = transition.SecondCellReferencePosition;
+            FirstCellSite = transition.FirstCellSite;
+            SecondCellSite = transition.SecondCellSite;
             AbstractTransition = transition.AbstractTransition;
             return this;
         }

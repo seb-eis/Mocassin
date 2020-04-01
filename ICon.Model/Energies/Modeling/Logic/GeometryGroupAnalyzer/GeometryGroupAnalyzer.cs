@@ -32,7 +32,7 @@ namespace Mocassin.Model.Energies
         /// <summary>
         ///     The unit cell provider that supplies the information about the super-cell the group is located in
         /// </summary>
-        public IUnitCellProvider<ICellReferencePosition> UnitCellProvider { get; }
+        public IUnitCellProvider<ICellSite> UnitCellProvider { get; }
 
         /// <summary>
         ///     The space group service that supplies the symmetry information about the unit cell
@@ -45,7 +45,7 @@ namespace Mocassin.Model.Energies
         /// </summary>
         /// <param name="unitCellProvider"></param>
         /// <param name="spaceGroupService"></param>
-        public GeometryGroupAnalyzer(IUnitCellProvider<ICellReferencePosition> unitCellProvider, ISpaceGroupService spaceGroupService)
+        public GeometryGroupAnalyzer(IUnitCellProvider<ICellSite> unitCellProvider, ISpaceGroupService spaceGroupService)
         {
             UnitCellProvider = unitCellProvider ?? throw new ArgumentNullException(nameof(unitCellProvider));
             SpaceGroupService = spaceGroupService ?? throw new ArgumentNullException(nameof(spaceGroupService));
@@ -60,7 +60,7 @@ namespace Mocassin.Model.Energies
         public ExtendedPositionGroup CreateExtendedPositionGroup(IGroupInteraction groupInteraction)
         {
             var extGroup = new ExtendedPositionGroup
-                {GroupInteraction = groupInteraction, CenterPosition = groupInteraction.CenterCellReferencePosition};
+                {GroupInteraction = groupInteraction, CenterPosition = groupInteraction.CenterCellSite};
 
             if (groupInteraction.IsDeprecated)
                 return extGroup;
@@ -102,7 +102,7 @@ namespace Mocassin.Model.Energies
             var particles =
                 new HashSet<IParticle>(GetGroupCellReferencePositions(group).SelectMany(value => value.OccupationSet.GetParticles()));
             var permutationSource =
-                new PermutationSlotMachine<IParticle>(group.CenterCellReferencePosition.OccupationSet.GetParticles(), particles);
+                new PermutationSlotMachine<IParticle>(group.CenterCellSite.OccupationSet.GetParticles(), particles);
             return new HashSet<SymmetricParticleInteractionPair>(permutationSource.Select(perm => new SymmetricParticleInteractionPair
                 {Particle0 = perm[0], Particle1 = perm[1]})).AsEnumerable();
         }
@@ -113,7 +113,7 @@ namespace Mocassin.Model.Energies
         /// </summary>
         /// <param name="groupInteraction"></param>
         /// <returns></returns>
-        public IEnumerable<ICellReferencePosition> GetGroupCellReferencePositions(IGroupInteraction groupInteraction)
+        public IEnumerable<ICellSite> GetGroupCellReferencePositions(IGroupInteraction groupInteraction)
         {
             return groupInteraction.GetSurroundingGeometry().Select(vector => UnitCellProvider.GetEntryValueAt(vector));
         }
@@ -137,12 +137,12 @@ namespace Mocassin.Model.Energies
             }
 
             var distances = groupInteraction.GetSurroundingGeometry()
-                .Select(vector => vector - groupInteraction.CenterCellReferencePosition.Vector)
+                .Select(vector => vector - groupInteraction.CenterCellSite.Vector)
                 .Select(x => UnitCellProvider.VectorEncoder.Transformer.ToCartesian(x).GetLength())
                 .ToList();
 
             return filters.Any(x =>
-                distances.Where((t, i) => x.IsApplicable(t, groupInteraction.CenterCellReferencePosition, partnerPositions[i])).Any())
+                distances.Where((t, i) => x.IsApplicable(t, groupInteraction.CenterCellSite, partnerPositions[i])).Any())
                 ? GroupGeometryValidity.ContainsFilteredPositions
                 : GroupGeometryValidity.IsValid;
         }
@@ -191,7 +191,7 @@ namespace Mocassin.Model.Energies
         /// <param name="centerPosition"></param>
         /// <returns></returns>
         protected Dictionary<IParticle, Dictionary<OccupationState, double>> MakeFullEnergyDictionary(
-            IEnumerable<OccupationState> occStates, ICellReferencePosition centerPosition)
+            IEnumerable<OccupationState> occStates, ICellSite centerPosition)
         {
             if (!(occStates is ICollection<OccupationState> occStateCollection))
                 occStateCollection = occStates.ToList();

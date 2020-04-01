@@ -151,14 +151,14 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         /// <param name="defectParticleId"></param>
         /// <param name="fixedDopingId"></param>
         /// <returns></returns>
-        public PlotData2D<double, MmcfeEnergyState> GetRelativeChangePerDefectPlotData2D(IDictionary<string, MmcfeEnergyDataPoint> data,
+        public PlotPoints<double, MmcfeEnergyState> GetRelativeChangePerDefectPlotData2D(IDictionary<string, MmcfeEnergyDataPoint> data,
             int fixedDopingId, double fixedDopingValue, int variableDopingId, int defectParticleId)
         {
             var keySelectorFunction = GetDopingSelectorFunction(fixedDopingId, fixedDopingValue);
             var baseData = data.Where(x => keySelectorFunction(x.Key)).OrderBy(x => x.Value.ParticleCounts[defectParticleId]).ToList();
             var baseState = baseData[0].Value.EnergyState;
 
-            var result = new PlotData2D<double, MmcfeEnergyState>(baseData.Count);
+            var result = new PlotPoints<double, MmcfeEnergyState>(baseData.Count);
             foreach (var pair in baseData)
             {
                 var dopingValue = ParseDopingValue(pair.Value.MetaEntry.DopingInfo, variableDopingId);
@@ -182,14 +182,14 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         /// <param name="defectParticleId"></param>
         /// <param name="fixedDopingId"></param>
         /// <returns></returns>
-        public PlotData2D<double, MmcfeEnergyState> GetAbsoluteChangePlotData2D(IDictionary<string, MmcfeEnergyDataPoint> data,
+        public PlotPoints<double, MmcfeEnergyState> GetAbsoluteChangePlotData2D(IDictionary<string, MmcfeEnergyDataPoint> data,
             int fixedDopingId, double fixedDopingValue, int variableDopingId, int defectParticleId)
         {
             var keySelectorFunction = GetDopingSelectorFunction(fixedDopingId, fixedDopingValue);
             var baseData = data.Where(x => keySelectorFunction(x.Key)).OrderBy(x => x.Value.ParticleCounts[defectParticleId]).ToList();
             var baseState = baseData[0].Value.EnergyState;
 
-            var result = new PlotData2D<double, MmcfeEnergyState>(baseData.Count);
+            var result = new PlotPoints<double, MmcfeEnergyState>(baseData.Count);
             foreach (var pair in baseData)
             {
                 var dopingValue = ParseDopingValue(pair.Value.MetaEntry.DopingInfo, variableDopingId);
@@ -200,7 +200,7 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         }
 
         /// <summary>
-        ///     Writes the <see cref="PlotData2D{TX,TY}" /> for a <see cref="MmcfeEnergyState" /> over concentration curve to the
+        ///     Writes the <see cref="PlotPoints{TX,TY}" /> for a <see cref="MmcfeEnergyState" /> over concentration curve to the
         ///     provided file location. By default the first line is skipped
         /// </summary>
         /// <param name="plotData"></param>
@@ -208,20 +208,20 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         /// <param name="entropyInKb"></param>
         /// <param name="skipLineCount"></param>
         /// <param name="doubleFormat"></param>
-        public void WriteEnergyStateOverConcentrationPlotData2DToFile(PlotData2D<double, MmcfeEnergyState> plotData, string filePath, bool entropyInKb = true,
+        public void WriteEnergyStateOverConcentrationPlotData2DToFile(PlotPoints<double, MmcfeEnergyState> plotData, string filePath, bool entropyInKb = true,
             int skipLineCount = 1, string doubleFormat = "e13")
         {
             if (File.Exists(filePath)) File.Delete(filePath);
             using var writer = File.AppendText(filePath);
             var entropyFactor = entropyInKb ? 1.0 / Equations.Constants.BlotzmannEv : 1.0;
             writer.WriteLine("c u error-u f error-f s error-s");
-            foreach (var (x, errorX, y, errorY) in plotData.Skip(skipLineCount))
+            foreach (var point in plotData.Skip(skipLineCount))
             {
-                writer.Write(x.ToString(doubleFormat));
+                writer.Write(point.X.ToString(doubleFormat));
                 writer.Write(" ");
-                WriteValueWithError(writer, y.InnerEnergy, errorY.InnerEnergy, false, doubleFormat);
-                WriteValueWithError(writer, y.FreeEnergy, errorY.FreeEnergy, false, doubleFormat);
-                WriteValueWithError(writer, y.Entropy * entropyFactor, errorY.Entropy * entropyFactor, true, doubleFormat);
+                WriteValueWithError(writer, point.Y.InnerEnergy, point.ErrorY.InnerEnergy, false, doubleFormat);
+                WriteValueWithError(writer, point.Y.FreeEnergy, point.ErrorY.FreeEnergy, false, doubleFormat);
+                WriteValueWithError(writer, point.Y.Entropy * entropyFactor, point.ErrorY.Entropy * entropyFactor, true, doubleFormat);
             }
         }
 

@@ -10,21 +10,21 @@ namespace Mocassin.Model.Translator.ModelContext
         public IPairInteractionModel PairInteractionModel { get; set; }
 
         /// <inheritdoc />
-        public ICellReferencePosition CellReferencePosition { get; set; }
+        public ICellSite CellSite { get; set; }
 
         /// <inheritdoc />
         public double Distance { get; set; }
 
         /// <inheritdoc />
-        public Fractional3D AbsoluteFractional3D { get; set; }
+        public Fractional3D AbsoluteFractional { get; set; }
 
         /// <inheritdoc />
-        public Fractional3D RelativeFractional3D { get; set; }
+        public Fractional3D RelativeFractional { get; set; }
 
         /// <inheritdoc />
-        public Cartesian3D AbsoluteCartesian3D { get; set; }
+        public Cartesian3D AbsoluteCartesian { get; set; }
 
         /// <inheritdoc />
-        public CrystalVector4D RelativeVector4D { get; set; }
+        public CrystalVector4D RelativeCrystalVector { get; set; }
     }
 }

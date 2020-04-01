@@ -10,14 +10,14 @@ namespace Mocassin.UI.Xml.Base
     public class CellPositionData : ProjectDataObject
     {
         private ModelObjectReference<Particle> particle;
-        private ModelObjectReference<CellReferencePosition> referencePosition;
+        private ModelObjectReference<CellSite> referencePosition;
         private VectorData3D vector;
 
         /// <summary>
-        ///     Get or set the <see cref="ModelObjectReference{T}" /> to the affiliated <see cref="CellReferencePosition" />
+        ///     Get or set the <see cref="ModelObjectReference{T}" /> to the affiliated <see cref="CellSite" />
         /// </summary>
         [XmlElement("ReferencePosition")]
-        public ModelObjectReference<CellReferencePosition> ReferencePosition
+        public ModelObjectReference<CellSite> ReferencePosition
         {
             get => referencePosition;
             set => SetProperty(ref referencePosition, value);

@@ -13,7 +13,7 @@ namespace Mocassin.UI.Xml.EnergyModel
     [XmlRoot]
     public class DefectEnergyData : ProjectDataObject, IComparable<DefectEnergyData>
     {
-        private ModelObjectReference<CellReferencePosition> cellReferencePosition;
+        private ModelObjectReference<CellSite> cellReferencePosition;
         private double energy;
         private ModelObjectReference<Particle> particle;
 
@@ -31,7 +31,7 @@ namespace Mocassin.UI.Xml.EnergyModel
         ///     Get or set the <see cref="ModelObjectReference{T}" /> for the defect <see cref="CellReferencePosition" />
         /// </summary>
         [XmlElement]
-        public ModelObjectReference<CellReferencePosition> CellReferencePosition
+        public ModelObjectReference<CellSite> CellReferencePosition
         {
             get => cellReferencePosition;
             set => SetProperty(ref cellReferencePosition, value);
@@ -66,7 +66,7 @@ namespace Mocassin.UI.Xml.EnergyModel
             {
                 Energy = Energy,
                 Particle = (IParticle) Particle.GetInputObject(),
-                CellReferencePosition = (ICellReferencePosition) CellReferencePosition.GetInputObject()
+                CellSite = (ICellSite) CellReferencePosition.GetInputObject()
             };
         }
     }

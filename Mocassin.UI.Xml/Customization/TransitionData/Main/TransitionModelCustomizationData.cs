@@ -50,11 +50,11 @@ namespace Mocassin.UI.Xml.Customization
         /// <inheritdoc />
         public override void PushToModel(IModelProject modelProject)
         {
-            var setterProvider = modelProject.GetManager<ITransitionManager>().QueryPort.Query(x => x.GetRuleSetterProvider());
+            var setterProvider = modelProject.Manager<ITransitionManager>().DataAccess.Query(x => x.GetRuleSetterProvider());
 
             foreach (var parameterSet in KineticTransitionParameterSets)
             {
-                var transition = modelProject.DataTracker.FindObjectByIndex<IKineticTransition>(parameterSet.TransitionIndex);
+                var transition = modelProject.DataTracker.FindObject<IKineticTransition>(parameterSet.TransitionIndex);
                 var ruleSetter = setterProvider.GetRuleSetter(transition);
                 parameterSet.PushToModel(modelProject, ruleSetter);
             }

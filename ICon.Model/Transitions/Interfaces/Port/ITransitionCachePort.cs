@@ -65,13 +65,13 @@ namespace Mocassin.Model.Transitions
         ///     Get a dictionary that contains which kinetic transitions are possible on which unit cell positions
         /// </summary>
         /// <returns></returns>
-        IDictionary<ICellReferencePosition, HashSet<IKineticTransition>> GetKineticTransitionPositionDictionary();
+        IDictionary<ICellSite, HashSet<IKineticTransition>> GetKineticTransitionPositionDictionary();
 
         /// <summary>
         ///     Get a dictionary that contains which metropolis transitions are possible on which unit cell positions
         /// </summary>
         /// <returns></returns>
-        IDictionary<ICellReferencePosition, HashSet<IMetropolisTransition>> GetMetropolisTransitionPositionDictionary();
+        IDictionary<ICellSite, HashSet<IMetropolisTransition>> GetMetropolisTransitionPositionDictionary();
 
         /// <summary>
         ///     Get the abstract charge transport chain of the abstract movement with the provided index

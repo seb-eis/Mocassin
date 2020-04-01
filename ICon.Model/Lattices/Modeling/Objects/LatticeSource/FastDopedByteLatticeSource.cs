@@ -28,15 +28,15 @@ namespace Mocassin.Model.Lattices
         private IBuildingBlock DefaultBlock { get; }
 
         /// <summary>
-        ///     Get the <see cref="IUnitCellProvider{T1}" /> of <see cref="ICellReferencePosition" /> that supplies the cell
+        ///     Get the <see cref="IUnitCellProvider{T1}" /> of <see cref="ICellSite" /> that supplies the cell
         ///     information
         /// </summary>
-        private IUnitCellProvider<ICellReferencePosition> UnitCellProvider { get; }
+        private IUnitCellProvider<ICellSite> UnitCellProvider { get; }
 
         /// <summary>
-        ///     Get the <see cref="IUnitCell{T1}" /> of <see cref="ICellReferencePosition" /> that supplies the cell information
+        ///     Get the <see cref="IUnitCell{T1}" /> of <see cref="ICellSite" /> that supplies the cell information
         /// </summary>
-        private IUnitCell<ICellReferencePosition> UnitCell { get; }
+        private IUnitCell<ICellSite> UnitCell { get; }
 
         /// <summary>
         ///     Get an array of integer tuples that contains all positions index and affiliated reference index values for unit
@@ -67,7 +67,7 @@ namespace Mocassin.Model.Lattices
             ChargeBalanceTolerance = chargeBalanceTolerance;
             ModelProject = modelProject ?? throw new ArgumentNullException(nameof(modelProject));
             DefaultBlock = baseBuildingBlock ?? throw new ArgumentNullException(nameof(baseBuildingBlock));
-            UnitCellProvider = modelProject.GetManager<IStructureManager>().QueryPort.Query(x => x.GetFullUnitCellProvider());
+            UnitCellProvider = modelProject.Manager<IStructureManager>().DataAccess.Query(x => x.GetFullUnitCellProvider());
             UnitCell = UnitCellProvider.GetUnitCell(0, 0, 0);
             DopingTargets = CreateDopingTargetList().ToArray();
             BufferPool = ArrayPool<byte>.Create();
@@ -106,7 +106,7 @@ namespace Mocassin.Model.Lattices
             var result = new List<(int, int)>();
             for (var i = 0; i < UnitCell.EntryCount; i++)
             {
-                var wyckoff = UnitCell[i].Entry;
+                var wyckoff = UnitCell[i].Content;
                 if (!wyckoff.IsValidAndStable()) continue;
                 result.Add((i, wyckoff.Index));
             }
@@ -211,13 +211,13 @@ namespace Mocassin.Model.Lattices
         public int[,] CreateBasePopulationTable(int a, int b, int c)
         {
             var particleCount = ModelProject.DataTracker.ObjectCount<IParticle>();
-            var wyckoffCount = ModelProject.DataTracker.ObjectCount<ICellReferencePosition>();
+            var wyckoffCount = ModelProject.DataTracker.ObjectCount<ICellSite>();
             var result = new int[wyckoffCount, particleCount];
 
             var cellCount = a * b * c;
             for (var i = 0; i < DefaultBlock.CellEntries.Count; i++)
             {
-                var wyckoff = UnitCell[i].Entry;
+                var wyckoff = UnitCell[i].Content;
                 if (wyckoff.Stability == PositionStability.Unstable) continue;
                 result[wyckoff.Index, DefaultBlock.CellEntries[i].Index] += cellCount;
             }
@@ -239,7 +239,7 @@ namespace Mocassin.Model.Lattices
             var result = CreateBasePopulationTable(a, b, c);
             foreach (var item in CreateOrderedDopingSequence(dopingDictionary))
             {
-                var originalCount = result[item.Key.PrimaryDoping.CellReferencePosition.Index, item.Key.PrimaryDoping.Dopable.Index];
+                var originalCount = result[item.Key.PrimaryDoping.CellSite.Index, item.Key.PrimaryDoping.Dopable.Index];
                 var populationCounts = DopingToPopulationCount(item, originalCount);
                 ApplyPopulationChangesToTable(result, item.Key, populationCounts);
             }
@@ -255,12 +255,12 @@ namespace Mocassin.Model.Lattices
         /// <param name="populations"></param>
         public void ApplyPopulationChangesToTable(int[,] populationTable, IDoping doping, in (int Primary, int Secondary) populations)
         {
-            populationTable[doping.PrimaryDoping.CellReferencePosition.Index, doping.PrimaryDoping.Dopable.Index] -= populations.Primary;
-            populationTable[doping.PrimaryDoping.CellReferencePosition.Index, doping.PrimaryDoping.Dopant.Index] += populations.Primary;
+            populationTable[doping.PrimaryDoping.CellSite.Index, doping.PrimaryDoping.Dopable.Index] -= populations.Primary;
+            populationTable[doping.PrimaryDoping.CellSite.Index, doping.PrimaryDoping.Dopant.Index] += populations.Primary;
 
             if (populations.Secondary == 0) return;
-            populationTable[doping.CounterDoping.CellReferencePosition.Index, doping.CounterDoping.Dopable.Index] -= populations.Secondary;
-            populationTable[doping.CounterDoping.CellReferencePosition.Index, doping.CounterDoping.Dopant.Index] += populations.Secondary;
+            populationTable[doping.CounterDoping.CellSite.Index, doping.CounterDoping.Dopable.Index] -= populations.Secondary;
+            populationTable[doping.CounterDoping.CellSite.Index, doping.CounterDoping.Dopant.Index] += populations.Secondary;
         }
 
         /// <summary>

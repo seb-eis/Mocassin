@@ -41,8 +41,8 @@ namespace Mocassin.Model.Translator.ModelContext
         /// </summary>
         protected void LoadBuildDataFromProject()
         {
-            var manager = ModelProject.GetManager<IStructureManager>();
-            VectorEncoder = manager.QueryPort.Query(port => port.GetVectorEncoder());
+            var manager = ModelProject.Manager<IStructureManager>();
+            VectorEncoder = manager.DataAccess.Query(port => port.GetVectorEncoder());
         }
 
         /// <summary>
@@ -65,12 +65,12 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <returns></returns>
         protected IEnumerable<IPositionModel> CreatePositionModels(IEnvironmentModel environmentModel)
         {
-            var sourceVector = environmentModel.CellReferencePosition.Vector;
+            var sourceVector = environmentModel.CellSite.Vector;
             var targetInfos = environmentModel.PairInteractionModels
                 .Select(a => a.TargetPositionInfo)
                 .ToList();
 
-            var targetVectors = ModelProject.SpaceGroupService.GetUnitCellP1PositionExtension(environmentModel.CellReferencePosition.Vector);
+            var targetVectors = ModelProject.SpaceGroupService.GetUnitCellP1PositionExtension(environmentModel.CellSite.Vector);
             var positionModels = targetVectors
                 .Select(target => ModelProject.SpaceGroupService.GetOperationToTarget(sourceVector, target))
                 .Select(operation => CreatePositionModel(environmentModel, operation, targetInfos));
@@ -91,10 +91,10 @@ namespace Mocassin.Model.Translator.ModelContext
         {
             var positionModel = new PositionModel
             {
-                CellReferencePosition = environmentModel.CellReferencePosition,
+                CellSite = environmentModel.CellSite,
                 EnvironmentModel = environmentModel,
                 TransformOperation = operation,
-                CenterVector = operation.Transform(environmentModel.CellReferencePosition.Vector)
+                CenterVector = operation.Transform(environmentModel.CellSite.Vector)
             };
 
             positionModel.TargetPositionInfos = TransformTargetInfos(targetInfos, operation, positionModel.CenterVector);
@@ -117,19 +117,19 @@ namespace Mocassin.Model.Translator.ModelContext
             {
                 var targetInfo = new TargetPositionInfo
                 {
-                    CellReferencePosition = positionInfo.CellReferencePosition,
+                    CellSite = positionInfo.CellSite,
                     Distance = positionInfo.Distance,
-                    AbsoluteFractional3D = operation.Transform(positionInfo.AbsoluteFractional3D),
+                    AbsoluteFractional = operation.Transform(positionInfo.AbsoluteFractional),
                     PairInteractionModel = positionInfo.PairInteractionModel
                 };
 
-                targetInfo.RelativeFractional3D = targetInfo.AbsoluteFractional3D - centerVector;
-                targetInfo.AbsoluteCartesian3D = VectorEncoder.Transformer.ToCartesian(targetInfo.AbsoluteFractional3D);
+                targetInfo.RelativeFractional = targetInfo.AbsoluteFractional - centerVector;
+                targetInfo.AbsoluteCartesian = VectorEncoder.Transformer.ToCartesian(targetInfo.AbsoluteFractional);
 
-                if (!VectorEncoder.TryEncodeAsRelative(centerVector, targetInfo.RelativeFractional3D, out var relative4D))
+                if (!VectorEncoder.TryEncodeAsRelative(centerVector, targetInfo.RelativeFractional, out var relative4D))
                     throw new InvalidOperationException("Failed to encode target info into 4D relative vector");
 
-                targetInfo.RelativeVector4D = relative4D;
+                targetInfo.RelativeCrystalVector = relative4D;
                 result.Add(targetInfo);
             }
 

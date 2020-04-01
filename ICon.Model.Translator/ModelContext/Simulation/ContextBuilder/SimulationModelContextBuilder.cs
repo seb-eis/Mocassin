@@ -22,7 +22,7 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <inheritdoc />
         public override bool CheckBuildRequirements()
         {
-            return ModelProject?.GetAllManagers().Any(x => x is ISimulationManager) ?? false;
+            return ModelProject?.Managers().Any(x => x is ISimulationManager) ?? false;
         }
 
         /// <inheritdoc />
@@ -44,9 +44,9 @@ namespace Mocassin.Model.Translator.ModelContext
         {
             if (!CheckBuildRequirements()) return modelContext;
 
-            var manager = ModelProject.GetManager<ISimulationManager>();
-            var metropolisSimulations = manager.QueryPort.Query(port => port.GetMetropolisSimulations());
-            var kineticSimulations = manager.QueryPort.Query(port => port.GetKineticSimulations());
+            var manager = ModelProject.Manager<ISimulationManager>();
+            var metropolisSimulations = manager.DataAccess.Query(port => port.GetMetropolisSimulations());
+            var kineticSimulations = manager.DataAccess.Query(port => port.GetKineticSimulations());
 
             modelContext.MetropolisSimulationModels = MetropolisSimulationModelBuilder.BuildModels(metropolisSimulations);
             modelContext.KineticSimulationModels = KineticSimulationModelBuilder.BuildModels(kineticSimulations);

@@ -54,7 +54,7 @@ namespace Mocassin.Model.DataManagement
         }
 
         /// <inheritdoc />
-        public TObject FindObjectByIndex<TObject>(int index) where TObject : IModelObject
+        public TObject FindObject<TObject>(int index) where TObject : IModelObject
         {
             if (typeof(TObject) == typeof(IModelObject))
                 throw new InvalidOperationException("Lookup of unspecified model object interface is ambiguous");
@@ -67,7 +67,7 @@ namespace Mocassin.Model.DataManagement
         }
 
         /// <inheritdoc />
-        public TObject FindObjectByKey<TObject>(string key) where TObject : IModelObject
+        public TObject FindObject<TObject>(string key) where TObject : IModelObject
         {
             if (string.IsNullOrWhiteSpace(key))
                 return default;
@@ -86,12 +86,27 @@ namespace Mocassin.Model.DataManagement
         }
 
         /// <inheritdoc />
-        public IEnumerable<TObject> EnumerateObjects<TObject>() where TObject : IModelObject
+        public IEnumerable<TObject> Objects<TObject>() where TObject : IModelObject
         {
             if (typeof(TObject) == typeof(IModelObject))
                 throw new InvalidOperationException("Lookup of unspecified model object interface is ambiguous");
 
             return FindObjectList(typeof(TObject)).Cast<TObject>();
+        }
+
+
+        /// <inheritdoc />
+        public TObject[] MapObjects<TObject>() where TObject : IModelObject
+        {
+            var list = Objects<TObject>().ToList();
+            var length = list.Max(x => x.Index) + 1;
+            var result = new TObject[length];
+            foreach (var item in list)
+            {
+                result[item.Index] = item;
+            }
+
+            return result;
         }
 
         /// <inheritdoc />
@@ -101,7 +116,7 @@ namespace Mocassin.Model.DataManagement
         }
 
         /// <inheritdoc />
-        public void LinkModelObject(object obj)
+        public void LinkObject(object obj)
         {
             if (objectLinkerDictionary.TryGetValue(obj.GetType(), out var linker))
                 linker(obj);
@@ -114,11 +129,11 @@ namespace Mocassin.Model.DataManagement
         }
 
         /// <inheritdoc />
-        public bool TryLinkModelObject(object obj)
+        public bool TryLinkObject(object obj)
         {
             try
             {
-                LinkModelObject(obj);
+                LinkObject(obj);
                 return true;
             }
             catch (Exception exception)
@@ -204,10 +219,10 @@ namespace Mocassin.Model.DataManagement
             if (propertyValue is IList list)
             {
                 foreach (var item in list)
-                    LinkModelObject(item);
+                    LinkObject(item);
             }
             else
-                LinkModelObject(propertyValue);
+                LinkObject(propertyValue);
         }
 
         /// <summary>

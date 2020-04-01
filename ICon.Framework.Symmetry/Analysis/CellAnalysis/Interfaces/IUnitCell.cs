@@ -24,12 +24,12 @@ namespace Mocassin.Symmetry.Analysis
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        CellEntry<T1> this[int index] { get; }
+        LatticePoint<T1> this[int index] { get; }
 
         /// <summary>
         ///     Get all unit cell entries as en enumerable
         /// </summary>
         /// <returns></returns>
-        IEnumerable<CellEntry<T1>> GetAllEntries();
+        IEnumerable<LatticePoint<T1>> GetAllEntries();
     }
 }

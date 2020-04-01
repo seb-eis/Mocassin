@@ -76,7 +76,7 @@ namespace Mocassin.Model.Energies.ConflictHandling
             var dataList = DataAccess.Query(data => data.UnstablePairInteractions);
             var uniquePairs = new MultisetList<UnstablePairInteraction>(GetInteractionComparer(), 100) {newPairs};
 
-            foreach (var item in dataList.Where(value => value.Position0 != envInfo.CellReferencePosition))
+            foreach (var item in dataList.Where(value => value.Position0 != envInfo.CellSite))
                 uniquePairs.Add(item);
 
             dataList.Clear();
@@ -118,7 +118,7 @@ namespace Mocassin.Model.Energies.ConflictHandling
         protected IEnumerable<UnstablePairInteraction> GetNewAsymmetricPairs(IUnstableEnvironment envInfo,
             IModelProject modelProject)
         {
-            var unitCellProvider = modelProject.GetManager<IStructureManager>().QueryPort.Query(port => port.GetFullUnitCellProvider());
+            var unitCellProvider = modelProject.Manager<IStructureManager>().DataAccess.Query(port => port.GetFullUnitCellProvider());
             var finder = new PairInteractionFinder(unitCellProvider, modelProject.SpaceGroupService);
             return finder.SampleUniqueUnstablePairs(envInfo.AsSingleton(), modelProject.GeometryNumeric.RangeComparer);
         }

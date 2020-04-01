@@ -34,9 +34,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel
 
         /// <summary>
         ///     Get the <see cref="IUnitCellProvider{T1}" /> that translates linearized cell position indexing to their
-        ///     affiliated <see cref="ICellReferencePosition" /> and vector information
+        ///     affiliated <see cref="ICellSite" /> and vector information
         /// </summary>
-        public IUnitCellProvider<ICellReferencePosition> UnitCellProvider { get; set; }
+        public IUnitCellProvider<ICellSite> UnitCellProvider { get; set; }
 
         /// <summary>
         ///     Get or set a boolean flag if the model is in a state where <see cref="BuildingBlockData" /> creation is possible
@@ -90,7 +90,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel
                 var sequence = particleData.Cast<object>().Concat(structureData).Concat(structureObjects);
                 var reports = ModelProject.InputPipeline.PushToProject(sequence);
                 UnitCellProvider = ModelProject
-                    .GetManager<IStructureManager>().QueryPort
+                    .Manager<IStructureManager>().DataAccess
                     .Query(x => x.GetFullUnitCellProvider());
 
                 if (reports.All(x => x.IsGood)) return true;
@@ -114,16 +114,16 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel
             if (UnitCellProvider == null)
                 throw new InvalidOperationException("Cannot create default list for invalid model");
 
-            var result = new List<CellPositionData>(UnitCellProvider.CellSizeInfo.D);
+            var result = new List<CellPositionData>(UnitCellProvider.CellSize.D);
 
-            for (var i = 0; i < UnitCellProvider.CellSizeInfo.D; i++)
+            for (var i = 0; i < UnitCellProvider.CellSize.D; i++)
             {
                 var cellEntry = UnitCellProvider.GetCellEntry(0, 0, 0, i);
                 var cellPosition = new CellPositionData
                 {
-                    Particle = GetParticleReferenceObject(cellEntry.Entry.OccupationSet.GetParticles().First(), cellEntry.Entry),
-                    ReferencePosition = GetCellReferencePositionReference(cellEntry.Entry),
-                    Vector = VectorData3D.Create(cellEntry.AbsoluteVector),
+                    Particle = GetParticleReferenceObject(cellEntry.Content.OccupationSet.GetParticles().First(), cellEntry.Content),
+                    ReferencePosition = GetCellReferencePositionReference(cellEntry.Content),
+                    Vector = VectorData3D.Create(cellEntry.Fractional),
                     Name = $"Pos.{i}"
                 };
                 result.Add(cellPosition);
@@ -139,7 +139,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel
         /// <param name="particle"></param>
         /// <param name="position"></param>
         /// <returns></returns>
-        private ModelObjectReference<Particle> GetParticleReferenceObject(IParticle particle, ICellReferencePosition position)
+        private ModelObjectReference<Particle> GetParticleReferenceObject(IParticle particle, ICellSite position)
         {
             if (!position.IsValidAndStable()) return new ModelObjectReference<Particle>(ParticleData.VoidParticle);
             var objectGraph = ContentSource.ProjectModelData.ParticleModelData.Particles.First(x => x.Key == particle.Key);
@@ -147,15 +147,15 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel
         }
 
         /// <summary>
-        ///     Translate the passed <see cref="ICellReferencePosition" /> interface to the affiliated
+        ///     Translate the passed <see cref="ICellSite" /> interface to the affiliated
         ///     <see cref="ModelObjectReference{T}" /> in the current content source
         /// </summary>
         /// <param name="position"></param>
         /// <returns></returns>
-        private ModelObjectReference<CellReferencePosition> GetCellReferencePositionReference(ICellReferencePosition position)
+        private ModelObjectReference<CellSite> GetCellReferencePositionReference(ICellSite position)
         {
             var objectGraph = ContentSource.ProjectModelData.StructureModelData.CellReferencePositions.First(x => x.Key == position.Key);
-            return new ModelObjectReference<CellReferencePosition> {Target = objectGraph};
+            return new ModelObjectReference<CellSite> {Target = objectGraph};
         }
     }
 }

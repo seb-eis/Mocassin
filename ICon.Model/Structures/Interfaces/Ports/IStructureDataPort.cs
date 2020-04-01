@@ -31,14 +31,14 @@ namespace Mocassin.Model.Structures
         ///     Get read only access to the unit cell position list
         /// </summary>
         /// <returns></returns>
-        ListReadOnlyWrapper<ICellReferencePosition> GetCellReferencePositions();
+        ListReadOnlyWrapper<ICellSite> GetCellReferencePositions();
 
         /// <summary>
         ///     Get a unit cell position by index
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        ICellReferencePosition GetCellReferencePosition(int index);
+        ICellSite GetCellReferencePosition(int index);
 
         /// <summary>
         ///     Get a read only list of all position dummies

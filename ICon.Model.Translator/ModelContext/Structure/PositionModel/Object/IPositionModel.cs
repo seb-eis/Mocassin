@@ -13,7 +13,7 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <summary>
         ///     The unit cell position that is valid on this position
         /// </summary>
-        ICellReferencePosition CellReferencePosition { get; set; }
+        ICellSite CellSite { get; set; }
 
         /// <summary>
         ///     The actual center vector of the position

@@ -108,7 +108,7 @@ namespace Mocassin.UI.Xml.Jobs
         {
             return int.TryParse(JobCountPerConfig, out var count)
                 ? count
-                : modelProject.DataTracker.FindObjectByKey<IMetropolisSimulation>(Simulation.Key).JobCount;
+                : modelProject.DataTracker.FindObject<IMetropolisSimulation>(Simulation.Key).JobCount;
         }
     }
 }

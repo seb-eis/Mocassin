@@ -38,8 +38,8 @@ namespace Mocassin.Model.Structures
         ///     The list of reference unit cell positions
         /// </summary>
         [DataMember]
-        [IndexedModelData(typeof(ICellReferencePosition))]
-        public List<CellReferencePosition> CellReferencePositions { get; set; }
+        [IndexedModelData(typeof(ICellSite))]
+        public List<CellSite> CellReferencePositions { get; set; }
 
         /// <summary>
         ///     The list of reference unit cell position dummies

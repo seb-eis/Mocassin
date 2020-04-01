@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Mocassin.Framework.Collections;
 using Mocassin.Mathematics.Coordinates;
 using Mocassin.Mathematics.ValueTypes;
@@ -71,7 +72,7 @@ namespace Mocassin.Model.Structures
         ///     Get a unit cell provider that carries the unit cell position interfaces for advanced analysis queries
         /// </summary>
         /// <returns></returns>
-        IUnitCellProvider<ICellReferencePosition> GetFullUnitCellProvider();
+        IUnitCellProvider<ICellSite> GetFullUnitCellProvider();
 
         /// <summary>
         ///     Gets all positions of the unit cell that are symmetry equivalent to the position at the provided 4D vector
@@ -84,7 +85,7 @@ namespace Mocassin.Model.Structures
         ///     Get read only list that assigns each extended position index the correct unit cell position interface
         /// </summary>
         /// <returns></returns>
-        IReadOnlyList<ICellReferencePosition> GetExtendedIndexToPositionList();
+        IReadOnlyList<ICellSite> GetExtendedIndexToPositionList();
 
         /// <summary>
         ///     Get a sorted unique list of all the wyckoff extension of the position dummy at the specified index
@@ -109,5 +110,23 @@ namespace Mocassin.Model.Structures
         /// </summary>
         /// <returns></returns>
         int GetLinearizedExtendedPositionCount();
+
+        /// <summary>
+        ///     Finds the array of <see cref="LatticeTarget"/> data around a <see cref="Fractional3D"/> position till a cutoff range in [Ang]
+        /// </summary>
+        /// <param name="origin"></param>
+        /// <param name="maxDistance"></param>
+        /// <param name="targetAcceptor"></param>
+        /// <returns></returns>
+        LatticeTarget[] FindLatticeTargets(in Fractional3D origin, double maxDistance, Func<ICellSite, bool> targetAcceptor);
+
+        /// <summary>
+        ///     Finds all <see cref="LatticeTarget"/> data around all positions in the unit cell till cutoff distance in [Ang]
+        /// </summary>
+        /// <param name="maxDistance"></param>
+        /// <param name="originAcceptor"></param>
+        /// <param name="targetAcceptor"></param>
+        /// <returns></returns>
+        IDictionary<int, LatticeTarget[]> FindUnitCellLatticeTargets(double maxDistance, Func<FractionalPosition, bool> originAcceptor, Func<ICellSite, bool> targetAcceptor);
     }
 }

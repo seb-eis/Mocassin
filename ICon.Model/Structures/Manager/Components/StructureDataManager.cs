@@ -33,9 +33,9 @@ namespace Mocassin.Model.Structures
         }
 
         /// <inheritdoc />
-        public ListReadOnlyWrapper<ICellReferencePosition> GetCellReferencePositions()
+        public ListReadOnlyWrapper<ICellSite> GetCellReferencePositions()
         {
-            return ListReadOnlyWrapper<ICellReferencePosition>.FromEnumerable(Data.CellReferencePositions);
+            return ListReadOnlyWrapper<ICellSite>.FromEnumerable(Data.CellReferencePositions);
         }
 
         /// <inheritdoc />
@@ -45,7 +45,7 @@ namespace Mocassin.Model.Structures
         }
 
         /// <inheritdoc />
-        public ICellReferencePosition GetCellReferencePosition(int index)
+        public ICellSite GetCellReferencePosition(int index)
         {
             return Data.CellReferencePositions[index];
         }

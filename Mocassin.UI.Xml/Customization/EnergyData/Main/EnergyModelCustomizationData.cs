@@ -74,7 +74,7 @@ namespace Mocassin.UI.Xml.Customization
         /// <inheritdoc />
         public override void PushToModel(IModelProject modelProject)
         {
-            var setterProvider = modelProject.GetManager<IEnergyManager>().QueryPort.Query(x => x.GetEnergySetterProvider());
+            var setterProvider = modelProject.Manager<IEnergyManager>().DataAccess.Query(x => x.GetEnergySetterProvider());
 
             foreach (var parameterSet in StablePairEnergyParameterSets)
             {

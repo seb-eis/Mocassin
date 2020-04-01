@@ -24,7 +24,7 @@ namespace Mocassin.Model.Transitions.Handler
         /// <param name="eventArgs"></param>
         /// <returns></returns>
         [EventHandlingMethod]
-        protected IConflictReport HandleNewCellReferencePosition(IModelObjectEventArgs<ICellReferencePosition> eventArgs)
+        protected IConflictReport HandleNewCellReferencePosition(IModelObjectEventArgs<ICellSite> eventArgs)
         {
             return new ConflictReport();
         }

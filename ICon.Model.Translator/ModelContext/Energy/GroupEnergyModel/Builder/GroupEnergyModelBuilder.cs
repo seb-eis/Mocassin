@@ -20,8 +20,8 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <inheritdoc />
         public IList<IGroupEnergyModel> BuildModels(IList<IGroupInteraction> groupInteractions)
         {
-            var manager = ModelProject.GetManager<IEnergyManager>();
-            var positionGroupInfos = manager.QueryPort.Query(port => port.GetPositionGroupInfos());
+            var manager = ModelProject.Manager<IEnergyManager>();
+            var positionGroupInfos = manager.DataAccess.Query(port => port.GetPositionGroupInfos());
             var index = 0;
             var groupEnergyModels = groupInteractions
                 .Select(interaction => CreateEnergyModel(interaction, positionGroupInfos, ref index))
@@ -64,7 +64,7 @@ namespace Mocassin.Model.Translator.ModelContext
             var index = 0;
             energyModel.ParticleIndexToTableMapping = new Dictionary<IParticle, int>();
 
-            foreach (var entry in energyModel.GroupInteraction.CenterCellReferencePosition.OccupationSet.GetParticles())
+            foreach (var entry in energyModel.GroupInteraction.CenterCellSite.OccupationSet.GetParticles())
                 energyModel.ParticleIndexToTableMapping.Add(entry, index++);
         }
 

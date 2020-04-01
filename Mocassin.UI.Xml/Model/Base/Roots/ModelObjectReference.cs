@@ -153,14 +153,10 @@ namespace Mocassin.UI.Xml.Base
         /// <param name="value"></param>
         private bool TryTreatStaticKey(string value)
         {
-            switch (value)
-            {
-                case "Particle.Void":
-                    Target = ParticleData.VoidParticle;
-                    return true;
-                default:
-                    return false;
-            }
+            if (ParticleData.VoidParticle.Key != value) return false;
+            Target = ParticleData.VoidParticle;
+            return true;
+
         }
     }
 }

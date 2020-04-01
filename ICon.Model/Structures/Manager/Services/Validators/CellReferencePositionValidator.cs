@@ -10,7 +10,7 @@ namespace Mocassin.Model.Structures.Validators
     ///     Validator for new unit cell position model objects that checks for compatibility with existing data and general
     ///     object constraints
     /// </summary>
-    public class CellReferencePositionValidator : DataValidator<ICellReferencePosition, MocassinStructureSettings, IStructureDataPort>
+    public class CellReferencePositionValidator : DataValidator<ICellSite, MocassinStructureSettings, IStructureDataPort>
     {
         /// <inheritdoc />
         public CellReferencePositionValidator(IModelProject modelProject, MocassinStructureSettings settings,
@@ -20,7 +20,7 @@ namespace Mocassin.Model.Structures.Validators
         }
 
         /// <inheritdoc />
-        public override IValidationReport Validate(ICellReferencePosition obj)
+        public override IValidationReport Validate(ICellSite obj)
         {
             var report = new ValidationReport();
             AddConstraintValidation(obj, report);
@@ -34,7 +34,7 @@ namespace Mocassin.Model.Structures.Validators
         /// </summary>
         /// <param name="position"></param>
         /// <param name="report"></param>
-        private void AddConstraintValidation(ICellReferencePosition position, ValidationReport report)
+        private void AddConstraintValidation(ICellSite position, ValidationReport report)
         {
             var constraint = new NumericConstraint(true, 0.0, 1.0, false,
                 NumericComparer.CreateRanged(ModelProject.CommonNumeric.ComparisonRange));
@@ -53,7 +53,7 @@ namespace Mocassin.Model.Structures.Validators
         /// </summary>
         /// <param name="position"></param>
         /// <param name="report"></param>
-        private void AddObjectUniquenessValidation(ICellReferencePosition position, ValidationReport report)
+        private void AddObjectUniquenessValidation(ICellSite position, ValidationReport report)
         {
             foreach (var item in DataReader.Access.GetCellReferencePositions())
             {

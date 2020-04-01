@@ -20,7 +20,7 @@ namespace Mocassin.Model.Energies
         /// <summary>
         ///     Get the unit cell position this grouping starts from
         /// </summary>
-        ICellReferencePosition CenterCellReferencePosition { get; }
+        ICellSite CenterCellSite { get; }
 
         /// <summary>
         ///     Get a sequence of 3D vectors that describe the base geometry of the grouping without the start position

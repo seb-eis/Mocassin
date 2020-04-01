@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using Mocassin.Framework.Collections;
 using Mocassin.Framework.Extensions;
 using Mocassin.Mathematics.Comparer;
@@ -74,7 +76,7 @@ namespace Mocassin.Model.Structures
         }
 
         /// <inheritdoc />
-        public IUnitCellProvider<ICellReferencePosition> GetFullUnitCellProvider()
+        public IUnitCellProvider<ICellSite> GetFullUnitCellProvider()
         {
             return GetResultFromCache(CreateFullUnitCellProvider);
         }
@@ -91,7 +93,7 @@ namespace Mocassin.Model.Structures
         }
 
         /// <inheritdoc />
-        public IReadOnlyList<ICellReferencePosition> GetExtendedIndexToPositionList()
+        public IReadOnlyList<ICellSite> GetExtendedIndexToPositionList()
         {
             return GetResultFromCache(CreateExtendedIndexToPositionList);
         }
@@ -120,6 +122,26 @@ namespace Mocassin.Model.Structures
             return GetLinearizedExtendedPositionList()?.Count ?? 0;
         }
 
+        /// <inheritdoc />
+        public LatticeTarget[] FindLatticeTargets(in Fractional3D origin, double maxDistance, Func<ICellSite, bool> targetAcceptor)
+        {
+            var provider = GetFullUnitCellProvider();
+            var query = RadialLatticeTargetQuery<ICellSite>.CreateRanged(provider, origin, maxDistance, ModelProject.GeometryNumeric.RangeComparer);
+            query.RadialLatticePointQuery.AcceptancePredicate = targetAcceptor;
+            query.SortingComparer = Comparer<LatticeTarget>.Create((lhs, rhs) => lhs.DistanceInFm.CompareTo(rhs.DistanceInFm));
+            return query.RunSynchronously();
+        }
+
+        /// <inheritdoc />
+        public IDictionary<int, LatticeTarget[]> FindUnitCellLatticeTargets(double maxDistance, Func<FractionalPosition, bool> originAcceptor, Func<ICellSite, bool> targetAcceptor)
+        {
+            var provider = GetFullUnitCellProvider();
+            var tasks = GetLinearizedExtendedPositionList()
+                .Select((x,i) => (task: originAcceptor.Invoke(x) ? Task.Run(() => FindLatticeTargets(x.Vector, maxDistance, targetAcceptor)) : null, i))
+                .ToList();
+            return tasks.Where(tuple => tuple.task != null).ToDictionary(x => x.i, y => y.task.Result);
+        }
+
         /// <summary>
         ///     Creates the wyckoff position indexing lists
         /// </summary>
@@ -140,7 +162,7 @@ namespace Mocassin.Model.Structures
         [CacheMethodResult]
         protected IList<SetList<Fractional3D>> CreateExtendedDummyPositionLists()
         {
-            var positions = ModelProject.GetManager<IStructureManager>().QueryPort.Query(port => port.GetDummyPositions());
+            var positions = ModelProject.Manager<IStructureManager>().DataAccess.Query(port => port.GetDummyPositions());
             return MocassinTaskingExtensions
                 .RunAndGetResults(positions
                     .Select(value => MakeWyckoffExtensionDelegate(value.Vector, value.IsDeprecated)))
@@ -154,7 +176,7 @@ namespace Mocassin.Model.Structures
         [CacheMethodResult]
         protected IList<SetList<FractionalPosition>> CreateExtendedPositionLists()
         {
-            var positions = ModelProject.GetManager<IStructureManager>().QueryPort.Query(port => port.GetCellReferencePositions());
+            var positions = ModelProject.Manager<IStructureManager>().DataAccess.Query(port => port.GetCellReferencePositions());
             var result = MocassinTaskingExtensions
                 .RunAndGetResults(positions
                     .Select(value => MakeWyckoffExtensionDelegate(value.AsPosition(), value.IsDeprecated)))
@@ -223,15 +245,15 @@ namespace Mocassin.Model.Structures
         /// </summary>
         /// <returns></returns>
         [CacheMethodResult]
-        protected List<ICellReferencePosition> CreateExtendedIndexToPositionList()
+        protected List<ICellSite> CreateExtendedIndexToPositionList()
         {
             var encodedExtendedPositionLists = GetEncodedExtendedPositionLists();
             var ucpList = ModelProject
-                .GetManager<IStructureManager>().QueryPort
+                .Manager<IStructureManager>().DataAccess
                 .Query(port => port.GetCellReferencePositions());
 
             var index = 0;
-            var result = encodedExtendedPositionLists.SelectMany(x => x).Select(x => default(ICellReferencePosition)).ToList();
+            var result = encodedExtendedPositionLists.SelectMany(x => x).Select(x => default(ICellSite)).ToList();
             foreach (var positionList in encodedExtendedPositionLists)
             {
                 foreach (var vector in positionList)
@@ -250,7 +272,7 @@ namespace Mocassin.Model.Structures
         [CacheMethodResult]
         protected IUnitCellProvider<FractionalPosition> CreateUnitCellProvider()
         {
-            return CellWrapperFactory.CreateUnitCell(GetLinearizedExtendedPositionList(), GetVectorEncoder());
+            return LatticeWrapping.ToUnitCell(GetLinearizedExtendedPositionList(), GetVectorEncoder());
         }
 
         /// <summary>
@@ -258,9 +280,9 @@ namespace Mocassin.Model.Structures
         /// </summary>
         /// <returns></returns>
         [CacheMethodResult]
-        protected IUnitCellProvider<ICellReferencePosition> CreateFullUnitCellProvider()
+        protected IUnitCellProvider<ICellSite> CreateFullUnitCellProvider()
         {
-            return CellWrapperFactory.CreateUnitCell(GetExtendedIndexToPositionList().ToList(), GetVectorEncoder());
+            return LatticeWrapping.ToUnitCell(GetExtendedIndexToPositionList().ToList(), GetVectorEncoder());
         }
 
         /// <summary>
@@ -270,7 +292,7 @@ namespace Mocassin.Model.Structures
         [CacheMethodResult]
         protected IUnitCellProvider<int> CreateOccupationUnitCellProvider()
         {
-            return CellWrapperFactory.CreateUnitCell(GetLinearizedExtendedPositionList().Select(value => value.OccupationIndex).ToList(),
+            return LatticeWrapping.ToUnitCell(GetLinearizedExtendedPositionList().Select(value => value.OccupationIndex).ToList(),
                 GetVectorEncoder());
         }
 

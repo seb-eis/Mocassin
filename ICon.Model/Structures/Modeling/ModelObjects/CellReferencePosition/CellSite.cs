@@ -4,8 +4,8 @@ using Mocassin.Model.Particles;
 
 namespace Mocassin.Model.Structures
 {
-    /// <inheritdoc cref="ICellReferencePosition" />
-    public class CellReferencePosition : ModelObject, ICellReferencePosition
+    /// <inheritdoc cref="ICellSite" />
+    public class CellSite : ModelObject, ICellSite
     {
         /// <summary>
         ///     The fractional position vector of the unit cell position
@@ -43,7 +43,7 @@ namespace Mocassin.Model.Structures
         /// <inheritdoc />
         public override ModelObject PopulateFrom(IModelObject obj)
         {
-            if (!(CastIfNotDeprecated<ICellReferencePosition>(obj) is { } position)) return null;
+            if (!(CastIfNotDeprecated<ICellSite>(obj) is { } position)) return null;
 
             Stability = position.Stability;
             Vector = position.Vector;

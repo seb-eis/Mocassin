@@ -13,7 +13,7 @@ namespace Mocassin.Model.Energies
 
         /// <inheritdoc />
         [UseTrackedData]
-        public ICellReferencePosition CellReferencePosition { get; set; }
+        public ICellSite CellSite { get; set; }
 
         /// <summary>
         ///     The set of defined interaction filters of the unstable environment (Can be empty)
@@ -73,7 +73,7 @@ namespace Mocassin.Model.Energies
             if (!(CastIfNotDeprecated<IUnstableEnvironment>(obj) is { } info))
                 return null;
 
-            CellReferencePosition = info.CellReferencePosition;
+            CellSite = info.CellSite;
             MaxInteractionRange = info.MaxInteractionRange;
             InteractionFilters = info.GetInteractionFilters().Select(UnstableInteractionFilter.FromInterface).ToList();
             GroupInteractions = info.GetGroupInteractions().ToList();

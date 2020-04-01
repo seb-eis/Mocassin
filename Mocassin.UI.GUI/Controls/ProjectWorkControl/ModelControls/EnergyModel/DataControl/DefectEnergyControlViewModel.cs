@@ -74,7 +74,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.
                     obj ??= new DefectEnergyData
                     {
                         Particle = particle.Duplicate(),
-                        CellReferencePosition = new ModelObjectReference<CellReferencePosition>(position)
+                        CellReferencePosition = new ModelObjectReference<CellSite>(position)
                     };
                     newList.Add(obj);
                 }

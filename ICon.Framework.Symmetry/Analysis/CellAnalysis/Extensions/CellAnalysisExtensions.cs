@@ -18,7 +18,7 @@ namespace Mocassin.Symmetry.Analysis
         /// <param name="start"></param>
         /// <param name="end"></param>
         /// <returns></returns>
-        public static IEnumerable<CellEntry<T>> GetCuboid<T>(this IUnitCellProvider<T> cellProvider, Fractional3D start, Fractional3D end)
+        public static IEnumerable<LatticePoint<T>> GetCuboid<T>(this IUnitCellProvider<T> cellProvider, Fractional3D start, Fractional3D end)
         {
             var comparer = cellProvider.VectorEncoder.Transformer.FractionalSystem.Comparer;
 
@@ -34,7 +34,7 @@ namespace Mocassin.Symmetry.Analysis
                         var cell = cellProvider.GetUnitCell(a, b, c);
                         foreach (var entry in cell.GetAllEntries())
                         {
-                            var vector = entry.AbsoluteVector;
+                            var vector = entry.Fractional;
                             if (comparer.Compare(vector.A, start.A) < 0) continue;
                             if (comparer.Compare(vector.B, start.B) < 0) continue;
                             if (comparer.Compare(vector.C, start.C) < 0) continue;

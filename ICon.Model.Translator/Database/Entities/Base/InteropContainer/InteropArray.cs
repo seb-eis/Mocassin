@@ -52,6 +52,14 @@ namespace Mocassin.Model.Translator
         }
 
         /// <summary>
+        ///     Creates an empty <see cref="InteropArray{T}"/>
+        /// </summary>
+        protected InteropArray()
+        {
+
+        }
+
+        /// <summary>
         ///     Get the value at the given indices. Throws if the number of indices does not match dimension (Slow, not intended
         ///     for frequent usage)
         /// </summary>
@@ -115,16 +123,37 @@ namespace Mocassin.Model.Translator
 
                 HeaderByteCount = GetHeaderByteCount(rank);
                 BlockLengths = new int[blocksCount];
+                var dataLength = (BinaryState.Length - HeaderByteCount) / Marshal.SizeOf<T>();
 
                 for (var i = 0; i < BlockLengths.Length; i++)
                     BlockLengths[i] = BitConverter.ToInt32(BinaryState, sizeof(int) * (2 + i));
 
-                InternalArray = Array.CreateInstance(typeof(T), GetDimensions());
+                var dimensions = BlocksToDimensions(BlockLengths, dataLength);
+                InternalArray = Array.CreateInstance(typeof(T), dimensions);
                 Buffer.BlockCopy(BinaryState, HeaderByteCount, InternalArray, 0, BinaryState.Length - HeaderByteCount);
                 Initialize(InternalArray);
             }
 
             BinaryState = null;
+        }
+
+        /// <summary>
+        ///     Converts the blocks sizes and total item count into the dimensions of the rectangular array
+        /// </summary>
+        /// <param name="blocks"></param>
+        /// <param name="dataLength"></param>
+        /// <returns></returns>
+        protected int[] BlocksToDimensions(int[] blocks, int dataLength)
+        {
+            var dimensions = new int[blocks.Length + 1];
+            for (var i = 0; i < blocks.Length; i++)
+            {
+                dimensions[i] = dataLength / blocks[i];
+                dataLength = blocks[i];
+            }
+
+            dimensions[BlockLengths.Length] = dataLength;
+            return dimensions;
         }
 
         /// <inheritdoc />
@@ -195,11 +224,7 @@ namespace Mocassin.Model.Translator
         /// <returns></returns>
         public int[] GetDimensions()
         {
-            var result = IndicesOf(Length - 1);
-            for (var i = 0; i < result.Length; i++)
-                result[i]++;
-
-            return result;
+            return BlocksToDimensions(BlockLengths, Length);
         }
 
         /// <summary>

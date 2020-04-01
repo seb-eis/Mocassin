@@ -27,7 +27,7 @@ namespace Mocassin.Model.Transitions
         /// <summary>
         ///     The list of existing unit cell positions
         /// </summary>
-        protected IUnitCellProvider<ICellReferencePosition> UnitCellProvider { get; }
+        protected IUnitCellProvider<ICellSite> UnitCellProvider { get; }
 
         /// <summary>
         ///     Creates new kinetic transition quick mapper that uses the provided space group service, vector encoder and full
@@ -37,7 +37,7 @@ namespace Mocassin.Model.Transitions
         /// <param name="vectorEncoder"></param>
         /// <param name="unitCellProvider"></param>
         public KineticTransitionMapper(ISpaceGroupService spaceGroupService, IUnitCellVectorEncoder vectorEncoder,
-            IUnitCellProvider<ICellReferencePosition> unitCellProvider)
+            IUnitCellProvider<ICellSite> unitCellProvider)
         {
             SpaceGroupService = spaceGroupService ?? throw new ArgumentNullException(nameof(spaceGroupService));
             VectorEncoder = vectorEncoder ?? throw new ArgumentNullException(nameof(vectorEncoder));

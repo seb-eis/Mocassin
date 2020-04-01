@@ -20,20 +20,20 @@ namespace Mocassin.UI.Xml.Customization
     [XmlRoot]
     public class PairEnergySetData : ExtensibleProjectDataObject, IComparable<PairEnergySetData>, IDuplicable<PairEnergySetData>
     {
-        private ModelObjectReference<CellReferencePosition> centerPosition;
+        private ModelObjectReference<CellSite> centerPosition;
         private int chiralPartnerModelIndex = -1;
         private double distance;
         private VectorData3D endVector;
         private int modelIndex;
         private ObservableCollection<PairEnergyData> pairEnergyEntries;
-        private ModelObjectReference<CellReferencePosition> partnerPosition;
+        private ModelObjectReference<CellSite> partnerPosition;
         private VectorData3D startVector;
 
         /// <summary>
         ///     Get or set the <see cref="ModelObjectReference{T}" /> that targets the center wyckoff position
         /// </summary>
         [XmlElement]
-        public ModelObjectReference<CellReferencePosition> CenterPosition
+        public ModelObjectReference<CellSite> CenterPosition
         {
             get => centerPosition;
             set => SetProperty(ref centerPosition, value);
@@ -43,7 +43,7 @@ namespace Mocassin.UI.Xml.Customization
         ///     Get or set the <see cref="ModelObjectReference{T}" /> that targets the partner wyckoff position
         /// </summary>
         [XmlElement]
-        public ModelObjectReference<CellReferencePosition> PartnerPosition
+        public ModelObjectReference<CellSite> PartnerPosition
         {
             get => partnerPosition;
             set => SetProperty(ref partnerPosition, value);
@@ -190,8 +190,8 @@ namespace Mocassin.UI.Xml.Customization
                 Name = $"Pair.Energy.Set.{energySetter.PairInteraction.Index}",
                 ModelIndex = energySetter.PairInteraction.Index,
                 ChiralPartnerModelIndex = energySetter.PairInteraction.ChiralPartner?.Index ?? -1,
-                CenterPosition = new ModelObjectReference<CellReferencePosition>(centerPosition),
-                PartnerPosition = new ModelObjectReference<CellReferencePosition>(partnerPosition),
+                CenterPosition = new ModelObjectReference<CellSite>(centerPosition),
+                PartnerPosition = new ModelObjectReference<CellSite>(partnerPosition),
                 Distance = energySetter.PairInteraction.Distance,
                 StartVector = VectorData3D.Create(energySetter.PairInteraction.Position0.Vector),
                 EndVector = VectorData3D.Create(energySetter.PairInteraction.SecondPositionVector),

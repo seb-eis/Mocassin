@@ -22,7 +22,7 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <inheritdoc />
         public override bool CheckBuildRequirements()
         {
-            return ModelProject?.GetAllManagers().Any(x => x is IEnergyManager) ?? false;
+            return ModelProject?.Managers().Any(x => x is IEnergyManager) ?? false;
         }
 
         /// <inheritdoc />
@@ -36,13 +36,13 @@ namespace Mocassin.Model.Translator.ModelContext
         {
             if (!CheckBuildRequirements()) return modelContext;
 
-            var manager = ModelProject.GetManager<IEnergyManager>();
-            var symmetricPairs = manager.QueryPort.Query(port => port.GetStablePairInteractions());
-            var asymmetricPairs = manager.QueryPort.Query(port => port.GetUnstablePairInteractions());
-            var groupInteractions = manager.QueryPort.Query(port => port.GetGroupInteractions());
+            var manager = ModelProject.Manager<IEnergyManager>();
+            var symmetricPairs = manager.DataAccess.Query(port => port.GetStablePairInteractions());
+            var asymmetricPairs = manager.DataAccess.Query(port => port.GetUnstablePairInteractions());
+            var groupInteractions = manager.DataAccess.Query(port => port.GetGroupInteractions());
             var allPairs = symmetricPairs.Cast<IPairInteraction>().Concat(asymmetricPairs);
 
-            var defects = manager.QueryPort.Query(x => x.GetStableEnvironmentInfo().GetDefectEnergies().ToList());
+            var defects = manager.DataAccess.Query(x => x.GetStableEnvironmentInfo().GetDefectEnergies().ToList());
             var pairTask = Task.Run(() => PairEnergyModelBuilder.BuildModels(allPairs));
             var groupTask = Task.Run(() => GroupEnergyModelBuilder.BuildModels(groupInteractions));
 

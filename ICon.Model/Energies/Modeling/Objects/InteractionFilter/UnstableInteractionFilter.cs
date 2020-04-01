@@ -11,11 +11,11 @@ namespace Mocassin.Model.Energies
     public class UnstableInteractionFilter : IInteractionFilter, IEquatable<UnstableInteractionFilter>
     {
         /// <inheritdoc />
-        public ICellReferencePosition CenterCellReferencePosition => null;
+        public ICellSite CenterCellSite => null;
 
         /// <inheritdoc />
         [UseTrackedData]
-        public ICellReferencePosition PartnerCellReferencePosition { get; set; }
+        public ICellSite PartnerCellSite { get; set; }
 
         /// <inheritdoc />
         public double StartRadius { get; set; }
@@ -27,15 +27,15 @@ namespace Mocassin.Model.Energies
         public bool Equals(UnstableInteractionFilter other)
         {
             return other != null
-                   && PartnerCellReferencePosition == other.PartnerCellReferencePosition
+                   && PartnerCellSite == other.PartnerCellSite
                    && EndRadius.AlmostEqualByRange(other.EndRadius)
                    && StartRadius.AlmostEqualByRange(other.StartRadius);
         }
 
         /// <inheritdoc />
-        public bool IsApplicable(double distance, ICellReferencePosition centerCellReferencePosition, ICellReferencePosition partnerCellReferencePosition)
+        public bool IsApplicable(double distance, ICellSite centerCellSite, ICellSite partnerCellSite)
         {
-            var result = partnerCellReferencePosition == PartnerCellReferencePosition;
+            var result = partnerCellSite == PartnerCellSite;
             result &= distance > StartRadius && distance < EndRadius
                       || distance.AlmostEqualByRange(StartRadius)
                       || distance.AlmostEqualByRange(EndRadius);
@@ -70,7 +70,7 @@ namespace Mocassin.Model.Energies
             {
                 StartRadius = interactionFilter.StartRadius,
                 EndRadius = interactionFilter.EndRadius,
-                PartnerCellReferencePosition = interactionFilter.PartnerCellReferencePosition
+                PartnerCellSite = interactionFilter.PartnerCellSite
             };
         }
     }

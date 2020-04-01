@@ -56,9 +56,9 @@ namespace Mocassin.Model.Energies
 
 
         /// <inheritdoc />
-        public IUnstableEnvironment GetUnstableEnvironment(ICellReferencePosition cellReferencePosition)
+        public IUnstableEnvironment GetUnstableEnvironment(ICellSite cellSite)
         {
-            return Data.UnstableEnvironments.SingleOrDefault(x => x.CellReferencePosition == cellReferencePosition);
+            return Data.UnstableEnvironments.SingleOrDefault(x => x.CellSite == cellSite);
         }
 
         /// <inheritdoc />

@@ -9,22 +9,22 @@ namespace Mocassin.Symmetry.Analysis
     ///     Generic radial search query that defines a start position, radial constraint, acceptance predicate and sorting
     ///     comparer for radial position sampling
     /// </summary>
-    public class RadialSearchQuery<T1>
+    public class RadialLatticePointQuery<T>
     {
         /// <summary>
-        ///     The task completion source for the search query
+        ///     The active query <see cref="Task"/>
         /// </summary>
-        public TaskCompletionSource<IList<CellEntry<T1>>> TaskCompletionSource { get; protected set; }
+        public Task<IList<LatticePoint<T>>> QueryTask { get; protected set; }
 
         /// <summary>
         ///     The unit cell provider used for the search
         /// </summary>
-        public IUnitCellProvider<T1> UnitCellProvider { get; set; }
+        public IUnitCellProvider<T> UnitCellProvider { get; set; }
 
         /// <summary>
         ///     Defines the cell entry at the start position
         /// </summary>
-        public CellEntry<T1> StartCellEntry { get; set; }
+        public LatticePoint<T> OriginLatticePoint { get; set; }
 
         /// <summary>
         ///     The radial search constraint
@@ -34,22 +34,22 @@ namespace Mocassin.Symmetry.Analysis
         /// <summary>
         ///     The acceptance predicate for found entry values
         /// </summary>
-        public Predicate<T1> AcceptancePredicate { get; set; }
+        public Func<T, bool> AcceptancePredicate { get; set; }
 
         /// <summary>
         ///     The sorting comparer used for sorted samplings
         /// </summary>
-        public IComparer<CellEntry<T1>> SortingComparer { get; set; }
+        public IComparer<LatticePoint<T>> SortingComparer { get; set; }
 
         /// <summary>
         ///     Get the value from the task completion source when the calculation is finished
         /// </summary>
-        public IList<CellEntry<T1>> Result => TaskCompletionSource.Task.Result;
+        public IList<LatticePoint<T>> Result => QueryTask?.Result;
 
         /// <summary>
         ///     Create empty search query with an always true acceptance predicate
         /// </summary>
-        public RadialSearchQuery()
+        public RadialLatticePointQuery()
         {
             AcceptancePredicate = a => true;
         }
@@ -59,32 +59,53 @@ namespace Mocassin.Symmetry.Analysis
         /// </summary>
         public void Start()
         {
-            if (TaskCompletionSource != null)
-                return;
-
-            InvokeResultGeneration();
+            if (QueryTask != null) return;
+            QueryTask = PrepareTask();
+            QueryTask.Start();
         }
 
         /// <summary>
-        ///     Invokes the result generation as a new task
+        ///     Runs the search query
         /// </summary>
-        protected void InvokeResultGeneration()
+        /// <returns></returns>
+        public Task<IList<LatticePoint<T>>> Run()
         {
-            TaskCompletionSource = new TaskCompletionSource<IList<CellEntry<T1>>>();
-            Task.Run(() => TaskCompletionSource.SetResult(GetSamplerDelegate().Invoke()));
+            Start();
+            return QueryTask;
+        }
+
+        /// <summary>
+        ///     Runs the query synchronously
+        /// </summary>
+        /// <returns></returns>
+        public IList<LatticePoint<T>> RunSynchronously()
+        {
+            if (QueryTask != null) return QueryTask.Result;
+            QueryTask = PrepareTask();
+            QueryTask.RunSynchronously();
+            return QueryTask.Result;
+        }
+
+        /// <summary>
+        ///     Prepares the work <see cref="Task{TResult}"/>
+        /// </summary>
+        /// <returns></returns>
+        private Task<IList<LatticePoint<T>>> PrepareTask()
+        {
+            return new Task<IList<LatticePoint<T>>>(GetSamplerDelegate());
         }
 
         /// <summary>
         ///     Get the correct sampling delegate depending on the set query properties
         /// </summary>
         /// <returns></returns>
-        protected Func<IList<CellEntry<T1>>> GetSamplerDelegate()
+        protected Func<IList<LatticePoint<T>>> GetSamplerDelegate()
         {
             var sampler = new RadialPositionSampler();
             if (SortingComparer == null)
-                return () => sampler.Search(UnitCellProvider, StartCellEntry.AbsoluteVector, RadialConstraint, AcceptancePredicate);
+                return () => sampler.Search(UnitCellProvider, OriginLatticePoint.Fractional, RadialConstraint, AcceptancePredicate);
 
-            return () => sampler.Search(UnitCellProvider, StartCellEntry.AbsoluteVector, RadialConstraint, AcceptancePredicate,
+            return () => sampler.Search(UnitCellProvider, OriginLatticePoint.Fractional, RadialConstraint, AcceptancePredicate,
                 SortingComparer);
         }
     }

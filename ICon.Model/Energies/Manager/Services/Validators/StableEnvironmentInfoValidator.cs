@@ -112,13 +112,13 @@ namespace Mocassin.Model.Energies.Validators
         /// <returns></returns>
         protected long ApproximateWorstCaseInteractionCount(IStableEnvironmentInfo envInfo)
         {
-            long interactionPerUnitCell = ModelProject.GetManager<IStructureManager>().QueryPort
+            long interactionPerUnitCell = ModelProject.Manager<IStructureManager>().DataAccess
                                               .Query(port => port.GetLinearizedExtendedPositionList())
                                               .Count(position => position.Stability == PositionStability.Stable) - 1;
 
             interactionPerUnitCell = Math.Max(interactionPerUnitCell, 1);
 
-            var unitCellVolume = ModelProject.GetManager<IStructureManager>().QueryPort
+            var unitCellVolume = ModelProject.Manager<IStructureManager>().DataAccess
                 .Query(port => port.GetVectorEncoder())
                 .GetCellVolume();
 
@@ -137,13 +137,13 @@ namespace Mocassin.Model.Energies.Validators
             foreach (var defectEnergy in envInfo.GetDefectEnergies())
             {
                 if (envInfo.GetDefectEnergies().SkipWhile(x => x != defectEnergy).Count(x => x.Equals(defectEnergy)) != 1)
-                    details.Add($"Defect [{defectEnergy.Particle}] @ [{defectEnergy.CellReferencePosition}] has multiple definitions.");
+                    details.Add($"Defect [{defectEnergy.Particle}] @ [{defectEnergy.CellSite}] has multiple definitions.");
 
-                if (defectEnergy.CellReferencePosition.IsValidAndStable() && defectEnergy.Particle.IsVoid)
-                    details.Add($"Defect [{defectEnergy.Particle}] (void) @ [{defectEnergy.CellReferencePosition}] (stable) has no effect.");
+                if (defectEnergy.CellSite.IsValidAndStable() && defectEnergy.Particle.IsVoid)
+                    details.Add($"Defect [{defectEnergy.Particle}] (void) @ [{defectEnergy.CellSite}] (stable) has no effect.");
 
                 if (double.IsInfinity(defectEnergy.Energy) || double.IsNaN(defectEnergy.Energy))
-                    details.Add($"Defect [{defectEnergy.Particle}] @ [{defectEnergy.CellReferencePosition}] has an infinity/NaN energy value.");
+                    details.Add($"Defect [{defectEnergy.Particle}] @ [{defectEnergy.CellSite}] has an infinity/NaN energy value.");
             }
 
             if (details.Count != 0)

@@ -9,7 +9,7 @@ using Mocassin.UI.Xml.Base;
 namespace Mocassin.UI.Xml.StructureModel
 {
     /// <summary>
-    ///     Serializable data object for <see cref="ICellReferencePosition" /> model object creation
+    ///     Serializable data object for <see cref="ICellSite" /> model object creation
     /// </summary>
     [XmlRoot]
     public class CellReferencePositionData : ModelDataObject
@@ -73,7 +73,7 @@ namespace Mocassin.UI.Xml.StructureModel
         /// <inheritdoc />
         protected override ModelObject GetModelObjectInternal()
         {
-            var obj = new CellReferencePosition
+            var obj = new CellSite
             {
                 OccupationSet = new ParticleSet {Key = Occupation.Key},
                 Stability = Stability,

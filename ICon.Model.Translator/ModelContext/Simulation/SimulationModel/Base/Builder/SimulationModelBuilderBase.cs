@@ -100,11 +100,11 @@ namespace Mocassin.Model.Translator.ModelContext
         protected (int, int, int) GetMappingAssignMatrixLengths<TMappingModel>(IList<IList<IList<TMappingModel>>> rawMatrix)
             where TMappingModel : ITransitionMappingModel
         {
-            var maxParticleId = ModelProject.GetManager<IParticleManager>()
-                .QueryPort.Query(port => port.ParticleCount);
+            var maxParticleId = ModelProject.Manager<IParticleManager>()
+                .DataAccess.Query(port => port.ParticleCount);
 
-            var maxPositionId = ModelProject.GetManager<IStructureManager>()
-                .QueryPort.Query(port => port.GetLinearizedExtendedPositionCount());
+            var maxPositionId = ModelProject.Manager<IStructureManager>()
+                .DataAccess.Query(port => port.GetLinearizedExtendedPositionCount());
 
             return (maxPositionId, maxParticleId, rawMatrix.SelectMany(a => a.Select(b => b).Select(c => c.Count)).Max());
         }
@@ -307,10 +307,10 @@ namespace Mocassin.Model.Translator.ModelContext
         {
             var result = new List<MobilityType[]>();
 
-            var particleCount = ModelProject.GetManager<IParticleManager>().QueryPort
+            var particleCount = ModelProject.Manager<IParticleManager>().DataAccess
                 .Query(port => port.GetParticles().Count);
 
-            var positionCount = ModelProject.GetManager<IStructureManager>().QueryPort
+            var positionCount = ModelProject.Manager<IStructureManager>().DataAccess
                 .Query(port => port.GetLinearizedExtendedPositionCount());
 
             for (var i = 0; i < positionCount; i++) result.Add(new MobilityType[particleCount]);

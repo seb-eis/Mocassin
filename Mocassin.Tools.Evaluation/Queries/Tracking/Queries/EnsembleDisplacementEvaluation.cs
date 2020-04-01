@@ -98,7 +98,7 @@ namespace Mocassin.Tools.Evaluation.Queries
             for (var i = 0; i < vectors.Length; i++)
             {
                 if (!YieldImmobile && VectorComparer.Compare(vectors[i], new Cartesian3D()) == 0) continue;
-                var particle = context.ModelContext.ModelProject.DataTracker.FindObjectByIndex<IParticle>(i);
+                var particle = context.ModelContext.ModelProject.DataTracker.FindObject<IParticle>(i);
                 var data = new EnsembleDisplacement(IsSquared, particleCounts[i], particle, vectors[i]);
                 result.Add(YieldMeanResult ? data.AsMean() : data);
             }

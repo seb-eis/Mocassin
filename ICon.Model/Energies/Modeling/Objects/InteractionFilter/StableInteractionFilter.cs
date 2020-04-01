@@ -12,11 +12,11 @@ namespace Mocassin.Model.Energies
     {
         /// <inheritdoc />
         [UseTrackedData]
-        public ICellReferencePosition CenterCellReferencePosition { get; set; }
+        public ICellSite CenterCellSite { get; set; }
 
         /// <inheritdoc />
         [UseTrackedData]
-        public ICellReferencePosition PartnerCellReferencePosition { get; set; }
+        public ICellSite PartnerCellSite { get; set; }
 
         /// <inheritdoc />
         public double StartRadius { get; set; }
@@ -28,20 +28,20 @@ namespace Mocassin.Model.Energies
         public bool Equals(StableInteractionFilter other)
         {
             return other != null
-                   && PartnerCellReferencePosition == other.PartnerCellReferencePosition
-                   && CenterCellReferencePosition == other.CenterCellReferencePosition
+                   && PartnerCellSite == other.PartnerCellSite
+                   && CenterCellSite == other.CenterCellSite
                    && EndRadius.AlmostEqualByRange(other.EndRadius)
                    && StartRadius.AlmostEqualByRange(other.StartRadius);
         }
 
         /// <inheritdoc />
-        public bool IsApplicable(double distance, ICellReferencePosition centerCellReferencePosition, ICellReferencePosition partnerCellReferencePosition)
+        public bool IsApplicable(double distance, ICellSite centerCellSite, ICellSite partnerCellSite)
         {
-            var result = partnerCellReferencePosition == PartnerCellReferencePosition
-                         && centerCellReferencePosition == CenterCellReferencePosition;
+            var result = partnerCellSite == PartnerCellSite
+                         && centerCellSite == CenterCellSite;
 
-            result |= partnerCellReferencePosition == CenterCellReferencePosition
-                      && centerCellReferencePosition == PartnerCellReferencePosition;
+            result |= partnerCellSite == CenterCellSite
+                      && centerCellSite == PartnerCellSite;
 
             result &= distance > StartRadius && distance < EndRadius
                       || distance.AlmostEqualByRange(StartRadius)
@@ -77,8 +77,8 @@ namespace Mocassin.Model.Energies
             {
                 StartRadius = interactionFilter.StartRadius,
                 EndRadius = interactionFilter.EndRadius,
-                PartnerCellReferencePosition = interactionFilter.PartnerCellReferencePosition,
-                CenterCellReferencePosition = interactionFilter.CenterCellReferencePosition
+                PartnerCellSite = interactionFilter.PartnerCellSite,
+                CenterCellSite = interactionFilter.CenterCellSite
             };
         }
     }

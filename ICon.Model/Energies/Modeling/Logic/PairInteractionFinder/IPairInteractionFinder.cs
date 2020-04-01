@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Mocassin.Mathematics.Comparer;
 using Mocassin.Model.Structures;
 using Mocassin.Symmetry.Analysis;
@@ -20,7 +21,7 @@ namespace Mocassin.Model.Energies
         /// <summary>
         ///     The used unit cell provider
         /// </summary>
-        IUnitCellProvider<ICellReferencePosition> UnitCellProvider { get; }
+        IUnitCellProvider<ICellSite> UnitCellProvider { get; }
 
         /// <summary>
         ///     Create a unique set of <see cref="UnstablePairInteraction"/> objects that results from the passed <see cref="IUnstableEnvironment"/> set.
@@ -40,7 +41,7 @@ namespace Mocassin.Model.Energies
         /// <param name="environmentInfo"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        IEnumerable<StablePairInteraction> SampleUniqueStablePairs(IEnumerable<ICellReferencePosition> positions,
+        IEnumerable<StablePairInteraction> SampleUniqueStablePairs(IEnumerable<ICellSite> positions,
             IStableEnvironmentInfo environmentInfo, NumericComparer comparer);
     }
 }

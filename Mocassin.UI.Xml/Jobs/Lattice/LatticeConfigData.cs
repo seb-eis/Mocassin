@@ -104,7 +104,7 @@ namespace Mocassin.UI.Xml.Jobs
                 SizeB = SizeB,
                 SizeC = SizeC,
                 DopingConcentrations = DopingValues
-                    .ToDictionary(x => modelProject.DataTracker.FindObjectByKey<IDoping>(x.Doping.Key), y => y.Value)
+                    .ToDictionary(x => modelProject.DataTracker.FindObject<IDoping>(x.Doping.Key), y => y.Value)
             };
 
             return result;

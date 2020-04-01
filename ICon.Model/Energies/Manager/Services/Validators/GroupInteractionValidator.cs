@@ -48,10 +48,10 @@ namespace Mocassin.Model.Energies.Validators
         /// <param name="report"></param>
         protected bool AddDefinedPositionValidation(IGroupInteraction group, ValidationReport report)
         {
-            if (group.CenterCellReferencePosition.Stability != PositionStability.Unstable &&
-                group.CenterCellReferencePosition.Stability != PositionStability.Stable)
+            if (group.CenterCellSite.Stability != PositionStability.Unstable &&
+                group.CenterCellSite.Stability != PositionStability.Stable)
             {
-                var detail0 = $"The position status type ({group.CenterCellReferencePosition.Stability.ToString()}) is not supported for grouping";
+                var detail0 = $"The position status type ({group.CenterCellSite.Stability.ToString()}) is not supported for grouping";
                 var detail1 = $"Supported types are ({PositionStability.Stable.ToString()}) and ({PositionStability.Unstable.ToString()})";
                 report.AddWarning(ModelMessageSource.CreateContentMismatchWarning(this, detail0, detail1));
             }
@@ -89,7 +89,7 @@ namespace Mocassin.Model.Energies.Validators
         {
             var comparer = new VectorComparer3D<Fractional3D>(ModelProject.GeometryNumeric.RangeComparer);
             var currentData = DataReader.Access.GetGroupInteractions()
-                .Where(value => !value.IsDeprecated && value.CenterCellReferencePosition == group.CenterCellReferencePosition)
+                .Where(value => !value.IsDeprecated && value.CenterCellSite == group.CenterCellSite)
                 .Select(value => (value, value.GetSurroundingGeometry().ToArray()));
 
             foreach (var (otherGroup, geometry) in currentData)
@@ -141,10 +141,10 @@ namespace Mocassin.Model.Energies.Validators
         /// <returns></returns>
         protected long GetGroupPermutationCount(IGroupInteraction group)
         {
-            var unitCellProvider = ModelProject.GetManager<IStructureManager>().QueryPort.Query(port => port.GetFullUnitCellProvider());
+            var unitCellProvider = ModelProject.Manager<IStructureManager>().DataAccess.Query(port => port.GetFullUnitCellProvider());
             var permutationSource = new GeometryGroupAnalyzer(unitCellProvider, ModelProject.SpaceGroupService)
                 .GetGroupStatePermutationSource(group);
-            return permutationSource.PermutationCount * group.CenterCellReferencePosition.OccupationSet.ParticleCount;
+            return permutationSource.PermutationCount * group.CenterCellSite.OccupationSet.ParticleCount;
         }
 
         /// <summary>
@@ -155,7 +155,7 @@ namespace Mocassin.Model.Energies.Validators
         protected double GetMaxGroupRange(IGroupInteraction group)
         {
             var transformer = ModelProject.CrystalSystemService.VectorTransformer;
-            var start = group.CenterCellReferencePosition.AsPosition().Vector;
+            var start = group.CenterCellSite.AsPosition().Vector;
 
             return group.GetSurroundingGeometry()
                 .Select(vector => transformer.ToCartesian(vector - start).GetLength())
@@ -190,10 +190,10 @@ namespace Mocassin.Model.Energies.Validators
         /// <returns></returns>
         protected GroupGeometryValidity GetGroupEnvironmentPositionValidity(IGroupInteraction group)
         {
-            var ucProvider = ModelProject.GetManager<IStructureManager>().QueryPort.Query(port => port.GetFullUnitCellProvider());
+            var ucProvider = ModelProject.Manager<IStructureManager>().DataAccess.Query(port => port.GetFullUnitCellProvider());
             var analyzer = new GeometryGroupAnalyzer(ucProvider, ModelProject.SpaceGroupService);
 
-            switch (group.CenterCellReferencePosition.Stability)
+            switch (group.CenterCellSite.Stability)
             {
                 case PositionStability.Stable:
                     var stableFilters = DataReader.Access
@@ -205,7 +205,7 @@ namespace Mocassin.Model.Energies.Validators
 
                 case PositionStability.Unstable:
                     var unstableFilters = DataReader.Access
-                        .GetUnstableEnvironment(group.CenterCellReferencePosition)
+                        .GetUnstableEnvironment(group.CenterCellSite)
                         .GetInteractionFilters()
                         .ToList();
 
@@ -224,11 +224,11 @@ namespace Mocassin.Model.Energies.Validators
         /// <returns></returns>
         protected object GetGroupAffiliatedEnvironment(IGroupInteraction group)
         {
-            return group.CenterCellReferencePosition.Stability switch
+            return group.CenterCellSite.Stability switch
             {
                 PositionStability.Stable => (object) DataReader.Access.GetStableEnvironmentInfo(),
                 PositionStability.Unstable => DataReader.Access.GetUnstableEnvironments()
-                    .SingleOrDefault(value => value.CellReferencePosition == group.CenterCellReferencePosition),
+                    .SingleOrDefault(value => value.CellSite == group.CenterCellSite),
                 _ => null
             };
         }

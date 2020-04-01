@@ -71,9 +71,9 @@ namespace Mocassin.Model.Energies
         /// <summary>
         ///     Get the unstable environment that belongs to the passed unit cell position. Returns null if it does not exist
         /// </summary>
-        /// <param name="cellReferencePosition"></param>
+        /// <param name="cellSite"></param>
         /// <returns></returns>
-        IUnstableEnvironment GetUnstableEnvironment(ICellReferencePosition cellReferencePosition);
+        IUnstableEnvironment GetUnstableEnvironment(ICellSite cellSite);
 
         /// <summary>
         ///     Get an <see cref="IEnergySetterProvider" /> for all interactions that conforms to the passed

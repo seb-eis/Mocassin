@@ -82,7 +82,7 @@ namespace Mocassin.Model.Transitions.Validators
         protected bool TransitionGeometryIsPlausible(IKineticTransition transition, ValidationReport report)
         {
             var details = new List<string>();
-            var unitCellProvider = ModelProject.GetManager<IStructureManager>().QueryPort.Query(port => port.GetFullUnitCellProvider());
+            var unitCellProvider = ModelProject.Manager<IStructureManager>().DataAccess.Query(port => port.GetFullUnitCellProvider());
             var cellReferencePositions = transition.GetGeometrySequence().Select(x => unitCellProvider.GetEntryValueAt(x)).ToList();
 
             AddExchangeGroupGeometryValidation(cellReferencePositions, transition.AbstractTransition.GetStateExchangeGroups().ToList(), report);
@@ -138,7 +138,7 @@ namespace Mocassin.Model.Transitions.Validators
         /// <param name="stateExchangeGroups"></param>
         /// <param name="report"></param>
         /// <returns></returns>
-        protected void AddExchangeGroupGeometryValidation(IList<ICellReferencePosition> cellReferencePositions,
+        protected void AddExchangeGroupGeometryValidation(IList<ICellSite> cellReferencePositions,
             IList<IStateExchangeGroup> stateExchangeGroups, ValidationReport report)
         {
             if (cellReferencePositions.Count != stateExchangeGroups.Count)

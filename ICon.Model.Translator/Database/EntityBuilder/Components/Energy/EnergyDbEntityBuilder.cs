@@ -126,12 +126,12 @@ namespace Mocassin.Model.Translator.EntityBuilder
         public DefectBackgroundEntity GetDefectBackgroundEntity(ISimulationEncodingModel encodingModel)
         {
             var defects = ModelContext.EnergyModelContext.DefectEnergies;
-            var ucpList = ModelContext.ModelProject.GetManager<IStructureManager>().QueryPort.Query(x => x.GetExtendedIndexToPositionList());
+            var ucpList = ModelContext.ModelProject.Manager<IStructureManager>().DataAccess.Query(x => x.GetExtendedIndexToPositionList());
             var array = new double[encodingModel.JumpCountMappingTable.GetLength(0), encodingModel.JumpCountMappingTable.GetLength(1)];
 
             for (var positionId = 0; positionId < ucpList.Count; positionId++)
             {
-                foreach (var defect in defects.Where(x => x.CellReferencePosition.Index == ucpList[positionId].Index))
+                foreach (var defect in defects.Where(x => x.CellSite.Index == ucpList[positionId].Index))
                     array[positionId, defect.Particle.Index] = defect.Energy;
             }
 

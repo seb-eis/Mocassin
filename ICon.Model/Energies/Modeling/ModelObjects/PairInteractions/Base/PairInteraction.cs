@@ -10,11 +10,11 @@ namespace Mocassin.Model.Energies
     {
         /// <inheritdoc />
         [UseTrackedData]
-        public ICellReferencePosition Position0 { get; set; }
+        public ICellSite Position0 { get; set; }
 
         /// <inheritdoc />
         [UseTrackedData]
-        public ICellReferencePosition Position1 { get; set; }
+        public ICellSite Position1 { get; set; }
 
         /// <summary>
         ///     The actual position vector for the second unit cell position

@@ -73,7 +73,7 @@ namespace Mocassin.Model.Translator.EntityBuilder
         /// </summary>
         private void InitializeBuildComponents()
         {
-            DopedByteLatticeSource = ModelContext.ModelProject.GetManager<ILatticeManager>().QueryPort
+            DopedByteLatticeSource = ModelContext.ModelProject.Manager<ILatticeManager>().DataAccess
                 .Query(x => x.GetDefaultByteLatticeSource());
             Rng = new PcgRandom32();
         }

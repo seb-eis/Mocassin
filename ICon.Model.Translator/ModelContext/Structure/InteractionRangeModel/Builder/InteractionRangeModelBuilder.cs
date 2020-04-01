@@ -27,8 +27,8 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <returns></returns>
         public double GetInteractionDistance(IModelProject modelProject)
         {
-            var manager = modelProject.GetManager<IEnergyManager>();
-            var environmentInfo = manager.QueryPort.Query(port => port.GetStableEnvironmentInfo());
+            var manager = modelProject.Manager<IEnergyManager>();
+            var environmentInfo = manager.DataAccess.Query(port => port.GetStableEnvironmentInfo());
             return environmentInfo.MaxInteractionRange;
         }
 
@@ -39,8 +39,8 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <param name="modelProject"></param>
         public void AddInteractionCubeInformation(IInteractionRangeModel rangeModel, IModelProject modelProject)
         {
-            var manager = modelProject.GetManager<IStructureManager>();
-            var cellParameter = manager.QueryPort.Query(port => port.GetCellParameters());
+            var manager = modelProject.Manager<IStructureManager>();
+            var cellParameter = manager.DataAccess.Query(port => port.GetCellParameters());
             rangeModel.CellsInDirectionA = (int) Math.Ceiling(rangeModel.InteractionRange / cellParameter.ParamA);
             rangeModel.CellsInDirectionB = (int) Math.Ceiling(rangeModel.InteractionRange / cellParameter.ParamB);
             rangeModel.CellsInDirectionC = (int) Math.Ceiling(rangeModel.InteractionRange / cellParameter.ParamC);

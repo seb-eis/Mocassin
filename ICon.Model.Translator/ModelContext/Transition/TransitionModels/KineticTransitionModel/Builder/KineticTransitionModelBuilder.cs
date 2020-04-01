@@ -141,7 +141,7 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <returns></returns>
         protected IParticle SearchEffectiveParticleInModel(IParticle effectiveParticle, IComparer<double> comparer)
         {
-            var particles = ModelProject.GetManager<IParticleManager>().QueryPort.Query(port => port.GetParticles());
+            var particles = ModelProject.Manager<IParticleManager>().DataAccess.Query(port => port.GetParticles());
             foreach (var particle in particles)
             {
                 if (particle.EqualsInModelProperties(effectiveParticle, comparer))
@@ -157,8 +157,8 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <param name="transitionModel"></param>
         protected void CreateAndAddAbstractMovement(IKineticTransitionModel transitionModel)
         {
-            var unitCellProvider = ModelProject.GetManager<IStructureManager>()
-                .QueryPort.Query(port => port.GetFullUnitCellProvider());
+            var unitCellProvider = ModelProject.Manager<IStructureManager>()
+                .DataAccess.Query(port => port.GetFullUnitCellProvider());
 
             var positions = transitionModel.Transition.GetGeometrySequence()
                 .Select(vector => unitCellProvider.GetEntryValueAt(vector))
@@ -197,7 +197,7 @@ namespace Mocassin.Model.Translator.ModelContext
         {
             var solver = new PointMechanicsSolver();
             var comparer = ModelProject.GeometryNumeric.RangeComparer;
-            var vectorEncoder = ModelProject.GetManager<IStructureManager>().QueryPort.Query(port => port.GetVectorEncoder());
+            var vectorEncoder = ModelProject.Manager<IStructureManager>().DataAccess.Query(port => port.GetVectorEncoder());
 
             // @ToDo: Use a more stable way of determining the rule direction, can currently fail on chained transitions
             foreach (var ruleModel in ruleModels)
@@ -264,11 +264,11 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <param name="transitionModel"></param>
         protected void CreateAndAddMappingModels(IKineticTransitionModel transitionModel)
         {
-            var manager = ModelProject.GetManager<ITransitionManager>();
+            var manager = ModelProject.Manager<ITransitionManager>();
 
             // Avoid implicit captured 'this' through local variable
             var index = transitionModel.Transition.Index;
-            var mappings = manager.QueryPort.Query(port => port.GetKineticMappingList(index));
+            var mappings = manager.DataAccess.Query(port => port.GetKineticMappingList(index));
 
             transitionModel.MappingModels = mappings
                 .Select(a => CreateMappingModel(a, transitionModel))
@@ -346,7 +346,7 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <param name="connectorTypes"></param>
         /// <param name="positions"></param>
         /// <returns></returns>
-        protected IList<int> CalculateAbstractMovement(IList<ConnectorType> connectorTypes, IList<ICellReferencePosition> positions)
+        protected IList<int> CalculateAbstractMovement(IList<ConnectorType> connectorTypes, IList<ICellSite> positions)
         {
             var result = new List<int>(connectorTypes.Count);
 

@@ -46,10 +46,10 @@ namespace Mocassin.Model.Energies.Validators
         protected void AddObjectUniquenessValidation(IUnstableEnvironment envInfo, ValidationReport report)
         {
             var objects = DataReader.Access.GetUnstableEnvironments().Where(value => !value.IsDeprecated);
-            if (!objects.Select(value => value.CellReferencePosition).Contains(envInfo.CellReferencePosition))
+            if (!objects.Select(value => value.CellSite).Contains(envInfo.CellSite))
                 return;
 
-            var detail0 = $"The unit cell position with index ({envInfo.CellReferencePosition.Index}) already has a defined environment";
+            var detail0 = $"The unit cell position with index ({envInfo.CellSite.Index}) already has a defined environment";
             const string detail1 = "The generation and selection of multiple environments per position is currently not supported";
             report.AddWarning(ModelMessageSource.CreateModelDuplicateWarning(this, detail0, detail1));
         }
@@ -63,7 +63,7 @@ namespace Mocassin.Model.Energies.Validators
         {
             var approxInteractionCount = ApproximatePairInteractionCount(envInfo);
 
-            if (envInfo.CellReferencePosition.Stability != PositionStability.Unstable)
+            if (envInfo.CellSite.Stability != PositionStability.Unstable)
             {
                 const string detail0 = "Cannot define an unstable environment for a stable position";
                 const string detail1 = "Stable environments are defined through one entity to avoid generation of 'energy holes' breaking the MMC routine";
@@ -137,11 +137,11 @@ namespace Mocassin.Model.Energies.Validators
         /// <returns></returns>
         protected long ApproximatePairInteractionCount(IUnstableEnvironment envInfo)
         {
-            long interactionPerUnitCell = ModelProject.GetManager<IStructureManager>().QueryPort
+            long interactionPerUnitCell = ModelProject.Manager<IStructureManager>().DataAccess
                 .Query(port => port.GetExtendedIndexToPositionList())
                 .Count(entry => entry.Stability == PositionStability.Stable);
 
-            var unitCellVolume = ModelProject.GetManager<IStructureManager>().QueryPort
+            var unitCellVolume = ModelProject.Manager<IStructureManager>().DataAccess
                 .Query(port => port.GetVectorEncoder())
                 .GetCellVolume();
 

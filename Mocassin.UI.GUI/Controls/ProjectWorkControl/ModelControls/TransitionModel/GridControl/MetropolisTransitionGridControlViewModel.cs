@@ -28,18 +28,18 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
         public IEnumerable<ModelObjectReference<AbstractTransition>> AbstractTransitionOptions => EnumerateAbstractTransitionOptions(SelectedItem);
 
         /// <summary>
-        ///     Get the possible set of <see cref="ModelObjectReference{T}" /> of <see cref="CellReferencePosition" /> instances
+        ///     Get the possible set of <see cref="ModelObjectReference{T}" /> of <see cref="CellSite" /> instances
         ///     for the currently selected
         ///     <see cref="MetropolisTransitionData" /> for exchanging the first position
         /// </summary>
-        public IEnumerable<ModelObjectReference<CellReferencePosition>> FirstPositionOptions => EnumerateReferencePositionOptions(SelectedItem, false);
+        public IEnumerable<ModelObjectReference<CellSite>> FirstPositionOptions => EnumerateReferencePositionOptions(SelectedItem, false);
 
         /// <summary>
-        ///     Get the possible set of <see cref="ModelObjectReference{T}" /> of <see cref="CellReferencePosition" /> instances
+        ///     Get the possible set of <see cref="ModelObjectReference{T}" /> of <see cref="CellSite" /> instances
         ///     for the currently selected
         ///     <see cref="MetropolisTransitionData" /> for exchanging the second position
         /// </summary>
-        public IEnumerable<ModelObjectReference<CellReferencePosition>> SecondPositionOptions => EnumerateReferencePositionOptions(SelectedItem, true);
+        public IEnumerable<ModelObjectReference<CellSite>> SecondPositionOptions => EnumerateReferencePositionOptions(SelectedItem, true);
 
         /// <inheritdoc />
         public void ChangeContentSource(MocassinProject contentSource)
@@ -76,13 +76,13 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
 
         /// <summary>
         ///     Get an <see cref="IEnumerable{T}" /> of selectable <see cref="ModelObjectReference{T}" />  to
-        ///     <see cref="CellReferencePosition" /> instances for the current state of the passed
+        ///     <see cref="CellSite" /> instances for the current state of the passed
         ///     <see cref="MetropolisTransitionData" /> in the context of the set <see cref="ContentSource" />
         /// </summary>
         /// <param name="current"></param>
         /// <param name="exchangeSecond"></param>
         /// <returns></returns>
-        public IEnumerable<ModelObjectReference<CellReferencePosition>> EnumerateReferencePositionOptions(MetropolisTransitionData current, bool exchangeSecond)
+        public IEnumerable<ModelObjectReference<CellSite>> EnumerateReferencePositionOptions(MetropolisTransitionData current, bool exchangeSecond)
         {
             if (ContentSource == null) yield break;
             if (!(ContentSource.ProjectModelData?.StructureModelData?.CellReferencePositions is { } source)) yield break;
@@ -98,12 +98,12 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
             foreach (var positionData in source.Where(x => x.Stability == PositionStability.Stable))
             {
                 if (exchangeSecond)
-                    option.SecondCellReferencePosition = new ModelObjectReference<CellReferencePosition>(positionData);
+                    option.SecondCellReferencePosition = new ModelObjectReference<CellSite>(positionData);
                 else
-                    option.FirstCellReferencePosition = new ModelObjectReference<CellReferencePosition>(positionData);
+                    option.FirstCellReferencePosition = new ModelObjectReference<CellSite>(positionData);
 
                 if (current == null || option.Equals(current) || !Items.Where(x => x.Key != current.Key).Contains(option))
-                    yield return new ModelObjectReference<CellReferencePosition>(positionData);
+                    yield return new ModelObjectReference<CellSite>(positionData);
             }
         }
     }

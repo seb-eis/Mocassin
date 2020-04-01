@@ -16,7 +16,7 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <summary>
         ///     The unit cell position at the target
         /// </summary>
-        ICellReferencePosition CellReferencePosition { get; set; }
+        ICellSite CellSite { get; set; }
 
         /// <summary>
         ///     The distance to the target in internal units
@@ -26,21 +26,21 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <summary>
         ///     Absolute fractional vector of the target
         /// </summary>
-        Fractional3D AbsoluteFractional3D { get; set; }
+        Fractional3D AbsoluteFractional { get; set; }
 
         /// <summary>
         ///     Relative fractional vector to the target
         /// </summary>
-        Fractional3D RelativeFractional3D { get; set; }
+        Fractional3D RelativeFractional { get; set; }
 
         /// <summary>
         ///     Absolute cartesian vector of the target
         /// </summary>
-        Cartesian3D AbsoluteCartesian3D { get; set; }
+        Cartesian3D AbsoluteCartesian { get; set; }
 
         /// <summary>
         ///     Relative crystal vector to the target
         /// </summary>
-        CrystalVector4D RelativeVector4D { get; set; }
+        CrystalVector4D RelativeCrystalVector { get; set; }
     }
 }

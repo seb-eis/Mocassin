@@ -44,7 +44,7 @@ namespace Mocassin.Model.Lattices.Validators
         /// <param name="report"></param>
         protected void AddOccupationValidation(IBuildingBlock buildingBlock, ValidationReport report)
         {
-            var structurePort = ModelProject.GetManager<IStructureManager>().QueryPort;
+            var structurePort = ModelProject.Manager<IStructureManager>().DataAccess;
 
             var occupationList = structurePort.Query(port => port.GetExtendedIndexToPositionList());
 

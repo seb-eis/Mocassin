@@ -10,13 +10,13 @@ namespace Mocassin.Model.Transitions
             TransitionQueryManager, TransitionEventManager, TransitionUpdateManager>, ITransitionManager
     {
         /// <inheritdoc />
-        public new ITransitionInputPort InputPort => InputManager;
+        public new ITransitionInputPort InputAccess => InputManager;
 
         /// <inheritdoc />
-        public ITransitionQueryPort QueryPort => QueryManager;
+        public ITransitionQueryPort DataAccess => QueryManager;
 
         /// <inheritdoc />
-        public new ITransitionEventPort EventPort => EventManager;
+        public new ITransitionEventPort EventAccess => EventManager;
 
         /// <inheritdoc />
         public TransitionManager(IModelProject modelProject, TransitionModelData data)

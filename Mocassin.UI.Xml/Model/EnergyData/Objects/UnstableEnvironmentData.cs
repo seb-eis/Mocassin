@@ -14,7 +14,7 @@ namespace Mocassin.UI.Xml.EnergyModel
     [XmlRoot]
     public class UnstableEnvironmentData : ModelDataObject
     {
-        private ModelObjectReference<CellReferencePosition> cellReferencePosition = new ModelObjectReference<CellReferencePosition>();
+        private ModelObjectReference<CellSite> cellReferencePosition = new ModelObjectReference<CellSite>();
         private ObservableCollection<RadialInteractionFilterData> interactionFilters = new ObservableCollection<RadialInteractionFilterData>();
         private double maxInteractionRange;
 
@@ -32,7 +32,7 @@ namespace Mocassin.UI.Xml.EnergyModel
         ///     Get or set the key of the center unit cell position
         /// </summary>
         [XmlElement]
-        public ModelObjectReference<CellReferencePosition> CellReferencePosition
+        public ModelObjectReference<CellSite> CellReferencePosition
         {
             get => cellReferencePosition;
             set => SetProperty(ref cellReferencePosition, value);
@@ -54,7 +54,7 @@ namespace Mocassin.UI.Xml.EnergyModel
             var obj = new UnstableEnvironment
             {
                 MaxInteractionRange = MaxInteractionRange,
-                CellReferencePosition = new CellReferencePosition {Key = CellReferencePosition.Key},
+                CellSite = new CellSite {Key = CellReferencePosition.Key},
                 InteractionFilters = InteractionFilters.Select(x => x.AsAsymmetric()).ToList()
             };
             return obj;

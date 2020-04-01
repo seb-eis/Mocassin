@@ -34,7 +34,7 @@ namespace Mocassin.Model.Lattices
         [CacheMethodResult]
         protected IDopedByteLatticeSource CreateDefaultLatticeSource()
         {
-            var baseBlock = ModelProject.GetManager<ILatticeManager>().QueryPort.Query(x => x.GetBuildingBlocks().First());
+            var baseBlock = ModelProject.Manager<ILatticeManager>().DataAccess.Query(x => x.GetBuildingBlocks().First());
             return new FastDopedByteLatticeSource(ModelProject, baseBlock);
         }
     }

@@ -96,8 +96,8 @@ namespace Mocassin.UI.Xml.Customization
         /// <returns></returns>
         public PairEnergyEntry ToInternal(IModelProject modelProject, IPairInteraction pairInteraction)
         {
-            var center = modelProject.DataTracker.FindObjectByKey<IParticle>(CenterParticle.Key);
-            var partner = modelProject.DataTracker.FindObjectByKey<IParticle>(PartnerParticle.Key);
+            var center = modelProject.DataTracker.FindObject<IParticle>(CenterParticle.Key);
+            var partner = modelProject.DataTracker.FindObject<IParticle>(PartnerParticle.Key);
             var pair = ParticleInteractionPair.MakePair(center, partner, pairInteraction.IsSymmetric);
             return new PairEnergyEntry(pair, Energy);
         }

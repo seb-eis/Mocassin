@@ -158,6 +158,7 @@ namespace Mocassin.Tools.Evaluation.Context
         /// <returns></returns>
         public IProjectModelContext GetProjectModelContext(int contextId)
         {
+            if (contextId < 1) throw new ArgumentException("Context id cannot be smaller than 1");
             if (ProjectContextCache.TryGetValue(contextId, out var context)) return context;
 
             var packageModel = LoadJobPackageModel(contextId);
