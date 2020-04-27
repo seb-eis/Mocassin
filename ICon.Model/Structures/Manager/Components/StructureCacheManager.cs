@@ -46,13 +46,13 @@ namespace Mocassin.Model.Structures
         }
 
         /// <inheritdoc />
-        public SetList<CrystalVector4D> GetEncodedExtendedPositionList(int index)
+        public SetList<Vector4I> GetEncodedExtendedPositionList(int index)
         {
             return GetEncodedExtendedPositionLists()[index];
         }
 
         /// <inheritdoc />
-        public IList<SetList<CrystalVector4D>> GetEncodedExtendedPositionLists()
+        public IList<SetList<Vector4I>> GetEncodedExtendedPositionLists()
         {
             return GetResultFromCache(CreateExtendedEncodedPositionLists);
         }
@@ -82,7 +82,7 @@ namespace Mocassin.Model.Structures
         }
 
         /// <inheritdoc />
-        public SetList<FractionalPosition> GetExtendedPositionList(in CrystalVector4D vector)
+        public SetList<FractionalPosition> GetExtendedPositionList(in Vector4I vector)
         {
             if (!GetVectorEncoder().TryDecode(vector, out Fractional3D decoded))
                 throw new ArgumentException("4D vector cannot be decoded into a valid 3D equivalent", nameof(vector));
@@ -219,13 +219,13 @@ namespace Mocassin.Model.Structures
         /// </summary>
         /// <returns></returns>
         [CacheMethodResult]
-        protected IList<SetList<CrystalVector4D>> CreateExtendedEncodedPositionLists()
+        protected IList<SetList<Vector4I>> CreateExtendedEncodedPositionLists()
         {
-            var result = new List<SetList<CrystalVector4D>>();
+            var result = new List<SetList<Vector4I>>();
             var encoder = GetVectorEncoder();
             foreach (var positionSet in GetExtendedPositionLists())
             {
-                var list = new SetList<CrystalVector4D>(Comparer<CrystalVector4D>.Default);
+                var list = new SetList<Vector4I>(Comparer<Vector4I>.Default);
                 foreach (var position in positionSet)
                 {
                     if (!encoder.TryEncode(position.Vector, out var encoded))

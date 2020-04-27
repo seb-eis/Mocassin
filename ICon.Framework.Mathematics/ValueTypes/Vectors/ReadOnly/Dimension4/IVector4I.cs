@@ -3,7 +3,7 @@
     /// <summary>
     ///     General interface for all four dimensional 128 bit encoded linear supercell crystal position information
     /// </summary>
-    public interface ICrystalVector4D
+    public interface IVector4I
     {
         /// <summary>
         ///     Get the coordinate tuple

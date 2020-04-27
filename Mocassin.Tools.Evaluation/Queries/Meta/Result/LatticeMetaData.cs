@@ -8,16 +8,17 @@ namespace Mocassin.Tools.Evaluation.Queries
     public readonly struct LatticeMetaData
     {
         /// <summary>
-        ///     Get a <see cref="CrystalVector4D" /> that stores the 4D size information
+        ///     Get a <see cref="Vector4I" /> that stores the 4D size information
         /// </summary>
-        public CrystalVector4D SizeInfo { get; }
+        public Vector4I SizeInfo { get; }
 
         /// <summary>
         ///     Get the volume of the lattice in [m^3]
         /// </summary>
         public double Volume { get; }
 
-        public LatticeMetaData(in CrystalVector4D sizeInfo, double volume)
+        /// <inheritdoc />
+        public LatticeMetaData(in Vector4I sizeInfo, double volume)
             : this()
         {
             SizeInfo = sizeInfo;

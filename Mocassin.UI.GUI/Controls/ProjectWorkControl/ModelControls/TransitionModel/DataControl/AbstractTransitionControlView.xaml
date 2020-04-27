@@ -230,7 +230,6 @@
                            Header="State Change Group Definitions:">
       <gridControl:ExchangeGroupGridControlView DataContext="{Binding ExchangeGroupGridViewModel}" />
     </content:HeaderedGroup>
-
     <content:HeaderedGroup Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3"
                            Style="{StaticResource App.Style.HeaderedGroup.BoldText}"
                            HeaderToolTip="{StaticResource Local.ToolTip.AbstractTransition}"

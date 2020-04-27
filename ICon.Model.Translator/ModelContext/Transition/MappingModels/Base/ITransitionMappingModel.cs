@@ -21,7 +21,7 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <summary>
         ///     Defines the start vector of the mapping in encoded 4D crystal coordinates
         /// </summary>
-        CrystalVector4D StartVector4D { get; set; }
+        Vector4I StartVector4D { get; set; }
 
         /// <summary>
         ///     Get the movement sequence of the transition mapping model
@@ -33,7 +33,7 @@ namespace Mocassin.Model.Translator.ModelContext
         ///     Get the transition sequence of the transition mapping model
         /// </summary>
         /// <returns></returns>
-        IEnumerable<CrystalVector4D> GetTransitionSequence();
+        IEnumerable<Vector4I> GetTransitionSequence();
 
         /// <summary>
         ///     Get the transition model of the transition mapping model

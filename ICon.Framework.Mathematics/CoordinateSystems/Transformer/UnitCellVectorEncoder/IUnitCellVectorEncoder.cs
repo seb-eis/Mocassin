@@ -31,7 +31,7 @@ namespace Mocassin.Mathematics.Coordinates
         /// </summary>
         /// <param name="vector"></param>
         /// <param name="encoded"></param>
-        bool TryEncode(in Fractional3D vector, out CrystalVector4D encoded);
+        bool TryEncode(in Fractional3D vector, out Vector4I encoded);
 
         /// <summary>
         ///     Tries to encode a sequence of fractional vectors into a list of encoded crystal 4D vectors (Returns false if one of
@@ -40,7 +40,7 @@ namespace Mocassin.Mathematics.Coordinates
         /// <param name="decoded"></param>
         /// <param name="encoded"></param>
         /// <returns></returns>
-        bool TryEncode(IEnumerable<Fractional3D> decoded, out List<CrystalVector4D> encoded);
+        bool TryEncode(IEnumerable<Fractional3D> decoded, out List<Vector4I> encoded);
 
         /// <summary>
         ///     Tries to encode a fractional vector that starts at another fractional position into an absolute 4D vector (Returns
@@ -50,7 +50,7 @@ namespace Mocassin.Mathematics.Coordinates
         /// <param name="vector"></param>
         /// <param name="encoded"></param>
         /// <returns></returns>
-        bool TryEncode(in Fractional3D origin, in Fractional3D vector, out CrystalVector4D encoded);
+        bool TryEncode(in Fractional3D origin, in Fractional3D vector, out Vector4I encoded);
 
         /// <summary>
         ///     Tries to encode a vector that points from a start to another position into a relative 4D vector (Returns false if
@@ -60,7 +60,7 @@ namespace Mocassin.Mathematics.Coordinates
         /// <param name="origin"></param>
         /// <param name="encoded"></param>
         /// <returns></returns>
-        bool TryEncodeAsRelative(in Fractional3D origin, in Fractional3D vector, out CrystalVector4D encoded);
+        bool TryEncodeAsRelative(in Fractional3D origin, in Fractional3D vector, out Vector4I encoded);
 
         /// <summary>
         ///     tries to encode a cartesian vector that starts at unit cell origin point into a 4D vector (Returns false if not
@@ -69,7 +69,7 @@ namespace Mocassin.Mathematics.Coordinates
         /// <param name="vector"></param>
         /// <param name="encoded"></param>
         /// <returns></returns>
-        bool TryEncode(in Cartesian3D vector, out CrystalVector4D encoded);
+        bool TryEncode(in Cartesian3D vector, out Vector4I encoded);
 
         /// <summary>
         ///     Tries to encode a cartesian vector that starts at another cartesian position into an absolute 4D vector (Returns
@@ -79,7 +79,7 @@ namespace Mocassin.Mathematics.Coordinates
         /// <param name="vector"></param>
         /// <param name="encoded"></param>
         /// <returns></returns>
-        bool TryEncode(in Cartesian3D origin, in Cartesian3D vector, out CrystalVector4D encoded);
+        bool TryEncode(in Cartesian3D origin, in Cartesian3D vector, out Vector4I encoded);
 
         /// <summary>
         ///     Tries to encode a cartesian vector that starts at another cartesian vector into a relative 4D vector (Returns false
@@ -89,7 +89,7 @@ namespace Mocassin.Mathematics.Coordinates
         /// <param name="vector"></param>
         /// <param name="encoded"></param>
         /// <returns></returns>
-        bool TryEncodeAsRelative(in Cartesian3D origin, in Cartesian3D vector, out CrystalVector4D encoded);
+        bool TryEncodeAsRelative(in Cartesian3D origin, in Cartesian3D vector, out Vector4I encoded);
 
         /// <summary>
         ///     tries to encode a spherical vector that starts at unit cell origin point into a 4D vector (Returns false if not
@@ -98,7 +98,7 @@ namespace Mocassin.Mathematics.Coordinates
         /// <param name="vector"></param>
         /// <param name="encoded"></param>
         /// <returns></returns>
-        bool TryEncode(in Spherical3D vector, out CrystalVector4D encoded);
+        bool TryEncode(in Spherical3D vector, out Vector4I encoded);
 
         /// <summary>
         ///     Tries to decode the provided 4D encoded vector to an absolute fractional 3D vector (Returns false if not possible,
@@ -107,7 +107,7 @@ namespace Mocassin.Mathematics.Coordinates
         /// <param name="encoded"></param>
         /// <param name="decoded"></param>
         /// <returns></returns>
-        bool TryDecode(in CrystalVector4D encoded, out Fractional3D decoded);
+        bool TryDecode(in Vector4I encoded, out Fractional3D decoded);
 
         /// <summary>
         ///     Tries to decode multiple 4D vectors into a list of fractional vectors (Returns false if not possible)
@@ -115,7 +115,7 @@ namespace Mocassin.Mathematics.Coordinates
         /// <param name="encoded"></param>
         /// <param name="decoded"></param>
         /// <returns></returns>
-        bool TryDecode(IEnumerable<CrystalVector4D> encoded, out List<Fractional3D> decoded);
+        bool TryDecode(IEnumerable<Vector4I> encoded, out List<Fractional3D> decoded);
 
         /// <summary>
         ///     Tries to decode 4D encoded vector into an absolute cartesian vector starting at unit cell origin (Returns false if
@@ -124,7 +124,7 @@ namespace Mocassin.Mathematics.Coordinates
         /// <param name="encoded"></param>
         /// <param name="decoded"></param>
         /// <returns></returns>
-        bool TryDecode(in CrystalVector4D encoded, out Cartesian3D decoded);
+        bool TryDecode(in Vector4I encoded, out Cartesian3D decoded);
 
         /// <summary>
         ///     Tries to decoded 4D encoded vector into a spherical vector from unit cell origin (Returns false if not possible)
@@ -132,7 +132,7 @@ namespace Mocassin.Mathematics.Coordinates
         /// <param name="encoded"></param>
         /// <param name="decoded"></param>
         /// <returns></returns>
-        bool TryDecode(in CrystalVector4D encoded, out Spherical3D decoded);
+        bool TryDecode(in Vector4I encoded, out Spherical3D decoded);
 
         /// <summary>
         ///     Tries to decode a relative 4D vector that starts at a 4D origin point into a relative 3D fractional vector (Returns
@@ -142,7 +142,7 @@ namespace Mocassin.Mathematics.Coordinates
         /// <param name="encoded"></param>
         /// <param name="decoded"></param>
         /// <returns></returns>
-        bool TryDecodeToRelative(in CrystalVector4D origin, in CrystalVector4D encoded, out Fractional3D decoded);
+        bool TryDecodeToRelative(in Vector4I origin, in Vector4I encoded, out Fractional3D decoded);
 
         /// <summary>
         ///     Tries to decode a relative 4D vector that starts at a 4D origin point into a relative 3D cartesian vector (Returns
@@ -152,7 +152,7 @@ namespace Mocassin.Mathematics.Coordinates
         /// <param name="encoded"></param>
         /// <param name="decoded"></param>
         /// <returns></returns>
-        bool TryDecodeToRelative(in CrystalVector4D origin, in CrystalVector4D encoded, out Cartesian3D decoded);
+        bool TryDecodeToRelative(in Vector4I origin, in Vector4I encoded, out Cartesian3D decoded);
 
         /// <summary>
         ///     Tries to decode a relative 4D vector that starts at a 4D origin point into a relative 3D spherical vector (Returns
@@ -162,7 +162,7 @@ namespace Mocassin.Mathematics.Coordinates
         /// <param name="encoded"></param>
         /// <param name="decoded"></param>
         /// <returns></returns>
-        bool TryDecodeToRelative(in CrystalVector4D origin, in CrystalVector4D encoded, out Spherical3D decoded);
+        bool TryDecodeToRelative(in Vector4I origin, in Vector4I encoded, out Spherical3D decoded);
 
         /// <summary>
         ///     Calculates the cell offset counts from origin in a,b,c direction of a generic fractional vector (Uses tolerance of

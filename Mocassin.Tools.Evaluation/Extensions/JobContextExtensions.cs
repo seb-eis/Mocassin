@@ -12,11 +12,11 @@ namespace Mocassin.Tools.Evaluation.Extensions
     public static class JobContextExtensions
     {
         /// <summary>
-        ///     Get a <see cref="CrystalVector4D"/> that describes the size information of the <see cref="JobContext"/> simulation lattice
+        ///     Get a <see cref="Vector4I"/> that describes the size information of the <see cref="JobContext"/> simulation lattice
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static CrystalVector4D GetLatticeSizes(this JobContext value)
+        public static Vector4I GetLatticeSizes(this JobContext value)
         {
             if (value.JobModel.SimulationLatticeModel.LatticeInfo == null)
             {
@@ -24,7 +24,7 @@ namespace Mocassin.Tools.Evaluation.Extensions
                 value.JobModel.SimulationLatticeModel.ChangePropertyStatesToObjects(marshalService);
             }
             var raw = value.JobModel.SimulationLatticeModel.LatticeInfo.Structure.SizeVector;
-            return new CrystalVector4D(raw.A, raw.B, raw.C, raw.D);
+            return new Vector4I(raw.A, raw.B, raw.C, raw.D);
         }
     }
 }

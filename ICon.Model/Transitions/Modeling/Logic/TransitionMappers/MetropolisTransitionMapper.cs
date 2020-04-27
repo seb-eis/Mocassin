@@ -21,7 +21,7 @@ namespace Mocassin.Model.Transitions
         /// <param name="encodedPositions"></param>
         /// <returns></returns>
         public IEnumerable<MetropolisMapping> MapTransition(IMetropolisTransition transition,
-            IList<SetList<CrystalVector4D>> encodedPositions)
+            IList<SetList<Vector4I>> encodedPositions)
         {
             if (!MappingIsPossible(transition, encodedPositions))
             {
@@ -40,7 +40,7 @@ namespace Mocassin.Model.Transitions
         /// <param name="encodedPositions"></param>
         /// <returns></returns>
         public IEnumerable<IEnumerable<MetropolisMapping>> MapTransitions(IMetropolisTransition[] transitions,
-            IList<SetList<CrystalVector4D>> encodedPositions)
+            IList<SetList<Vector4I>> encodedPositions)
         {
             return transitions.Select(transition => MapTransition(transition, encodedPositions));
         }
@@ -52,7 +52,7 @@ namespace Mocassin.Model.Transitions
         /// <param name="encodedPositions"></param>
         /// <returns></returns>
         protected IEnumerable<MetropolisMapping> MakeMappings(IMetropolisTransition transition,
-            IList<SetList<CrystalVector4D>> encodedPositions)
+            IList<SetList<Vector4I>> encodedPositions)
         {
             return GetMappingPermutationSource(transition, encodedPositions)
                 .Select(permutation => new MetropolisMapping(transition, permutation[0], permutation[1]));
@@ -65,7 +65,7 @@ namespace Mocassin.Model.Transitions
         /// <param name="encodedPositions"></param>
         /// <returns></returns>
         protected IPermutationSource<int> GetMappingPermutationSource(IMetropolisTransition transition,
-            IList<SetList<CrystalVector4D>> encodedPositions)
+            IList<SetList<Vector4I>> encodedPositions)
         {
             var first = encodedPositions[transition.FirstCellSite.Index].Select(position => position.P).ToList();
             var second = encodedPositions[transition.SecondCellSite.Index].Select(position => position.P).ToList();
@@ -78,7 +78,7 @@ namespace Mocassin.Model.Transitions
         /// <param name="transition"></param>
         /// <param name="encodedPositions"></param>
         /// <returns></returns>
-        protected bool MappingIsPossible(IMetropolisTransition transition, IList<SetList<CrystalVector4D>> encodedPositions)
+        protected bool MappingIsPossible(IMetropolisTransition transition, IList<SetList<Vector4I>> encodedPositions)
         {
             if (transition == null)
                 throw new ArgumentNullException(nameof(transition));

@@ -23,6 +23,7 @@ namespace Mocassin.Tools.Evaluation.Queries
         /// </summary>
         public double Conductivity { get; }
 
+        /// <inheritdoc />
         public EnsembleMobility(IParticle particle, double ionicMobility, double conductivity)
             : this()
         {

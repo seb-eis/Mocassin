@@ -28,6 +28,7 @@ namespace Mocassin.Tools.Evaluation.Queries
         /// </summary>
         public double CoefficientZ { get; }
 
+        /// <inheritdoc />
         public EnsembleDiffusion(IParticle particle, double coefficientX, double coefficientY, double coefficientZ)
             : this()
         {

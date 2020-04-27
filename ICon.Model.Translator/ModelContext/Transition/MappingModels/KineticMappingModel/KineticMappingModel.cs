@@ -22,13 +22,13 @@ namespace Mocassin.Model.Translator.ModelContext
         public IKineticMappingModel InverseMapping { get; set; }
 
         /// <inheritdoc />
-        public IList<CrystalVector4D> PositionSequence4D => Mapping.EncodedPath;
+        public IList<Vector4I> PositionSequence4D => Mapping.EncodedPath;
 
         /// <inheritdoc />
         public IList<Fractional3D> PositionSequence3D => Mapping.FractionalPath;
 
         /// <inheritdoc />
-        public IList<CrystalVector4D> TransitionSequence4D { get; set; }
+        public IList<Vector4I> TransitionSequence4D { get; set; }
 
         /// <inheritdoc />
         public IList<Fractional3D> TransitionSequence3D { get; set; }
@@ -44,7 +44,7 @@ namespace Mocassin.Model.Translator.ModelContext
 
         /// <inheritdoc />
         /// <remarks> This value cannot be set for a kinetic transition </remarks>
-        public CrystalVector4D StartVector4D
+        public Vector4I StartVector4D
         {
             get => PositionSequence4D[0];
             set => throw new NotSupportedException("Cannot manipulate start vector on kinetic mapping");
@@ -92,7 +92,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <inheritdoc />
-        public IEnumerable<CrystalVector4D> GetTransitionSequence()
+        public IEnumerable<Vector4I> GetTransitionSequence()
         {
             return TransitionSequence4D.AsEnumerable();
         }
@@ -122,9 +122,9 @@ namespace Mocassin.Model.Translator.ModelContext
         ///     Gets an inverted version of the encoded transition sequence
         /// </summary>
         /// <returns></returns>
-        protected IList<CrystalVector4D> GetGeometricInversionTransitionSequence4D()
+        protected IList<Vector4I> GetGeometricInversionTransitionSequence4D()
         {
-            var result = new List<CrystalVector4D>(TransitionSequence4D.Count);
+            var result = new List<Vector4I>(TransitionSequence4D.Count);
             var lastId = PositionSequence4D.Count - 1;
 
             for (var i = lastId - 1; i >= 0; i--)

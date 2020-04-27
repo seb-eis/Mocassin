@@ -9,15 +9,15 @@ namespace Mocassin.Tools.Evaluation.Helper
     /// <summary>
     ///     Provides helper methods for handling translation of simulation mappings into higher level information
     /// </summary>
-    public static class SimulationMappingHelper
+    public static class SimulationMapping
     {
         /// <summary>
         ///     Get a mapper <see cref="Func{T, TResult}" /> that translates linear lattice position indices into
-        ///     <see cref="CrystalVector4D" /> information
+        ///     <see cref="Vector4I" /> information
         /// </summary>
         /// <param name="latticeSize"></param>
         /// <returns></returns>
-        public static Func<int, CrystalVector4D> GetPositionIndexToVector4DMapper(in CrystalVector4D latticeSize)
+        public static Func<int, Vector4I> GetPositionIndexToVector4Mapper(in Vector4I latticeSize)
         {
             if (latticeSize.A < 1 || latticeSize.B < 1 || latticeSize.C < 1 || latticeSize.P < 1)
                 throw new ArgumentException("Provided vector contains 0 or negative size information.");
@@ -27,13 +27,13 @@ namespace Mocassin.Tools.Evaluation.Helper
             var blockSizeA = blockSizeB * latticeSize.B;
             var totalSize = blockSizeA * latticeSize.A;
 
-            CrystalVector4D GetValue(int index)
+            Vector4I GetValue(int index)
             {
                 if (index >= totalSize || index < 0) throw new ArgumentException($"Index {index} is out of range of the lattice.");
                 var a = Math.DivRem(index, blockSizeA, out index);
                 var b = Math.DivRem(index, blockSizeB, out index);
                 var c = Math.DivRem(index, blockSizeC, out index);
-                return new CrystalVector4D(a, b, c, index);
+                return new Vector4I(a, b, c, index);
             }
 
             return GetValue;
@@ -41,16 +41,16 @@ namespace Mocassin.Tools.Evaluation.Helper
 
         /// <summary>
         ///     Get a mapper <see cref="Func{T, TResult}" /> that translates a simulation unit cell index into
-        ///     <see cref="CrystalVector4D" /> unit cell offset information
+        ///     <see cref="Vector4I" /> unit cell offset information
         /// </summary>
         /// <param name="latticeSize"></param>
         /// <returns></returns>
-        public static Func<int, CrystalVector4D> GetCellIndexToCellOffset4DMapper(in CrystalVector4D latticeSize)
+        public static Func<int, Vector4I> GetCellIndexToCellOffset4DMapper(in Vector4I latticeSize)
         {
-            var mapper4D = GetPositionIndexToVector4DMapper(latticeSize);
+            var mapper4D = GetPositionIndexToVector4Mapper(latticeSize);
             var cellSize = latticeSize.P;
 
-            CrystalVector4D GetValue(int index)
+            Vector4I GetValue(int index)
             {
                 return mapper4D.Invoke(index * cellSize);
             }
@@ -65,10 +65,10 @@ namespace Mocassin.Tools.Evaluation.Helper
         /// <param name="latticeSize"></param>
         /// <param name="vectorEncoder"></param>
         /// <returns></returns>
-        public static Func<int, Fractional3D> GetPositionIndexToFractional3DMapper(in CrystalVector4D latticeSize, IUnitCellVectorEncoder vectorEncoder)
+        public static Func<int, Fractional3D> GetPositionIndexToFractionalMapper(in Vector4I latticeSize, IUnitCellVectorEncoder vectorEncoder)
         {
             if (vectorEncoder.PositionCount != latticeSize.P) throw new ArgumentException("Size mismatch between encoder and lattice information.");
-            var mapper4D = GetPositionIndexToVector4DMapper(latticeSize);
+            var mapper4D = GetPositionIndexToVector4Mapper(latticeSize);
 
             Fractional3D GetValue(int index)
             {
@@ -87,10 +87,10 @@ namespace Mocassin.Tools.Evaluation.Helper
         /// <param name="latticeSize"></param>
         /// <param name="vectorEncoder"></param>
         /// <returns></returns>
-        public static Func<int, Cartesian3D> GetPositionIndexToCartesian3DMapper(in CrystalVector4D latticeSize, IUnitCellVectorEncoder vectorEncoder)
+        public static Func<int, Cartesian3D> GetPositionIndexToCartesianMapper(in Vector4I latticeSize, IUnitCellVectorEncoder vectorEncoder)
         {
             if (vectorEncoder.PositionCount != latticeSize.P) throw new ArgumentException("Size mismatch between encoder and lattice information.");
-            var mapper4D = GetPositionIndexToVector4DMapper(latticeSize);
+            var mapper4D = GetPositionIndexToVector4Mapper(latticeSize);
 
             Cartesian3D GetValue(int index)
             {
@@ -104,18 +104,18 @@ namespace Mocassin.Tools.Evaluation.Helper
 
         /// <summary>
         ///     Get a mapper <see cref="Func{T, TResult}" /> that translates linear lattice position indices into
-        ///     <see cref="Cartesian3D" />, <see cref="Fractional3D" /> and <see cref="CrystalVector4D" /> information
+        ///     <see cref="Cartesian3D" />, <see cref="Fractional3D" /> and <see cref="Vector4I" /> information
         /// </summary>
         /// <param name="latticeSize"></param>
         /// <param name="vectorEncoder"></param>
         /// <returns></returns>
-        public static Func<int, (CrystalVector4D, Fractional3D, Cartesian3D)> GetPositionIndexToCoordinateMapper(in CrystalVector4D latticeSize,
+        public static Func<int, (Vector4I, Fractional3D, Cartesian3D)> GetPositionIndexToCoordinateMapper(in Vector4I latticeSize,
             IUnitCellVectorEncoder vectorEncoder)
         {
             if (vectorEncoder.PositionCount != latticeSize.P) throw new ArgumentException("Size mismatch between encoder and lattice information.");
-            var mapper4D = GetPositionIndexToVector4DMapper(latticeSize);
+            var mapper4D = GetPositionIndexToVector4Mapper(latticeSize);
 
-            (CrystalVector4D, Fractional3D, Cartesian3D) GetValue(int index)
+            (Vector4I, Fractional3D, Cartesian3D) GetValue(int index)
             {
                 var vector4D = mapper4D(index);
                 var fractional3D = vectorEncoder.TryDecode(vector4D, out Fractional3D decoded)
@@ -131,23 +131,23 @@ namespace Mocassin.Tools.Evaluation.Helper
 
         /// <summary>
         ///     Generates a mapper <see cref="Func{T, TResult}" /> that translates static tracker indices into
-        ///     <see cref="CrystalVector4D" /> lattice position information
+        ///     <see cref="Vector4I" /> lattice position information
         /// </summary>
         /// <param name="modelContext"></param>
         /// <param name="simulationModel"></param>
         /// <param name="latticeSize"></param>
         /// <returns></returns>
-        public static Func<int, CrystalVector4D> GetStaticTrackerIndexToVector4DMapper(IProjectModelContext modelContext, ISimulationModel simulationModel,
-            in CrystalVector4D latticeSize)
+        public static Func<int, Vector4I> GetStaticTrackerIndexToVector4Mapper(IProjectModelContext modelContext, ISimulationModel simulationModel,
+            in Vector4I latticeSize)
         {
             var trackerModels = simulationModel.SimulationTrackingModel.StaticTrackerModels;
             var cellOffsetMapper = GetCellIndexToCellOffset4DMapper(latticeSize);
 
-            CrystalVector4D GetValue(int trackerIndex)
+            Vector4I GetValue(int trackerIndex)
             {
                 var cellIndex = Math.DivRem(trackerIndex, trackerModels.Count, out var trackerModelIndex);
                 var cellOffset = cellOffsetMapper.Invoke(cellIndex);
-                return new CrystalVector4D(cellOffset.A, cellOffset.B, cellOffset.C, trackerModels[trackerModelIndex].TrackedPositionIndex);
+                return new Vector4I(cellOffset.A, cellOffset.B, cellOffset.C, trackerModels[trackerModelIndex].TrackedPositionIndex);
             }
 
             return GetValue;
@@ -161,10 +161,10 @@ namespace Mocassin.Tools.Evaluation.Helper
         /// <param name="simulationModel"></param>
         /// <param name="latticeSize"></param>
         /// <returns></returns>
-        public static Func<int, Fractional3D> GetStaticTrackerIndexToFractional3DMapper(IProjectModelContext modelContext, ISimulationModel simulationModel,
-            in CrystalVector4D latticeSize)
+        public static Func<int, Fractional3D> GetStaticTrackerIndexToFractionalMapper(IProjectModelContext modelContext, ISimulationModel simulationModel,
+            in Vector4I latticeSize)
         {
-            var mapper4D = GetStaticTrackerIndexToVector4DMapper(modelContext, simulationModel, latticeSize);
+            var mapper4D = GetStaticTrackerIndexToVector4Mapper(modelContext, simulationModel, latticeSize);
             var vectorEncoder = modelContext.GetUnitCellVectorEncoder();
 
             Fractional3D GetValue(int trackerIndex)
@@ -185,10 +185,10 @@ namespace Mocassin.Tools.Evaluation.Helper
         /// <param name="simulationModel"></param>
         /// <param name="latticeSize"></param>
         /// <returns></returns>
-        public static Func<int, Cartesian3D> GetStaticTrackerIndexToCartesian3DMapper(IProjectModelContext modelContext, ISimulationModel simulationModel,
-            in CrystalVector4D latticeSize)
+        public static Func<int, Cartesian3D> GetStaticTrackerIndexToCartesianMapper(IProjectModelContext modelContext, ISimulationModel simulationModel,
+            in Vector4I latticeSize)
         {
-            var mapper4D = GetStaticTrackerIndexToVector4DMapper(modelContext, simulationModel, latticeSize);
+            var mapper4D = GetStaticTrackerIndexToVector4Mapper(modelContext, simulationModel, latticeSize);
             var vectorEncoder = modelContext.GetUnitCellVectorEncoder();
 
             Cartesian3D GetValue(int trackerIndex)

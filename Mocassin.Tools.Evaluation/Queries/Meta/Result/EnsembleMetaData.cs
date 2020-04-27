@@ -23,6 +23,7 @@ namespace Mocassin.Tools.Evaluation.Queries
         /// </summary>
         public double ParticleDensity { get; }
 
+        /// <inheritdoc />
         public EnsembleMetaData(IParticle particle, int particleCount, double particleDensity)
             : this()
         {

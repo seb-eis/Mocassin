@@ -18,6 +18,7 @@ namespace Mocassin.Tools.Evaluation.Queries
         /// </summary>
         public EnsembleMobility EnsembleMobility { get; }
 
+        /// <inheritdoc />
         public TransitionMobility(IGlobalTrackerModel trackerModel, in EnsembleMobility ensembleMobility)
             : this()
         {

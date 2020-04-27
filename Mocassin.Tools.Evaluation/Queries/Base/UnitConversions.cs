@@ -5,6 +5,9 @@
     /// </summary>
     public static class UnitConversions
     {
+        /// <summary>
+        ///     Length helper class
+        /// </summary>
         public static class Length
         {
             /// <summary>

@@ -32,7 +32,7 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <summary>
         ///     The encoded 4D position sequence in absolute coordinates
         /// </summary>
-        IList<CrystalVector4D> PositionSequence4D { get; }
+        IList<Vector4I> PositionSequence4D { get; }
 
         /// <summary>
         ///     The fractional 3D position sequence in absolute coordinates
@@ -42,7 +42,7 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <summary>
         ///     The encoded 4D transition sequence where each vector is relative to the start position
         /// </summary>
-        IList<CrystalVector4D> TransitionSequence4D { get; set; }
+        IList<Vector4I> TransitionSequence4D { get; set; }
 
         /// <summary>
         ///     The fractional 3D transition sequence where each vector is relative to the start position

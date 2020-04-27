@@ -307,7 +307,7 @@ namespace Mocassin.Model.Translator.ModelContext
         protected void AddTransitionSequences(IKineticMappingModel mappingModel)
         {
             mappingModel.TransitionSequence3D = new List<Fractional3D>(mappingModel.Mapping.PathLength - 1);
-            mappingModel.TransitionSequence4D = new List<CrystalVector4D>(mappingModel.Mapping.PathLength - 1);
+            mappingModel.TransitionSequence4D = new List<Vector4I>(mappingModel.Mapping.PathLength - 1);
 
             for (var i = 1; i < mappingModel.Mapping.PathLength; i++)
             {

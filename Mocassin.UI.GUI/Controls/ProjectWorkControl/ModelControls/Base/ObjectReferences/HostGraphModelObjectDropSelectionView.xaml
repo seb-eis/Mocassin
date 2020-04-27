@@ -15,12 +15,10 @@
 
   <Grid>
     <TextBox IsReadOnly="True" TextAlignment="Center" Text="{StaticResource App.String.DropLocationText}"
-             Background="Transparent" BorderThickness="5"
-             Visibility="{Binding Converter={converter:NullToVisibilityConverter}, ConverterParameter=Collapsed}" />
+             Background="Transparent" BorderThickness="5"/>
     <DataGrid Name="HostGrid"
               ItemsSource="{Binding Items}"
               SelectedItem="{Binding SelectedItem}"
-              Visibility="{Binding Converter={converter:NullToVisibilityConverter}, ConverterParameter=Collapsed}"
               AutoGenerateColumns="False"
               ColumnWidth="*"
               AllowDrop="True"

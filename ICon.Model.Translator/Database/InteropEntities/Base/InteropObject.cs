@@ -72,6 +72,9 @@ namespace Mocassin.Model.Translator
             this.structure = structure;
         }
 
+        /// <summary>
+        ///     Creates an <see cref="InteropObject" />
+        /// </summary>
         public InteropObject()
         {
         }

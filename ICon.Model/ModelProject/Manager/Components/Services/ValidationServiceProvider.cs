@@ -98,7 +98,7 @@ namespace Mocassin.Model.ModelProject
         }
 
         /// <summary>
-        ///     Validates the passed object of type <see cref="T" /> if a matching <see cref="IValidationService" /> is available
+        ///     Validates the passed object if a matching <see cref="IValidationService" /> is available
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="obj"></param>
@@ -109,7 +109,7 @@ namespace Mocassin.Model.ModelProject
         }
 
         /// <summary>
-        ///     Get a generic validation <see cref="Func{T1, TResult}" /> delegate for the passed object of type <see cref="T" />
+        ///     Get a generic validation <see cref="Func{T1, TResult}" /> delegate for the passed object
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="obj"></param>

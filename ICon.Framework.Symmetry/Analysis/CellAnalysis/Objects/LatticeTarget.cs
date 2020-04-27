@@ -43,15 +43,15 @@ namespace Mocassin.Symmetry.Analysis
         public Cartesian3D CartesianToTarget { get; private set; }
 
         /// <summary>
-        ///     Get the absolute <see cref="CrystalVector4D" /> of the target
+        ///     Get the absolute <see cref="Vector4I" /> of the target
         /// </summary>
 
-        public CrystalVector4D CrystalVector { get; private set; }
+        public Vector4I CrystalVector { get; private set; }
 
         /// <summary>
-        ///     Get the relative <see cref="CrystalVector4D" /> to the target
+        ///     Get the relative <see cref="Vector4I" /> to the target
         /// </summary>
-        public CrystalVector4D CrystalVectorToTarget { get; private set; }
+        public Vector4I CrystalVectorToTarget { get; private set; }
 
         /// <summary>
         ///     Builds a new <see cref="LatticeTarget" /> from vector data
@@ -63,8 +63,8 @@ namespace Mocassin.Symmetry.Analysis
         /// <param name="targetCartesian"></param>
         /// <param name="targetCrystalVector"></param>
         /// <returns></returns>
-        public static LatticeTarget FromVectors(in Fractional3D sourceFractional, in Cartesian3D sourceCartesian, in CrystalVector4D sourceCrystalVector,
-            in Fractional3D targetFractional, in Cartesian3D targetCartesian, in CrystalVector4D targetCrystalVector)
+        public static LatticeTarget FromVectors(in Fractional3D sourceFractional, in Cartesian3D sourceCartesian, in Vector4I sourceCrystalVector,
+            in Fractional3D targetFractional, in Cartesian3D targetCartesian, in Vector4I targetCrystalVector)
         {
             var result = new LatticeTarget
             {

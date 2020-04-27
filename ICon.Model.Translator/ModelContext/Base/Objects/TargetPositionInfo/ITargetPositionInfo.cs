@@ -41,6 +41,6 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <summary>
         ///     Relative crystal vector to the target
         /// </summary>
-        CrystalVector4D RelativeCrystalVector { get; set; }
+        Vector4I RelativeCrystalVector { get; set; }
     }
 }

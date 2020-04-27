@@ -35,11 +35,11 @@ namespace Mocassin.Tools.Evaluation.Queries
         /// <param name="jobContext"></param>
         /// <param name="vectorEncoder"></param>
         /// <returns></returns>
-        protected CrystalVector4D GetLatticeSizeInfo(JobContext jobContext, IUnitCellVectorEncoder vectorEncoder)
+        protected Vector4I GetLatticeSizeInfo(JobContext jobContext, IUnitCellVectorEncoder vectorEncoder)
         {
             var split = jobContext.JobModel.JobMetaData.LatticeInfo.Split(',');
             if (split.Length != 3) throw new InvalidOperationException("Invalid format of lattice size string.");
-            return new CrystalVector4D(int.Parse(split[0]), int.Parse(split[1]), int.Parse(split[2]), vectorEncoder.PositionCount);
+            return new Vector4I(int.Parse(split[0]), int.Parse(split[1]), int.Parse(split[2]), vectorEncoder.PositionCount);
         }
     }
 }

@@ -122,8 +122,8 @@ namespace Mocassin.Model.Translator.ModelContext
             {
                 Mapping = mapping,
                 TransitionModel = transitionModel,
-                StartVector4D = new CrystalVector4D(0, 0, 0, mapping.PositionIndex0),
-                EndVector4D = new CrystalVector4D(0, 0, 0, mapping.PositionIndex1)
+                StartVector4D = new Vector4I(0, 0, 0, mapping.PositionIndex0),
+                EndVector4D = new Vector4I(0, 0, 0, mapping.PositionIndex1)
             };
 
             if (!vectorEncoder.TryDecode(mappingModel.StartVector4D, out Fractional3D startVector3D))

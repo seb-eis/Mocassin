@@ -133,6 +133,7 @@
         <Setter Property="RowBackground" Value="White" />
         <Setter Property="Background" Value="White" />
         <Setter Property="AlternatingRowBackground" Value="White" />
+        <Setter Property="VirtualizingPanel.VirtualizationMode" Value="Standard"></Setter>
       </Style>
 
       <Style TargetType="{x:Type DataGridCell}">

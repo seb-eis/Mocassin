@@ -104,6 +104,7 @@ namespace Mocassin.Model.Translator.ModelContext
         protected void CreateAllGroupLookupCodesOnModel(IGroupEnergyModel groupEnergyModel)
         {
             var codes = new SetList<long>(Comparer<long>.Default, groupEnergyModel.OccupationStates.Count);
+            var mapping = new Dictionary<long, IOccupationState>(groupEnergyModel.OccupationStates.Count);
             var buffer = new byte[8];
 
             foreach (var state in groupEnergyModel.OccupationStates)
@@ -115,11 +116,13 @@ namespace Mocassin.Model.Translator.ModelContext
 
                 var code = BitConverter.ToInt64(buffer, 0);
                 codes.Add(code);
+                mapping.Add(code, state);
 
                 for (var i = 0; i < index; i++) buffer[i] = 0;
             }
 
             groupEnergyModel.GroupLookupCodes = codes;
+            groupEnergyModel.GroupCodeToOccupationStateMapping = mapping;
         }
 
         /// <summary>
@@ -132,11 +135,16 @@ namespace Mocassin.Model.Translator.ModelContext
             var colCount = groupEnergyModel.GroupLookupCodes.Count;
             var energyTable = new double[rowCount, colCount];
 
-            var index = 0;
-            for (var row = 0; row < rowCount; row++)
+            for (var rowId = 0; rowId < rowCount; rowId++)
             {
-                for (var col = 0; col < colCount; col++)
-                    energyTable[row, col] = groupEnergyModel.EnergyEntries[index++].Energy;
+                for (var colId = 0; colId < colCount; colId++)
+                {
+                    var code = groupEnergyModel.GroupLookupCodes[colId];
+                    var groupOccupation = groupEnergyModel.GroupCodeToOccupationStateMapping[code];
+                    var particle = groupEnergyModel.ParticleIndexToTableMapping.Single(x => x.Value == rowId).Key;
+                    var groupEntry = groupEnergyModel.EnergyEntries.Single(x => x.CenterParticle.Equals(particle) && x.GroupOccupation.Equals(groupOccupation));
+                    energyTable[rowId, colId] = groupEntry.Energy;
+                }
             }
 
             groupEnergyModel.EnergyTable = energyTable;

@@ -14,6 +14,7 @@ using Mocassin.UI.Xml.Customization;
 using Mocassin.UI.Xml.Jobs;
 using Mocassin.UI.Xml.Main;
 using Mocassin.UI.Xml.Model;
+#pragma warning disable 1591
 
 namespace Mocassin.UI.Xml.ProjectBuilding
 {

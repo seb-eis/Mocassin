@@ -1,5 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 using Mocassin.Mathematics.ValueTypes;
+#pragma warning disable 1591
 
 namespace Mocassin.Model.Translator
 {
@@ -18,7 +19,7 @@ namespace Mocassin.Model.Translator
             D = d;
         }
 
-        public CVector4(in CrystalVector4D vector4D)
+        public CVector4(in Vector4I vector4D)
             : this(vector4D.A, vector4D.B, vector4D.C, vector4D.P)
         {
         }

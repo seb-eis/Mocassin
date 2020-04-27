@@ -24,6 +24,7 @@ namespace Mocassin.Tools.Evaluation.Queries
         /// </summary>
         public Cartesian3D VelocityVector { get; }
 
+        /// <inheritdoc />
         public StaticTrackerResult(int positionId, IParticle particle, in Cartesian3D velocityVector)
             : this()
         {

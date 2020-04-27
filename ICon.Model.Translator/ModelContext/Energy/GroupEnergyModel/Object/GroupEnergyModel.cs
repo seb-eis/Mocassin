@@ -27,6 +27,9 @@ namespace Mocassin.Model.Translator.ModelContext
         public IDictionary<IParticle, int> ParticleIndexToTableMapping { get; set; }
 
         /// <inheritdoc />
+        public IDictionary<long, IOccupationState> GroupCodeToOccupationStateMapping { get; set; }
+
+        /// <inheritdoc />
         public double[,] EnergyTable { get; set; }
 
         /// <summary>

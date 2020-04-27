@@ -42,7 +42,7 @@ namespace Mocassin.Tools.Evaluation.Queries
             var distributionAccesses = CreateCoordinationQuickAccess(result);
             var particleCounts = new int[particles.Max(x => x.Index) + 1];
 
-            foreach (var originVector in CrystalVector4D.LatticeVectorSet(sizeVector))
+            foreach (var originVector in Vector4I.LatticeVectorSet(sizeVector))
             {
                 var originParticleId = lattice[originVector.ToLinearIndex(sizeVector)];
                 particleCounts[originParticleId]++;

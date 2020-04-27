@@ -357,7 +357,6 @@ namespace Mocassin.Model.Transitions
         ///     Filters a set of rules by assigning common movement tags and removing all rules that can be generated from each
         ///     other and are therefore equivalent
         /// </summary>
-        /// <typeparam name="TRule"></typeparam>
         /// <param name="unfilteredRules"></param>
         /// <remarks> Equivalent rules are; Back-jump rules, Symmetric rules or twisted symmetric rules  </remarks>
         /// <returns></returns>

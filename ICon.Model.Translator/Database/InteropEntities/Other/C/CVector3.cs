@@ -1,5 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 using Mocassin.Mathematics.ValueTypes;
+#pragma warning disable 1591
 
 namespace Mocassin.Model.Translator
 {

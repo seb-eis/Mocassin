@@ -37,7 +37,7 @@ namespace Mocassin.UI.Xml.ProjectLibrary
         IObservable<Unit> ModelChangedNotification { get; }
 
         /// <summary>
-        ///     Adds the given <see cref="TEntity" /> objects to the <see cref="IMocassinProjectLibrary" />
+        ///     Adds the given entity objects to the <see cref="IMocassinProjectLibrary" />
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="entity"></param>

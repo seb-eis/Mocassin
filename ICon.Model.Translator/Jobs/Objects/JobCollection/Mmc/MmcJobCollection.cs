@@ -41,11 +41,13 @@ namespace Mocassin.Model.Translator.Jobs
             return PostBuildOptimizers.AsEnumerable();
         }
 
+        /// <inheritdoc />
         public IEnumerator<JobConfiguration> GetEnumerator()
         {
             return JobConfigurations.GetEnumerator();
         }
 
+        /// <inheritdoc />
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();

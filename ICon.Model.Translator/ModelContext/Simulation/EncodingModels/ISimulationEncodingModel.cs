@@ -7,8 +7,19 @@ namespace Mocassin.Model.Translator.ModelContext
     /// </summary>
     public enum MobilityType
     {
+        /// <summary>
+        ///     The particle is immobile
+        /// </summary>
         Immobile,
+        
+        /// <summary>
+        ///     The particle is mobile
+        /// </summary>
         Mobile,
+        
+        /// <summary>
+        ///     The particle is mobile and can be selected
+        /// </summary>
         Selectable
     }
 

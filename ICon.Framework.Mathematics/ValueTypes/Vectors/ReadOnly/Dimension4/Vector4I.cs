@@ -7,12 +7,12 @@ namespace Mocassin.Mathematics.ValueTypes
     /// <summary>
     ///     Four dimensional 128 bit encoded linear supercell crystal position information
     /// </summary>
-    public readonly struct CrystalVector4D : ICrystalVector4D, IComparable<CrystalVector4D>, IEquatable<CrystalVector4D>
+    public readonly struct Vector4I : IVector4I, IComparable<Vector4I>, IEquatable<Vector4I>
     {
         /// <summary>
         ///     The null vector of this type
         /// </summary>
-        public static CrystalVector4D NullVector { get; } = new CrystalVector4D(0, 0, 0, 0);
+        public static Vector4I Zero { get; } = new Vector4I(0, 0, 0, 0);
 
         /// <summary>
         ///     The integer coordinate tuple
@@ -38,7 +38,7 @@ namespace Mocassin.Mathematics.ValueTypes
         /// <param name="b"></param>
         /// <param name="c"></param>
         /// <param name="p"></param>
-        public CrystalVector4D(int a, int b, int c, int p)
+        public Vector4I(int a, int b, int c, int p)
             : this()
         {
             Coordinates = new Coordinates4I(a, b, c, p);
@@ -50,9 +50,9 @@ namespace Mocassin.Mathematics.ValueTypes
         /// <param name="lhs"></param>
         /// <param name="rhs"></param>
         /// <returns></returns>
-        public static CrystalVector4D operator -(CrystalVector4D lhs, ICrystalVector4D rhs)
+        public static Vector4I operator -(Vector4I lhs, IVector4I rhs)
         {
-            return new CrystalVector4D(lhs.A - rhs.A, lhs.B - rhs.B, lhs.C - rhs.C, lhs.P - rhs.P);
+            return new Vector4I(lhs.A - rhs.A, lhs.B - rhs.B, lhs.C - rhs.C, lhs.P - rhs.P);
         }
 
         /// <summary>
@@ -61,17 +61,17 @@ namespace Mocassin.Mathematics.ValueTypes
         /// <param name="lhs"></param>
         /// <param name="rhs"></param>
         /// <returns></returns>
-        public static CrystalVector4D operator +(CrystalVector4D lhs, ICrystalVector4D rhs)
+        public static Vector4I operator +(Vector4I lhs, IVector4I rhs)
         {
-            return new CrystalVector4D(lhs.A + rhs.A, lhs.B + rhs.B, lhs.C + rhs.C, lhs.P + rhs.P);
+            return new Vector4I(lhs.A + rhs.A, lhs.B + rhs.B, lhs.C + rhs.C, lhs.P + rhs.P);
         }
 
         /// <summary>
         ///     Vector multiplication with scalar value
         /// </summary>
-        public static CrystalVector4D operator *(CrystalVector4D lhs, int scalar)
+        public static Vector4I operator *(Vector4I lhs, int scalar)
         {
-            return new CrystalVector4D(lhs.A * scalar, lhs.B * scalar, lhs.C * scalar, lhs.P * scalar);
+            return new Vector4I(lhs.A * scalar, lhs.B * scalar, lhs.C * scalar, lhs.P * scalar);
         }
 
         /// <inheritdoc />
@@ -81,45 +81,45 @@ namespace Mocassin.Mathematics.ValueTypes
         }
 
         /// <inheritdoc />
-        public int CompareTo(CrystalVector4D other)
+        public int CompareTo(Vector4I other)
         {
             return Coordinates.CompareTo(other.Coordinates);
         }
 
         /// <inheritdoc />
-        public bool Equals(CrystalVector4D other)
+        public bool Equals(Vector4I other)
         {
             return Coordinates.Equals(other.Coordinates);
         }
 
         /// <summary>
-        ///     Get a <see cref="CrystalVector4D" /> trimmed back into a super-cell with periodic boundary sizes
+        ///     Get a <see cref="Vector4I" /> trimmed back into a super-cell with periodic boundary sizes
         /// </summary>
         /// <param name="sizes"></param>
         /// <returns></returns>
-        public CrystalVector4D ToTrimmed(in VectorI3 sizes)
+        public Vector4I ToTrimmed(in VectorI3 sizes)
         {
             return ToTrimmed(sizes.A, sizes.B, sizes.C);
         }
 
         /// <summary>
-        ///     Get a <see cref="CrystalVector4D" /> trimmed back into a super-cell with periodic boundary sizes
+        ///     Get a <see cref="Vector4I" /> trimmed back into a super-cell with periodic boundary sizes
         /// </summary>
         /// <param name="sizes"></param>
         /// <returns></returns>
-        public CrystalVector4D ToTrimmed(in CrystalVector4D sizes)
+        public Vector4I ToTrimmed(in Vector4I sizes)
         {
             return ToTrimmed(sizes.A, sizes.B, sizes.C);
         }
 
         /// <summary>
-        ///     Get a <see cref="CrystalVector4D" /> trimmed back into a super-cell with periodic boundary sizes
+        ///     Get a <see cref="Vector4I" /> trimmed back into a super-cell with periodic boundary sizes
         /// </summary>
         /// <param name="maxA"></param>
         /// <param name="maxB"></param>
         /// <param name="maxC"></param>
         /// <returns></returns>
-        public CrystalVector4D ToTrimmed(int maxA, int maxB, int maxC)
+        public Vector4I ToTrimmed(int maxA, int maxB, int maxC)
         {
             var a = A;
             var b = B;
@@ -130,16 +130,16 @@ namespace Mocassin.Mathematics.ValueTypes
             while (b >= maxB) b -= maxB;
             while (c < 0) c += maxC;
             while (c >= maxC) c -= maxC;
-            return new CrystalVector4D(a, b, c, P);
+            return new Vector4I(a, b, c, P);
         }
 
         /// <summary>
-        ///     Converts the <see cref="CrystalVector4D" /> to a linear integer index using the provided
-        ///     <see cref="CrystalVector4D" /> super-cell size data
+        ///     Converts the <see cref="Vector4I" /> to a linear integer index using the provided
+        ///     <see cref="Vector4I" /> super-cell size data
         /// </summary>
         /// <param name="sizes"></param>
         /// <returns></returns>
-        public int ToLinearIndex(in CrystalVector4D sizes)
+        public int ToLinearIndex(in Vector4I sizes)
         {
             return P +
                    C * sizes.P +
@@ -154,12 +154,12 @@ namespace Mocassin.Mathematics.ValueTypes
         }
 
         /// <summary>
-        ///     Enumerates all possible <see cref="CrystalVector4D" /> for a super-cell for the defined
-        ///     <see cref="CrystalVector4D" /> size data
+        ///     Enumerates all possible <see cref="Vector4I" /> for a super-cell for the defined
+        ///     <see cref="Vector4I" /> size data
         /// </summary>
         /// <param name="sizes"></param>
         /// <returns></returns>
-        public static IEnumerable<CrystalVector4D> LatticeVectorSet(CrystalVector4D sizes)
+        public static IEnumerable<Vector4I> LatticeVectorSet(Vector4I sizes)
         {
             for (var a = 0; a < sizes.A; a++)
             {
@@ -167,7 +167,7 @@ namespace Mocassin.Mathematics.ValueTypes
                 {
                     for (var c = 0; c < sizes.C; c++)
                     {
-                        for (var p = 0; p < sizes.P; p++) yield return new CrystalVector4D(a, b, c, p);
+                        for (var p = 0; p < sizes.P; p++) yield return new Vector4I(a, b, c, p);
                     }
                 }
             }

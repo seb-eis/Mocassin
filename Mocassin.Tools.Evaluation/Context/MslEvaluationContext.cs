@@ -130,9 +130,10 @@ namespace Mocassin.Tools.Evaluation.Context
         /// <returns></returns>
         public IProjectModelContext RestoreProjectModelContext(string projectXml)
         {
-            var projectGraph = ProjectDataObject.CreateFromXml<SimulationDbBuildTemplate>(projectXml);
+            var dbBuildTemplate = ProjectDataObject.CreateFromXml<SimulationDbBuildTemplate>(projectXml);
             var modelProject = ModelProjectProvider.Invoke();
-            modelProject.InputPipeline.PushToProject(projectGraph.ProjectModelData.GetInputSequence());
+            modelProject.InputPipeline.PushToProject(dbBuildTemplate.ProjectModelData.GetInputSequence());
+            dbBuildTemplate.ProjectCustomizationTemplate.PushToModel(modelProject);
             var builder = new ProjectModelContextBuilder(modelProject);
             return builder.BuildContextAsync().Result;
         }

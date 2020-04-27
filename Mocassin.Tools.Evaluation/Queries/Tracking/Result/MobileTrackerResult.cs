@@ -24,6 +24,7 @@ namespace Mocassin.Tools.Evaluation.Queries
         /// </summary>
         public Cartesian3D Displacement { get; }
 
+        /// <inheritdoc />
         public MobileTrackerResult(IParticle particle, int originalPositionId, in Cartesian3D displacement)
             : this()
         {

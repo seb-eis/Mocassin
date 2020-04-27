@@ -31,10 +31,10 @@ namespace Mocassin.Model.Translator.ModelContext
 
         /// <inheritdoc />
         /// <remarks> Coordinates (0,0,0,P) are always in the original unit cell </remarks>
-        public CrystalVector4D StartVector4D { get; set; }
+        public Vector4I StartVector4D { get; set; }
 
         /// <inheritdoc />
-        public CrystalVector4D EndVector4D { get; set; }
+        public Vector4I EndVector4D { get; set; }
 
         /// <inheritdoc />
         public IMetropolisTransitionModel TransitionModel { get; set; }
@@ -49,9 +49,9 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <inheritdoc />
-        public IEnumerable<CrystalVector4D> GetTransitionSequence()
+        public IEnumerable<Vector4I> GetTransitionSequence()
         {
-            yield return new CrystalVector4D(0, 0, 0, Mapping.PositionIndex1);
+            yield return new Vector4I(0, 0, 0, Mapping.PositionIndex1);
         }
 
         /// <inheritdoc />

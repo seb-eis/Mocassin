@@ -131,7 +131,7 @@ namespace Mocassin.Model.Transitions
         /// </summary>
         /// <param name="pathGeometry"></param>
         /// <returns></returns>
-        protected IEnumerable<LatticePoint<int>> GetGeometricPath(IEnumerable<CrystalVector4D> pathGeometry)
+        protected IEnumerable<LatticePoint<int>> GetGeometricPath(IEnumerable<Vector4I> pathGeometry)
         {
             foreach (var encoded in pathGeometry)
             {
@@ -184,7 +184,7 @@ namespace Mocassin.Model.Transitions
         /// <typeparam name="T1"></typeparam>
         /// <param name="sequence"></param>
         /// <returns></returns>
-        protected IEnumerable<CrystalVector4D> EncodeGeometry<T1>(IEnumerable<LatticePoint<T1>> sequence)
+        protected IEnumerable<Vector4I> EncodeGeometry<T1>(IEnumerable<LatticePoint<T1>> sequence)
         {
             foreach (var item in sequence)
             {

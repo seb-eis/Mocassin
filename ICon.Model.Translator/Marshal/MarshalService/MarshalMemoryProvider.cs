@@ -81,6 +81,10 @@ namespace Mocassin.Model.Translator
         /// </summary>
         public int TypeSize => MemoryProvider.TypeSize;
 
+        /// <summary>
+        ///     Creates a <see cref="LockedMarshalMemory"/> using a <see cref="MarshalMemoryProvider"/>
+        /// </summary>
+        /// <param name="memoryProvider"></param>
         public LockedMarshalMemory(MarshalMemoryProvider memoryProvider)
         {
             MemoryProvider = memoryProvider ?? throw new ArgumentNullException(nameof(memoryProvider));

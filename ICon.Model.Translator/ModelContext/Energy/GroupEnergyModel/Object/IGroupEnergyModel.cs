@@ -40,6 +40,11 @@ namespace Mocassin.Model.Translator.ModelContext
         IDictionary<IParticle, int> ParticleIndexToTableMapping { get; set; }
 
         /// <summary>
+        ///     Assigns each group lookup code its affiliated <see cref="IOccupationState"/>
+        /// </summary>
+        IDictionary<long, IOccupationState> GroupCodeToOccupationStateMapping { get; set; }
+
+        /// <summary>
         ///     The energy table for the group interaction that enables energy lookup by redirected center particle
         ///     index and lookup code index
         /// </summary>

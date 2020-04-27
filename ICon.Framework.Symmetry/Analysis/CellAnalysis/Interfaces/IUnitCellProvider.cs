@@ -60,7 +60,7 @@ namespace Mocassin.Symmetry.Analysis
         /// </summary>
         /// <param name="vector"></param>
         /// <returns></returns>
-        LatticePoint<T1> GetCellEntry(in CrystalVector4D vector);
+        LatticePoint<T1> GetCellEntry(in Vector4I vector);
 
         /// <summary>
         ///     Get the cell entry value at the specified absolute 3d fractional vector

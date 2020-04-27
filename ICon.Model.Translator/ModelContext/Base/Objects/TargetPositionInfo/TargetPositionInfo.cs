@@ -25,6 +25,6 @@ namespace Mocassin.Model.Translator.ModelContext
         public Cartesian3D AbsoluteCartesian { get; set; }
 
         /// <inheritdoc />
-        public CrystalVector4D RelativeCrystalVector { get; set; }
+        public Vector4I RelativeCrystalVector { get; set; }
     }
 }

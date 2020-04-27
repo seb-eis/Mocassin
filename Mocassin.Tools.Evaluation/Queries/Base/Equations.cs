@@ -72,6 +72,9 @@ namespace Mocassin.Tools.Evaluation.Queries.Base
             }
         }
 
+        /// <summary>
+        ///     Defines equations related to diffusion
+        /// </summary>
         public static class Diffusion
         {
             /// <summary>
@@ -99,6 +102,9 @@ namespace Mocassin.Tools.Evaluation.Queries.Base
             }
         }
 
+        /// <summary>
+        ///     Provides statistics helper methods
+        /// </summary>
         public static class Statistics
         {
             /// <summary>

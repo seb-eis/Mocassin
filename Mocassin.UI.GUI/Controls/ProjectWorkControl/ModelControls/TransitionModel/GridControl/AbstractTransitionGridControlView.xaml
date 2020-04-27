@@ -13,11 +13,15 @@
   d:DataContext="{d:DesignInstance local:AbstractTransitionGridControlViewModel, IsDesignTimeCreatable=True}"
   d:DesignHeight="450" d:DesignWidth="800"
   Background="Transparent">
+  <UserControl.Resources>
+    <adapter:AbstractTransitionExchangeGroupSelectionVmConverter x:Key="Local.AbstractTransitionExchangeGroupSelectionVmConverter"/>
+  </UserControl.Resources>
   <Grid>
     <DataGrid Name="AbstractTransitionDataGrid"
               ItemsSource="{Binding Items}"
               SelectedItem="{Binding SelectedItem}"
-              VerticalScrollBarVisibility="Auto"
+              VerticalAlignment="Stretch"
+              VerticalContentAlignment="Stretch"
               AutoGenerateColumns="False"
               ColumnWidth="*"
               Background="Transparent">
@@ -34,7 +38,6 @@
 
       <DataGrid.Columns>
         <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
-
         <DataGridTextColumn Header="Connection Pattern" Binding="{Binding ConnectorString}">
 
           <DataGridTextColumn.ElementStyle>
@@ -58,7 +61,7 @@
             <DataTemplate DataType="{x:Type transitionModel:AbstractTransitionData}">
               <gridControl:HostGraphModelObjectDropSelectionView>
                 <gridControl:HostGraphModelObjectDropSelectionView.DataContext>
-                  <MultiBinding Converter="{adapter:AbstractTransitionExchangeGroupSelectionVmConverter}">
+                  <MultiBinding Converter="{StaticResource Local.AbstractTransitionExchangeGroupSelectionVmConverter}">
                     <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}"
                              Path="DataContext" />
                     <Binding />
@@ -68,6 +71,7 @@
             </DataTemplate>
           </DataGridTemplateColumn.CellTemplate>
         </DataGridTemplateColumn>
+
       </DataGrid.Columns>
     </DataGrid>
   </Grid>

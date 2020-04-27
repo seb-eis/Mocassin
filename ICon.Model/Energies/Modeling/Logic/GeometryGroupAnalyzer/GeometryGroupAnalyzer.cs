@@ -17,10 +17,29 @@ namespace Mocassin.Model.Energies
     /// </summary>
     public enum GroupGeometryValidity
     {
+        /// <summary>
+        ///     The group is valid
+        /// </summary>
         IsValid,
+        
+        /// <summary>
+        ///     Defined positions partially do not exist
+        /// </summary>
         ContainsNonExistentPositions,
+        
+        /// <summary>
+        ///     Defined positions are partially affected by a filter
+        /// </summary>
         ContainsFilteredPositions,
+        
+        /// <summary>
+        ///     Defined positions are partially unstable
+        /// </summary>
         ContainsUnstablePositions,
+        
+        /// <summary>
+        ///     Defines positions contain a ring definition
+        /// </summary>
         ContainsRingDefinition
     }
 

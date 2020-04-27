@@ -39,6 +39,10 @@ namespace Mocassin.Symmetry.Analysis
         /// </summary>
         public IComparer<LatticeTarget> SortingComparer { get; set; }
 
+
+        /// <summary>
+        ///     Creates empty <see cref="RadialLatticeTargetQuery{T}"/>
+        /// </summary>
         protected RadialLatticeTargetQuery()
         {
         }

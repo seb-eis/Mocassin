@@ -9,7 +9,7 @@ namespace Mocassin.UI.Xml.Base
     /// </summary>
     public class ResourcesData
     {
-        private static readonly CultureInfo DefaultCultureInfo = CultureInfo.InvariantCulture;
+        private static CultureInfo DefaultCultureInfo { get; } = CultureInfo.InvariantCulture;
 
         /// <summary>
         ///     Get or set the <see cref="Dictionary{TKey,TValue}" /> that stores resources of the project as string values (It is
@@ -35,7 +35,7 @@ namespace Mocassin.UI.Xml.Base
         }
 
         /// <summary>
-        ///     Sets a generic resource of type <see cref="T" /> with the supplied key and converter <see cref="Func{T,TResult}" />
+        ///     Sets a generic resource with the supplied key and converter <see cref="Func{T,TResult}" />
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
@@ -98,7 +98,7 @@ namespace Mocassin.UI.Xml.Base
         }
 
         /// <summary>
-        ///     Tries to get a stored generic resource as type <see cref="T" /> that belongs to the supplied key
+        ///     Tries to get a stored generic resource that belongs to the supplied key
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="key"></param>

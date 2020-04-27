@@ -17,7 +17,7 @@ namespace Mocassin.Model.Transitions
         /// </summary>
         /// <param name="geometryVectors"></param>
         /// <returns></returns>
-        public bool ContainsRingTransition(IEnumerable<CrystalVector4D> geometryVectors)
+        public bool ContainsRingTransition(IEnumerable<Vector4I> geometryVectors)
         {
             var positionList = geometryVectors.AsList();
             for (var i = 0; i < positionList.Count; i++)
@@ -91,7 +91,7 @@ namespace Mocassin.Model.Transitions
         /// </summary>
         /// <param name="lhs"></param>
         /// <param name="rhs"></param>
-        /// <remarks> Rules form back-jump pair when the following is true. S_0 == S_1.Reverse && E_0 == E_1.Reverse </remarks>
+        /// <remarks> Rules form back-jump pair when the following is true. S_0 == S_1.Reverse and E_0 == E_1.Reverse </remarks>
         /// <returns></returns>
         public bool IsBackjumpRulePair(ITransitionRule lhs, ITransitionRule rhs)
         {

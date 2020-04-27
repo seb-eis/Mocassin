@@ -25,6 +25,11 @@ namespace Mocassin.Tools.Evaluation.Context
         /// <inheritdoc />
         public JobContext this[int index] => JobContexts[index];
 
+        /// <summary>
+        ///     Creates an <see cref="EvaluableJobSet"/> from a <see cref="IList{T}"/> of <see cref="JobContext"/> instances
+        /// </summary>
+        /// <param name="jobContexts"></param>
+        /// <exception cref="ArgumentException"></exception>
         public EvaluableJobSet(IList<JobContext> jobContexts)
         {
             JobContexts = jobContexts ?? throw new ArgumentNullException(nameof(jobContexts));
@@ -33,6 +38,7 @@ namespace Mocassin.Tools.Evaluation.Context
                 throw new ArgumentException("Job context set cannot have more than one evaluation context.");
         }
 
+        /// <inheritdoc />
         public EvaluableJobSet(IEnumerable<JobContext> jobContexts)
             : this(jobContexts?.ToList())
         {

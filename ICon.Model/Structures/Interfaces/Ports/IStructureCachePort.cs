@@ -47,14 +47,14 @@ namespace Mocassin.Model.Structures
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        SetList<CrystalVector4D> GetEncodedExtendedPositionList(int index);
+        SetList<Vector4I> GetEncodedExtendedPositionList(int index);
 
         /// <summary>
         ///     Extends all unit cell positions into their 4D encoded counterparts (Each position is extended into a separate set
         ///     of positions)
         /// </summary>
         /// <returns></returns>
-        IList<SetList<CrystalVector4D>> GetEncodedExtendedPositionLists();
+        IList<SetList<Vector4I>> GetEncodedExtendedPositionLists();
 
         /// <summary>
         ///     Get the unit cell provider for the current unit cell
@@ -79,7 +79,7 @@ namespace Mocassin.Model.Structures
         /// </summary>
         /// <param name="vector"></param>
         /// <returns></returns>
-        SetList<FractionalPosition> GetExtendedPositionList(in CrystalVector4D vector);
+        SetList<FractionalPosition> GetExtendedPositionList(in Vector4I vector);
 
         /// <summary>
         ///     Get read only list that assigns each extended position index the correct unit cell position interface

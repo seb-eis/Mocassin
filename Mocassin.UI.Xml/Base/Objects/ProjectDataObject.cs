@@ -116,7 +116,7 @@ namespace Mocassin.UI.Xml.Base
         ///     Creates a deep copy of the <see cref="ProjectDataObject" /> using its json representation. By default the system
         ///     preserves object references
         /// </summary>
-        /// <see cref="referencesHandling" />
+        /// <param name="referencesHandling"></param>
         /// <returns></returns>
         public virtual ProjectDataObject DeepCopy(PreserveReferencesHandling referencesHandling = PreserveReferencesHandling.All)
         {

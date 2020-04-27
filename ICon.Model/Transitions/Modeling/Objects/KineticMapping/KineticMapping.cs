@@ -29,7 +29,7 @@ namespace Mocassin.Model.Transitions
         /// <summary>
         ///     The transition path encoded as a set of 4D vectors (Cannot be null)
         /// </summary>
-        public CrystalVector4D[] EncodedPath { get; }
+        public Vector4I[] EncodedPath { get; }
 
         /// <summary>
         ///     The transition path in fractional coordinates (Can be null)
@@ -44,12 +44,12 @@ namespace Mocassin.Model.Transitions
         /// <summary>
         ///     The 4D encoded start position vector of the mapping
         /// </summary>
-        public CrystalVector4D StartVector4D => EncodedPath[0];
+        public Vector4I StartVector4D => EncodedPath[0];
 
         /// <summary>
         ///     The 4D encoded end position vector of the mapping
         /// </summary>
-        public CrystalVector4D EndVector4D => EncodedPath[PathLength - 1];
+        public Vector4I EndVector4D => EncodedPath[PathLength - 1];
 
         /// <summary>
         ///     The 3D fractional start position vector of the mapping
@@ -71,7 +71,7 @@ namespace Mocassin.Model.Transitions
         /// <param name="encodedPath"></param>
         /// <param name="fractionalPath"></param>
         public KineticMapping(IKineticTransition transition, ICellSite startCellSite, ICellSite endCellSite,
-            CrystalVector4D[] encodedPath, Fractional3D[] fractionalPath)
+            Vector4I[] encodedPath, Fractional3D[] fractionalPath)
         {
             Transition = transition;
             StartCellSite = startCellSite;
@@ -81,7 +81,7 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <inheritdoc />
-        public KineticMapping(IKineticTransition transition, CrystalVector4D[] encodedPath)
+        public KineticMapping(IKineticTransition transition, Vector4I[] encodedPath)
             : this(transition, null, null, encodedPath, null)
         {
         }

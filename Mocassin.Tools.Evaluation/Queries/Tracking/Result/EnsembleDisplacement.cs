@@ -34,6 +34,7 @@ namespace Mocassin.Tools.Evaluation.Queries
         /// </summary>
         public bool IsMean => EnsembleSize == 1;
 
+        /// <inheritdoc />
         public EnsembleDisplacement(bool isSquared, int ensembleSize, IParticle particle, Cartesian3D vector)
             : this()
         {

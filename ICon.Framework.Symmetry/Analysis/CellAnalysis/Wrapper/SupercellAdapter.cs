@@ -66,7 +66,7 @@ namespace Mocassin.Symmetry.Analysis
         }
 
         /// <inheritdoc />
-        public LatticePoint<T1> GetCellEntry(in CrystalVector4D vector)
+        public LatticePoint<T1> GetCellEntry(in Vector4I vector)
         {
             return GetCellEntry(vector.A, vector.B, vector.C, vector.P);
         }

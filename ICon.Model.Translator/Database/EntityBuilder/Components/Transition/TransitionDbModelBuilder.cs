@@ -161,7 +161,7 @@ namespace Mocassin.Model.Translator.EntityBuilder
         /// </summary>
         /// <param name="crystalVectors"></param>
         /// <returns></returns>
-        protected JumpSequenceEntity GetJumpSequenceEntity(IEnumerable<CrystalVector4D> crystalVectors)
+        protected JumpSequenceEntity GetJumpSequenceEntity(IEnumerable<Vector4I> crystalVectors)
         {
             var cVectors = crystalVectors.Select(x => new CVector4(x)).ToList();
             return new JumpSequenceEntity {Values = cVectors};

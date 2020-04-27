@@ -20,7 +20,7 @@ namespace Mocassin.Tools.Evaluation.Queries
         ///     Get or set the <see cref="Func{T,TResult}" /> that defines which positions are included in the result. Defaults to
         ///     stable <see cref="PositionStability" /> only
         /// </summary>
-        public Func<CrystalVector4D, FractionalPosition, bool> OriginAcceptor { get; set; }
+        public Func<Vector4I, FractionalPosition, bool> OriginAcceptor { get; set; }
 
         /// <inheritdoc />
         public LocalSiteCoordinationEvaluation(IEvaluableJobSet jobSet, double maxDistance)
@@ -42,7 +42,7 @@ namespace Mocassin.Tools.Evaluation.Queries
             var rawResult = new SiteCoordination[latticeSizes.A, latticeSizes.B, latticeSizes.C][][];
             var dummyCell = new SiteCoordination[latticeSizes.P][].Populate(new SiteCoordination[0]);
 
-            foreach (var origin in CrystalVector4D.LatticeVectorSet(latticeSizes))
+            foreach (var origin in Vector4I.LatticeVectorSet(latticeSizes))
             {
                 if (!OriginAcceptor.Invoke(origin, sites[origin.P]))
                 {

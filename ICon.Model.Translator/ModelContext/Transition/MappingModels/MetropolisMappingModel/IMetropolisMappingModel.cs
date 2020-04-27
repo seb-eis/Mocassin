@@ -47,7 +47,7 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <summary>
         ///     The encoded 4D coordinates of the end position (0,0,0,P) in the origin unit cell
         /// </summary>
-        CrystalVector4D EndVector4D { get; set; }
+        Vector4I EndVector4D { get; set; }
 
         /// <summary>
         ///     Create a new geometric inversion of this metropolis mapping model

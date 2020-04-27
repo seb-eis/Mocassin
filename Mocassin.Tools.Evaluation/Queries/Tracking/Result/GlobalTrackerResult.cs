@@ -18,6 +18,7 @@ namespace Mocassin.Tools.Evaluation.Queries
         /// </summary>
         public EnsembleDisplacement DisplacementData { get; }
 
+        /// <inheritdoc />
         public GlobalTrackerResult(IGlobalTrackerModel trackerModel, in EnsembleDisplacement displacementData)
             : this()
         {

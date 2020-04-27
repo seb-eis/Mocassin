@@ -37,21 +37,13 @@ namespace Mocassin.Model.Particles
         /// <inheritdoc />
         public int GetValidParticleCount()
         {
-            var count = 0;
-            foreach (var item in Data.Particles)
-                count += item.IsDeprecated ? 0 : 1;
-
-            return count;
+            return Data.Particles.Sum(item => item.IsDeprecated ? 0 : 1);
         }
 
         /// <inheritdoc />
         public int GetValidParticleSetCount()
         {
-            var count = 0;
-            foreach (var item in Data.ParticleSets)
-                count += item.IsDeprecated ? 0 : 1;
-
-            return count;
+            return Data.ParticleSets.Sum(item => item.IsDeprecated ? 0 : 1);
         }
 
         /// <inheritdoc />
@@ -63,18 +55,12 @@ namespace Mocassin.Model.Particles
         /// <inheritdoc />
         public IParticle GetParticle(int index)
         {
-            if (index >= Data.Particles.Count)
-                throw new ArgumentOutOfRangeException(nameof(index), "Particle index out of range");
-
             return Data.Particles[index];
         }
 
         /// <inheritdoc />
         public IParticleSet GetParticleSet(int index)
         {
-            if (index >= Data.ParticleSets.Count)
-                throw new ArgumentOutOfRangeException(nameof(index), "Particle set index out of range");
-
             return Data.ParticleSets[index];
         }
 

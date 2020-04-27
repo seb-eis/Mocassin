@@ -25,13 +25,6 @@ namespace Mocassin.Tools.Evaluation.Queries
         protected override IUnitCellProvider<IDictionary<IParticle, double>> GetValue(JobContext jobContext)
         {
             throw new NotImplementedException();
-            var particleMap = jobContext.ModelContext.ModelProject.DataTracker.MapObjects<IParticle>();
-            var vectorEncoder = jobContext.ModelContext.GetUnitCellVectorEncoder();
-            var latticeSizes = jobContext.GetLatticeSizes();
-            var lattice = jobContext.McsReader.ReadLattice();
-            var rawResult = new IDictionary<IParticle, double>[latticeSizes.A, latticeSizes.B, latticeSizes.C][];
-
-            return LatticeWrapping.ToSuperCell(rawResult, vectorEncoder);
         }
 
         /// <summary>
@@ -40,10 +33,9 @@ namespace Mocassin.Tools.Evaluation.Queries
         /// <param name="particles"></param>
         /// <param name="latticeSizes"></param>
         /// <returns></returns>
-        protected IDictionary<IParticle, double>[,,][] PrepareRawResult(IList<IParticle> particles, in CrystalVector4D latticeSizes)
+        protected IDictionary<IParticle, double>[,,][] PrepareRawResult(IList<IParticle> particles, in Vector4I latticeSizes)
         {
-            var result = new IDictionary<IParticle, double>[latticeSizes.A, latticeSizes.B, latticeSizes.C][];
-            return result;
+            throw new NotImplementedException();
         }
     }
 }

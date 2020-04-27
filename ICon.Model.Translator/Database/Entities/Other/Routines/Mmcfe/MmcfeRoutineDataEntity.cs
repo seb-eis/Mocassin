@@ -4,7 +4,7 @@ using System.Linq;
 namespace Mocassin.Model.Translator.Routines
 {
     /// <summary>
-    ///     The <see cref="RoutineDataEntity{T}" /> for providing parameter data & identification for the the MMCFE routine
+    ///     The <see cref="RoutineDataEntity{T}" /> for providing parameter data and identification for the the MMCFE routine
     /// </summary>
     [MocsimExtensionComponent("b7f2dded-daf1-40c0-4d4d-434645000000", "mmcfe")]
     public class MmcfeRoutineDataEntity : RoutineDataEntity<CMmcfeParams>

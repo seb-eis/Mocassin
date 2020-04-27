@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using Mocassin.Model.Basic;
@@ -43,7 +44,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.GridCon
         public TDataObject HostObject { get; }
 
         /// <inheritdoc />
-        public Command<IDataObject> ProcessDataObjectCommand { get; set; }
+        public Command<IDataObject> ProcessDataObjectCommand { get; protected set; }
 
         /// <summary>
         ///     Get the <see cref="IEnumerable{T}" /> of currently selectable <see cref="ModelDataObject" /> instances
