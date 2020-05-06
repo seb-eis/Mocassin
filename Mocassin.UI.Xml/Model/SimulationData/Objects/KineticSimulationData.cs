@@ -37,7 +37,7 @@ namespace Mocassin.UI.Xml.SimulationModel
         public double NormalizationProbability
         {
             get => normalizationProbability;
-            set => SetProperty(ref normalizationProbability, value);
+            set => SetProperty(ref normalizationProbability, value > 0 && value <= 1 ? value : 1);
         }
 
         /// <summary>

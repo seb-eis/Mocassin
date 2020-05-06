@@ -23,6 +23,7 @@
               ItemsSource="{Binding BuildingBlockCollectionViewModel.Items}"
               SelectedItem="{Binding BuildingBlockCollectionViewModel.SelectedItem}"
               AutoGenerateColumns="False"
+              IsReadOnly="True"
               ColumnWidth="*">
       <DataGrid.RowHeaderTemplate>
         <DataTemplate>

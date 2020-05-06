@@ -203,15 +203,6 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
         }
 
         /// <summary>
-        ///     Updates the transparency flag on all <see cref="SceneNode" /> instances
-        /// </summary>
-        protected void UpdateTransparencyFlags()
-        {
-            var flag = DiffuseColor.A < byte.MaxValue;
-            foreach (var sceneNode in SceneNodes) UpdateNode(sceneNode, x => x.IsTransparent = flag, x => x.IsTransparent = flag);
-        }
-
-        /// <summary>
         ///     Action that is called if the<see cref="MeshQuality" /> property changed
         /// </summary>
         protected virtual void OnMeshQualityChanged()
@@ -286,7 +277,6 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
         {
             var material = CreateMaterial();
             foreach (var sceneNode in SceneNodes) ChangeNodeMaterial(sceneNode, material);
-            UpdateTransparencyFlags();
         }
 
         /// <summary>
@@ -296,7 +286,9 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
         /// <param name="material"></param>
         protected void ChangeNodeMaterial(SceneNode sceneNode, MaterialCore material)
         {
+            var flag = DiffuseColor.A < byte.MaxValue;
             UpdateNode(sceneNode, x => x.Material = material, x => x.Material = material);
+            UpdateNode(sceneNode, x => x.IsTransparent = flag, x => x.IsTransparent = flag);
         }
 
         /// <summary>

@@ -37,7 +37,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         public double? NormalizationProbability
         {
             get => double.TryParse(JobDescription.NormalizationProbability, out var x) ? x : (double?) null;
-            set => JobDescription.NormalizationProbability = value?.ToString();
+            set => JobDescription.NormalizationProbability = (value == null ? null : value > 0 && value <= 1 ? value : 1).ToString();
         }
 
         /// <summary>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Mocassin.Framework.Extensions;
 using Mocassin.Model.ModelProject;
 using Mocassin.Model.Particles;
 using Mocassin.Model.Structures;
@@ -64,11 +65,30 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel
 
             if (!TryPrepareModelProject())
             {
-                PushInfoMessage("Cannot access invalid model");
+                PushInfoMessage("Cannot access invalid model.");
                 CanBeUsed = false;
+                return;
             }
 
             CanBeUsed = true;
+            EnsureFirstBlockIsDefaultBlock(contentSource);
+        }
+
+        /// <summary>
+        ///     Temporary workaround that ensures that a default <see cref="BuildingBlockData"/> exists and is the first block
+        /// </summary>
+        /// <param name="contentSource"></param>
+        private void EnsureFirstBlockIsDefaultBlock(MocassinProject contentSource)
+        {
+            var positionList = CreateDefaultCellPositionList();
+            var blocks = ContentSource?.ProjectModelData?.LatticeModelData?.BuildingBlocks ?? throw new InvalidOperationException();
+            if (blocks.Count == 0)
+            {
+                var defaultBlock = new BuildingBlockData {Name = "Default"};
+                blocks.Add(defaultBlock);
+            }
+            blocks.First().ParticleList.Clear();
+            blocks.First().ParticleList.AddRange(positionList.Select(x => x.Particle));
         }
 
         /// <summary>
