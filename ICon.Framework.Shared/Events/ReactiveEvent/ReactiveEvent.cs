@@ -7,9 +7,7 @@ using System.Threading.Tasks;
 namespace Mocassin.Framework.Events
 {
     /// <summary>
-    ///     Reactive event that wraps a System.Reactive subject for generic push based asynchronous event system
-    ///     implementations
-    ///     implementation
+    ///     Provides a basic mechanism for an event system based on the <see cref="IObservable{T}"/> interface
     /// </summary>
     /// <typeparam name="TSubject"></typeparam>
     public class ReactiveEvent<TSubject>

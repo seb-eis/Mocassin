@@ -44,7 +44,7 @@ namespace Mocassin.UI.GUI.Controls.Base.IO
         /// </summary>
         /// <param name="checkFileExists"></param>
         /// <returns></returns>
-        public string GetFileSelection(bool checkFileExists = false)
+        public string RequestFileSelection(bool checkFileExists = false)
         {
             var openFileDialog = GetFileDialog(checkFileExists);
             openFileDialog.ShowDialog();
@@ -58,9 +58,9 @@ namespace Mocassin.UI.GUI.Controls.Base.IO
         /// <param name="selected"></param>
         /// <param name="checkFileExists"></param>
         /// <returns></returns>
-        public bool TryGetFileSelection(out string selected, bool checkFileExists = false)
+        public bool TryRequestFileSelection(out string selected, bool checkFileExists = false)
         {
-            selected = GetFileSelection(checkFileExists);
+            selected = RequestFileSelection(checkFileExists);
             return File.Exists(selected) ^ !checkFileExists;
         }
 

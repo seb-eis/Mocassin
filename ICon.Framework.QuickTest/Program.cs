@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
-using Mocassin.Tools.Evaluation.Context;
-using Mocassin.Tools.Evaluation.Extensions;
+using Mocassin.Mathematics.Comparer;
 using Mocassin.Tools.Evaluation.Helper;
 
 namespace Mocassin.Framework.QuickTest
@@ -10,7 +9,10 @@ namespace Mocassin.Framework.QuickTest
     {
         private static void Main(string[] args)
         {
-            RadialSampleScript.Run();
+            var pathToExportMsl = @"C:\Users\Sebastian\Documents\Mocassin\Projects\mmc_test.msl";
+            var pathToImportMsl = @"C:\Users\Sebastian\Documents\Mocassin\Projects\kmc_test.msl";
+            var importer = new ResultLatticeImporter(NumericComparer.Default());
+            importer.ImportFinalLatticesAsInitialLattices(pathToExportMsl, pathToImportMsl);
         }
 
         private static void DisplayWatch(Stopwatch watch)

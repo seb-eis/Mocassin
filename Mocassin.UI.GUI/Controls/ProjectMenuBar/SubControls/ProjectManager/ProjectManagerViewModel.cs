@@ -53,7 +53,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager
         public ICommand SaveProjectLibraryChangesCommand { get; }
 
         /// <inheritdoc />
-        public ProjectManagerViewModel(IMocassinProjectControl projectControl)
+        public ProjectManagerViewModel(IProjectAppControl projectControl)
             : base(projectControl)
         {
             OpenProjectLibraryCommand = new OpenProjectLibraryCommand(projectControl);

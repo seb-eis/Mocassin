@@ -37,7 +37,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Commands
         /// <inheritdoc />
         public override void Execute(Viewport3DX parameter)
         {
-            var path = new UserFileSelectionSource(true, EnumerateSupportedImageFormats().ToArray()).GetFileSelection();
+            var path = new UserFileSelectionSource(true, EnumerateSupportedImageFormats().ToArray()).RequestFileSelection();
             if (string.IsNullOrWhiteSpace(path)) return;
             var (width, height) = GetOutputSize(parameter);
             TrySaveImage(parameter, path, GetImageFormatForPath(path), width, height);

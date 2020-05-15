@@ -228,6 +228,16 @@ namespace Mocassin.Model.Translator
         }
 
         /// <summary>
+        ///     Performs a array buffer overwrite based on a linear data source
+        /// </summary>
+        /// <param name="values"></param>
+        public void ImportDataFrom(ReadOnlySpan<T> values)
+        {
+            if (values.Length != InternalArray.Length) throw new ArgumentException("The value set does not match the internal array length.");
+            Buffer.BlockCopy(values.ToArray(), 0, InternalArray, 0, values.Length);
+        }
+
+        /// <summary>
         ///     Initializes the interop binary array from an arbitrary array with correct element type
         /// </summary>
         /// <param name="array"></param>

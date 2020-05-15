@@ -23,7 +23,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl
         public ControlTabHostViewModel TabHostViewModel { get; }
 
         /// <inheritdoc />
-        public ProjectWorkTabControlViewModel(IMocassinProjectControl projectControl)
+        public ProjectWorkTabControlViewModel(IProjectAppControl projectControl)
             : base(projectControl)
         {
             TabHostViewModel = new ControlTabHostViewModel {IsFrontInsertMode = true};

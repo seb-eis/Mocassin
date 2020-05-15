@@ -11,7 +11,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
     ///     The <see cref="AsyncProjectControlCommand{T}" /> to remove a <see cref="ProjectJobSetTemplate" /> from a
     ///     <see cref="MocassinProject" />
     /// </summary>
-    public class DeleteJobTranslationCommand : AsyncProjectControlCommand<ProjectJobSetTemplate>
+    public class DeleteJobSetTemplateCommand : AsyncProjectControlCommand<ProjectJobSetTemplate>
     {
         /// <summary>
         ///     Additional <see cref="Action" /> to be invoked on successful removal
@@ -19,7 +19,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         private Action OnRemovalAction { get; }
 
         /// <inheritdoc />
-        public DeleteJobTranslationCommand(IMocassinProjectControl projectControl, Action onRemovalAction = null)
+        public DeleteJobSetTemplateCommand(IProjectAppControl projectControl, Action onRemovalAction = null)
             : base(projectControl)
         {
             OnRemovalAction = onRemovalAction;

@@ -6,21 +6,21 @@ namespace Mocassin.UI.GUI.Controls.Base.Commands
 {
     /// <summary>
     ///     Base class for <see cref="AsyncCommand" /> implementations that target the main
-    ///     <see cref="IMocassinProjectControl" />
+    ///     <see cref="IProjectAppControl" />
     ///     that ensures that potential context change events are triggered before checking execution
     /// </summary>
     public abstract class AsyncProjectControlCommand : AsyncCommand
     {
         /// <summary>
-        ///     Get the access to the <see cref="IMocassinProjectControl" /> main project control
+        ///     Get the access to the <see cref="IProjectAppControl" /> main project control
         /// </summary>
-        protected IMocassinProjectControl ProjectControl { get; }
+        protected IProjectAppControl ProjectControl { get; }
 
         /// <summary>
-        ///     Creates new <see cref="ProjectControlCommand" /> that targets the passed <see cref="IMocassinProjectControl" />
+        ///     Creates new <see cref="ProjectControlCommand" /> that targets the passed <see cref="IProjectAppControl" />
         /// </summary>
         /// <param name="projectControl"></param>
-        protected AsyncProjectControlCommand(IMocassinProjectControl projectControl)
+        protected AsyncProjectControlCommand(IProjectAppControl projectControl)
         {
             ProjectControl = projectControl ?? throw new ArgumentNullException(nameof(projectControl));
         }
@@ -43,21 +43,21 @@ namespace Mocassin.UI.GUI.Controls.Base.Commands
 
     /// <summary>
     ///     Base class for <see cref="Command{T}" /> implementations that target the main
-    ///     <see cref="IMocassinProjectControl" />
+    ///     <see cref="IProjectAppControl" />
     ///     that ensures that potential context change events are triggered before checking execution
     /// </summary>
     public abstract class AsyncProjectControlCommand<T> : AsyncCommand<T>
     {
         /// <summary>
-        ///     Get the access to the <see cref="IMocassinProjectControl" /> main project control
+        ///     Get the access to the <see cref="IProjectAppControl" /> main project control
         /// </summary>
-        protected IMocassinProjectControl ProjectControl { get; }
+        protected IProjectAppControl ProjectControl { get; }
 
         /// <summary>
-        ///     Creates new <see cref="ProjectControlCommand{T}" /> that targets the passed <see cref="IMocassinProjectControl" />
+        ///     Creates new <see cref="ProjectControlCommand{T}" /> that targets the passed <see cref="IProjectAppControl" />
         /// </summary>
         /// <param name="projectControl"></param>
-        protected AsyncProjectControlCommand(IMocassinProjectControl projectControl)
+        protected AsyncProjectControlCommand(IProjectAppControl projectControl)
         {
             ProjectControl = projectControl ?? throw new ArgumentNullException(nameof(projectControl));
         }

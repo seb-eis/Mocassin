@@ -17,9 +17,9 @@ using Mocassin.UI.Xml.ProjectLibrary;
 namespace Mocassin.UI.GUI.Base.DataContext
 {
     /// <summary>
-    ///     General interface for access to the controls of the currently opened <see cref="MainWindow" />
+    ///     The main control interface for accessing the project application controls of the main window
     /// </summary>
-    public interface IMocassinProjectControl : INotifyPropertyChanged
+    public interface IProjectAppControl : INotifyPropertyChanged
     {
         /// <summary>
         ///     Get the window description <see cref="string" />
@@ -49,7 +49,7 @@ namespace Mocassin.UI.GUI.Base.DataContext
         ObservableCollection<MocassinProject> ProjectGraphs { get; }
 
         /// <summary>
-        ///     Get or set the main <see cref="PushMessageSystem" />
+        ///     Get the main <see cref="IPushMessageSystem" />
         /// </summary>
         IPushMessageSystem PushMessageSystem { get; }
 

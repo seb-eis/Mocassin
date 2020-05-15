@@ -14,7 +14,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.HelpMenu.Commands
     public class CheckApplicationUpdateCommand : ProjectControlCommand
     {
         /// <inheritdoc />
-        public CheckApplicationUpdateCommand(IMocassinProjectControl projectControl)
+        public CheckApplicationUpdateCommand(IProjectAppControl projectControl)
             : base(projectControl)
         {
         }

@@ -76,8 +76,8 @@ namespace Mocassin.UI.Xml.Jobs
             {
                 Parent = Parent,
                 Name = $"{Name}(copy)",
-                KmcJobPackageDescriptions = KmcJobPackageDescriptions.ToObservableCollection(),
-                MmcJobPackageDescriptions = MmcJobPackageDescriptions.ToObservableCollection()
+                KmcJobPackageDescriptions = KmcJobPackageDescriptions.Select(x => x.Duplicate()).ToObservableCollection(),
+                MmcJobPackageDescriptions = MmcJobPackageDescriptions.Select(x => x.Duplicate()).ToObservableCollection()
             };
             return duplicate;
         }

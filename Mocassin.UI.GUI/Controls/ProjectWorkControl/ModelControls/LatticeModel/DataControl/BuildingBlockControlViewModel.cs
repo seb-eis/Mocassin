@@ -49,7 +49,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel
         }
 
         /// <inheritdoc />
-        public BuildingBlockControlViewModel(IMocassinProjectControl projectControl)
+        public BuildingBlockControlViewModel(IProjectAppControl projectControl)
             : base(projectControl)
         {
             BuildingBlockCollectionViewModel = new CollectionControlViewModel<BuildingBlockData>();

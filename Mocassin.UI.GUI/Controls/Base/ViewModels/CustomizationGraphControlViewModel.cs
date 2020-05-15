@@ -14,7 +14,7 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
         public ProjectCustomizationTemplate ContentSource { get; protected set; }
 
         /// <inheritdoc />
-        protected CustomizationGraphControlViewModel(IMocassinProjectControl projectControl)
+        protected CustomizationGraphControlViewModel(IProjectAppControl projectControl)
             : base(projectControl)
         {
         }

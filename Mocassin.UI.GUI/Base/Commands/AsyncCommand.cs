@@ -15,7 +15,7 @@ namespace Mocassin.UI.Base.Commands
         /// <summary>
         ///     Get or set a boolean flag if the command is currently executing
         /// </summary>
-        protected bool IsExecuting
+        public bool IsExecuting
         {
             get => isExecuting;
             private set

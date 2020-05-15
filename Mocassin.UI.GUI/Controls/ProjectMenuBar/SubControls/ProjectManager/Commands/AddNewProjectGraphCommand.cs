@@ -9,7 +9,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager.Com
     public class AddNewProjectGraphCommand : ProjectControlCommand
     {
         /// <inheritdoc />
-        public AddNewProjectGraphCommand(IMocassinProjectControl projectControl)
+        public AddNewProjectGraphCommand(IProjectAppControl projectControl)
             : base(projectControl)
         {
         }

@@ -28,7 +28,7 @@ namespace Mocassin.UI.GUI
     /// <summary>
     ///     <see cref="ViewModelBase" /> for the main window of the Mocassin GUI
     /// </summary>
-    public class MainWindowViewModel : ViewModelBase, IMocassinProjectControl
+    public class MainWindowViewModel : ViewModelBase, IProjectAppControl
     {
         /// <summary>
         ///     The <see cref="OpenProjectLibrary" /> backing field

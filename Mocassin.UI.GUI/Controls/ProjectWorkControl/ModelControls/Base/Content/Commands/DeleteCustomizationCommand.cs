@@ -19,7 +19,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         private Action OnRemovalAction { get; }
 
         /// <inheritdoc />
-        public DeleteCustomizationCommand(IMocassinProjectControl projectControl, Action onRemovalAction = null)
+        public DeleteCustomizationCommand(IProjectAppControl projectControl, Action onRemovalAction = null)
             : base(projectControl)
         {
             OnRemovalAction = onRemovalAction;

@@ -9,7 +9,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager.Com
     public class SaveProjectLibraryChangesCommand : ProjectControlCommand
     {
         /// <inheritdoc />
-        public SaveProjectLibraryChangesCommand(IMocassinProjectControl projectControl)
+        public SaveProjectLibraryChangesCommand(IProjectAppControl projectControl)
             : base(projectControl)
         {
         }

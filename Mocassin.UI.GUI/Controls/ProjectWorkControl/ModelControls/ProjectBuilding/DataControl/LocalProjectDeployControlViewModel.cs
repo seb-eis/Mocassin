@@ -121,14 +121,14 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
         }
 
         /// <inheritdoc />
-        public LocalProjectDeployControlViewModel(IMocassinProjectControl projectControl,
+        public LocalProjectDeployControlViewModel(IProjectAppControl projectControl,
             CollectionControlViewModel<SimulationDbBuildTemplate> projectBuildGraphCollectionViewModel)
             : base(projectControl)
         {
             ProjectBuildGraphCollectionViewModel = projectBuildGraphCollectionViewModel;
             LogConsoleMessages = new ObservableCollectionViewModel<Tuple<DateTime, string>>(1000);
             var fileSelectionSource = UserFileSelectionSource.CreateForJobDbFiles(true);
-            GetFileSelectionCommand = new RelayCommand(() => BuildTargetFilePath = fileSelectionSource.GetFileSelection());
+            GetFileSelectionCommand = new RelayCommand(() => BuildTargetFilePath = fileSelectionSource.RequestFileSelection());
             WriteDatabaseCommand = GetWriteDatabaseCommand();
             JobMetaDataCollectionControlViewModel = new ObservableCollectionViewModel<JobMetaDataEntity>();
             PropertyChanged += OnLibraryStatusChanged;

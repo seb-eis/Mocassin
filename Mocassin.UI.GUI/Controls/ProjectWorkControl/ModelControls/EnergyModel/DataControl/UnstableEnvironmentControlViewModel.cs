@@ -17,7 +17,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.
         public UnstableEnvironmentGridControlViewModel EnvironmentGridControlViewModel { get; }
 
         /// <inheritdoc />
-        public UnstableEnvironmentControlViewModel(IMocassinProjectControl projectControl)
+        public UnstableEnvironmentControlViewModel(IProjectAppControl projectControl)
             : base(projectControl)
         {
             EnvironmentGridControlViewModel = new UnstableEnvironmentGridControlViewModel();

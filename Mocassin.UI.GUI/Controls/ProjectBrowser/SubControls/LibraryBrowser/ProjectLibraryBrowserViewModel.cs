@@ -75,7 +75,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.LibraryBrowser
         public Command<IDataObject> ProcessDataObjectCommand { get; }
 
         /// <inheritdoc />
-        public ProjectLibraryBrowserViewModel(IMocassinProjectControl projectControl)
+        public ProjectLibraryBrowserViewModel(IProjectAppControl projectControl)
             : base(projectControl)
         {
             JsonBrowserViewModel = new JsonBrowserViewModel();

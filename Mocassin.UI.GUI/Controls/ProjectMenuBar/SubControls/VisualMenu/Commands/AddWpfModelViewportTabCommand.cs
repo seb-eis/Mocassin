@@ -12,7 +12,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.VisualMenu.Command
     public class AddWpfModelViewportTabCommand : AddDefaultLayoutControlTabCommand
     {
         /// <inheritdoc />
-        public AddWpfModelViewportTabCommand(IMocassinProjectControl projectControl)
+        public AddWpfModelViewportTabCommand(IProjectAppControl projectControl)
             : base(projectControl)
         {
         }

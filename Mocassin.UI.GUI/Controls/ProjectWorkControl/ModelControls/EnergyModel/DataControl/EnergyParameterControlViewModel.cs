@@ -40,7 +40,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.
         }
 
         /// <inheritdoc />
-        public EnergyParameterControlViewModel(IMocassinProjectControl projectControl)
+        public EnergyParameterControlViewModel(IProjectAppControl projectControl)
             : base(projectControl)
         {
             InteractionFilterGridViewModel = new InteractionFilterGridControlViewModel(true);

@@ -105,7 +105,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.OperationConsole
         public SetSoftUpdateStopCommand SoftUpdateStopCommand { get; }
 
         /// <inheritdoc />
-        public OperationReportConsoleViewModel(IMocassinProjectControl projectControl)
+        public OperationReportConsoleViewModel(IProjectAppControl projectControl)
             : base(projectControl)
         {
             OperationCollectionViewModel = new ObservableCollectionViewModel<IOperationReport>();

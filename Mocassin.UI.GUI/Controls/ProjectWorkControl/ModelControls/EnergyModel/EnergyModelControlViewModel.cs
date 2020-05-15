@@ -34,7 +34,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel
         public DefectEnergyControlViewModel DefectEnergyViewModel { get; }
 
         /// <inheritdoc />
-        public EnergyModelControlViewModel(IMocassinProjectControl projectControl)
+        public EnergyModelControlViewModel(IProjectAppControl projectControl)
             : base(projectControl)
         {
             ParameterControlViewModel = new EnergyParameterControlViewModel(projectControl);

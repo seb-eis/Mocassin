@@ -26,7 +26,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel
         public DopingControlViewModel DopingViewModel { get; }
 
         /// <inheritdoc />
-        public LatticeModelControlViewModel(IMocassinProjectControl projectControl)
+        public LatticeModelControlViewModel(IProjectAppControl projectControl)
             : base(projectControl)
         {
             BlockControlViewModel = new BuildingBlockControlViewModel(projectControl);

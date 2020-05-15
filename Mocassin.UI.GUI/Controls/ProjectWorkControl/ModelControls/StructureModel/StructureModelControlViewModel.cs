@@ -22,7 +22,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureMod
         public StructureParameterControlViewModel ParameterControlViewModel { get; }
 
         /// <inheritdoc />
-        public StructureModelControlViewModel(IMocassinProjectControl projectControl)
+        public StructureModelControlViewModel(IProjectAppControl projectControl)
             : base(projectControl)
         {
             ParameterControlViewModel = new StructureParameterControlViewModel(projectControl);

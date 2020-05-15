@@ -133,11 +133,11 @@ namespace Mocassin.UI.GUI.Logic.Validation
 
         /// <summary>
         ///     Creates new <see cref="ModelValidatorViewModel" /> for the passed <see cref="ProjectModelData" /> and
-        ///     <see cref="IMocassinProjectControl" />
+        ///     <see cref="IProjectAppControl" />
         /// </summary>
         /// <param name="projectModelData"></param>
         /// <param name="projectControl"></param>
-        public ModelValidatorViewModel(ProjectModelData projectModelData, IMocassinProjectControl projectControl)
+        public ModelValidatorViewModel(ProjectModelData projectModelData, IProjectAppControl projectControl)
             : base(projectControl)
         {
             ProjectModelData = projectModelData ?? throw new ArgumentNullException(nameof(projectModelData));

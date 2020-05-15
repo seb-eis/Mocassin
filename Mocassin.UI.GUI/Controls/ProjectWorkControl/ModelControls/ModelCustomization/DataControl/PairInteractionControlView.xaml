@@ -37,7 +37,8 @@
 
       <DataGrid.Columns>
         <DataGridTextColumn Header="Name" Binding="{Binding PairEnergySet.Name}" />
-        <DataGridTextColumn Header="Content Count" Binding="{Binding PairEnergySet.PairEnergyEntries.Count}"/>
+        <DataGridTextColumn Header="Content Count" Binding="{Binding PairEnergySet.PairEnergyEntries.Count}"
+                            IsReadOnly="True"/>
         <DataGridTextColumn Header="Center Cell Position" Binding="{Binding PairEnergySet.CenterPosition.Name}"
                             IsReadOnly="True" />
         <DataGridTextColumn Header="Partner Cell Position" Binding="{Binding PairEnergySet.PartnerPosition.Name}"

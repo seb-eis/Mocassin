@@ -10,7 +10,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.WelcomeContr
     public class WelcomeControlViewModel : PrimaryControlViewModel
     {
         /// <inheritdoc />
-        public WelcomeControlViewModel(IMocassinProjectControl projectControl)
+        public WelcomeControlViewModel(IProjectAppControl projectControl)
             : base(projectControl)
         {
         }

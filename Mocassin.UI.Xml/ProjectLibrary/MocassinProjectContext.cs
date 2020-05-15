@@ -128,5 +128,12 @@ namespace Mocassin.UI.Xml.ProjectLibrary
         {
             StateChangedEvent.OnNext(Unit.Default);
         }
+
+        /// <inheritdoc cref="DbContext" />
+        public override int SaveChanges()
+        {
+            Clean();
+            return base.SaveChanges();
+        }
     }
 }

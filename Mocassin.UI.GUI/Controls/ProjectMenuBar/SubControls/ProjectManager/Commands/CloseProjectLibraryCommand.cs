@@ -9,7 +9,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager.Com
     public class CloseProjectLibraryCommand : ProjectControlCommand
     {
         /// <inheritdoc />
-        public CloseProjectLibraryCommand(IMocassinProjectControl projectControl)
+        public CloseProjectLibraryCommand(IProjectAppControl projectControl)
             : base(projectControl)
         {
         }

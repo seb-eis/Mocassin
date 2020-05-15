@@ -23,7 +23,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
         public TransitionControlViewModel TransitionControlViewModel { get; }
 
         /// <inheritdoc />
-        public TransitionModelControlViewModel(IMocassinProjectControl projectControl)
+        public TransitionModelControlViewModel(IProjectAppControl projectControl)
             : base(projectControl)
         {
             AbstractTransitionControlViewModel = new AbstractTransitionControlViewModel(projectControl);

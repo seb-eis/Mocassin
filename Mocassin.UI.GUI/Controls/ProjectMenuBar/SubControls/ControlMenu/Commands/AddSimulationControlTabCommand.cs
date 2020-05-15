@@ -12,7 +12,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ControlMenu.Comman
     public class AddSimulationControlTabCommand : AddDefaultLayoutControlTabCommand
     {
         /// <inheritdoc />
-        public AddSimulationControlTabCommand(IMocassinProjectControl projectControl)
+        public AddSimulationControlTabCommand(IProjectAppControl projectControl)
             : base(projectControl)
         {
         }

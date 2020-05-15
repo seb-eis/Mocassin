@@ -57,7 +57,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         public MigrateCustomizationCommand MigrateCustomizationCommand { get; }
 
         /// <inheritdoc />
-        public BasicCustomizationContentControlViewModel(IMocassinProjectControl projectControl)
+        public BasicCustomizationContentControlViewModel(IProjectAppControl projectControl)
             : base(projectControl)
         {
             AddCustomizationCommand = new AddNewCustomizationCommand(projectControl, () => SelectedProject, x => ReloadSelectionSource(false, true));

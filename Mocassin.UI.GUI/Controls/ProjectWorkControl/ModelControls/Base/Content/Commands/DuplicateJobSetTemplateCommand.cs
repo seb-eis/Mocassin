@@ -11,7 +11,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
     ///     to the selected
     ///     project
     /// </summary>
-    public class DuplicateJobTranslationCommand : AsyncProjectControlCommand<ProjectJobSetTemplate>
+    public class DuplicateJobSetTemplateCommand : AsyncProjectControlCommand<ProjectJobSetTemplate>
     {
         /// <summary>
         ///     Get an <see cref="Action" /> to be executed on success
@@ -19,7 +19,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         private Action<ProjectJobSetTemplate> OnSuccessAction { get; }
 
         /// <inheritdoc />
-        public DuplicateJobTranslationCommand(IMocassinProjectControl projectControl, Action<ProjectJobSetTemplate> onSuccessAction = null)
+        public DuplicateJobSetTemplateCommand(IProjectAppControl projectControl, Action<ProjectJobSetTemplate> onSuccessAction = null)
             : base(projectControl)
         {
             OnSuccessAction = onSuccessAction;

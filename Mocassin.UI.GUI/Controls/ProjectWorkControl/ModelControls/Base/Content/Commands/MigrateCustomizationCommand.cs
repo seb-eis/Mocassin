@@ -21,7 +21,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         public Action<ProjectCustomizationTemplate> OnSuccessAction { get; }
 
         /// <inheritdoc />
-        public MigrateCustomizationCommand(IMocassinProjectControl projectControl, Action<ProjectCustomizationTemplate> onSuccessAction = null)
+        public MigrateCustomizationCommand(IProjectAppControl projectControl, Action<ProjectCustomizationTemplate> onSuccessAction = null)
             : base(projectControl)
         {
             OnSuccessAction = onSuccessAction;

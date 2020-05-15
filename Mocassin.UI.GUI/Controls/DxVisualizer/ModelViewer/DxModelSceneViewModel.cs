@@ -170,7 +170,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         }
 
         /// <inheritdoc />
-        public DxModelSceneViewModel(IMocassinProjectControl projectControl)
+        public DxModelSceneViewModel(IProjectAppControl projectControl)
             : base(projectControl)
         {
             ModelProject = projectControl.CreateModelProject();
@@ -191,8 +191,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         /// <inheritdoc />
         public IEnumerable<VvmContainer> GetControlContainers()
         {
-            yield return new VvmContainer(new DxModelControlView(), ModelControlViewModel) {Name = "Model control"};
-            yield return new VvmContainer(new DxCustomizationControlView(), CustomizationControlViewModel) {Name = "Customization control"};
+            yield return new VvmContainer(new DxModelControlView(), ModelControlViewModel, "Model Control");
+            yield return new VvmContainer(new DxCustomizationControlView(), CustomizationControlViewModel, "Customization Control");
         }
 
         /// <inheritdoc />

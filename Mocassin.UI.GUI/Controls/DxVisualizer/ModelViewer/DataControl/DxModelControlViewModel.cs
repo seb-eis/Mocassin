@@ -74,7 +74,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.DataControl
         public IReadOnlyCollection<string> MeshMaterialNames => PhongMaterialCoreToStringConverter.MaterialNameCollection;
 
         /// <inheritdoc />
-        public DxModelControlViewModel(IMocassinProjectControl projectControl, DxModelSceneViewModel parentSceneViewModel)
+        public DxModelControlViewModel(IProjectAppControl projectControl, DxModelSceneViewModel parentSceneViewModel)
             : base(projectControl)
         {
             RenderResourcesViewModel = new ModelRenderResourcesViewModel();

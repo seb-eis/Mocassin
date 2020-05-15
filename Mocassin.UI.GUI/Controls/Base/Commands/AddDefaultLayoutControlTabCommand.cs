@@ -12,7 +12,7 @@ namespace Mocassin.UI.GUI.Controls.Base.Commands
     public class AddDefaultLayoutControlTabCommand : AddWorkTabCommand
     {
         /// <inheritdoc />
-        protected AddDefaultLayoutControlTabCommand(IMocassinProjectControl projectControl)
+        protected AddDefaultLayoutControlTabCommand(IProjectAppControl projectControl)
             : base(projectControl)
         {
         }

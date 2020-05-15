@@ -20,7 +20,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         private Action<ProjectCustomizationTemplate> OnSuccessAction { get; }
 
         /// <inheritdoc />
-        public DuplicateCustomizationCommand(IMocassinProjectControl projectControl, Action<ProjectCustomizationTemplate> onSuccessAction = null)
+        public DuplicateCustomizationCommand(IProjectAppControl projectControl, Action<ProjectCustomizationTemplate> onSuccessAction = null)
             : base(projectControl)
         {
             OnSuccessAction = onSuccessAction;

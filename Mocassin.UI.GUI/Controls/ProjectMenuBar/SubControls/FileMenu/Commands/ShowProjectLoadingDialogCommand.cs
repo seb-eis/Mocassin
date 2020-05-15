@@ -16,7 +16,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.FileMenu.Commands
         private readonly UserFileSelectionSource userFileSelectionSource;
 
         /// <inheritdoc />
-        public ShowProjectLoadingDialogCommand(IMocassinProjectControl projectControl)
+        public ShowProjectLoadingDialogCommand(IProjectAppControl projectControl)
             : base(projectControl)
         {
             userFileSelectionSource = UserFileSelectionSource.CreateForProjectFiles(false);
@@ -25,7 +25,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.FileMenu.Commands
         /// <inheritdoc />
         public override void Execute()
         {
-            if (userFileSelectionSource.TryGetFileSelection(out var selected, true))
+            if (userFileSelectionSource.TryRequestFileSelection(out var selected, true))
             {
                 WindowedBackgroundTask.RunWithLoadingWindow(()
                     => ProjectControl.ProjectManagerViewModel.OpenProjectLibraryCommand.Execute(selected));

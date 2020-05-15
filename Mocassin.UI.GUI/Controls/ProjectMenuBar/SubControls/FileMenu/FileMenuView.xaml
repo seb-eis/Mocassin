@@ -14,23 +14,23 @@
     <Menu Background="Transparent">
       <MenuItem Header="_File">
         <MenuItem Header="_New">
-          <MenuItem Header="Project" Command="{Binding CommandSource}"
+          <MenuItem Header="Project" Command="{Binding CommandRelay}"
                     CommandParameter="{x:Type fileCommands:ShowProjectCreationDialogCommand}" />
-          <MenuItem Header="Model" Command="{Binding CommandSource}"
+          <MenuItem Header="Model" Command="{Binding CommandRelay}"
                     CommandParameter="{x:Type projectCommands:AddNewProjectGraphCommand}" />
         </MenuItem>
         <Separator />
-        <MenuItem Header="New Work Window" Command="{Binding CommandSource}"
+        <MenuItem Header="New Work Window" Command="{Binding CommandRelay}"
                   CommandParameter="{x:Type fileCommands:OpenProjectWorkTabHostWindow}" />
         <Separator />
-        <MenuItem Header="_Open Project" Command="{Binding CommandSource}"
+        <MenuItem Header="_Open Project" Command="{Binding CommandRelay}"
                   CommandParameter="{x:Type fileCommands:ShowProjectLoadingDialogCommand}" />
-        <MenuItem Header="_Close Project" Command="{Binding CommandSource}"
+        <MenuItem Header="_Close Project" Command="{Binding CommandRelay}"
                   CommandParameter="{x:Type projectCommands:CloseProjectLibraryCommand}" />
-        <MenuItem Header="_Save Project" Command="{Binding CommandSource}"
+        <MenuItem Header="_Save Project" Command="{Binding CommandRelay}"
                   CommandParameter="{x:Type projectCommands:SaveProjectLibraryChangesCommand}" />
         <Separator />
-        <MenuItem Header="_Exit" Command="{Binding CommandSource}"
+        <MenuItem Header="_Exit" Command="{Binding CommandRelay}"
                   CommandParameter="{x:Type fileCommands:SaveExitProgramCommand}" />
       </MenuItem>
     </Menu>

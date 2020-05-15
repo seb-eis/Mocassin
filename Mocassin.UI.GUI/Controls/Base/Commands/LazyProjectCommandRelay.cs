@@ -5,13 +5,13 @@ using Mocassin.UI.GUI.Base.DataContext;
 namespace Mocassin.UI.GUI.Controls.Base.Commands
 {
     /// <summary>
-    ///     Automated source for <see cref="ProjectControlCommand" /> instances that creates missing instances automatically on
+    ///     Lazy relay for <see cref="ProjectControlCommand" /> instances that creates missing instances automatically on
     ///     first request
     /// </summary>
-    public class AutoProjectCommandSource : ProjectControlCommandDictionary
+    public class LazyProjectCommandRelay : ProjectControlCommandDictionary
     {
         /// <inheritdoc />
-        public AutoProjectCommandSource(IMocassinProjectControl projectControl)
+        public LazyProjectCommandRelay(IProjectAppControl projectControl)
             : base(projectControl)
         {
         }
@@ -26,12 +26,6 @@ namespace Mocassin.UI.GUI.Controls.Base.Commands
         public override void Execute(Type parameter)
         {
             GetCommand(parameter).Execute();
-        }
-
-        /// <inheritdoc />
-        public override IEnumerable<ProjectControlCommand> CreateCommands(IMocassinProjectControl projectControl)
-        {
-            yield break;
         }
 
         /// <summary>

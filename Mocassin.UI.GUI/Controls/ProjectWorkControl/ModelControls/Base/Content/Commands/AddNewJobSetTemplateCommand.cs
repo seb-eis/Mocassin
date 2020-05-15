@@ -14,7 +14,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
     ///     selected
     ///     project
     /// </summary>
-    public class AddNewJobTranslationCommand : AsyncProjectControlCommand
+    public class AddNewJobSetTemplateCommand : AsyncProjectControlCommand
     {
         /// <summary>
         ///     Get the getter delegate for the <see cref="MocassinProject" />
@@ -27,7 +27,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         private Action<ProjectJobSetTemplate> OnSuccessAction { get; }
 
         /// <inheritdoc />
-        public AddNewJobTranslationCommand(IMocassinProjectControl projectControl, Func<MocassinProject> projectGetter,
+        public AddNewJobSetTemplateCommand(IProjectAppControl projectControl, Func<MocassinProject> projectGetter,
             Action<ProjectJobSetTemplate> onSuccessAction = null)
             : base(projectControl)
         {

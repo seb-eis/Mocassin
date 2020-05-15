@@ -19,7 +19,7 @@ namespace Mocassin.UI.GUI.Controls.Base.Commands
         protected virtual string BaseWindowDescription { get; }
 
         /// <inheritdoc />
-        protected OpenDefaultContentWindowCommand(IMocassinProjectControl projectControl)
+        protected OpenDefaultContentWindowCommand(IProjectAppControl projectControl)
             : base(projectControl)
         {
             BaseWindowDescription = "Mocassin";
@@ -54,7 +54,7 @@ namespace Mocassin.UI.GUI.Controls.Base.Commands
         }
 
         /// <summary>
-        ///     Attaches to the <see cref="IMocassinProjectControl" /> property change events and relays the window description
+        ///     Attaches to the <see cref="IProjectAppControl" /> property change events and relays the window description
         ///     changes to the passed view model. Returns an <see cref="Action" /> to unsubscribe from the event
         /// </summary>
         /// <param name="viewModel"></param>

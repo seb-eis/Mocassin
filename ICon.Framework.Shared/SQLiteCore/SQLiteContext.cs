@@ -81,6 +81,34 @@ namespace Mocassin.Framework.SQLiteCore
         }
 
         /// <summary>
+        ///     Executes a text command on the database
+        /// </summary>
+        /// <param name="commandText"></param>
+        public void ExecuteCommand(string commandText)
+        {
+            using var connection = Database.GetDbConnection();
+            try
+            {
+                connection.Open();
+                using var command = connection.CreateCommand();
+                command.CommandText = commandText;
+                command.ExecuteNonQuery();
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
+        /// <summary>
+        ///     Cleans the sqlite database
+        /// </summary>
+        public void Clean()
+        {
+            ExecuteCommand("vacuum main");
+        }
+
+        /// <summary>
         ///     Creates a new generic <see cref="DbContext" /> for the provided database filepath and returns a
         ///     <see cref="ReadOnlyDbContext" /> wrapper for it
         /// </summary>

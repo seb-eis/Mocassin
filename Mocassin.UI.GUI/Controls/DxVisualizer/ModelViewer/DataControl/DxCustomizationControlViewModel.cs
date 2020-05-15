@@ -78,7 +78,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.DataControl
         }
 
         /// <inheritdoc />
-        public DxCustomizationControlViewModel(IMocassinProjectControl projectControl, DxModelSceneViewModel parentModelSceneViewModel)
+        public DxCustomizationControlViewModel(IProjectAppControl projectControl, DxModelSceneViewModel parentModelSceneViewModel)
             : base(projectControl)
         {
             ParentModelSceneViewModel = parentModelSceneViewModel ?? throw new ArgumentNullException(nameof(parentModelSceneViewModel));

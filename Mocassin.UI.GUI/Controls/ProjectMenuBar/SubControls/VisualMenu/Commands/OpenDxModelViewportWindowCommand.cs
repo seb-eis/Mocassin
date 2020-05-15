@@ -14,7 +14,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.VisualMenu.Command
     public class OpenDxModelViewportWindowCommand : OpenDefaultContentWindowCommand
     {
         /// <inheritdoc />
-        public OpenDxModelViewportWindowCommand(IMocassinProjectControl projectControl)
+        public OpenDxModelViewportWindowCommand(IProjectAppControl projectControl)
             : base(projectControl)
         {
         }
@@ -28,7 +28,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.VisualMenu.Command
                 DataContentControl = new DxModelSceneView {DataContext = new DxModelSceneViewModel(ProjectControl)},
                 SelectedProject = ProjectControl.ProjectBrowserViewModel.GetWorkProject()
             };
-            return new VvmContainer(control, viewModel);
+            return new VvmContainer(control, viewModel, "Dx Visualizer");
         }
 
         /// <inheritdoc />

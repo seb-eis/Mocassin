@@ -41,7 +41,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar
         public IDynamicMenuBarViewModel MenuBarViewModel { get; }
 
         /// <inheritdoc />
-        public ProjectMenuBarViewModel(IMocassinProjectControl projectControl)
+        public ProjectMenuBarViewModel(IProjectAppControl projectControl)
             : base(projectControl)
         {
             MenuBarViewModel = new DynamicMenuBarViewModel(Dock.Top);

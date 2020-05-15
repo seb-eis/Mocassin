@@ -312,9 +312,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Base\Commands\LazyCommandRelay.cs" />
     <Compile Include="Base\Loading\ExportWindow.xaml.cs">
       <DependentUpon>ExportWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Base\Objects\LazyVvmContainer.cs" />
     <Compile Include="Base\Objects\VvmContainer.cs" />
     <Compile Include="Base\UiElements\Content\HeaderedGroup.cs" />
     <Compile Include="Base\UiElements\Popup\ControlOverlay.cs" />
@@ -351,10 +353,11 @@
       <DependentUpon>HelpMenuView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ProjectMenuBar\SubControls\HelpMenu\HelpMenuViewModel.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\ToolMenu\Commands\AddMslToolsTabCommand.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\VisualMenu\Commands\AddDxModelViewportTabCommand.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\VisualMenu\Commands\OpenDxModelViewportWindowCommand.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\Commands\DuplicateCustomizationCommand.cs" />
-    <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\Commands\DuplicateJobTranslationCommand.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\Commands\DuplicateJobSetTemplateCommand.cs" />
     <Compile Include="Controls\DxVisualizer\Extensions\DxVectorExtensions.cs" />
     <Compile Include="Controls\DxVisualizer\Viewport\Attributes\TogglesOverlayAttribute.cs" />
     <Compile Include="Controls\DxVisualizer\Viewport\Attributes\RaiseInvalidateRenderAttribute.cs" />
@@ -384,6 +387,16 @@
       <DependentUpon>MigrationReportView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ProjectWorkControl\Reports\MigrationReportViewModel.cs" />
+    <Compile Include="Controls\Tools\MslTools\MslToolsView.xaml.cs">
+      <DependentUpon>MslToolsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Tools\MslTools\MslToolsViewModel.cs" />
+    <Compile Include="Controls\Tools\MslTools\SubControls\LatticeRecycleToolView.xaml.cs">
+      <DependentUpon>LatticeRecycleToolView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Tools\MslTools\SubControls\LatticeRecycleToolViewModel.cs" />
+    <Compile Include="Controls\Tools\ToolContainer.cs" />
+    <Compile Include="Controls\Tools\ToolViewModel.cs" />
     <Compile Include="Controls\Visualizer\Commands\ExportViewportCommand.cs" />
     <Compile Include="Controls\Visualizer\Commands\ToggleViewportCameraCommand.cs" />
     <Compile Include="Controls\Visualizer\Objects\Helper\IObjectSceneConfig.cs" />
@@ -743,6 +756,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\Tools\MslTools\MslToolsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Tools\MslTools\SubControls\LatticeRecycleToolView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\Visualizer\DataControl\Viewport3DView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -776,7 +797,7 @@
     <Compile Include="Base\Converter\NullToVisibilityConverter.cs" />
     <Compile Include="Base\Converter\ValueConverter.cs" />
     <Compile Include="Base\DataContext\IDataObjectAcceptor.cs" />
-    <Compile Include="Base\DataContext\IMocassinProjectControl.cs" />
+    <Compile Include="Base\DataContext\IProjectAppControl.cs" />
     <Compile Include="Base\DragHandler.cs" />
     <Compile Include="Base\Loading\WindowedBackgroundTask.cs" />
     <Compile Include="Base\Loading\LoadingWindow.xaml.cs">
@@ -819,7 +840,7 @@
     <Compile Include="Controls\Base\Commands\AddDefaultLayoutControlTabCommand.cs" />
     <Compile Include="Controls\Base\Commands\AddWorkTabCommand.cs" />
     <Compile Include="Controls\Base\Commands\AsyncProjectControlCommand.cs" />
-    <Compile Include="Controls\Base\Commands\AutoProjectCommandSource.cs" />
+    <Compile Include="Controls\Base\Commands\LazyProjectCommandRelay.cs" />
     <Compile Include="Controls\Base\Commands\DuplicateCollectionItemCommand.cs" />
     <Compile Include="Controls\Base\Commands\ProjectControlCommandDictionary.cs" />
     <Compile Include="Controls\Base\Commands\ProjectControlCommand.cs" />
@@ -911,9 +932,9 @@
     </Compile>
     <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\BasicJobTranslationContentControlViewModel.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\Commands\AddNewCustomizationCommand.cs" />
-    <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\Commands\AddNewJobTranslationCommand.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\Commands\AddNewJobSetTemplateCommand.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\Commands\DeleteCustomizationCommand.cs" />
-    <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\Commands\DeleteJobTranslationCommand.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\Commands\DeleteJobSetTemplateCommand.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\DataControl\DefectEnergyControlView.xaml.cs">
       <DependentUpon>DefectEnergyControlView.xaml</DependentUpon>
     </Compile>

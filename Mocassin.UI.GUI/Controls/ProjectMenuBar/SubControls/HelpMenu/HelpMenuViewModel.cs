@@ -14,13 +14,13 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.HelpMenu
         /// <summary>
         ///     Get the <see cref="ProjectControlCommandDictionary" /> of the <see cref="FileMenuViewModel" />
         /// </summary>
-        public AutoProjectCommandSource CommandSource { get; }
+        public LazyProjectCommandRelay CommandRelay { get; }
 
         /// <inheritdoc />
-        public HelpMenuViewModel(IMocassinProjectControl projectControl)
+        public HelpMenuViewModel(IProjectAppControl projectControl)
             : base(projectControl)
         {
-            CommandSource = new AutoProjectCommandSource(projectControl);
+            CommandRelay = new LazyProjectCommandRelay(projectControl);
         }
     }
 }

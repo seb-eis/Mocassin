@@ -26,7 +26,7 @@ namespace Mocassin.UI.GUI
         /// <param name="e"></param>
         private void MainWindow_OnClosing(object sender, CancelEventArgs e)
         {
-            if (!(DataContext is IMocassinProjectControl projectControl)) return;
+            if (!(DataContext is IProjectAppControl projectControl)) return;
             if (projectControl.OpenProjectLibrary == null) return;
 
             new SaveExitProgramCommand(projectControl).Execute();

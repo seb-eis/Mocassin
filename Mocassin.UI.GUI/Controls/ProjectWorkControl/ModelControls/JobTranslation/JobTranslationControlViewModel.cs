@@ -32,7 +32,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         ProjectJobSetTemplate IContentSupplier<ProjectJobSetTemplate>.ContentSource => JobTranslationContentSource;
 
         /// <inheritdoc />
-        public JobTranslationControlViewModel(IMocassinProjectControl projectControl)
+        public JobTranslationControlViewModel(IProjectAppControl projectControl)
             : base(projectControl)
         {
             KmcJobPackageViewModel = new KmcJobPackageControlViewModel();

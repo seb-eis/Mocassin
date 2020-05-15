@@ -48,7 +48,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.GraphBrowser
         }
 
         /// <inheritdoc />
-        public ProjectGraphBrowserViewModel(IMocassinProjectControl projectControl)
+        public ProjectGraphBrowserViewModel(IProjectAppControl projectControl)
             : base(projectControl)
         {
             DeleteSelectedProjectCommand = new RelayCommand(() => DeleteProjectWithConfirmation(SelectedProject), () => SelectedProject != null);

@@ -11,7 +11,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ControlMenu.Comman
     public class AddStructureControlTabCommand : AddDefaultLayoutControlTabCommand
     {
         /// <inheritdoc />
-        public AddStructureControlTabCommand(IMocassinProjectControl projectControl)
+        public AddStructureControlTabCommand(IProjectAppControl projectControl)
             : base(projectControl)
         {
         }

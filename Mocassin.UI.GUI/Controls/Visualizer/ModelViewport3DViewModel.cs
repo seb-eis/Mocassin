@@ -124,7 +124,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         }
 
         /// <inheritdoc />
-        public ModelViewport3DViewModel(IMocassinProjectControl projectControl)
+        public ModelViewport3DViewModel(IProjectAppControl projectControl)
             : base(projectControl)
         {
             UtilityProject = projectControl.CreateModelProject();

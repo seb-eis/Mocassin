@@ -70,13 +70,13 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
         /// <inheritdoc />
         public void AddDynamicTab(string tabName, ViewModelBase contentViewModel, Control content, bool selectTab = true)
         {
-            AddTab(new DynamicControlTabItem(tabName, contentViewModel, content, this));
+            AddTab(new DynamicControlTabItem(tabName, contentViewModel, content, this), selectTab);
         }
 
         /// <inheritdoc />
         public void AddStaticTab(string tabName, ViewModelBase contentViewModel, Control content, bool selectTab = true)
         {
-            AddTab(new ControlTabItem(tabName, contentViewModel, content));
+            AddTab(new ControlTabItem(tabName, contentViewModel, content), selectTab);
         }
 
         /// <inheritdoc />

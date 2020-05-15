@@ -9,7 +9,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager.Com
     public class CreateProjectLibraryCommand : ProjectControlCommand<string>
     {
         /// <inheritdoc />
-        public CreateProjectLibraryCommand(IMocassinProjectControl projectControl)
+        public CreateProjectLibraryCommand(IProjectAppControl projectControl)
             : base(projectControl)
         {
         }

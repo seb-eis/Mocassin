@@ -12,7 +12,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.VisualMenu.Command
     public class AddDxModelViewportTabCommand : AddDefaultLayoutControlTabCommand
     {
         /// <inheritdoc />
-        public AddDxModelViewportTabCommand(IMocassinProjectControl projectControl)
+        public AddDxModelViewportTabCommand(IProjectAppControl projectControl)
             : base(projectControl)
         {
         }

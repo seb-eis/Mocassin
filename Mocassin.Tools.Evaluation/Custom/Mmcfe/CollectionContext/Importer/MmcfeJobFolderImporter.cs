@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -48,6 +50,11 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe.Importer
         public bool IsExcludeRawData { get; set; }
 
         /// <summary>
+        ///     Get or set a boolean flag if job folders are deleted as soon as they are imported into the raw database
+        /// </summary>
+        public bool IsDeleteJobFolders { get; set; }
+
+        /// <summary>
         ///     Get or set the number of imports per save
         /// </summary>
         public int ImportsPerSave { get; set; }
@@ -84,6 +91,7 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe.Importer
 
             var importTasks = new List<Task<IList<object>>>(ImportsPerSave);
             var saveTask = Task.CompletedTask;
+            IsImporting = true;
             using (var library = OpenSimulationLibrary())
             {
                 var importCount = 0;
@@ -107,8 +115,8 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe.Importer
                     importCount = 0;
                 }
             }
-
             AsyncSaveAndDetachEntities(importTasks, saveTask).Wait();
+            IsImporting = false;
         }
 
         /// <summary>
@@ -153,16 +161,24 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe.Importer
                 var energyEvaluator = new MmcfeEnergyEvaluator();
                 var results = new List<object>(250);
                 using var context = GetEvaluationContext(metaData);
-                var readers = context.FullReaderSet().ToList();
+                var readers = context
+                    .FullReaderSet()
+                    .ToList();
                 var metaEntry = new MmcfeLogMetaEntry(metaData);
-                var logEntries = context.LogSet().OrderBy(x => x.Alpha).Select(x => MmcfeExtendedLogEntry.Create(x, metaEntry, IsExcludeRawData)).ToList();
-                var energyEntries = energyEvaluator.CalculateEnergyStates(readers, metaData.Temperature)
+                var logEntries = context
+                    .LogSet()
+                    .OrderBy(x => x.Alpha)
+                    .Select(x => MmcfeExtendedLogEntry.Create(x, metaEntry, IsExcludeRawData))
+                    .ToList();
+                var energyEntries = energyEvaluator
+                    .CalculateEnergyStates(readers, metaData.Temperature)
                     .Zip(logEntries, (state, entry) => MmcfeLogEnergyEntry.Create(state, entry));
 
                 results.Add(metaEntry);
                 results.AddRange(logEntries);
                 results.AddRange(energyEntries);
                 foreach (var item in readers) item.Dispose();
+                if (IsDeleteJobFolders) DeleteJobFolder(metaData);
                 return results;
             }
             catch (Exception e)
@@ -182,6 +198,55 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe.Importer
         {
             var filePath = $"{JobFolderRootPath}\\Job{metaData.JobModelId:D5}\\mmcfelog.db";
             return MmcfeLogEvaluationContext.OpenFile(filePath);
+        }
+
+        /// <summary>
+        ///     Deletes the job folder affiliated with the passed <see cref="JobMetaDataEntity"/>
+        /// </summary>
+        /// <param name="metaData"></param>
+        protected void DeleteJobFolder(JobMetaDataEntity metaData)
+        {
+            var path = $"{JobFolderRootPath}\\Job{metaData.JobModelId:D5}";
+            Directory.Delete(path, true);
+        }
+
+        /// <summary>
+        ///     Performs the default import of MMCFE results into raw and evaluation database. Optionally Zips the raw database
+        /// </summary>
+        /// <param name="zipRawDatabase"></param>
+        public void BuildEvaluationDatabases(bool zipRawDatabase = true)
+        {
+            var rawPath = $"{JobFolderRootPath}\\mmcfe.raw.db";
+            var evalPath = $"{JobFolderRootPath}\\mmcfe.eval.db";
+            using var context = SqLiteContext.OpenDatabase<MmcfeLogCollectionDbContext>(rawPath, true);
+            ImportDbContext = context;
+            Import();
+            context.CopyDatabaseWithoutRawData(evalPath);
+
+            if (zipRawDatabase) ZipFile(rawPath, $"{JobFolderRootPath}\\mmcfe.raw.zip");
+            ImportDbContext = null;
+        }
+
+        /// <summary>
+        ///     Zips the file at the source path into the target archive. Optionally deletes the raw file after completion
+        /// </summary>
+        /// <param name="sourceFilePath"></param>
+        /// <param name="targetFilePath"></param>
+        /// <param name="deleteSource"></param>
+        public void ZipFile(string sourceFilePath, string targetFilePath, bool deleteSource = true)
+        {
+            Console.WriteLine("Compressing {0} into {1}", sourceFilePath, targetFilePath);
+            using (var targetStream = new FileStream(targetFilePath, FileMode.Create))
+            {
+                using var archive = new ZipArchive(targetStream, ZipArchiveMode.Create);
+                var entry = archive.CreateEntryFromFile(sourceFilePath, Path.GetFileName(sourceFilePath));
+                var sourceInfo = new FileInfo(sourceFilePath);
+                var targetInfo = new FileInfo(targetFilePath);
+                Console.WriteLine("Done @ {0} KB ==> {1} KB ({2} %)", sourceInfo.Length / 1024, targetInfo.Length / 1024,
+                    targetInfo.Length / sourceInfo.Length);
+            }
+
+            if (deleteSource) File.Delete(sourceFilePath);
         }
     }
 }

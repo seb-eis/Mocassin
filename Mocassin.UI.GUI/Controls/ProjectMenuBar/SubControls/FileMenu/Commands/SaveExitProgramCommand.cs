@@ -11,7 +11,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.FileMenu.Commands
     public class SaveExitProgramCommand : ProjectControlCommand
     {
         /// <inheritdoc />
-        public SaveExitProgramCommand(IMocassinProjectControl projectControl)
+        public SaveExitProgramCommand(IProjectAppControl projectControl)
             : base(projectControl)
         {
         }

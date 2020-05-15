@@ -8,7 +8,7 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
     /// <summary>
     ///     Describes an energy state of a single stage of an MMCFE simulation series
     /// </summary>
-    public readonly struct MmcfeEnergyState
+    public class MmcfeEnergyState
     {
         /// <summary>
         ///     Get the alpha value the sate belongs to

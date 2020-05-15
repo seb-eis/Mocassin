@@ -11,12 +11,12 @@
   <Grid>
     <Menu Background="Transparent">
       <MenuItem Header="Viewers">
-        <MenuItem Header="3D Model Viewer [DX9]" Command="{Binding CommandSource}"
+        <MenuItem Header="3D Model Viewer [DX9]" Command="{Binding CommandRelay}"
                   CommandParameter="{x:Type commands:AddWpfModelViewportTabCommand}" />
-        <MenuItem Header="3D Model Viewer [DX10+]" Command="{Binding CommandSource}"
+        <MenuItem Header="3D Model Viewer [DX10+]" Command="{Binding CommandRelay}"
                   CommandParameter="{x:Type commands:AddDxModelViewportTabCommand}" />
         <Separator />
-        <MenuItem Header="3D Model Viewer [DX10+] (Windowed)" Command="{Binding CommandSource}"
+        <MenuItem Header="3D Model Viewer [DX10+] (Windowed)" Command="{Binding CommandRelay}"
                   CommandParameter="{x:Type commands:OpenDxModelViewportWindowCommand}" />
       </MenuItem>
     </Menu>

@@ -67,27 +67,29 @@ namespace Mocassin.Model.Translator
         /// <inheritdoc />
         public void SetJournalMode(DbJournalMode journalMode)
         {
-            var connection = Database.GetDbConnection();
-            try
-            {
-                connection.Open();
-                using var command = connection.CreateCommand();
-                command.CommandText = journalMode switch
+            switch (journalMode)
                 {
-                    DbJournalMode.Delete => "pragma journal_mode=delete",
-                    DbJournalMode.Truncate => "pragma journal_mode=truncate",
-                    DbJournalMode.Persist => "pragma journal_mode=persist",
-                    DbJournalMode.Memory => "pragma journal_mode=memory",
-                    DbJournalMode.Wal => "pragma journal_mode=wal",
-                    DbJournalMode.Off => "pragma journal_mode=off",
-                    _ => throw new ArgumentOutOfRangeException(nameof(journalMode), journalMode, null)
-                };
-                command.ExecuteNonQuery();
-            }
-            finally
-            {
-                connection.Close();
-            }
+                    case DbJournalMode.Delete:
+                        ExecuteCommand("pragma journal_mode=delete");
+                        break;
+                    case DbJournalMode.Truncate:
+                        ExecuteCommand("pragma journal_mode=truncate");
+                        break;
+                    case DbJournalMode.Persist:
+                        ExecuteCommand("pragma journal_mode=persist");
+                        break;
+                    case DbJournalMode.Memory:
+                        ExecuteCommand("pragma journal_mode=memory");
+                        break;
+                    case DbJournalMode.Wal:
+                        ExecuteCommand("pragma journal_mode=wal");
+                        break;
+                    case DbJournalMode.Off:
+                        ExecuteCommand("pragma journal_mode=off");
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(journalMode), journalMode, null);
+                }
         }
 
         /// <summary>

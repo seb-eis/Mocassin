@@ -24,7 +24,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.SimulationMo
         public KineticSimulationControlViewModel KineticSimulationViewModel { get; }
 
         /// <inheritdoc />
-        public SimulationModelControlViewModel(IMocassinProjectControl projectControl)
+        public SimulationModelControlViewModel(IProjectAppControl projectControl)
             : base(projectControl)
         {
             MetropolisSimulationViewModel = new MetropolisSimulationControlViewModel();

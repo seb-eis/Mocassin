@@ -13,7 +13,7 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
 {
     /// <summary>
     ///     Base <see cref="ViewModelBase" /> implementation for primary controls with access to the components of the
-    ///     <see cref="IMocassinProjectControl" />
+    ///     <see cref="IProjectAppControl" />
     /// </summary>
     public abstract class PrimaryControlViewModel : ViewModelBase, IDisposable
     {
@@ -28,16 +28,16 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
         private IDisposable ProjectEntityChangeSubscription { get; set; }
 
         /// <summary>
-        ///     Get the main <see cref="IMocassinProjectControl" /> that this sub control is connected to
+        ///     Get the main <see cref="IProjectAppControl" /> that this sub control is connected to
         /// </summary>
-        public IMocassinProjectControl ProjectControl { get; }
+        public IProjectAppControl ProjectControl { get; }
 
         /// <summary>
         ///     Create new <see cref="PrimaryControlViewModel" /> that is connected to the passed
-        ///     <see cref="IMocassinProjectControl" />
+        ///     <see cref="IProjectAppControl" />
         /// </summary>
         /// <param name="projectControl"></param>
-        protected PrimaryControlViewModel(IMocassinProjectControl projectControl)
+        protected PrimaryControlViewModel(IProjectAppControl projectControl)
         {
             ProjectControl = projectControl ?? throw new ArgumentNullException(nameof(projectControl));
             ProjectLibraryChangeSubscription = projectControl.ProjectLibraryChangeNotification

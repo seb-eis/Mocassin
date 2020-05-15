@@ -11,7 +11,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ControlMenu.Comman
 	public class AddLatticeControlTabCommand : AddDefaultLayoutControlTabCommand
 	{
 		/// <inheritdoc />
-		public AddLatticeControlTabCommand(IMocassinProjectControl projectControl)
+		public AddLatticeControlTabCommand(IProjectAppControl projectControl)
 			: base(projectControl)
 		{
 		}

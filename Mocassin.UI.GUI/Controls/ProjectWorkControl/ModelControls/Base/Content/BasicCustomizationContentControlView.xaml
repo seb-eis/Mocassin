@@ -39,7 +39,7 @@
               IsTextSearchEnabled="True">
       <ComboBox.ContextMenu>
         <ContextMenu>
-          <MenuItem Header="Add Customization" Command="{Binding AddCustomizationCommand}" />
+          <MenuItem Header="New Template" Command="{Binding AddCustomizationCommand}" />
           <Separator />
           <MenuItem Header="Migrate Selected" Command="{Binding MigrateCustomizationCommand}"
                     CommandParameter="{Binding SelectedCustomizationTemplate}" />

@@ -45,7 +45,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Commands
         /// <inheritdoc />
         public override void Execute(HelixViewport3D parameter)
         {
-            var fileName = FileSelectionSource.GetFileSelection();
+            var fileName = FileSelectionSource.RequestFileSelection();
             if (string.IsNullOrWhiteSpace(fileName)) return;
             var window = new ExportWindow();
             try

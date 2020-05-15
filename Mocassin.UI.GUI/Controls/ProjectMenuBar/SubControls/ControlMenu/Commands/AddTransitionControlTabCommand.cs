@@ -12,7 +12,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ControlMenu.Comman
     public class AddTransitionControlTabCommand : AddDefaultLayoutControlTabCommand
     {
         /// <inheritdoc />
-        public AddTransitionControlTabCommand(IMocassinProjectControl projectControl)
+        public AddTransitionControlTabCommand(IProjectAppControl projectControl)
             : base(projectControl)
         {
         }

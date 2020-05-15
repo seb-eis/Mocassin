@@ -28,7 +28,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser
         public ControlTabHostViewModel TabHostViewModel { get; }
 
         /// <inheritdoc />
-        public ProjectBrowserViewModel(IMocassinProjectControl projectControl)
+        public ProjectBrowserViewModel(IProjectAppControl projectControl)
             : base(projectControl)
         {
             GraphBrowserViewModel = new ProjectGraphBrowserViewModel(projectControl);

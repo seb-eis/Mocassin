@@ -14,7 +14,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.FileMenu.Commands
     public class OpenProjectWorkTabHostWindow : OpenDefaultContentWindowCommand
     {
         /// <inheritdoc />
-        public OpenProjectWorkTabHostWindow(IMocassinProjectControl projectControl)
+        public OpenProjectWorkTabHostWindow(IProjectAppControl projectControl)
             : base(projectControl)
         {
         }
@@ -24,7 +24,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.FileMenu.Commands
         {
             var view = new ProjectWorkTabControlView();
             var viewModel = new ProjectWorkTabControlViewModel(ProjectControl);
-            return new VvmContainer(view, viewModel);
+            return new VvmContainer(view, viewModel, "Work Tab");
         }
 
         /// <inheritdoc />

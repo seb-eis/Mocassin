@@ -1,4 +1,5 @@
-﻿using Mocassin.UI.GUI.Base.DataContext;
+﻿using Mocassin.UI.Base.Commands;
+using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Controls.Base.Commands;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
 
@@ -11,15 +12,15 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ToolMenu
     public class ProjectToolMenuViewModel : PrimaryControlViewModel
     {
         /// <summary>
-        ///     Get the <see cref="AutoProjectCommandSource" /> that supplies command instances
+        ///     Get the <see cref="LazyProjectCommandRelay" /> for project control commands
         /// </summary>
-        public AutoProjectCommandSource CommandSource { get; }
+        public LazyProjectCommandRelay ProjectCommandRelay { get; }
 
         /// <inheritdoc />
-        public ProjectToolMenuViewModel(IMocassinProjectControl projectControl)
+        public ProjectToolMenuViewModel(IProjectAppControl projectControl)
             : base(projectControl)
         {
-            CommandSource = new AutoProjectCommandSource(ProjectControl);
+            ProjectCommandRelay = new LazyProjectCommandRelay(ProjectControl);
         }
     }
 }

@@ -26,7 +26,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ParticleMode
         public ParticleSetControlViewModel ParticleSetControlViewModel { get; }
 
         /// <inheritdoc />
-        public ParticleModelControlViewModel(IMocassinProjectControl projectControl)
+        public ParticleModelControlViewModel(IProjectAppControl projectControl)
             : base(projectControl)
         {
             ParticleControlViewModel = new ParticleControlViewModel();

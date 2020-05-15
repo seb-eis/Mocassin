@@ -11,7 +11,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ControlMenu.Comman
     public class AddParticleControlTabCommand : AddDefaultLayoutControlTabCommand
     {
         /// <inheritdoc />
-        public AddParticleControlTabCommand(IMocassinProjectControl projectControl)
+        public AddParticleControlTabCommand(IProjectAppControl projectControl)
             : base(projectControl)
         {
         }

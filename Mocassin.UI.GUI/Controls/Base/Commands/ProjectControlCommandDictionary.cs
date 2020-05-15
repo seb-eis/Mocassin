@@ -12,9 +12,9 @@ namespace Mocassin.UI.GUI.Controls.Base.Commands
     public abstract class ProjectControlCommandDictionary : CommandDictionary<Type, ProjectControlCommand>
     {
         /// <summary>
-        ///     Get the <see cref="IMocassinProjectControl" /> the dictionary targets
+        ///     Get the <see cref="IProjectAppControl" /> the dictionary targets
         /// </summary>
-        protected IMocassinProjectControl ProjectControl { get; }
+        protected IProjectAppControl ProjectControl { get; }
 
         /// <summary>
         ///     Creates new <see cref="ProjectControlCommandDictionary" /> with the passed sequence of
@@ -22,14 +22,14 @@ namespace Mocassin.UI.GUI.Controls.Base.Commands
         /// </summary>
         /// <param name="projectControl"></param>
         /// <param name="commands"></param>
-        protected ProjectControlCommandDictionary(IMocassinProjectControl projectControl, IEnumerable<ProjectControlCommand> commands)
+        protected ProjectControlCommandDictionary(IProjectAppControl projectControl, IEnumerable<ProjectControlCommand> commands)
             : this(projectControl)
         {
             AddCommands(commands);
         }
 
         /// <inheritdoc />
-        protected ProjectControlCommandDictionary(IMocassinProjectControl projectControl)
+        protected ProjectControlCommandDictionary(IProjectAppControl projectControl)
         {
             ProjectControl = projectControl ?? throw new ArgumentNullException(nameof(projectControl));
         }
@@ -55,12 +55,5 @@ namespace Mocassin.UI.GUI.Controls.Base.Commands
         {
             foreach (var projectControlCommand in commands) AddCommand(projectControlCommand);
         }
-
-        /// <summary>
-        ///     Creates a new set of all <see cref="ProjectControlCommand" /> that the
-        ///     <see cref="ProjectControlCommandDictionary" /> defines targeting the passed <see cref="IMocassinProjectControl" />
-        /// </summary>
-        /// <returns></returns>
-        public abstract IEnumerable<ProjectControlCommand> CreateCommands(IMocassinProjectControl projectControl);
     }
 }

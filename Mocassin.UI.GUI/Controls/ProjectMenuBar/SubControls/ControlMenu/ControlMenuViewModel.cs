@@ -11,15 +11,15 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ControlMenu
     public class ControlMenuViewModel : PrimaryControlViewModel
     {
         /// <summary>
-        ///     Get the <see cref="AutoProjectCommandSource" /> that supplies command instances
+        ///     Get the <see cref="LazyProjectCommandRelay" /> that supplies command instances
         /// </summary>
-        public AutoProjectCommandSource CommandSource { get; }
+        public LazyProjectCommandRelay CommandRelay { get; }
 
         /// <inheritdoc />
-        public ControlMenuViewModel(IMocassinProjectControl projectControl)
+        public ControlMenuViewModel(IProjectAppControl projectControl)
             : base(projectControl)
         {
-            CommandSource = new AutoProjectCommandSource(projectControl);
+            CommandRelay = new LazyProjectCommandRelay(projectControl);
         }
     }
 }

@@ -13,13 +13,16 @@
     <Menu Background="Transparent">
       <MenuItem Header="Tools">
 
-        <MenuItem Header="Model Validator" Command="{Binding CommandSource}"
+        <MenuItem Header="Model Validator" Command="{Binding ProjectCommandRelay}"
                   CommandParameter="{x:Type commands:AddLiveOperationConsoleCommand}" />
 
-        <MenuItem Header="Simulation Builder" Command="{Binding CommandSource}"
+        <MenuItem Header="Simulation Builder" Command="{Binding ProjectCommandRelay}"
                   CommandParameter="{x:Type commands:AddProjectDeploymentTabCommand}" />
+        <Separator/>
+        <MenuItem Header="Msl Tools" Command="{Binding ProjectCommandRelay}"
+                  CommandParameter="{x:Type commands:AddMslToolsTabCommand}"/>
 
-      </MenuItem>
+        </MenuItem>
     </Menu>
   </Grid>
 </UserControl>

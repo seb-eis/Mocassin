@@ -12,7 +12,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ToolMenu.Commands
     public class AddProjectDeploymentTabCommand : AddDefaultLayoutControlTabCommand
     {
         /// <inheritdoc />
-        public AddProjectDeploymentTabCommand(IMocassinProjectControl projectControl)
+        public AddProjectDeploymentTabCommand(IProjectAppControl projectControl)
             : base(projectControl)
         {
         }

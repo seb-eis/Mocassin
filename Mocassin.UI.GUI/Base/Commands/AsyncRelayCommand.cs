@@ -49,6 +49,28 @@ namespace Mocassin.UI.Base.Commands
         {
             return executeFunc.Invoke();
         }
+
+        /// <summary>
+        ///     Creates an <see cref="AsyncRelayCommand"/> from a set of delegates
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="canExecuteFunc"></param>
+        /// <returns></returns>
+        public static AsyncRelayCommand Create(Action action, Func<bool> canExecuteFunc = null)
+        {
+            return new AsyncRelayCommand(() => Task.Run(action), canExecuteFunc);
+        }
+
+        /// <summary>
+        ///     Creates an <see cref="AsyncRelayCommand{T}"/> from a set of delegates
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="canExecuteFunc"></param>
+        /// <returns></returns>
+        public static AsyncRelayCommand<T> Create<T>(Action<T> action, Func<T, bool> canExecuteFunc = null)
+        {
+            return new AsyncRelayCommand<T>(x => Task.Run(() => action.Invoke(x)), canExecuteFunc);
+        }
     }
 
     /// <summary>

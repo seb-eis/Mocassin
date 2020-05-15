@@ -23,7 +23,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
         public KineticTransitionGridControlViewModel KineticTransitionGridViewModel { get; }
 
         /// <inheritdoc />
-        public TransitionControlViewModel(IMocassinProjectControl projectControl)
+        public TransitionControlViewModel(IProjectAppControl projectControl)
             : base(projectControl)
         {
             MetropolisTransitionGridViewModel = new MetropolisTransitionGridControlViewModel();

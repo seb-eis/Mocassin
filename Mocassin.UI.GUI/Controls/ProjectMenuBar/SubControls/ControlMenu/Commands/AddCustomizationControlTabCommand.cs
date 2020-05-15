@@ -12,7 +12,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ControlMenu.Comman
     public class AddCustomizationControlTabCommand : AddDefaultCustomizationControlTabCommand
     {
         /// <inheritdoc />
-        public AddCustomizationControlTabCommand(IMocassinProjectControl projectControl)
+        public AddCustomizationControlTabCommand(IProjectAppControl projectControl)
             : base(projectControl)
         {
         }

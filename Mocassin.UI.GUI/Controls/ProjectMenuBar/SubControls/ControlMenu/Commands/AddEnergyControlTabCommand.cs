@@ -12,7 +12,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ControlMenu.Comman
     public class AddEnergyControlTabCommand : AddDefaultLayoutControlTabCommand
     {
         /// <inheritdoc />
-        public AddEnergyControlTabCommand(IMocassinProjectControl projectControl)
+        public AddEnergyControlTabCommand(IProjectAppControl projectControl)
             : base(projectControl)
         {
         }

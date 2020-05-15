@@ -27,7 +27,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         private Action<ProjectCustomizationTemplate> OnSuccessAction { get; }
 
         /// <inheritdoc />
-        public AddNewCustomizationCommand(IMocassinProjectControl projectControl, Func<MocassinProject> projectGetter,
+        public AddNewCustomizationCommand(IProjectAppControl projectControl, Func<MocassinProject> projectGetter,
             Action<ProjectCustomizationTemplate> onSuccessAction = null)
             : base(projectControl)
         {

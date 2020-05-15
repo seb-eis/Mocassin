@@ -52,7 +52,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.MessageConsole
         }
 
         /// <inheritdoc />
-        public MessageConsoleViewModel(IMocassinProjectControl projectControl)
+        public MessageConsoleViewModel(IProjectAppControl projectControl)
             : base(projectControl)
         {
             PushMessageCollectionViewModel = new ObservableCollectionViewModel<PushMessage>(100);

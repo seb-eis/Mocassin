@@ -32,7 +32,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
         public AbstractTransitionGridControlViewModel AbstractTransitionGridViewModel { get; }
 
         /// <inheritdoc />
-        public AbstractTransitionControlViewModel(IMocassinProjectControl projectControl)
+        public AbstractTransitionControlViewModel(IProjectAppControl projectControl)
             : base(projectControl)
         {
             ExchangePairGridViewModel = new ExchangePairGridControlViewModel();

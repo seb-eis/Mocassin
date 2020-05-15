@@ -24,7 +24,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole
         public MessageConsoleViewModel MessageConsoleViewModel { get; }
 
         /// <inheritdoc />
-        public ProjectConsoleTabControlViewModel(IMocassinProjectControl projectControl)
+        public ProjectConsoleTabControlViewModel(IProjectAppControl projectControl)
             : base(projectControl)
         {
             TabHostViewModel = new ControlTabHostViewModel {TabStripPlacement = Dock.Top};

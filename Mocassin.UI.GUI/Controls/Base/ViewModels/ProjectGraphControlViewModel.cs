@@ -22,7 +22,7 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
         }
 
         /// <inheritdoc />
-        protected ProjectGraphControlViewModel(IMocassinProjectControl projectControl)
+        protected ProjectGraphControlViewModel(IProjectAppControl projectControl)
             : base(projectControl)
         {
         }

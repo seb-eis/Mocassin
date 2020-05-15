@@ -81,7 +81,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureMod
         public ISpaceGroupService SpaceGroupService { get; }
 
         /// <inheritdoc />
-        public StructureParameterControlViewModel(IMocassinProjectControl projectControl)
+        public StructureParameterControlViewModel(IProjectAppControl projectControl)
             : base(projectControl)
         {
             CachedGroups ??= projectControl?.ServiceModelProject.SpaceGroupService.GetFullGroupList();

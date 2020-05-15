@@ -23,7 +23,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
         public RelayCommand AutoAssignBuildModelContextCommand { get; }
 
         /// <inheritdoc />
-        public ProjectBuildGraphControlViewModel(IMocassinProjectControl projectControl)
+        public ProjectBuildGraphControlViewModel(IProjectAppControl projectControl)
             : base(projectControl)
         {
             ProjectBuildCollectionViewModel = new CollectionControlViewModel<SimulationDbBuildTemplate>();

@@ -37,30 +37,30 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         }
 
         /// <summary>
-        ///     Get the <see cref="AddNewJobTranslationCommand" /> to create a new <see cref="ProjectJobSetTemplate" /> on the
+        ///     Get the <see cref="AddNewJobSetTemplateCommand" /> to create a new <see cref="ProjectJobSetTemplate" /> on the
         ///     current project
         /// </summary>
-        public AddNewJobTranslationCommand AddJobTranslationCommand { get; }
+        public AddNewJobSetTemplateCommand AddJobSetTemplateCommand { get; }
 
         /// <summary>
-        ///     Get the <see cref="DeleteJobTranslationCommand" /> to remove a <see cref="ProjectJobSetTemplate" /> from the
+        ///     Get the <see cref="DeleteJobSetTemplateCommand" /> to remove a <see cref="ProjectJobSetTemplate" /> from the
         ///     current project
         /// </summary>
-        public DeleteJobTranslationCommand DeleteTranslationCommand { get; }
+        public DeleteJobSetTemplateCommand DeleteSetTemplateCommand { get; }
 
         /// <summary>
-        ///     Get the <see cref="DuplicateJobTranslationCommand" /> to add a <see cref="ProjectJobSetTemplate" /> duplicate to
+        ///     Get the <see cref="DuplicateJobSetTemplateCommand" /> to add a <see cref="ProjectJobSetTemplate" /> duplicate to
         ///     the current project
         /// </summary>
-        public DuplicateJobTranslationCommand DuplicateTranslationCommand { get; }
+        public DuplicateJobSetTemplateCommand DuplicateSetTemplateCommand { get; }
 
         /// <inheritdoc />
-        public BasicJobTranslationContentControlViewModel(IMocassinProjectControl projectControl)
+        public BasicJobTranslationContentControlViewModel(IProjectAppControl projectControl)
             : base(projectControl)
         {
-            AddJobTranslationCommand = new AddNewJobTranslationCommand(projectControl, () => SelectedProject, x => ReloadSelectionSource(false, true));
-            DeleteTranslationCommand = new DeleteJobTranslationCommand(projectControl, () => ReloadSelectionSource(true, true));
-            DuplicateTranslationCommand = new DuplicateJobTranslationCommand(projectControl, x => ReloadSelectionSource(false, true));
+            AddJobSetTemplateCommand = new AddNewJobSetTemplateCommand(projectControl, () => SelectedProject, x => ReloadSelectionSource(false, true));
+            DeleteSetTemplateCommand = new DeleteJobSetTemplateCommand(projectControl, () => ReloadSelectionSource(true, true));
+            DuplicateSetTemplateCommand = new DuplicateJobSetTemplateCommand(projectControl, x => ReloadSelectionSource(false, true));
             PropertyChanged += OnTranslationSourceChanged;
         }
 

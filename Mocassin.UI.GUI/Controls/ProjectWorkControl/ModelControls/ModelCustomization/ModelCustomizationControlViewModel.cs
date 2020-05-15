@@ -43,7 +43,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
         ProjectCustomizationTemplate IContentSupplier<ProjectCustomizationTemplate>.ContentSource => CustomizationContentSource;
 
         /// <inheritdoc />
-        public ModelCustomizationControlViewModel(IMocassinProjectControl projectControl)
+        public ModelCustomizationControlViewModel(IProjectAppControl projectControl)
             : base(projectControl)
         {
             StablePairInteractionViewModel = new PairInteractionControlViewModel(x => x?.EnergyModelCustomization?.StablePairEnergyParameterSets);

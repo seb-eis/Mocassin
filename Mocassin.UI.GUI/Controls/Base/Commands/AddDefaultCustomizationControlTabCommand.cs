@@ -13,7 +13,7 @@ namespace Mocassin.UI.GUI.Controls.Base.Commands
     public class AddDefaultCustomizationControlTabCommand : AddWorkTabCommand
     {
         /// <inheritdoc />
-        protected AddDefaultCustomizationControlTabCommand(IMocassinProjectControl projectControl)
+        protected AddDefaultCustomizationControlTabCommand(IProjectAppControl projectControl)
             : base(projectControl)
         {
         }

@@ -20,7 +20,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
         public CollectionControlViewModel<KineticRuleSetControlViewModel> KineticRuleSetCollectionViewModel { get; }
 
         /// <inheritdoc />
-        public TransitionCustomizationControlViewModel(IMocassinProjectControl projectControl)
+        public TransitionCustomizationControlViewModel(IProjectAppControl projectControl)
             : base(projectControl)
         {
             KineticRuleSetCollectionViewModel = new CollectionControlViewModel<KineticRuleSetControlViewModel>();

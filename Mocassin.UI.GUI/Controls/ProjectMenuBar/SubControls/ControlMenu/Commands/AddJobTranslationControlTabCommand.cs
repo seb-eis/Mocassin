@@ -13,7 +13,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ControlMenu.Comman
     public class AddJobTranslationControlTabCommand : AddDefaultJobTranslationControlTabCommand
     {
         /// <inheritdoc />
-        public AddJobTranslationControlTabCommand(IMocassinProjectControl projectControl)
+        public AddJobTranslationControlTabCommand(IProjectAppControl projectControl)
             : base(projectControl)
         {
         }

@@ -31,7 +31,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.
         public RelayCommand UpdateDefectCollectionCommand { get; }
 
         /// <inheritdoc />
-        public DefectEnergyControlViewModel(IMocassinProjectControl projectControl)
+        public DefectEnergyControlViewModel(IProjectAppControl projectControl)
             : base(projectControl)
         {
             DefectEnergiesControlViewModel = new CollectionControlViewModel<DefectEnergyData>();

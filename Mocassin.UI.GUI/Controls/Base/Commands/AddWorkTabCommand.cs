@@ -11,7 +11,7 @@ namespace Mocassin.UI.GUI.Controls.Base.Commands
     public abstract class AddWorkTabCommand : ProjectControlCommand
     {
         /// <inheritdoc />
-        protected AddWorkTabCommand(IMocassinProjectControl projectControl)
+        protected AddWorkTabCommand(IProjectAppControl projectControl)
             : base(projectControl)
         {
         }
