@@ -16,7 +16,7 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe.Importer
     /// <summary>
     ///     Default <see cref="IMmcfeResultImporter" /> implementation that imports from the default simulation job folder
     /// </summary>
-    public class MmcfeJobFolderImporter : IMmcfeResultImporter
+    public class MmcfeJobFolderImporter : IMmcfeResultImporter, IDisposable
     {
         private MmcfeLogCollectionDbContext dbContext;
 
@@ -25,8 +25,16 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe.Importer
         /// </summary>
         private ReactiveEvent<int> JobImportedEvent { get; }
 
+        /// <summary>
+        ///     Get the <see cref="ReactiveEvent{TSubject}"/> for messages
+        /// </summary>
+        private ReactiveEvent<string> MessageEvent { get; }
+
         /// <inheritdoc />
         public IObservable<int> JobImportedNotification => JobImportedEvent.AsObservable();
+
+        /// <inheritdoc />
+        public IObservable<string> MessageNotifications => MessageEvent.AsObservable();
 
         /// <summary>
         ///     Get the <see cref="string" /> path for the simulation library
@@ -80,6 +88,7 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe.Importer
             SimulationLibraryPath = simulationLibraryPath ?? throw new ArgumentNullException(nameof(simulationLibraryPath));
             JobFolderRootPath = jobFolderRootPath ?? throw new ArgumentNullException(nameof(jobFolderRootPath));
             JobImportedEvent = new ReactiveEvent<int>();
+            MessageEvent = new ReactiveEvent<string>();
             ImportsPerSave = 100;
         }
 
@@ -109,7 +118,6 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe.Importer
 
                     importTasks.Add(Task.Run(LocalImport));
                     if (++importCount < ImportsPerSave) continue;
-
                     saveTask = AsyncSaveAndDetachEntities(importTasks.ToList(), saveTask);
                     importTasks.Clear();
                     importCount = 0;
@@ -214,16 +222,23 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe.Importer
         ///     Performs the default import of MMCFE results into raw and evaluation database. Optionally Zips the raw database
         /// </summary>
         /// <param name="zipRawDatabase"></param>
-        public void BuildEvaluationDatabases(bool zipRawDatabase = true)
+        public void RunImport(bool zipRawDatabase = true)
         {
             var rawPath = $"{JobFolderRootPath}\\mmcfe.raw.db";
             var evalPath = $"{JobFolderRootPath}\\mmcfe.eval.db";
             using var context = SqLiteContext.OpenDatabase<MmcfeLogCollectionDbContext>(rawPath, true);
             ImportDbContext = context;
+            MessageEvent.OnNext($"Starting import for '{SimulationLibraryPath}' using '{JobFolderRootPath}' as root path.");
             Import();
+            MessageEvent.OnNext($"Raw import to '{rawPath}' completed, creating clean evaluation database '{evalPath}'.");
             context.CopyDatabaseWithoutRawData(evalPath);
+            MessageEvent.OnNext($"Eval database created.");
+            if (zipRawDatabase)
+            {
+                var zipPath = $"{JobFolderRootPath}\\mmcfe.raw.zip";
+                ZipFile(rawPath, zipPath);
 
-            if (zipRawDatabase) ZipFile(rawPath, $"{JobFolderRootPath}\\mmcfe.raw.zip");
+            }
             ImportDbContext = null;
         }
 
@@ -235,18 +250,38 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe.Importer
         /// <param name="deleteSource"></param>
         public void ZipFile(string sourceFilePath, string targetFilePath, bool deleteSource = true)
         {
-            Console.WriteLine("Compressing {0} into {1}", sourceFilePath, targetFilePath);
+            if (sourceFilePath == null) throw new ArgumentNullException(nameof(sourceFilePath));
+            if (targetFilePath == null) throw new ArgumentNullException(nameof(targetFilePath));
+
+            MessageEvent.OnNext($"Creating ZIP archive '{targetFilePath}' from '{sourceFilePath}'.");
             using (var targetStream = new FileStream(targetFilePath, FileMode.Create))
             {
                 using var archive = new ZipArchive(targetStream, ZipArchiveMode.Create);
                 var entry = archive.CreateEntryFromFile(sourceFilePath, Path.GetFileName(sourceFilePath));
                 var sourceInfo = new FileInfo(sourceFilePath);
                 var targetInfo = new FileInfo(targetFilePath);
-                Console.WriteLine("Done @ {0} KB ==> {1} KB ({2} %)", sourceInfo.Length / 1024, targetInfo.Length / 1024,
-                    targetInfo.Length / sourceInfo.Length);
+                var message = $"Archive created @ {sourceInfo.Length / 1024.0} KB ==> {targetInfo.Length / 1024.0} KB ({ (double) targetInfo.Length / sourceInfo.Length} %)";
+                MessageEvent.OnNext(message);
             }
 
             if (deleteSource) File.Delete(sourceFilePath);
+        }
+
+        /// <summary>
+        ///     Counts how many entries can be imported with the current settings
+        /// </summary>
+        /// <returns></returns>
+        public int CountImportableEntries()
+        {
+            using var context = OpenSimulationLibrary();
+            return context.JobMetaData.Count();
+        }
+
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            JobImportedEvent.OnCompleted();
+            MessageEvent.OnCompleted();
         }
     }
 }

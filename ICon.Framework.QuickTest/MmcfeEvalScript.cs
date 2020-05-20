@@ -64,13 +64,13 @@ namespace Mocassin.Framework.QuickTest
             }
         }
 
-        private static void CreateMmcfeEvalDatabasesFromJobs(string rootPath, string mslFileName, bool createEvalDb = true, bool zipDeleteRaw = true)
+        public static void RunCreateMmcfeEvalDatabasesFromJobs(string rootPath, string mslFileName, bool createEvalDb = true, bool zipDeleteRaw = true)
         {
             void WriteProgress(ref int counter, object lockObj)
             {
                 lock (lockObj)
                 {
-                    Console.Write($"{++counter} ");
+                    Console.Write($"Done: {++counter:D5}\r");
                 }
             }
 

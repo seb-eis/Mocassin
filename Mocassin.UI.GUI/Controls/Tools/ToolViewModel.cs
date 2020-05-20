@@ -22,10 +22,10 @@ namespace Mocassin.UI.GUI.Controls.Tools
         }
 
         /// <summary>
-        ///     Sends a message <see cref="string"/>
+        ///     Logs a message <see cref="string"/>
         /// </summary>
         /// <param name="value"></param>
-        public void SendMessage(string value)
+        public void LogMessage(string value)
         {
             MessagesViewModel.AddItem(Tuple.Create(DateTime.Now, value));
         }

@@ -11,18 +11,18 @@
   <Grid>
     <StackPanel>
       <DockPanel Dock="Right" Margin="{StaticResource App.Margin.VerticalStack}">
-        <Button Command="{Binding SelectImportPathCommand}" Content="Select Import File" Width="200"/>
-        <Rectangle Width="10" Visibility="Hidden"/>
+        <Button Command="{Binding SelectImportPathCommand}" Content="Select Import File" Width="200"
+                Margin="{StaticResource App.Margin.HorizontalStack}"/>
         <TextBox Text="{Binding PathToImportMsl}"/>
       </DockPanel>
       <DockPanel Dock="Right" Margin="{StaticResource App.Margin.VerticalStack}">
-        <Button Command="{Binding SelectExportPathCommand}" Content="Select Export File" Width="200"/>
-        <Rectangle Width="10" Visibility="Hidden"/>
+        <Button Command="{Binding SelectExportPathCommand}" Content="Select Export File" Width="200"
+                Margin="{StaticResource App.Margin.HorizontalStack}"/>
         <TextBox Text="{Binding PathToExportMsl}"/>
       </DockPanel>
       <DockPanel Dock="Right" Margin="{StaticResource App.Margin.VerticalStack}">
-        <Button Command="{Binding RefreshCanImportCommand}" Content="Check Can Import" Width="200"/>
-        <Rectangle Width="10" Visibility="Hidden"/>
+        <Button Command="{Binding RefreshCanImportCommand}" Content="Check Can Import" Width="200"
+                Margin="{StaticResource App.Margin.HorizontalStack}"/>
         <TextBox IsReadOnly="True">
           <TextBox.Style>
             <Style TargetType="{x:Type TextBox}">
@@ -41,11 +41,12 @@
         </TextBox>
       </DockPanel>
       <DockPanel Dock="Right" Margin="{StaticResource App.Margin.VerticalStack}">
-        <Button Command="{Binding RunImportCommand}" Content="Run Import" Width="200"/>
-        <Rectangle Width="10" Visibility="Hidden"/>
+        <Button Command="{Binding RunImportCommand}" Content="Run Import" Width="200"
+                Margin="{StaticResource App.Margin.HorizontalStack}"/>
         <Grid>
           <ProgressBar Maximum="{Binding ImportableCount, Mode=OneWay}" Value="{Binding ImportedCount, Mode=OneWay}"/>
           <TextBlock HorizontalAlignment="Center">
+            <Run Text="Imported:"/>
             <Run Text="{Binding ImportedCount, Mode=OneWay}"/>
             <Run Text="/"/>
             <Run Text="{Binding ImportableCount, Mode=OneWay}"/>

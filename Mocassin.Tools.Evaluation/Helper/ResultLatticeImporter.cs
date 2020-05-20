@@ -49,10 +49,11 @@ namespace Mocassin.Tools.Evaluation.Helper
         /// <returns></returns>
         public bool AreCompatibleForLatticeImport(IJobMetaData first, IJobMetaData second)
         {
-            return first.JobIndex == second.JobIndex &&
+            return first.ConfigName == second.ConfigName &&
+                   first.CollectionName == second.CollectionName &&
+                   first.JobIndex == second.JobIndex &&
                    first.DopingInfo == second.DopingInfo &&
-                   first.LatticeInfo == second.LatticeInfo &&
-                   NumericComparer.Compare(first.Temperature, second.Temperature) == 0;
+                   first.LatticeInfo == second.LatticeInfo;
         }
 
         /// <summary>

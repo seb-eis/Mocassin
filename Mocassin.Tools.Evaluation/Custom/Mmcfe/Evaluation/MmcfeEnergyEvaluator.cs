@@ -18,41 +18,56 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         ///     value will be excluded from integration
         /// </summary>
         /// <param name="logReaders"></param>
-        /// <param name="minSampleCount"></param>
         /// <param name="temperature"></param>
+        /// <param name="minSampleCount"></param>
         /// <returns></returns>
         public IList<MmcfeEnergyState> CalculateEnergyStates(IReadOnlyList<MmcfeLogReader> logReaders, double temperature, long minSampleCount = 1)
         {
             if (!CheckLogReadersInEvaluationOrder(logReaders)) throw new InvalidOperationException("Readers are in wrong order for evaluation.");
 
-            var result = new List<MmcfeEnergyState>(logReaders.Count);
-            var (sampleSumIntegral, weightedSumIntegral, alphaDeltas) = (0.0, 0.0, GetAlphaDeltaList(logReaders));
-            foreach (var (reader, logIndex) in logReaders.Select((x, i) => (x, i)))
+            var result = new List<MmcfeEnergyState>(logReaders.Count - 1);
+            var alphaDeltas = CalculateAlphaDeltaList(logReaders);
+            var sumFractionIntegral = 0.0;
+            for (var i = 1; i < logReaders.Count; i++)
             {
-                var (header, routineParams) = (reader.EnergyHistogramReader.ReadHeader(), reader.ReadParameters());
-                var (sampleSum, weightedSum, counterIndex) = (0L, 0.0, -1);
+                var alphaDelta = alphaDeltas[i - 1];
+                var highTempReader = logReaders[i - 1];
+                var lowTempReader = logReaders[i];
+                var lowTempHeader = lowTempReader.EnergyHistogramReader.ReadHeader();
+                var lowTempParams = lowTempReader.ReadParameters();
 
-                foreach (var counter in reader.EnergyHistogramReader.ReadCounters())
+                if (i == 1)
                 {
-                    counterIndex++;
-                    if (counter < minSampleCount) continue;
-                    if (logIndex != 0) sampleSum += counter;
-                    if (logIndex == logReaders.Count - 1) continue;
-
-                    var energy = (header.MinValue + counterIndex * header.Stepping) * 0.5;
-                    var expFactor = Math.Exp(energy * alphaDeltas[logIndex] / (temperature * Equations.Constants.BlotzmannEv));
-                    weightedSum += counter * expFactor;
+                    var highInnerEnergy = CalculateInnerEnergy(highTempReader, minSampleCount);
+                    var highTempParams = highTempReader.ReadParameters();
+                    result.Add(new MmcfeEnergyState(highTempParams.AlphaCurrent, temperature / highTempParams.AlphaCurrent, 0, highInnerEnergy));
                 }
 
-                if (double.IsNaN(weightedSum) || double.IsInfinity(weightedSum))
+                var highTempSum = 0L;
+                var weightedLowTempSum = 0.0;
+
+                foreach (var counter in highTempReader.EnergyHistogramReader.ReadCounters())
+                    if (counter >= minSampleCount)
+                        highTempSum += counter;
+
+                var histogramIndex = -1;
+                foreach (var counter in lowTempReader.EnergyHistogramReader.ReadCounters())
+                {
+                    histogramIndex++;
+                    if (counter < minSampleCount) continue;
+                    var energy = lowTempHeader.MinValue + histogramIndex * lowTempHeader.Stepping;
+                    var expFactor = Math.Exp(energy * alphaDelta / (temperature * Equations.Constants.BlotzmannEv));
+                    weightedLowTempSum += expFactor * counter;
+                }
+
+                var logOfSumFraction = Math.Log(highTempSum / weightedLowTempSum, Math.E);
+                if (double.IsNaN(logOfSumFraction) || double.IsInfinity(logOfSumFraction))
                     throw new InvalidOperationException("Calculation is numerically unstable.");
 
-                sampleSumIntegral += sampleSum == 0 ? 0 : Math.Log(sampleSum, Math.E);
-                weightedSumIntegral += weightedSum < double.Epsilon ? 0 : Math.Log(weightedSum, Math.E);
-
-                var innerEnergy = CalculateInnerEnergy(reader, minSampleCount);
-                var freeEnergy = -temperature * Equations.Constants.BlotzmannEv * (sampleSumIntegral - weightedSumIntegral);
-                result.Add(new MmcfeEnergyState(routineParams.AlphaCurrent, temperature / routineParams.AlphaCurrent, freeEnergy, innerEnergy));
+                sumFractionIntegral += logOfSumFraction;
+                var innerEnergy = CalculateInnerEnergy(lowTempReader, minSampleCount);
+                var freeEnergy = -temperature * Equations.Constants.BlotzmannEv * sumFractionIntegral;
+                result.Add(new MmcfeEnergyState(lowTempParams.AlphaCurrent, temperature / lowTempParams.AlphaCurrent, freeEnergy, innerEnergy));
             }
 
             return result;
@@ -81,7 +96,7 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         /// </summary>
         /// <param name="logReaders"></param>
         /// <returns></returns>
-        public IList<double> GetAlphaDeltaList(IReadOnlyList<MmcfeLogReader> logReaders)
+        public IList<double> CalculateAlphaDeltaList(IReadOnlyList<MmcfeLogReader> logReaders)
         {
             var result = new List<double>(logReaders.Count - 1);
             for (var i = 1; i < logReaders.Count; i++)
@@ -108,7 +123,7 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
                 index++;
                 if (counter < minCounter) continue;
                 countSum += counter;
-                energySum += 0.5 * counter * (header.MinValue + index * header.Stepping);
+                energySum += counter * (header.MinValue + index * header.Stepping);
             }
 
             return energySum / countSum;

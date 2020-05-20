@@ -110,13 +110,13 @@ namespace Mocassin.UI.GUI.Controls.Tools.MslTools.SubControls
             if (PathToImportMsl != null && PathToImportMsl == PathToExportMsl)
             {
                 CanRecycle = false;
-                SendMessage("It is currently not supported to repopulate an MSL file by its own result contents.");
+                LogMessage("It is currently not supported to repopulate an MSL file by its own result contents.");
                 return;
             }
             using var importer = CreateImporter();
             CanRecycle = importer.DataCanBeMapped(PathToExportMsl, PathToImportMsl, out var count);
             ImportableCount = count;
-            SendMessage($"Data migration from '{PathToExportMsl}' to '{pathToImportMsl}' is {(CanRecycle ? "possible":"not possible")} ({count} items mapped).");
+            LogMessage($"Data migration from '{PathToExportMsl}' to '{pathToImportMsl}' is {(CanRecycle ? "possible":"not possible")} ({count} items mapped).");
         }
 
         /// <summary>
@@ -126,10 +126,10 @@ namespace Mocassin.UI.GUI.Controls.Tools.MslTools.SubControls
         {
             if (!CanRecycle) throw new InvalidOperationException("Cannot start importing when the recycle flag is false.");
             using var importer = CreateImporter();
-            SendMessage($"Migrating {ImportableCount} items from '{PathToExportMsl}' to '{pathToImportMsl}'");
+            LogMessage($"Migrating {ImportableCount} items from '{PathToExportMsl}' to '{pathToImportMsl}'");
             var watch = Stopwatch.StartNew();
             importer.ImportFinalLatticesAsInitialLattices(PathToExportMsl, PathToImportMsl);
-            SendMessage($"Recycling complete [{watch.Elapsed}]!");
+            LogMessage($"Recycling complete [{watch.Elapsed}]!");
         }
 
         /// <summary>

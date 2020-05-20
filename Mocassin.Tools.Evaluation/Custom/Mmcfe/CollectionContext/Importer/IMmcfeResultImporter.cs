@@ -10,9 +10,14 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe.Importer
     public interface IMmcfeResultImporter
     {
         /// <summary>
-        ///     Get a <see cref="IObservable{T}" /> that informs about
+        ///     Get a <see cref="IObservable{T}" /> that informs about completed jobs
         /// </summary>
         IObservable<int> JobImportedNotification { get; }
+
+        /// <summary>
+        ///     Get the <see cref="IObservable{T}"/> that supplies messages
+        /// </summary>
+        IObservable<string> MessageNotifications { get; }
 
         /// <summary>
         ///     Get or set the <see cref="MmcfeLogCollectionDbContext" /> used for data collection
