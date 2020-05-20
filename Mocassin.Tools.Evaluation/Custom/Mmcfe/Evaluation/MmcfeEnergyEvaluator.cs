@@ -18,10 +18,10 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         ///     value will be excluded from integration
         /// </summary>
         /// <param name="logReaders"></param>
-        /// <param name="temperature"></param>
+        /// <param name="baseTemperature"></param>
         /// <param name="minSampleCount"></param>
         /// <returns></returns>
-        public IList<MmcfeEnergyState> CalculateEnergyStates(IReadOnlyList<MmcfeLogReader> logReaders, double temperature, long minSampleCount = 1)
+        public IList<MmcfeEnergyState> CalculateEnergyStates(IReadOnlyList<MmcfeLogReader> logReaders, double baseTemperature, long minSampleCount = 1)
         {
             if (!CheckLogReadersInEvaluationOrder(logReaders)) throw new InvalidOperationException("Readers are in wrong order for evaluation.");
 
@@ -40,7 +40,7 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
                 {
                     var highInnerEnergy = CalculateInnerEnergy(highTempReader, minSampleCount);
                     var highTempParams = highTempReader.ReadParameters();
-                    result.Add(new MmcfeEnergyState(highTempParams.AlphaCurrent, temperature / highTempParams.AlphaCurrent, 0, highInnerEnergy));
+                    result.Add(new MmcfeEnergyState(highTempParams.AlphaCurrent, baseTemperature / highTempParams.AlphaCurrent, 0, highInnerEnergy));
                 }
 
                 var highTempSum = 0L;
@@ -56,7 +56,7 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
                     histogramIndex++;
                     if (counter < minSampleCount) continue;
                     var energy = lowTempHeader.MinValue + histogramIndex * lowTempHeader.Stepping;
-                    var expFactor = Math.Exp(energy * alphaDelta / (temperature * Equations.Constants.BlotzmannEv));
+                    var expFactor = Math.Exp(energy * alphaDelta / (baseTemperature * Equations.Constants.BlotzmannEv));
                     weightedLowTempSum += expFactor * counter;
                 }
 
@@ -65,9 +65,10 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
                     throw new InvalidOperationException("Calculation is numerically unstable.");
 
                 sumFractionIntegral += logOfSumFraction;
+                var currentTemperature = baseTemperature / lowTempParams.AlphaCurrent;
                 var innerEnergy = CalculateInnerEnergy(lowTempReader, minSampleCount);
-                var freeEnergy = -temperature * Equations.Constants.BlotzmannEv * sumFractionIntegral;
-                result.Add(new MmcfeEnergyState(lowTempParams.AlphaCurrent, temperature / lowTempParams.AlphaCurrent, freeEnergy, innerEnergy));
+                var freeEnergy = - currentTemperature * Equations.Constants.BlotzmannEv * sumFractionIntegral;
+                result.Add(new MmcfeEnergyState(lowTempParams.AlphaCurrent, currentTemperature, freeEnergy, innerEnergy));
             }
 
             return result;

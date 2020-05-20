@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
-using Microsoft.Win32;
 using Mocassin.Tools.Evaluation.Custom.Mmcfe.Importer;
 using Mocassin.UI.Base.Commands;
 using Mocassin.UI.GUI.Controls.Base.IO;
@@ -10,7 +9,8 @@ using Mocassin.UI.GUI.Controls.Base.IO;
 namespace Mocassin.UI.GUI.Controls.Tools.MslTools.SubControls
 {
     /// <summary>
-    ///     The <see cref="ToolViewModel"/> for <see cref="MmcfeImportToolView"/> that performs the MMCFE routine raw data import tasks
+    ///     The <see cref="ToolViewModel" /> for <see cref="MmcfeImportToolView" /> that performs the MMCFE routine raw data
+    ///     import tasks
     /// </summary>
     public class MmcfeImportToolViewModel : ToolViewModel
     {
@@ -19,10 +19,11 @@ namespace Mocassin.UI.GUI.Controls.Tools.MslTools.SubControls
         private string mslFilePath;
         private string jobFolderRootPath;
         private bool isImporting;
-        private bool isZipRawActive = false;
+        private bool isZipRawActive;
         private bool isAutoSelectRootByMslPath = true;
         private bool isIndeterminateProgress;
         private int importsPerSave = 50;
+        private bool isDeleteJobFoldersActive;
 
         /// <summary>
         ///     Get the lock object for access
@@ -75,6 +76,15 @@ namespace Mocassin.UI.GUI.Controls.Tools.MslTools.SubControls
         }
 
         /// <summary>
+        ///     Get or set a boolean flag if the job folders should be removed during importing
+        /// </summary>
+        public bool IsDeleteJobFoldersActive
+        {
+            get => isDeleteJobFoldersActive;
+            set => SetProperty(ref isDeleteJobFoldersActive, value);
+        }
+
+        /// <summary>
         ///     Get the number of already imported MMCFE entries
         /// </summary>
         public int ImportedCount
@@ -111,17 +121,17 @@ namespace Mocassin.UI.GUI.Controls.Tools.MslTools.SubControls
         }
 
         /// <summary>
-        ///     Get a <see cref="VoidParameterCommand"/> so select the msl path
+        ///     Get a <see cref="VoidParameterCommand" /> so select the msl path
         /// </summary>
         public VoidParameterCommand SelectMslPathCommand { get; }
 
         /// <summary>
-        ///     Get a <see cref="VoidParameterCommand"/> to select the job root path
+        ///     Get a <see cref="VoidParameterCommand" /> to select the job root path
         /// </summary>
         public VoidParameterCommand SelectJobRootPathCommand { get; }
 
         /// <summary>
-        ///     Get an <see cref="AsyncVoidParameterCommand"/> to run the import
+        ///     Get an <see cref="AsyncVoidParameterCommand" /> to run the import
         /// </summary>
         public AsyncVoidParameterCommand RunImportCommand { get; }
 
@@ -148,7 +158,11 @@ namespace Mocassin.UI.GUI.Controls.Tools.MslTools.SubControls
         public void RunImport()
         {
             if (IsImporting) throw new InvalidOperationException("Import already in progress");
-            using var importer = new MmcfeJobFolderImporter(MslFilePath, JobFolderRootPath) {ImportsPerSave = ImportsPerSave};
+            using var importer = new MmcfeJobFolderImporter(MslFilePath, JobFolderRootPath)
+            {
+                ImportsPerSave = ImportsPerSave,
+                IsDeleteJobFolders = IsDeleteJobFoldersActive
+            };
             try
             {
                 var watch = Stopwatch.StartNew();
@@ -199,10 +213,7 @@ namespace Mocassin.UI.GUI.Controls.Tools.MslTools.SubControls
         /// </summary>
         private void OnMslPathChanged()
         {
-            if (IsAutoSelectRootByMslPath && File.Exists(MslFilePath))
-            {
-                JobFolderRootPath = Directory.GetParent(MslFilePath)?.FullName;
-            }
+            if (IsAutoSelectRootByMslPath && File.Exists(MslFilePath)) JobFolderRootPath = Directory.GetParent(MslFilePath)?.FullName;
         }
 
         /// <summary>

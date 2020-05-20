@@ -26,6 +26,10 @@
         <TextBlock Text="Auto Select Root Path:" Margin="{StaticResource App.Margin.HorizontalStack}"/>
         <CheckBox IsChecked="{Binding IsAutoSelectRootByMslPath}" Margin="{StaticResource App.Margin.HorizontalStack}" 
                   VerticalAlignment="Center"/>
+        <TextBlock Text="Delete Job Folders:" Margin="{StaticResource App.Margin.HorizontalStack}"/>
+        <CheckBox IsChecked="{Binding IsDeleteJobFoldersActive}" Margin="{StaticResource App.Margin.HorizontalStack}" 
+                  VerticalAlignment="Center"/>
+        <TextBox Visibility="Hidden"/>
       </DockPanel>
       <DockPanel Dock="Right" Margin="{StaticResource App.Margin.VerticalStack}">
         <Button Command="{Binding RunImportCommand}" Content="Run Import" Width="200"
