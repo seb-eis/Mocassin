@@ -24,7 +24,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         public List<Fractional3D> PointSequence { get; set; }
 
         /// <summary>
-        ///     The unfiltered list of all point symmetry operations of the origin point
+        ///     The unfiltered list of all symmetry operations that do not shift the origin point
         /// </summary>
         public List<SymmetryOperation> PointOperations { get; set; }
 
@@ -39,11 +39,17 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// </summary>
         public List<SymmetryOperation> SelfProjectionOperations { get; set; }
 
+        /// <inheritdoc />
+        public int ExtensionCountPerSite => PointOperations.Count / SelfProjectionOperations.Count;
+
+        /// <inheritdoc />
+        public int UniqueOriginSiteCount { get; set; } 
+
         /// <summary>
         ///     Matrix that describes all possible equivalent orders of the vector sequence when performing a self projection (For
         ///     value permutations)
         /// </summary>
-        public List<List<int>> UniqueSelfProjectionOrders { get; set; }
+        public List<List<int>> SelfProjectionOrders { get; set; }
 
         /// <inheritdoc />
         public IEnumerable<IEnumerable<Fractional3D>> GetUniquePointSequences()
@@ -80,7 +86,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// <inheritdoc />
         public IEnumerable<int[]> GetUniqueProjectionOrders()
         {
-            return UniqueSelfProjectionOrders.Select(value => value.ToArray());
+            return SelfProjectionOrders.Select(value => value.ToArray());
         }
 
         /// <inheritdoc />
@@ -99,7 +105,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// <inheritdoc />
         public bool HasPermutationMultiplicity()
         {
-            return UniqueSelfProjectionOrders.Count != 1;
+            return SelfProjectionOrders.Count != 1;
         }
 
         /// <summary>
@@ -118,7 +124,7 @@ namespace Mocassin.Symmetry.SpaceGroups
                 if (lhs.Length != rhs.Length)
                     return false;
 
-                foreach (var vectorOrder in UniqueSelfProjectionOrders)
+                foreach (var vectorOrder in SelfProjectionOrders)
                 {
                     var index = -1;
                     var orderIsMatch = true;

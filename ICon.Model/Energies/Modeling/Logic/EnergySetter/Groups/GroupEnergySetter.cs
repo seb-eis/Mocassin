@@ -38,11 +38,15 @@ namespace Mocassin.Model.Energies
         protected IEnergyQueryPort EnergyQueryPort { get; }
 
         /// <inheritdoc />
+        public IPositionGroupInfo PositionGroupInfo { get; }
+
+        /// <inheritdoc />
         public GroupEnergySetter(GroupInteraction groupInteraction, IEnergyQueryPort energyQueryPort)
         {
             EnergyQueryPort = energyQueryPort ?? throw new ArgumentNullException(nameof(energyQueryPort));
             GroupInteraction = groupInteraction ?? throw new ArgumentNullException(nameof(groupInteraction));
             EnergyEntries = CreateEnergyEntries(groupInteraction);
+            PositionGroupInfo = energyQueryPort.Query(x => x.GetPositionGroupInfo(groupInteraction.Index));
         }
 
         /// <inheritdoc />

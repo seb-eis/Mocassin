@@ -73,5 +73,15 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// </summary>
         /// <returns></returns>
         bool HasPermutationMultiplicity();
+
+        /// <summary>
+        ///     Get the number of unique group extensions per site
+        /// </summary>
+        int ExtensionCountPerSite { get; }
+
+        /// <summary>
+        ///     Get the number of possible origin sites
+        /// </summary>
+        int UniqueOriginSiteCount { get; }
     }
 }

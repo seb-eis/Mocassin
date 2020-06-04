@@ -25,6 +25,7 @@ namespace Mocassin.UI.Xml.Customization
         private ObservableCollection<GroupEnergyData> energyEntries;
         private ModelObjectReference<GroupInteraction> groupInteraction;
         private int modelIndex;
+        private int extensionCountPerSite;
 
         /// <summary>
         ///     Get or set the <see cref="ModelObjectReference{T}" /> of the group interaction that the graph is based upon
@@ -74,6 +75,16 @@ namespace Mocassin.UI.Xml.Customization
         {
             get => modelIndex;
             set => SetProperty(ref modelIndex, value);
+        }
+
+        /// <summary>
+        ///     Get or set the number of non-equivalent cluster extensions per site
+        /// </summary>
+        [XmlAttribute]
+        public int ExtensionCountPerSite
+        {
+            get => extensionCountPerSite;
+            set => SetProperty(ref extensionCountPerSite, value);
         }
 
         /// <inheritdoc />
@@ -147,7 +158,8 @@ namespace Mocassin.UI.Xml.Customization
                 BaseGeometry = energySetter.GroupInteraction.GetSurroundingGeometry().Select(x => VectorData3D.Create(x)).ToObservableCollection(),
                 GroupInteraction = new ModelObjectReference<GroupInteraction>(groupInteraction),
                 CenterPosition = new ModelObjectReference<CellSite>(centerPosition),
-                EnergyEntries = energySetter.EnergyEntries.Select(x => GroupEnergyData.Create(x, parent)).ToObservableCollection()
+                EnergyEntries = energySetter.EnergyEntries.Select(x => GroupEnergyData.Create(x, parent)).ToObservableCollection(),
+                ExtensionCountPerSite = energySetter.PositionGroupInfo.PointOperationGroup.ExtensionCountPerSite
             };
             return obj;
         }

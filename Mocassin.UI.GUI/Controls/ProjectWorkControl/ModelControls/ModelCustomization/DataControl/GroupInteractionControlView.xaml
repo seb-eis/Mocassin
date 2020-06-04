@@ -36,12 +36,14 @@
 
       <DataGrid.Columns>
         <DataGridTextColumn Header="Name" Binding="{Binding GroupEnergySet.Name}" />
-        <DataGridTextColumn Header="Content Count" Binding="{Binding GroupEnergySet.EnergyEntries.Count}"
+        <DataGridTextColumn Header="Unique Geometries Per Site" Binding="{Binding GroupEnergySet.ExtensionCountPerSite}"
+                            IsReadOnly="True"/>
+        <DataGridTextColumn Header="Unique Occupations" Binding="{Binding GroupEnergySet.EnergyEntries.Count}"
                             IsReadOnly="True"/>
         <DataGridTextColumn Header="Source Interaction" Binding="{Binding GroupEnergySet.GroupInteraction.Name}"
                             IsReadOnly="True" />
 
-        <DataGridTextColumn Header="Center Cell Position" Binding="{Binding GroupEnergySet.CenterPosition.Name}"
+        <DataGridTextColumn Header="Center Cell Site" Binding="{Binding GroupEnergySet.CenterPosition.Name}"
                             IsReadOnly="True" />
       </DataGrid.Columns>
 

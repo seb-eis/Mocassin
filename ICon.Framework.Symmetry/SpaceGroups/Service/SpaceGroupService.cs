@@ -419,6 +419,7 @@ namespace Mocassin.Symmetry.SpaceGroups
             var operationGroup = new PointOperationGroup
             {
                 SpaceGroupEntry = LoadedGroup.GetGroupEntry(),
+                UniqueOriginSiteCount = GetUnitCellP1PositionExtension(in originPoint).Count,
                 OriginPoint = originPoint,
                 PointSequence = pointList.ToList(),
                 SelfProjectionOperations = new List<SymmetryOperation>()
@@ -439,7 +440,7 @@ namespace Mocassin.Symmetry.SpaceGroups
                 multiplicityOperations.RemoveAt(index);
 
             operationGroup.UniqueSequenceOperations = multiplicityOperations.Cast<SymmetryOperation>().ToList();
-            operationGroup.UniqueSelfProjectionOrders = MakeProjectionMatrix(pointList, operationGroup.SelfProjectionOperations);
+            operationGroup.SelfProjectionOrders = MakeProjectionMatrix(pointList, operationGroup.SelfProjectionOperations);
             return operationGroup;
         }
 

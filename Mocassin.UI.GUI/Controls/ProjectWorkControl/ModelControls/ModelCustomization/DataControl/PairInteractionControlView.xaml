@@ -37,15 +37,15 @@
 
       <DataGrid.Columns>
         <DataGridTextColumn Header="Name" Binding="{Binding PairEnergySet.Name}" />
-        <DataGridTextColumn Header="Content Count" Binding="{Binding PairEnergySet.PairEnergyEntries.Count}"
+        <DataGridTextColumn Header="Unique Occupations" Binding="{Binding PairEnergySet.PairEnergyEntries.Count}"
                             IsReadOnly="True"/>
-        <DataGridTextColumn Header="Center Cell Position" Binding="{Binding PairEnergySet.CenterPosition.Name}"
+        <DataGridTextColumn Header="Center Cell Site" Binding="{Binding PairEnergySet.CenterPosition.Name}"
                             IsReadOnly="True" />
-        <DataGridTextColumn Header="Partner Cell Position" Binding="{Binding PairEnergySet.PartnerPosition.Name}"
+        <DataGridTextColumn Header="Partner Cell Site" Binding="{Binding PairEnergySet.PartnerPosition.Name}"
                             IsReadOnly="True" />
         <DataGridTextColumn Header="Distance [&#x212b;]" Binding="{Binding PairEnergySet.Distance}"
                             IsReadOnly="True" />
-        <DataGridTextColumn Header="Chiral Partner" Binding="{Binding ChiralPairEnergySet.Name}"
+        <DataGridTextColumn Header="Chiral To" Binding="{Binding ChiralPairEnergySet.Name}"
                             IsReadOnly="True" />
       </DataGrid.Columns>
 
