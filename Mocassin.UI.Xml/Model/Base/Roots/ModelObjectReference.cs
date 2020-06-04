@@ -43,7 +43,7 @@ namespace Mocassin.UI.Xml.Base
         /// </summary>
         [JsonIgnore]
         [XmlIgnore]
-        public string Name => Target?.Name ?? "TargetNull";
+        public string Name => Target == null ? "[Error:NullTarget]" : string.IsNullOrWhiteSpace(Target.Name) ? $"[{Target.GetType().Name}:{Key}]" : Target.Name;
 
         /// <summary>
         ///     Get or set the reference target <see cref="ModelDataObject" />. Only serialized in JSON mode with reference

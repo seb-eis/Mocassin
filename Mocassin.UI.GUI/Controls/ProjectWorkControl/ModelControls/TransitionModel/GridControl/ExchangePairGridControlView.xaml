@@ -7,6 +7,7 @@
   xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionModel.GridControl"
   xmlns:comboBox="clr-namespace:Mocassin.UI.GUI.Base.UiElements.ComboBox"
   xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
+  xmlns:transitionModel="clr-namespace:Mocassin.UI.Xml.TransitionModel;assembly=Mocassin.UI.Xml"
   mc:Ignorable="d"
   d:DataContext="{d:DesignInstance local:ExchangePairGridControlViewModel, IsDesignTimeCreatable=True}"
   d:DesignHeight="450" d:DesignWidth="800"
@@ -29,7 +30,7 @@
                                      PreviewMouseLeftButtonDown="RowHeaderLogo_OnPreviewMouseLeftButtonDown"
                                      PreviewMouseLeftButtonUp="RowHeaderLogo_OnPreviewMouseLeftButtonUp"
                                      PreviewMouseMove="RowHeaderLogo_OnPreviewMouseMove"
-                                     Cursor="Hand" />
+                                     Cursor="Hand"/>
         </DataTemplate>
       </DataGrid.RowHeaderTemplate>
 
@@ -45,6 +46,15 @@
                                                  ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.CurrentDonorOptions}"
                                                  DisplayMemberPath="Name"
                                                  SelectedItemBinding="{Binding DonorParticle}" />
+        <DataGridTemplateColumn Header="Quick Grouping" CanUserSort="False">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate DataType="{x:Type transitionModel:StateExchangePairData}">
+              <Button Content="Make Group" 
+                      Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ExchangePairGridControlView}}, Path=DataContext.AddToModelAsExchangeGroupCommand}" 
+                      CommandParameter="{Binding}"/>
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
       </DataGrid.Columns>
     </DataGrid>
   </Grid>

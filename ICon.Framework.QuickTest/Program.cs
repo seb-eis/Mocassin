@@ -9,10 +9,7 @@ namespace Mocassin.Framework.QuickTest
     {
         private static void Main(string[] args)
         {
-            var rootPath =
-                @"C:\Users\Sebastian\Documents\Promotion\HO_Backup_Corona\HO_Backup_Corona\Promotions_Unterlagen\Projekte\BaZrO3\Simulation\Model.4.23A.Y010\raw\Mmcfe";
-            var dbName = @"mmcfe_y010_423pm.msl";
-            MmcfeEvalScript.RunCreateMmcfeEvalDatabasesFromJobs(rootPath, dbName, true, false);
+            MmcfeEvalScript.Run();
         }
 
         private static void DisplayWatch(Stopwatch watch)

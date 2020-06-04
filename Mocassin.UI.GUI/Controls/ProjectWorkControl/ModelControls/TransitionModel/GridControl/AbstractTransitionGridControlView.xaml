@@ -9,6 +9,7 @@
   xmlns:gridControl="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.GridControl"
   xmlns:adapter="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionModel.GridControl.Adapter"
   xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
+  xmlns:comboBox="clr-namespace:Mocassin.UI.GUI.Base.UiElements.ComboBox"
   mc:Ignorable="d"
   d:DataContext="{d:DesignInstance local:AbstractTransitionGridControlViewModel, IsDesignTimeCreatable=True}"
   d:DesignHeight="450" d:DesignWidth="800"
@@ -37,24 +38,47 @@
       </DataGrid.RowHeaderTemplate>
 
       <DataGrid.Columns>
-        <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
-        <DataGridTextColumn Header="Connection Pattern" Binding="{Binding ConnectorString}">
-
-          <DataGridTextColumn.ElementStyle>
-            <Style TargetType="{x:Type TextBlock}">
-              <Setter Property="TextWrapping" Value="Wrap" />
+        <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
+        <comboBox:BindableDataGridComboBoxColumn Header="Mechanism Selection"
+                                                 ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:AbstractTransitionGridControlView}}, Path=DataContext.SelectableTransitionMechanisms.ObservableItems}"
+                                                 SelectedValueBinding="{Binding ConnectorString}" 
+                                                 SelectedValuePath="ConnectionPattern"
+                                                 DisplayMemberPath="Name"
+                                                 x:Name="MechanismComboBoxColumn">
+          <comboBox:BindableDataGridComboBoxColumn.EditingElementStyle>
+            <Style TargetType="{x:Type ComboBox}">
+              <Setter Property="ItemContainerStyle">
+                <Setter.Value>
+                  <Style TargetType="{x:Type ComboBoxItem}">
+                    <Setter Property="ToolTip">
+                      <Setter.Value>
+                        <TextBlock d:DataContext="{d:DesignInstance local:TransitionMechanismViewModel}">
+                          <Run Text="Name:&#09;&#09;"/>
+                          <Run Text="{Binding Name}"/>
+                          <LineBreak/>
+                          <Run Text="Description:&#09;"/>
+                          <Run Text="{Binding Description}"/>
+                          <LineBreak/>
+                          <Run Text="Position Chain:&#09;"/>
+                          <Run Text="{Binding PositionChainDescription}"/>
+                          <LineBreak/>
+                          <Run Text="Link Pattern:&#09;"/>
+                          <Run Text="{Binding ConnectionPattern}"/>
+                          <LineBreak/>
+                          <Run Text="Two Options:&#09;"/>
+                          <Run Text="{Binding HasAssociationFlagSupport}"/>
+                          <Run Text="(If TRUE, association/dissociation and unidirectional movement (default) are distinct mechanisms."/>
+                        </TextBlock>
+                      </Setter.Value>
+                    </Setter>
+                  </Style>
+                </Setter.Value>
+              </Setter>
             </Style>
-          </DataGridTextColumn.ElementStyle>
+          </comboBox:BindableDataGridComboBoxColumn.EditingElementStyle>
+        </comboBox:BindableDataGridComboBoxColumn>
 
-          <DataGridTextColumn.EditingElementStyle>
-            <Style TargetType="{x:Type TextBox}">
-              <Setter Property="TextWrapping" Value="Wrap" />
-            </Style>
-          </DataGridTextColumn.EditingElementStyle>
-
-        </DataGridTextColumn>
-
-        <DataGridCheckBoxColumn Header="Association Flag" Binding="{Binding IsAssociation}" />
+        <DataGridCheckBoxColumn Header="Activate Association/Dissociation" Binding="{Binding IsAssociation}"/>
 
         <DataGridTemplateColumn Header="State Change Groups">
           <DataGridTemplateColumn.CellTemplate>

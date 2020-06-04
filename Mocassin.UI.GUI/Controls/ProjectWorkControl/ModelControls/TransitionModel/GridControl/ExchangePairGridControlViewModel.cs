@@ -1,7 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Input;
 using Mocassin.Framework.Extensions;
 using Mocassin.Model.Particles;
+using Mocassin.Model.Transitions;
+using Mocassin.UI.Base.Commands;
 using Mocassin.UI.GUI.Controls.Base.Interfaces;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
 using Mocassin.UI.Xml.Base;
@@ -36,6 +40,17 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
         ///     selected <see cref="StateExchangePairData" />
         /// </summary>
         public IEnumerable<ModelObjectReference<Particle>> CurrentAcceptorOptions => EnumerateCurrentAcceptorOptions();
+
+        /// <summary>
+        ///     Get the <see cref="Command{T}"/> to convert an <see cref="StateExchangePairData"/> to an <see cref="StateExchangeGroupData"/> and add it to the parent model
+        /// </summary>
+        public ICommand AddToModelAsExchangeGroupCommand { get; }
+
+        /// <inheritdoc />
+        public ExchangePairGridControlViewModel()
+        {
+            AddToModelAsExchangeGroupCommand = new RelayCommand<object>(obj => AddToModelAsExchangeGroup((StateExchangePairData) obj), obj => ContentSource != null && obj is StateExchangePairData);
+        }
 
         /// <inheritdoc />
         public void ChangeContentSource(MocassinProject contentSource)
@@ -91,6 +106,21 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
                    || defined != null && defined
                        .Where(x => x != SelectedItem)
                        .Any(x => x.AcceptorParticle?.Key == acceptorKey && x.DonorParticle?.Key == donorKey);
+        }
+
+        /// <summary>
+        ///     Converts an <see cref="StateExchangePairData"/> to a matching <see cref="StateExchangeGroupData"/> and adds it to the content source model
+        /// </summary>
+        /// <param name="exchangePairData"></param>
+        private void AddToModelAsExchangeGroup(StateExchangePairData exchangePairData)
+        {
+            if (exchangePairData == null) throw new ArgumentNullException(nameof(exchangePairData));
+            var groupData = new StateExchangeGroupData
+            {
+                Name = $"{exchangePairData.Name} (auto conv.)",
+                StateExchangePairs = {new ModelObjectReference<StateExchangePair>(exchangePairData)}
+            };
+            ContentSource.ProjectModelData.TransitionModelData.StateExchangeGroups.Add(groupData);
         }
     }
 }

@@ -19,7 +19,7 @@ namespace Mocassin.UI.Xml.TransitionModel
         /// <summary>
         ///     Get the regex for the connector string
         /// </summary>
-        public static readonly Regex ConnectorRegex = new Regex($"{ConnectorType.Static.ToString()}|{ConnectorType.Dynamic.ToString()}");
+        public static readonly Regex ConnectorRegex = new Regex($"{ConnectorType.Static}|{ConnectorType.Dynamic}", RegexOptions.Compiled);
 
         private string connectorString = ConnectorType.Dynamic.ToString();
 

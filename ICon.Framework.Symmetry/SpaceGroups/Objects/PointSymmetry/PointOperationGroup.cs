@@ -31,7 +31,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// <summary>
         ///     The filtered list of all operations that yield unique vector sequences of the original point sequence
         /// </summary>
-        /// <remarks> Unique in the sense that two sequences are not identical cannot trivially matched by inverting one </remarks>
+        /// <remarks> Unique in the sense that two sequences are not identical and cannot be matched trivially by inverting one </remarks>
         public List<SymmetryOperation> UniqueSequenceOperations { get; set; }
 
         /// <summary>
@@ -123,7 +123,7 @@ namespace Mocassin.Symmetry.SpaceGroups
                     var index = -1;
                     var orderIsMatch = true;
                     foreach (var orderIndex in vectorOrder)
-                        orderIsMatch = orderIsMatch & valueComparer.Equals(lhs[++index], rhs[orderIndex]);
+                        orderIsMatch &= valueComparer.Equals(lhs[++index], rhs[orderIndex]);
 
                     if (orderIsMatch)
                         return true;

@@ -20,8 +20,8 @@ namespace Mocassin.Framework.QuickTest
     {
         public static void Run()
         {
-            var rootPath = @"C:\Users\hims-user\Documents\Promotions_Unterlagen\Projekte\BaZrO3\Simulation\Mode.Large.Y010\raw";
-            var mslName = "bazro3.mmcfelarge.msl";
+            var rootPath = @"C:\Users\Sebastian\Documents\Promotion\HO_Backup_Corona\HO_Backup_Corona\Promotions_Unterlagen\Projekte\BaZrO3\Simulation\Model.650PM.Y030\";
+            var mslName = "bzo_y030_650pm_mmcfe.msl";
             var evalDbName = "mmcfe.eval.db";
 
             var extractArgs = MmcfeTemperatureDefectExtractArgs.CreateForRoot(rootPath, mslName, evalDbName);
@@ -29,7 +29,7 @@ namespace Mocassin.Framework.QuickTest
             extractArgs.DefectSelector = x => x.Symbol == "H";
             extractArgs.FixedDopingSelector = x => x.Index == 0;
             extractArgs.VariableDopingSelector = x => x.Index == 1;
-            extractArgs.FixedDopingValue = 0.1;
+            extractArgs.FixedDopingValue = 0.3;
             ExtractHyperSurfaceDataByTemperatures(extractArgs);
         }
 
@@ -161,7 +161,7 @@ namespace Mocassin.Framework.QuickTest
             public bool UseRelativeMode { get; set; }
 
             public static MmcfeTemperatureDefectExtractArgs CreateForRoot(string rootPath, string mslName, string evalDbName,
-                string plotPathFormat = "Exports\\ufs.{0:F2}.{1}.txt")
+                string plotPathFormat = "exports\\ufs.{0:F2}.{1}.txt")
             {
                 return new MmcfeTemperatureDefectExtractArgs
                 {
