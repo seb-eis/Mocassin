@@ -93,8 +93,8 @@ elseif (UNIX)
     # Advanced gnu compiler settings
     if ("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU")
         message(STATUS "** Compiling with GNU settings **")
-        set(CMAKE_C_FLAGS_RELEASE "-O3 ${COMPILE_FLAGS_SSE_GNU} -w -fno-cx-limited-range -funroll-loops -march=native -mtune=native -lm -ldl -pthread -s")
-        set(CMAKE_C_FLAGS_DEBUG "-g ${COMPILE_FLAGS_SSE_GNU} -fno-cx-limited-range -funroll-loops -march=native -mtune=native -lm -ldl -pthread")
+        set(CMAKE_C_FLAGS_RELEASE "-O3 ${COMPILE_FLAGS_SSE_GNU} -w -fno-cx-limited-range -funroll-loops -lm -ldl -pthread -s")
+        set(CMAKE_C_FLAGS_DEBUG "-g ${COMPILE_FLAGS_SSE_GNU} -fno-cx-limited-range -funroll-loops -lm -ldl -pthread")
 
     # Advanced intel compiler settings
     elseif("${CMAKE_C_COMPILER_ID}" STREQUAL "Intel")
