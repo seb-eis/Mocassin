@@ -228,14 +228,14 @@ static inline void LogCycleOutcome(SCONTEXT_PARAMETER, MmcfeLog_t*restrict log, 
 }
 
 // Calculates an estimated time till completion of the routine using the current log data
-static int64_t CalculateRuntimeEtaInSeconds(SCONTEXT_PARAMETER, const MmcfeLog_t*restrict log)
+static int64_t CalculateEtaAtCurrentRateInSeconds(SCONTEXT_PARAMETER, const MmcfeLog_t*restrict log)
 {
-    let meta = getMainStateMetaData(simContext);
     let cycleCountPerBlock = log->ParamsState.RelaxPhaseCycleCount + log->ParamsState.LogPhaseCycleCount;
     let alphaStep = (log->ParamsState.AlphaMax - log->ParamsState.AlphaMin) / log->ParamsState.AlphaCount;
     let remainingAlphaCount = (int32_t) round((log->ParamsState.AlphaMax - log->ParamsState.AlphaCurrent) / alphaStep);
 
-    let avgCycleRate = meta->CycleRate;
+    let runSeconds = (log->RunInfo.PhaseEndClock - log->RunInfo.PhaseStartClock) / CLOCKS_PER_SEC;
+    let avgCycleRate = cycleCountPerBlock / runSeconds;
     return (cycleCountPerBlock * remainingAlphaCount) / (int64_t) avgCycleRate;
 }
 
@@ -250,11 +250,11 @@ static inline void PrintRoutineProgress(SCONTEXT_PARAMETER, const MmcfeLog_t*res
     char stampBuffer[TIME_ISO8601_BYTECOUNT], runBuffer[TIME_ISO8601_BYTECOUNT], etaBuffer[TIME_ISO8601_BYTECOUNT];
     GetCurrentIso8601UtcTimeStamp(stampBuffer);
     SecondsToIso8601FormattedTimePeriod(runBuffer, meta->ProgramRunTime);
-    let timeEta = CalculateRuntimeEtaInSeconds(simContext, log);
-    SecondsToIso8601FormattedTimePeriod(etaBuffer, timeEta);
+    let etaAtCurrentRateInSeconds = CalculateEtaAtCurrentRateInSeconds(simContext, log);
+    SecondsToIso8601FormattedTimePeriod(etaBuffer, etaAtCurrentRateInSeconds);
 
-    fprintf(stdout, "MMCFE  => Logtime: %s [  ] (Runtime=%s, ETA=%s [@ lograte])\n", stampBuffer, runBuffer, etaBuffer);
-    fprintf(stdout, "MMCFE  => Lograte: %+.6e [Hz] (Successrate=%+.6e [Hz])\n", meta->CycleRate, meta->SuccessRate);
+    fprintf(stdout, "MMCFE  => LogTime: %s [  ] (RunTime=%s, CURRENT_ETA=%s)\n", stampBuffer, runBuffer, etaBuffer);
+    fprintf(stdout, "MMCFE  => AvgRate: %+.6e [Hz] (McsRate=%+.6e [Hz])\n", meta->CycleRate, meta->SuccessRate);
     fprintf(stdout, "MMCFE  => Log entry: E(Lattice)=%+.6e [eV] (Peak=%+.6e [eV]), Alpha=%+.2e, T_eq=%.2f [K]\n\n", meanEnergy, peakEnergy, log->ParamsState.AlphaCurrent, tempEquiv);
     fflush(stdout);
 }
@@ -318,8 +318,11 @@ static error_t EnterExecutionLoop(SCONTEXT_PARAMETER, MmcfeLog_t*restrict log, s
 
     for (;log->ParamsState.AlphaCurrent <= log->ParamsState.AlphaMax + 1.0e-6;)
     {
+        log->RunInfo.PhaseStartClock = clock();
         EnterRelaxationPhase(simContext, log);
         EnterLoggingPhase(simContext, log);
+        log->RunInfo.PhaseEndClock = clock();
+
         FinishLoggingPhase(simContext, log, db);
         log->ParamsState.AlphaCurrent += alphaStep;
     }

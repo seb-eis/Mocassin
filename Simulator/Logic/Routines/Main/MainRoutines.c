@@ -93,7 +93,7 @@ error_t StartMainSimulationRoutine(SCONTEXT_PARAMETER)
         if (StateFlagsAreSet(simContext, STATE_FLG_PRERUN))
         {
             SIMERROR = StartMmcPreRunRoutine(simContext);
-            assert_success(SIMERROR, "Pre-run execution of main KMC routine aborted with an error");
+            assert_success(SIMERROR, "Pre-run execution of main MMC routine aborted with an error");
         }
         return SIMERROR = StartMmcMainRoutine(simContext);
     }
@@ -830,6 +830,7 @@ static void SetKmcTransitionStateEnergyAlphaMethod(double* restrict states, cons
 {
     let deltaConf = states[2] - states[0];
     let deltaAbs = fabs(deltaConf);
+    states[4] = deltaConf;
     states[1] += states[0] + 0.5 * (deltaConf - deltaAbs) + alpha * deltaAbs;
 }
 

@@ -388,7 +388,7 @@ typedef struct MmcHeader
     // The sample length of the abort test
     int32_t     AbortSampleLength;
 
-    // The smaple interval fro the abort test
+    // The sample interval fro the abort test
     int32_t     AbortSampleInterval;
 
     // Padding

@@ -47,8 +47,20 @@ typedef struct MmcfeParams
 
 } MmcfeParams_t;
 
+// Type for holding MMCFE runtime information
+// Layout@ggc_x86_64 => 16@[8,8]
+typedef struct MmcfeRunInfo
+{
+    // The clock when the alpha phase was started
+    clock_t     PhaseStartClock;
+
+    // The clock when the alpha phase was finished
+    clock_t     PhaseEndClock;
+
+} MmcfeRunInfo_t;
+
 // Type for holding MMCFE log entry information
-// Layout@ggc_x86_64 => 108@[24,24,56]
+// Layout@ggc_x86_64 => 120@[24,24,16,56]
 typedef struct MmcfeLog
 {
     // The simulation state buffer
@@ -56,6 +68,9 @@ typedef struct MmcfeLog
 
     // The state of the dynamic energy histogram
     DynamicJumpHistogram_t  Histogram;
+
+    // The current run information
+    MmcfeRunInfo_t          RunInfo;
 
     // The state of the parameter struct as checkpoint data
     MmcfeParams_t           ParamsState;
