@@ -107,7 +107,7 @@ typedef Span_t(ClusterState_t, ClusterStates) ClusterStates_t;
 typedef Span_t(double, EnergyStates) EnergyStates_t;
 
 // Type for a full environment state definition (Supports 16 bit alignment)
-// Layout@ggc_x86_64 => 96@[16,1,1,1,1,4,4,4,,16,16,24,8]
+// Layout@ggc_x86_64 => 96@[16,1,1,1,1,4,4,4,16,16,24,8]
 typedef struct EnvironmentState
 {
     // Absolute 4D position vector of the environment in the lattice
@@ -124,9 +124,6 @@ typedef struct EnvironmentState
 
     // Current occupation particle id
     byte_t                      ParticleId;
-
-    // Pointer to the affiliated environment definition
-    EnvironmentDefinition_t*    EnvironmentDefinition;
 
     // Current direction pool id the environment is registered in
     int32_t                     PoolId;
@@ -145,6 +142,9 @@ typedef struct EnvironmentState
 
     // Set of registered links to other environments
     EnvironmentLinks_t          EnvironmentLinks;
+
+    // Pointer to the affiliated environment definition
+    EnvironmentDefinition_t*    EnvironmentDefinition;
 
 } EnvironmentState_t;
 
