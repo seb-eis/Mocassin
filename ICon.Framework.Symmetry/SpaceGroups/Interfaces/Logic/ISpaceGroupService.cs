@@ -44,13 +44,12 @@ namespace Mocassin.Symmetry.SpaceGroups
         IPositionOperationDictionary GetOperationDictionary(in Fractional3D sourceVector);
 
         /// <summary>
-        ///     Get a list interface of all symmetry operations that do not change the input vector (Optional with shift
-        ///     correction)
+        ///     Get a list interface of all symmetry operations that do not change the input vector (Optional with correction of invariance shift)
         /// </summary>
         /// <param name="sourceVector"></param>
-        /// <param name="shiftCorrection"></param>
+        /// <param name="useInvarianceCorrection"></param>
         /// <returns></returns>
-        IList<ISymmetryOperation> GetSelfProjectionOperations(in Fractional3D sourceVector, bool shiftCorrection);
+        IList<ISymmetryOperation> GetOperationsNotShiftingOrigin(in Fractional3D sourceVector, bool useInvarianceCorrection);
 
         /// <summary>
         ///     Get the point operation group for the provided origin point and point sequence based upon the currently loaded

@@ -159,7 +159,7 @@ namespace Mocassin.UI.Xml.Customization
                 GroupInteraction = new ModelObjectReference<GroupInteraction>(groupInteraction),
                 CenterPosition = new ModelObjectReference<CellSite>(centerPosition),
                 EnergyEntries = energySetter.EnergyEntries.Select(x => GroupEnergyData.Create(x, parent)).ToObservableCollection(),
-                ExtensionCountPerSite = energySetter.PositionGroupInfo.PointOperationGroup.ExtensionCountPerSite
+                ExtensionCountPerSite = energySetter.PositionGroupInfo.PointOperationGroup.OrderIgnoringExtensionCountPerSite
             };
             return obj;
         }

@@ -94,7 +94,7 @@ namespace Mocassin.Model.Translator.ModelContext
                 throw new InvalidOperationException("Cannot resolve pair interactions for the environment model");
 
             var multiplicityOperations = ModelProject.SpaceGroupService
-                .GetSelfProjectionOperations(environmentModel.CellSite.Vector, true);
+                .GetOperationsNotShiftingOrigin(environmentModel.CellSite.Vector, true);
 
             var index = 0;
             var pairInteractionModels = interactions
@@ -286,7 +286,7 @@ namespace Mocassin.Model.Translator.ModelContext
         protected IEnumerable<IGroupInteractionModel> ExtendGroupInteractionModel(IGroupInteractionModel groupModel)
         {
             var comparer = ModelProject.SpaceGroupService.Comparer;
-            var groupVectors = groupModel.PositionGroupInfo.PointOperationGroup.GetUniquePointSequences();
+            var groupVectors = groupModel.PositionGroupInfo.PointOperationGroup.GetUniqueSequencesWithoutPreservedPointOrder();
 
             var pairInteractions = groupVectors
                 .Select(vectorSet => vectorSet

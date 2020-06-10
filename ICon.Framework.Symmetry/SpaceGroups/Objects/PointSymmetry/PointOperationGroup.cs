@@ -26,24 +26,34 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// <summary>
         ///     The unfiltered list of all symmetry operations that do not shift the origin point
         /// </summary>
-        public List<SymmetryOperation> PointOperations { get; set; }
+        public List<SymmetryOperation> LocalSequenceOperations { get; set; }
 
         /// <summary>
-        ///     The filtered list of all operations that yield unique vector sequences of the original point sequence
+        ///     The filtered list of all operations that yield unique vector sequences of the original point sequence (Does not remove sequences where the only difference is the point order)
         /// </summary>
-        /// <remarks> Unique in the sense that two sequences are not identical and cannot be matched trivially by inverting one </remarks>
-        public List<SymmetryOperation> UniqueSequenceOperations { get; set; }
+        public List<SymmetryOperation> OrderPreservingUniqueSequenceOperations { get; set; }
 
         /// <summary>
-        ///     Get all operations that project the original point sequence onto itself
+        ///     The filtered list of all operations that yield unique vector sequences of the original point sequence (Removes sequences where the only difference is the point order)
         /// </summary>
-        public List<SymmetryOperation> SelfProjectionOperations { get; set; }
+        public List<SymmetryOperation> OrderIgnoringUniqueSequenceOperations { get; set; }
+
+        /// <summary>
+        ///     Get all operations that project the original point sequence onto itself in any order
+        /// </summary>
+        public List<SymmetryOperation> OrderIgnoringSelfProjectionOperations { get; set; }
 
         /// <inheritdoc />
-        public int ExtensionCountPerSite => PointOperations.Count / SelfProjectionOperations.Count;
+        public int UniqueOriginSiteCount { get; set; }
 
         /// <inheritdoc />
-        public int UniqueOriginSiteCount { get; set; } 
+        public int OrderPreservingExtensionCountPerSite => OrderPreservingUniqueSequenceOperations.Count;
+
+        /// <inheritdoc />
+        public int OrderIgnoringExtensionCountPerSite => OrderIgnoringUniqueSequenceOperations.Count;
+
+        /// <inheritdoc />
+        public bool IsFullSelfProjection => LocalSequenceOperations.Count == OrderIgnoringSelfProjectionOperations.Count;
 
         /// <summary>
         ///     Matrix that describes all possible equivalent orders of the vector sequence when performing a self projection (For
@@ -52,17 +62,25 @@ namespace Mocassin.Symmetry.SpaceGroups
         public List<List<int>> SelfProjectionOrders { get; set; }
 
         /// <inheritdoc />
-        public IEnumerable<IEnumerable<Fractional3D>> GetUniquePointSequences()
+        public IEnumerable<IEnumerable<Fractional3D>> GetAllUniqueSequencesWithPreservedPointOrder()
         {
             var vectorSequence = GetPointSequence().ToList();
-            foreach (var operation in UniqueSequenceOperations)
+            foreach (var operation in OrderPreservingUniqueSequenceOperations)
+                yield return operation.Transform(vectorSequence);
+        }
+
+        /// <inheritdoc />
+        public IEnumerable<IEnumerable<Fractional3D>> GetUniqueSequencesWithoutPreservedPointOrder()
+        {
+            var vectorSequence = GetPointSequence().ToList();
+            foreach (var operation in OrderIgnoringUniqueSequenceOperations)
                 yield return operation.Transform(vectorSequence);
         }
 
         /// <inheritdoc />
         public IEnumerable<ISymmetryOperation> GetPointOperations()
         {
-            return PointOperations.AsEnumerable();
+            return LocalSequenceOperations.AsEnumerable();
         }
 
         /// <inheritdoc />
@@ -72,15 +90,21 @@ namespace Mocassin.Symmetry.SpaceGroups
         }
 
         /// <inheritdoc />
-        public IEnumerable<ISymmetryOperation> GetUniqueSequenceOperations()
+        public IEnumerable<ISymmetryOperation> GetOrderPreservingUniqueSequenceOperations()
         {
-            return UniqueSequenceOperations.AsEnumerable();
+            return OrderPreservingUniqueSequenceOperations.AsEnumerable();
         }
 
         /// <inheritdoc />
-        public IEnumerable<ISymmetryOperation> GetSelfProjectionOperations()
+        public IEnumerable<ISymmetryOperation> GetOrderIgnoringUniqueSequenceOperations()
         {
-            return SelfProjectionOperations.AsEnumerable();
+            return OrderIgnoringUniqueSequenceOperations.AsEnumerable();
+        }
+
+        /// <inheritdoc />
+        public IEnumerable<ISymmetryOperation> GetOrderIndependentSelfProjectionOperations()
+        {
+            return OrderIgnoringSelfProjectionOperations.AsEnumerable();
         }
 
         /// <inheritdoc />
@@ -90,16 +114,15 @@ namespace Mocassin.Symmetry.SpaceGroups
         }
 
         /// <inheritdoc />
-        public IEnumerable<T1[]> GetUniquePermutations<T1>(IPermutationSource<T1> permProvider, IEqualityComparer<T1> comparer,
+        public IEnumerable<T1[]> GetUniquePermutations<T1>(IPermutationSource<T1> permutationSource, IEqualityComparer<T1> comparer,
             Func<T1, int> selector)
         {
-            if (permProvider.ResultLength != PointSequence.Count)
+            if (permutationSource.ResultLength != PointSequence.Count)
                 throw new ArgumentException("Permutation provider does not match the point sequence");
 
             return !HasPermutationMultiplicity()
-                ? permProvider.AsEnumerable()
-                : new HashSet<T1[]>(permProvider, MakePermutationEqualityComparer(comparer, value => value.Sum(selector)))
-                    .AsEnumerable();
+                ? permutationSource.AsEnumerable()
+                : new HashSet<T1[]>(permutationSource, MakePermutationEqualityComparer(comparer, value => value.Sum(selector)));
         }
 
         /// <inheritdoc />
@@ -116,23 +139,18 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// <param name="valueComparer"></param>
         /// <param name="hashFunction"></param>
         /// <returns></returns>
-        protected IEqualityComparer<T1[]> MakePermutationEqualityComparer<T1>(IEqualityComparer<T1> valueComparer,
-            Func<T1[], int> hashFunction)
+        protected IEqualityComparer<T1[]> MakePermutationEqualityComparer<T1>(IEqualityComparer<T1> valueComparer, Func<T1[], int> hashFunction)
         {
             bool Equals(T1[] lhs, T1[] rhs)
             {
-                if (lhs.Length != rhs.Length)
-                    return false;
+                if (lhs.Length != rhs.Length) return false;
 
                 foreach (var vectorOrder in SelfProjectionOrders)
                 {
                     var index = -1;
                     var orderIsMatch = true;
-                    foreach (var orderIndex in vectorOrder)
-                        orderIsMatch &= valueComparer.Equals(lhs[++index], rhs[orderIndex]);
-
-                    if (orderIsMatch)
-                        return true;
+                    foreach (var orderIndex in vectorOrder) orderIsMatch &= valueComparer.Equals(lhs[++index], rhs[orderIndex]);
+                    if (orderIsMatch) return true;
                 }
 
                 return false;

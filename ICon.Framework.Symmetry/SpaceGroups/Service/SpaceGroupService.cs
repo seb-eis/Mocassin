@@ -393,7 +393,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         }
 
         /// <inheritdoc />
-        public IList<ISymmetryOperation> GetSelfProjectionOperations(in Fractional3D sourceVector, bool shiftCorrection)
+        public IList<ISymmetryOperation> GetOperationsNotShiftingOrigin(in Fractional3D sourceVector, bool useInvarianceCorrection)
         {
             var result = new List<ISymmetryOperation>(LoadedGroup.Operations.Count);
             foreach (var operation in LoadedGroup.Operations)
@@ -402,7 +402,7 @@ namespace Mocassin.Symmetry.SpaceGroups
                 if (Comparer.Compare(untrimmedVector.TrimToUnitCell(operation.TrimTolerance), sourceVector) != 0)
                     continue;
 
-                var shift = shiftCorrection ? sourceVector - untrimmedVector : Fractional3D.Zero;
+                var shift = useInvarianceCorrection ? sourceVector - untrimmedVector : Fractional3D.Zero;
                 var newOperation = GetTranslationShiftedOperation(operation, shift);
                 result.Add(newOperation);
             }
@@ -422,25 +422,40 @@ namespace Mocassin.Symmetry.SpaceGroups
                 UniqueOriginSiteCount = GetUnitCellP1PositionExtension(in originPoint).Count,
                 OriginPoint = originPoint,
                 PointSequence = pointList.ToList(),
-                SelfProjectionOperations = new List<SymmetryOperation>()
+                OrderIgnoringSelfProjectionOperations = new List<SymmetryOperation>(),
+                OrderIgnoringUniqueSequenceOperations = new List<SymmetryOperation>()
             };
 
-            var multiplicityOperations = GetSelfProjectionOperations(originPoint, true);
-            var resultSequences = multiplicityOperations
-                .Select(operation => operation.Transform(pointList).ToList()).ToList();
+            var operationsAtOrigin = GetOperationsNotShiftingOrigin(originPoint, true);
+            var sequencesAtOrigin = operationsAtOrigin
+                .Select(operation => operation.Transform(pointList).ToList())
+                .ToList();
 
-            operationGroup.PointOperations = multiplicityOperations.Cast<SymmetryOperation>().ToList();
+            operationGroup.LocalSequenceOperations = operationsAtOrigin.Cast<SymmetryOperation>().ToList();
 
             var equalityComparer = MakeVectorSequenceProjectionComparer();
 
-            foreach (var index in resultSequences.IndexOfMany(value => equalityComparer.Equals(value, resultSequences.First())))
-                operationGroup.SelfProjectionOperations.Add((SymmetryOperation) multiplicityOperations[index]);
+            for (var i = 0; i < operationsAtOrigin.Count; i++)
+            {
+                var isAlreadyDefined = false;
+                for (var j = 0; j < i; j++)
+                {
+                    if (!equalityComparer.Equals(sequencesAtOrigin[i], sequencesAtOrigin[j])) continue;
+                    isAlreadyDefined = true;
+                    break;
+                }
 
-            foreach (var index in resultSequences.RemoveDuplicatesAndGetRemovedIndices(MakeVectorSequenceEquivalenceComparer()))
-                multiplicityOperations.RemoveAt(index);
+                if (!isAlreadyDefined) operationGroup.OrderIgnoringUniqueSequenceOperations.Add((SymmetryOperation) operationsAtOrigin[i]);
+            }
 
-            operationGroup.UniqueSequenceOperations = multiplicityOperations.Cast<SymmetryOperation>().ToList();
-            operationGroup.SelfProjectionOrders = MakeProjectionMatrix(pointList, operationGroup.SelfProjectionOperations);
+            foreach (var index in sequencesAtOrigin.IndexOfMany(value => equalityComparer.Equals(value, sequencesAtOrigin.First())))
+                operationGroup.OrderIgnoringSelfProjectionOperations.Add((SymmetryOperation) operationsAtOrigin[index]);
+
+            foreach (var index in sequencesAtOrigin.RemoveDuplicatesAndGetRemovedIndices(MakeVectorSequenceEquivalenceComparer()))
+                operationsAtOrigin.RemoveAt(index);
+
+            operationGroup.OrderPreservingUniqueSequenceOperations = operationsAtOrigin.Cast<SymmetryOperation>().ToList();
+            operationGroup.SelfProjectionOrders = CalculateProjectionOrderMatrix(pointList, operationGroup.OrderIgnoringSelfProjectionOperations);
             return operationGroup;
         }
 
@@ -553,7 +568,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// <param name="vectors"></param>
         /// <param name="symmetryOperations"></param>
         /// <returns> Operations have to be self projection operations for this function to yield meaningful results </returns>
-        protected List<List<int>> MakeProjectionMatrix(IEnumerable<Fractional3D> vectors,
+        protected List<List<int>> CalculateProjectionOrderMatrix(IEnumerable<Fractional3D> vectors,
             IEnumerable<ISymmetryOperation> symmetryOperations)
         {
             var options = symmetryOperations.Select(operation => operation.Transform(vectors).ToList()).ToList();
