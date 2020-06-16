@@ -158,11 +158,10 @@ namespace Mocassin.UI.Xml.Helper.Migration
         /// <param name="reporter"></param>
         private void Migrate(PairEnergyData source, PairEnergyData target, DataMigrationReporter reporter)
         {
-            if (!IsRedundantReportEnabled && source.Name == target.Name && VectorComparer.ValueComparer.Compare(source.Energy, target.Energy) == 0) return;
+            if (!IsRedundantReportEnabled && VectorComparer.ValueComparer.Compare(source.Energy, target.Energy) == 0) return;
 
             var comment = $"Energy: \"{source.Energy}\", Name: \"{source.Name}\"";
             target.Energy = source.Energy;
-            target.Name = source.Name;
             reporter.Invoke(source, target, comment);
         }
 
@@ -175,11 +174,10 @@ namespace Mocassin.UI.Xml.Helper.Migration
         /// <param name="reporter"></param>
         private void Migrate(GroupEnergyData source, GroupEnergyData target, DataMigrationReporter reporter)
         {
-            if (!IsRedundantReportEnabled && source.Name == target.Name && VectorComparer.ValueComparer.Compare(source.Energy, target.Energy) == 0) return;
+            if (!IsRedundantReportEnabled && VectorComparer.ValueComparer.Compare(source.Energy, target.Energy) == 0) return;
 
             var comment = $"Energy: \"{source.Energy}\", Name: \"{source.Name}\"";
             target.Energy = source.Energy;
-            target.Name = source.Name;
             reporter.Invoke(source, target, comment);
         }
 

@@ -79,7 +79,6 @@ namespace Mocassin.Model.Translator.EntityBuilder
             foreach (var _ in encodingModel.PositionIndexToMobilityTypesSet[positionId])
             {
                 if (ParticlePositionPairHasNonZeroEnergies(positionId, particleId)) buffer[bufferId++] = particleId;
-
                 particleId++;
             }
 
@@ -97,6 +96,7 @@ namespace Mocassin.Model.Translator.EntityBuilder
         {
             var comparer = ModelContext.ModelProject.CommonNumeric.RangeComparer;
             var environmentModel = ModelContext.StructureModelContext.PositionModels[positionId].EnvironmentModel;
+            if (environmentModel.CellSite.OccupationSet.All(particle => particle.Index != particleId)) return false;
 
             if (environmentModel.PairInteractionModels.Select(x => x.PairEnergyModel)
                 .Any(energyModel => energyModel.EnergyEntries.Any(x =>
