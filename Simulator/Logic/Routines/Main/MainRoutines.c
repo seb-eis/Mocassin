@@ -712,7 +712,7 @@ static inline void KMC_SetActiveJumpStatus(SCONTEXT_PARAMETER)
     let direction = getActiveJumpDirection(simContext);
     var cycleState = getCycleState(simContext);
 
-    debug_assert(!array_IsIndexOutOfRange(*statusArray, vecCoorSet3(JUMPPATH[0]->PositionVector), direction->ObjectId));
+    debug_assert(!array_IsIndexOutOfRange(*statusArray, vecCoorSet3(JUMPPATH[0]->LatticeVector), direction->ObjectId));
     cycleState->ActiveJumpStatus = &array_Get(*statusArray, vecCoorSet3(JUMPPATH[0]->LatticeVector), direction->ObjectId);
 }
 

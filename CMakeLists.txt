@@ -66,6 +66,10 @@ add_library(mmcfe.mocext SHARED Extensions/Mmcfe/MmcFERoutine.h Extensions/Mmcfe
 set_target_properties(mmcfe.mocext PROPERTIES C_STANDARD 11 PUBLIC_HEADER Extensions/Interface/IMocsimExtension.h)
 
 # Compiler settings
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    add_compile_definitions(MC_TESTBUILD)
+endif()
+
 if (WIN32)
     # Compiler settings for windows
     message(STATUS "** Compiling with WINDOWS settings **")

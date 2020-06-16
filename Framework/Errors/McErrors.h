@@ -23,7 +23,7 @@
 // Define to enable all debug assertions
 //#define ENABLE_DEBUG_ASSERTIONS
 
-#if defined(ENABLE_DEBUG_ASSERTIONS)
+#if defined(ENABLE_DEBUG_ASSERTIONS) || defined (MC_TESTBUILD)
     // Active debug assertion macro. Asserts that the condition is true during runtime
     #define debug_assert(cond) if (!(cond)) { DumpErrorToStderrOut(ERR_DEBUGASSERT, __FUNCTION__, __LINE__, #cond); }
 #else
