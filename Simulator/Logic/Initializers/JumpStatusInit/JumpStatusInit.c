@@ -11,7 +11,7 @@
 #include "Simulator/Logic/Initializers/JumpStatusInit/JumpStatusInit.h"
 #include "Simulator/Logic/Routines/Helper/HelperRoutines.h"
 
-// Allocates the memory for the jump status collection span
+// Allocates the memory for the jump status collection array
 static void AllocateJumpStatusArray(SCONTEXT_PARAMETER)
 {
     let cellSizes = getLatticeSizeVector(simContext);
@@ -19,6 +19,21 @@ static void AllocateJumpStatusArray(SCONTEXT_PARAMETER)
     JumpStatusArray_t statusArray = array_New(statusArray, cellSizes->A, cellSizes->B, cellSizes->C, jumpCountPerCell);
 
     *getJumpStatusArray(simContext) = statusArray;
+}
+
+// Free the memory for the jump status collection array and contained data and returns the amount of freed bytes
+static int64_t DeleteJumpStatusArray(SCONTEXT_PARAMETER)
+{
+    var statusArray = getJumpStatusArray(simContext);
+    var byteCount = 0LL;
+    cpp_foreach(item, *statusArray)
+    {
+        byteCount += sizeof(typeof(*item)) + span_ByteCount(item->JumpLinks);
+        span_Delete(item->JumpLinks);
+    }
+    array_Delete(*statusArray);
+    *statusArray = (JumpStatusArray_t) {.Header = NULL, .Begin = NULL, .End = NULL};
+    return byteCount;
 }
 
 // Populates the jump path with the passed jump status vector and jump direction to prepare for the jump link search
@@ -135,7 +150,7 @@ static error_t ConstructJumpStatusCollection(SCONTEXT_PARAMETER)
             }
         }
     }
-    printf("[Init-Info]: Constructed transition status cache [TRANSITION_COUNT=" FORMAT_I64() "]\n", totalCount);
+    printf("[Init-Info]: KMC event cache BUILD [TRANSITION_COUNT=" FORMAT_I64() "]\n", totalCount);
     return error;
 }
 
@@ -185,6 +200,7 @@ static error_t AssignPossibleStaticCorrectionValuesToRules(SCONTEXT_PARAMETER)
 {
     var jumpCollections = getJumpCollections(simContext);
     var physicalFactors = getPhysicalFactors(simContext);
+    var canDeleteJumpStatusArray = true;
     cpp_foreach(jumpCollection, *jumpCollections)
     {
         cpp_foreach(jumpRule, jumpCollection->JumpRules)
@@ -195,15 +211,22 @@ static error_t AssignPossibleStaticCorrectionValuesToRules(SCONTEXT_PARAMETER)
             jumpRule->StaticVirtualJumpEnergyCorrection = isConst ? energy : NAN;
             if (isConst)
             {
-                printf("[Init-Info]: Optimized transition event [TRANSITION_ID=%i, STATE_ENCODING="FORMAT_I64()"-"FORMAT_I64()"-"FORMAT_I64()"] => Path bias S0->S2 is context independent [%f eV].\n",
+                printf("[Init-Info]: KMC event optimization SUCCESS [TRANSITION_ID=%i, INITIAL_STATE="FORMAT_I64()"-"FORMAT_I64()"-"FORMAT_I64()"] => S0->S2 bias correction is [%f eV].\n",
                        jumpCollection->ObjectId, jumpRule->StateCode0.Value, jumpRule->StateCode1.Value, jumpRule->StateCode2.Value, energy * physicalFactors->EnergyFactorKtToEv);
             }
             else
             {
-                printf("[Init-Info]: Cannot optimize transition event [TRANSITION_ID=%i, STATE_ENCODING="FORMAT_I64()"-"FORMAT_I64()"-"FORMAT_I64()"] => Path bias S0->S2 is context dependent. \n",
+                canDeleteJumpStatusArray = false;
+                printf("[Init-Info]: KMC event optimization FAILURE [TRANSITION_ID=%i, INITIAL_STATE="FORMAT_I64()"-"FORMAT_I64()"-"FORMAT_I64()"] => S0->S2 bias correction is dynamic. \n",
                        jumpCollection->ObjectId, jumpRule->StateCode0.Value, jumpRule->StateCode1.Value, jumpRule->StateCode2.Value);
             }
         }
+    }
+
+    if (canDeleteJumpStatusArray)
+    {
+        let byteCount = DeleteJumpStatusArray(simContext);
+        printf("[Init-Info]: KMC event cache REMOVED [CACHE_SIZE=" FORMAT_I64() "KB] => All KMC events have constant bias corrections.\n", byteCount /  1024);
     }
 
     return ERR_OK;
@@ -217,8 +240,8 @@ void BuildJumpStatusCollection(SCONTEXT_PARAMETER)
 
     AllocateJumpStatusArray(simContext);
     error = ConstructJumpStatusCollection(simContext);
-    assert_success(error, "Fatal error during construction of the jump status collection.");
+    assert_success(error, "Fatal error during construction of the KMC event status cache.");
 
     error = AssignPossibleStaticCorrectionValuesToRules(simContext);
-    assert_success(error, "Fatal error during attempt to determine virtual jump bias optimization.");
+    assert_success(error, "Fatal error during attempt to determine KMC bias corrections.");
 }

@@ -705,10 +705,12 @@ static inline void SetActivePathStartEnvironment(SCONTEXT_PARAMETER)
     JUMPPATH[0] = envState;
 }
 
-// Sets the active jump status for the currently selected KMC on the context
+// Sets the active jump status for the currently selected KMC on the context if required
 static inline void KMC_SetActiveJumpStatus(SCONTEXT_PARAMETER)
 {
     let statusArray = getJumpStatusArray(simContext);
+    return_if(statusArray->Header == NULL);
+
     let direction = getActiveJumpDirection(simContext);
     var cycleState = getCycleState(simContext);
 

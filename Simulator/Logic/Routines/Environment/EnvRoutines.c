@@ -278,7 +278,7 @@ static error_t ConstructPreparedLinkingSystem(SCONTEXT_PARAMETER)
         SortEnvironmentLinkingSystem(simContext, environment);
         linkCount += span_Length(environment->EnvironmentLinks);
     }
-    printf("[Init-Info]: Optimized required state dependency network [TOTAL_LINKS_CREATED=%i, SKIPPED_CONST_ENERGY_LINKS=%i, SKIPPED_CONST_PARTICLE_LINKS=%i]\n",
+    printf("[Init-Info]: State dependency network optimization COMPLETE [TOTAL_LINKS_CREATED=%i, SKIPPED_CONST_ENERGY_LINKS=%i, SKIPPED_CONST_PARTICLE_LINKS=%i]\n",
             linkCount, energyIgnoredCount, mobilityIgnoredCount);
     return ERR_OK;
 }
@@ -297,7 +297,7 @@ static error_t DetectAndTagConstantInteractionDefinitions(SCONTEXT_PARAMETER)
         setFlags(table->Padding, ENERGY_FLG_CONST_TABLE);
         fixPairCount++;
     }
-    if (fixPairCount != 0) printf("[Init-Info]: Optimized pair energy table behavior => No dynamic effect on energy landscape [%i of %i].\n",
+    if (fixPairCount != 0) printf("[Init-Info]: Pair energy table optimization SUCCESS => Ignoring constant tables [%i of %i].\n",
             fixPairCount, (int32_t) span_Length(energyModel->PairTables));
 
     cpp_foreach(table, energyModel->ClusterTables)
@@ -308,7 +308,7 @@ static error_t DetectAndTagConstantInteractionDefinitions(SCONTEXT_PARAMETER)
         fixClusterCount++;
     }
 
-    if (fixClusterCount != 0) printf("[Init-Info]: Optimized cluster energy table behavior => No dynamic effect on energy landscape [%i of %i].\n",
+    if (fixClusterCount != 0) printf("[Init-Info]: Cluster energy table optimization SUCCESS => Ignoring constant tables [%i of %i].\n",
             fixClusterCount, (int32_t) span_Length(energyModel->ClusterTables));
     return error;
 }
