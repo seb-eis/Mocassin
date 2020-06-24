@@ -23,7 +23,7 @@
 #include "Framework/Math/Random/Approx.h"
 
 // Calculates the result of the exponential function depending on the settings
-static inline double GetExpResult(SCONTEXT_PARAMETER, const double exponent)
+static inline double CalculateExp(SCONTEXT_PARAMETER, const double exponent)
 {
     return simContext->IsExpApproximationActive ? FastExp32RmsError(exponent) : exp(exponent);
 }
@@ -256,7 +256,7 @@ static inline void UpdateMaxJumpProbabilityBackjumpSafe(SCONTEXT_PARAMETER)
 
     // Note: This is a safety check for the backjump to prevent the normalization system from accidentally over-normalizing
     return_if(energyInfo->S0toS2DeltaEnergy >= energyInfo->S2toS0DeltaEnergy);
-    metaData->RawMaxJumpProbability = getMaxOfTwo(metaData->RawMaxJumpProbability, GetExpResult(simContext, -energyInfo->S2toS0DeltaEnergy));
+    metaData->RawMaxJumpProbability = getMaxOfTwo(metaData->RawMaxJumpProbability, CalculateExp(simContext, -energyInfo->S2toS0DeltaEnergy));
 }
 
 // Action for cases where the jump selection has been statistically accepted
@@ -747,7 +747,7 @@ void SetKmcJumpPathPropertiesOnContext(SCONTEXT_PARAMETER)
 
     let latticeSizes = getLatticeSizeVector(simContext);
     let jumpSequence = &getActiveJumpDirection(simContext)->JumpSequence;
-    let length = span_Length(*jumpSequence);
+    let length = (int32_t) span_Length(*jumpSequence);
     let baseVector = &JUMPPATH[0]->LatticeVector;
     var stateCode = &getCycleState(simContext)->ActiveStateCode;
 
@@ -815,7 +815,7 @@ void SetKmcJumpProbabilitiesOnContext(SCONTEXT_PARAMETER)
     energyInfo->S0toS2DeltaEnergy = energyInfo->S1Energy - energyInfo->S0Energy + energyInfo->ElectricFieldEnergy;
     energyInfo->S2toS0DeltaEnergy = energyInfo->S1Energy - energyInfo->S2Energy - energyInfo->ElectricFieldEnergy;
 
-    energyInfo->RawS0toS2Probability = GetExpResult(simContext, -energyInfo->S0toS2DeltaEnergy);
+    energyInfo->RawS0toS2Probability = CalculateExp(simContext, -energyInfo->S0toS2DeltaEnergy);
     energyInfo->NormalizedS0toS2Probability = energyInfo->RawS0toS2Probability * preFactor;
 }
 
@@ -918,7 +918,7 @@ void SetMmcJumpProbabilitiesOnContext(SCONTEXT_PARAMETER)
     var energyInfo = getJumpEnergyInfo(simContext);
 
     energyInfo->S0toS2DeltaEnergy = energyInfo->S2Energy - energyInfo->S0Energy;
-    energyInfo->RawS0toS2Probability = GetExpResult(simContext, -energyInfo->S0toS2DeltaEnergy);
+    energyInfo->RawS0toS2Probability = CalculateExp(simContext, -energyInfo->S0toS2DeltaEnergy);
     energyInfo->NormalizedS0toS2Probability = energyInfo->RawS0toS2Probability;
 }
 
@@ -961,7 +961,7 @@ void SetMmcJumpProbabilitiesOnContextWithAlpha(SCONTEXT_PARAMETER, double alpha)
     var energyInfo = getJumpEnergyInfo(simContext);
 
     energyInfo->S0toS2DeltaEnergy = energyInfo->S2Energy - energyInfo->S0Energy;
-    energyInfo->RawS0toS2Probability = GetExpResult(simContext, -energyInfo->S0toS2DeltaEnergy * alpha);
+    energyInfo->RawS0toS2Probability = CalculateExp(simContext, -energyInfo->S0toS2DeltaEnergy * alpha);
 }
 
 void OnEnergeticMmcJumpEvaluationWithAlpha(SCONTEXT_PARAMETER, double alpha)

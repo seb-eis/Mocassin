@@ -137,14 +137,13 @@ static error_t ResolveAndSetEssentialCmdArguments(SCONTEXT_PARAMETER)
     error_t error;
     let resolverTable = getEssentialCmdArgsResolverTable();
     var unresolved = span_Length(*resolverTable);
-
+    var cmdArguments = getCommandArguments(simContext);
     TerminateOnSetBuildCallFlag(simContext);
 
-    for (int32_t i = 1; i < getCommandArguments(simContext)->Count; i++)
+    for (int32_t i = 1; i < cmdArguments->Count; i++)
     {
         error = LookupAndResolveCmdArgument(simContext, resolverTable, i);
-        return_if(error == ERR_VALIDATION, error);
-
+        if (error == ERR_VALIDATION) printf("[FAILURE]: The parameter for command line argument '%s' is invalid.\n", cmdArguments->Values[i]);
         if (error == ERR_OK)
         {
             --unresolved;
@@ -152,7 +151,10 @@ static error_t ResolveAndSetEssentialCmdArguments(SCONTEXT_PARAMETER)
 
         return_if(unresolved == 0, ERR_OK);
     }
-
+    printf("[FAILURE]: Missing input. Make sure all required command line arguments are defined:\n");
+    cpp_foreach(item, *resolverTable)
+        printf("[REQUIRED]: %s\t<value>\n", item->KeyArgument);
+    fflush(stdout);
     return ERR_CMDARGUMENT;
 }
 

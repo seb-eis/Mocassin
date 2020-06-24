@@ -32,7 +32,7 @@ typedef Vector4_t InteractionRange_t;
 // Layout@ggc_x86_64 => 32@[16,16]
 typedef struct RoutineData
 {
-    // Pointer to the 16 bytes of the routine UUID/GUID
+    // The 16 bytes of the routine UUID/GUID
     byte_t      Guid[16];
 
     //  The custom routine parameter data span
@@ -82,7 +82,7 @@ typedef struct EnvironmentDefinition
     int32_t                     PositionId;
 
     // Padding
-    uint32_t                     Padding;
+    uint32_t                    Padding;
 
     // The particle mask of center positions that should be put into the selection pool
     Bitmask_t                   SelectionParticleMask;

@@ -44,7 +44,7 @@ static inline int32_t BinarySearchClusterCodeId(const ClusterTable_t *restrict c
             counter -= step + 1;
         }
         else counter = step;
-    }\
+    }
     firstIndex = (length != firstIndex) ? firstIndex : -1;
     debug_assert(firstIndex != -1);
     return firstIndex;
@@ -857,7 +857,7 @@ void SetFinalKmcStateEnergyOnContext(SCONTEXT_PARAMETER)
 }
 
 // Advances a single path id step to the final state
-static inline void KMC_AdvanceSystemToFinalStateByPathId(SCONTEXT_PARAMETER, const int32_t pathId, OccupationCode64_t*restrict stateCode)
+static inline void AdvanceKmcSystemToFinalStateByPathId(SCONTEXT_PARAMETER, const int32_t pathId, OccupationCode64_t*restrict stateCode)
 {
     let envState = JUMPPATH[pathId];
     let newParticleId = GetOccupationCodeByteAt(stateCode, pathId);
@@ -874,19 +874,19 @@ void AdvanceKmcSystemToFinalState(SCONTEXT_PARAMETER)
     switch (jumpDirection->JumpLength)
     {
         case 8:
-            KMC_AdvanceSystemToFinalStateByPathId(simContext, 7, stateCode);
+            AdvanceKmcSystemToFinalStateByPathId(simContext, 7, stateCode);
         case 7:
-            KMC_AdvanceSystemToFinalStateByPathId(simContext, 6, stateCode);
+            AdvanceKmcSystemToFinalStateByPathId(simContext, 6, stateCode);
         case 6:
-            KMC_AdvanceSystemToFinalStateByPathId(simContext, 5, stateCode);
+            AdvanceKmcSystemToFinalStateByPathId(simContext, 5, stateCode);
         case 5:
-            KMC_AdvanceSystemToFinalStateByPathId(simContext, 4, stateCode);
+            AdvanceKmcSystemToFinalStateByPathId(simContext, 4, stateCode);
         case 4:
-            KMC_AdvanceSystemToFinalStateByPathId(simContext, 3, stateCode);
+            AdvanceKmcSystemToFinalStateByPathId(simContext, 3, stateCode);
         case 3:
-            KMC_AdvanceSystemToFinalStateByPathId(simContext, 2, stateCode);
-            KMC_AdvanceSystemToFinalStateByPathId(simContext, 1, stateCode);
-            KMC_AdvanceSystemToFinalStateByPathId(simContext, 0, stateCode);
+            AdvanceKmcSystemToFinalStateByPathId(simContext, 2, stateCode);
+            AdvanceKmcSystemToFinalStateByPathId(simContext, 1, stateCode);
+            AdvanceKmcSystemToFinalStateByPathId(simContext, 0, stateCode);
         default:
             break;
     }
