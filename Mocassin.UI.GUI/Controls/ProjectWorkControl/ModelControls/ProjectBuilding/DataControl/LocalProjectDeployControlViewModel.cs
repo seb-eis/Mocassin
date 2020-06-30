@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Mocassin.Framework.Extensions;
 using Mocassin.Model.Translator;
 using Mocassin.Model.Translator.Database.Entities.Other.Meta;
 using Mocassin.UI.Base.Commands;
@@ -235,8 +236,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
             BuildCancellationTokenSource = new CancellationTokenSource();
             AddConsoleMessage($"Deployment start: {BuildTargetFilePath}");
             using var builder = new SimulationLibraryBuilder {IsAutoSaveAfterBuild = !IsManualLibrarySaving};
-            BuildSimulationLibrary?.Dispose();
-            BuildSimulationLibrary = null;
+            EnsureBuildLibraryUnloaded();
+            JobMetaDataCollectionControlViewModel.Clear();
 
             builder.LibraryBuildStatusNotifications.Subscribe(x => BuildStatus = x, AddConsoleError, () => DoneJobs = MaxJobs);
             builder.JobBuildCounterNotifications.Subscribe(UpdateBuildCountsOnMayorStep);
@@ -248,21 +249,33 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
             if (BuildSimulationLibrary != null)
             {
                 AddConsoleMessage("Loading meta information table.");
-                JobMetaDataCollectionControlViewModel.Clear();
-                JobMetaDataCollectionControlViewModel.AddItems(BuildSimulationLibrary.JobMetaData.Local);
+                JobMetaDataCollectionControlViewModel.AddItems(BuildSimulationLibrary.JobMetaData.Local.Action(x => x.JobModel = null));
                 AddConsoleMessage($"Successfully created at [{(IsManualLibrarySaving ? "MEMORY" : BuildTargetFilePath)}]");
+
                 if (IsManualLibrarySaving) return;
-                AddConsoleMessage("Changing database journal mode to DELETE.");
+
+                AddConsoleMessage("Changing database journal mode to DELETE and cleaning up.");
                 BuildSimulationLibrary.SetJournalMode(DbJournalMode.Delete);
+                EnsureBuildLibraryUnloaded();
             }
             else
             {
                 AddConsoleMessage($"Creation failed, collecting garbage! ({(cancellationToken.IsCancellationRequested ? "Cancelled" : "Error")})");
+                EnsureBuildLibraryUnloaded();
                 GC.Collect();
             }
 
             BuildCancellationTokenSource.Dispose();
             BuildCancellationTokenSource = null;
+        }
+
+        /// <summary>
+        ///     Ensures that the build <see cref="ISimulationLibrary"/> is disposed and the reference is null to avoid memory leaks
+        /// </summary>
+        private void EnsureBuildLibraryUnloaded()
+        {
+            BuildSimulationLibrary?.Dispose();
+            BuildSimulationLibrary = null;
         }
 
         /// <summary>

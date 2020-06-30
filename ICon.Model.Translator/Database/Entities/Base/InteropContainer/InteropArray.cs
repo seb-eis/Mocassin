@@ -234,7 +234,7 @@ namespace Mocassin.Model.Translator
         public void ImportDataFrom(ReadOnlySpan<T> values)
         {
             if (values.Length != InternalArray.Length) throw new ArgumentException("The value set does not match the internal array length.");
-            Buffer.BlockCopy(values.ToArray(), 0, InternalArray, 0, values.Length);
+            Buffer.BlockCopy(values.ToArray(), 0, InternalArray, 0, InternalArray.Length);
         }
 
         /// <summary>

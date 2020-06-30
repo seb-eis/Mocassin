@@ -1,12 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Mocassin.Model.Translator;
-using Mocassin.Model.Translator.Database.Entities.Other.Meta;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using Mocassin.Framework.Events;
-using Mocassin.Framework.Extensions;
 using Mocassin.Framework.SQLiteCore;
+using Mocassin.Model.Translator;
+using Mocassin.Model.Translator.Database.Entities.Other.Meta;
 using Mocassin.Tools.UAccess.Readers;
 
 namespace Mocassin.Tools.Evaluation.Helper
@@ -17,22 +16,22 @@ namespace Mocassin.Tools.Evaluation.Helper
     public class ResultLatticeImporter : IDisposable
     {
         /// <summary>
-        ///     Get the <see cref="ReactiveEvent{TSubject}"/> that reports how many jobs have been imported
+        ///     Get the <see cref="ReactiveEvent{TSubject}" /> that reports how many jobs have been imported
         /// </summary>
         public ReactiveEvent<int> ImportCountEvent { get; }
 
         /// <summary>
-        ///     Get a <see cref="IObservable{T}"/> that notifies how man jobs have been imported
+        ///     Get a <see cref="IObservable{T}" /> that notifies how man jobs have been imported
         /// </summary>
         public IObservable<int> ImportCountNotifications => ImportCountEvent.AsObservable();
 
         /// <summary>
-        ///     Get the <see cref="IComparer{T}"/> for numeric values
+        ///     Get the <see cref="IComparer{T}" /> for numeric values
         /// </summary>
         public IComparer<double> NumericComparer { get; }
 
         /// <summary>
-        ///     Creates new <see cref="ResultLatticeImporter"/>
+        ///     Creates new <see cref="ResultLatticeImporter" />
         /// </summary>
         /// <param name="numericComparer"></param>
         public ResultLatticeImporter(IComparer<double> numericComparer)
@@ -42,7 +41,8 @@ namespace Mocassin.Tools.Evaluation.Helper
         }
 
         /// <summary>
-        ///     Checks if two <see cref="IJobMetaData"/> entries should have matching data required for simulation lattice importing
+        ///     Checks if two <see cref="IJobMetaData" /> entries should have matching data required for simulation lattice
+        ///     importing
         /// </summary>
         /// <param name="first"></param>
         /// <param name="second"></param>
@@ -57,7 +57,8 @@ namespace Mocassin.Tools.Evaluation.Helper
         }
 
         /// <summary>
-        ///     Enumerates the source/target import pairs based on <see cref="JobMetaDataEntity"/> collections. Throws if at least one item cannot be mapped or is mapped twice
+        ///     Enumerates the source/target import pairs based on <see cref="JobMetaDataEntity" /> collections. Throws if at least
+        ///     one item cannot be mapped or is mapped twice
         /// </summary>
         /// <param name="exportSet"></param>
         /// <param name="importSet"></param>
@@ -97,7 +98,8 @@ namespace Mocassin.Tools.Evaluation.Helper
         }
 
         /// <summary>
-        ///     Imports the result lattice from one job to another using the provides <see cref="JobMetaDataEntity"/> items and <see cref="IMarshalService"/>
+        ///     Imports the result lattice from one job to another using the provides <see cref="JobMetaDataEntity" /> items and
+        ///     <see cref="IMarshalService" />
         /// </summary>
         /// <param name="source"></param>
         /// <param name="target"></param>
@@ -112,7 +114,8 @@ namespace Mocassin.Tools.Evaluation.Helper
         }
 
         /// <summary>
-        ///     Convenience function to import the result lattices from an exporting msl database as initial lattices for an importing msl database
+        ///     Convenience function to import the result lattices from an exporting msl database as initial lattices for an
+        ///     importing msl database
         /// </summary>
         /// <param name="pathToExportMsl"></param>
         /// <param name="pathToImportMsl"></param>
@@ -127,12 +130,14 @@ namespace Mocassin.Tools.Evaluation.Helper
             }
             catch (Exception exception)
             {
-                throw new InvalidOperationException("Error while importing data, the databases are most likely not compatible to each other or result data is missing.", exception);
+                throw new InvalidOperationException(
+                    "Error while importing data, the databases are most likely not compatible to each other or result data is missing.", exception);
             }
         }
 
         /// <summary>
-        ///     Performs a check if the data in export and import path can be mapped without errors and reports how many jobs have been mapped
+        ///     Performs a check if the data in export and import path can be mapped without errors and reports how many jobs have
+        ///     been mapped
         /// </summary>
         /// <param name="pathToExportMsl"></param>
         /// <param name="pathToImportMsl"></param>
@@ -159,7 +164,7 @@ namespace Mocassin.Tools.Evaluation.Helper
         }
 
         /// <summary>
-        ///     Prepares and loads the <see cref="IQueryable{T}"/> of <see cref="JobMetaDataEntity"/> for lattice import
+        ///     Prepares and loads the <see cref="IQueryable{T}" /> of <see cref="JobMetaDataEntity" /> for lattice import
         /// </summary>
         /// <param name="metaData"></param>
         /// <returns></returns>
@@ -172,7 +177,7 @@ namespace Mocassin.Tools.Evaluation.Helper
         }
 
         /// <summary>
-        ///     Prepares and loads the <see cref="IQueryable{T}"/> of <see cref="JobMetaDataEntity"/> for lattice export
+        ///     Prepares and loads the <see cref="IQueryable{T}" /> of <see cref="JobMetaDataEntity" /> for lattice export
         /// </summary>
         /// <param name="metaData"></param>
         /// <returns></returns>
