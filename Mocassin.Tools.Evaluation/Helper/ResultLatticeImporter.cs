@@ -69,28 +69,27 @@ namespace Mocassin.Tools.Evaluation.Helper
             if (exportSet.Equals(importSet)) throw new ArgumentException("Source and target collection cannot be identical");
             if (exportSet.Count != importSet.Count) throw new InvalidOperationException("Source and target collection have unequal size.");
 
-            var usedTargets = new HashSet<JobMetaDataEntity>();
-            foreach (var source in exportSet)
+            var usedImportTargets = new HashSet<JobMetaDataEntity>();
+            foreach (var exportTarget in exportSet)
             {
-                var target = importSet.First(x => AreCompatibleForLatticeImport(x, source));
-                if (usedTargets.Contains(target)) throw new InvalidOperationException("A target was used twice, data cannot be zipped together.");
-                usedTargets.Add(target);
-                yield return (source, target);
+                var importTarget = importSet.First(x => AreCompatibleForLatticeImport(x, exportTarget));
+                if (usedImportTargets.Contains(importTarget)) throw new InvalidOperationException("A target was used twice, data cannot be zipped together.");
+                usedImportTargets.Add(importTarget);
+                yield return (exportTarget, importTarget);
             }
+            usedImportTargets.Clear();
         }
 
         /// <summary>
         ///     Imports the lattice results from the source and exports them to the target as new initial lattices
         /// </summary>
-        /// <param name="exportingSet"></param>
-        /// <param name="importingSet"></param>
-        public void ImportFinalLatticesAsInitialLattices(IQueryable<JobMetaDataEntity> exportingSet, IQueryable<JobMetaDataEntity> importingSet)
+        /// <param name="exportList"></param>
+        /// <param name="importList"></param>
+        public void ImportFinalLatticesAsInitialLattices(IList<JobMetaDataEntity> exportList, IList<JobMetaDataEntity> importList)
         {
-            var sourceData = LoadAsExporting(exportingSet);
-            var targetData = LoadAsImporting(importingSet);
             var counter = 0;
             using var marshalService = new MarshalService();
-            foreach (var (source, target) in ZipExportWithImport(sourceData, targetData))
+            foreach (var (source, target) in ZipExportWithImport(exportList, importList))
             {
                 ImportFinalLatticeAsInitialLattice(source, target, marshalService);
                 ImportCountEvent.OnNext(++counter);
@@ -111,6 +110,7 @@ namespace Mocassin.Tools.Evaluation.Helper
             target.JobModel.SimulationLatticeModel.ChangePropertyStatesToObjects(marshalService);
             target.JobModel.SimulationLatticeModel.Lattice.ImportDataFrom(sourceLattice);
             target.JobModel.SimulationLatticeModel.ChangePropertyStatesToBinaries(marshalService);
+            source.JobModel.JobResultData.SimulationStateBinary = null;
         }
 
         /// <summary>
@@ -124,8 +124,13 @@ namespace Mocassin.Tools.Evaluation.Helper
             try
             {
                 using var exportContext = SqLiteContext.OpenDatabase<SimulationDbContext>(pathToExportMsl);
+                var exportList = LoadAsExporting(exportContext.JobMetaData);
+                exportContext.Dispose();
+
                 using var importContext = SqLiteContext.OpenDatabase<SimulationDbContext>(pathToImportMsl);
-                ImportFinalLatticesAsInitialLattices(exportContext.JobMetaData, importContext.JobMetaData);
+                var importList = LoadAsImporting(importContext.JobMetaData);
+
+                ImportFinalLatticesAsInitialLattices(exportList, importList);
                 importContext.SaveChanges();
             }
             catch (Exception exception)
@@ -149,9 +154,12 @@ namespace Mocassin.Tools.Evaluation.Helper
             try
             {
                 using var exportContext = SqLiteContext.OpenDatabase<SimulationDbContext>(pathToExportMsl);
-                using var importContext = SqLiteContext.OpenDatabase<SimulationDbContext>(pathToImportMsl);
                 var exportList = LoadAsExporting(exportContext.JobMetaData);
+                exportContext.Dispose();
+
+                using var importContext = SqLiteContext.OpenDatabase<SimulationDbContext>(pathToImportMsl);
                 var importList = LoadAsImporting(importContext.JobMetaData);
+
                 if (exportList.Any(x => x.JobModel.JobResultData.SimulationStateBinary == null)) return false;
                 count = ZipExportWithImport(exportList, importList).Count();
                 return true;
