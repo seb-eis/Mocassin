@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
-using Mocassin.Mathematics.Comparer;
-using Mocassin.Tools.Evaluation.Helper;
+using Mocassin.Tools.Evaluation.Context;
 
 namespace Mocassin.Framework.QuickTest
 {
@@ -9,7 +8,9 @@ namespace Mocassin.Framework.QuickTest
     {
         private static void Main(string[] args)
         {
-            MmcfeEvalScript.Run();
+            var path = "C:\\Users\\Sebastian\\Documents\\Promotion\\Mocassin\\Testing\\Databases\\veh030.msl";
+            using var mslContext = MslEvaluationContext.Create(path);
+            var jobSet = mslContext.LoadJobsAsEvaluable(query => query);
         }
 
         private static void DisplayWatch(Stopwatch watch)

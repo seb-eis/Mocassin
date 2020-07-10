@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Mocassin.Framework.Extensions;
+using Mocassin.Mathematics.Codes;
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.ModelProject;
 using Mocassin.Model.Particles;
@@ -98,12 +99,12 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        ///     Creates a 64 bit long code for the simulation from the passed set of int values
+        ///     Creates a 64 bit byte code for the simulation from the passed set of int values
         /// </summary>
         /// <param name="values"></param>
         /// <param name="buffer"></param>
         /// <returns></returns>
-        protected long Create64BitIndexCode(IEnumerable<int> values, byte[] buffer)
+        protected ByteCode64 Create64BitIndexCode(IEnumerable<int> values, byte[] buffer)
         {
             var index = -1;
             foreach (var item in values)
@@ -112,7 +113,7 @@ namespace Mocassin.Model.Translator.ModelContext
             var code = BitConverter.ToInt64(buffer, 0);
             for (; index >= 0; index--)
                 buffer[index] = 0;
-            return code;
+            return new ByteCode64(code);
         }
 
         /// <summary>
@@ -121,7 +122,7 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <param name="endIndexingDeltas"></param>
         /// <param name="buffer"></param>
         /// <returns></returns>
-        protected long CreateFinalTrackerOrderCode(IList<int> endIndexingDeltas, byte[] buffer)
+        protected ByteCode64 CreateFinalTrackerOrderCode(IList<int> endIndexingDeltas, byte[] buffer)
         {
             var orderIndexing = new List<int>(endIndexingDeltas.Count);
             orderIndexing.AddRange(endIndexingDeltas.Select((element, index) => index + element));
@@ -139,8 +140,10 @@ namespace Mocassin.Model.Translator.ModelContext
             var index = 0;
             var result = new List<int>(transitionRule.PathLength).Populate(() => index++, transitionRule.PathLength);
 
-            foreach (var (start, end) in transitionRule.GetMovementDescription().SelectConsecutivePairs((a, b) => (a, b)))
-                result.Swap(start, end);
+            var movementPairs = transitionRule.GetMovementDescription().SelectAsPairs((lhs, rhs) => (lhs, rhs));
+
+            foreach (var (lhs, rhs) in movementPairs) 
+                result.Swap(lhs, rhs);
 
             for (var i = 0; i < result.Count; i++)
                 result[i] -= i;

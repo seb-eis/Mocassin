@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
+using Mocassin.Framework.Extensions;
 using Mocassin.Framework.SQLiteCore;
 using Mocassin.Model.DataManagement;
 using Mocassin.Model.ModelProject;
@@ -14,7 +16,8 @@ using Mocassin.UI.Xml.Main;
 namespace Mocassin.Tools.Evaluation.Context
 {
     /// <summary>
-    ///     Context for a evaluation of contents and results provided by <see cref="ISimulationLibrary" /> interfaces
+    ///     Context for a evaluation of contents and results provided by <see cref="ISimulationLibrary" /> interfaces. This context manages the lifetimes of <see cref="JobContext"/> instances
+    ///     and not properly disposing the context or creating <see cref="JobContext"/> instances not known by the this context will cause memory leaking
     /// </summary>
     public class MslEvaluationContext : IDisposable
     {
@@ -31,6 +34,11 @@ namespace Mocassin.Tools.Evaluation.Context
         ///     packaged context id
         /// </summary>
         private Dictionary<int, ISimulationModel> SimulationModelCache { get; }
+
+        /// <summary>
+        ///     Stores all <see cref="JobContext"/> instances that were provided by the context
+        /// </summary>
+        private HashSet<JobContext> KnownJobContexts { get; }
 
         /// <summary>
         ///     Get the provider <see cref="Func{TResult}" /> that supplies <see cref="IModelProject" /> instances
@@ -60,6 +68,7 @@ namespace Mocassin.Tools.Evaluation.Context
             ProjectContextCache = new Dictionary<int, IProjectModelContext>();
             SimulationModelCache = new Dictionary<int, ISimulationModel>();
             MarshalService = new MarshalService();
+            KnownJobContexts = new HashSet<JobContext>();
         }
 
         /// <inheritdoc />
@@ -67,6 +76,19 @@ namespace Mocassin.Tools.Evaluation.Context
         {
             DataContext.Dispose();
             MarshalService.Dispose();
+            KnownJobContexts.DisposeAllAndClear();
+        }
+
+        /// <summary>
+        ///     A convenience function to quickly combine querying and calling <see cref="MakeEvaluableSet"/>
+        /// </summary>
+        /// <param name="queryMutator"></param>
+        /// <param name="targetSecondaryState"></param>
+        /// <returns></returns>
+        public IEvaluableJobSet LoadJobsAsEvaluable(Func<IQueryable<SimulationJobModel>, IQueryable<SimulationJobModel>> queryMutator, bool targetSecondaryState = false)
+        {
+            var query = queryMutator.Invoke(EvaluationJobSet());
+            return MakeEvaluableSet(query, targetSecondaryState);
         }
 
         /// <summary>
@@ -107,7 +129,11 @@ namespace Mocassin.Tools.Evaluation.Context
                 : jobModels.AsEnumerable().Select(x => JobContext.CreatePrimary(x, this, index++)).ToList();
 
             var evaluableSet = new EvaluableJobSet(contextSet);
-            foreach (var jobContext in evaluableSet) EnsureModelContextCreated(jobContext);
+            foreach (var jobContext in evaluableSet)
+            {
+                EnsureModelContextCreated(jobContext);
+                KnownJobContexts.Add(jobContext);
+            }
 
             return evaluableSet;
         }

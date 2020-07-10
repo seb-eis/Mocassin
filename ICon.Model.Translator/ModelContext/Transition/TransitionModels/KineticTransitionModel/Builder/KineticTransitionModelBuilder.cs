@@ -142,13 +142,7 @@ namespace Mocassin.Model.Translator.ModelContext
         protected IParticle SearchEffectiveParticleInModel(IParticle effectiveParticle, IComparer<double> comparer)
         {
             var particles = ModelProject.Manager<IParticleManager>().DataAccess.Query(port => port.GetParticles());
-            foreach (var particle in particles)
-            {
-                if (particle.EqualsInModelProperties(effectiveParticle, comparer))
-                    return particle;
-            }
-
-            return null;
+            return particles.FirstOrDefault(particle => particle.EqualsInModelProperties(effectiveParticle, comparer));
         }
 
         /// <summary>

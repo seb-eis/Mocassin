@@ -194,7 +194,7 @@ namespace Mocassin.Model.Translator.EntityBuilder
             foreach (var ruleModel in transitionModel.GetRuleModels())
             {
                 var jumpRule = GetBasicJumpRule(ruleModel);
-                jumpRule.StateCode1 = ruleModel.TransitionStateCode;
+                jumpRule.StateCode1 = ruleModel.TransitionStateCode.AsLong();
                 jumpRule.AttemptFrequencyFraction = ruleModel.AttemptFrequency / simulationModel.MaxAttemptFrequency;
                 jumpRule.ElectricFieldFactor = simulationModel.SimulationEncodingModel.TransitionRuleToElectricFieldFactors[ruleModel];
                 jumpRule.StaticVirtualJumpEnergyCorrection = double.NaN;
@@ -211,12 +211,12 @@ namespace Mocassin.Model.Translator.EntityBuilder
         /// <returns></returns>
         protected CJumpRule GetBasicJumpRule(ITransitionRuleModel ruleModel)
         {
-            var trackerOder = BitConverter.GetBytes(ruleModel.FinalTrackerOrderCode);
+            var trackerOder = ruleModel.FinalTrackerOrderCode.Decode();
             var cJumpRule = new CJumpRule
             {
                 TrackerOrder = trackerOder,
-                StateCode0 = ruleModel.StartStateCode,
-                StateCode2 = ruleModel.FinalStateCode
+                StateCode0 = ruleModel.StartStateCode.AsLong(),
+                StateCode2 = ruleModel.FinalStateCode.AsLong()
             };
 
             return cJumpRule;

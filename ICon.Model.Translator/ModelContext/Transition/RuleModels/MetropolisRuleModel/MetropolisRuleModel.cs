@@ -1,4 +1,5 @@
 ﻿using Mocassin.Framework.Extensions;
+using Mocassin.Mathematics.Codes;
 using Mocassin.Model.Particles;
 using Mocassin.Model.Transitions;
 
@@ -20,7 +21,7 @@ namespace Mocassin.Model.Translator.ModelContext
         public override double AttemptFrequency => 0;
 
         /// <inheritdoc />
-        public override long TransitionStateCode { get; set; }
+        public override ByteCode64 TransitionStateCode { get; set; }
 
         /// <inheritdoc />
         public IMetropolisRule MetropolisRule { get; set; }

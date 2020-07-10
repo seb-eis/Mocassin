@@ -18,7 +18,6 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         /// </summary>
         /// <param name="logReaders"></param>
         /// <param name="baseTemperature"></param>
-        /// <param name="minSampleCount"></param>
         /// <returns></returns>
         public IList<MmcfeEnergyState> CalculateEnergyStates(IReadOnlyList<MmcfeLogReader> logReaders, double baseTemperature)
         {
@@ -28,7 +27,7 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
             var dAlphas = CalculateAlphaDeltaList(logReaders);
             var sumOfLnMij = 0.0;
 
-            // The general formalism is to replace the numerically unstable m'(Inf->T) calculation by a summation over LN(m'(high)/m'(low)) for all consecutive histogram pairs in range T=Inf -> T
+            // The general formalism is to replace the numerically unstable m'(Inf->T) calculation by a summation over LN(m'(low)/m'(high)) for all consecutive histogram pairs in range T=Inf -> T
             for (var i = 1; i < logReaders.Count; i++)
             {
                 var dAlpha = dAlphas[i - 1];
@@ -75,8 +74,7 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         }
 
         /// <summary>
-        ///     Checks if the provided <see cref="IReadOnlyList{T}" /> of <see cref="MmcfeLogReader" /> instances is ordered by
-        ///     alpha (ascending)
+        ///     Checks if the provided <see cref="IReadOnlyList{T}" /> of <see cref="MmcfeLogReader" /> instances is ordered by alpha (ascending)
         /// </summary>
         /// <param name="logReaders"></param>
         /// <returns></returns>
@@ -84,8 +82,9 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         {
             for (var i = 1; i < logReaders.Count; i++)
             {
-                if (logReaders[i].ReadParameters().AlphaCurrent <= logReaders[i - 1].ReadParameters().AlphaCurrent)
-                    return false;
+                var lowerTemperatureParameters = logReaders[i].ReadParameters();
+                var higherTemperatureParameters = logReaders[i - 1].ReadParameters();
+                if (lowerTemperatureParameters.AlphaCurrent <= higherTemperatureParameters.AlphaCurrent) return false;
             }
 
             return true;
@@ -102,7 +101,9 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
             var result = new List<double>(logReaders.Count - 1);
             for (var i = 1; i < logReaders.Count; i++)
             {
-                var delta = logReaders[i].ReadParameters().AlphaCurrent - logReaders[i - 1].ReadParameters().AlphaCurrent;
+                var lowerTemperatureParameters = logReaders[i].ReadParameters();
+                var higherTemperatureParameters = logReaders[i - 1].ReadParameters();
+                var delta = lowerTemperatureParameters.AlphaCurrent - higherTemperatureParameters.AlphaCurrent;
                 result.Add(delta);
             }
 

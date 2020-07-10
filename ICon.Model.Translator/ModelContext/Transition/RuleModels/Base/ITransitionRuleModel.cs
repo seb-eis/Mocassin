@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Mocassin.Mathematics.Codes;
 using Mocassin.Model.Particles;
 using Mocassin.Model.Transitions;
 
@@ -54,22 +55,22 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <summary>
         ///     Index encoded version of the start state occupation
         /// </summary>
-        long StartStateCode { get; set; }
+        ByteCode64 StartStateCode { get; set; }
 
         /// <summary>
         ///     Index encoded version of the transition state occupation
         /// </summary>
-        long TransitionStateCode { get; set; }
+        ByteCode64 TransitionStateCode { get; set; }
 
         /// <summary>
         ///     Index encoded version of the final state occupation
         /// </summary>
-        long FinalStateCode { get; set; }
+        ByteCode64 FinalStateCode { get; set; }
 
         /// <summary>
         ///     Index encoded final order of the involved dynamic trackers
         /// </summary>
-        long FinalTrackerOrderCode { get; set; }
+        ByteCode64 FinalTrackerOrderCode { get; set; }
 
         /// <summary>
         ///     Copies the data on this rule model as inverted info onto the passed rule model

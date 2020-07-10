@@ -44,7 +44,8 @@ namespace Mocassin.Tools.Evaluation.Queries
                 var displacement = trackerResult.DisplacementData.AsMean().Vector;
                 var mobility = Equations.Mobility.DisplacementToMobility(displacement, normField, fieldModulus, time);
                 var conductivity = Equations.Mobility.MobilityToConductivity(mobility, particle.Charge, density);
-                result.Add(new TransitionMobility(trackerResult.TrackerModel, new EnsembleMobility(particle, mobility, conductivity)));
+                var normConductivity = Equations.Mobility.MobilityToConductivity(mobility, 1, density);
+                result.Add(new TransitionMobility(trackerResult.TrackerModel, new EnsembleMobility(particle, mobility, conductivity, normConductivity)));
             }
 
             return result.AsReadOnly();
