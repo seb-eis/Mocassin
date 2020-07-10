@@ -13,7 +13,7 @@ namespace Mocassin.Model.Translator.ModelContext
     public class KineticRuleModel : TransitionRuleModel, IKineticRuleModel
     {
         /// <inheritdoc />
-        public override IParticle SelectableParticle => KineticRule.SelectableParticle;
+        public override IParticle SelectableParticle => StartState[0];
 
         /// <inheritdoc />
         public override bool InverseIsSet => InverseRuleModel != null;

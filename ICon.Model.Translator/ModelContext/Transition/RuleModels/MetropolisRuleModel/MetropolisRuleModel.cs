@@ -15,7 +15,7 @@ namespace Mocassin.Model.Translator.ModelContext
         public override IAbstractTransition AbstractTransition => MetropolisRule.AbstractTransition;
 
         /// <inheritdoc />
-        public override IParticle SelectableParticle => MetropolisRule.SelectableParticle;
+        public override IParticle SelectableParticle => StartState[0];
 
         /// <inheritdoc />
         public override double AttemptFrequency => 0;

@@ -25,5 +25,12 @@ namespace Mocassin.Tools.Evaluation.Queries
             TrackerModel = trackerModel ?? throw new ArgumentNullException(nameof(trackerModel));
             DisplacementData = displacementData;
         }
+
+        /// <inheritdoc />
+        public override string ToString()
+        {
+            return
+                $"[{TrackerModel.KineticTransitionModel.Transition.Name}]:[{DisplacementData.Particle.Name}][{DisplacementData.Vector}]";
+        }
     }
 }

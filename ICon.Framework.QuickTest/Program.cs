@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using Mocassin.Tools.Evaluation.Context;
+using Mocassin.Tools.Evaluation.Queries;
+using Newtonsoft.Json;
 
 namespace Mocassin.Framework.QuickTest
 {
@@ -10,7 +13,9 @@ namespace Mocassin.Framework.QuickTest
         {
             var path = "C:\\Users\\Sebastian\\Documents\\Promotion\\Mocassin\\Testing\\Databases\\veh030.msl";
             using var mslContext = MslEvaluationContext.Create(path);
-            var jobSet = mslContext.LoadJobsAsEvaluable(query => query);
+            var jobSet = mslContext.LoadJobsAsEvaluable(query => query.Where(x => x.Id == 1));
+            var eval = new GlobalTrackingEvaluation(jobSet);
+            var result = eval.Result.First();
         }
 
         private static void DisplayWatch(Stopwatch watch)
