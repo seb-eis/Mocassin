@@ -3,26 +3,23 @@
         {
             "name": "Win64",
             "includePath": [
-                "additional/paths",
                 "${default}"
             ],
             "defines": [
                 "${default}"
             ],
             "macFrameworkPath": [
-                "${default}",
-                "additional/paths"
+                "${default}"
             ],
             "compileCommands": "${default}",
             "browse": {
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": "${default}",
                 "path": [
-                    "${default}",
-                    "additional/paths"
+                    "${default}"
                 ]
             },
-            "intelliSenseMode": "clang-x64",
+            "intelliSenseMode": "gcc-x64",
             "cStandard": "c11",
             "cppStandard": "${default}",
             "compilerPath": "${default}"

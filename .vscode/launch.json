@@ -4,11 +4,12 @@
     // Weitere Informationen finden Sie unter https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+        
         {
             "name": "(gdb) Starten",
             "type": "cppdbg",
             "request": "launch",
-            "program": "Programmnamen eingeben, z. B. \"${workspaceFolder}/a.exe\"",
+            "program": "C:\\Users\\Sebastian\\source\\ICon.Simulator\\build\\Mocassin.Simulator.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
