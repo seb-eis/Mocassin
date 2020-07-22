@@ -1,4 +1,5 @@
 ﻿using Mocassin.Framework.Extensions;
+using Mocassin.Mathematics.Codes;
 using Mocassin.Model.Particles;
 using Mocassin.Model.Transitions;
 
@@ -14,13 +15,13 @@ namespace Mocassin.Model.Translator.ModelContext
         public override IAbstractTransition AbstractTransition => MetropolisRule.AbstractTransition;
 
         /// <inheritdoc />
-        public override IParticle SelectableParticle => MetropolisRule.SelectableParticle;
+        public override IParticle SelectableParticle => StartState[0];
 
         /// <inheritdoc />
         public override double AttemptFrequency => 0;
 
         /// <inheritdoc />
-        public override long TransitionStateCode { get; set; }
+        public override ByteCode64 TransitionStateCode { get; set; }
 
         /// <inheritdoc />
         public IMetropolisRule MetropolisRule { get; set; }

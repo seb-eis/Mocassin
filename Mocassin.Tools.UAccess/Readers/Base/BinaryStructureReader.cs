@@ -12,12 +12,12 @@ namespace Mocassin.Tools.UAccess.Readers.Base
         /// <summary>
         ///     Get the <see cref="GCHandle" /> that pins the <see cref="Bytes" />
         /// </summary>
-        private GCHandle BytesGcHandle { get; }
+        private GCHandle bytesGcHandle;
 
         /// <summary>
         ///     Get the byte array buffer that is accessed
         /// </summary>
-        private byte[] Bytes { get; }
+        private byte[] Bytes { get; set; }
 
         /// <summary>
         ///     Get the length of the accessed binary content
@@ -33,13 +33,14 @@ namespace Mocassin.Tools.UAccess.Readers.Base
         {
             Bytes = bytes ?? throw new ArgumentNullException(nameof(bytes));
             if (bytes.Length == 0) throw new ArgumentException("Value cannot be an empty collection.", nameof(bytes));
-            BytesGcHandle = GCHandle.Alloc(Bytes, GCHandleType.Pinned);
+            bytesGcHandle = GCHandle.Alloc(Bytes, GCHandleType.Pinned);
         }
 
         /// <inheritdoc />
         public void Dispose()
         {
-            BytesGcHandle.Free();
+            bytesGcHandle.Free();
+            Bytes = null;
         }
 
         /// <summary>

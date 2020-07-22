@@ -77,7 +77,22 @@
             </HeaderedContentControl.Header>
             <DataGrid
               ItemsSource="{Binding LocalDeployControlViewModel.JobMetaDataCollectionControlViewModel.ObservableItems}"
-              IsReadOnly="True" />
+              IsReadOnly="True"
+              AutoGenerateColumns="False">
+              <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Id}" Header="Id"/>
+                <DataGridTextColumn Binding="{Binding CollectionName, Mode=OneTime}" Header="Collection"/>
+                <DataGridTextColumn Binding="{Binding ConfigName, Mode=OneTime}" Header="Config"/>
+                <DataGridTextColumn Binding="{Binding JobIndex, Mode=OneTime}" Header="Duplicate"/>
+                <DataGridTextColumn Binding="{Binding Mcsp, Mode=OneTime}" Header="MCSP"/>
+                <DataGridTextColumn Binding="{Binding PreRunMcsp, Mode=OneTime}" Header="MCSP (Prerun)"/>
+                <DataGridTextColumn Binding="{Binding FlagString, Mode=OneTime}" Header="Flags"/>
+                <DataGridTextColumn Binding="{Binding DopingInfo, Mode=OneTime}" Header="Doping"/>
+                <DataGridTextColumn Binding="{Binding LatticeInfo, Mode=OneTime}" Header="Lattice"/>
+                <DataGridTextColumn Binding="{Binding ElectricFieldModulus, Mode=OneTime}" Header="Field [V/m]"/>
+                <DataGridTextColumn Binding="{Binding BaseFrequency, Mode=OneTime}" Header="Max. Frequency [Hz]"/>
+              </DataGrid.Columns>
+            </DataGrid>
           </content:HeaderedGroup>
         </Grid>
       </TabItem>

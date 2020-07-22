@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Mocassin.Framework.Extensions;
+using Mocassin.Mathematics.Codes;
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Particles;
 using Mocassin.Model.Transitions;
@@ -12,7 +13,7 @@ namespace Mocassin.Model.Translator.ModelContext
     public class KineticRuleModel : TransitionRuleModel, IKineticRuleModel
     {
         /// <inheritdoc />
-        public override IParticle SelectableParticle => KineticRule.SelectableParticle;
+        public override IParticle SelectableParticle => StartState[0];
 
         /// <inheritdoc />
         public override bool InverseIsSet => InverseRuleModel != null;
@@ -39,7 +40,7 @@ namespace Mocassin.Model.Translator.ModelContext
         public override double AttemptFrequency => KineticRule?.AttemptFrequency ?? 0;
 
         /// <inheritdoc />
-        public override long TransitionStateCode { get; set; }
+        public override ByteCode64 TransitionStateCode { get; set; }
 
         /// <inheritdoc />
         public Matrix2D ChargeTransportMatrix { get; set; }

@@ -40,9 +40,10 @@ namespace Mocassin.Model.Translator.ModelContext
                 AddAttemptFrequencyInformation(simulationModel);
                 AddLocalJumpModels(simulationModel);
                 AddKineticTrackingModel(simulationModel);
-                IndexTrackerModels(simulationModel, ref indexing);
-                AddTrackingModelMappingTables(simulationModel.SimulationTrackingModel);
                 AddEncodingModel(simulationModel);
+                IndexTrackerModels(simulationModel, ref indexing);
+
+                AddTrackingModelMappingTables(simulationModel.SimulationTrackingModel);
             }
         }
 
@@ -117,8 +118,9 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <remarks> For a valid mapping to be created the indexing of the tracking model has to be final </remarks>
         protected void AddTrackingModelMappingTables(ISimulationTrackingModel trackingModel)
         {
+            var encodingModel = trackingModel.SimulationModel.SimulationEncodingModel;
             trackingModel.StaticTrackerMappingTable = CreateStaticTrackerMappingTable(trackingModel.StaticTrackerModels);
-            trackingModel.GlobalTrackerMappingTable = CreateGlobalTrackerMappingTable(trackingModel.GlobalTrackerModels);
+            trackingModel.GlobalTrackerMappingTable = CreateGlobalTrackerMappingTable(trackingModel.GlobalTrackerModels, encodingModel);
         }
 
         /// <summary>
@@ -149,18 +151,27 @@ namespace Mocassin.Model.Translator.ModelContext
         ///     simulation
         /// </summary>
         /// <param name="trackerModels"></param>
+        /// <param name="encodingModel"></param>
         /// <returns></returns>
         /// <remarks> Assigns each combination that does not support tracking the value -1 </remarks>
-        protected int[,] CreateGlobalTrackerMappingTable(IList<IGlobalTrackerModel> trackerModels)
+        protected int[,] CreateGlobalTrackerMappingTable(IList<IGlobalTrackerModel> trackerModels, ISimulationEncodingModel encodingModel)
         {
-            var maxTransitionId = 1 + trackerModels.Select(a => a.KineticTransitionModel.ModelId).Max();
-            var maxParticleId = ModelProject.Manager<IParticleManager>().DataAccess
+            var maxTransitionId = 1 + trackerModels
+                .Select(trackerModel => encodingModel.TransitionModelToJumpCollectionId[trackerModel.KineticTransitionModel])
+                .Max();
+
+            var maxParticleId = ModelProject
+                .Manager<IParticleManager>().DataAccess
                 .Query(port => port.ParticleCount);
 
             var result = new int[maxTransitionId, maxParticleId].Populate(() => -1);
 
             foreach (var trackerModel in trackerModels)
-                result[trackerModel.KineticTransitionModel.ModelId, trackerModel.TrackedParticle.Index] = trackerModel.ModelId;
+            {
+                var transitionId = encodingModel.TransitionModelToJumpCollectionId[trackerModel.KineticTransitionModel];
+                var particleId = trackerModel.TrackedParticle.Index;
+                result[transitionId, particleId] = trackerModel.ModelId;
+            }
 
             return result;
         }

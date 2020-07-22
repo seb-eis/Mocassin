@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Mocassin.Framework.Collections;
+using Mocassin.Mathematics.Codes;
 using Mocassin.Model.Particles;
 using Mocassin.Model.Transitions;
 
@@ -35,16 +36,16 @@ namespace Mocassin.Model.Translator.ModelContext
         public abstract double AttemptFrequency { get; }
 
         /// <inheritdoc />
-        public long StartStateCode { get; set; }
+        public ByteCode64 StartStateCode { get; set; }
 
         /// <inheritdoc />
-        public abstract long TransitionStateCode { get; set; }
+        public abstract ByteCode64 TransitionStateCode { get; set; }
 
         /// <inheritdoc />
-        public long FinalStateCode { get; set; }
+        public ByteCode64 FinalStateCode { get; set; }
 
         /// <inheritdoc />
-        public long FinalTrackerOrderCode { get; set; }
+        public ByteCode64 FinalTrackerOrderCode { get; set; }
 
         /// <inheritdoc />
         public void CopyInversionDataToModel(ITransitionRuleModel ruleModel)
@@ -96,14 +97,14 @@ namespace Mocassin.Model.Translator.ModelContext
         /// </summary>
         /// <param name="invertedEndIndexingDeltas"></param>
         /// <returns></returns>
-        protected long CreateInvertedTrackerOrderCode(IList<int> invertedEndIndexingDeltas)
+        protected ByteCode64 CreateInvertedTrackerOrderCode(IList<int> invertedEndIndexingDeltas)
         {
-            var bytes = BitConverter.GetBytes(FinalTrackerOrderCode);
+            var bytes = FinalTrackerOrderCode.Decode();
 
             for (var i = 0; i < invertedEndIndexingDeltas.Count; i++)
                 bytes[i] -= (byte) (EndIndexingDeltas[i] - invertedEndIndexingDeltas[i]);
 
-            return BitConverter.ToInt64(bytes, 0);
+            return ByteCode64.FromBytes(bytes);
         }
 
         /// <summary>
@@ -111,14 +112,14 @@ namespace Mocassin.Model.Translator.ModelContext
         /// </summary>
         /// <param name="state"></param>
         /// <returns></returns>
-        protected long MakeInvertedStateCode(IList<IParticle> state)
+        protected ByteCode64 MakeInvertedStateCode(IList<IParticle> state)
         {
             var bytes = new byte[8];
             var index = 0;
             for (var i = state.Count - 1; i >= 0; i--) bytes[index++] = (byte) state[i].Index;
 
             var result = BitConverter.ToInt64(bytes, 0);
-            return result;
+            return new ByteCode64(result);
         }
     }
 }

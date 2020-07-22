@@ -1,12 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Mocassin.Model.Translator;
-using Mocassin.Model.Translator.Database.Entities.Other.Meta;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using Mocassin.Framework.Events;
-using Mocassin.Framework.Extensions;
 using Mocassin.Framework.SQLiteCore;
+using Mocassin.Model.Translator;
+using Mocassin.Model.Translator.Database.Entities.Other.Meta;
 using Mocassin.Tools.UAccess.Readers;
 
 namespace Mocassin.Tools.Evaluation.Helper
@@ -17,22 +16,22 @@ namespace Mocassin.Tools.Evaluation.Helper
     public class ResultLatticeImporter : IDisposable
     {
         /// <summary>
-        ///     Get the <see cref="ReactiveEvent{TSubject}"/> that reports how many jobs have been imported
+        ///     Get the <see cref="ReactiveEvent{TSubject}" /> that reports how many jobs have been imported
         /// </summary>
         public ReactiveEvent<int> ImportCountEvent { get; }
 
         /// <summary>
-        ///     Get a <see cref="IObservable{T}"/> that notifies how man jobs have been imported
+        ///     Get a <see cref="IObservable{T}" /> that notifies how man jobs have been imported
         /// </summary>
         public IObservable<int> ImportCountNotifications => ImportCountEvent.AsObservable();
 
         /// <summary>
-        ///     Get the <see cref="IComparer{T}"/> for numeric values
+        ///     Get the <see cref="IComparer{T}" /> for numeric values
         /// </summary>
         public IComparer<double> NumericComparer { get; }
 
         /// <summary>
-        ///     Creates new <see cref="ResultLatticeImporter"/>
+        ///     Creates new <see cref="ResultLatticeImporter" />
         /// </summary>
         /// <param name="numericComparer"></param>
         public ResultLatticeImporter(IComparer<double> numericComparer)
@@ -42,7 +41,8 @@ namespace Mocassin.Tools.Evaluation.Helper
         }
 
         /// <summary>
-        ///     Checks if two <see cref="IJobMetaData"/> entries should have matching data required for simulation lattice importing
+        ///     Checks if two <see cref="IJobMetaData" /> entries should have matching data required for simulation lattice
+        ///     importing
         /// </summary>
         /// <param name="first"></param>
         /// <param name="second"></param>
@@ -57,7 +57,8 @@ namespace Mocassin.Tools.Evaluation.Helper
         }
 
         /// <summary>
-        ///     Enumerates the source/target import pairs based on <see cref="JobMetaDataEntity"/> collections. Throws if at least one item cannot be mapped or is mapped twice
+        ///     Enumerates the source/target import pairs based on <see cref="JobMetaDataEntity" /> collections. Throws if at least
+        ///     one item cannot be mapped or is mapped twice
         /// </summary>
         /// <param name="exportSet"></param>
         /// <param name="importSet"></param>
@@ -68,28 +69,27 @@ namespace Mocassin.Tools.Evaluation.Helper
             if (exportSet.Equals(importSet)) throw new ArgumentException("Source and target collection cannot be identical");
             if (exportSet.Count != importSet.Count) throw new InvalidOperationException("Source and target collection have unequal size.");
 
-            var usedTargets = new HashSet<JobMetaDataEntity>();
-            foreach (var source in exportSet)
+            var usedImportTargets = new HashSet<JobMetaDataEntity>();
+            foreach (var exportTarget in exportSet)
             {
-                var target = importSet.First(x => AreCompatibleForLatticeImport(x, source));
-                if (usedTargets.Contains(target)) throw new InvalidOperationException("A target was used twice, data cannot be zipped together.");
-                usedTargets.Add(target);
-                yield return (source, target);
+                var importTarget = importSet.First(x => AreCompatibleForLatticeImport(x, exportTarget));
+                if (usedImportTargets.Contains(importTarget)) throw new InvalidOperationException("A target was used twice, data cannot be zipped together.");
+                usedImportTargets.Add(importTarget);
+                yield return (exportTarget, importTarget);
             }
+            usedImportTargets.Clear();
         }
 
         /// <summary>
         ///     Imports the lattice results from the source and exports them to the target as new initial lattices
         /// </summary>
-        /// <param name="exportingSet"></param>
-        /// <param name="importingSet"></param>
-        public void ImportFinalLatticesAsInitialLattices(IQueryable<JobMetaDataEntity> exportingSet, IQueryable<JobMetaDataEntity> importingSet)
+        /// <param name="exportList"></param>
+        /// <param name="importList"></param>
+        public void ImportFinalLatticesAsInitialLattices(IList<JobMetaDataEntity> exportList, IList<JobMetaDataEntity> importList)
         {
-            var sourceData = LoadAsExporting(exportingSet);
-            var targetData = LoadAsImporting(importingSet);
             var counter = 0;
             using var marshalService = new MarshalService();
-            foreach (var (source, target) in ZipExportWithImport(sourceData, targetData))
+            foreach (var (source, target) in ZipExportWithImport(exportList, importList))
             {
                 ImportFinalLatticeAsInitialLattice(source, target, marshalService);
                 ImportCountEvent.OnNext(++counter);
@@ -97,7 +97,8 @@ namespace Mocassin.Tools.Evaluation.Helper
         }
 
         /// <summary>
-        ///     Imports the result lattice from one job to another using the provides <see cref="JobMetaDataEntity"/> items and <see cref="IMarshalService"/>
+        ///     Imports the result lattice from one job to another using the provides <see cref="JobMetaDataEntity" /> items and
+        ///     <see cref="IMarshalService" />
         /// </summary>
         /// <param name="source"></param>
         /// <param name="target"></param>
@@ -109,10 +110,12 @@ namespace Mocassin.Tools.Evaluation.Helper
             target.JobModel.SimulationLatticeModel.ChangePropertyStatesToObjects(marshalService);
             target.JobModel.SimulationLatticeModel.Lattice.ImportDataFrom(sourceLattice);
             target.JobModel.SimulationLatticeModel.ChangePropertyStatesToBinaries(marshalService);
+            source.JobModel.JobResultData.SimulationStateBinary = null;
         }
 
         /// <summary>
-        ///     Convenience function to import the result lattices from an exporting msl database as initial lattices for an importing msl database
+        ///     Convenience function to import the result lattices from an exporting msl database as initial lattices for an
+        ///     importing msl database
         /// </summary>
         /// <param name="pathToExportMsl"></param>
         /// <param name="pathToImportMsl"></param>
@@ -121,18 +124,25 @@ namespace Mocassin.Tools.Evaluation.Helper
             try
             {
                 using var exportContext = SqLiteContext.OpenDatabase<SimulationDbContext>(pathToExportMsl);
+                var exportList = LoadAsExporting(exportContext.JobMetaData);
+                exportContext.Dispose();
+
                 using var importContext = SqLiteContext.OpenDatabase<SimulationDbContext>(pathToImportMsl);
-                ImportFinalLatticesAsInitialLattices(exportContext.JobMetaData, importContext.JobMetaData);
+                var importList = LoadAsImporting(importContext.JobMetaData);
+
+                ImportFinalLatticesAsInitialLattices(exportList, importList);
                 importContext.SaveChanges();
             }
             catch (Exception exception)
             {
-                throw new InvalidOperationException("Error while importing data, the databases are most likely not compatible to each other or result data is missing.", exception);
+                throw new InvalidOperationException(
+                    "Error while importing data, the databases are most likely not compatible to each other or result data is missing.", exception);
             }
         }
 
         /// <summary>
-        ///     Performs a check if the data in export and import path can be mapped without errors and reports how many jobs have been mapped
+        ///     Performs a check if the data in export and import path can be mapped without errors and reports how many jobs have
+        ///     been mapped
         /// </summary>
         /// <param name="pathToExportMsl"></param>
         /// <param name="pathToImportMsl"></param>
@@ -144,9 +154,12 @@ namespace Mocassin.Tools.Evaluation.Helper
             try
             {
                 using var exportContext = SqLiteContext.OpenDatabase<SimulationDbContext>(pathToExportMsl);
-                using var importContext = SqLiteContext.OpenDatabase<SimulationDbContext>(pathToImportMsl);
                 var exportList = LoadAsExporting(exportContext.JobMetaData);
+                exportContext.Dispose();
+
+                using var importContext = SqLiteContext.OpenDatabase<SimulationDbContext>(pathToImportMsl);
                 var importList = LoadAsImporting(importContext.JobMetaData);
+
                 if (exportList.Any(x => x.JobModel.JobResultData.SimulationStateBinary == null)) return false;
                 count = ZipExportWithImport(exportList, importList).Count();
                 return true;
@@ -159,7 +172,7 @@ namespace Mocassin.Tools.Evaluation.Helper
         }
 
         /// <summary>
-        ///     Prepares and loads the <see cref="IQueryable{T}"/> of <see cref="JobMetaDataEntity"/> for lattice import
+        ///     Prepares and loads the <see cref="IQueryable{T}" /> of <see cref="JobMetaDataEntity" /> for lattice import
         /// </summary>
         /// <param name="metaData"></param>
         /// <returns></returns>
@@ -172,7 +185,7 @@ namespace Mocassin.Tools.Evaluation.Helper
         }
 
         /// <summary>
-        ///     Prepares and loads the <see cref="IQueryable{T}"/> of <see cref="JobMetaDataEntity"/> for lattice export
+        ///     Prepares and loads the <see cref="IQueryable{T}" /> of <see cref="JobMetaDataEntity" /> for lattice export
         /// </summary>
         /// <param name="metaData"></param>
         /// <returns></returns>

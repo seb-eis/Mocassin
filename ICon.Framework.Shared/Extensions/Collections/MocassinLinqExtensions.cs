@@ -113,25 +113,46 @@ namespace Mocassin.Framework.Extensions
         }
 
         /// <summary>
-        ///     Performs a select operation on consecutive pairs within the enumerable yielding N-1 results. First argument of
-        ///     function is last value, second is current value
+        ///     Performs a select operation where data is returned as (n, n+1), (n+1, n+2), ... pairs. This yields N - 1 resuluts
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <typeparam name="T2"></typeparam>
         /// <param name="values"></param>
-        /// <param name="function"></param>
+        /// <param name="selector"></param>
         /// <returns></returns>
-        public static IEnumerable<T2> SelectConsecutivePairs<T1, T2>(this IEnumerable<T1> values, Func<T1, T1, T2> function)
+        public static IEnumerable<T2> SelectAsMovingPairs<T1, T2>(this IEnumerable<T1> values, Func<T1, T1, T2> selector)
         {
             // ReSharper disable once GenericEnumeratorNotDisposed
             using var iterator = values.GetEnumerator();
             if (!iterator.MoveNext()) yield break;
 
-            var last = iterator.Current;
+            var lhs = iterator.Current;
             while (iterator.MoveNext())
             {
-                yield return function(last, iterator.Current);
-                last = iterator.Current;
+                yield return selector.Invoke(lhs, iterator.Current);
+                lhs = iterator.Current;
+            }
+        }
+
+        /// <summary>
+        ///     Perform select operation where the data is returned as (n, n+1), (n+2, n+3), ... pairs. This yields N / 2 results and fails if the data count is not even
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T2"></typeparam>
+        /// <param name="values"></param>
+        /// <param name="selector"></param>
+        /// <returns></returns>
+        public static IEnumerable<T2> SelectAsPairs<T1, T2>(this IEnumerable<T1> values, Func<T1, T1, T2> selector)
+        {
+            // ReSharper disable once GenericEnumeratorNotDisposed
+            using var iterator = values.GetEnumerator();
+
+            while (iterator.MoveNext())
+            {
+                var lhs = iterator.Current;
+                if (!iterator.MoveNext()) throw new InvalidOperationException("The Enumerable does not contains an uneven number of entries");
+                var rhs = iterator.Current;
+                yield return selector.Invoke(lhs, rhs);
             }
         }
 

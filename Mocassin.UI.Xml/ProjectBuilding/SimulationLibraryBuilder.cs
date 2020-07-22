@@ -117,20 +117,31 @@ namespace Mocassin.UI.Xml.ProjectBuilding
         {
             BuildStatusEvent.OnNext(LibraryBuildStatus.BuildProcessStarted);
             CancellationToken = cancellationToken;
-            if (CheckCancel() || !TryPrepareLibraryContext(filePath, out var libraryContext))
-                return null;
-            if (CheckCancel() || !TryPrepareModelProject(simulationDbBuildTemplate.ProjectModelData, modelProject))
-                return null;
-            if (CheckCancel() || !TryPrepareModelCustomization(modelProject, simulationDbBuildTemplate.ProjectCustomizationTemplate))
-                return null;
-            if (CheckCancel() || !TryBuildModelContext(modelProject, out var modelContext))
-                return null;
-            if (CheckCancel() || !TryBuildLibraryContent(modelContext, simulationDbBuildTemplate.ProjectJobSetTemplate, out var jobPackageModels))
-                return null;
-            if (CheckCancel() || !TryAddBuildMetaData(jobPackageModels, simulationDbBuildTemplate))
-                return null;
-            if (CheckCancel() || !TryAddContentsToLibrary(libraryContext, jobPackageModels))
-                return null;
+            SimulationDbContext libraryContext = null;
+            var isFullyBuild = false;
+
+            try
+            {
+                if (CheckCancel() || !TryPrepareLibraryContext(filePath, out libraryContext))
+                    return null;
+                if (CheckCancel() || !TryPrepareModelProject(simulationDbBuildTemplate.ProjectModelData, modelProject))
+                    return null;
+                if (CheckCancel() || !TryPrepareModelCustomization(modelProject, simulationDbBuildTemplate.ProjectCustomizationTemplate))
+                    return null;
+                if (CheckCancel() || !TryBuildModelContext(modelProject, out var modelContext))
+                    return null;
+                if (CheckCancel() || !TryBuildLibraryContent(modelContext, simulationDbBuildTemplate.ProjectJobSetTemplate, out var jobPackageModels))
+                    return null;
+                if (CheckCancel() || !TryAddBuildMetaData(jobPackageModels, simulationDbBuildTemplate))
+                    return null;
+                if (CheckCancel() || !TryAddContentsToLibrary(libraryContext, jobPackageModels))
+                    return null;
+                isFullyBuild = true;
+            }
+            finally
+            {
+                if (!isFullyBuild) libraryContext?.Dispose();
+            }
 
             BuildStatusEvent.OnNext(LibraryBuildStatus.BuildProcessCompleted);
             return libraryContext;

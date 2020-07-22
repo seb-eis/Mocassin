@@ -49,7 +49,7 @@ namespace Mocassin.Model.Translator.ModelContext
             foreach (var transitionModel in resultModels)
             {
                 AddBasicMobilityInformation(transitionModel);
-                transitionModel.EffectiveParticle = CreateEffectiveMobileParticle(transitionModel.SelectableParticles);
+                transitionModel.EffectiveParticle = CreateOrFindEffectiveMobileParticle(transitionModel.GetMobileParticles());
             }
 
             return resultModels;
@@ -110,14 +110,15 @@ namespace Mocassin.Model.Translator.ModelContext
         /// </summary>
         /// <param name="mobileParticles"></param>
         /// <remarks> Particle is for calculation purposes only and not part of the actual model data </remarks>
-        protected IParticle CreateEffectiveMobileParticle(IParticleSet mobileParticles)
+        protected IParticle CreateOrFindEffectiveMobileParticle(IEnumerable<IParticle> mobileParticles)
         {
             var comparer = ModelProject.CommonNumeric.RangeComparer;
-            var first = mobileParticles.First();
+            var particleList = mobileParticles.AsCollection();
+            var first = particleList.First();
 
             var effectiveParticle = new Particle {Index = -1, Name = first.Name, Symbol = first.Symbol, Charge = first.Charge};
 
-            foreach (var particle in mobileParticles.Skip(1))
+            foreach (var particle in particleList.Skip(1))
             {
                 if (particle.IsVoid)
                     continue;
@@ -142,13 +143,7 @@ namespace Mocassin.Model.Translator.ModelContext
         protected IParticle SearchEffectiveParticleInModel(IParticle effectiveParticle, IComparer<double> comparer)
         {
             var particles = ModelProject.Manager<IParticleManager>().DataAccess.Query(port => port.GetParticles());
-            foreach (var particle in particles)
-            {
-                if (particle.EqualsInModelProperties(effectiveParticle, comparer))
-                    return particle;
-            }
-
-            return null;
+            return particles.FirstOrDefault(particle => particle.EqualsInModelProperties(effectiveParticle, comparer));
         }
 
         /// <summary>
