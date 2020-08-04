@@ -11,6 +11,7 @@
 #pragma once
 
 #include <stdint.h>
+#include <errno.h>
 #include "Extensions/Interface/MocsimExtesionTypes.h"
 #include "Framework/Math/Random/PcgRandom.h"
 #include "Framework/Basic/BaseTypes/BaseTypes.h"

@@ -10,6 +10,7 @@
 
 #include <strings.h>
 #include <math.h>
+#include <errno.h>
 #include "Framework/Basic/FileIO/FileIO.h"
 #include "Simulator/Logic/Validators/Validators.h"
 
