@@ -17,9 +17,9 @@
     </NuGetPackageImportStamp>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <TargetFrameworkProfile />
-    <PublishUrl>C:\Users\Sebastian\Documents\Mocassin\Deploy\</PublishUrl>
+    <PublishUrl>\\pc1server\allgemein\Sebastian Eisele\Mocassin\1.1.X.X_Current\</PublishUrl>
     <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
+    <InstallFrom>Unc</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
     <UpdateMode>Background</UpdateMode>
     <UpdateInterval>7</UpdateInterval>
@@ -33,8 +33,9 @@
     <ProductName>Mocassin</ProductName>
     <PublisherName>Sebastian Eisele, HIMS, Juelich Research Center IEK-12</PublisherName>
     <SuiteName>MOCASSIN</SuiteName>
+    <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>10</ApplicationRevision>
+    <ApplicationRevision>14</ApplicationRevision>
     <ApplicationVersion>1.1.0.%2a</ApplicationVersion>
     <UseApplicationTrust>true</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
