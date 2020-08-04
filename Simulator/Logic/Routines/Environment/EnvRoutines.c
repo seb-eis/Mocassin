@@ -541,7 +541,7 @@ static inline void SetActiveWorkClusterTable(SCONTEXT_PARAMETER, EnvironmentStat
 // Finds a cluster code ID in a cluster table. Search is linear for very small occupation sets and binary for larger ones
 static inline int32_t SearchClusterCodeIdInTable(const ClusterTable_t *restrict clusterTable,const OccupationCode64_t code)
 {
-    return (span_Length(clusterTable->OccupationCodes) < CLUSTER_MAXSIZE_LINEAR_SERACH)
+    return (span_Length(clusterTable->OccupationCodes) < CLUSTER_MAXSIZE_LINEAR_SEARCH)
         ? LinearSearchClusterCodeId(clusterTable, code)
         : BinarySearchClusterCodeId(clusterTable, code);
 }

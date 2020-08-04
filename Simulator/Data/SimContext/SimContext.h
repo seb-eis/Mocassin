@@ -524,6 +524,15 @@ typedef struct CmdArguments
 
 } CmdArguments_t;
 
+// Type for storing the program overwrites defined by CMD arguments
+// Layout@ggc_x86_64 => 16@[8,4,{4}]
+typedef struct CmdOverwrites
+{
+    //  An overwrite energy value in [eV] for the new upper limit of jump histograms
+    double  JumpHistogramMaxValue;
+
+} CmdOverwrites_t;
+
 // Type for the full simulation context that provides access to all simulation data structures
 // Layout@ggc_x86_64
 typedef struct SimulationContext
@@ -558,6 +567,9 @@ typedef struct SimulationContext
     // Stores the last cycle outcome type (accepted, rejected, blocked, skipped, start unstable, end unstable)
     int32_t             CycleResult;
 
+    // Stores the set CMD overwrites for the simulation
+    CmdOverwrites_t     CmdOverwrites;
+
     // Marks if the simulation uses approximate EXP calculation
     bool_t              IsExpApproximationActive;
 
@@ -573,5 +585,6 @@ static inline SimulationContext_t ctor_SimulationContext()
     memset(&context, 0, sizeof(SimulationContext_t));
     context.DynamicModel.FileInfo.IODirectoryPath = ".";
     context.DynamicModel.FileInfo.ExtensionLookupPath = ".";
+    context.CmdOverwrites.JumpHistogramMaxValue = NAN;
     return context;
 }

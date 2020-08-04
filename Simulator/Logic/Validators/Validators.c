@@ -9,6 +9,7 @@
 //////////////////////////////////////////
 
 #include <strings.h>
+#include <math.h>
 #include "Framework/Basic/FileIO/FileIO.h"
 #include "Simulator/Logic/Validators/Validators.h"
 
@@ -47,4 +48,11 @@ error_t ValidateDatabaseQueryString(char const* value)
     int32_t jobId;
     return_if (sscanf(value, "%i", &jobId) != 1, ERR_VALIDATION);
     return  (jobId >= 0) ? ERR_OK : ERR_VALIDATION;
+}
+
+error_t ValidateIsPositiveDoubleString(char const* value)
+{
+    var flpValue = strtod(value, NULL);
+    if (errno == ERANGE || flpValue <= 0.0) return ERR_VALIDATION;
+    return ERR_OK;
 }

@@ -132,7 +132,6 @@ static inline void UpdatePathEnvironmentTrackingData(SCONTEXT_PARAMETER, const i
     getEnvironmentBackup(simContext)->PathMobileMappings[pathId] = envState->MobileTrackerId;
     return_if(!envState->IsMobile);
 
-    // ToDo: Optimize this to lookup the required globalTrackerId only once (Needed for movement and jump statistics)
     UpdatePathEnvironmentMovementTracking(simContext, pathId);
     return_if(simContext->IsJumpLoggingDisabled);
     UpdatePathEnvironmentJumpStatistics(simContext, pathId);
@@ -208,13 +207,13 @@ error_t SyncMainStateTrackerMappingToSimulation(SCONTEXT_PARAMETER)
 }
 
 // Init the passed jump histogram to the default state
-static inline void InitJumpHistogramToDefault(JumpHistogram_t*restrict jumpHistogram)
+static inline void InitJumpHistogramToDefault(SCONTEXT_PARAMETER, JumpHistogram_t*restrict jumpHistogram)
 {
     jumpHistogram->MinValue = STATE_JUMPSTAT_EMIN;
-    jumpHistogram->MaxValue = STATE_JUMPSTAT_EMAX;
+    jumpHistogram->MaxValue = getUpperJumpHistogramLimit(simContext);
     jumpHistogram->UnderflowCount = 0;
     jumpHistogram->OverflowCount = 0;
-    jumpHistogram->SteppingInverse = STATE_JUMPSTAT_SIZE / (STATE_JUMPSTAT_EMAX - STATE_JUMPSTAT_EMIN);
+    jumpHistogram->SteppingInverse = STATE_JUMPSTAT_SIZE / (jumpHistogram->MaxValue - STATE_JUMPSTAT_EMIN);
 
     memset(&jumpHistogram->CountBuffer, 0, sizeof(jumpHistogram->CountBuffer));
 }
@@ -224,10 +223,10 @@ static inline void InitJumpStatisticSystemToDefault(SCONTEXT_PARAMETER)
 {
     cpp_foreach(jumpStatistic, *getJumpStatistics(simContext))
     {
-        InitJumpHistogramToDefault(&jumpStatistic->TotalEnergyHistogram);
-        InitJumpHistogramToDefault(&jumpStatistic->PosConfEnergyHistogram);
-        InitJumpHistogramToDefault(&jumpStatistic->NegConfEnergyHistogram);
-        InitJumpHistogramToDefault(&jumpStatistic->EdgeEnergyHistogram);
+        InitJumpHistogramToDefault(simContext, &jumpStatistic->TotalEnergyHistogram);
+        InitJumpHistogramToDefault(simContext, &jumpStatistic->PosConfEnergyHistogram);
+        InitJumpHistogramToDefault(simContext, &jumpStatistic->NegConfEnergyHistogram);
+        InitJumpHistogramToDefault(simContext, &jumpStatistic->EdgeEnergyHistogram);
     }
 }
 

@@ -29,7 +29,7 @@
 
 #define STATE_JUMPSTAT_SIZE 1000
 #define STATE_JUMPSTAT_EMIN 0
-#define STATE_JUMPSTAT_EMAX 10.0
+#define STATE_JUMPSTAT_EMAX 5.0
 
 /* Job info flag values */
 
@@ -97,7 +97,7 @@
 
 /* Cluster and energy defines */
 #define CLUSTER_MAXLINK_COUNT           256
-#define CLUSTER_MAXSIZE_LINEAR_SERACH   8
+#define CLUSTER_MAXSIZE_LINEAR_SEARCH   8
 #define ENERGY_FLG_CONST_TABLE          1U
 
 /* Particle/position/index constants */

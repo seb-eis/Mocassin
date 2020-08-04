@@ -796,6 +796,36 @@ static inline void setEnergyPluginSymbol(SCONTEXT_PARAMETER, const char* symbol)
     getFileInformation(simContext)->EnergyPluginSymbol = symbol;
 }
 
+// Get the command argument overwrites from the simulation context
+static inline CmdOverwrites_t* getCommandArgumentOverwrites(SCONTEXT_PARAMETER)
+{
+    return &simContext->CmdOverwrites;
+}
+
+// Get the upper energy limit of the jump histogram tracking system from the context (Returns default value if no value is defined)
+static inline double getUpperJumpHistogramLimit(SCONTEXT_PARAMETER)
+{
+    let value = getCommandArgumentOverwrites(simContext)->JumpHistogramMaxValue;
+    return isfinite(value) ? value : STATE_JUMPSTAT_EMAX;
+}
+
+// Set the upper energy limit for the jump histogram tracking system on the context
+static inline void setUpperJumpHistogramLimit(SCONTEXT_PARAMETER, const double value)
+{
+    debug_assert(isfinite(value));
+    getCommandArgumentOverwrites(simContext)->JumpHistogramMaxValue = value;
+}
+
+// Set the upper energy limit for the jump histogram tracking system on the context using a string representation
+static inline void setUpperJumpHistogramLimitByString(SCONTEXT_PARAMETER, const char* value)
+{
+    var flpValue = strtod(value, NULL);
+    assert_true(errno != ERANGE, ERR_DATACONSISTENCY, "Conversion error on parsing the upper limit string.");
+    assert_true(flpValue > 0.0, ERR_DATACONSISTENCY, "The upper jump histogram limit cannot be set to negative or zero values.");
+    setUpperJumpHistogramLimit(simContext, flpValue);
+}
+
+
 
 /* Selection pool getter/setter */
 

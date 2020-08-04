@@ -89,12 +89,13 @@ static const CmdArgLookup_t* getOptionalCmdArgsResolverTable()
 {
     static const CmdArgResolver_t resolvers[] =
     {
-        { "-outPluginPath",   (FValidator_t)  ValidateIsValidFilePath,     (FCmdCallback_t) setOutputPluginPath },
-        { "-outPluginSymbol", (FValidator_t)  ValidateStringNotNullOrEmpty,(FCmdCallback_t) setOutputPluginSymbol },
-        { "-engPluginPath",   (FValidator_t)  ValidateIsValidFilePath,     (FCmdCallback_t) setEnergyPluginPath },
-        { "-engPluginSymbol", (FValidator_t)  ValidateStringNotNullOrEmpty,(FCmdCallback_t) setEnergyPluginSymbol },
-        { "-stdout",          (FValidator_t)  ValidateStringNotNullOrEmpty,(FCmdCallback_t) setStdoutRedirection},
-        { "-extDir",          (FValidator_t)  ValidateIsDiretoryPath,      (FCmdCallback_t) setExtensionLookupPath}
+        { "-outPluginPath",   (FValidator_t)  ValidateIsValidFilePath,          (FCmdCallback_t) setOutputPluginPath },
+        { "-outPluginSymbol", (FValidator_t)  ValidateStringNotNullOrEmpty,     (FCmdCallback_t) setOutputPluginSymbol },
+        { "-engPluginPath",   (FValidator_t)  ValidateIsValidFilePath,          (FCmdCallback_t) setEnergyPluginPath },
+        { "-engPluginSymbol", (FValidator_t)  ValidateStringNotNullOrEmpty,     (FCmdCallback_t) setEnergyPluginSymbol },
+        { "-stdout",          (FValidator_t)  ValidateStringNotNullOrEmpty,     (FCmdCallback_t) setStdoutRedirection},
+        { "-extDir",          (FValidator_t)  ValidateIsDiretoryPath,           (FCmdCallback_t) setExtensionLookupPath},
+        { "-jumpLogMaxEv",    (FValidator_t)  ValidateIsPositiveDoubleString,   (FCmdCallback_t) setUpperJumpHistogramLimitByString}
     };
 
     static const CmdArgLookup_t resolverTable =
@@ -131,6 +132,13 @@ static error_t LookupAndResolveCmdArgument(SCONTEXT_PARAMETER, const CmdArgLooku
     return ERR_CMDARGUMENT;
 }
 
+static void PrintValidationFailureToStdout(SCONTEXT_PARAMETER, const int32_t argId)
+{
+    let keyArgument = getCommandArgumentStringAt(simContext, argId);
+    let valArgument = getCommandArgumentStringAt(simContext, argId + 1);
+    printf("[FAILURE]: The CMD option '%s' was given an invalid value '%s'.\n", keyArgument, valArgument);
+}
+
 // Resolves the essential command line arguments and using the affiliated callback table
 static error_t ResolveAndSetEssentialCmdArguments(SCONTEXT_PARAMETER)
 {
@@ -143,7 +151,7 @@ static error_t ResolveAndSetEssentialCmdArguments(SCONTEXT_PARAMETER)
     for (int32_t i = 1; i < cmdArguments->Count; i++)
     {
         error = LookupAndResolveCmdArgument(simContext, resolverTable, i);
-        if (error == ERR_VALIDATION) printf("[FAILURE]: The parameter for command line argument '%s' is invalid.\n", cmdArguments->Values[i]);
+        if (error == ERR_VALIDATION) PrintValidationFailureToStdout(simContext, i);
         if (error == ERR_OK)
         {
             --unresolved;
@@ -168,6 +176,7 @@ static error_t ResolveAndSetOptionalCmdArguments(SCONTEXT_PARAMETER)
     for (int32_t i = 1; i < getCommandArguments(simContext)->Count; i++)
     {
         error = LookupAndResolveCmdArgument(simContext, resolverTable, i);
+        if (error == ERR_VALIDATION) PrintValidationFailureToStdout(simContext, i);
         continue_if(error);
 
         return_if(--unresolved == 0, ERR_OK);
