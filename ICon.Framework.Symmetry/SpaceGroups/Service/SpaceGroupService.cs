@@ -414,19 +414,22 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// <inheritdoc />
         public IPointOperationGroup GetPointOperationGroup(in Fractional3D originPoint, IEnumerable<Fractional3D> pointSequence)
         {
-            var pointList = pointSequence.AsList();
+            var originShiftedData = ShiftFirstToOriginCell(originPoint.AsSingleton().Concat(pointSequence), DoubleComparer).ToList();
+
+            var shiftedOriginPoint = originShiftedData[0];
+            var pointList = originShiftedData.Skip(1).AsList();
 
             var operationGroup = new PointOperationGroup
             {
                 SpaceGroupEntry = LoadedGroup.GetGroupEntry(),
-                UniqueOriginSiteCount = GetUnitCellP1PositionExtension(in originPoint).Count,
-                OriginPoint = originPoint,
+                UniqueOriginSiteCount = GetUnitCellP1PositionExtension(in shiftedOriginPoint).Count,
+                OriginPoint = shiftedOriginPoint,
                 PointSequence = pointList.ToList(),
                 OrderIgnoringSelfProjectionOperations = new List<SymmetryOperation>(),
                 OrderIgnoringUniqueSequenceOperations = new List<SymmetryOperation>()
             };
 
-            var operationsAtOrigin = GetOperationsNotShiftingOrigin(originPoint, true);
+            var operationsAtOrigin = GetOperationsNotShiftingOrigin(shiftedOriginPoint, true);
             var sequencesAtOrigin = operationsAtOrigin
                 .Select(operation => operation.Transform(pointList).ToList())
                 .ToList();

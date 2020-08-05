@@ -53,7 +53,7 @@ namespace Mocassin.Symmetry.SpaceGroups
 
         /// <summary>
         ///     Get the point operation group for the provided origin point and point sequence based upon the currently loaded
-        ///     space group
+        ///     space group. The data is automatically shifted to the (0 0 0) origin cell
         /// </summary>
         /// <param name="originPoint"></param>
         /// <param name="pointSequence"></param>

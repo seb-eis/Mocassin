@@ -11,6 +11,16 @@ namespace Mocassin.Model.Energies
     public interface IPairEnergySetter : IValueSetter
     {
         /// <summary>
+        ///     Get the number of interaction geometries emerging at each origin site after P1 translation
+        /// </summary>
+        int OriginInteractionCountPerSite { get; }
+
+        /// <summary>
+        ///     Get the number of interaction geometries emerging at each partner site after p1 translation
+        /// </summary>
+        int PartnerInteractionCountPerSite { get; }
+
+        /// <summary>
         ///     Get a read only list of the current energy entries
         /// </summary>
         IReadOnlyCollection<PairEnergyEntry> EnergyEntries { get; }
