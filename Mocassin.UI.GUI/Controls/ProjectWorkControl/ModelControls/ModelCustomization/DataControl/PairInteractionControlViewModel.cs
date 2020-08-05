@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Mocassin.Framework.Extensions;
 using Mocassin.UI.GUI.Controls.Base.Interfaces;
@@ -39,29 +40,36 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
         public void ChangeContentSource(ProjectCustomizationTemplate contentSource)
         {
             ContentSource = contentSource;
-            CreateSetControlViewModels();
+            UpdateSetControlViewModels();
         }
 
         /// <inheritdoc />
         public virtual void Dispose()
         {
-            foreach (var item in Items ?? Enumerable.Empty<PairEnergySetControlViewModel>()) item?.Dispose();
+            DisposeAndClearSetControlViewModels();
         }
 
         /// <summary>
-        ///     Creates and sets the new <see cref="PairEnergySetControlViewModel" /> collection
+        ///     Updates the required <see cref="PairEnergySetControlViewModel" /> collection
         /// </summary>
-        private void CreateSetControlViewModels()
+        private void UpdateSetControlViewModels()
         {
-            var interactionSets = InteractionSetGetter.Invoke(ContentSource);
-            if (interactionSets == null)
-            {
-                SetCollection(null);
-                return;
-            }
+            Items ??= new ObservableCollection<PairEnergySetControlViewModel>();
 
-            var viewModels = interactionSets.Select(x => new PairEnergySetControlViewModel(x, interactionSets)).ToList(interactionSets.Count);
-            SetCollection(viewModels);
+            DisposeAndClearSetControlViewModels();
+            var interactionSets = InteractionSetGetter.Invoke(ContentSource);
+            if (interactionSets == null) return;
+
+            Items.AddRange(interactionSets.Select(pairEnergySetData => new PairEnergySetControlViewModel(pairEnergySetData, interactionSets)));
+        }
+
+        /// <summary>
+        ///     Disposes the current set control view models and clears the collection
+        /// </summary>
+        private void DisposeAndClearSetControlViewModels()
+        {
+            foreach (var viewModel in Items ?? Enumerable.Empty<PairEnergySetControlViewModel>()) viewModel?.Dispose();
+            Items?.Clear();
         }
     }
 }
