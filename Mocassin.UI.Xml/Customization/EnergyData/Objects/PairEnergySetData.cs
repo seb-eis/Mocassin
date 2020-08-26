@@ -28,6 +28,8 @@ namespace Mocassin.UI.Xml.Customization
         private ObservableCollection<PairEnergyData> pairEnergyEntries;
         private ModelObjectReference<CellSite> partnerPosition;
         private VectorData3D startVector;
+        private int interactionCountPerStartSite;
+        private int interactionCountPerEndSite;
 
         /// <summary>
         ///     Get or set the <see cref="ModelObjectReference{T}" /> that targets the center wyckoff position
@@ -57,6 +59,26 @@ namespace Mocassin.UI.Xml.Customization
         {
             get => distance;
             set => SetProperty(ref distance, value);
+        }
+
+        /// <summary>
+        ///     Get or set the number of interaction counts in the P1 extension at the each of the first sites
+        /// </summary>
+        [XmlAttribute]
+        public int InteractionCountPerStartSite
+        {
+            get => interactionCountPerStartSite; 
+            set => SetProperty(ref interactionCountPerStartSite, value);
+        }
+
+        /// <summary>
+        ///     Get or set the number of interaction counts in the P1 extension at the each of the end sites
+        /// </summary>
+        [XmlAttribute]
+        public int InteractionCountPerEndSite
+        {
+            get => interactionCountPerEndSite;
+            set => SetProperty(ref interactionCountPerEndSite, value);
         }
 
         /// <summary>
@@ -144,6 +166,8 @@ namespace Mocassin.UI.Xml.Customization
                 endVector = endVector.Duplicate(),
                 modelIndex = modelIndex,
                 chiralPartnerModelIndex = chiralPartnerModelIndex,
+                interactionCountPerEndSite = interactionCountPerEndSite,
+                interactionCountPerStartSite = interactionCountPerStartSite,
                 pairEnergyEntries = pairEnergyEntries.Select(x => x.Duplicate()).ToObservableCollection()
             };
             return copy;
@@ -195,7 +219,9 @@ namespace Mocassin.UI.Xml.Customization
                 Distance = energySetter.PairInteraction.Distance,
                 StartVector = VectorData3D.Create(energySetter.PairInteraction.Position0.Vector),
                 EndVector = VectorData3D.Create(energySetter.PairInteraction.SecondPositionVector),
-                PairEnergyEntries = energySetter.EnergyEntries.Select(x => PairEnergyData.Create(x, parent)).ToObservableCollection()
+                PairEnergyEntries = energySetter.EnergyEntries.Select(x => PairEnergyData.Create(x, parent)).ToObservableCollection(),
+                InteractionCountPerStartSite = energySetter.OriginInteractionCountPerSite,
+                InteractionCountPerEndSite = energySetter.PartnerInteractionCountPerSite
             };
 
             return obj;

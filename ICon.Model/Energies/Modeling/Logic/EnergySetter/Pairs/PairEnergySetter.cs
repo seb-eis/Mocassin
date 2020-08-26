@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Mocassin.Framework.Constraints;
+using Mocassin.Framework.Extensions;
+using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Basic;
 
 namespace Mocassin.Model.Energies
@@ -39,11 +42,19 @@ namespace Mocassin.Model.Energies
         protected IEnergyQueryPort EnergyQueryPort { get; }
 
         /// <inheritdoc />
+        public int OriginInteractionCountPerSite { get; }
+
+        /// <inheritdoc />
+        public int PartnerInteractionCountPerSite { get; }
+
+
+        /// <inheritdoc />
         public PairEnergySetter(PairInteraction pairInteraction, IEnergyQueryPort energyQueryPort)
         {
             EnergyQueryPort = energyQueryPort ?? throw new ArgumentNullException(nameof(energyQueryPort));
             PairInteraction = pairInteraction ?? throw new ArgumentNullException(nameof(pairInteraction));
             EnergyEntries = CreateEnergySet(pairInteraction);
+            (OriginInteractionCountPerSite, PartnerInteractionCountPerSite) = GetInteractionCountsPerSite(energyQueryPort, pairInteraction);
         }
 
         /// <inheritdoc />
@@ -100,6 +111,23 @@ namespace Mocassin.Model.Energies
         protected HashSet<PairEnergyEntry> CreateEnergySet(PairInteraction pairInteraction)
         {
             return new HashSet<PairEnergyEntry>(pairInteraction.GetEnergyEntries());
+        }
+
+        /// <summary>
+        ///     Calculates the interaction counts after P1 extension at each origin and partner site
+        /// </summary>
+        /// <param name="energyQueryPort"></param>
+        /// <param name="pairInteraction"></param>
+        /// <returns></returns>
+        protected (int CountAtOrigin, int CountAtPartner) GetInteractionCountsPerSite(IEnergyQueryPort energyQueryPort, PairInteraction pairInteraction)
+        {
+            // TodO: Check if the use the rather performance heavy point operation group calculation is unproblematic for this task
+            var originVector = pairInteraction.Position0.Vector;
+            var partnerVector = pairInteraction.SecondPositionVector;
+            var spaceGroupService = energyQueryPort.Query(port => port.GetPairInteractionFinder().SpaceGroupService);
+            var originPointOperationGroup = spaceGroupService.GetPointOperationGroup(originVector, partnerVector.AsSingleton());
+            var partnerPointOperationGroup = spaceGroupService.GetPointOperationGroup(partnerVector, originVector.AsSingleton());
+            return (originPointOperationGroup.OrderIgnoringExtensionCountPerSite, partnerPointOperationGroup.OrderIgnoringExtensionCountPerSite);
         }
     }
 }

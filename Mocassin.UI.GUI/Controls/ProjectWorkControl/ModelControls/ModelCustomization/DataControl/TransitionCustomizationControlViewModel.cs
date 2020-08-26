@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using Mocassin.Framework.Extensions;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
@@ -30,23 +32,18 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
         public override void ChangeContentSource(ProjectCustomizationTemplate contentSource)
         {
             ContentSource = contentSource;
-            CreateSetControlViewModels();
+            UpdateSetControlViewModels();
         }
 
         /// <summary>
-        ///     Creates and sets the new <see cref="KineticRuleSetControlViewModel" /> collection
+        ///     Updates the required <see cref="KineticRuleSetControlViewModel" /> collection
         /// </summary>
-        private void CreateSetControlViewModels()
+        private void UpdateSetControlViewModels()
         {
+            KineticRuleSetCollectionViewModel.Items ??= new ObservableCollection<KineticRuleSetControlViewModel>();
             var interactionSets = ContentSource?.TransitionModelCustomization?.KineticTransitionParameterSets;
-            if (interactionSets == null)
-            {
-                KineticRuleSetCollectionViewModel.SetCollection(null);
-                return;
-            }
-
-            var viewModels = interactionSets.Select(x => new KineticRuleSetControlViewModel(x)).ToList(interactionSets.Count);
-            KineticRuleSetCollectionViewModel.SetCollection(viewModels);
+            if (interactionSets == null) return;
+            KineticRuleSetCollectionViewModel.Items.AddRange(interactionSets.Select(ruleSetData => new KineticRuleSetControlViewModel(ruleSetData)));
         }
     }
 }

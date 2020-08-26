@@ -18,6 +18,10 @@
         WindowState="Maximized"
         Closing="MainWindow_OnClosing">
 
+  <Window.InputBindings>
+    <KeyBinding Gesture="Ctrl+S" Command="{Binding ProjectManagerViewModel.SaveProjectLibraryChangesCommand}"/>
+  </Window.InputBindings>
+
   <Grid Margin="5,5,5,5">
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto" />

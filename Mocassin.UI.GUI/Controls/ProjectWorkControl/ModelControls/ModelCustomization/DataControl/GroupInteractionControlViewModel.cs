@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.ObjectModel;
+using System.Linq;
 using Mocassin.Framework.Extensions;
 using Mocassin.UI.GUI.Controls.Base.Interfaces;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
@@ -21,23 +22,21 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
         public void ChangeContentSource(ProjectCustomizationTemplate contentSource)
         {
             ContentSource = contentSource;
-            CreateSetControlViewModels();
+            UpdateSetControlViewModels();
         }
 
         /// <summary>
-        ///     Creates and sets the new <see cref="GroupEnergySetControlViewModel" /> collection
+        ///     Updates the required <see cref="GroupEnergySetControlViewModel" /> collection
         /// </summary>
-        private void CreateSetControlViewModels()
+        private void UpdateSetControlViewModels()
         {
-            var interactionSets = ContentSource?.EnergyModelCustomization?.GroupEnergyParameterSets;
-            if (interactionSets == null)
-            {
-                SetCollection(null);
-                return;
-            }
+            Items ??= new ObservableCollection<GroupEnergySetControlViewModel>();
+            Items.Clear();
 
-            var viewModels = interactionSets.Select(x => new GroupEnergySetControlViewModel(x)).ToList(interactionSets.Count);
-            SetCollection(viewModels);
+            var interactionSets = ContentSource?.EnergyModelCustomization?.GroupEnergyParameterSets;
+            if (interactionSets == null) return;
+
+            Items.AddRange(interactionSets.Select(groupEnergySetData => new GroupEnergySetControlViewModel(groupEnergySetData)));
         }
     }
 }
