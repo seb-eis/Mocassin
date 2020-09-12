@@ -15,12 +15,12 @@ using Mocassin.UI.GUI.Properties;
 using Mocassin.UI.Xml.ProjectLibrary;
 using Newtonsoft.Json;
 
-namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.LibraryBrowser
+namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.DataBrowser
 {
     /// <summary>
-    ///     The <see cref="ViewModelBase" /> for <see cref="ProjectLibraryBrowserView" />
+    ///     The <see cref="ViewModelBase" /> for <see cref="ProjectDataBrowserView" />
     /// </summary>
-    public class ProjectLibraryBrowserViewModel : PrimaryControlViewModel, IDataObjectAcceptor
+    public class ProjectDataBrowserViewModel : PrimaryControlViewModel, IDataObjectAcceptor
     {
         private JsonBrowserViewModel jsonBrowserViewModel;
         private TextDocument xmlTextDocument;
@@ -75,7 +75,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.LibraryBrowser
         public Command<IDataObject> ProcessDataObjectCommand { get; }
 
         /// <inheritdoc />
-        public ProjectLibraryBrowserViewModel(IProjectAppControl projectControl)
+        public ProjectDataBrowserViewModel(IProjectAppControl projectControl)
             : base(projectControl)
         {
             JsonBrowserViewModel = new JsonBrowserViewModel();

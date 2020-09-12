@@ -47,7 +47,7 @@ namespace Mocassin.UI.GUI.Controls.Base.Commands
             var viewModel = new BasicModelContentControlViewModel(ProjectControl)
             {
                 DataContentControl = GetDataControl(),
-                SelectedProject = ProjectControl.ProjectBrowserViewModel.GetWorkProject()
+                SelectedProject = ProjectControl.ProjectBrowserViewModel.GetActiveWorkProject()
             };
             return viewModel;
         }

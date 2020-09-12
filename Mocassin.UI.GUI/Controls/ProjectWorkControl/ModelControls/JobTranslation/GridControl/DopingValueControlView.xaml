@@ -27,7 +27,7 @@
                             Binding="{Binding Doping.Name}"
                             IsReadOnly="True" />
         <DataGridTextColumn Header="Value"
-                            Binding="{Binding Value}" />
+                            Binding="{Binding Value, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
       </DataGrid.Columns>
 
     </DataGrid>

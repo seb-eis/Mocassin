@@ -347,7 +347,7 @@
     <Compile Include="Controls\DxVisualizer\Viewport\Enums\DxSceneBatchingMode.cs" />
     <Compile Include="Controls\DxVisualizer\Viewport\Base\IDxSceneHost.cs" />
     <Compile Include="Controls\DxVisualizer\Viewport\Base\IDxSceneController.cs" />
-    <Compile Include="Controls\ProjectMenuBar\SubControls\FileMenu\Commands\OpenProjectWorkTabHostWindow.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\VisualMenu\Commands\OpenProjectWorkTabHostWindow.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\HelpMenu\Commands\CheckApplicationUpdateCommand.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\HelpMenu\HelpMenuView.xaml.cs">
       <DependentUpon>HelpMenuView.xaml</DependentUpon>
@@ -461,11 +461,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ProjectBrowser\SubControls\GraphBrowser\ProjectGraphBrowserView.xaml">
+    <Page Include="Controls\ProjectBrowser\SubControls\ComponentBrowser\ProjectComponentBrowserView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ProjectBrowser\SubControls\LibraryBrowser\ProjectLibraryBrowserView.xaml">
+    <Page Include="Controls\ProjectBrowser\SubControls\DataBrowser\ProjectDataBrowserView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -862,14 +862,14 @@
     <Compile Include="Controls\ProjectBrowser\ProjectBrowserView.xaml.cs">
       <DependentUpon>ProjectBrowserView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ProjectBrowser\SubControls\GraphBrowser\ProjectGraphBrowserView.xaml.cs">
-      <DependentUpon>ProjectGraphBrowserView.xaml</DependentUpon>
+    <Compile Include="Controls\ProjectBrowser\SubControls\ComponentBrowser\ProjectComponentBrowserView.xaml.cs">
+      <DependentUpon>ProjectComponentBrowserView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ProjectBrowser\SubControls\GraphBrowser\ProjectGraphBrowserViewModel.cs" />
-    <Compile Include="Controls\ProjectBrowser\SubControls\LibraryBrowser\ProjectLibraryBrowserView.xaml.cs">
-      <DependentUpon>ProjectLibraryBrowserView.xaml</DependentUpon>
+    <Compile Include="Controls\ProjectBrowser\SubControls\ComponentBrowser\ProjectComponentBrowserViewModel.cs" />
+    <Compile Include="Controls\ProjectBrowser\SubControls\DataBrowser\ProjectDataBrowserView.xaml.cs">
+      <DependentUpon>ProjectDataBrowserView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ProjectBrowser\SubControls\LibraryBrowser\ProjectLibraryBrowserViewModel.cs" />
+    <Compile Include="Controls\ProjectBrowser\SubControls\DataBrowser\ProjectDataBrowserViewModel.cs" />
     <Compile Include="Base\ViewModels\JsonBrowser\JsonTreeViewBuilder.cs" />
     <Compile Include="Controls\ProjectConsole\ProjectConsoleTabControlView.xaml.cs">
       <DependentUpon>ProjectConsoleTabControlView.xaml</DependentUpon>
@@ -902,8 +902,8 @@
     </Compile>
     <Compile Include="Controls\ProjectMenuBar\SubControls\ControlMenu\ControlMenuViewModel.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\FileMenu\Commands\SaveExitProgramCommand.cs" />
-    <Compile Include="Controls\ProjectMenuBar\SubControls\FileMenu\Commands\ShowProjectCreationDialogCommand.cs" />
-    <Compile Include="Controls\ProjectMenuBar\SubControls\FileMenu\Commands\ShowProjectLoadingDialogCommand.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\FileMenu\Commands\ShowProjectFileCreationDialogCommand.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\FileMenu\Commands\ShowProjectFileLoadingDialogCommand.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\FileMenu\FileMenuView.xaml.cs">
       <DependentUpon>FileMenuView.xaml</DependentUpon>
     </Compile>

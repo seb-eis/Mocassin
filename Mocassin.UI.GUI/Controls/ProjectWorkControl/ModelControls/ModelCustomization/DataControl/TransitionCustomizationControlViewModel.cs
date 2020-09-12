@@ -41,6 +41,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
         private void UpdateSetControlViewModels()
         {
             KineticRuleSetCollectionViewModel.Items ??= new ObservableCollection<KineticRuleSetControlViewModel>();
+            KineticRuleSetCollectionViewModel.Items.Clear();
+
             var interactionSets = ContentSource?.TransitionModelCustomization?.KineticTransitionParameterSets;
             if (interactionSets == null) return;
             KineticRuleSetCollectionViewModel.Items.AddRange(interactionSets.Select(ruleSetData => new KineticRuleSetControlViewModel(ruleSetData)));

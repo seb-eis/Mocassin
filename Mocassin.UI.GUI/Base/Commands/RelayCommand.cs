@@ -97,6 +97,54 @@ namespace Mocassin.UI.Base.Commands
 
             return new RelayCommand(LocalExecute, LocalCanExecute);
         }
+
+        /// <summary>
+        ///     Creates a new <see cref="RelayCommand"/> that executes an <see cref="Action"/>
+        /// </summary>
+        /// <param name="executeAction"></param>
+        /// <returns></returns>
+        public static RelayCommand Create(Action executeAction)
+        {
+            if (executeAction is null) throw new ArgumentNullException(nameof(executeAction));
+            return new RelayCommand(executeAction);
+        }
+
+        /// <summary>
+        ///     Creates a new <see cref="RelayCommand"/> that executes an <see cref="Action"/> with a can execute check
+        /// </summary>
+        /// <param name="executeAction"></param>
+        /// <param name="canExecuteFunc"></param>
+        /// <returns></returns>
+        public static RelayCommand Create(Action executeAction, Func<bool> canExecuteFunc)
+        {
+            if (executeAction is null) throw new ArgumentNullException(nameof(executeAction));
+            if (canExecuteFunc is null) throw new ArgumentNullException(nameof(canExecuteFunc));
+            return new RelayCommand(executeAction, canExecuteFunc);
+        }
+
+        /// <summary>
+        ///     Creates a new <see cref="RelayCommand{T}"/> that executes an <see cref="Action{T}"/>
+        /// </summary>
+        /// <param name="executeAction"></param>
+        /// <returns></returns>
+        public static RelayCommand<T> Create<T>(Action<T> executeAction)
+        {
+            if (executeAction is null) throw new ArgumentNullException(nameof(executeAction));
+            return new RelayCommand<T>(executeAction);
+        }
+
+        /// <summary>
+        ///     Creates a new <see cref="RelayCommand{T}"/> that executes an <see cref="Action"/>
+        /// </summary>
+        /// <param name="executeAction"></param>
+        /// <param name="canExecuteFunc"></param>
+        /// <returns></returns>
+        public static RelayCommand<T> Create<T>(Action<T> executeAction, Func<T, bool> canExecuteFunc)
+        {
+            if (executeAction is null) throw new ArgumentNullException(nameof(executeAction));
+            if (canExecuteFunc is null) throw new ArgumentNullException(nameof(canExecuteFunc));
+            return new RelayCommand<T>(executeAction, canExecuteFunc);
+        }
     }
 
     /// <summary>

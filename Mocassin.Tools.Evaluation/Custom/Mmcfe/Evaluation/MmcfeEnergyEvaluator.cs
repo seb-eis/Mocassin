@@ -13,19 +13,23 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
     public class MmcfeEnergyEvaluator
     {
         /// <summary>
-        ///     Calculates the complete set of <see cref="MmcfeEnergyState" /> objects resulting from a
-        ///     <see cref="IReadOnlyList{T}" /> of <see cref="MmcfeLogReader" /> and a base temperature
+        ///     Calculates the complete set of <see cref="MmcfeEnergyState" /> objects resulting from a <see cref="IReadOnlyList{T}" /> of <see cref="MmcfeLogReader" /> and a base temperature using the number of unit cells for normalization
         /// </summary>
         /// <param name="logReaders"></param>
         /// <param name="baseTemperature"></param>
+        /// <param name="numberOfUnitCells"></param>
         /// <returns></returns>
-        public IList<MmcfeEnergyState> CalculateEnergyStates(IReadOnlyList<MmcfeLogReader> logReaders, double baseTemperature)
+        public IList<MmcfeEnergyState> CalculateEnergyStates(IReadOnlyList<MmcfeLogReader> logReaders, double baseTemperature, int numberOfUnitCells)
         {
             if (!CheckLogReadersInEvaluationOrder(logReaders)) throw new InvalidOperationException("Readers are in wrong order for evaluation.");
+            if (numberOfUnitCells <= 0) throw new ArgumentOutOfRangeException(nameof(numberOfUnitCells));
 
             var result = new List<MmcfeEnergyState>(logReaders.Count - 1);
             var dAlphas = CalculateAlphaDeltaList(logReaders);
             var sumOfLnMij = 0.0;
+            
+            // Normalizes the free energy calculation to one unit cell to prevent issues with exp(...) for very large absolute energy values
+            var energyNormalization = 1.0 / numberOfUnitCells;
 
             // The general formalism is to replace the numerically unstable m'(Inf->T) calculation by a summation over LN(m'(low)/m'(high)) for all consecutive histogram pairs in range T=Inf -> T
             for (var i = 1; i < logReaders.Count; i++)
@@ -35,7 +39,6 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
                 var lowReader = logReaders[i];
                 var lowHeader = lowReader.EnergyHistogramReader.ReadHeader();
                 var lowParams = lowReader.ReadParameters();
-
                 if (i == 1)
                 {
                     var highInnerEnergy = CalculateInnerEnergy(highReader);
@@ -43,7 +46,7 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
                     result.Add(new MmcfeEnergyState(highTempParams.AlphaCurrent, baseTemperature / highTempParams.AlphaCurrent, 0, highInnerEnergy));
                 }
 
-                var nominator = 0L;
+                var nominator = 0.0;
                 var denominator = 0.0;
 
                 // The m_ij nominator in the Valleau & Card solution is the unweighted sum of samples of the higher temperature histogram
@@ -55,18 +58,19 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
                 {
                     index++;
                     var energy = lowHeader.MinValue + index * lowHeader.Stepping;
-                    var weighting = Math.Exp(energy * dAlpha / (baseTemperature * Equations.Constants.BlotzmannEv));
+                    var weighting = Math.Exp(energy * dAlpha * energyNormalization / (baseTemperature * Equations.Constants.BlotzmannEv));
                     denominator += weighting * counter;
                 }
 
-                var lnOfMij = Math.Log(nominator / denominator, Math.E);
-                if (double.IsNaN(lnOfMij) || double.IsInfinity(lnOfMij)) throw new InvalidOperationException("Calculation is numerically unstable.");
+                var lnOfMij = Math.Log(nominator, Math.E) - Math.Log(denominator, Math.E);
+                if (double.IsNaN(lnOfMij) || double.IsInfinity(lnOfMij)) 
+                    throw new InvalidOperationException("Calculation is numerically unstable.");
 
                 // The free energy at each temperature is defined as: -k*T*sum(ln(m_ij))
                 sumOfLnMij += lnOfMij;
                 var temperature = baseTemperature / lowParams.AlphaCurrent;
                 var innerEnergy = CalculateInnerEnergy(lowReader);
-                var freeEnergy = - temperature * Equations.Constants.BlotzmannEv * sumOfLnMij;
+                var freeEnergy = - temperature * Equations.Constants.BlotzmannEv * sumOfLnMij / energyNormalization;
                 result.Add(new MmcfeEnergyState(lowParams.AlphaCurrent, temperature, freeEnergy, innerEnergy));
             }
 

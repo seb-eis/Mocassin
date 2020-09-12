@@ -1,8 +1,8 @@
 ﻿using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Base.ViewModels.Tabs;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
-using Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.GraphBrowser;
-using Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.LibraryBrowser;
+using Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.ComponentBrowser;
+using Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.DataBrowser;
 using Mocassin.UI.Xml.Main;
 
 namespace Mocassin.UI.GUI.Controls.ProjectBrowser
@@ -13,14 +13,14 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser
     public class ProjectBrowserViewModel : PrimaryControlViewModel
     {
         /// <summary>
-        ///     Get the <see cref="ProjectGraphBrowserViewModel" /> used by the tab system
+        ///     Get the <see cref="ProjectComponentBrowserViewModel" /> used by the tab system
         /// </summary>
-        private ProjectGraphBrowserViewModel GraphBrowserViewModel { get; }
+        private ProjectComponentBrowserViewModel ComponentBrowserViewModel { get; }
 
         /// <summary>
-        ///     Get the <see cref="ProjectLibraryBrowserViewModel" /> used by the tab system
+        ///     Get the <see cref="ProjectDataBrowserViewModel" /> used by the tab system
         /// </summary>
-        private ProjectLibraryBrowserViewModel LibraryBrowserViewModel { get; }
+        private ProjectDataBrowserViewModel DataBrowserViewModel { get; }
 
         /// <summary>
         ///     Get the <see cref="ControlTabHostViewModel" /> that controls the browser tabs
@@ -31,11 +31,11 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser
         public ProjectBrowserViewModel(IProjectAppControl projectControl)
             : base(projectControl)
         {
-            GraphBrowserViewModel = new ProjectGraphBrowserViewModel(projectControl);
-            LibraryBrowserViewModel = new ProjectLibraryBrowserViewModel(projectControl);
+            ComponentBrowserViewModel = new ProjectComponentBrowserViewModel(projectControl);
+            DataBrowserViewModel = new ProjectDataBrowserViewModel(projectControl);
             TabHostViewModel = new ControlTabHostViewModel();
-            TabHostViewModel.AddStaticTab("Solution Explorer", GraphBrowserViewModel, new ProjectGraphBrowserView());
-            TabHostViewModel.AddStaticTab("Data Viewers", LibraryBrowserViewModel, new ProjectLibraryBrowserView());
+            TabHostViewModel.AddStaticTab("Solution Explorer", ComponentBrowserViewModel, new ProjectComponentBrowserView());
+            TabHostViewModel.AddStaticTab("Data Viewers", DataBrowserViewModel, new ProjectDataBrowserView());
             TabHostViewModel.SetActiveTabByIndex(0);
         }
 
@@ -43,9 +43,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser
         ///     Retrieves the currently user selected <see cref="MocassinProject" />
         /// </summary>
         /// <returns></returns>
-        public MocassinProject GetWorkProject()
+        public MocassinProject GetActiveWorkProject()
         {
-            return GraphBrowserViewModel.SelectedProject;
+            return ComponentBrowserViewModel.ActiveProject;
         }
     }
 }

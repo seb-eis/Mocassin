@@ -10,6 +10,7 @@ using Mocassin.Framework.Extensions;
 using Mocassin.Framework.SQLiteCore;
 using Mocassin.Model.Translator;
 using Mocassin.Model.Translator.Database.Entities.Other.Meta;
+using Mocassin.Tools.Evaluation.Helper;
 
 namespace Mocassin.Tools.Evaluation.Custom.Mmcfe.Importer
 {
@@ -179,7 +180,7 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe.Importer
                     .Select(x => MmcfeExtendedLogEntry.Create(x, metaEntry, IsExcludeRawData))
                     .ToList();
                 var energyEntries = energyEvaluator
-                    .CalculateEnergyStates(readers, metaData.Temperature)
+                    .CalculateEnergyStates(readers, metaData.Temperature, MetaDataHelper.GetNumberOfUnitCells(metaEntry))
                     .Zip(logEntries, (state, entry) => MmcfeLogEnergyEntry.Create(state, entry));
 
                 results.Add(metaEntry);

@@ -4,17 +4,17 @@ using System.Windows.Controls;
 using ICSharpCode.AvalonEdit.Folding;
 using Mocassin.UI.GUI.Extensions;
 
-namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.LibraryBrowser
+namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.DataBrowser
 {
     /// <summary>
     ///     Interaktionslogik für ProjectLibraryBrowserView.xaml
     /// </summary>
-    public partial class ProjectLibraryBrowserView : UserControl
+    public partial class ProjectDataBrowserView : UserControl
     {
         private FoldingManager XmlFoldingManager { get; set; }
 
         /// <inheritdoc />
-        public ProjectLibraryBrowserView()
+        public ProjectDataBrowserView()
         {
             InitializeComponent();
         }

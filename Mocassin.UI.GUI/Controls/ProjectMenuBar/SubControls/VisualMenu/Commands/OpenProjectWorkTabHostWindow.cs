@@ -5,7 +5,7 @@ using Mocassin.UI.GUI.Base.Objects;
 using Mocassin.UI.GUI.Controls.Base.Commands;
 using Mocassin.UI.GUI.Controls.ProjectWorkControl;
 
-namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.FileMenu.Commands
+namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.VisualMenu.Commands
 {
     /// <summary>
     ///     A <see cref="OpenDefaultContentWindowCommand" /> implementation to open a windowed

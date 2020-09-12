@@ -26,7 +26,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.VisualMenu.Command
             var viewModel = new BasicModelContentControlViewModel(ProjectControl)
             {
                 DataContentControl = new DxModelSceneView {DataContext = new DxModelSceneViewModel(ProjectControl)},
-                SelectedProject = ProjectControl.ProjectBrowserViewModel.GetWorkProject()
+                SelectedProject = ProjectControl.ProjectBrowserViewModel.GetActiveWorkProject()
             };
             return new VvmContainer(control, viewModel, "Dx Visualizer");
         }

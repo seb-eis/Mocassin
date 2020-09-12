@@ -23,6 +23,7 @@ namespace Mocassin.UI.Xml.Main
         private ProjectModelData projectModelData;
         private ResourcesData resources;
         private ObservableCollection<SimulationDbBuildTemplate> simulationDbBuildTemplates;
+        private bool isActiveProject;
 
         /// <summary>
         ///     Get or set a Guid for the project
@@ -117,6 +118,17 @@ namespace Mocassin.UI.Xml.Main
         {
             get => resources;
             set => SetProperty(ref resources, value);
+        }
+
+        /// <summary>
+        ///     Get or set a boolean flag if the project is set to be active
+        /// </summary>
+        [NotMapped]
+        [XmlIgnore]
+        public bool IsActiveProject
+        {
+            get => isActiveProject;
+            set => SetProperty(ref isActiveProject, value);
         }
 
         /// <summary>
