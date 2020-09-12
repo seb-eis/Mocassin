@@ -295,7 +295,9 @@
             <DataTemplate>
               <WrapPanel>
                 <TextBlock Text="{Binding}" Style="{StaticResource App.Style.TextBlock.DemiBold}" />
-                <TextBlock Text="[?]" Margin="5,0,0,0" ToolTip="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type content:HeaderedGroup}}, Path=HeaderToolTip}">
+                <TextBlock Text="[?]" Margin="5,0,0,0" 
+                           ToolTip="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type content:HeaderedGroup}}, Path=HeaderToolTip}"
+                           Visibility="{Binding RelativeSource={RelativeSource Self}, Path=ToolTip, Converter={StaticResource App.Converter.NullToVisibility}}">
                   <TextBlock.Style>
                     <Style TargetType="{x:Type TextBlock}">
                       <Setter Property="Foreground" Value="Blue" />
