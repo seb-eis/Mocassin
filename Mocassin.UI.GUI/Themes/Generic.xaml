@@ -15,15 +15,17 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
               </Grid.RowDefinitions>
-              <ContentPresenter Grid.Row="0" Margin="{TemplateBinding HeaderMargin}"
+              <ContentPresenter Name="PART_HeaderPresenter"
+                                Grid.Row="0" 
+                                Margin="{TemplateBinding HeaderMargin}"
                                 ContentSource="Header"
-                                ToolTip="{TemplateBinding HeaderToolTip}"
                                 ContentTemplate="{TemplateBinding HeaderTemplate}" />
               <Border Grid.Row="1"
                       Background="{TemplateBinding Background}"
                       BorderBrush="{TemplateBinding BorderBrush}"
                       BorderThickness="{TemplateBinding BorderThickness}">
-                <ContentPresenter Margin="{TemplateBinding ContentMargin}"
+                <ContentPresenter Name="PART_ContentPresenter"
+                                  Margin="{TemplateBinding ContentMargin}"
                                   ContentSource="Content"
                                   ContentTemplate="{TemplateBinding ContentTemplate}" />
               </Border>
