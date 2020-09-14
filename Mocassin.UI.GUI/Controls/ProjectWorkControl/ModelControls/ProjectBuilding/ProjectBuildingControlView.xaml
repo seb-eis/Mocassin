@@ -13,13 +13,13 @@
   Background="Transparent">
 
   <UserControl.Resources>
-    <ToolTip x:Key="Local.ToolTip.DeployInstruction" Style="{StaticResource App.Style.ToolTip.Default}">
+    <ToolTip x:Key="Local.ToolTip.DeployInstruction" >
       <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
         <Run
           Text="Define a full translation group containing a model project, customization and job definition source." />
       </TextBlock>
     </ToolTip>
-    <ToolTip x:Key="Local.ToolTip.LocalDeployment" Style="{StaticResource App.Style.ToolTip.Default}">
+    <ToolTip x:Key="Local.ToolTip.LocalDeployment" >
       <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
         <Run Text="Automatic deploy of simulation databases to your local machine." />
         <Run Text="The time and memory requirements primarily depend on the simulation count and lattice sizes." />

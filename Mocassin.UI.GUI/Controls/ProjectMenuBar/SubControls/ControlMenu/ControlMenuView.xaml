@@ -32,7 +32,7 @@
                   CommandParameter="{x:Type tabCommands:AddLatticeControlTabCommand}" />
         <Separator />
 
-        <MenuItem Header="Customization Template Control" Command="{Binding CommandRelay}"
+        <MenuItem Header="Parametrization Template Control" Command="{Binding CommandRelay}"
                   CommandParameter="{x:Type tabCommands:AddCustomizationControlTabCommand}" />
         <MenuItem Header="Job Template Control" Command="{Binding CommandRelay}"
                   CommandParameter="{x:Type tabCommands:AddJobTranslationControlTabCommand}" />

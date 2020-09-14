@@ -39,7 +39,7 @@ namespace Mocassin.UI.GUI.Controls.Base.Commands
         /// <inheritdoc />
         protected override string GetTabName()
         {
-            return "Customization Control";
+            return "Parametrization Control";
         }
 
         /// <inheritdoc />

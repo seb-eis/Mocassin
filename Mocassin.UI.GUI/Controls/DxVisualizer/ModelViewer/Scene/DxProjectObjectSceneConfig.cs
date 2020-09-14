@@ -16,9 +16,9 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
     {
         private string description;
         private Action onChangeInvalidatesNode;
-        private static string IsInactiveKey => Resources.ResourceKey_ModelObject_RenderInactiveFlag;
-        private static string IsVisibleKey => Resources.ResourceKey_ModelObject_RenderVisibilityFlag;
-        private static string NameKey => Resources.ResourceKey_ModelObject_RenderDisplayName;
+        private static string IsInactiveKey => Properties.Resources.ResourceKey_ModelObject_RenderInactiveFlag;
+        private static string IsVisibleKey => Properties.Resources.ResourceKey_ModelObject_RenderVisibilityFlag;
+        private static string NameKey => Properties.Resources.ResourceKey_ModelObject_RenderDisplayName;
 
         /// <summary>
         ///     Get the <see cref="ExtensibleProjectDataObject" /> that provides the scene resources

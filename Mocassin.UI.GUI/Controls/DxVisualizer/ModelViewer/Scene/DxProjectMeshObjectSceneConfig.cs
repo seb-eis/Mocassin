@@ -24,12 +24,12 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
     public class DxProjectMeshObjectSceneConfig : DxProjectObjectSceneConfig, IDxMeshItemConfig
     {
         private bool canResizeMeshAtOrigin;
-        private static string MaterialKey => Resources.ResourceKey_ModelObject_RenderMaterial;
-        private static string ColorKey => Resources.ResourceKey_ModelObject_RenderColor;
-        private static string MeshQualityKey => Resources.ResourceKey_ModelObject_MeshQuality;
-        private static string UniformScalingKey => Resources.ResourceKey_ModelObject_RenderScaling;
-        private static string IsWireframeVisibleKey => Resources.ResourceKey_ModelObject_RenderWireframeFlag;
-        private static string WireframeColorKey => Resources.ResourceKey_ModelObject_RenderWireframeColor;
+        private static string MaterialKey => Properties.Resources.ResourceKey_ModelObject_RenderMaterial;
+        private static string ColorKey => Properties.Resources.ResourceKey_ModelObject_RenderColor;
+        private static string MeshQualityKey => Properties.Resources.ResourceKey_ModelObject_MeshQuality;
+        private static string UniformScalingKey => Properties.Resources.ResourceKey_ModelObject_RenderScaling;
+        private static string IsWireframeVisibleKey => Properties.Resources.ResourceKey_ModelObject_RenderWireframeFlag;
+        private static string WireframeColorKey => Properties.Resources.ResourceKey_ModelObject_RenderWireframeColor;
 
         /// <summary>
         ///     Get the <see cref="Dictionary{TKey,TValue}" /> of supported <see cref="Material" /> items

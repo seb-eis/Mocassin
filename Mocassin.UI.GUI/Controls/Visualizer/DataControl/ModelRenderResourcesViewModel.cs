@@ -17,7 +17,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
     /// </summary>
     public class ModelRenderResourcesViewModel : ViewModelBase
     {
-        private static string RenderAreaResourceKey => Resources.ResourceKey_ModelViewport_RenderArea;
+        private static string RenderAreaResourceKey => Properties.Resources.ResourceKey_ModelViewport_RenderArea;
         private static CultureInfo CultureDefault => CultureInfo.InvariantCulture;
         private static double[] RenderAreaDefault => new double[] {0, 0, 0, 1, 1, 1};
         private double[] RenderAreaValues { get; }
@@ -157,7 +157,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         private void SetRenderAreaValue(double value, int index, [CallerMemberName] string callerMemberName = default)
         {
             RenderAreaValues[index] = value;
-            DataSource.SetResource(Resources.ResourceKey_ModelViewport_RenderArea, RenderAreaValues, CreateRenderAreaString);
+            DataSource.SetResource(Properties.Resources.ResourceKey_ModelViewport_RenderArea, RenderAreaValues, CreateRenderAreaString);
             OnPropertyChanged(callerMemberName);
         }
 

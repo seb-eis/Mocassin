@@ -6,35 +6,21 @@
              xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel"
              xmlns:dataControl="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel.DataControl"
              xmlns:content="clr-namespace:Mocassin.UI.GUI.Base.UiElements.Content"
+             xmlns:res="clr-namespace:Mocassin.UI.GUI.Resources"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance local:LatticeModelControlViewModel, IsDesignTimeCreatable=True}"
              d:DesignHeight="450" d:DesignWidth="800"
              Background="Transparent">
 
   <UserControl.Resources>
-    <ToolTip x:Key="Local.ToolTip.BuildingBlocks" Style="{StaticResource App.Style.ToolTip.Default}">
-      <StackPanel>
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="Define the basic building blocks of your lattice. Currently only the default block can be used!" />
-          <Run
-            Text="The default occupation is automatically set to the first entry of the affiliated position occupation option list." />
-        </TextBlock>
-      </StackPanel>
-
+    <ToolTip x:Key="Local.ToolTip.BuildingBlocks" >
+      <TextBlock Text="{x:Static res:Tooltips.ModelObject_BuildingBlock}"/>
     </ToolTip>
-    <ToolTip x:Key="Local.ToolTip.Doping" Style="{StaticResource App.Style.ToolTip.Default}">
-      <StackPanel>
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="Define how actual dopings are applied to a building block." />
-        </TextBlock>
-      </StackPanel>
+    <ToolTip x:Key="Local.ToolTip.Doping" >
+      <TextBlock Text="{x:Static res:Tooltips.ModelObject_Doping}"/>
     </ToolTip>
-    <ToolTip x:Key="Local.ToolTip.DopingCombination" Style="{StaticResource App.Style.ToolTip.Default}">
-      <StackPanel>
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="Define how one particle can replace another on which position." />
-        </TextBlock>
-      </StackPanel>
+    <ToolTip x:Key="Local.ToolTip.DopingCombination" >
+      <TextBlock Text="{x:Static res:Tooltips.ModelObject_OccupationExchange}"/>
     </ToolTip>
   </UserControl.Resources>
   <Grid>

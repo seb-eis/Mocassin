@@ -7,204 +7,21 @@
   xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionModel.DataControl"
   xmlns:gridControl="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionModel.GridControl"
   xmlns:content="clr-namespace:Mocassin.UI.GUI.Base.UiElements.Content"
+  xmlns:res="clr-namespace:Mocassin.UI.GUI.Resources"
   mc:Ignorable="d"
   d:DataContext="{d:DesignInstance local:AbstractTransitionControlViewModel, IsDesignTimeCreatable=True}"
   d:DesignHeight="450" d:DesignWidth="800"
   Background="Transparent">
 
   <UserControl.Resources>
-    <ToolTip x:Key="Local.ToolTip.StateExchangePair" Style="{StaticResource App.Style.ToolTip.Default}">
-      <StackPanel>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.StateExchangePair}"
-               Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="objects describe the basic possible changes of position occupations within your cell." />
-          <Run Text="Each change is formed by two" />
-          <Run Text="{StaticResource App.String.Particle}"
-               Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="objects, describing donor and acceptor state. The" />
-          <Run Text="{StaticResource App.String.Particle.Void}"
-               Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="is a special acceptor for transition state changes from 'nothing' to 'something'." />
-          <LineBreak />
-          <Run Text="Keep in mind: These objects are the first part of MOCASSINS's movement abstraction system."
-               Style="{StaticResource App.Style.Run.Important}" />
-          <Run
-            Text="For Example, in an oxygen vacancy mechanism, the start position 'vacancy' state changes to an 'oxygen'."
-            Style="{StaticResource App.Style.Run.Important}" />
-          <Run Text="The end position will change from 'oxygen' to 'vacancy', so the same"
-               Style="{StaticResource App.Style.Run.Important}" />
-          <Run Text="{StaticResource App.String.StateExchangePair}"
-               Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="is valid here."
-               Style="{StaticResource App.Style.Run.Important}" />
-          <Run
-            Text="During transition however, the 'nothing' state of the unstable position will temporary change to an 'oxygen'."
-            Style="{StaticResource App.Style.Run.Important}" />
-          <Run Text="So, for KMC this change has to be defined as well, while for MMC the first is sufficient."
-               Style="{StaticResource App.Style.Run.Important}" />
-          <LineBreak />
-        </TextBlock>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.ToolTip.PropertyInfo}"
-               Style="{StaticResource App.Style.Run.Important}" />
-          <LineBreak />
-        </TextBlock>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.StateExchangePair.AcceptorState}"
-               Style="{StaticResource App.Style.Run.Property}" />
-          <LineBreak />
-          <Run Text="Define the" />
-          <Run Text="{StaticResource App.String.Particle}"
-               Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="describing the acceptor state of an exchange (e.g. 'vacancy', 'nothing',...)." />
-          <LineBreak />
-        </TextBlock>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.StateExchangePair.DonorState}"
-               Style="{StaticResource App.Style.Run.Property}" />
-          <LineBreak />
-          <Run Text="Define the" />
-          <Run Text="{StaticResource App.String.Particle}"
-               Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="describing the donor state of an exchange (e.g. 'ion', 'polaron',...)." />
-          <LineBreak />
-        </TextBlock>
-
-      </StackPanel>
-
+    <ToolTip x:Key="Local.ToolTip.StateExchangePair" >
+      <TextBlock Text="{x:Static res:Tooltips.ModelObject_StateExchangePair}"/>
     </ToolTip>
-    <ToolTip x:Key="Local.ToolTip.StateExchangeGroup" Style="{StaticResource App.Style.ToolTip.Default}">
-      <StackPanel>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.StateExchangeGroup}"
-               Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="objects define sets of analogous state exchanges which share a common charge change." />
-          <Run Text="Normally, each group consists of just one" />
-          <Run Text="{StaticResource App.String.StateExchangePair}"
-               Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run
-            Text="and adding more is only recommended for simultaneous treatment of similar ions with similar transitions." />
-          <Run
-            Text="For example, grouping multiple 'halide ion' to 'vacancy' changes for a common halide movement behavior." />
-          <LineBreak />
-          <Run Text="Keep in mind: This is the second step of movement abstraction."
-               Style="{StaticResource App.Style.Run.Important}" />
-          <Run Text="Forming a group still allows species specific energy modeling an result evaluation."
-               Style="{StaticResource App.Style.Run.Important}" />
-          <Run
-            Text="It simply allows MOCASSIN to generate multiple transitions and affiliated behavior rules in a single step."
-            Style="{StaticResource App.Style.Run.Important}" />
-        </TextBlock>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.ToolTip.PropertyInfo}"
-               Style="{StaticResource App.Style.Run.Important}" />
-          <LineBreak />
-        </TextBlock>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.StateExchangeGroup.StateExchangePairs}"
-               Style="{StaticResource App.Style.Run.Property}" />
-          <LineBreak />
-          <Run Text="The set of" />
-          <Run Text="{StaticResource App.String.StateExchangePair}"
-               Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="objects that should be treated simultaneously." />
-          <Run Text="MOCASSIN requires members to have a common relative charge change from donor to acceptor state." />
-          <LineBreak />
-        </TextBlock>
-
-      </StackPanel>
-
+    <ToolTip x:Key="Local.ToolTip.StateExchangeGroup" >
+      <TextBlock Text="{x:Static res:Tooltips.ModelObject_StateExchangeGroup}"/>
     </ToolTip>
-    <ToolTip x:Key="Local.ToolTip.AbstractTransition" Style="{StaticResource App.Style.ToolTip.Default}">
-      <StackPanel>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.AbstractTransition}"
-               Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run
-            Text="objects provide a basis for automatic deduction of possible state changes that involve multiple positions." />
-          <Run Text="Each position involved in a transition is assigned a" />
-          <Run Text="{StaticResource App.String.StateExchangeGroup}"
-               Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run
-            Text="to provide the local state change permutation basis. A connection pattern describes where consecutive state changes affect each other." />
-          <LineBreak />
-          <LineBreak />
-          <Run
-            Text="Keep in mind: This is the third step of movement abstraction which contains the 1D behavior basis of transitions."
-            Style="{StaticResource App.Style.Run.Important}" />
-          <Run
-            Text="Think about what state changes apply to the positions of your transition and if the positions can exchange information or not."
-            Style="{StaticResource App.Style.Run.Important}" />
-          <Run
-            Text="For example, a basic oxygen vacancy mechanism has the position stability sequence [Stable,Unstable,Stable]."
-            Style="{StaticResource App.Style.Run.Important}" />
-          <Run Text="The attached sequence of required state change options is ['Vc,O','Void,O','Vc,O']."
-               Style="{StaticResource App.Style.Run.Important}" />
-          <Run
-            Text="If we describe this as an information exchange, oxygen is passed from position (1) to (2) (State 0 to 1) and then from (2) to (3) (State 1 to 2) or vise-versa."
-            Style="{StaticResource App.Style.Run.Important}" />
-          <Run
-            Text="Therefore, the linking of position (1) to (2) and (2) to (3) both require the 'Dynamic' connection flag."
-            Style="{StaticResource App.Style.Run.Important}" />
-          <Run
-            Text="Form this, two co-dependent options emerge that actually change the state of the lattice - oxygen can move from (1) to a vacancy at (3) or the other way around."
-            Style="{StaticResource App.Style.Run.Important}" />
-          <Run
-            Text="Including the law of mass conservation, the only option is that the oxygen particle is on the unstable position in the transition state."
-            Style="{StaticResource App.Style.Run.Important}" />
-          <LineBreak />
-        </TextBlock>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.ToolTip.PropertyInfo}"
-               Style="{StaticResource App.Style.Run.Important}" />
-          <LineBreak />
-        </TextBlock>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.AbstractTransition.Connection}"
-               Style="{StaticResource App.Style.Run.Property}" />
-          <LineBreak />
-          <Run
-            Text="Set the regex interpreted connection description string. Requires (#Positions - 1) occurrences of the words 'Dynamic' or 'Static' in the correct order." />
-          <Run
-            Text="'Dynamic' defines affiliated state changes as co-dependent (exchange information) while 'Static' is a connector that separates sub-movement." />
-          <LineBreak />
-        </TextBlock>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.AbstractTransition.AssociationFlag}"
-               Style="{StaticResource App.Style.Run.Property}" />
-          <LineBreak />
-          <Run
-            Text="Advanced behavior flag for complex movements that defines if the 'dissociative' (default) or 'associative' case should be generated." />
-          <Run
-            Text="Has no effect unless the abstract describes a multi-atom KMC transition (e.g. oxygen-proton vehicle mechanism)." />
-          <LineBreak />
-        </TextBlock>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.AbstractTransition.StateExchangeGroups}"
-               Style="{StaticResource App.Style.Run.Property}" />
-          <LineBreak />
-          <Run Text="Set the " />
-          <Run Text="{StaticResource App.String.StateExchangeGroup}"
-               Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="for each involved position in the required order." />
-          <LineBreak />
-        </TextBlock>
-
-      </StackPanel>
-
+    <ToolTip x:Key="Local.ToolTip.AbstractTransition" >
+      <TextBlock Text="{x:Static res:Tooltips.ModelObject_AbstractTransition}"/>
     </ToolTip>
   </UserControl.Resources>
   <Grid>

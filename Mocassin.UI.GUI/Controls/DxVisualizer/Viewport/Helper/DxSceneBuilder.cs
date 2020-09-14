@@ -151,7 +151,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
             if (geometry == null) throw new ArgumentNullException(nameof(geometry));
             if (material == null) throw new ArgumentNullException(nameof(material));
             if (transforms == null) throw new ArgumentNullException(nameof(transforms));
-            if (transforms.Count == 0) throw new ArgumentException(Resources.ErrorMsg_Argument_EmptyCollection, nameof(transforms));
+            if (transforms.Count == 0) throw new ArgumentException( Properties.Resources.ErrorMsg_Argument_EmptyCollection, nameof(transforms));
 
             foreach (var matrix in transforms)
             {
@@ -188,7 +188,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
             if (geometry == null) throw new ArgumentNullException(nameof(geometry));
             if (material == null) throw new ArgumentNullException(nameof(material));
             if (transforms == null) throw new ArgumentNullException(nameof(transforms));
-            if (transforms.Count == 0) throw new ArgumentException(Resources.ErrorMsg_Argument_EmptyCollection, nameof(transforms));
+            if (transforms.Count == 0) throw new ArgumentException(Properties.Resources.ErrorMsg_Argument_EmptyCollection, nameof(transforms));
 
             var geometries = new BatchedMeshGeometryConfig[transforms.Count];
             for (var i = 0; i < transforms.Count; i++) geometries[i] = new BatchedMeshGeometryConfig(geometry, transforms[i], 0);

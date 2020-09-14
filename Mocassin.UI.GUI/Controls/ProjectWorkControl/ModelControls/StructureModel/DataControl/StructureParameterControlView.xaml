@@ -9,134 +9,18 @@
   xmlns:crystalSystems="clr-namespace:Mocassin.Symmetry.CrystalSystems;assembly=Mocassin.Symmetry"
   xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
   xmlns:content="clr-namespace:Mocassin.UI.GUI.Base.UiElements.Content"
+  xmlns:res="clr-namespace:Mocassin.UI.GUI.Resources"
   d:DataContext="{d:DesignInstance local:StructureParameterControlViewModel, IsDesignTimeCreatable = True}"
   mc:Ignorable="d"
   d:DesignHeight="450" d:DesignWidth="800"
   Background="Transparent">
 
   <UserControl.Resources>
-    <ToolTip x:Key="Local.ToolTip.SpaceGroup" Style="{StaticResource App.Style.ToolTip.Default}">
-      <StackPanel>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="The" />
-          <Run Text="{StaticResource App.String.SpaceGroup}" Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="is a unique entity of your model that defines the existing symmetry operations for the unit cell." />
-          <Run
-            Text="Mocassin ships with a basic database supporting all 230 existing groups with multiple axis and origin choices." />
-          <LineBreak />
-          <Run Text="Keep in mind: All model input has to be done symmetry reduced and is expanded to P1 using your "
-               Style="{StaticResource App.Style.Run.Important}" />
-          <Run Text="{StaticResource App.String.SpaceGroup}" Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run
-            Text="choice. Inversely, geometric and permutation analysis/searches will yield only symmetry reduced results."
-            Style="{StaticResource App.Style.Run.Important}" />
-          <LineBreak />
-        </TextBlock>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.ToolTip.PropertyInfo}" Style="{StaticResource App.Style.Run.Important}" />
-          <LineBreak />
-        </TextBlock>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.SpaceGroup.Index}" Style="{StaticResource App.Style.Run.Property}" />
-          <LineBreak />
-          <Run Text="The index/id of the group within the international table of space groups." />
-          <LineBreak />
-        </TextBlock>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.SpaceGroup.Literal}" Style="{StaticResource App.Style.Run.Property}" />
-          <LineBreak />
-          <Run Text="The string representation/name of the group." />
-          <LineBreak />
-        </TextBlock>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.SpaceGroup.Info}" Style="{StaticResource App.Style.Run.Property}" />
-          <LineBreak />
-          <Run Text="Additional symmetry information for groups with multiple axis or origin choices." />
-          <LineBreak />
-        </TextBlock>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.SpaceGroup.System}" Style="{StaticResource App.Style.Run.Property}" />
-          <LineBreak />
-          <Run Text="The crystal system that the space group belongs to." />
-          <LineBreak />
-        </TextBlock>
-
-      </StackPanel>
-
+    <ToolTip x:Key="Local.ToolTip.SpaceGroup">
+      <TextBlock Text="{x:Static res:Tooltips.ModelObject_SpaceGroup}"/>
     </ToolTip>
-    <ToolTip x:Key="Local.ToolTip.Parameters" Style="{StaticResource App.Style.ToolTip.Default}">
-      <StackPanel>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="The" />
-          <Run Text="{StaticResource App.String.CellParameters}" Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="are unique objects that describe the geometry of your unit cell." />
-          <Run Text="The chosen parameters from an affine transformed space for the fractional coordinates (A,B,C)." />
-          <LineBreak />
-        </TextBlock>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.ToolTip.PropertyInfo}" Style="{StaticResource App.Style.Run.Important}" />
-          <LineBreak />
-        </TextBlock>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.CellParameters.Name}" Style="{StaticResource App.Style.Run.Property}" />
-          <LineBreak />
-          <Run Text="Name your unit cell" />
-          <LineBreak />
-        </TextBlock>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.CellParameters.A}" Style="{StaticResource App.Style.Run.Property}" />
-          <LineBreak />
-          <Run Text="Set the unit cell parameter length in A direction in [&#x212b;]" />
-          <LineBreak />
-        </TextBlock>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.CellParameters.B}" Style="{StaticResource App.Style.Run.Property}" />
-          <LineBreak />
-          <Run Text="Set the unit cell parameter length in B direction in [&#x212b;]" />
-          <LineBreak />
-        </TextBlock>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.CellParameters.C}" Style="{StaticResource App.Style.Run.Property}" />
-          <LineBreak />
-          <Run Text="Set the unit cell parameter length in C direction in [&#x212b;]" />
-          <LineBreak />
-        </TextBlock>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.CellParameters.Alpha}" Style="{StaticResource App.Style.Run.Property}" />
-          <LineBreak />
-          <Run Text="Set the unit cell angle &#x3B1; (A-B angle) in [°]" />
-          <LineBreak />
-        </TextBlock>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.CellParameters.Beta}" Style="{StaticResource App.Style.Run.Property}" />
-          <LineBreak />
-          <Run Text="Set the unit cell angle &#x3B2; (A-C angle)  in [°]" />
-          <LineBreak />
-        </TextBlock>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.CellParameters.Gamma}" Style="{StaticResource App.Style.Run.Property}" />
-          <LineBreak />
-          <Run Text="Set the unit cell angle &#x3B3; (B-C angle) in [°]" />
-          <LineBreak />
-        </TextBlock>
-
-      </StackPanel>
-
+    <ToolTip x:Key="Local.ToolTip.Parameters">
+      <TextBlock Text="{x:Static res:Tooltips.ModelObject_CellParameterSettings}"/>
     </ToolTip>
   </UserControl.Resources>
   <Grid>

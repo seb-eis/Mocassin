@@ -11,63 +11,17 @@
   xmlns:adapter="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.SimulationModel.GridControl.Adapter"
   xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
   xmlns:content="clr-namespace:Mocassin.UI.GUI.Base.UiElements.Content"
+  xmlns:res="clr-namespace:Mocassin.UI.GUI.Resources"
   d:DataContext="{d:DesignInstance local:MetropolisSimulationControlViewModel, IsDesignTimeCreatable=True}"
   mc:Ignorable="d"
   d:DesignHeight="450" d:DesignWidth="800"
   Background="Transparent">
 
   <UserControl.Resources>
-    <ToolTip x:Key="Local.ToolTip.MetropolisSimulations" Style="{StaticResource App.Style.ToolTip.Default}">
+    <ToolTip x:Key="Local.ToolTip.MetropolisSimulations" >
       <StackPanel>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.MetropolisSimulation}"
-               Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="objects define the basis for your MMC simulation project deployment." />
-          <Run Text="They group sets of" />
-          <Run Text="{StaticResource App.String.MetropolisTransition}"
-               Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="objects to define what can happen within the lattice during simulation." />
-          <LineBreak />
-          <Run
-            Text="Keep in mind: Settings you define here can be overwritten later on and serve as global fallback values."
-            Style="{StaticResource App.Style.Run.Important}" />
-          <Run Text="It is recommended to use the automatic default values if global overrides are not required."
-               Style="{StaticResource App.Style.Run.Important}" />
-          <LineBreak />
-        </TextBlock>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.ToolTip.PropertyInfo}"
-               Style="{StaticResource App.Style.Run.Important}" />
-          <LineBreak />
-        </TextBlock>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.MetropolisSimulation.Transitions}"
-               Style="{StaticResource App.Style.Run.Property}" />
-          <LineBreak />
-          <Run Text="Define the set of attached" />
-          <Run Text="{StaticResource App.String.MetropolisTransition}"
-               Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="objects that define the possible set of selectable changes." />
-        </TextBlock>
-
-      </StackPanel>
-
-    </ToolTip>
-    <ToolTip x:Key="Local.ToolTip.GeneralSettings" Style="{StaticResource App.Style.ToolTip.Default}">
-      <StackPanel>
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="Defines the global overrides for general simulation settings that exist for both KMC and MMC." />
-        </TextBlock>
-      </StackPanel>
-    </ToolTip>
-    <ToolTip x:Key="Local.ToolTip.MetropolisSettings">
-      <StackPanel>
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="Defines the global overrides for simulation settings that exist only for MMC." />
-        </TextBlock>
+        <TextBlock Text="{x:Static res:Tooltips.ModelObject_MetropolisSimulation}"/>
+        <TextBlock Text="{x:Static res:Tooltips.ModelObject_Simulation_SharedSettings}"/>
       </StackPanel>
     </ToolTip>
   </UserControl.Resources>
@@ -127,7 +81,7 @@
       </DataGrid>
     </content:HeaderedGroup>
 
-    <content:HeaderedGroup Grid.Column="2" Grid.Row="0" HeaderToolTip="{StaticResource Local.ToolTip.GeneralSettings}">
+    <content:HeaderedGroup Grid.Column="2" Grid.Row="0">
       <content:HeaderedGroup.Header>
         <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
           <Run Text="General Fallback Values:" />
@@ -138,8 +92,7 @@
       <gridControl:SimulationBaseControlView DataContext="{Binding SelectedItem}" />
     </content:HeaderedGroup>
 
-    <content:HeaderedGroup Grid.Column="2" Grid.Row="2"
-                           HeaderToolTip="{StaticResource Local.ToolTip.MetropolisSettings}">
+    <content:HeaderedGroup Grid.Column="2" Grid.Row="2">
       <content:HeaderedGroup.Header>
         <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
           <Run Text="MMC Fallback Values:" />

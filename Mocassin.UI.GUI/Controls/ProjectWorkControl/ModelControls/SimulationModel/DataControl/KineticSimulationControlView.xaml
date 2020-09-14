@@ -11,62 +11,16 @@
   xmlns:adapter="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.SimulationModel.GridControl.Adapter"
   xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
   xmlns:content="clr-namespace:Mocassin.UI.GUI.Base.UiElements.Content"
+  xmlns:res="clr-namespace:Mocassin.UI.GUI.Resources"
   d:DataContext="{d:DesignInstance local:KineticSimulationControlViewModel, IsDesignTimeCreatable=True}"
   mc:Ignorable="d"
   d:DesignHeight="450" d:DesignWidth="800">
 
   <UserControl.Resources>
-    <ToolTip x:Key="Local.ToolTip.KineticSimulations" Style="{StaticResource App.Style.ToolTip.Default}">
+    <ToolTip x:Key="Local.ToolTip.KineticSimulations" >
       <StackPanel>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.KineticSimulation}"
-               Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="objects define the basis for your KMC simulation project deployment." />
-          <Run Text="They group sets of" />
-          <Run Text="{StaticResource App.String.KineticsTransition}"
-               Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="objects to define what can happen within the lattice during simulation." />
-          <LineBreak />
-          <Run
-            Text="Keep in mind: Settings you define here can be overwritten later on and serve as fallback values."
-            Style="{StaticResource App.Style.Run.Important}" />
-          <Run Text="It is recommended to use the automatic defaults or similar values."
-               Style="{StaticResource App.Style.Run.Important}" />
-          <LineBreak />
-        </TextBlock>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.ToolTip.PropertyInfo}"
-               Style="{StaticResource App.Style.Run.Important}" />
-          <LineBreak />
-        </TextBlock>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.KineticSimulation.Transitions}"
-               Style="{StaticResource App.Style.Run.Property}" />
-          <LineBreak />
-          <Run Text="Define the set of attached" />
-          <Run Text="{StaticResource App.String.KineticsTransition}"
-               Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="objects that define the possible set of selectable changes." />
-        </TextBlock>
-
-      </StackPanel>
-
-    </ToolTip>
-    <ToolTip x:Key="Local.ToolTip.GeneralSettings" Style="{StaticResource App.Style.ToolTip.Default}">
-      <StackPanel>
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="Defines the fallback values for general simulation settings that exist for both KMC and MMC." />
-        </TextBlock>
-      </StackPanel>
-    </ToolTip>
-    <ToolTip x:Key="Local.ToolTip.KineticSettings">
-      <StackPanel>
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="Defines the fallback values for simulation settings that exist only for KMC." />
-        </TextBlock>
+        <TextBlock Text="{x:Static res:Tooltips.ModelObject_KineticSimulation}"/>
+        <TextBlock Text="{x:Static res:Tooltips.ModelObject_Simulation_SharedSettings}"/>
       </StackPanel>
     </ToolTip>
   </UserControl.Resources>
@@ -127,8 +81,7 @@
 
     <GridSplitter Grid.Column="1" Grid.Row="0" Grid.RowSpan="4" />
 
-    <content:HeaderedGroup Grid.Column="2" Grid.Row="0"
-                           HeaderToolTip="{StaticResource Local.ToolTip.GeneralSettings}">
+    <content:HeaderedGroup Grid.Column="2" Grid.Row="0">
       <content:HeaderedGroup.Header>
         <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
           <Run Text="General Fallback Values:" />
@@ -138,8 +91,7 @@
       <gridControl:SimulationBaseControlView DataContext="{Binding SelectedItem}" />
     </content:HeaderedGroup>
 
-    <content:HeaderedGroup Grid.Column="2" Grid.Row="2"
-                           HeaderToolTip="{StaticResource Local.ToolTip.KineticSettings}">
+    <content:HeaderedGroup Grid.Column="2" Grid.Row="2">
       <content:HeaderedGroup.Header>
         <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
           <Run Text="KMC Fallback Values:" />

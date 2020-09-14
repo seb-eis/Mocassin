@@ -187,7 +187,7 @@ namespace Mocassin.UI.GUI
         {
             try
             {
-                var filePath = GetFullResourceFilePath(Resources.Filename_Project_Default_Configuration);
+                var filePath = GetFullResourceFilePath(Properties.Resources.Filename_Project_Default_Configuration);
                 return ProjectSettings.Deserialize(filePath, PluginAssemblies);
             }
             catch (Exception exception)
@@ -207,7 +207,7 @@ namespace Mocassin.UI.GUI
         /// <param name="isOverwrite"></param>
         public void EnsureResourcesDeployed(bool isOverwrite)
         {
-            Directory.CreateDirectory(Environment.ExpandEnvironmentVariables(Resources.Folder_Userprofile_Resources));
+            Directory.CreateDirectory(Environment.ExpandEnvironmentVariables(Properties.Resources.Folder_Userprofile_Resources));
             EnsureProjectConfigDeployed(isOverwrite);
             EnsureSymmetryDatabaseDeployed(isOverwrite);
         }
@@ -218,8 +218,8 @@ namespace Mocassin.UI.GUI
         /// <param name="isOverwrite"></param>
         public void EnsureSymmetryDatabaseDeployed(bool isOverwrite)
         {
-            var dbPath = GetFullResourceFilePath(Resources.Filename_Symmetry_Default_Database);
-            if (!File.Exists(dbPath) || isOverwrite) File.WriteAllBytes(dbPath, Resources.Symmetry_Database_Default);
+            var dbPath = GetFullResourceFilePath(Properties.Resources.Filename_Symmetry_Default_Database);
+            if (!File.Exists(dbPath) || isOverwrite) File.WriteAllBytes(dbPath, Properties.Resources.Symmetry_Database_Default);
         }
 
         /// <summary>
@@ -229,8 +229,8 @@ namespace Mocassin.UI.GUI
         /// <param name="isOverwrite"></param>
         public void EnsureProjectConfigDeployed(bool isOverwrite)
         {
-            var dbPath = GetFullResourceFilePath(Resources.Filename_Symmetry_Default_Database);
-            var configPath = GetFullResourceFilePath(Resources.Filename_Project_Default_Configuration);
+            var dbPath = GetFullResourceFilePath(Properties.Resources.Filename_Symmetry_Default_Database);
+            var configPath = GetFullResourceFilePath(Properties.Resources.Filename_Project_Default_Configuration);
             var projectSettings = ProjectSettings.CreateDefault();
             projectSettings.SymmetrySettings.SpaceGroupDbPath = dbPath;
             var settingsXml = projectSettings.Serialize(PluginAssemblies);
@@ -245,7 +245,7 @@ namespace Mocassin.UI.GUI
         /// <returns></returns>
         public string GetFullResourceFilePath(string fileName)
         {
-            return Environment.ExpandEnvironmentVariables(Resources.Folder_Userprofile_Resources + fileName);
+            return Environment.ExpandEnvironmentVariables(Properties.Resources.Folder_Userprofile_Resources + fileName);
         }
 
         /// <summary>

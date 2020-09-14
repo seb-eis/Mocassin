@@ -13,11 +13,11 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
     /// </summary>
     public class ObjectVisualResourcesViewModel : ViewModelBase, IObjectSceneConfig
     {
-        private static string ColorResourceKey => Resources.ResourceKey_ModelObject_RenderColor;
-        private static string ScalingResourceKey => Resources.ResourceKey_ModelObject_RenderScaling;
-        private static string VisibilityResourceKey => Resources.ResourceKey_ModelObject_RenderVisibilityFlag;
-        private static string MeshQualityResourceKey => Resources.ResourceKey_ModelObject_MeshQuality;
-        private static string MaterialResourceKey => Resources.ResourceKey_ModelObject_RenderMaterial;
+        private static string ColorResourceKey => Properties.Resources.ResourceKey_ModelObject_RenderColor;
+        private static string ScalingResourceKey => Properties.Resources.ResourceKey_ModelObject_RenderScaling;
+        private static string VisibilityResourceKey => Properties.Resources.ResourceKey_ModelObject_RenderVisibilityFlag;
+        private static string MeshQualityResourceKey => Properties.Resources.ResourceKey_ModelObject_MeshQuality;
+        private static string MaterialResourceKey => Properties.Resources.ResourceKey_ModelObject_RenderMaterial;
 
         /// <summary>
         ///     Get the <see cref="ExtensibleProjectDataObject" /> that the formatting is valid for

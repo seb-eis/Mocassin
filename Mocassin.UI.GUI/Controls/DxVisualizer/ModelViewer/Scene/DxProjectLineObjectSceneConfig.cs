@@ -18,8 +18,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
     public class DxProjectLineObjectSceneConfig : DxProjectObjectSceneConfig, IDxLineItemConfig
     {
         private readonly LineMaterialCore material = new LineMaterialCore();
-        private static string ColorKey => Resources.ResourceKey_ModelObject_RenderColor;
-        private static string LineThicknessKey => Resources.ResourceKey_ModelObject_RenderScaling;
+        private static string ColorKey => Properties.Resources.ResourceKey_ModelObject_RenderColor;
+        private static string LineThicknessKey => Properties.Resources.ResourceKey_ModelObject_RenderScaling;
 
         /// <inheritdoc />
         public LineMaterialCore Material

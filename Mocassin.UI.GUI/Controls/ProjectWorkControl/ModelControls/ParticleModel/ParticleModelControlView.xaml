@@ -7,6 +7,7 @@
   xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ParticleModel"
   xmlns:dataControl="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ParticleModel.DataControl"
   xmlns:content="clr-namespace:Mocassin.UI.GUI.Base.UiElements.Content"
+  xmlns:res="clr-namespace:Mocassin.UI.GUI.Resources"
   mc:Ignorable="d"
   d:DataContext="{d:DesignInstance local:ParticleModelControlViewModel, IsDesignTimeCreatable = True}"
   d:DesignHeight="450" d:DesignWidth="800"
@@ -14,75 +15,11 @@
   Background="Transparent">
 
   <UserControl.Resources>
-    <ToolTip x:Key="Local.ToolTip.Particle" Style="{StaticResource App.Style.ToolTip.Default}">
-      <StackPanel>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.Particle}" Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="objects describe the existing occupation states for positions within your model." />
-          <Run Text="The implicitly existing object" />
-          <Run Text="{StaticResource App.String.Particle.Void}" Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run
-            Text="- the 'nothing' state - is the default state for unstable positions and cannot be added/removed manually." />
-          <LineBreak />
-        </TextBlock>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.ToolTip.PropertyInfo}" Style="{StaticResource App.Style.Run.Important}" />
-          <LineBreak />
-        </TextBlock>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.Particle.Symbol}" Style="{StaticResource App.Style.Run.Property}" />
-          <LineBreak />
-          <Run Text="Enforces mass conversion between different charge states of the same element." />
-          <LineBreak />
-        </TextBlock>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.Particle.Vacancy}" Style="{StaticResource App.Style.Run.Property}" />
-          <LineBreak />
-          <Run Text="Allow/Disallow vacant behavior, which is required for transitions with physical ion movement." />
-          <LineBreak />
-        </TextBlock>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.Particle.Charge}" Style="{StaticResource App.Style.Run.Property}" />
-          <LineBreak />
-          <Run Text="Set the charge of the particle in [eV]." />
-          <Run
-            Text="Values can be defined absolute or relative to a default state, the later is recommended for polarons." />
-          <Run Text="Unless polarons localized at vacancies are required, vacant sites should have a charge of 0 eV." />
-        </TextBlock>
-
-      </StackPanel>
+    <ToolTip x:Key="Local.ToolTip.Particle">
+      <TextBlock Text="{x:Static res:Tooltips.ModelObject_Particle}"/>
     </ToolTip>
-    <ToolTip x:Key="Local.ToolTip.ParticleSet" Style="{StaticResource App.Style.ToolTip.Default}">
-      <StackPanel>
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.ParticleSet}" Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="objects describe groupings of" />
-          <Run Text="{StaticResource App.String.Particle}" Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run
-            Text="objects that define the permutation basis for cases where the system requires information about allowed particle options." />
-          <Run Text="When used as unstable/transition position occupation options, the" />
-          <Run Text="{StaticResource App.String.Particle.Void}" Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="state is implicitly included. Add objects by drag &amp; drop." />
-          <LineBreak />
-        </TextBlock>
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.ToolTip.PropertyInfo}" Style="{StaticResource App.Style.Run.Important}" />
-          <LineBreak />
-        </TextBlock>
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.ParticleSet.Particles}" Style="{StaticResource App.Style.Run.Property}" />
-          <LineBreak />
-          <Run Text="Set of" />
-          <Run Text="{StaticResource App.String.Particle}" Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run
-            Text="objects that belong to the occupation options. The first object in the list defines the default value." />
-        </TextBlock>
-      </StackPanel>
+    <ToolTip x:Key="Local.ToolTip.ParticleSet">
+      <TextBlock Text="{x:Static res:Tooltips.ModelObject_ParticleSet}"/>
     </ToolTip>
   </UserControl.Resources>
 

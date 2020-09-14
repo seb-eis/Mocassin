@@ -473,7 +473,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         private void OnRenderError(Exception e, [CallerMemberName] string callerMemberName = null)
         {
             PushErrorMessage(e, callerMemberName);
-            MessageBox.Show(Resources.Viewer3D_Error_Visual_Generation, Resources.Viewer3D_Error_Box_Caption, MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show(Properties.Resources.Viewer3D_Error_Visual_Generation, Properties.Resources.Viewer3D_Error_Box_Caption, MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         /// <summary>

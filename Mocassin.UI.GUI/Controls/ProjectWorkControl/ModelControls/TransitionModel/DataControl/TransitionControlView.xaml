@@ -7,128 +7,18 @@
   xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionModel.DataControl"
   xmlns:gridControl="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionModel.GridControl"
   xmlns:content="clr-namespace:Mocassin.UI.GUI.Base.UiElements.Content"
+  xmlns:res="clr-namespace:Mocassin.UI.GUI.Resources"
   mc:Ignorable="d"
   d:DataContext="{d:DesignInstance local:TransitionControlViewModel, IsDesignTimeCreatable=True}"
   d:DesignHeight="450" d:DesignWidth="800"
   Background="Transparent">
 
   <UserControl.Resources>
-    <ToolTip x:Key="Local.ToolTip.MetropolisTransitions" Style="{StaticResource App.Style.ToolTip.Default}">
-      <StackPanel>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.MetropolisTransition}"
-               Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="objects describe time and space independent exchanges between positions." />
-          <Run Text="They are the basic building blocks of Metropolis Monte Carlo (MMC) simulations." />
-          <Run Text="Each transition is defined through two exchanging" />
-          <Run Text="{StaticResource App.String.UnitCellPosition}"
-               Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="objects and and an assigned" />
-          <Run Text="{StaticResource App.String.AbstractTransition}"
-               Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="restricts the set of possible permutations." />
-          <LineBreak />
-        </TextBlock>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.ToolTip.PropertyInfo}"
-               Style="{StaticResource App.Style.Run.Important}" />
-          <LineBreak />
-        </TextBlock>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.MetropolisTransition.Abstract}"
-               Style="{StaticResource App.Style.Run.Property}" />
-          <LineBreak />
-          <Run Text="Set the" />
-          <Run Text="{StaticResource App.String.AbstractTransition}"
-               Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="that defines the set of allowed changes. Changes not supported by the assigned" />
-          <Run Text="{StaticResource App.String.UnitCellPosition}"
-               Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="objects will not occur during simulation." />
-          <LineBreak />
-        </TextBlock>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.MetropolisTransition.FirstWyckoff}"
-               Style="{StaticResource App.Style.Run.Property}" />
-          <LineBreak />
-          <Run Text="Set the first" />
-          <Run Text="{StaticResource App.String.UnitCellPosition}"
-               Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="involved. Exchange options will be limited by the first" />
-          <Run Text="{StaticResource App.String.StateExchangeGroup}"
-               Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="of the assign abstract." />
-          <LineBreak />
-        </TextBlock>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.MetropolisTransition.FirstWyckoff}"
-               Style="{StaticResource App.Style.Run.Property}" />
-          <LineBreak />
-          <Run Text="Set the second" />
-          <Run Text="{StaticResource App.String.UnitCellPosition}"
-               Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="involved. Exchange options will be limited by the second" />
-          <Run Text="{StaticResource App.String.StateExchangeGroup}"
-               Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="of the assign abstract." />
-        </TextBlock>
-
-      </StackPanel>
-
+    <ToolTip x:Key="Local.ToolTip.MetropolisTransitions" >
+      <TextBlock Text="{x:Static res:Tooltips.ModelObject_MetropolisTransition}"/>
     </ToolTip>
-    <ToolTip x:Key="Local.ToolTip.KineticTransitions" Style="{StaticResource App.Style.ToolTip.Default}">
-      <StackPanel>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.KineticsTransition}"
-               Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="objects describe time and space dependent exchanges between positions." />
-          <Run Text="They are the basic building blocks of Kinetic Monte Carlo (KMC) simulations." />
-          <Run Text="Each transition is defined through one reference transition path geometry and a" />
-          <Run Text="{StaticResource App.String.AbstractTransition}"
-               Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="restricts the set of possible permutations." />
-          <LineBreak />
-        </TextBlock>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.ToolTip.PropertyInfo}"
-               Style="{StaticResource App.Style.Run.Important}" />
-          <LineBreak />
-        </TextBlock>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.KineticsTransition.Abstract}"
-               Style="{StaticResource App.Style.Run.Property}" />
-          <LineBreak />
-          <Run Text="Set the" />
-          <Run Text="{StaticResource App.String.AbstractTransition}"
-               Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="that defines the set of allowed changes. Changes not supported by the" />
-          <Run Text="{StaticResource App.String.UnitCellPosition}"
-               Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="objects of the assigned path geometry will not occur." />
-          <LineBreak />
-        </TextBlock>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.KineticsTransition.PathGeometry}"
-               Style="{StaticResource App.Style.Run.Property}" />
-          <LineBreak />
-          <Run Text="Set a reference path geometry for the transition which defines the spatial component of KMC." />
-          <Run Text="The order of the position vectors has to match the order of" />
-          <Run Text="{StaticResource App.String.StateExchangeGroup}"
-               Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="objects in the attached abstract." />
-        </TextBlock>
-
-      </StackPanel>
-
+    <ToolTip x:Key="Local.ToolTip.KineticTransitions" >
+      <TextBlock Text="{x:Static res:Tooltips.ModelObject_KineticTransition}"/>
     </ToolTip>
   </UserControl.Resources>
 

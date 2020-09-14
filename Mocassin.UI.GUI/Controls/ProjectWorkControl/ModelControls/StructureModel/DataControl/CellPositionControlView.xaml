@@ -10,6 +10,7 @@
   xmlns:comboBox="clr-namespace:Mocassin.UI.GUI.Base.UiElements.ComboBox"
   xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
   xmlns:content="clr-namespace:Mocassin.UI.GUI.Base.UiElements.Content"
+  xmlns:res="clr-namespace:Mocassin.UI.GUI.Resources"
   mc:Ignorable="d"
   d:DataContext="{d:DesignInstance local:CellPositionControlViewModel, IsDesignTimeCreatable=True}"
   d:DesignHeight="450" d:DesignWidth="800"
@@ -24,74 +25,8 @@
         <x:Type TypeName="structures:PositionStability" />
       </ObjectDataProvider.MethodParameters>
     </ObjectDataProvider>
-    <ToolTip x:Key="Local.ToolTip.UnitCellPosition" Style="{StaticResource App.Style.ToolTip.Default}">
-      <StackPanel>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.UnitCellPosition}" Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="objects describe the symmetry reduced positions of your unit cell." />
-          <Run Text="Both stable cell positions and unstable migration positions of your model have to be defined." />
-          <LineBreak />
-        </TextBlock>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.ToolTip.PropertyInfo}" Style="{StaticResource App.Style.Run.Important}" />
-          <LineBreak />
-        </TextBlock>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.UnitCellPosition.A}" Style="{StaticResource App.Style.Run.Property}" />
-          <LineBreak />
-          <Run Text="Set the fractional vector component in A direction of the unit cell [0..1)" />
-          <LineBreak />
-        </TextBlock>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.UnitCellPosition.B}" Style="{StaticResource App.Style.Run.Property}" />
-          <LineBreak />
-          <Run Text="Set the fractional vector component in B direction of the unit cell [0..1)" />
-          <LineBreak />
-        </TextBlock>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.UnitCellPosition.C}" Style="{StaticResource App.Style.Run.Property}" />
-          <LineBreak />
-          <Run Text="Set the fractional vector component in C direction of the unit cell [0..1)" />
-          <LineBreak />
-        </TextBlock>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.UnitCellPosition.Occupation}"
-               Style="{StaticResource App.Style.Run.Property}" />
-          <LineBreak />
-          <Run Text="Set the" />
-          <Run Text="{StaticResource App.String.ParticleSet}" Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="that describes the possible occupation states of the position and symmetry equivalents." />
-          <LineBreak />
-        </TextBlock>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.UnitCellPosition.Stability}"
-               Style="{StaticResource App.Style.Run.Property}" />
-          <LineBreak />
-          <Run Text="Defines the stability - stable or unstable - of your position." />
-          <Run Text="Meta-stability is as an implicit result of the energetic landscape and cannot be set explicitly." />
-          <LineBreak />
-        </TextBlock>
-      </StackPanel>
-
-    </ToolTip>
-    <ToolTip x:Key="Local.ToolTip.ExtendedPositions" Style="{StaticResource App.Style.ToolTip.Default}">
-      <StackPanel>
-
-        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="The extension list shows all symmetry equivalent positions of the currently selected" />
-          <Run Text="{StaticResource App.String.UnitCellPosition}" Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="ordered by their fractional position in the unit cell. The data is read-only." />
-        </TextBlock>
-
-      </StackPanel>
-
+    <ToolTip x:Key="Local.ToolTip.UnitCellPosition" >
+      <TextBlock Text="{x:Static res:Tooltips.ModelObject_UnitCellPosition}"/>
     </ToolTip>
   </UserControl.Resources>
 
@@ -145,8 +80,7 @@
 
     <GridSplitter Grid.Column="1" />
 
-    <content:HeaderedGroup Grid.Column="2" x:Name="ExpansionContentControl"
-                           HeaderToolTip="{StaticResource Local.ToolTip.ExtendedPositions}">
+    <content:HeaderedGroup Grid.Column="2" x:Name="ExpansionContentControl">
 
       <HeaderedContentControl.Header>
         <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">

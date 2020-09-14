@@ -170,9 +170,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.DataBrowser
         /// <param name="dataObject"></param>
         private async void SetObjectDropByFormat(IDataObject dataObject)
         {
-            if (dataObject.GetData(Resources.DataObjectFormatKey_ViewFormat_Json) is { } jsonConvertible) await SetActiveObjectJsonAsync(jsonConvertible);
-            if (dataObject.GetData(Resources.DataObjectFormatKey_ViewFormat_Xml) is { } xmlConvertible) await SetActiveObjectXmlAsync(xmlConvertible);
-            if (dataObject.GetData(Resources.DataObjectFormatKey_ViewFormat_Tree) is { } treeConvertible) await SetActiveObjectTreeViewAsync(treeConvertible);
+            if (dataObject.GetData(Properties.Resources.DataObjectFormatKey_ViewFormat_Json) is { } jsonConvertible) await SetActiveObjectJsonAsync(jsonConvertible);
+            if (dataObject.GetData(Properties.Resources.DataObjectFormatKey_ViewFormat_Xml) is { } xmlConvertible) await SetActiveObjectXmlAsync(xmlConvertible);
+            if (dataObject.GetData(Properties.Resources.DataObjectFormatKey_ViewFormat_Tree) is { } treeConvertible) await SetActiveObjectTreeViewAsync(treeConvertible);
         }
 
         /// <inheritdoc />

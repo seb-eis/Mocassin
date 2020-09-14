@@ -408,6 +408,11 @@
     <Compile Include="Controls\Visualizer\Commands\ToggleViewportCameraCommand.cs" />
     <Compile Include="Controls\Visualizer\Objects\Helper\IObjectSceneConfig.cs" />
     <Compile Include="Controls\Visualizer\Objects\Helper\VisualObjectCategory.cs" />
+    <Compile Include="Resources\Tooltips.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Tooltips.resx</DependentUpon>
+    </Compile>
     <Compile Include="StartupWindow.xaml.cs">
       <DependentUpon>StartupWindow.xaml</DependentUpon>
     </Compile>
@@ -1239,6 +1244,10 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Tooltips.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Tooltips.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />

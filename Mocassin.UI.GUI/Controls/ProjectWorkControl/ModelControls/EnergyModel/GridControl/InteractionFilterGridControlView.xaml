@@ -37,13 +37,13 @@
                             Binding="{Binding EndRadius, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
 
         <comboBox:BindableDataGridComboBoxColumn
-          Header="Center Reference Pos."
+          Header="Reference Pos. 1"
           ItemsSource="{Binding ElementName=FilterDataGrid, Path=DataContext.CenterPositionOptions}"
           DisplayMemberPath="Name"
           SelectedItemBinding="{Binding CenterCellReferencePosition}" />
 
         <comboBox:BindableDataGridComboBoxColumn
-          Header="Partner Reference Pos."
+          Header="Reference Pos. 2"
           ItemsSource="{Binding ElementName=FilterDataGrid, Path=DataContext.PartnerPositionOptions}"
           DisplayMemberPath="Name"
           SelectedItemBinding="{Binding PartnerCellReferencePosition}" />

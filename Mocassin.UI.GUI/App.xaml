@@ -310,6 +310,17 @@
           </Setter.Value>
         </Setter>
       </Style>
+
+      <Style TargetType="{x:Type ToolTip}">
+        <Setter Property="MaxWidth" Value="500" />
+        <Style.Resources>
+          <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="TextAlignment" Value="Justify"/>
+          </Style>
+        </Style.Resources>
+      </Style>
+
       <!-- Styles with keys -->
 
       <Style TargetType="{x:Type Button}" x:Key="App.Style.Button.NullCommand">
@@ -337,10 +348,6 @@
       <Style TargetType="{x:Type Run}" x:Key="App.Style.Run.Property">
         <Setter Property="Foreground" Value="OrangeRed" />
         <Setter Property="FontWeight" Value="Bold" />
-      </Style>
-
-      <Style TargetType="{x:Type ToolTip}" x:Key="App.Style.ToolTip.Default">
-        <Setter Property="MaxWidth" Value="500" />
       </Style>
 
       <Style TargetType="{x:Type TextBlock}" x:Key="App.Style.ToolTip.TextBlock">

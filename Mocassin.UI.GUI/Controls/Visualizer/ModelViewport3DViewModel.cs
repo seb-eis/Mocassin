@@ -312,7 +312,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
 
             await Task.WhenAll(awaitables);
 
-            VisualViewModel.AddVisualGroup(cellFrameBuildTask.Result, Resources.DisplayName_ModelViewport_CellFrameLayer,
+            VisualViewModel.AddVisualGroup(cellFrameBuildTask.Result, Properties.Resources.DisplayName_ModelViewport_CellFrameLayer,
                 GetProjectObjectViewModel(structureInfo).IsVisible);
 
             for (var i = 0; i < positionGraphs.Count; i++)
@@ -364,8 +364,8 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         private void OnRenderError(Exception e, [CallerMemberName] string callMemberName = null)
         {
             PushErrorMessage(e, callMemberName);
-            MessageBox.Show(Resources.Viewer3D_Error_Visual_Generation,
-                Resources.Viewer3D_Error_Box_Caption, MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show(Properties.Resources.Viewer3D_Error_Visual_Generation,
+                Properties.Resources.Viewer3D_Error_Box_Caption, MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         /// <summary>
