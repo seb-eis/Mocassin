@@ -14,4 +14,4 @@
 #include "Simulator/Data/SimContext/ContextAccess.h"
 
 // Resolves all passed command line arguments and sets the affiliated context information
-void ResolveCommandLineArguments(SCONTEXT_PARAM, int32_t argCount, char const * const * argValues);
+void ResolveMocassinCommandLineArguments(SCONTEXT_PARAMETER, int32_t argCount, char const * const * argValues);

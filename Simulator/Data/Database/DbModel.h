@@ -12,24 +12,13 @@
 #include "Framework/Errors/McErrors.h"
 #include "Framework/Basic/BaseTypes/BaseTypes.h"
 #include "Framework/Math/Types/Vector.h"
-#include "Framework/Basic/BaseTypes/Buffers.h"
+#include "Framework/Basic/Buffers/Buffers.h"
 #include "Simulator/Logic/Constants/Constants.h"
 
 /* General definitions */
 
-// Type for encoding state occupations with 64 bits (8 Particles max)
-typedef int64_t OccupationCode64_t;
-
-// Type for encoding state occupations with 128 bits (16 particles max)
-typedef struct OccupationCode128
-{
-    // First code part, contains occupation particles 0-7
-    int64_t CodePart0;
-
-    // First code part, contains occupation particles 8-15
-    int64_t CodePart1;
-
-} OccupationCode128_t;
+// Union type for encoding state occupations with 64 bit integers (8 Particles max)
+typedef union OccupationCode64 { int64_t Value; byte_t ParticleIds[8]; } OccupationCode64_t;
 
 // Type for 1D index mappings
 // Layout@ggc_x86_64 => 16@[8,8]
@@ -38,6 +27,18 @@ typedef Span_t(int32_t, IdMappingSpan) IdMappingSpan_t;
 // Type for defining a range of unit cells (Supports 16 bit alignment)
 // Layout@ggc_x86_64 => 16@[4,4,4,4]
 typedef Vector4_t InteractionRange_t;
+
+// Type for passing custom routine request and affiliated data
+// Layout@ggc_x86_64 => 32@[16,16]
+typedef struct RoutineData
+{
+    // The 16 bytes of the routine UUID/GUID
+    byte_t      Guid[16];
+
+    //  The custom routine parameter data span
+    Buffer_t    ParamData;
+
+} RoutineData_t;
 
 /* Structure model */
 
@@ -78,10 +79,10 @@ typedef Span_t(ClusterInteraction_t, ClusterInteractions) ClusterInteractions_t;
 typedef struct EnvironmentDefinition
 {
     // The object id of the environment. Is equal to the position id
-    int32_t                     ObjectId;
+    int32_t                     PositionId;
 
     // Padding
-    int32_t                     Padding:32;
+    uint32_t                    Padding;
 
     // The particle mask of center positions that should be put into the selection pool
     Bitmask_t                   SelectionParticleMask;
@@ -179,7 +180,7 @@ typedef struct PairTable
     int32_t         ObjectId;
 
     // Padding
-    int32_t         Padding:32;
+    uint32_t         Padding;
 
 } PairTable_t;
 
@@ -192,17 +193,17 @@ typedef struct ClusterTable
 
     // The energy table of the cluster.
     // Access by [TableId,OccCodId]
-    EnergyTable_t   EnergyTable;
+    EnergyTable_t           EnergyTable;
 
     // The object id
-    int32_t         ObjectId;
+    int32_t                 ObjectId;
 
     // The particle table mapping. Assigns each particle id its valid sub table in the cluster table
     // Access by [ParticleId]
-    byte_t          ParticleTableMapping[PARTICLE_IDLIMIT];
+    byte_t                  ParticleTableMapping[PARTICLE_IDLIMIT];
 
     // Padding
-    int32_t         Padding:32;
+    uint32_t                 Padding;
     
 } ClusterTable_t;
 
@@ -214,8 +215,12 @@ typedef Span_t(PairTable_t, PairTables) PairTables_t;
 // Layout@ggc_x86_64 => 16@[8,8]
 typedef Span_t(ClusterTable_t, ClusterTables) ClusterTables_t;
 
+// Type for the double 2D rectangular energy defect access [positionId][particleId]
+// Layout@ggc_x86_64 => 24@[8,8,8]
+typedef Array_t(double, 2, DefectBackground) DefectBackground_t;
+
 // Type for the energy model
-// Layout@ggc_x86_64 => 32@[16,16]
+// Layout@ggc_x86_64 => 48@[16,16,16]
 typedef struct EnergyModel
 {
     // The collection of pair energy tables.
@@ -225,7 +230,11 @@ typedef struct EnergyModel
     // The collection of cluster energy tables
     // Access by [TableId] of a cluster interaction
     ClusterTables_t     ClusterTables;
-    
+
+    //  The defect energy background 2D array
+    // Access by [PositionId][ParticleId]
+    DefectBackground_t  DefectBackground;
+
 } EnergyModel_t;
 
 /* Transition model */
@@ -282,7 +291,7 @@ typedef struct JumpDirection
 typedef Span_t(JumpDirection_t, JumpDirections) JumpDirections_t;
 
 // Type for a transition jump rule
-// Layout@ggc_x86_64 => 48@[8,8,8,8,8,8]
+// Layout@ggc_x86_64 => 56@[8,8,8,8,8,8,8]
 typedef struct JumpRule
 {
     // The occupation code for the start state
@@ -295,13 +304,16 @@ typedef struct JumpRule
     OccupationCode64_t   StateCode2;
 
     // The attempt frequency factor that describes the fraction of the frequency modulus that is applied
-    double      FrequencyFactor;
+    double               FrequencyFactor;
 
     // The electric field rule factor that encodes direction
-    double      ElectricFieldFactor;
+    double               ElectricFieldFactor;
+
+    // The virtual path jump energy correction value that corrects the biased S2 calculation. Is NaN if no universally valid values exists for the transition
+    double               StaticVirtualJumpEnergyCorrection;
 
     // The tracker order code that encodes the tracker reordering
-    byte_t      TrackerOrderCode[JUMPS_JUMPLENGTH_MAX];
+    byte_t               TrackerOrderCode[JUMPS_JUMPLENGTH_MAX];
     
 } JumpRule_t;
 
@@ -326,7 +338,7 @@ typedef struct JumpCollection
     int32_t             ObjectId;
 
     // Padding
-    int32_t             Padding:32;
+    uint32_t             Padding;
 
 } JumpCollection_t;
 
@@ -376,11 +388,11 @@ typedef struct MmcHeader
     // The sample length of the abort test
     int32_t     AbortSampleLength;
 
-    // The smaple interval fro the abort test
+    // The sample interval fro the abort test
     int32_t     AbortSampleInterval;
 
     // Padding
-    int32_t     Padding:32;
+    uint32_t     Padding;
     
 } MmcHeader_t;
 
@@ -404,7 +416,7 @@ typedef struct KmcHeader
     int32_t     PreRunMcsp;
 
     // Padding
-    int32_t     Padding:32;
+    uint32_t     Padding;
 
 } KmcHeader_t;
 
@@ -446,37 +458,40 @@ typedef struct JobInfo
     int32_t     ObjectId;
 
     // Padding
-    int32_t     Padding:32;
+    uint32_t     Padding;
     
 } JobInfo_t;
 
 // Type for the job model
-// Layout@ggc_x86_64 => 40@[4,4,4,4,4,4,8,8]
+// Layout@ggc_x86_64 => 72@[4,4,4,4,4,4,8,8,32]
 typedef struct JobModel
 {
     // The objects database context key
-    int32_t     ContextId;
+    int32_t         ContextId;
 
     // The simulation package context id
-    int32_t     PackageId;
+    int32_t         PackageId;
 
     // The lattice model context id
-    int32_t     LatticeModelId;
+    int32_t         LatticeModelId;
 
     // The structure model context id
-    int32_t     StructureModelId;
+    int32_t         StructureModelId;
 
     // The energy model context id
-    int32_t     EnergyModelId;
+    int32_t         EnergyModelId;
 
     // The transition model context id
-    int32_t     TransitionModelId;
+    int32_t         TransitionModelId;
 
     // The job info object
-    JobInfo_t   JobInfo;
+    JobInfo_t       JobInfo;
 
     // The job header pointer
-    void*       JobHeader;
+    void*           JobHeader;
+
+    // Additional routine data for custom non-standard routines
+    RoutineData_t   RoutineData;
 
 } JobModel_t;
 
@@ -486,7 +501,7 @@ typedef struct JobModel
 // Layout@ggc_x86_64 => 24@[8,8,8]
 typedef Array_t(byte_t, 4, Lattice) Lattice_t;
 
-// Type for the double 5D rectangular energy background access
+// Type for the double 5D rectangular energy background access [a][b][c][positionId][particleId]
 // Layout@ggc_x86_64 => 24@[8,8,8]
 typedef Array_t(double, 5, EnergyBackground) EnergyBackground_t;
 
@@ -521,14 +536,14 @@ typedef struct LatticeModel
     EnergyBackground_t  EnergyBackground;
 
     // Padding
-    int64_t             Padding:64;
+    uint64_t             Padding;
 
 } LatticeModel_t;
 
 /* Database model */
 
 // Type for the database model context
-// Layout@ggc_x86_64 => 320@[80,72,56,32,80]
+// Layout@ggc_x86_64 => 336@[80,72,56,48,80]
 typedef struct DbModel
 {
     // The lattice model

@@ -73,7 +73,7 @@ static inline Vector3_t SubtractVector3(const Vector3_t *lhs, const Vector3_t *r
 // Performs a multiplication of the vector with a scalar and returns the resulting vector
 static inline Vector3_t ScalarMultiplyVector3(const Vector3_t *lhs, double rhs)
 {
-	return (Vector3_t) { lhs->A* rhs, lhs->A * rhs, lhs->C * rhs };
+	return (Vector3_t) { lhs->A* rhs, lhs->B * rhs, lhs->C * rhs };
 }
 
 // Performs a division of the vector with a scalar and returns the resulting vector
@@ -89,7 +89,7 @@ static inline double CalcVector3DotProduct(const Vector3_t* lhs, const Vector3_t
 }
 
 // Performs a vector addition (a + b) and returns the resulting int vector
-static inline Vector4_t AddVector4(const Vector4_t* lhs, const Vector4_t* rhs)
+static inline Vector4_t AddVector4(const Vector4_t*restrict lhs, const Vector4_t*restrict rhs)
 {
 	return (Vector4_t) { lhs->A + rhs->A,lhs->B + rhs->B,lhs->C + rhs->C,lhs->D + rhs->D };
 }
@@ -164,13 +164,13 @@ static inline int32_t Int32FromVector4Pair(const Vector4_t* restrict start, cons
 static inline Vector4_t Vector4FromInt32(int32_t value, const int32_t* restrict blockSizes)
 {
     Vector4_t result;
-    result.A = value / blockSizes[0];
-    value %= blockSizes[0];
-    result.B = value / blockSizes[1];
-    value %= blockSizes[1];
-    result.C = value / blockSizes[2];
-    value %= blockSizes[2];
-    result.D = value;
+    var divValue = div(value, blockSizes[0]);
+    result.A = divValue.quot;
+    divValue = div(divValue.rem, blockSizes[1]);
+    result.B = divValue.quot;
+    divValue = div(divValue.rem, blockSizes[2]);
+    result.C = divValue.quot;
+    result.D = divValue.rem;
     return result;
 }
 
@@ -178,10 +178,10 @@ static inline Vector4_t Vector4FromInt32(int32_t value, const int32_t* restrict 
 // Checks if the passed 4D vector is out of bounds of the passed reference size 4D vector
 static inline bool_t Vector4IsOutOfBounds(const Vector4_t* restrict value, const Vector4_t* restrict refSize)
 {
-    return_if(value->A >= refSize->A || value ->A < 0, true);
-    return_if(value->B >= refSize->B || value ->B < 0, true);
-    return_if(value->C >= refSize->C || value ->C < 0, true);
-    return_if(value->D >= refSize->D || value ->D < 0, true);
+    return_if(value->A >= refSize->A || value->A < 0, true);
+    return_if(value->B >= refSize->B || value->B < 0, true);
+    return_if(value->C >= refSize->C || value->C < 0, true);
+    return_if(value->D >= refSize->D || value->D < 0, true);
     return false;
 }
 

@@ -10,7 +10,14 @@
 
 #include <string.h>
 #include <stdlib.h>
-#include "Framework/Basic/BaseTypes/Buffers.h"
+#include "Framework/Basic/Buffers/Buffers.h"
+
+int32_t CompareMocuuid(const void* lhs, const void* rhs)
+{
+    var comp = compareLhsToRhs(*(int64_t*)lhs, *(int64_t*)rhs);
+    if (comp != 0) return comp;
+    return compareLhsToRhs(*(int64_t*)(lhs+8), *(int64_t*)(rhs+8));
+}
 
 VoidSpan_t AllocateSpan(const size_t numOfElements, const size_t sizeOfElement)
 {
@@ -28,7 +35,7 @@ error_t TryAllocateSpan(const size_t numOfElements, const size_t sizeOfElement, 
 void* ConstructVoidSpan(const size_t numOfElements, const size_t sizeOfElement, VoidSpan_t *restrict outSpan)
 {
     error_t error = TryAllocateSpan(numOfElements, sizeOfElement, outSpan);
-    error_assert(error, "Out of memory on span construction.");
+    assert_success(error, "Out of memory on span construction.");
     memset(outSpan->Begin, 0, numOfElements * sizeOfElement);
     return outSpan;
 }
@@ -41,10 +48,10 @@ void* ConstructSpanFromBlob(const void *restrict buffer, size_t numOfBytes, Void
         return outSpan;
     }
 
-    *outSpan = new_Span(*outSpan, numOfBytes);
+    *outSpan = span_New(*outSpan, numOfBytes);
     let bufferSpan = (Buffer_t) {.Begin = (void*) buffer, .End = (void*) buffer + numOfBytes};
     var error = SaveCopyBuffer(&bufferSpan, (Buffer_t*) outSpan);
-    error_assert(error, "this has not worked \n");
+    assert_success(error, "this has not worked \n");
 
     return outSpan;
 }
@@ -64,14 +71,14 @@ error_t TryAllocateList(const size_t capacity, const size_t sizeOfElement, VoidL
 void* ConstructVoidList(const size_t capacity, const size_t sizeOfElement, VoidList_t *restrict outList)
 {
     error_t error = TryAllocateList(capacity, sizeOfElement, outList);
-    error_assert(error, "Out of memory on list construction.");
+    assert_success(error, "Out of memory on list construction.");
     memset(outList->Begin, 0, capacity * sizeOfElement);
     return outList;
 }
 
 VoidArray_t AllocateArray(const int32_t rank, const size_t sizeOfElement, const int32_t dimensions[rank])
 {
-    let numOfHeaderBytes = (2 + rank -1) * sizeof(int32_t);
+    let numOfHeaderBytes = CalculateArrayHeaderSize(rank);
     var numOfDataBytes = dimensions[0] * sizeOfElement;
 
     for (int i = 1; i < rank; ++i)
@@ -91,7 +98,7 @@ error_t TryAllocateArray(const int32_t rank, const size_t sizeOfElement, const i
 void* ConstructVoidArray(const int32_t rank, const size_t sizeOfElement, const int32_t dimensions[rank], VoidArray_t*restrict outArray)
 {
     error_t error = TryAllocateArray(rank, sizeOfElement, dimensions, outArray);
-    error_assert(error, "Out of memory on array construct");
+    assert_success(error, "Out of memory on array construct");
 
     MakeArrayBlocks(rank, dimensions, &outArray->Header->FirstBlockEntry);
     outArray->Header->Size = (int32_t) (span_Length(*outArray) / sizeOfElement);
@@ -116,7 +123,7 @@ void* ConstructArrayFromBlob(const void *restrict buffer,const size_t sizeOfElem
     let totalByteCount = headerByteCount + dataByteCount;
 
     outArray->Header = malloc(totalByteCount);
-    error_assert((outArray->Header != NULL) ? ERR_OK : ERR_MEMALLOCATION, "Failed to build array from passed blob");
+    assert_success((outArray->Header != NULL) ? ERR_OK : ERR_MEMALLOCATION, "Failed to build array from passed blob");
 
     outArray->Begin = ((void*)outArray->Header) + headerByteCount;
     outArray->End = outArray->Begin + dataByteCount;
@@ -179,6 +186,6 @@ error_t SaveMoveBuffer(Buffer_t* restrict sourceBuffer, Buffer_t* restrict targe
     if (SaveCopyBuffer(sourceBuffer, targetBuffer) != ERR_OK)
         return ERR_BUFFEROVERFLOW;
 
-    delete_Span(*sourceBuffer);
+    span_Delete(*sourceBuffer);
     return ERR_OK;
 }

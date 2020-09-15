@@ -32,3 +32,6 @@ error_t ValidateIsDiretoryPath(char const * value);
 
 // Validates the database query string
 error_t ValidateDatabaseQueryString(char const* value);
+
+// Validates that the provided string can be parsed to a finite and positive FLP64
+error_t ValidateIsPositiveDoubleString(char const* value);

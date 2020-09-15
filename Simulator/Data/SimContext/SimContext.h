@@ -11,10 +11,39 @@
 #pragma once
 #include "Framework/Errors/McErrors.h"
 #include "Framework/Basic/BaseTypes/BaseTypes.h"
-#include "Framework/Basic/BaseTypes/Buffers.h"
+#include "Framework/Basic/Buffers/Buffers.h"
 #include "Framework/Math/Random/PcgRandom.h"
 #include "Simulator/Data/Database/DbModel.h"
 #include "Simulator/Data/State/StateModel.h"
+
+// Marks the "no result yet" cycle outcome case
+#define MC_UNFINISHED_CYCLE     0
+
+// Marks the "statistically accepted" cycle outcome case
+#define MC_ACCEPTED_CYCLE       1
+
+// Marks the "statistically rejected" cycle outcome case
+#define MC_REJECTED_CYCLE       2
+
+// Marks the "site blocked" cycle outcome case
+#define MC_BLOCKED_CYCLE        3
+
+// Marks the "start state is unstable" cycle outcome case
+#define MC_STARTUNSTABLE_CYCLE  4
+
+// Marks the "end state is unstable" cycle outcome case
+#define MC_ENDUNSTABLE_CYCLE    5
+
+// Marks the "skipped due to jump frequency" cycle outcome case
+#define MC_SKIPPED_CYCLE        6
+
+// Array type for 3D pair energy delta tables [Original][New][Partner]
+// Layout@ggc_x86_64 => 24@[8,8,8]
+typedef Array_t(double, 3, PairDeltaTable) PairDeltaTable_t;
+
+// Span type for 3D pair energy delta table sets [TableId]
+// Layout@ggc_x86_64 => 24@[8,8,8]
+typedef Span_t(PairDeltaTable_t, PairDeltaTables) PairDeltaTables_t;
 
 // Type for cluster links
 // Layout@ggc_x86_64 => 2@[1,1]
@@ -77,10 +106,16 @@ typedef Span_t(ClusterState_t, ClusterStates) ClusterStates_t;
 // Layout@ggc_x86_64 => 16@[8,8]
 typedef Span_t(double, EnergyStates) EnergyStates_t;
 
-// Type for a full environment state definition (Does not support 16 bit alignment)
-// Layout@ggc_x86_64 => 100@[1,1,1,1,4,4,4,16,4,,16,16,24,8]
+// Type for a full environment state definition (Supports 16 bit alignment)
+// Layout@ggc_x86_64 => 96@[16,1,1,1,1,4,4,4,16,16,24,8]
 typedef struct EnvironmentState
 {
+    // Absolute 4D position vector of the environment in the lattice
+    Vector4_t                   LatticeVector;
+
+    // Current id of the environment in the jump path
+    byte_t                      PathId;
+
     // Boolean flag if the environment center is mobile
     bool_t                      IsMobile;
 
@@ -90,20 +125,11 @@ typedef struct EnvironmentState
     // Current occupation particle id
     byte_t                      ParticleId;
 
-    // Current id of the environment in the jump path
-    byte_t                      PathId;
-
-    // Environment id in the linearized lattice
-    int32_t                     EnvironmentId;
-
     // Current direction pool id the environment is registered in
     int32_t                     PoolId;
 
     // Current relative position id in the affiliated direction pool environment list
     int32_t                     PoolPositionId;
-
-    // Absolute 4D position vector of the environment
-    Vector4_t                   PositionVector;
 
     // Current mobile tracker id of the environment
     int32_t                     MobileTrackerId;
@@ -133,11 +159,11 @@ typedef struct JumpSelectionInfo
     // The selected environment id
     int32_t EnvironmentId;
 
-    // The global jump id of the selection
-    int32_t GlobalJumpId;
-
     // The selected relative jump id within the selected environment
     int32_t RelativeJumpId;
+
+    // The global jump id of the selection
+    int32_t GlobalJumpId;
 
     // The selected offset source environment id (MMC only)
     int32_t MmcOffsetSourceId;
@@ -176,7 +202,7 @@ typedef struct JumpEnergyInfo
     double RawS2toS0Probability;
 
     // The normalized compare state change probability from S0 to S2
-    double CompareS0toS2Probability;
+    double NormalizedS0toS2Probability;
     
 } JumpEnergyInfo_t;
 
@@ -236,7 +262,7 @@ typedef struct JumpLink
 typedef Span_t(JumpLink_t, JumpLinks) JumpLinks_t;
 
 // Type for the jump status that holds the jump link information of a single KMC jump
-// Layout@ggc_x86_64 => 48@[16]
+// Layout@ggc_x86_64 => 80@[16]
 typedef struct JumpStatus
 {
     // The jump links of the jump status
@@ -291,8 +317,13 @@ typedef struct CycleState
     // The pointer to the current work cluster
     ClusterState_t*             WorkCluster;
 
+    #if defined(OPT_USE_3D_PAIRTABLES)
+    // The pointer to the current pair delta table
+    PairDeltaTable_t*           WorkPairTable;
+    #else
     // The pointer to the current pair table
     PairTable_t*                WorkPairTable;
+    #endif
 
     // The pointer to the current work cluster table
     ClusterTable_t*             WorkClusterTable;
@@ -377,7 +408,7 @@ typedef struct PhysicalInfo
 } PhysicalInfo_t;
 
 // Type for the file string information
-// Layout@ggc_x86_64 => 80@[8,8,8,8,8,8,8,8,8,8]
+// Layout@ggc_x86_64 => 88@[8,8,8,8,8,8,8,8,8,8,8]
 typedef struct FileInfo
 {
     // The database query string for data loading
@@ -409,6 +440,9 @@ typedef struct FileInfo
 
     // The energy plugin search symbol
     char const* EnergyPluginSymbol;
+
+    // The path where the system should look for extension routines
+    char const* ExtensionLookupPath;
     
 } FileInfo_t;
 
@@ -434,7 +468,7 @@ typedef struct Flp64Buffer
 } Flp64Buffer_t;
 
 // Type for the simulation dynamic model
-// Layout@ggc_x86_64 => 192@[80,24,32,16,24,16]
+// Layout@ggc_x86_64 => 208@[80,24,32,16,24,16,16]
 typedef struct DynamicModel
 {
     // The simulation file information
@@ -455,6 +489,9 @@ typedef struct DynamicModel
     // The jump status array
     JumpStatusArray_t       JumpStatusArray;
 
+    // The pair delta 3D table span. Access by [TableId][OriginalParticleId][NewParticleId][CenterParticleId]
+    PairDeltaTables_t       PairDeltaTables;
+
 } DynamicModel_t;
 
 // Type for plugin function pointers
@@ -467,8 +504,8 @@ typedef struct SimulationPlugins
     // The callback plugin function on data outputs
     FPlugin_t OnDataOutput;
 
-    // The callback plugin function on set jump probabilities
-    FPlugin_t OnSetJumpProbabilities;
+    // The callback plugin function for setting the KMC transition energy value
+    FPlugin_t OnSetTransitionStateEnergy;
     
 } SimulationPlugins_t;
 
@@ -487,8 +524,17 @@ typedef struct CmdArguments
 
 } CmdArguments_t;
 
+// Type for storing the program overwrites defined by CMD arguments
+// Layout@ggc_x86_64 => 16@[8,4,{4}]
+typedef struct CmdOverwrites
+{
+    //  An overwrite energy value in [eV] for the new upper limit of jump histograms
+    double  JumpHistogramMaxValue;
+
+} CmdOverwrites_t;
+
 // Type for the full simulation context that provides access to all simulation data structures
-// Layout@ggc_x86_64 => 32@[4,]
+// Layout@ggc_x86_64
 typedef struct SimulationContext
 {
     // The main simulation state. Stores the result collections
@@ -517,14 +563,28 @@ typedef struct SimulationContext
 
     // Current main error code of the simulation
     error_t             ErrorCode;
-    
+
+    // Stores the last cycle outcome type (accepted, rejected, blocked, skipped, start unstable, end unstable)
+    int32_t             CycleResult;
+
+    // Stores the set CMD overwrites for the simulation
+    CmdOverwrites_t     CmdOverwrites;
+
+    // Marks if the simulation uses approximate EXP calculation
+    bool_t              IsExpApproximationActive;
+
+    //  Marks if the simulation does not log jump events into histograms
+    bool_t              IsJumpLoggingDisabled;
+
 } SimulationContext_t;
 
-// Construct a new raw simulation context struct
+// Construct a new raw simulation context struct with relative path as IO and math.h exp as exp function
 static inline SimulationContext_t ctor_SimulationContext()
 {
     SimulationContext_t context;
     memset(&context, 0, sizeof(SimulationContext_t));
     context.DynamicModel.FileInfo.IODirectoryPath = ".";
+    context.DynamicModel.FileInfo.ExtensionLookupPath = ".";
+    context.CmdOverwrites.JumpHistogramMaxValue = NAN;
     return context;
 }

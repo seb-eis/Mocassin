@@ -13,137 +13,285 @@
 #include "Simulator/Logic/Routines/Helper/HelperRoutines.h"
 #include "Simulator/Data/State/StateModel.h"
 
-// Updates the mobile tracker index on all used path environment states using the previously set backup data
-static void UpdateMobileTrackerMapping(SCONTEXT_PARAM)
+// Updates the mobile tracker index on path environment state by path id using the previously set backup data
+static inline void UpdateMobileTrackerMappingByPathId(SCONTEXT_PARAMETER, const int32_t pathId, const JumpRule_t*restrict jumpRule, const EnvironmentBackup_t*restrict envBackup)
 {
-    for (int32_t pathId = 0; pathId < getActiveJumpDirection(SCONTEXT)->JumpLength; ++pathId)
-    {
-        let pullId = getActiveJumpRule(SCONTEXT)->TrackerOrderCode[pathId];
+    let pullId = jumpRule->TrackerOrderCode[pathId];
 
-        // On debug assert that no immobile particle has a tracker reorder instruction
-        debug_assert(!((pullId != pathId) && !JUMPPATH[pathId]->IsMobile));
-        JUMPPATH[pathId]->MobileTrackerId = getEnvironmentBackup(SCONTEXT)->PathMobileMappings[pullId];
+    // On debug assert that no immobile particle has a tracker reorder instruction
+    debug_assert(!((pullId != pathId) && !JUMPPATH[pathId]->IsMobile));
+    JUMPPATH[pathId]->MobileTrackerId = envBackup->PathMobileMappings[pullId];
+}
+
+// Updates the mobile tracker index on all used path environment states using the previously set backup data
+static void UpdateMobileTrackerMapping(SCONTEXT_PARAMETER)
+{
+    let length = getActiveJumpDirection(simContext)->JumpLength;
+    let jumpRule = getActiveJumpRule(simContext);
+    let envBackup = getEnvironmentBackup(simContext);
+
+    // Fallthrough switch of possible jump lengths, path id 0 and 2 are always mobile and 1 never is
+    switch(length)
+    {
+        case 8:
+            UpdateMobileTrackerMappingByPathId(simContext, 7, jumpRule, envBackup);
+        case 7:
+            UpdateMobileTrackerMappingByPathId(simContext, 6, jumpRule, envBackup);
+        case 6:
+            UpdateMobileTrackerMappingByPathId(simContext, 5, jumpRule, envBackup);
+        case 5:
+            UpdateMobileTrackerMappingByPathId(simContext, 4, jumpRule, envBackup);
+        case 4:
+            UpdateMobileTrackerMappingByPathId(simContext, 3, jumpRule, envBackup);
+        case 3:
+            UpdateMobileTrackerMappingByPathId(simContext, 2, jumpRule, envBackup);
+            UpdateMobileTrackerMappingByPathId(simContext, 1, jumpRule, envBackup);
+            UpdateMobileTrackerMappingByPathId(simContext, 0, jumpRule, envBackup);
+        default:
+            break;
     }
 }
 
 // Updates the path environment movement tracking at the specified index
-static inline void UpdatePathEnvironmentMovementTracking(SCONTEXT_PARAM, const byte_t pathId)
+static inline void UpdatePathEnvironmentMovementTracking(SCONTEXT_PARAMETER, const int32_t pathId)
 {
-    let moveVector = &span_Get(getActiveJumpDirection(SCONTEXT)->MovementSequence, pathId);
+    let moveVector = &span_Get(getActiveJumpDirection(simContext)->MovementSequence, pathId);
+    let envState = JUMPPATH[pathId];
 
-    // Update the movement data on the mobile tracker
-    var mobileTracker = getMobileTrackerAt(SCONTEXT, JUMPPATH[pathId]->MobileTrackerId);
+    var mobileTracker = getMobileTrackerAt(simContext, envState->MobileTrackerId);
     vector3VectorOp(*mobileTracker, *moveVector, +=);
 
-    // Update the movement data of the static tracker
-    var staticTracker = getStaticMovementTrackerAt(SCONTEXT, &JUMPPATH[pathId]->PositionVector, JUMPPATH[pathId]->ParticleId);
+    var staticTracker = getStaticMovementTrackerAt(simContext, &envState->LatticeVector, envState->ParticleId);
     vector3VectorOp(*staticTracker, *moveVector, +=);
 
-    // Update the movement data on the global tracker
-    var globalTracker = getGlobalMovementTrackerAt(SCONTEXT, getActiveJumpCollection(SCONTEXT)->ObjectId, JUMPPATH[pathId]->ParticleId);
+    var globalTracker = getGlobalMovementTrackerAt(simContext, getActiveJumpCollection(simContext)->ObjectId, envState->ParticleId);
     vector3VectorOp(*globalTracker, *moveVector, +=);
 }
 
-// Adds an occurred energy value to the passed histogram by increasing the correct counter value
-static inline void AddEnergyValueToJumpHistogram(JumpHistogram_t*restrict jumpHistogram, const double energy)
+
+void AddEnergyValueToJumpHistogram(JumpHistogram_t*restrict jumpHistogram, const double value)
 {
-    // Handle the over and underflow cases
-    if (energy > jumpHistogram->MaxValue)
-        ++jumpHistogram->OverflowCount;
-
-    if (energy < jumpHistogram->MinValue)
+    if (value < jumpHistogram->MinValue)
+    {
         ++jumpHistogram->UnderflowCount;
+        return;
+    }
 
-    // Handle the calculation of the correct counter id
-    let counterId = (int32_t) round(energy / jumpHistogram->Stepping);
+    let counterId = (int32_t) ((value - jumpHistogram->MinValue) * jumpHistogram->SteppingInverse);
+    if (counterId >= STATE_JUMPSTAT_SIZE)
+    {
+        ++jumpHistogram->OverflowCount;
+        return;
+    }
+
     ++jumpHistogram->CountBuffer[counterId];
 }
 
-// Updates the jump statistics affiliated with the passed environment state in the current simulation cycle context
-static inline void UpdatePathEnvironmentJumpStatistics(SCONTEXT_PARAM, const byte_t pathId)
+void AddEnergyValueToDynamicJumpHistogram(DynamicJumpHistogram_t*restrict jumpHistogram, const double value)
 {
-    let toEvFactor = getPhysicalFactors(SCONTEXT)->EnergyFactorKtToEv;
-    let energyInfo = getJumpEnergyInfo(SCONTEXT);
-    var jumpStatistic = getJumpStatisticAt(SCONTEXT, getActiveJumpCollection(SCONTEXT)->ObjectId, JUMPPATH[pathId]->ParticleId);
+    if (value < jumpHistogram->Header->MinValue)
+    {
+        ++jumpHistogram->Header->UnderflowCount;
+        return;
+    }
 
-    // Handle edge energy
-    AddEnergyValueToJumpHistogram(&jumpStatistic->EdgeEnergyHistogram, energyInfo->S0Energy * toEvFactor);
+    let counterId = (int32_t) ((value - jumpHistogram->Header->MinValue) * jumpHistogram->Header->SteppingInverse);
+    if (counterId >= jumpHistogram->Header->EntryCount)
+    {
+        ++jumpHistogram->Header->OverflowCount;
+        return;
+    }
 
-    // Handle conformation influence depending on prefix
-    if (energyInfo->ConformationDeltaEnergy < 0.0)
-        AddEnergyValueToJumpHistogram(&jumpStatistic->NegConfEnergyHistogram, fabs(energyInfo->ConformationDeltaEnergy) * toEvFactor);
+    ++span_Get(jumpHistogram->Counters, counterId);
+}
+
+// Updates the jump statistics affiliated with the passed environment state in the current simulation cycle context
+static inline void UpdatePathEnvironmentJumpStatistics(SCONTEXT_PARAMETER, const int32_t pathId)
+{
+    let toEvFactor = getPhysicalFactors(simContext)->EnergyFactorKtToEv;
+    let energyInfo = getJumpEnergyInfo(simContext);
+    var jumpStatistic = getJumpStatisticAt(simContext, getActiveJumpCollection(simContext)->ObjectId, JUMPPATH[pathId]->ParticleId);
+
+    let energyS1 = energyInfo->S1Energy * toEvFactor;
+    AddEnergyValueToJumpHistogram(&jumpStatistic->EdgeEnergyHistogram, energyS1);
+
+    let energyConf = energyInfo->ConformationDeltaEnergy * toEvFactor;
+    if (energyConf < 0.0)
+        AddEnergyValueToJumpHistogram(&jumpStatistic->NegConfEnergyHistogram, fabs(energyConf));
     else
-        AddEnergyValueToJumpHistogram(&jumpStatistic->PosConfEnergyHistogram, energyInfo->ConformationDeltaEnergy * toEvFactor);
+        AddEnergyValueToJumpHistogram(&jumpStatistic->PosConfEnergyHistogram, energyConf);
 
-    // Handle the total energy value
-    AddEnergyValueToJumpHistogram(&jumpStatistic->TotalEnergyHistogram, energyInfo->S0toS2DeltaEnergy * toEvFactor);
+    let totEnergy = energyInfo->S0toS2DeltaEnergy * toEvFactor;
+    AddEnergyValueToJumpHistogram(&jumpStatistic->TotalEnergyHistogram, totEnergy);
 }
 
 // Updates all tracking data (movement and jump statistics) affiliated with the passed path id in the current cycle context
-static inline void UpdatePathEnvironmentTrackingData(SCONTEXT_PARAM, const byte_t pathId)
+static inline void UpdatePathEnvironmentTrackingData(SCONTEXT_PARAMETER, const int32_t pathId)
 {
-    getEnvironmentBackup(SCONTEXT)->PathMobileMappings[pathId] = JUMPPATH[pathId]->MobileTrackerId;
-    return_if(!JUMPPATH[pathId]->IsMobile);
+    let envState = JUMPPATH[pathId];
+    getEnvironmentBackup(simContext)->PathMobileMappings[pathId] = envState->MobileTrackerId;
+    return_if(!envState->IsMobile);
 
-    // ToDo: Optimize this to lookup the required globalTrackerId only once (Needed for movement and jump statistics)
-    UpdatePathEnvironmentMovementTracking(SCONTEXT, pathId);
-    UpdatePathEnvironmentJumpStatistics(SCONTEXT, pathId);
+    UpdatePathEnvironmentMovementTracking(simContext, pathId);
+    return_if(simContext->IsJumpLoggingDisabled);
+    UpdatePathEnvironmentJumpStatistics(simContext, pathId);
 }
 
-void AdvanceTransitionTrackingSystem(SCONTEXT_PARAM)
+void AddCurrentKmcTransitionDataToHistograms(SCONTEXT_PARAMETER)
 {
-    for (byte_t pathId = 0; pathId < getActiveJumpDirection(SCONTEXT)->JumpLength; ++pathId)
-        UpdatePathEnvironmentTrackingData(SCONTEXT, pathId);
+    return_if(simContext->IsJumpLoggingDisabled);
+    let length = getActiveJumpDirection(simContext)->JumpLength;
 
-    UpdateMobileTrackerMapping(SCONTEXT);
+    // Fallthrough switch of possible jump lengths, path id 0 and 2 are always mobile and 1 never is
+    switch(length)
+    {
+        case 8:
+            if (JUMPPATH[7]->IsMobile) UpdatePathEnvironmentJumpStatistics(simContext, 7);
+        case 7:
+            if (JUMPPATH[6]->IsMobile) UpdatePathEnvironmentJumpStatistics(simContext, 6);
+        case 6:
+            if (JUMPPATH[5]->IsMobile) UpdatePathEnvironmentJumpStatistics(simContext, 5);
+        case 5:
+            if (JUMPPATH[4]->IsMobile) UpdatePathEnvironmentJumpStatistics(simContext, 4);
+        case 4:
+            if (JUMPPATH[3]->IsMobile) UpdatePathEnvironmentJumpStatistics(simContext, 3);
+        case 3:
+            UpdatePathEnvironmentJumpStatistics(simContext, 2);
+            UpdatePathEnvironmentJumpStatistics(simContext, 0);
+        default:
+            break;
+    }
 }
 
-error_t SyncMainStateTrackerMappingToSimulation(SCONTEXT_PARAM)
+void AdvanceKmcTransitionTrackingSystem(SCONTEXT_PARAMETER)
+{
+    let length = getActiveJumpDirection(simContext)->JumpLength;
+
+    // Fallthrough switch of possible jump lengths
+    switch(length)
+    {
+        case 8:
+            UpdatePathEnvironmentTrackingData(simContext, 7);
+        case 7:
+            UpdatePathEnvironmentTrackingData(simContext, 6);
+        case 6:
+            UpdatePathEnvironmentTrackingData(simContext, 5);
+        case 5:
+            UpdatePathEnvironmentTrackingData(simContext, 4);
+        case 4:
+            UpdatePathEnvironmentTrackingData(simContext, 3);
+        case 3:
+            UpdatePathEnvironmentTrackingData(simContext, 2);
+            UpdatePathEnvironmentTrackingData(simContext, 1);
+            UpdatePathEnvironmentTrackingData(simContext, 0);
+        default:
+            break;
+    }
+
+    UpdateMobileTrackerMapping(simContext);
+}
+
+error_t SyncMainStateTrackerMappingToSimulation(SCONTEXT_PARAMETER)
 {
     error_t error = ERR_OK;
-    var trackerMapping = getMobileTrackerMapping(SCONTEXT);
+    var trackerMapping = getMobileTrackerMapping(simContext);
 
-    // Update mobile tracker mapping in the state to the current simulation lattice state
-    cpp_foreach(envState, *getEnvironmentLattice(SCONTEXT))
+    cpp_foreach(envState, *getEnvironmentLattice(simContext))
     {
         continue_if(envState->MobileTrackerId <= INVALID_INDEX);
-        span_Get(*trackerMapping, envState->MobileTrackerId) = envState->EnvironmentId;
+        let envId = getEnvironmentStateIdByPointer(simContext, envState);
+        span_Get(*trackerMapping, envState->MobileTrackerId) = envId;
     }
 
     return error;
 }
 
 // Init the passed jump histogram to the default state
-static inline void InitJumpHistogramToDefault(JumpHistogram_t*restrict jumpHistogram)
+static inline void InitJumpHistogramToDefault(SCONTEXT_PARAMETER, JumpHistogram_t*restrict jumpHistogram)
 {
     jumpHistogram->MinValue = STATE_JUMPSTAT_EMIN;
-    jumpHistogram->MaxValue = STATE_JUMPSTAT_EMAX;
+    jumpHistogram->MaxValue = getUpperJumpHistogramLimit(simContext);
     jumpHistogram->UnderflowCount = 0;
     jumpHistogram->OverflowCount = 0;
-    jumpHistogram->Stepping = (STATE_JUMPSTAT_EMAX - STATE_JUMPSTAT_EMIN) / STATE_JUMPSTAT_SIZE;
+    jumpHistogram->SteppingInverse = STATE_JUMPSTAT_SIZE / (jumpHistogram->MaxValue - STATE_JUMPSTAT_EMIN);
 
     memset(&jumpHistogram->CountBuffer, 0, sizeof(jumpHistogram->CountBuffer));
 }
 
 // Initializes the full jump statistic system to the default state
-static inline void InitJumpStatisticSystemToDefault(SCONTEXT_PARAM)
+static inline void InitJumpStatisticSystemToDefault(SCONTEXT_PARAMETER)
 {
-    cpp_foreach(jumpStatistic, *getJumpStatistics(SCONTEXT))
+    cpp_foreach(jumpStatistic, *getJumpStatistics(simContext))
     {
-        InitJumpHistogramToDefault(&jumpStatistic->TotalEnergyHistogram);
-        InitJumpHistogramToDefault(&jumpStatistic->PosConfEnergyHistogram);
-        InitJumpHistogramToDefault(&jumpStatistic->NegConfEnergyHistogram);
-        InitJumpHistogramToDefault(&jumpStatistic->EdgeEnergyHistogram);
+        InitJumpHistogramToDefault(simContext, &jumpStatistic->TotalEnergyHistogram);
+        InitJumpHistogramToDefault(simContext, &jumpStatistic->PosConfEnergyHistogram);
+        InitJumpHistogramToDefault(simContext, &jumpStatistic->NegConfEnergyHistogram);
+        InitJumpHistogramToDefault(simContext, &jumpStatistic->EdgeEnergyHistogram);
     }
 }
 
-error_t InitJumpStatisticsTrackingSystem(SCONTEXT_PARAM)
+error_t InitJumpStatisticsTrackingSystem(SCONTEXT_PARAMETER)
 {
-    if (!StateFlagsAreSet(SCONTEXT, STATE_FLG_INITIALIZED))
+    if (!StateFlagsAreSet(simContext, STATE_FLG_INITIALIZED))
     {
-        // ToDo: Implement customization of EMIN and EMAX for the histograms
-        InitJumpStatisticSystemToDefault(SCONTEXT);
+        InitJumpStatisticSystemToDefault(simContext);
     }
 
     return ERR_OK;
+}
+
+error_t ChangeDynamicJumpHistogramSamplingAreaByMinMax(DynamicJumpHistogram_t*restrict jumpHistogram, double minValue, double maxValue)
+{
+    return_if(jumpHistogram->Header == NULL || jumpHistogram->Header->EntryCount <= 0, ERR_ARGUMENT);
+    return_if(minValue >= maxValue, ERR_ARGUMENT);
+
+    ResetDynamicJumpHistogramToEmptyState(jumpHistogram);
+    let stepping = (maxValue-minValue) / (double) jumpHistogram->Header->EntryCount;
+    let steppingInv = 1.0 / stepping;
+
+    return_if(!isfinite(stepping) || !isfinite(steppingInv), ERR_ARGUMENT);
+
+    jumpHistogram->Header->MinValue = minValue;
+    jumpHistogram->Header->MaxValue = maxValue;
+    jumpHistogram->Header->Stepping = stepping;
+    jumpHistogram->Header->SteppingInverse = steppingInv;
+
+    return ERR_OK;
+}
+
+error_t ChangeDynamicJumpHistogramSamplingAreaByRange(DynamicJumpHistogram_t*restrict jumpHistogram, double centerValue, double valueRange)
+{
+    return_if(jumpHistogram->Header == NULL || jumpHistogram->Header->EntryCount <= 0, ERR_ARGUMENT);
+    return_if(!isfinite(centerValue) || !isfinite(valueRange), ERR_ARGUMENT);
+    return ChangeDynamicJumpHistogramSamplingAreaByMinMax(jumpHistogram, centerValue - valueRange, centerValue + valueRange);
+}
+
+double CalculateDynamicJumpHistogramMeanEnergy(const DynamicJumpHistogram_t*restrict jumpHistogram)
+{
+    double samplingSum = 0.0;
+    int64_t totalCount = 0;
+
+    for (int64_t i = 0; i < jumpHistogram->Header->EntryCount; i++)
+    {
+        let count = span_Get(jumpHistogram->Counters, i);
+        let sampleEnergy = jumpHistogram->Header->MinValue + (double) i * jumpHistogram->Header->Stepping;
+        samplingSum += count * sampleEnergy;
+        totalCount += count;
+    }
+
+    return samplingSum / (double) totalCount;
+}
+
+double FindDynamicJumpHistogramMaxValue(const DynamicJumpHistogram_t*restrict jumpHistogram)
+{
+    int64_t maxEntry = 0, id = 0;
+    for (int64_t i = 0; i < jumpHistogram->Header->EntryCount; i++)
+    {
+        let counter = span_Get(jumpHistogram->Counters, i);
+        if (counter < maxEntry) continue;
+        maxEntry = counter;
+        id = i;
+    }
+
+    return jumpHistogram->Header->MinValue + (double) id * jumpHistogram->Header->Stepping;
 }

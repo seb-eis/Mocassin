@@ -1,20 +1,10 @@
 {
-    "files.associations": {
-        "jumpselection.h": "c",
-        "mainroutines.h": "c",
-        "pluginloading.h": "c",
-        "contextinitializer.h": "c",
-        "basetypes.h": "c",
-        "contextaccess.h": "c"
-    },
     "cmake.mingwSearchDirs": [
-        "C:\\Program Files\\DevTools\\MinGw-w64"
+        "C:\\msys64\\mingw64\\bin"
     ],
-    "cmake.preferredGenerators": [
-        "MinGW Makefiles",
-        "Ninja",
-        "Unix Makefiles"
-    ],
-    "cmake.configureOnOpen": true,
-    "C_Cpp.configurationWarnings": "Disabled"
+    "cmake.generator": "MinGW Makefiles",
+    "cmake.configureSettings": {
+        "CMAKE_MAKE_PROGRAM": "C:\\msys64\\mingw64\\bin\\mingw32-make.exe"
+    },
+    "C_Cpp.default.configurationProvider": "vector-of-bool.cmake-tools"
 }

@@ -12,7 +12,7 @@
 #include "Simulator/Logic/JumpSelection/JumpSelection.h"
 #include "Simulator/Logic/Routines/Helper/HelperRoutines.h"
 #include "Simulator/Data/SimContext/ContextAccess.h"
-#include "Framework/Basic/BaseTypes/Buffers.h"
+#include "Framework/Basic/Buffers/Buffers.h"
 
 /* Local helper routines */
 
@@ -26,7 +26,7 @@ static inline bool_t EnvironmentIsSelectable(const EnvironmentState_t*restrict e
 static inline int32_t GetEnvironmentPoolId(JumpSelectionPool_t *restrict selectionPool, const JumpCountTable_t *restrict jumpCountTable, const EnvironmentState_t *restrict environment)
 {
     return_if(!EnvironmentIsSelectable(environment), INVALID_INDEX);
-    let jumpCount = array_Get(*jumpCountTable, environment->PositionVector.D, environment->ParticleId);
+    let jumpCount = array_Get(*jumpCountTable, environment->LatticeVector.D, environment->ParticleId);
     return span_Get(selectionPool->DirectionPoolMapping, jumpCount);
 }
 
@@ -61,13 +61,13 @@ static inline void UpdateEnvStateSelectionStatus(EnvironmentState_t* restrict en
 
 /* Initializer routines*/
 
-static error_t AddEnvStateToSelectionPool(SCONTEXT_PARAM, EnvironmentState_t* restrict environment, const int32_t jumpCount)
+static error_t AddEnvStateToSelectionPool(SCONTEXT_PARAMETER, EnvironmentState_t* restrict environment, const int32_t jumpCount)
 {
-    let poolId = getDirectionPoolIdByJumpCount(SCONTEXT, jumpCount);
-    var selectionPool = getJumpSelectionPool(SCONTEXT);
-    var directionPool = getDirectionPoolAt(SCONTEXT, poolId);
-
-    return_if(!TryAddDirectionPoolEntry(directionPool, environment->EnvironmentId), ERR_BUFFEROVERFLOW);
+    let poolId = getDirectionPoolIdByJumpCount(simContext, jumpCount);
+    var selectionPool = getJumpSelectionPool(simContext);
+    var directionPool = getDirectionPoolAt(simContext, poolId);
+    let envId = getEnvironmentStateIdByPointer(simContext, environment);
+    return_if(!TryAddDirectionPoolEntry(directionPool, envId), ERR_BUFFEROVERFLOW);
 
     directionPool->PositionCount++;
     directionPool->JumpCount += jumpCount;
@@ -78,10 +78,10 @@ static error_t AddEnvStateToSelectionPool(SCONTEXT_PARAM, EnvironmentState_t* re
     return ERR_OK;
 }
 
-error_t HandleEnvStatePoolRegistration(SCONTEXT_PARAM, const int32_t environmentId)
+error_t RegisterEnvironmentStateInTransitionPool(SCONTEXT_PARAMETER, int32_t environmentId)
 {
-    var environment = getEnvironmentStateAt(SCONTEXT, environmentId);
-    let directionCount = getJumpCountAt(SCONTEXT, environment->PositionVector.D, environment->ParticleId);
+    var environment = getEnvironmentStateAt(simContext, environmentId);
+    let directionCount = getJumpCountAt(simContext, environment->LatticeVector.D, environment->ParticleId);
     
     if (!environment->IsStable || (directionCount <= JPOOL_DIRCOUNT_STATIC))
     {
@@ -101,7 +101,7 @@ error_t HandleEnvStatePoolRegistration(SCONTEXT_PARAM, const int32_t environment
     {
         environment->IsMobile = true;
         if (EnvironmentIsSelectable(environment))
-            return AddEnvStateToSelectionPool(SCONTEXT, environment, directionCount);
+            return AddEnvStateToSelectionPool(simContext, environment, directionCount);
 
         UpdateEnvStateSelectionStatus(environment, JPOOL_NOT_SELECTABLE, JPOOL_NOT_SELECTABLE);
         return ERR_OK;
@@ -113,50 +113,50 @@ error_t HandleEnvStatePoolRegistration(SCONTEXT_PARAM, const int32_t environment
 /* Simulation routines*/
 
 // Rolls a start position and jump direction from the jump selection pool
-static inline void RollPositionAndDirectionFromPool(SCONTEXT_PARAM)
+static inline void RollPositionAndDirectionFromPool(SCONTEXT_PARAMETER)
 {
-    var selectionInfo = getJumpSelectionInfo(SCONTEXT);
-    var random = GetNextCeiledRandom(SCONTEXT, SCONTEXT->SelectionPool.SelectableJumpCount);
+    var selectionInfo = getJumpSelectionInfo(simContext);
+    var random = GetNextCeiledRandomFromContextRng(simContext, simContext->SelectionPool.SelectableJumpCount);
 
-    cpp_offset_foreach(directionPool, SCONTEXT->SelectionPool.DirectionPools, 1)
+    cpp_offset_foreach(directionPool, simContext->SelectionPool.DirectionPools, 1)
     {
-        if (random >= directionPool->JumpCount)
+        if (random < directionPool->JumpCount)
         {
-            random -= directionPool->JumpCount;
-            continue;
+            let rdiv = div(random, directionPool->DirectionCount);
+            selectionInfo->EnvironmentId = getEnvironmentPoolEntryAt(directionPool, rdiv.quot);
+            selectionInfo->RelativeJumpId = rdiv.rem;
+            return;
         }
-
-        selectionInfo->EnvironmentId = getEnvironmentPoolEntryAt(directionPool, random / directionPool->DirectionCount);
-        selectionInfo->RelativeJumpId = random % directionPool->DirectionCount;
-
-        return;
+        random -= directionPool->JumpCount;
     }
 
     SIMERROR = ERR_UNKNOWN;
 }
 
 // Roll an environment offset id for the MMC selection process
-static inline void MMC_RollEnvironmentOffsetId(SCONTEXT_PARAM)
+static inline void RollMmcEnvironmentOffsetId(SCONTEXT_PARAMETER)
 {
-    getJumpSelectionInfo(SCONTEXT)->MmcOffsetSourceId = GetNextCeiledRandom(SCONTEXT, getEnvironmentLattice(SCONTEXT)->Header->Size);
+    getJumpSelectionInfo(simContext)->MmcOffsetSourceId = GetNextCeiledRandomFromContextRng(simContext,
+                                                                                            getEnvironmentLattice(
+                                                                                                    simContext)->Header->Size);
 }
 
 // Replaces the direction pool entry at the passed id by the last entry and updates the id set of the moved environment
-static inline void RemoveDirectionPoolEntryAt(SCONTEXT_PARAM, DirectionPool_t *restrict directionPool, const int32_t id)
+static inline void RemoveDirectionPoolEntryAt(SCONTEXT_PARAMETER, DirectionPool_t *restrict directionPool, const int32_t id)
 {
-    debug_assert(!span_IndexIsOutOfRange(directionPool->EnvironmentPool, id));
+    debug_assert(!span_IsIndexOutOfRange(directionPool->EnvironmentPool, id));
 
     let newEnvironmentId = PopBackDirectionEnvPool(directionPool);
     span_Get(directionPool->EnvironmentPool, id) = newEnvironmentId;
-    getEnvironmentStateAt(SCONTEXT, newEnvironmentId)->PoolPositionId = id;
+    getEnvironmentStateAt(simContext, newEnvironmentId)->PoolPositionId = id;
 }
 
 // Environment pool entries update reaction to an environment change from not-selectable to selectable
-static inline void OnPoolUpdateInvalidToSelectable(SCONTEXT_PARAM, JumpSelectionPool_t*restrict selectionPool,  EnvironmentState_t *restrict environment, const int32_t newPoolId)
+static inline void OnPoolUpdateInvalidToSelectable(SCONTEXT_PARAMETER, JumpSelectionPool_t*restrict selectionPool, EnvironmentState_t *restrict environment, const int32_t newPoolId)
 {
-    var newDirectionPool = getDirectionPoolAt(SCONTEXT, newPoolId);
-
-    AddDirectionPoolEntry(newDirectionPool, environment->EnvironmentId);
+    var newDirectionPool = getDirectionPoolAt(simContext, newPoolId);
+    let envId = getEnvironmentStateIdByPointer(simContext, environment);
+    AddDirectionPoolEntry(newDirectionPool, envId);
     environment->PoolId = newPoolId;
     environment->PoolPositionId = newDirectionPool->PositionCount;
 
@@ -167,11 +167,11 @@ static inline void OnPoolUpdateInvalidToSelectable(SCONTEXT_PARAM, JumpSelection
 }
 
 // Environment pool entries update reaction to an environment change from selectable to not-selectable
-static inline void OnPoolUpdateSelectableToInvalid(SCONTEXT_PARAM, JumpSelectionPool_t*restrict selectionPool,  EnvironmentState_t *restrict environment)
+static inline void OnPoolUpdateSelectableToInvalid(SCONTEXT_PARAMETER, JumpSelectionPool_t*restrict selectionPool, EnvironmentState_t *restrict environment)
 {
-    var oldDirectionPool = getDirectionPoolAt(SCONTEXT, environment->PoolId);
+    var oldDirectionPool = getDirectionPoolAt(simContext, environment->PoolId);
 
-    RemoveDirectionPoolEntryAt(SCONTEXT, oldDirectionPool, environment->PoolPositionId);
+    RemoveDirectionPoolEntryAt(simContext, oldDirectionPool, environment->PoolPositionId);
     oldDirectionPool->PositionCount--;
     oldDirectionPool->JumpCount -= oldDirectionPool->DirectionCount;
     selectionPool->SelectableJumpCount -= oldDirectionPool->DirectionCount;
@@ -181,15 +181,15 @@ static inline void OnPoolUpdateSelectableToInvalid(SCONTEXT_PARAM, JumpSelection
 }
 
 // Environment pool entries update reaction to an environment change from selectable to not-selectable
-static inline void OnPoolUpdateSelectableToSelectable(SCONTEXT_PARAM, JumpSelectionPool_t*restrict selectionPool, EnvironmentState_t *restrict environment, const int32_t newPoolId)
+static inline void OnPoolUpdateSelectableToSelectable(SCONTEXT_PARAMETER, JumpSelectionPool_t*restrict selectionPool, EnvironmentState_t *restrict environment, const int32_t newPoolId)
 {
     debug_assert(environment->PoolId != newPoolId);
 
-    var oldDirectionPool = getDirectionPoolAt(SCONTEXT, environment->PoolId);
-    var newDirectionPool = getDirectionPoolAt(SCONTEXT, newPoolId);
-
-    AddDirectionPoolEntry(newDirectionPool, environment->EnvironmentId);
-    RemoveDirectionPoolEntryAt(SCONTEXT, oldDirectionPool, environment->PoolPositionId);
+    var oldDirectionPool = getDirectionPoolAt(simContext, environment->PoolId);
+    var newDirectionPool = getDirectionPoolAt(simContext, newPoolId);
+    let envId = getEnvironmentStateIdByPointer(simContext, environment);
+    AddDirectionPoolEntry(newDirectionPool, envId);
+    RemoveDirectionPoolEntryAt(simContext, oldDirectionPool, environment->PoolPositionId);
 
     environment->PoolId = newPoolId;
     environment->PoolPositionId = newDirectionPool->PositionCount;
@@ -203,10 +203,10 @@ static inline void OnPoolUpdateSelectableToSelectable(SCONTEXT_PARAM, JumpSelect
 
 
 // Creates the environment pool entry update using the provided environment state
-static inline void MakeEnvironmentPoolEntriesUpdate(SCONTEXT_PARAM, const JumpCountTable_t *restrict jumpCountTable, EnvironmentState_t *restrict environment)
+static inline void MakeEnvironmentPoolEntriesUpdate(SCONTEXT_PARAMETER, const JumpCountTable_t *restrict jumpCountTable, EnvironmentState_t *restrict environment)
 {
     return_if(!environment->IsStable);
-    var selectionPool = getJumpSelectionPool(SCONTEXT);
+    var selectionPool = getJumpSelectionPool(simContext);
     let newPoolId = GetEnvironmentPoolId(selectionPool, jumpCountTable, environment);
 
     // Case: The pool id has not changed or both old and new are not selectable -> do nothing
@@ -215,42 +215,44 @@ static inline void MakeEnvironmentPoolEntriesUpdate(SCONTEXT_PARAM, const JumpCo
     // Case: The pool id changed from not-selectable to selectable -> push new entry to affiliated pool
     if (environment->PoolId == JPOOL_NOT_SELECTABLE)
     {
-        OnPoolUpdateInvalidToSelectable(SCONTEXT,selectionPool, environment, newPoolId);
+        OnPoolUpdateInvalidToSelectable(simContext, selectionPool, environment, newPoolId);
         return;
     }
     // Case: The pool id changed from selectable to not-selectable -> remove old entry from affiliated pool
     if (newPoolId == JPOOL_NOT_SELECTABLE)
     {
-        OnPoolUpdateSelectableToInvalid(SCONTEXT,selectionPool, environment);
+        OnPoolUpdateSelectableToInvalid(simContext, selectionPool, environment);
         return;
     }
     // Case: The pool id changed from selectable to another selectable -> remove old entry and push new entry
-    OnPoolUpdateSelectableToSelectable(SCONTEXT, selectionPool, environment, newPoolId);
+    OnPoolUpdateSelectableToSelectable(simContext, selectionPool, environment, newPoolId);
 }
 
-bool_t KMC_UpdateJumpPool(SCONTEXT_PARAM)
+bool_t UpdateTransitionPoolAfterKmcSystemAdvance(SCONTEXT_PARAMETER)
 {
-    let oldSelectableJumpCount = getJumpSelectionPool(SCONTEXT)->SelectableJumpCount;
+    let oldSelectableJumpCount = getJumpSelectionPool(simContext)->SelectableJumpCount;
+    let jumpCountMapping = getJumpCountMapping(simContext);
 
-    for (int32_t i = 0; i < getActiveJumpDirection(SCONTEXT)->JumpLength; i++)
-        MakeEnvironmentPoolEntriesUpdate(SCONTEXT, getJumpCountMapping(SCONTEXT), JUMPPATH[i]);
+    for (int32_t i = 0; i < getActiveJumpDirection(simContext)->JumpLength; i++)
+        MakeEnvironmentPoolEntriesUpdate(simContext, jumpCountMapping, JUMPPATH[i]);
 
-    return oldSelectableJumpCount != getJumpSelectionPool(SCONTEXT)->SelectableJumpCount;
+    return oldSelectableJumpCount != getJumpSelectionPool(simContext)->SelectableJumpCount;
 }
 
-void MMC_UpdateJumpPool(SCONTEXT_PARAM)
+void UpdateTransitionPoolAfterMmcSystemAdvance(SCONTEXT_PARAMETER)
 {
-    MakeEnvironmentPoolEntriesUpdate(SCONTEXT, getJumpCountMapping(SCONTEXT), JUMPPATH[0]);
-    MakeEnvironmentPoolEntriesUpdate(SCONTEXT, getJumpCountMapping(SCONTEXT), JUMPPATH[1]);
+    let jumpCountMapping = getJumpCountMapping(simContext);
+    MakeEnvironmentPoolEntriesUpdate(simContext, jumpCountMapping, JUMPPATH[0]);
+    MakeEnvironmentPoolEntriesUpdate(simContext, jumpCountMapping, JUMPPATH[1]);
 }
 
-void KMC_RollNextJumpSelection(SCONTEXT_PARAM)
+void UniformSelectNextKmcJumpSelection(SCONTEXT_PARAMETER)
 {
-    RollPositionAndDirectionFromPool(SCONTEXT);
+    RollPositionAndDirectionFromPool(simContext);
 }
 
-void MMC_RollNextJumpSelection(SCONTEXT_PARAM)
+void UniformSelectNextMmcJumpSelection(SCONTEXT_PARAMETER)
 {
-    RollPositionAndDirectionFromPool(SCONTEXT);
-    MMC_RollEnvironmentOffsetId(SCONTEXT);
+    RollPositionAndDirectionFromPool(simContext);
+    RollMmcEnvironmentOffsetId(simContext);
 }

@@ -12,14 +12,14 @@
 #include "Framework/Errors/McErrors.h"
 #include "Simulator/Data/SimContext/ContextAccess.h"
 
-// Prints the run statistics to a stream with an optional flag to print only the mobile species data
-void PrintFullSimulationStatistics(SCONTEXT_PARAM, file_t *fstream, bool_t onlyMobiles);
+// Print action that is called on blocks finished
+void PrintMocassinSimulationBlockInfo(SCONTEXT_PARAMETER, file_t *fstream, bool_t onlyMobiles);
 
-// Prints the start information of the simulation
-void PrintJobStartInfo(SCONTEXT_PARAM, file_t *fstream);
+// Print action that is called on simulation start
+void PrintMocassinSimulationStartInfo(SCONTEXT_PARAMETER, file_t *fstream);
 
-// Prints the pre run context rest notification
-void PrintContextResetNotice(SCONTEXT_PARAM, file_t *fstream);
+// Print action that is called on context reset (pre-run -> run switch)
+void PrintMocassinSimulationContextResetInfo(SCONTEXT_PARAMETER, file_t *fstream);
 
-// Prints the simulation finsihe notice
-void PrintFinishNotice(SCONTEXT_PARAM, file_t* fstream);
+// Print action that is called on simulation finish
+void PrintMocassinSimulationFinishInfo(SCONTEXT_PARAMETER, file_t *fstream);

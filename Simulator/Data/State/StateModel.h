@@ -11,7 +11,7 @@
 #pragma once
 #include "Framework/Math/Types/Vector.h"
 #include "Framework/Basic/BaseTypes/BaseTypes.h"
-#include "Framework/Basic/BaseTypes/Buffers.h"
+#include "Framework/Basic/Buffers/Buffers.h"
 #include "Simulator/Logic/Constants/Constants.h"
 
 // Type for 3d movement tracking without tracker id (Does currently not support 16 bit alignment!)
@@ -19,7 +19,7 @@
 typedef Vector3_t Tracker_t;
 
 // Type for the state header information
-// Layout@ggc_x86_64 => 48@[8,8,8,4,4,4,4,4,4,4,4,4,{4}]
+// Layout@ggc_x86_64 => 56@[8,8,8,4,4,4,4,4,4,4,4]
 typedef struct StateHeaderData
 {
     // The number of successful steps
@@ -29,7 +29,7 @@ typedef struct StateHeaderData
     int64_t Cycles;
 
     // The simulation runtime flags
-    int32_t Flags;
+    Bitmask_t Flags;
 
     // The start byte number of the state meta data
     int32_t MetaStartByte;
@@ -55,9 +55,6 @@ typedef struct StateHeaderData
     // The start byte number of the state jump statistics data
     int32_t JumpStatisticsStartByte;
 
-    // Explicit Padding
-    int32_t Padding:32;
-
 } StateHeaderData_t;
 
 // Type for the state header data
@@ -81,8 +78,8 @@ typedef Span_t(Tracker_t, TrackerState) TrackersState_t;
 // Layout@ggc_x86_64 => 48@[8,8,8,8,8,8]
 typedef struct StateCounterCollection
 {
-    // Counter for simulation cycles
-    int64_t CycleCount;
+    // Counter for simulation cycle skips
+    int64_t SkipCount;
 
     // Counter for successful cycles
     int64_t McsCount;
@@ -106,7 +103,7 @@ typedef struct StateCounterCollection
 typedef Span_t(StateCounterCollection_t, CountersState) CountersState_t;
 
 // Type for the state meta information
-// Layout@ggc_x86_64 => 72@[8,8,8,8,8,8,8,8,8,8]
+// Layout@ggc_x86_64 => 80@[8,8,8,8,8,8,8,8,8,8]
 typedef struct StateMetaData
 {
     // The simulated time span of the system [seconds]
@@ -150,8 +147,8 @@ typedef struct StateMetaInfo
     
 } StateMetaInfo_t;
 
-// Type for the jump histogram type that stores a energy value occurrence statistic
-// Layout@ggc_x86_64 => 32+1000*8@[8,8,8,8,1000*8]
+// Type for the fixed size jump histogram type that stores a energy value occurrence statistics in a fixed size buffer
+// Layout@ggc_x86_64 => 40+1000*8@[8,8,8,8,1000*8]
 typedef struct JumpHistogram
 {
     // The minimal energy value of the histogram
@@ -160,8 +157,8 @@ typedef struct JumpHistogram
     // The maximum energy value of the histogram
     double MaxValue;
 
-    // The energy stepping value of the the count buffer
-    double Stepping;
+    // The energy stepping inverse value of the the count buffer
+    double SteppingInverse;
 
     // The counter for occurred cases above the max energy value
     int64_t OverflowCount;
