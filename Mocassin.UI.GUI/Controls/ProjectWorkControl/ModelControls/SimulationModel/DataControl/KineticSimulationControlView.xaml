@@ -17,10 +17,10 @@
   d:DesignHeight="450" d:DesignWidth="800">
 
   <UserControl.Resources>
-    <ToolTip x:Key="Local.ToolTip.KineticSimulations" >
+    <ToolTip x:Key="Local.ToolTip.KineticSimulations">
       <StackPanel>
-        <TextBlock Text="{x:Static res:Tooltips.ModelObject_KineticSimulation}"/>
-        <TextBlock Text="{x:Static res:Tooltips.ModelObject_Simulation_SharedSettings}"/>
+        <TextBlock Text="{x:Static res:Tooltips.ModelObject_KineticSimulation}" />
+        <TextBlock Text="{x:Static res:Tooltips.ModelObject_Simulation_SharedSettings}" />
       </StackPanel>
     </ToolTip>
   </UserControl.Resources>

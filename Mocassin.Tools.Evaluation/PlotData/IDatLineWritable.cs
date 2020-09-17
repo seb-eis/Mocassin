@@ -1,6 +1,4 @@
-﻿using System.IO;
-
-namespace Mocassin.Tools.Evaluation.PlotData
+﻿namespace Mocassin.Tools.Evaluation.PlotData
 {
     /// <summary>
     ///     Represents a data item that can be formatted as a DAT file line
@@ -8,7 +6,7 @@ namespace Mocassin.Tools.Evaluation.PlotData
     public interface IDatLineWritable
     {
         /// <summary>
-        ///     Get a new <see cref="string"/> formatted as a DAT file line
+        ///     Get a new <see cref="string" /> formatted as a DAT file line
         /// </summary>
         /// <param name="format"></param>
         /// <returns></returns>

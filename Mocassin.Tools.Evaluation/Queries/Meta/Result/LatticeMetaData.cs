@@ -29,18 +29,12 @@ namespace Mocassin.Tools.Evaluation.Queries
         ///     Get the number of unit cells in the lattice
         /// </summary>
         /// <returns></returns>
-        public int GetUnitCellCount()
-        {
-            return SizeInfo.A * SizeInfo.B * SizeInfo.C;
-        }
+        public int GetUnitCellCount() => SizeInfo.A * SizeInfo.B * SizeInfo.C;
 
         /// <summary>
         ///     Get the number of positions in the lattice
         /// </summary>
         /// <returns></returns>
-        public int GetPositionCount()
-        {
-            return GetUnitCellCount() * SizeInfo.P;
-        }
+        public int GetPositionCount() => GetUnitCellCount() * SizeInfo.P;
     }
 }

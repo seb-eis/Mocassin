@@ -22,10 +22,8 @@ namespace Mocassin.Model.Structures.ConflictHandling
         /// <param name="dataAccess"></param>
         /// <returns></returns>
         [ConflictHandlingMethod]
-        protected IConflictReport ResolveSpaceGroupChange(SpaceGroupInfo groupInfo, IDataAccessor<StructureModelData> dataAccess)
-        {
-            return new SpaceGroupChangeHandler(dataAccess, ModelProject).HandleConflicts(groupInfo);
-        }
+        protected IConflictReport ResolveSpaceGroupChange(SpaceGroupInfo groupInfo, IDataAccessor<StructureModelData> dataAccess) =>
+            new SpaceGroupChangeHandler(dataAccess, ModelProject).HandleConflicts(groupInfo);
 
         /// <summary>
         ///     Resolver method that handles the required internal changes if the cell parameters change
@@ -34,9 +32,7 @@ namespace Mocassin.Model.Structures.ConflictHandling
         /// <param name="dataAccess"></param>
         /// <returns></returns>
         [ConflictHandlingMethod]
-        protected IConflictReport ResolveCellParametersChange(CellParameters parameters, IDataAccessor<StructureModelData> dataAccess)
-        {
-            return new CellParametersChangeHandler(dataAccess, ModelProject).HandleConflicts(parameters);
-        }
+        protected IConflictReport ResolveCellParametersChange(CellParameters parameters, IDataAccessor<StructureModelData> dataAccess) =>
+            new CellParametersChangeHandler(dataAccess, ModelProject).HandleConflicts(parameters);
     }
 }

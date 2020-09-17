@@ -144,10 +144,8 @@ namespace Mocassin.UI.GUI.Base.ViewModels
         /// </summary>
         /// <param name="action"></param>
         /// <param name="priority"></param>
-        public Task ExecuteOnAppThreadAsync(Action action, DispatcherPriority priority = DispatcherPriority.Normal)
-        {
-            return !(Application.Current?.Dispatcher is { } dispatcher) ? default : dispatcher.InvokeAsync(action, priority).Task;
-        }
+        public Task ExecuteOnAppThreadAsync(Action action, DispatcherPriority priority = DispatcherPriority.Normal) =>
+            !(Application.Current?.Dispatcher is { } dispatcher) ? default : dispatcher.InvokeAsync(action, priority).Task;
 
         /// <summary>
         ///     Async executes a <see cref="Func{TResult}" /> on the UI thread. This method should be used when the UI action
@@ -155,10 +153,8 @@ namespace Mocassin.UI.GUI.Base.ViewModels
         /// </summary>
         /// <param name="function"></param>
         /// <param name="priority"></param>
-        public Task<TResult> ExecuteOnAppThreadAsync<TResult>(Func<TResult> function, DispatcherPriority priority = DispatcherPriority.Normal)
-        {
-            return !(Application.Current?.Dispatcher is { } dispatcher) ? default : dispatcher.InvokeAsync(function, priority).Task;
-        }
+        public Task<TResult> ExecuteOnAppThreadAsync<TResult>(Func<TResult> function, DispatcherPriority priority = DispatcherPriority.Normal) =>
+            !(Application.Current?.Dispatcher is { } dispatcher) ? default : dispatcher.InvokeAsync(function, priority).Task;
 
         /// <summary>
         ///     Queues an <see cref="Action" /> for execution on the UI thread. This method should be used when the UI action is

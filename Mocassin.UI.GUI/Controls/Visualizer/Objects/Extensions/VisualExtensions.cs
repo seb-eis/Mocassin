@@ -28,20 +28,14 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
         /// </summary>
         /// <param name="color"></param>
         /// <returns></returns>
-        public static string ToRgbaHex(this Color color)
-        {
-            return color.ToString();
-        }
+        public static string ToRgbaHex(this Color color) => color.ToString();
 
         /// <summary>
         ///     Converts a <see cref="Color4" /> to a ARGB #FFFFFFFF format
         /// </summary>
         /// <param name="color"></param>
         /// <returns></returns>
-        public static string ToRgbaHex(this Color4 color)
-        {
-            return $"#{color.Alpha:X2}{color.Red:X2}{color.Green:X2}{color.Blue:X2}";
-        }
+        public static string ToRgbaHex(this Color4 color) => $"#{color.Alpha:X2}{color.Red:X2}{color.Green:X2}{color.Blue:X2}";
 
         /// <summary>
         ///     Tries to convert a <see cref="string" /> to a <see cref="Color" /> if in the  ARGB #FFFFFFFF format

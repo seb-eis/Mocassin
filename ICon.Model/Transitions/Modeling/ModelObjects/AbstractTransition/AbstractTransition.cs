@@ -34,16 +34,10 @@ namespace Mocassin.Model.Transitions
         public override string ObjectName => "Abstract Transition";
 
         /// <inheritdoc />
-        public IEnumerable<ConnectorType> GetConnectorSequence()
-        {
-            return (Connectors ?? new List<ConnectorType>()).AsEnumerable();
-        }
+        public IEnumerable<ConnectorType> GetConnectorSequence() => (Connectors ?? new List<ConnectorType>()).AsEnumerable();
 
         /// <inheritdoc />
-        public IEnumerable<IStateExchangeGroup> GetStateExchangeGroups()
-        {
-            return (StateExchangeGroups ?? new List<IStateExchangeGroup>()).AsEnumerable();
-        }
+        public IEnumerable<IStateExchangeGroup> GetStateExchangeGroups() => (StateExchangeGroups ?? new List<IStateExchangeGroup>()).AsEnumerable();
 
         /// <inheritdoc />
         public bool Equals(IAbstractTransition other)

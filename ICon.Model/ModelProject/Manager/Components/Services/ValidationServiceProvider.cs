@@ -103,10 +103,7 @@ namespace Mocassin.Model.ModelProject
         /// <typeparam name="T"></typeparam>
         /// <param name="obj"></param>
         /// <returns></returns>
-        protected IValidationReport Validate<T>(T obj)
-        {
-            return GetValidationDelegate(obj)(obj);
-        }
+        protected IValidationReport Validate<T>(T obj) => GetValidationDelegate(obj)(obj);
 
         /// <summary>
         ///     Get a generic validation <see cref="Func{T1, TResult}" /> delegate for the passed object
@@ -144,8 +141,8 @@ namespace Mocassin.Model.ModelProject
         protected IDataReader<IModelDataPort> GetMatchingDataReader(object obj)
         {
             var results = from modelManager in ModelProject.Managers()
-                where modelManager.InputAccess.GetSupportedModelTypes().Any(x => x.IsInstanceOfType(obj))
-                select modelManager.InputAccess.GetDataReader();
+                          where modelManager.InputAccess.GetSupportedModelTypes().Any(x => x.IsInstanceOfType(obj))
+                          select modelManager.InputAccess.GetDataReader();
 
             return results.FirstOrDefault();
         }

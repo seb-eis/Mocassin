@@ -66,12 +66,10 @@ namespace Mocassin.Model.Basic
 
         /// <inheritdoc />
         public Task<IOperationReport> InputModelObject<TObject>(TObject modelObject)
-            where TObject : IModelObject
-        {
-            return modelObject == null
+            where TObject : IModelObject =>
+            modelObject == null
                 ? throw new ArgumentNullException(nameof(modelObject))
                 : ObjectInputPipeline.Process(modelObject);
-        }
 
         /// <inheritdoc />
         public Task<IOperationReport> RemoveModelObject<TObject>(TObject modelObject)
@@ -97,22 +95,13 @@ namespace Mocassin.Model.Basic
         }
 
         /// <inheritdoc />
-        public Task<IOperationReport> CleanupManager()
-        {
-            return Task.Run(TryCleanDeprecatedData);
-        }
+        public Task<IOperationReport> CleanupManager() => Task.Run(TryCleanDeprecatedData);
 
         /// <inheritdoc />
-        public Task<IOperationReport> ResetManager()
-        {
-            return Task.Run(TryResetManagerDataToDefault);
-        }
+        public Task<IOperationReport> ResetManager() => Task.Run(TryResetManagerDataToDefault);
 
         /// <inheritdoc />
-        public IEnumerable<Type> GetSupportedModelTypes()
-        {
-            return GetSupportedModelObjects().Concat(GetSupportedModelParameters());
-        }
+        public IEnumerable<Type> GetSupportedModelTypes() => GetSupportedModelObjects().Concat(GetSupportedModelParameters());
 
         /// <inheritdoc />
         public abstract IDataReader<IModelDataPort> GetDataReader();
@@ -136,10 +125,7 @@ namespace Mocassin.Model.Basic
         /// <returns></returns>
         protected IAsyncObjectProcessor<IOperationReport> GetAsyncInvalidObjectHandler()
         {
-            IOperationReport HandlerFunction(object obj)
-            {
-                return OperationReport.MakeUnexpectedTypeResult(obj.GetType(), GetSupportedModelObjects());
-            }
+            IOperationReport HandlerFunction(object obj) => OperationReport.MakeUnexpectedTypeResult(obj.GetType(), GetSupportedModelObjects());
 
             return ObjectProcessorFactory.CreateAsync<object, IOperationReport>(HandlerFunction);
         }
@@ -151,10 +137,7 @@ namespace Mocassin.Model.Basic
         /// <returns></returns>
         protected IAsyncObjectProcessor<IOperationReport> GetAsyncInvalidParameterHandler()
         {
-            IOperationReport HandlerFunction(object obj)
-            {
-                return OperationReport.MakeUnexpectedTypeResult(obj.GetType(), GetSupportedModelParameters());
-            }
+            IOperationReport HandlerFunction(object obj) => OperationReport.MakeUnexpectedTypeResult(obj.GetType(), GetSupportedModelParameters());
 
             return ObjectProcessorFactory.CreateAsync<object, IOperationReport>(HandlerFunction);
         }
@@ -252,7 +235,7 @@ namespace Mocassin.Model.Basic
                 return false;
             }
 
-            return new ObjectProcessorCreator().CreateAsyncProcessors<IOperationReport>(this, MethodSearch,
+            return new ObjectProcessorBuilder().CreateAsyncProcessors<IOperationReport>(this, MethodSearch,
                 BindingFlags.Instance | BindingFlags.NonPublic);
         }
     }
@@ -310,10 +293,7 @@ namespace Mocassin.Model.Basic
         }
 
         /// <inheritdoc />
-        public override IDataReader<IModelDataPort> GetDataReader()
-        {
-            return DataReaderSource.Create();
-        }
+        public override IDataReader<IModelDataPort> GetDataReader() => DataReaderSource.Create();
 
         /// <inheritdoc />
         protected override IOperationReport TryResetManagerDataToDefault()
@@ -704,8 +684,8 @@ namespace Mocassin.Model.Basic
         protected IEnumerable<PropertyInfo> GetIndexedDataProperties()
         {
             return typeof(TData)
-                .GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-                .Where(property => property.GetCustomAttribute(typeof(IndexedModelDataAttribute)) != null);
+                   .GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                   .Where(property => property.GetCustomAttribute(typeof(IndexedModelDataAttribute)) != null);
         }
 
         /// <summary>
@@ -717,7 +697,7 @@ namespace Mocassin.Model.Basic
         /// <returns></returns>
         protected IEnumerable<IList<ModelObject>> GetIndexedDataLists(IEnumerable<PropertyInfo> propertyInfo, DataAccessor<TData> accessor)
         {
-            return propertyInfo.Select(info => new GenericListAdapter<ModelObject>((IList) info.GetValue(accessor.Query(data => data))));
+            return propertyInfo.Select(info => new GenericListEmulator<ModelObject>((IList) info.GetValue(accessor.Query(data => data))));
         }
 
         /// <summary>
@@ -742,10 +722,10 @@ namespace Mocassin.Model.Basic
         {
             var properties = typeof(TData).GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             return properties
-                .Select(property => property.GetCustomAttribute(typeof(IndexedModelDataAttribute)) as IndexedModelDataAttribute)
-                .Where(attribute => attribute != null)
-                .Where(attribute => !attribute.IsAutoManaged)
-                .Select(attribute => attribute.InterfaceType).ToArray();
+                   .Select(property => property.GetCustomAttribute(typeof(IndexedModelDataAttribute)) as IndexedModelDataAttribute)
+                   .Where(attribute => attribute != null)
+                   .Where(attribute => !attribute.IsAutoManaged)
+                   .Select(attribute => attribute.InterfaceType).ToArray();
         }
 
         /// <inheritdoc />
@@ -753,10 +733,10 @@ namespace Mocassin.Model.Basic
         {
             var properties = typeof(TData).GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             return properties
-                .Select(property => property.GetCustomAttribute(typeof(ModelParameterAttribute)) as ModelParameterAttribute)
-                .Where(attribute => attribute != null)
-                .Select(attribute => attribute.InterfaceType)
-                .ToArray();
+                   .Select(property => property.GetCustomAttribute(typeof(ModelParameterAttribute)) as ModelParameterAttribute)
+                   .Where(attribute => attribute != null)
+                   .Select(attribute => attribute.InterfaceType)
+                   .ToArray();
         }
 
         /// <summary>

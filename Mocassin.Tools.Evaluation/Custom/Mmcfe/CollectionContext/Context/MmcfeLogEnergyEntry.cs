@@ -17,8 +17,7 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         /// <summary>
         ///     Get or set the context id for <see cref="LogEntry" />
         /// </summary>
-        [Column("LogEntryId")]
-        [ForeignKey(nameof(LogEntry))]
+        [Column("LogEntryId"), ForeignKey(nameof(LogEntry))]
         public int LogEntryId { get; set; }
 
         /// <summary>
@@ -68,9 +67,6 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         ///     Gets the data as an <see cref="MmcfeEnergyState" /> struct
         /// </summary>
         /// <returns></returns>
-        public MmcfeEnergyState AsStruct()
-        {
-            return new MmcfeEnergyState(Alpha, Temperature, FreeEnergy, InnerEnergy);
-        }
+        public MmcfeEnergyState AsStruct() => new MmcfeEnergyState(Alpha, Temperature, FreeEnergy, InnerEnergy);
     }
 }

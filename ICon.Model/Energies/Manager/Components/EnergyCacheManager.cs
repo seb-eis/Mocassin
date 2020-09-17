@@ -16,106 +16,63 @@ namespace Mocassin.Model.Energies
         }
 
         /// <inheritdoc />
-        public IPairInteractionFinder GetPairInteractionFinder()
-        {
-            return GetResultFromCache(CreatePairInteractionFinder);
-        }
+        public IPairInteractionFinder GetPairInteractionFinder() => GetResultFromCache(CreatePairInteractionFinder);
 
         /// <inheritdoc />
-        public IPositionGroupInfo GetPositionGroupInfo(int index)
-        {
-            return GetPositionGroupInfos()[index];
-        }
+        public IPositionGroupInfo GetPositionGroupInfo(int index) => GetPositionGroupInfos()[index];
 
         /// <inheritdoc />
-        public IReadOnlyDictionary<ICellSite, IReadOnlyList<IPairInteraction>> GetPositionPairInteractions()
-        {
-            return GetResultFromCache(CreatePositionPairInteractions);
-        }
+        public IReadOnlyDictionary<ICellSite, IReadOnlyList<IPairInteraction>> GetPositionPairInteractions() =>
+            GetResultFromCache(CreatePositionPairInteractions);
 
         /// <inheritdoc />
-        public IReadOnlyDictionary<ICellSite, IReadOnlyList<IGroupInteraction>> GetPositionGroupInteractions()
-        {
-            return GetResultFromCache(CreatePositionGroupInteractions);
-        }
+        public IReadOnlyDictionary<ICellSite, IReadOnlyList<IGroupInteraction>> GetPositionGroupInteractions() =>
+            GetResultFromCache(CreatePositionGroupInteractions);
 
         /// <inheritdoc />
-        public IReadOnlyList<IPositionGroupInfo> GetPositionGroupInfos()
-        {
-            return GetResultFromCache(CreateAllPositionGroupInfos);
-        }
+        public IReadOnlyList<IPositionGroupInfo> GetPositionGroupInfos() => GetResultFromCache(CreateAllPositionGroupInfos);
 
         /// <inheritdoc />
-        public IEnergySetterProvider GetEnergySetterProvider()
-        {
-            return GetResultFromCache(CreateEnergySetterProvider);
-        }
+        public IEnergySetterProvider GetEnergySetterProvider() => GetResultFromCache(CreateEnergySetterProvider);
 
         /// <inheritdoc />
-        public IReadOnlyList<IPairEnergySetter> GetStablePairEnergySetters()
-        {
-            return GetResultFromCache(CreateStablePairEnergySetters);
-        }
+        public IReadOnlyList<IPairEnergySetter> GetStablePairEnergySetters() => GetResultFromCache(CreateStablePairEnergySetters);
 
         /// <inheritdoc />
-        public IPairEnergySetter GetStablePairEnergySetter(int index)
-        {
-            return GetStablePairEnergySetters()[index];
-        }
+        public IPairEnergySetter GetStablePairEnergySetter(int index) => GetStablePairEnergySetters()[index];
 
         /// <inheritdoc />
-        public IReadOnlyList<IPairEnergySetter> GetUnstablePairEnergySetters()
-        {
-            return GetResultFromCache(CreateUnstablePairEnergySetters);
-        }
+        public IReadOnlyList<IPairEnergySetter> GetUnstablePairEnergySetters() => GetResultFromCache(CreateUnstablePairEnergySetters);
 
         /// <inheritdoc />
-        public IPairEnergySetter GetUnstablePairEnergySetter(int index)
-        {
-            return GetUnstablePairEnergySetters()[index];
-        }
+        public IPairEnergySetter GetUnstablePairEnergySetter(int index) => GetUnstablePairEnergySetters()[index];
 
         /// <inheritdoc />
-        public IReadOnlyList<IGroupEnergySetter> GetGroupEnergySetters()
-        {
-            return GetResultFromCache(CreateGroupEnergySetters);
-        }
+        public IReadOnlyList<IGroupEnergySetter> GetGroupEnergySetters() => GetResultFromCache(CreateGroupEnergySetters);
 
         /// <inheritdoc />
-        public IGroupEnergySetter GetGroupEnergySetter(int index)
-        {
-            return GetGroupEnergySetters()[index];
-        }
+        public IGroupEnergySetter GetGroupEnergySetter(int index) => GetGroupEnergySetters()[index];
 
         /// <summary>
         ///     Pulls energy setter provider from data manager and creates all energy setters for stable pair interactions
         /// </summary>
         /// <returns></returns>
         [CacheMethodResult]
-        protected IReadOnlyList<IPairEnergySetter> CreateStablePairEnergySetters()
-        {
-            return GetEnergySetterProvider().GetStablePairEnergySetters();
-        }
+        protected IReadOnlyList<IPairEnergySetter> CreateStablePairEnergySetters() => GetEnergySetterProvider().GetStablePairEnergySetters();
 
         /// <summary>
         ///     Pulls energy setter provider from data manager and creates all energy setters for unstable pair interactions
         /// </summary>
         /// <returns></returns>
         [CacheMethodResult]
-        protected IReadOnlyList<IPairEnergySetter> CreateUnstablePairEnergySetters()
-        {
-            return GetEnergySetterProvider().GetUnstablePairEnergySetters();
-        }
+        protected IReadOnlyList<IPairEnergySetter> CreateUnstablePairEnergySetters() => GetEnergySetterProvider().GetUnstablePairEnergySetters();
 
         /// <summary>
         ///     Pulls energy setter provider from data manager and creates all energy setters for group interactions
         /// </summary>
         /// <returns></returns>
         [CacheMethodResult]
-        protected IReadOnlyList<IGroupEnergySetter> CreateGroupEnergySetters()
-        {
-            return GetEnergySetterProvider().GetGroupEnergySetters();
-        }
+        protected IReadOnlyList<IGroupEnergySetter> CreateGroupEnergySetters() => GetEnergySetterProvider().GetGroupEnergySetters();
 
         /// <summary>
         ///     Pulls energy setter provider from data and sets the value constraints according to the project service settings
@@ -153,8 +110,8 @@ namespace Mocassin.Model.Energies
             var interactions = ModelProject.Manager<IEnergyManager>().DataAccess.Query(port => port.GetGroupInteractions());
 
             var result = analyzer.CreateExtendedPositionGroups(interactions)
-                .Select(value => (IPositionGroupInfo) new PositionGroupInfo(value))
-                .ToList();
+                                 .Select(value => (IPositionGroupInfo) new PositionGroupInfo(value))
+                                 .ToList();
 
             result.ForEach(x => x.SynchronizeEnergyDictionary());
             return result;
@@ -175,12 +132,14 @@ namespace Mocassin.Model.Energies
             var asymmetricResult = AssignPairInteractionsToPosition(asymmetricPairs);
 
             var result = symmetricResult
-                .Concat(asymmetricResult)
-                .ToDictionary(item => item.Key, item => (IReadOnlyList<IPairInteraction>) item.Value);
+                         .Concat(asymmetricResult)
+                         .ToDictionary(item => item.Key, item => (IReadOnlyList<IPairInteraction>) item.Value);
 
             foreach (var referencePosition in structureManager.DataAccess.Query(port => port.GetCellReferencePositions()))
+            {
                 if (!result.ContainsKey(referencePosition))
                     result.Add(referencePosition, new List<IPairInteraction>());
+            }
 
             return result;
         }

@@ -38,9 +38,6 @@ namespace Mocassin.UI.Xml.Helper.Migration
         }
 
         /// <inheritdoc />
-        public override string ToString()
-        {
-            return $"Source: {MigrationSource}, Target: {MigrationTarget}, Count: {Entries.Count}";
-        }
+        public override string ToString() => $"Source: {MigrationSource}, Target: {MigrationTarget}, Count: {Entries.Count}";
     }
 }

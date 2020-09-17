@@ -15,7 +15,7 @@
 
   <Grid>
     <TextBox IsReadOnly="True" TextAlignment="Center" Text="{StaticResource App.String.DropLocationText}"
-             Background="Transparent" BorderThickness="5"/>
+             Background="Transparent" BorderThickness="5" />
     <DataGrid Name="HostGrid"
               ItemsSource="{Binding Items}"
               SelectedItem="{Binding SelectedItem}"

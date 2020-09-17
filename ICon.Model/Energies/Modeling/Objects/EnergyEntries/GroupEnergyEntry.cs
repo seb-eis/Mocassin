@@ -41,31 +41,6 @@ namespace Mocassin.Model.Energies
         }
 
         /// <summary>
-        ///     Creates a new group energy entry with the same identifier info but a changed energy value
-        /// </summary>
-        /// <param name="energy"></param>
-        /// <returns></returns>
-        public GroupEnergyEntry ChangeEnergy(double energy)
-        {
-            return new GroupEnergyEntry(CenterParticle, GroupOccupation, energy);
-        }
-
-        /// <summary>
-        ///     Get a hash code for the identifier system of the group energy entry
-        /// </summary>
-        /// <returns></returns>
-        public override int GetHashCode()
-        {
-            return CenterParticle.GetHashCode() ^ GroupOccupation.GetHashCode();
-        }
-
-        /// <inheritdoc />
-        public bool Equals(GroupEnergyEntry other)
-        {
-            return other != null && (CenterParticle.Equals(other.CenterParticle) && GroupOccupation.Equals(other.GroupOccupation));
-        }
-
-        /// <summary>
         ///     Compares to other energy entry in order of particle, than occupation
         /// </summary>
         /// <param name="other"></param>
@@ -77,6 +52,23 @@ namespace Mocassin.Model.Energies
                 ? GroupOccupation.CompareTo(other.GroupOccupation)
                 : particleCompare;
         }
+
+        /// <inheritdoc />
+        public bool Equals(GroupEnergyEntry other) =>
+            other != null && CenterParticle.Equals(other.CenterParticle) && GroupOccupation.Equals(other.GroupOccupation);
+
+        /// <summary>
+        ///     Creates a new group energy entry with the same identifier info but a changed energy value
+        /// </summary>
+        /// <param name="energy"></param>
+        /// <returns></returns>
+        public GroupEnergyEntry ChangeEnergy(double energy) => new GroupEnergyEntry(CenterParticle, GroupOccupation, energy);
+
+        /// <summary>
+        ///     Get a hash code for the identifier system of the group energy entry
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode() => CenterParticle.GetHashCode() ^ GroupOccupation.GetHashCode();
 
         /// <summary>
         ///     Creates a group energy entry with reordered state code

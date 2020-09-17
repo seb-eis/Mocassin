@@ -101,7 +101,8 @@ namespace Mocassin.Model.Energies
         }
 
         /// <summary>
-        ///     Builds the <see cref="IEnumerable{T}"/> of <see cref="StablePairInteraction"/> instances within the provided radial <see cref="NumericConstraint"/>
+        ///     Builds the <see cref="IEnumerable{T}" /> of <see cref="StablePairInteraction" /> instances within the provided
+        ///     radial <see cref="NumericConstraint" />
         /// </summary>
         /// <param name="positions"></param>
         /// <param name="radialConstraint"></param>
@@ -109,10 +110,7 @@ namespace Mocassin.Model.Energies
         protected IEnumerable<StablePairInteraction> FindAllStablePairs(IEnumerable<ICellSite> positions,
             NumericConstraint radialConstraint)
         {
-            static bool Predicate(ICellSite position)
-            {
-                return position.IsValidAndStable();
-            }
+            static bool Predicate(ICellSite position) => position.IsValidAndStable();
 
             var candidateDictionary = CreateUniquePairCandidateDictionary(positions, radialConstraint, Predicate, false);
             var values = CreateUniquePairs(candidateDictionary, CreateStablePairInteraction);
@@ -120,7 +118,8 @@ namespace Mocassin.Model.Energies
         }
 
         /// <summary>
-        ///     Builds the <see cref="IEnumerable{T}"/> of <see cref="UnstablePairInteraction"/> instances within the provided radial <see cref="NumericConstraint"/>
+        ///     Builds the <see cref="IEnumerable{T}" /> of <see cref="UnstablePairInteraction" /> instances within the provided
+        ///     radial <see cref="NumericConstraint" />
         /// </summary>
         /// <param name="positions"></param>
         /// <param name="radialConstraint"></param>
@@ -128,10 +127,7 @@ namespace Mocassin.Model.Energies
         public IEnumerable<UnstablePairInteraction> FindAllUnstablePairs(IEnumerable<ICellSite> positions,
             NumericConstraint radialConstraint)
         {
-            static bool Predicate(ICellSite position)
-            {
-                return position.IsValidAndStable();
-            }
+            static bool Predicate(ICellSite position) => position.IsValidAndStable();
 
             var candidateDictionary = CreateUniquePairCandidateDictionary(positions, radialConstraint, Predicate, true);
             var values = CreateUniquePairs(candidateDictionary, CreateUnstablePairInteraction);
@@ -159,7 +155,8 @@ namespace Mocassin.Model.Energies
         }
 
         /// <summary>
-        ///     Takes a pair candidate dictionary and a selector function to create the unique set of <see cref="PairInteraction"/> instances
+        ///     Takes a pair candidate dictionary and a selector function to create the unique set of
+        ///     <see cref="PairInteraction" /> instances
         /// </summary>
         /// <param name="candidateDictionary"></param>
         /// <param name="pairMaker"></param>
@@ -181,7 +178,8 @@ namespace Mocassin.Model.Energies
         }
 
         /// <summary>
-        ///     Creates new <see cref="StablePairInteraction"/> from <see cref="PairCandidate"/> and a <see cref="IPermutationSource{T1}"/> for the occupation sets
+        ///     Creates new <see cref="StablePairInteraction" /> from <see cref="PairCandidate" /> and a
+        ///     <see cref="IPermutationSource{T1}" /> for the occupation sets
         /// </summary>
         /// <param name="candidate"></param>
         /// <param name="particleSource"></param>
@@ -197,7 +195,8 @@ namespace Mocassin.Model.Energies
         }
 
         /// <summary>
-        ///     Creates new <see cref="UnstablePairInteraction"/> from <see cref="PairCandidate"/> and a <see cref="IPermutationSource{T1}"/> for the occupation sets
+        ///     Creates new <see cref="UnstablePairInteraction" /> from <see cref="PairCandidate" /> and a
+        ///     <see cref="IPermutationSource{T1}" /> for the occupation sets
         /// </summary>
         /// <param name="candidate"></param>
         /// <param name="particleSource"></param>
@@ -237,10 +236,8 @@ namespace Mocassin.Model.Energies
         /// <param name="position0"></param>
         /// <param name="position1"></param>
         /// <returns></returns>
-        public IPermutationSource<IParticle> CreateParticlePermutationSource(ICellSite position0, ICellSite position1)
-        {
-            return new PermutationSlotMachine<IParticle>(position0.OccupationSet.GetParticles(), position1.OccupationSet.GetParticles());
-        }
+        public IPermutationSource<IParticle> CreateParticlePermutationSource(ICellSite position0, ICellSite position1) =>
+            new PermutationSlotMachine<IParticle>(position0.OccupationSet.GetParticles(), position1.OccupationSet.GetParticles());
 
         /// <summary>
         ///     Searches the set of passed positions for pair interaction within the rules of the constraint and predicate and
@@ -315,11 +312,9 @@ namespace Mocassin.Model.Energies
 
                 foreach (var vector in possibleVectors)
                 {
-                    bool IsCandidateMatch(PairCandidate value)
-                    {
-                        return value.Position0 == uniqueCandidate.Position0
-                               && SpaceGroupService.Comparer.Compare(vector, value.PositionVector) == 0;
-                    }
+                    bool IsCandidateMatch(PairCandidate value) =>
+                        value.Position0 == uniqueCandidate.Position0
+                        && SpaceGroupService.Comparer.Compare(vector, value.PositionVector) == 0;
 
                     var index = rawCandidates.FindIndex(IsCandidateMatch);
                     if (index < 0)
@@ -384,8 +379,8 @@ namespace Mocassin.Model.Energies
             foreach (var position in positions)
             {
                 var distance = UnitCellProvider.VectorEncoder.Transformer
-                    .ToCartesian(position.Fractional - start.Vector)
-                    .GetLength();
+                                               .ToCartesian(position.Fractional - start.Vector)
+                                               .GetLength();
 
                 yield return new PairCandidate(start, position.Content, position.Fractional, distance);
             }
@@ -443,7 +438,8 @@ namespace Mocassin.Model.Energies
         }
 
         /// <summary>
-        ///     Creates the acceptance <see cref="Predicate{T}"/> for an <see cref="UnstablePairInteraction"/> from its <see cref="IUnstableEnvironment"/> definition
+        ///     Creates the acceptance <see cref="Predicate{T}" /> for an <see cref="UnstablePairInteraction" /> from its
+        ///     <see cref="IUnstableEnvironment" /> definition
         /// </summary>
         /// <param name="environment"></param>
         /// <returns></returns>
@@ -458,7 +454,8 @@ namespace Mocassin.Model.Energies
         }
 
         /// <summary>
-        ///     Creates the acceptance <see cref="Predicate{T}"/> for an <see cref="StablePairInteraction"/> from the <see cref="IStableEnvironmentInfo"/>
+        ///     Creates the acceptance <see cref="Predicate{T}" /> for an <see cref="StablePairInteraction" /> from the
+        ///     <see cref="IStableEnvironmentInfo" />
         /// </summary>
         /// <param name="environment"></param>
         /// <returns></returns>

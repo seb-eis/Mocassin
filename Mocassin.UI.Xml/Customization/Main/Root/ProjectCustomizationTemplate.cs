@@ -28,8 +28,7 @@ namespace Mocassin.UI.Xml.Customization
         /// <summary>
         ///     Get or set a key for the customization
         /// </summary>
-        [XmlAttribute("Key")]
-        [NotMapped]
+        [XmlAttribute("Key"), NotMapped]
         public string Key
         {
             get => key;
@@ -39,9 +38,7 @@ namespace Mocassin.UI.Xml.Customization
         /// <summary>
         ///     Get or set the <see cref="EnergyModelCustomizationData" /> that stores energy customization data
         /// </summary>
-        [XmlElement("EnergyCustomization")]
-        [ModelCustomizationRoot]
-        [NotMapped]
+        [XmlElement("EnergyCustomization"), ModelCustomizationRoot, NotMapped]
         public EnergyModelCustomizationData EnergyModelCustomization
         {
             get => energyModelCustomization;
@@ -51,9 +48,7 @@ namespace Mocassin.UI.Xml.Customization
         /// <summary>
         ///     Get or set the <see cref="TransitionModelCustomizationData" /> that stores transition customization data
         /// </summary>
-        [XmlElement("TransitionCustomization")]
-        [ModelCustomizationRoot]
-        [NotMapped]
+        [XmlElement("TransitionCustomization"), ModelCustomizationRoot, NotMapped]
         public TransitionModelCustomizationData TransitionModelCustomization
         {
             get => transitionModelCustomization;
@@ -69,22 +64,17 @@ namespace Mocassin.UI.Xml.Customization
         }
 
         /// <inheritdoc />
-        public ProjectCustomizationTemplate Duplicate()
-        {
-            return new ProjectCustomizationTemplate
+        public ProjectCustomizationTemplate Duplicate() =>
+            new ProjectCustomizationTemplate
             {
                 Parent = Parent,
                 Name = $"{Name}(copy)",
                 TransitionModelCustomization = TransitionModelCustomization.Duplicate(),
                 EnergyModelCustomization = EnergyModelCustomization.Duplicate()
             };
-        }
 
         /// <inheritdoc />
-        object IDuplicable.Duplicate()
-        {
-            return Duplicate();
-        }
+        object IDuplicable.Duplicate() => Duplicate();
 
         /// <inheritdoc />
         public override void PushToModel(IModelProject modelProject)

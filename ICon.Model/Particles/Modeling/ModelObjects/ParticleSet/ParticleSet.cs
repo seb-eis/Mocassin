@@ -24,10 +24,7 @@ namespace Mocassin.Model.Particles
         public override string ObjectName => "Particle Set";
 
         /// <inheritdoc />
-        public IEnumerable<IParticle> GetParticles()
-        {
-            return (Particles ?? new List<IParticle>()).AsEnumerable();
-        }
+        public IEnumerable<IParticle> GetParticles() => (Particles ?? new List<IParticle>()).AsEnumerable();
 
 
         /// <inheritdoc />
@@ -44,17 +41,11 @@ namespace Mocassin.Model.Particles
         }
 
         /// <inheritdoc />
-        public bool EqualsInModelProperties(IParticleSet other)
-        {
-            return AsBitmask().Equals(other.AsBitmask());
-        }
+        public bool EqualsInModelProperties(IParticleSet other) => AsBitmask().Equals(other.AsBitmask());
 
 
         /// <inheritdoc />
-        public bool IsEmpty()
-        {
-            return ParticleCount == 0;
-        }
+        public bool IsEmpty() => ParticleCount == 0;
 
         /// <inheritdoc />
         public long AsLong()
@@ -63,25 +54,16 @@ namespace Mocassin.Model.Particles
         }
 
         /// <inheritdoc />
-        public IEnumerator<IParticle> GetEnumerator()
-        {
-            return Particles.GetEnumerator();
-        }
+        public IEnumerator<IParticle> GetEnumerator() => Particles.GetEnumerator();
 
         /// <inheritdoc />
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         /// <summary>
         ///     Creates new empty particle set that does not allow any occupants (Always has the index 0)
         /// </summary>
         /// <returns></returns>
-        public static ParticleSet CreateEmpty()
-        {
-            return new ParticleSet {Particles = new List<IParticle>(), Index = 0, Key = "ParticleSet.Void"};
-        }
+        public static ParticleSet CreateEmpty() => new ParticleSet {Particles = new List<IParticle>(), Index = 0, Key = "ParticleSet.Void"};
 
         /// <inheritdoc />
         public override ModelObject PopulateFrom(IModelObject obj)

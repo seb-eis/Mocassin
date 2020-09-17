@@ -19,40 +19,22 @@ namespace Mocassin.Model.Energies
         }
 
         /// <inheritdoc />
-        public IStableEnvironmentInfo GetStableEnvironmentInfo()
-        {
-            return Data.StableEnvironmentInfo;
-        }
+        public IStableEnvironmentInfo GetStableEnvironmentInfo() => Data.StableEnvironmentInfo;
 
         /// <inheritdoc />
-        public IGroupInteraction GetGroupInteraction(int index)
-        {
-            return Data.GroupInteractions[index];
-        }
+        public IGroupInteraction GetGroupInteraction(int index) => Data.GroupInteractions[index];
 
         /// <inheritdoc />
-        public ListReadOnlyWrapper<IGroupInteraction> GetGroupInteractions()
-        {
-            return ListReadOnlyWrapper<IGroupInteraction>.FromEnumerable(Data.GroupInteractions);
-        }
+        public FixedList<IGroupInteraction> GetGroupInteractions() => FixedList<IGroupInteraction>.FromEnumerable(Data.GroupInteractions);
 
         /// <inheritdoc />
-        public IStablePairInteraction GetStablePairInteraction(int index)
-        {
-            return Data.StablePairInteractions[index];
-        }
+        public IStablePairInteraction GetStablePairInteraction(int index) => Data.StablePairInteractions[index];
 
         /// <inheritdoc />
-        public ListReadOnlyWrapper<IStablePairInteraction> GetStablePairInteractions()
-        {
-            return ListReadOnlyWrapper<IStablePairInteraction>.FromEnumerable(Data.StablePairInteractions);
-        }
+        public FixedList<IStablePairInteraction> GetStablePairInteractions() => FixedList<IStablePairInteraction>.FromEnumerable(Data.StablePairInteractions);
 
         /// <inheritdoc />
-        public IUnstableEnvironment GetUnstableEnvironment(int index)
-        {
-            return Data.UnstableEnvironments[index];
-        }
+        public IUnstableEnvironment GetUnstableEnvironment(int index) => Data.UnstableEnvironments[index];
 
 
         /// <inheritdoc />
@@ -62,22 +44,14 @@ namespace Mocassin.Model.Energies
         }
 
         /// <inheritdoc />
-        public ListReadOnlyWrapper<IUnstableEnvironment> GetUnstableEnvironments()
-        {
-            return ListReadOnlyWrapper<IUnstableEnvironment>.FromEnumerable(Data.UnstableEnvironments);
-        }
+        public FixedList<IUnstableEnvironment> GetUnstableEnvironments() => FixedList<IUnstableEnvironment>.FromEnumerable(Data.UnstableEnvironments);
 
         /// <inheritdoc />
-        public IUnstablePairInteraction GetUnstablePairInteractions(int index)
-        {
-            return Data.UnstablePairInteractions[index];
-        }
+        public IUnstablePairInteraction GetUnstablePairInteractions(int index) => Data.UnstablePairInteractions[index];
 
         /// <inheritdoc />
-        public ListReadOnlyWrapper<IUnstablePairInteraction> GetUnstablePairInteractions()
-        {
-            return ListReadOnlyWrapper<IUnstablePairInteraction>.FromEnumerable(Data.UnstablePairInteractions);
-        }
+        public FixedList<IUnstablePairInteraction> GetUnstablePairInteractions() =>
+            FixedList<IUnstablePairInteraction>.FromEnumerable(Data.UnstablePairInteractions);
 
         /// <inheritdoc />
         public IEnergySetterProvider GetEnergySetterProvider(ProjectSettings projectSettings, IEnergyQueryPort queryPort)

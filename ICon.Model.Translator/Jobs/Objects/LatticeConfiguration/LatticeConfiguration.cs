@@ -47,19 +47,13 @@ namespace Mocassin.Model.Translator.Jobs
         ///     Get the size as an <see cref="VectorI3" />
         /// </summary>
         /// <returns></returns>
-        public VectorI3 GetSizeVector()
-        {
-            return new VectorI3(SizeA, SizeB, SizeC);
-        }
+        public VectorI3 GetSizeVector() => new VectorI3(SizeA, SizeB, SizeC);
 
         /// <summary>
         ///     Get set size as a default formatted <see cref="string" />
         /// </summary>
         /// <returns></returns>
-        public string GetSizeString()
-        {
-            return $"{SizeA},{SizeB},{SizeC}";
-        }
+        public string GetSizeString() => $"{SizeA},{SizeB},{SizeC}";
 
         /// <summary>
         ///     Get the set dopings as a default formatted <see cref="string" />

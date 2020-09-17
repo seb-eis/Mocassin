@@ -68,7 +68,7 @@ namespace Mocassin.UI.Xml.EnergyModel
         public override IEnumerable<IModelObject> GetInputObjects()
         {
             return UnstableEnvironments.Select(x => x.GetInputObject())
-                .Concat(GroupInteractions.Select(x => x.GetInputObject()));
+                                       .Concat(GroupInteractions.Select(x => x.GetInputObject()));
         }
     }
 }

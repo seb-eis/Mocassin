@@ -19,29 +19,20 @@ namespace Mocassin.Model.Energies.ConflictHandling
         /// </summary>
         /// <returns></returns>
         [HandlerFactoryMethod(DataOperationType.ParameterChange)]
-        protected object CreateParameterHandler()
-        {
-            return new EnergyParameterChangeHandler(ModelProject);
-        }
+        protected object CreateParameterHandler() => new EnergyParameterChangeHandler(ModelProject);
 
         /// <summary>
         ///     Get the custom handler for energy object change data conflict resolving (Overwrites default handler in pipeline)
         /// </summary>
         /// <returns></returns>
         [HandlerFactoryMethod(DataOperationType.ObjectChange)]
-        protected object CreateObjectChangeHandler()
-        {
-            return new EnergyObjectChangeHandler(ModelProject);
-        }
+        protected object CreateObjectChangeHandler() => new EnergyObjectChangeHandler(ModelProject);
 
         /// <summary>
         ///     Get the custom handler for energy object change data conflict resolving (Overwrites default handler in pipeline)
         /// </summary>
         /// <returns></returns>
         [HandlerFactoryMethod(DataOperationType.NewObject)]
-        protected object CreateInputChangeHandler()
-        {
-            return new EnergyObjectAddedHandler(ModelProject);
-        }
+        protected object CreateInputChangeHandler() => new EnergyObjectAddedHandler(ModelProject);
     }
 }

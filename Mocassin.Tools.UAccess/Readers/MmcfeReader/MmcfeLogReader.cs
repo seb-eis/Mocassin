@@ -52,10 +52,7 @@ namespace Mocassin.Tools.UAccess.Readers
         ///     Reads the byte representation of the parameters as an <see cref="CMmcfeParams" />
         /// </summary>
         /// <returns></returns>
-        public ref CMmcfeParams ReadParameters()
-        {
-            return ref ParameterReader.ReadAs<CMmcfeParams>(0);
-        }
+        public ref CMmcfeParams ReadParameters() => ref ParameterReader.ReadAs<CMmcfeParams>(0);
 
         /// <summary>
         ///     Creates a new <see cref="MmcfeLogReader" /> for the provided set of binary representations and performs consistency

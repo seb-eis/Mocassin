@@ -43,12 +43,10 @@ namespace Mocassin.Mathematics.ValueTypes
         /// <param name="b"></param>
         /// <param name="c"></param>
         /// <returns></returns>
-        public bool IsWithinBounds(double a, double b, double c)
-        {
-            return a >= Start.A && a <= End.A &&
-                   b >= Start.B && b <= End.B &&
-                   c >= Start.C && c <= End.C;
-        }
+        public bool IsWithinBounds(double a, double b, double c) =>
+            a >= Start.A && a <= End.A &&
+            b >= Start.B && b <= End.B &&
+            c >= Start.C && c <= End.C;
 
         /// <summary>
         ///     Performs a within bounds check for the provided <see cref="Fractional3D" /> using direct double comparison
@@ -56,10 +54,7 @@ namespace Mocassin.Mathematics.ValueTypes
         /// </summary>
         /// <param name="point"></param>
         /// <returns></returns>
-        public bool IsWithinBounds(in Fractional3D point)
-        {
-            return IsWithinBounds(point.A, point.B, point.C);
-        }
+        public bool IsWithinBounds(in Fractional3D point) => IsWithinBounds(point.A, point.B, point.C);
 
         /// <summary>
         ///     Performs a within bounds check for the provided a,b,c coordinates using a double <see cref="IComparer{T}" />
@@ -69,12 +64,10 @@ namespace Mocassin.Mathematics.ValueTypes
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        public bool IsWithinBounds(double a, double b, double c, IComparer<double> comparer)
-        {
-            return comparer.Compare(a, Start.A) >= 0 && comparer.Compare(a, End.A) <= 0 &&
-                   comparer.Compare(b, Start.B) >= 0 && comparer.Compare(b, End.B) <= 0 &&
-                   comparer.Compare(c, Start.C) >= 0 && comparer.Compare(c, End.C) <= 0;
-        }
+        public bool IsWithinBounds(double a, double b, double c, IComparer<double> comparer) =>
+            comparer.Compare(a, Start.A) >= 0 && comparer.Compare(a, End.A) <= 0 &&
+            comparer.Compare(b, Start.B) >= 0 && comparer.Compare(b, End.B) <= 0 &&
+            comparer.Compare(c, Start.C) >= 0 && comparer.Compare(c, End.C) <= 0;
 
         /// <summary>
         ///     Performs a within bounds check for the provided <see cref="Fractional3D" /> using a double
@@ -83,10 +76,7 @@ namespace Mocassin.Mathematics.ValueTypes
         /// <param name="point"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        public bool IsWithinBounds(in Fractional3D point, IComparer<double> comparer)
-        {
-            return IsWithinBounds(point.A, point.B, point.C, comparer);
-        }
+        public bool IsWithinBounds(in Fractional3D point, IComparer<double> comparer) => IsWithinBounds(point.A, point.B, point.C, comparer);
 
         /// <summary>
         ///     Performs an almost within bounds check for the provided <see cref="Fractional3D" /> using a range tolerance
@@ -108,10 +98,7 @@ namespace Mocassin.Mathematics.ValueTypes
         /// </summary>
         /// <param name="point"></param>
         /// <param name="tolerance"></param>
-        public bool IsWithinBounds(in Fractional3D point, double tolerance)
-        {
-            return IsWithinBounds(point.A, point.B, point.C, tolerance);
-        }
+        public bool IsWithinBounds(in Fractional3D point, double tolerance) => IsWithinBounds(point.A, point.B, point.C, tolerance);
 
         /// <summary>
         ///     Calculates the <see cref="Fractional3D" /> start and end points of the <see cref="FractionalBox3D" /> from an

@@ -175,9 +175,6 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
         /// </summary>
         /// <param name="dataObject"></param>
         /// <returns></returns>
-        private bool CanHandleDataDrop(IDataObject dataObject)
-        {
-            return dataObject.GetDataPresent(typeof(TabMoveData));
-        }
+        private bool CanHandleDataDrop(IDataObject dataObject) => dataObject.GetDataPresent(typeof(TabMoveData));
     }
 }

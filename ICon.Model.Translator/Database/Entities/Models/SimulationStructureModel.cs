@@ -58,15 +58,13 @@ namespace Mocassin.Model.Translator
         /// <summary>
         ///     The interaction range object for regular environment objects
         /// </summary>
-        [NotMapped]
-        [InteropProperty(nameof(InteractionRangeBinary))]
+        [NotMapped, InteropProperty(nameof(InteractionRangeBinary))]
         public InteropObject<CInteractionRange> InteractionRange { get; set; }
 
         /// <summary>
         ///     The structure meta data object that carries non-essential additional structure info for calculations
         /// </summary>
-        [NotMapped]
-        [InteropProperty(nameof(StructureMetaDataBinary))]
+        [NotMapped, InteropProperty(nameof(StructureMetaDataBinary))]
         public InteropObject<CStructureMetaData> StructureMetaData { get; set; }
     }
 }

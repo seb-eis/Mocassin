@@ -37,10 +37,7 @@ namespace Mocassin.Model.Translator
         /// <typeparam name="TStruct"></typeparam>
         /// <param name="structure"></param>
         /// <returns></returns>
-        public static InteropObject<TStruct> Create<TStruct>(in TStruct structure) where TStruct : struct
-        {
-            return new InteropObject<TStruct>(structure);
-        }
+        public static InteropObject<TStruct> Create<TStruct>(in TStruct structure) where TStruct : struct => new InteropObject<TStruct>(structure);
     }
 
     /// <summary>

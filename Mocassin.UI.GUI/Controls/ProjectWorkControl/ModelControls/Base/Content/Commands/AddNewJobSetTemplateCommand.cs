@@ -42,10 +42,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         }
 
         /// <inheritdoc />
-        protected override bool CanExecuteInternal()
-        {
-            return ProjectGetter() != null;
-        }
+        protected override bool CanExecuteInternal() => ProjectGetter() != null;
 
         /// <summary>
         ///     Tries to create and add a new <see cref="ProjectJobSetTemplate" /> to the passed
@@ -87,9 +84,6 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         ///     supplied by the internal getter
         /// </summary>
         /// <returns></returns>
-        private ProjectJobSetTemplate CreateJobTranslation()
-        {
-            return ProjectJobSetTemplate.Create(ProjectGetter.Invoke());
-        }
+        private ProjectJobSetTemplate CreateJobTranslation() => ProjectJobSetTemplate.Create(ProjectGetter.Invoke());
     }
 }

@@ -50,9 +50,6 @@ namespace Mocassin.Tools.Evaluation.Queries
         ///     behavior
         /// </summary>
         /// <returns></returns>
-        public EnsembleDisplacement AsMean()
-        {
-            return new EnsembleDisplacement(IsSquared, 1, Particle, Vector / EnsembleSize);
-        }
+        public EnsembleDisplacement AsMean() => new EnsembleDisplacement(IsSquared, 1, Particle, Vector / EnsembleSize);
     }
 }

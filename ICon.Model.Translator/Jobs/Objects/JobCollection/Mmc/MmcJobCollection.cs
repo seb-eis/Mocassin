@@ -30,27 +30,15 @@ namespace Mocassin.Model.Translator.Jobs
         public int CollectionId { get; set; }
 
         /// <inheritdoc />
-        public ISimulation GetSimulation()
-        {
-            return Simulation;
-        }
+        public ISimulation GetSimulation() => Simulation;
 
         /// <inheritdoc />
-        public IEnumerable<IPostBuildOptimizer> GetPostBuildOptimizers()
-        {
-            return PostBuildOptimizers.AsEnumerable();
-        }
+        public IEnumerable<IPostBuildOptimizer> GetPostBuildOptimizers() => PostBuildOptimizers.AsEnumerable();
 
         /// <inheritdoc />
-        public IEnumerator<JobConfiguration> GetEnumerator()
-        {
-            return JobConfigurations.GetEnumerator();
-        }
+        public IEnumerator<JobConfiguration> GetEnumerator() => JobConfigurations.GetEnumerator();
 
         /// <inheritdoc />
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }

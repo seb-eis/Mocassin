@@ -71,16 +71,10 @@ namespace Mocassin.UI.Xml.ProjectLibrary
         }
 
         /// <inheritdoc />
-        public bool CheckForModelChanges()
-        {
-            return !IsDisposed && HasUnsavedChanges();
-        }
+        public bool CheckForModelChanges() => !IsDisposed && HasUnsavedChanges();
 
         /// <inheritdoc />
-        public Task<bool> CheckForModelChangesAsync()
-        {
-            return Task.Run(CheckForModelChanges);
-        }
+        public Task<bool> CheckForModelChangesAsync() => Task.Run(CheckForModelChanges);
 
         /// <inheritdoc />
         public IModelProject LoadDefaultModelProject(Expression<Func<MocassinProject, bool>> selectorExpression, ProjectSettings settings = null)
@@ -121,19 +115,19 @@ namespace Mocassin.UI.Xml.ProjectLibrary
             StateChangedEvent.OnCompleted();
         }
 
+        /// <inheritdoc cref="DbContext" />
+        public override int SaveChanges()
+        {
+            Clean();
+            return base.SaveChanges();
+        }
+
         /// <summary>
         ///     Relays the <see cref="DbContext" /> entity changed event to the internal <see cref="ReactiveEvent{TSubject}" />
         /// </summary>
         private void RelayEntityChangeEvent(object sender, EventArgs args)
         {
             StateChangedEvent.OnNext(Unit.Default);
-        }
-
-        /// <inheritdoc cref="DbContext" />
-        public override int SaveChanges()
-        {
-            Clean();
-            return base.SaveChanges();
         }
     }
 }

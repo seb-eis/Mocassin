@@ -11,10 +11,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Commands
     public class ToggleViewportCameraCommand : Command<HelixViewport3D>
     {
         /// <inheritdoc />
-        public override bool CanExecute(HelixViewport3D parameter)
-        {
-            return parameter != null && base.CanExecute(parameter);
-        }
+        public override bool CanExecute(HelixViewport3D parameter) => parameter != null && base.CanExecute(parameter);
 
         /// <inheritdoc />
         public override void Execute(HelixViewport3D parameter)

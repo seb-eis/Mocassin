@@ -50,8 +50,8 @@ namespace Mocassin.Model.Translator.ModelContext
 
             var index = 0;
             return cellReferencePositions.Select(BuildEnvironmentModel)
-                .Action(a => a.ModelId = index++)
-                .ToList();
+                                         .Action(a => a.ModelId = index++)
+                                         .ToList();
         }
 
         /// <summary>
@@ -94,14 +94,14 @@ namespace Mocassin.Model.Translator.ModelContext
                 throw new InvalidOperationException("Cannot resolve pair interactions for the environment model");
 
             var multiplicityOperations = ModelProject.SpaceGroupService
-                .GetOperationsNotShiftingOrigin(environmentModel.CellSite.Vector, true);
+                                                     .GetOperationsNotShiftingOrigin(environmentModel.CellSite.Vector, true);
 
             var index = 0;
             var pairInteractionModels = interactions
-                .Select(a => CreatePairInteractionModel(a, environmentModel))
-                .SelectMany(a => ExtendPairInteractionModel(a, multiplicityOperations))
-                .Action(a => a.ModelId = index++)
-                .ToList();
+                                        .Select(a => CreatePairInteractionModel(a, environmentModel))
+                                        .SelectMany(a => ExtendPairInteractionModel(a, multiplicityOperations))
+                                        .Action(a => a.ModelId = index++)
+                                        .ToList();
 
             environmentModel.PairInteractionModels = pairInteractionModels;
         }
@@ -163,11 +163,11 @@ namespace Mocassin.Model.Translator.ModelContext
             var targetInfo = pairModel.TargetPositionInfo;
             var positionPair = new[] {pairInteraction.SecondPositionVector, pairInteraction.Position0.Vector};
             var invertedPair = ModelProject.SpaceGroupService
-                .ShiftFirstToOriginCell(positionPair, ModelProject.GeometryNumeric.ComparisonRange)
-                .ToList();
+                                           .ShiftFirstToOriginCell(positionPair, ModelProject.GeometryNumeric.ComparisonRange)
+                                           .ToList();
 
             var operation = ModelProject.SpaceGroupService
-                .GetOperationToTarget(invertedPair[0], pairInteraction.Position1.Vector);
+                                        .GetOperationToTarget(invertedPair[0], pairInteraction.Position1.Vector);
 
             targetInfo.Distance = pairInteraction.Distance;
             targetInfo.CellSite = pairInteraction.Position0;
@@ -199,8 +199,8 @@ namespace Mocassin.Model.Translator.ModelContext
             }
 
             var extended = absoluteVectors
-                .Select(vector => CreateEquivalentModelByVector(pairInteractionModel, vector))
-                .ToList();
+                           .Select(vector => CreateEquivalentModelByVector(pairInteractionModel, vector))
+                           .ToList();
 
             return extended.Action(model => model.EquivalentModels = extended);
         }
@@ -251,10 +251,10 @@ namespace Mocassin.Model.Translator.ModelContext
 
             var index = 0;
             var groupModels = groupInteractions
-                .Select(a => CreateGroupInteractionModel(a, environmentModel))
-                .SelectMany(ExtendGroupInteractionModel)
-                .Action(a => a.ModelId = index++)
-                .ToList();
+                              .Select(a => CreateGroupInteractionModel(a, environmentModel))
+                              .SelectMany(ExtendGroupInteractionModel)
+                              .Action(a => a.ModelId = index++)
+                              .ToList();
 
             environmentModel.GroupInteractionModels = groupModels;
         }
@@ -289,11 +289,12 @@ namespace Mocassin.Model.Translator.ModelContext
             var groupVectors = groupModel.PositionGroupInfo.PointOperationGroup.GetUniqueSequencesWithoutPreservedPointOrder();
 
             var pairInteractions = groupVectors
-                .Select(vectorSet => vectorSet
-                    .Select(vector => groupModel.EnvironmentModel.PairInteractionModels
-                        .Single(a => comparer.Compare(a.TargetPositionInfo.AbsoluteFractional, vector) == 0))
-                    .ToList())
-                .ToList();
+                                   .Select(vectorSet => vectorSet
+                                                        .Select(vector => groupModel.EnvironmentModel.PairInteractionModels
+                                                                                    .Single(a => comparer.Compare(a.TargetPositionInfo.AbsoluteFractional,
+                                                                                        vector) == 0))
+                                                        .ToList())
+                                   .ToList();
 
             var groupModels = pairInteractions.Select(a => CreateExtendedGroupModel(groupModel, a)).ToList();
             return groupModels.Action(a => a.EquivalentModels = groupModels);

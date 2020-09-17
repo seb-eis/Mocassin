@@ -18,7 +18,7 @@
       <Setter Property="VerticalAlignment" Value="Center" />
       <Setter Property="HorizontalAlignment" Value="Center" />
       <Setter Property="Margin" Value="5,10,5,10" />
-      <Setter Property="FontWeight" Value="DemiBold"/>
+      <Setter Property="FontWeight" Value="DemiBold" />
     </Style>
     <Style TargetType="{x:Type TextBox}" x:Key="Local.NamingTextBoxStyle">
       <Setter Property="MinWidth" Value="50" />
@@ -30,7 +30,7 @@
           <Setter Property="Background" Value="White" />
         </Trigger>
         <Trigger Property="IsKeyboardFocused" Value="False">
-          <Setter Property="FontWeight" Value="DemiBold"></Setter>
+          <Setter Property="FontWeight" Value="DemiBold" />
           <Setter Property="Background" Value="Transparent" />
         </Trigger>
       </Style.Triggers>
@@ -53,12 +53,12 @@
       <Setter Property="X2" Value="1" />
     </Style>
     <Style TargetType="{x:Type Border}" x:Key="Local.ColorBorderStyle">
-      <Setter Property="BorderBrush" Value="Black"/>
-      <Setter Property="BorderThickness" Value="1"/>
-      <Setter Property="CornerRadius" Value="0"/>
-      <Setter Property="Width" Value="25"/>
-      <Setter Property="Height" Value="25"/>
-      <Setter Property="VerticalAlignment" Value="Stretch"/>
+      <Setter Property="BorderBrush" Value="Black" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="CornerRadius" Value="0" />
+      <Setter Property="Width" Value="25" />
+      <Setter Property="Height" Value="25" />
+      <Setter Property="VerticalAlignment" Value="Stretch" />
     </Style>
   </UserControl.Resources>
 
@@ -79,60 +79,62 @@
                   <RowDefinition Height="Auto" />
                   <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <Line Grid.Column="0" Grid.Row="0" Grid.RowSpan="3" Style="{StaticResource Local.VerticalConnectorLineStyle}" />
-                <WrapPanel Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Left">
+                <Line Grid.Column="0" Grid.Row="0" Grid.RowSpan="3"
+                      Style="{StaticResource Local.VerticalConnectorLineStyle}" />
+                <WrapPanel Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" VerticalAlignment="Center"
+                           HorizontalAlignment="Left">
                   <Menu Background="Transparent" BorderThickness="1" VerticalAlignment="Center" Margin="10,0,10,0">
-                      <MenuItem>
-                        <MenuItem.Header>
-                          <WrapPanel>
-                            <Border Style="{StaticResource Local.ColorBorderStyle}">
-                              <Border.Background>
-                                <LinearGradientBrush po:Freeze="True">
-                                  <GradientStop Color="LightBlue" Offset="0.0" />
-                                  <GradientStop Color="DarkBlue" Offset="0.5" />
-                                  <GradientStop Color="LightBlue" Offset="1.0" />
-                                </LinearGradientBrush>
-                              </Border.Background>
-                            </Border>
-                            <TextBlock Text="PROJECT:" Style="{StaticResource Local.TypeTextBlockStyle}"/>
-                          </WrapPanel>
-                        </MenuItem.Header>
-                        <MenuItem Header="Set project as active"
-                                  Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.SetAsActiveProjectCommand}"
-                                  CommandParameter="{Binding}"/>
-                        <MenuItem Header="Duplicate project"
-                                  Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.DuplicateProjectCommand}"
-                                  CommandParameter="{Binding}"/>
-                        <Separator/>
-                        <MenuItem Header="Add new parameter template"
-                                  Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.AddCustomizationTemplateToProjectCommand}"
-                                  CommandParameter="{Binding}"/>
-                        <MenuItem Header="Add new job set template"
-                                  Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.AddJobSetTemplateToProjectCommand}"
-                                  CommandParameter="{Binding}"/>
-                        <Separator/>
-                        <MenuItem Header="Delete project" 
-                                  Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.DeleteProjectCommand}"
-                                  CommandParameter="{Binding}"/>
-                      </MenuItem>
-                    </Menu>
-                    <TextBox Text="{Binding Name}"
-                             Style="{StaticResource Local.NamingTextBoxStyle}">
-                      <TextBox.InputBindings>
-                        <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
-                                    CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
-                      </TextBox.InputBindings>
-                    </TextBox>
+                    <MenuItem>
+                      <MenuItem.Header>
+                        <WrapPanel>
+                          <Border Style="{StaticResource Local.ColorBorderStyle}">
+                            <Border.Background>
+                              <LinearGradientBrush po:Freeze="True">
+                                <GradientStop Color="LightBlue" Offset="0.0" />
+                                <GradientStop Color="DarkBlue" Offset="0.5" />
+                                <GradientStop Color="LightBlue" Offset="1.0" />
+                              </LinearGradientBrush>
+                            </Border.Background>
+                          </Border>
+                          <TextBlock Text="PROJECT:" Style="{StaticResource Local.TypeTextBlockStyle}" />
+                        </WrapPanel>
+                      </MenuItem.Header>
+                      <MenuItem Header="Set project as active"
+                                Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.SetAsActiveProjectCommand}"
+                                CommandParameter="{Binding}" />
+                      <MenuItem Header="Duplicate project"
+                                Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.DuplicateProjectCommand}"
+                                CommandParameter="{Binding}" />
+                      <Separator />
+                      <MenuItem Header="Add new parameter template"
+                                Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.AddCustomizationTemplateToProjectCommand}"
+                                CommandParameter="{Binding}" />
+                      <MenuItem Header="Add new job set template"
+                                Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.AddJobSetTemplateToProjectCommand}"
+                                CommandParameter="{Binding}" />
+                      <Separator />
+                      <MenuItem Header="Delete project"
+                                Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.DeleteProjectCommand}"
+                                CommandParameter="{Binding}" />
+                    </MenuItem>
+                  </Menu>
+                  <TextBox Text="{Binding Name}"
+                           Style="{StaticResource Local.NamingTextBoxStyle}">
+                    <TextBox.InputBindings>
+                      <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                                  CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
+                    </TextBox.InputBindings>
+                  </TextBox>
                   <TextBlock Text="(ACTIVE)">
                     <TextBlock.Style>
                       <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource Local.TypeTextBlockStyle}">
-                        <Setter Property="Foreground" Value="Brown"/>
+                        <Setter Property="Foreground" Value="Brown" />
                         <Style.Triggers>
                           <DataTrigger Binding="{Binding IsActiveProject}" Value="True">
-                            <Setter Property="Visibility" Value="Visible"/>
+                            <Setter Property="Visibility" Value="Visible" />
                           </DataTrigger>
                           <DataTrigger Binding="{Binding IsActiveProject}" Value="False">
-                            <Setter Property="Visibility" Value="Hidden"/>
+                            <Setter Property="Visibility" Value="Hidden" />
                           </DataTrigger>
                         </Style.Triggers>
                       </Style>
@@ -148,7 +150,7 @@
                           <ColumnDefinition Width="25" />
                           <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <Line Style="{StaticResource Local.HorizontalConnectorLineStyle}" Grid.Column="0"/>
+                        <Line Style="{StaticResource Local.HorizontalConnectorLineStyle}" Grid.Column="0" />
                         <WrapPanel Grid.Column="1">
                           <Menu Background="Transparent">
                             <MenuItem>
@@ -168,14 +170,14 @@
                               </MenuItem.Header>
                               <MenuItem Header="Duplicate template"
                                         Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.DuplicateCustomizationTemplateCommand}"
-                                        CommandParameter="{Binding}"/>
+                                        CommandParameter="{Binding}" />
                               <MenuItem Header="Migrate template"
                                         Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.MigrateCustomizationTemplateCommand}"
-                                        CommandParameter="{Binding}"/>
-                              <Separator/>
-                              <MenuItem Header="Delete template" 
+                                        CommandParameter="{Binding}" />
+                              <Separator />
+                              <MenuItem Header="Delete template"
                                         Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.DeleteCustomizationTemplateCommand}"
-                                        CommandParameter="{Binding}"/>
+                                        CommandParameter="{Binding}" />
                             </MenuItem>
                           </Menu>
                           <TextBox Text="{Binding Name}" Style="{StaticResource Local.NamingTextBoxStyle}">
@@ -198,7 +200,7 @@
                           <ColumnDefinition Width="25" />
                           <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <Line Style="{StaticResource Local.HorizontalConnectorLineStyle}" Grid.Column="0"/>
+                        <Line Style="{StaticResource Local.HorizontalConnectorLineStyle}" Grid.Column="0" />
                         <WrapPanel Grid.Column="1">
                           <Menu Background="Transparent">
                             <MenuItem>
@@ -218,11 +220,11 @@
                               </MenuItem.Header>
                               <MenuItem Header="Duplicate template"
                                         Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.DuplicateJobSetTemplateCommand}"
-                                        CommandParameter="{Binding}"/>
-                              <Separator/>
-                              <MenuItem Header="Delete template" 
+                                        CommandParameter="{Binding}" />
+                              <Separator />
+                              <MenuItem Header="Delete template"
                                         Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.DeleteJobSetTemplateCommand}"
-                                        CommandParameter="{Binding}"/>
+                                        CommandParameter="{Binding}" />
                             </MenuItem>
                           </Menu>
                           <TextBox Text="{Binding Name}" Style="{StaticResource Local.NamingTextBoxStyle}">

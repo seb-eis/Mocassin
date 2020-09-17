@@ -63,7 +63,8 @@ namespace Mocassin.Tools.Evaluation.Queries
         }
 
         /// <summary>
-        ///     Creates a 3D access array for the <see cref="SiteCoordination"/> instances by [SiteID, OriginParticleId, TargetParticleId]
+        ///     Creates a 3D access array for the <see cref="SiteCoordination" /> instances by [SiteID, OriginParticleId,
+        ///     TargetParticleId]
         /// </summary>
         /// <param name="dictionary"></param>
         /// <returns></returns>
@@ -79,10 +80,7 @@ namespace Mocassin.Tools.Evaluation.Queries
                 foreach (var item in pair.Value)
                 {
                     var index1 = item.Key.Index;
-                    for (var index2 = 0; index2 < item.Value.Length; index2++)
-                    {
-                        result[index0, index1, index2] = item.Value[index2];
-                    }
+                    for (var index2 = 0; index2 < item.Value.Length; index2++) result[index0, index1, index2] = item.Value[index2];
                 }
             }
 

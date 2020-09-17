@@ -37,9 +37,7 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
         /// <param name="delay"></param>
         /// <param name="action"></param>
         /// <param name="onAppThread"></param>
-        protected Task ExecuteIfContentSourceUnchanged(Action action, TimeSpan delay, bool onAppThread = false)
-        {
-            return ExecuteIfPropertyUnchanged(action, delay, nameof(ContentSource), onAppThread);
-        }
+        protected Task ExecuteIfContentSourceUnchanged(Action action, TimeSpan delay, bool onAppThread = false) =>
+            ExecuteIfPropertyUnchanged(action, delay, nameof(ContentSource), onAppThread);
     }
 }

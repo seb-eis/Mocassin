@@ -92,11 +92,11 @@ namespace Mocassin.Model.Energies.Validators
         protected void AddInteractionFilterUniquenessValidation(IUnstableEnvironment envInfo, ValidationReport report)
         {
             var duplicateIndices = envInfo.GetInteractionFilters()
-                .ToList().RemoveDuplicatesAndGetRemovedIndices((a, b) => a.IsEqualFilter(b));
+                                          .ToList().RemoveDuplicatesAndGetRemovedIndices((a, b) => a.IsEqualFilter(b));
 
             var details = duplicateIndices
-                .Select(index => $"Filter ({index}) is a duplicate of previous filter definition")
-                .ToList();
+                          .Select(index => $"Filter ({index}) is a duplicate of previous filter definition")
+                          .ToList();
 
             if (details.Count == 0)
                 return;
@@ -138,12 +138,12 @@ namespace Mocassin.Model.Energies.Validators
         protected long ApproximatePairInteractionCount(IUnstableEnvironment envInfo)
         {
             long interactionPerUnitCell = ModelProject.Manager<IStructureManager>().DataAccess
-                .Query(port => port.GetExtendedIndexToPositionList())
-                .Count(entry => entry.Stability == PositionStability.Stable);
+                                                      .Query(port => port.GetExtendedIndexToPositionList())
+                                                      .Count(entry => entry.Stability == PositionStability.Stable);
 
             var unitCellVolume = ModelProject.Manager<IStructureManager>().DataAccess
-                .Query(port => port.GetVectorEncoder())
-                .GetCellVolume();
+                                             .Query(port => port.GetVectorEncoder())
+                                             .GetCellVolume();
 
             return (long) Math.Ceiling(interactionPerUnitCell * MocassinMath.GetSphereVolume(envInfo.MaxInteractionRange) / unitCellVolume);
         }

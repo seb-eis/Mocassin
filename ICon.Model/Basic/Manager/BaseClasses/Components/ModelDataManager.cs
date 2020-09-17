@@ -26,10 +26,8 @@ namespace Mocassin.Model.Basic
         /// <param name="modelObjects"></param>
         /// <returns></returns>
         protected ReindexingList CreateReindexing<TModelObject>(IEnumerable<TModelObject> modelObjects)
-            where TModelObject : IModelObject
-        {
-            return CreateReindexing(modelObjects, 0);
-        }
+            where TModelObject : IModelObject =>
+            CreateReindexing(modelObjects, 0);
 
         /// <summary>
         ///     Generic reindexing function that creates a cleaned reindex info that results if deprecated model data is removed
@@ -76,16 +74,10 @@ namespace Mocassin.Model.Basic
         }
 
         /// <inheritdoc />
-        public override object GetDataCopy()
-        {
-            return JsonConvert.DeserializeObject(JsonSerializeData(), typeof(TData));
-        }
+        public override object GetDataCopy() => JsonConvert.DeserializeObject(JsonSerializeData(), typeof(TData));
 
         /// <inheritdoc />
-        public override string JsonSerializeData()
-        {
-            return JsonConvert.SerializeObject(Data);
-        }
+        public override string JsonSerializeData() => JsonConvert.SerializeObject(Data);
 
         /// <inheritdoc />
         public override void WriteDataContract(Stream stream, DataContractSerializerSettings settings)

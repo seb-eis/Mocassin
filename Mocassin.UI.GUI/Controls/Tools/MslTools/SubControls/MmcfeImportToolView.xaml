@@ -20,16 +20,16 @@
         <TextBox Text="{Binding JobFolderRootPath}" />
       </DockPanel>
       <DockPanel Dock="Right" Margin="{StaticResource App.Margin.VerticalStack}">
-        <TextBlock Text="Compress Raw Data:" Margin="{StaticResource App.Margin.HorizontalStack}"/>
+        <TextBlock Text="Compress Raw Data:" Margin="{StaticResource App.Margin.HorizontalStack}" />
         <CheckBox IsChecked="{Binding IsZipRawActive}" Margin="{StaticResource App.Margin.HorizontalStack}"
-                  VerticalAlignment="Center"/>
-        <TextBlock Text="Auto Select Root Path:" Margin="{StaticResource App.Margin.HorizontalStack}"/>
-        <CheckBox IsChecked="{Binding IsAutoSelectRootByMslPath}" Margin="{StaticResource App.Margin.HorizontalStack}" 
-                  VerticalAlignment="Center"/>
-        <TextBlock Text="Delete Job Folders:" Margin="{StaticResource App.Margin.HorizontalStack}"/>
-        <CheckBox IsChecked="{Binding IsDeleteJobFoldersActive}" Margin="{StaticResource App.Margin.HorizontalStack}" 
-                  VerticalAlignment="Center"/>
-        <TextBox Visibility="Hidden"/>
+                  VerticalAlignment="Center" />
+        <TextBlock Text="Auto Select Root Path:" Margin="{StaticResource App.Margin.HorizontalStack}" />
+        <CheckBox IsChecked="{Binding IsAutoSelectRootByMslPath}" Margin="{StaticResource App.Margin.HorizontalStack}"
+                  VerticalAlignment="Center" />
+        <TextBlock Text="Delete Job Folders:" Margin="{StaticResource App.Margin.HorizontalStack}" />
+        <CheckBox IsChecked="{Binding IsDeleteJobFoldersActive}" Margin="{StaticResource App.Margin.HorizontalStack}"
+                  VerticalAlignment="Center" />
+        <TextBox Visibility="Hidden" />
       </DockPanel>
       <DockPanel Dock="Right" Margin="{StaticResource App.Margin.VerticalStack}">
         <Button Command="{Binding RunImportCommand}" Content="Run Import" Width="200"
@@ -41,10 +41,10 @@
               <Style TargetType="{x:Type ProgressBar}">
                 <Style.Triggers>
                   <DataTrigger Binding="{Binding IsIndeterminateProgress}" Value="False">
-                    <Setter Property="Opacity" Value="1"/>
+                    <Setter Property="Opacity" Value="1" />
                   </DataTrigger>
                   <DataTrigger Binding="{Binding IsIndeterminateProgress}" Value="True">
-                    <Setter Property="Opacity" Value=".5"/>
+                    <Setter Property="Opacity" Value=".5" />
                   </DataTrigger>
                 </Style.Triggers>
               </Style>

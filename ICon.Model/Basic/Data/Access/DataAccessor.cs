@@ -47,10 +47,7 @@ namespace Mocassin.Model.Basic
         }
 
         /// <inheritdoc />
-        public TResult Query<TResult>(Func<TData, TResult> function)
-        {
-            return function(Data);
-        }
+        public TResult Query<TResult>(Func<TData, TResult> function) => function(Data);
 
         /// <inheritdoc />
         public void Dispose()
@@ -61,17 +58,13 @@ namespace Mocassin.Model.Basic
 
         /// <inheritdoc />
         public IDataReader<TPort> AsReader<TPort>()
-            where TPort : class, IModelDataPort
-        {
-            return new ReadOnlyDataAccessorAdapter<TData, TPort>(this);
-        }
+            where TPort : class, IModelDataPort =>
+            new ReadOnlyDataAccessorAdapter<TData, TPort>(this);
 
         /// <inheritdoc />
         public IDataReader<TPort> AsReader<TPort>(IDataReaderSource<TPort> source)
-            where TPort : class, IModelDataPort
-        {
-            return AsReader<TPort>();
-        }
+            where TPort : class, IModelDataPort =>
+            AsReader<TPort>();
     }
 
     /// <summary>

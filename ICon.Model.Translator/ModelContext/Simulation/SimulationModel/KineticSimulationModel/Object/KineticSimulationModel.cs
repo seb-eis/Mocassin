@@ -27,15 +27,9 @@ namespace Mocassin.Model.Translator.ModelContext
         public IList<IKineticLocalJumpModel> LocalJumpModels { get; set; }
 
         /// <inheritdoc />
-        public override IEnumerable<ITransitionModel> GetTransitionModels()
-        {
-            return TransitionModels.AsEnumerable();
-        }
+        public override IEnumerable<ITransitionModel> GetTransitionModels() => TransitionModels.AsEnumerable();
 
         /// <inheritdoc />
-        public override IEnumerable<ILocalJumpModel> GetLocalJumpModels()
-        {
-            return LocalJumpModels.AsEnumerable();
-        }
+        public override IEnumerable<ILocalJumpModel> GetLocalJumpModels() => LocalJumpModels.AsEnumerable();
     }
 }

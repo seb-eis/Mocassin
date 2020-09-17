@@ -6,8 +6,7 @@ namespace Mocassin.Model.ModelProject
     /// <summary>
     ///     Settings data object for the element managing module
     /// </summary>
-    [DataContract]
-    [ModuleSettings(typeof(IParticleManager))]
+    [DataContract, ModuleSettings(typeof(IParticleManager))]
     public class MocassinParticleSettings : MocassinModuleSettings
     {
         /// <summary>

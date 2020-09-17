@@ -175,10 +175,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
                 BuildStatus = LibraryBuildStatus.Unknown;
             }
 
-            bool CanExecute()
-            {
-                return BuildSimulationLibrary != null;
-            }
+            bool CanExecute() => BuildSimulationLibrary != null;
 
             return new AsyncRelayCommand(() => Task.Run(Execute), CanExecute);
         }
@@ -187,10 +184,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
         ///     Get a startup message <see cref="string" /> for the console
         /// </summary>
         /// <returns></returns>
-        private string GetStartupMessage()
-        {
-            return $"Async build with {Environment.ProcessorCount} cores.";
-        }
+        private string GetStartupMessage() => $"Async build with {Environment.ProcessorCount} cores.";
 
         /// <summary>
         ///     Get a <see cref="RelayCommand" /> to cancel the build process
@@ -203,10 +197,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
                 BuildCancellationTokenSource.Cancel();
             }
 
-            bool CanCancel()
-            {
-                return BuildCancellationTokenSource != null && !BuildCancellationTokenSource.IsCancellationRequested;
-            }
+            bool CanCancel() => BuildCancellationTokenSource != null && !BuildCancellationTokenSource.IsCancellationRequested;
 
             return new RelayCommand(Cancel, CanCancel);
         }
@@ -217,13 +208,11 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
         /// <returns></returns>
         private AsyncRelayCommand GetWriteDatabaseCommand()
         {
-            bool CanExecute()
-            {
-                return !string.IsNullOrWhiteSpace(buildTargetFilePath)
-                       && BuildCancellationTokenSource == null
-                       && ProjectBuildGraphCollectionViewModel.SelectedItem?.ProjectCustomizationTemplate != null
-                       && ProjectBuildGraphCollectionViewModel.SelectedItem.ProjectJobSetTemplate != null;
-            }
+            bool CanExecute() =>
+                !string.IsNullOrWhiteSpace(buildTargetFilePath)
+                && BuildCancellationTokenSource == null
+                && ProjectBuildGraphCollectionViewModel.SelectedItem?.ProjectCustomizationTemplate != null
+                && ProjectBuildGraphCollectionViewModel.SelectedItem.ProjectJobSetTemplate != null;
 
             return new AsyncRelayCommand(StartBuildProcess, CanExecute);
         }
@@ -270,7 +259,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
         }
 
         /// <summary>
-        ///     Ensures that the build <see cref="ISimulationLibrary"/> is disposed and the reference is null to avoid memory leaks
+        ///     Ensures that the build <see cref="ISimulationLibrary" /> is disposed and the reference is null to avoid memory
+        ///     leaks
         /// </summary>
         private void EnsureBuildLibraryUnloaded()
         {

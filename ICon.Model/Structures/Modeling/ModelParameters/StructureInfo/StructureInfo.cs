@@ -9,10 +9,7 @@ namespace Mocassin.Model.Structures
         public string Name { get; set; }
 
         /// <inheritdoc />
-        public override string GetParameterName()
-        {
-            return "Structure Info";
-        }
+        public override string GetParameterName() => "Structure Info";
 
         /// <inheritdoc />
         public override bool Equals(IModelParameter other)
@@ -26,10 +23,7 @@ namespace Mocassin.Model.Structures
         ///     Creates the default initialized structure info
         /// </summary>
         /// <returns></returns>
-        public static StructureInfo CreateDefault()
-        {
-            return new StructureInfo {Name = "Unnamed"};
-        }
+        public static StructureInfo CreateDefault() => new StructureInfo {Name = "Unnamed"};
 
         /// <inheritdoc />
         public override ModelParameter PopulateObject(IModelParameter modelParameter)

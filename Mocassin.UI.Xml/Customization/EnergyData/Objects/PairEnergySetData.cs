@@ -24,12 +24,12 @@ namespace Mocassin.UI.Xml.Customization
         private int chiralPartnerModelIndex = -1;
         private double distance;
         private VectorData3D endVector;
+        private int interactionCountPerEndSite;
+        private int interactionCountPerStartSite;
         private int modelIndex;
         private ObservableCollection<PairEnergyData> pairEnergyEntries;
         private ModelObjectReference<CellSite> partnerPosition;
         private VectorData3D startVector;
-        private int interactionCountPerStartSite;
-        private int interactionCountPerEndSite;
 
         /// <summary>
         ///     Get or set the <see cref="ModelObjectReference{T}" /> that targets the center wyckoff position
@@ -67,7 +67,7 @@ namespace Mocassin.UI.Xml.Customization
         [XmlAttribute]
         public int InteractionCountPerStartSite
         {
-            get => interactionCountPerStartSite; 
+            get => interactionCountPerStartSite;
             set => SetProperty(ref interactionCountPerStartSite, value);
         }
 
@@ -174,10 +174,7 @@ namespace Mocassin.UI.Xml.Customization
         }
 
         /// <inheritdoc />
-        object IDuplicable.Duplicate()
-        {
-            return Duplicate();
-        }
+        object IDuplicable.Duplicate() => Duplicate();
 
         /// <summary>
         ///     Set all data on the passed <see cref="IPairEnergySetter" /> and push the values to the affiliated

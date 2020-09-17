@@ -97,9 +97,8 @@
         ///     Get the job configuration as an interop object
         /// </summary>
         /// <returns></returns>
-        public InteropObject<CJobInfo> GetInteropJobInfo()
-        {
-            return new InteropObject<CJobInfo>
+        public InteropObject<CJobInfo> GetInteropJobInfo() =>
+            new InteropObject<CJobInfo>
             {
                 Structure = new CJobInfo
                 {
@@ -114,7 +113,6 @@
                     TimeLimit = TimeLimit
                 }
             };
-        }
 
         /// <summary>
         ///     Get the job header as an interop object

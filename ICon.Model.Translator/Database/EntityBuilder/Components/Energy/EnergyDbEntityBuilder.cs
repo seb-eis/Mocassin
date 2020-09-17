@@ -32,8 +32,8 @@ namespace Mocassin.Model.Translator.EntityBuilder
         public List<PairEnergyTableEntity> GetPairEnergyTableEntities()
         {
             var entities = ModelContext.EnergyModelContext.PairEnergyModels
-                .Select(GetEnergyTableEntity)
-                .ToList();
+                                       .Select(GetEnergyTableEntity)
+                                       .ToList();
 
             return entities;
         }
@@ -63,8 +63,8 @@ namespace Mocassin.Model.Translator.EntityBuilder
         public List<ClusterEnergyTableEntity> GetClusterEnergyTableEntities()
         {
             var entities = ModelContext.EnergyModelContext.GroupEnergyModels
-                .Select(GetEnergyTableEntity)
-                .ToList();
+                                       .Select(GetEnergyTableEntity)
+                                       .ToList();
 
             return entities;
         }
@@ -142,15 +142,13 @@ namespace Mocassin.Model.Translator.EntityBuilder
         ///     Creates new energy database model with all values set to default
         /// </summary>
         /// <returns></returns>
-        public SimulationEnergyModel CreateNewModel()
-        {
-            return new SimulationEnergyModel
+        public SimulationEnergyModel CreateNewModel() =>
+            new SimulationEnergyModel
             {
                 PairEnergyTableCount = ModelContext.EnergyModelContext.PairEnergyModels.Count,
                 ClusterEnergyTableCount = ModelContext.EnergyModelContext.GroupEnergyModels.Count,
                 PairEnergyTables = GetPairEnergyTableEntities(),
                 ClusterEnergyTables = GetClusterEnergyTableEntities()
             };
-        }
     }
 }

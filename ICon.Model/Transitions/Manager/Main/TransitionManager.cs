@@ -25,10 +25,7 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <inheritdoc />
-        public override Type GetManagerInterfaceType()
-        {
-            return typeof(ITransitionManager);
-        }
+        public override Type GetManagerInterfaceType() => typeof(ITransitionManager);
 
         /// <inheritdoc />
         public override IValidationService CreateValidationService(ProjectSettings settings)

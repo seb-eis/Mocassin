@@ -24,10 +24,7 @@ namespace Mocassin.Model.Energies.Handler
         /// <param name="eventArgs"></param>
         /// <returns></returns>
         [EventHandlingMethod]
-        protected IConflictReport HandleAbstractTransition(IModelObjectEventArgs<IAbstractTransition> eventArgs)
-        {
-            return DummyHandleEvent(eventArgs);
-        }
+        protected IConflictReport HandleAbstractTransition(IModelObjectEventArgs<IAbstractTransition> eventArgs) => DummyHandleEvent(eventArgs);
 
         /// <summary>
         ///     Event reaction to a change in one of the state exchange pair objects
@@ -35,10 +32,7 @@ namespace Mocassin.Model.Energies.Handler
         /// <param name="eventArgs"></param>
         /// <returns></returns>
         [EventHandlingMethod]
-        protected IConflictReport HandleStateExchangePair(IModelObjectEventArgs<IStateExchangePair> eventArgs)
-        {
-            return DummyHandleEvent(eventArgs);
-        }
+        protected IConflictReport HandleStateExchangePair(IModelObjectEventArgs<IStateExchangePair> eventArgs) => DummyHandleEvent(eventArgs);
 
         /// <summary>
         ///     Event reaction to a change in one of the kinetic transition objects
@@ -46,10 +40,7 @@ namespace Mocassin.Model.Energies.Handler
         /// <param name="eventArgs"></param>
         /// <returns></returns>
         [EventHandlingMethod]
-        protected IConflictReport HandleKineticTransition(IModelObjectEventArgs<IKineticTransition> eventArgs)
-        {
-            return DummyHandleEvent(eventArgs);
-        }
+        protected IConflictReport HandleKineticTransition(IModelObjectEventArgs<IKineticTransition> eventArgs) => DummyHandleEvent(eventArgs);
 
         /// <summary>
         ///     Event reaction to a change in one of the metropolis transition objects
@@ -57,10 +48,7 @@ namespace Mocassin.Model.Energies.Handler
         /// <param name="eventArgs"></param>
         /// <returns></returns>
         [EventHandlingMethod]
-        protected IConflictReport HandleMetropolisStatePair(IModelObjectEventArgs<IMetropolisTransition> eventArgs)
-        {
-            return DummyHandleEvent(eventArgs);
-        }
+        protected IConflictReport HandleMetropolisStatePair(IModelObjectEventArgs<IMetropolisTransition> eventArgs) => DummyHandleEvent(eventArgs);
 
         /// <summary>
         ///     Event reaction to a change in one of the state exchange groups
@@ -68,9 +56,6 @@ namespace Mocassin.Model.Energies.Handler
         /// <param name="eventArgs"></param>
         /// <returns></returns>
         [EventHandlingMethod]
-        protected IConflictReport HandleStateExchangeGroup(IModelObjectEventArgs<IStateExchangeGroup> eventArgs)
-        {
-            return DummyHandleEvent(eventArgs);
-        }
+        protected IConflictReport HandleStateExchangeGroup(IModelObjectEventArgs<IStateExchangeGroup> eventArgs) => DummyHandleEvent(eventArgs);
     }
 }

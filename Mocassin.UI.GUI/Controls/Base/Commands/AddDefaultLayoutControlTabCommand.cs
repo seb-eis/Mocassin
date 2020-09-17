@@ -21,25 +21,16 @@ namespace Mocassin.UI.GUI.Controls.Base.Commands
         ///     Get the <see cref="ContentControl" /> for the data control <see cref="ContentPresenter" />
         /// </summary>
         /// <returns></returns>
-        protected virtual ContentControl GetDataControl()
-        {
-            return GetNoContentControl();
-        }
+        protected virtual ContentControl GetDataControl() => GetNoContentControl();
 
         /// <summary>
         ///     Get the default <see cref="ContentControl" /> for undefined <see cref="ContentPresenter" /> content
         /// </summary>
         /// <returns></returns>
-        protected virtual ContentControl GetNoContentControl()
-        {
-            return new NoContentView();
-        }
+        protected virtual ContentControl GetNoContentControl() => new NoContentView();
 
         /// <inheritdoc />
-        protected override string GetTabName()
-        {
-            return "Control";
-        }
+        protected override string GetTabName() => "Control";
 
         /// <inheritdoc />
         protected sealed override ViewModelBase GetViewModel()
@@ -53,9 +44,6 @@ namespace Mocassin.UI.GUI.Controls.Base.Commands
         }
 
         /// <inheritdoc />
-        protected sealed override UserControl GetUserControl()
-        {
-            return new BasicModelContentControlView();
-        }
+        protected sealed override UserControl GetUserControl() => new BasicModelContentControlView();
     }
 }

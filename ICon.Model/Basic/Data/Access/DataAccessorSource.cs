@@ -60,24 +60,15 @@ namespace Mocassin.Model.Basic
         }
 
         /// <inheritdoc />
-        public IDataAccessor<TData> CreateUnsafe()
-        {
-            return new DataAccessor<TData>(DataObject);
-        }
+        public IDataAccessor<TData> CreateUnsafe() => new DataAccessor<TData>(DataObject);
 
         /// <inheritdoc />
-        IDataAccessor<TData> IDataAccessorSource<TData>.Create()
-        {
-            return Create();
-        }
+        IDataAccessor<TData> IDataAccessorSource<TData>.Create() => Create();
 
         /// <summary>
         ///     Creates a new model data accessor for the internal data object
         /// </summary>
         /// <returns></returns>
-        public DataAccessor<TData> Create()
-        {
-            return new DataAccessor<TData>(DataObject, LockSource);
-        }
+        public DataAccessor<TData> Create() => new DataAccessor<TData>(DataObject, LockSource);
     }
 }

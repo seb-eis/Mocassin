@@ -13,14 +13,14 @@
              Background="Transparent">
 
   <UserControl.Resources>
-    <ToolTip x:Key="Local.ToolTip.BuildingBlocks" >
-      <TextBlock Text="{x:Static res:Tooltips.ModelObject_BuildingBlock}"/>
+    <ToolTip x:Key="Local.ToolTip.BuildingBlocks">
+      <TextBlock Text="{x:Static res:Tooltips.ModelObject_BuildingBlock}" />
     </ToolTip>
-    <ToolTip x:Key="Local.ToolTip.Doping" >
-      <TextBlock Text="{x:Static res:Tooltips.ModelObject_Doping}"/>
+    <ToolTip x:Key="Local.ToolTip.Doping">
+      <TextBlock Text="{x:Static res:Tooltips.ModelObject_Doping}" />
     </ToolTip>
-    <ToolTip x:Key="Local.ToolTip.DopingCombination" >
-      <TextBlock Text="{x:Static res:Tooltips.ModelObject_OccupationExchange}"/>
+    <ToolTip x:Key="Local.ToolTip.DopingCombination">
+      <TextBlock Text="{x:Static res:Tooltips.ModelObject_OccupationExchange}" />
     </ToolTip>
   </UserControl.Resources>
   <Grid>

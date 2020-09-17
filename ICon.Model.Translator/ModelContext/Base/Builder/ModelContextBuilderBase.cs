@@ -38,16 +38,10 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <inheritdoc />
-        public virtual Task<TContext> BuildContext()
-        {
-            return RebuildContext(GetEmptyDefaultContext());
-        }
+        public virtual Task<TContext> BuildContext() => RebuildContext(GetEmptyDefaultContext());
 
         /// <inheritdoc />
-        public virtual Task BuildLinkDependentComponents()
-        {
-            return Task.CompletedTask;
-        }
+        public virtual Task BuildLinkDependentComponents() => Task.CompletedTask;
 
         /// <inheritdoc />
         public virtual Task<TContext> RebuildContext(TContext modelContext)

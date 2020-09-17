@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
-using Mocassin.Framework.Extensions;
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Particles;
 using Mocassin.Symmetry.Analysis;
 using Mocassin.Tools.Evaluation.Context;
-using Mocassin.Tools.Evaluation.Extensions;
 
 namespace Mocassin.Tools.Evaluation.Queries
 {
@@ -22,20 +19,15 @@ namespace Mocassin.Tools.Evaluation.Queries
         }
 
         /// <inheritdoc />
-        protected override IUnitCellProvider<IDictionary<IParticle, double>> GetValue(JobContext jobContext)
-        {
-            throw new NotImplementedException();
-        }
+        protected override IUnitCellProvider<IDictionary<IParticle, double>> GetValue(JobContext jobContext) => throw new NotImplementedException();
 
         /// <summary>
-        ///     Prepares the raw result <see cref="IDictionary{TKey,TValue}"/> array system
+        ///     Prepares the raw result <see cref="IDictionary{TKey,TValue}" /> array system
         /// </summary>
         /// <param name="particles"></param>
         /// <param name="latticeSizes"></param>
         /// <returns></returns>
-        protected IDictionary<IParticle, double>[,,][] PrepareRawResult(IList<IParticle> particles, in Vector4I latticeSizes)
-        {
+        protected IDictionary<IParticle, double>[,,][] PrepareRawResult(IList<IParticle> particles, in Vector4I latticeSizes) =>
             throw new NotImplementedException();
-        }
     }
 }

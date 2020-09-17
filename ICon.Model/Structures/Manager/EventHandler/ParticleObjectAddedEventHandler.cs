@@ -24,10 +24,7 @@ namespace Mocassin.Model.Structures.Handler
         /// <param name="eventArgs"></param>
         /// <returns></returns>
         [EventHandlingMethod]
-        protected IConflictReport HandleNewParticle(IModelObjectEventArgs<IParticle> eventArgs)
-        {
-            return new ConflictReport();
-        }
+        protected IConflictReport HandleNewParticle(IModelObjectEventArgs<IParticle> eventArgs) => new ConflictReport();
 
         /// <summary>
         ///     Event reaction to a new particle set in the particle manager
@@ -35,9 +32,6 @@ namespace Mocassin.Model.Structures.Handler
         /// <param name="eventArgs"></param>
         /// <returns></returns>
         [EventHandlingMethod]
-        protected IConflictReport HandleNewParticleSet(IModelObjectEventArgs<IParticleSet> eventArgs)
-        {
-            return new ConflictReport();
-        }
+        protected IConflictReport HandleNewParticleSet(IModelObjectEventArgs<IParticleSet> eventArgs) => new ConflictReport();
     }
 }

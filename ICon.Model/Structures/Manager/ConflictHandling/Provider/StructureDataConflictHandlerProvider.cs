@@ -19,9 +19,6 @@ namespace Mocassin.Model.Structures.ConflictHandling
         /// </summary>
         /// <returns></returns>
         [HandlerFactoryMethod(DataOperationType.ParameterChange)]
-        protected object CreateParameterHandler()
-        {
-            return new StructureParameterConflictHandler(ModelProject);
-        }
+        protected object CreateParameterHandler() => new StructureParameterConflictHandler(ModelProject);
     }
 }

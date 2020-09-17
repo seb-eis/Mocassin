@@ -60,14 +60,12 @@ namespace Mocassin.UI.Xml.EnergyModel
         ///     Get an <see cref="DefectEnergy" /> object for the model input pipeline
         /// </summary>
         /// <returns></returns>
-        public DefectEnergy GetInputObject()
-        {
-            return new DefectEnergy
+        public DefectEnergy GetInputObject() =>
+            new DefectEnergy
             {
                 Energy = Energy,
                 Particle = (IParticle) Particle.GetInputObject(),
                 CellSite = (ICellSite) CellReferencePosition.GetInputObject()
             };
-        }
     }
 }

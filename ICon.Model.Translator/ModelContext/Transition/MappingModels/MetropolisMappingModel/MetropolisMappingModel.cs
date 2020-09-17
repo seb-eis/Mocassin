@@ -55,15 +55,11 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <inheritdoc />
-        public ITransitionModel GetTransitionModel()
-        {
-            return TransitionModel;
-        }
+        public ITransitionModel GetTransitionModel() => TransitionModel;
 
         /// <inheritdoc />
-        public IMetropolisMappingModel CreateGeometricInversion()
-        {
-            return new MetropolisMappingModel
+        public IMetropolisMappingModel CreateGeometricInversion() =>
+            new MetropolisMappingModel
             {
                 TransitionModel = TransitionModel.InverseTransitionModel
                                   ?? throw new InvalidOperationException("Inverse transition model is unknown!"),
@@ -75,7 +71,6 @@ namespace Mocassin.Model.Translator.ModelContext
                 StartVector4D = EndVector4D,
                 EndVector4D = StartVector4D
             };
-        }
 
         /// <inheritdoc />
         public bool LinkIfGeometricInversion(IMetropolisMappingModel mappingModel)

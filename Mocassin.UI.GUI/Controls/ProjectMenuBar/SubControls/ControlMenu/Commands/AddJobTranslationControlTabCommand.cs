@@ -19,9 +19,6 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ControlMenu.Comman
         }
 
         /// <inheritdoc />
-        protected override ContentControl GetDataControl()
-        {
-            return new JobTranslationControlView {DataContext = new JobTranslationControlViewModel(ProjectControl)};
-        }
+        protected override ContentControl GetDataControl() => new JobTranslationControlView {DataContext = new JobTranslationControlViewModel(ProjectControl)};
     }
 }

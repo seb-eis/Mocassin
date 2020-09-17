@@ -16,7 +16,8 @@ namespace Mocassin.Model.DataManagement
         /// <summary>
         ///     The object liker dictionary that contains cached linking delegates for known model data objects
         /// </summary>
-        [IgnoreDataMember] private readonly Dictionary<Type, Action<object>> objectLinkerDictionary;
+        [IgnoreDataMember]
+        private readonly Dictionary<Type, Action<object>> objectLinkerDictionary;
 
         /// <summary>
         ///     The data object dictionary that stores the data object reference and affiliated manager as key value pairs
@@ -101,19 +102,13 @@ namespace Mocassin.Model.DataManagement
             var list = Objects<TObject>().ToList();
             var length = list.Max(x => x.Index) + 1;
             var result = new TObject[length];
-            foreach (var item in list)
-            {
-                result[item.Index] = item;
-            }
+            foreach (var item in list) result[item.Index] = item;
 
             return result;
         }
 
         /// <inheritdoc />
-        public int ObjectCount<TObject>() where TObject : IModelObject
-        {
-            return FindObjectList(typeof(TObject)).Count;
-        }
+        public int ObjectCount<TObject>() where TObject : IModelObject => FindObjectList(typeof(TObject)).Count;
 
         /// <inheritdoc />
         public void LinkObject(object obj)

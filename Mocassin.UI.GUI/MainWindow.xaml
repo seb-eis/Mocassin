@@ -19,7 +19,7 @@
         Closing="MainWindow_OnClosing">
 
   <Window.InputBindings>
-    <KeyBinding Gesture="Ctrl+S" Command="{Binding ProjectManagerViewModel.SaveProjectLibraryChangesCommand}"/>
+    <KeyBinding Gesture="Ctrl+S" Command="{Binding ProjectManagerViewModel.SaveProjectLibraryChangesCommand}" />
   </Window.InputBindings>
 
   <Grid Margin="5,5,5,5">

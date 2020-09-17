@@ -318,7 +318,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
             SelectableCustomizations.AddItem(ProjectCustomizationTemplate.Empty);
             if (ContentSource == null) return;
             SelectableCustomizations.AddItems(ContentSource.CustomizationTemplates);
-            CustomizationLinkDisposable = SelectableCustomizations.ObservableItems.ListenToContentChanges(ContentSource.CustomizationTemplates);
+            CustomizationLinkDisposable = SelectableCustomizations.ObservableItems.SubscribeToContentChanges(ContentSource.CustomizationTemplates);
             if (SelectableCustomizations.ObservableItems.Contains(SelectedCustomization)) return;
             SelectedCustomization = ProjectCustomizationTemplate.Empty;
         }
@@ -389,19 +389,14 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         /// <returns></returns>
         private IDxMeshItemConfig GetMeshItemConfigLazy(ExtensibleProjectDataObject dataObject)
         {
-            IDxMeshItemConfig CreateNew()
-            {
-                return new DxProjectMeshObjectSceneConfig(dataObject, GetVisualObjectCategory(dataObject))
+            IDxMeshItemConfig CreateNew() =>
+                new DxProjectMeshObjectSceneConfig(dataObject, GetVisualObjectCategory(dataObject))
                 {
                     OnChangeInvalidatesNode = MarkSceneAsInvalid,
                     CanResizeMeshAtOrigin = dataObject is CellReferencePositionData
                 };
-            }
 
-            bool CheckMatch(IDxSceneItemConfig config)
-            {
-                return config.CheckAccess(dataObject);
-            }
+            bool CheckMatch(IDxSceneItemConfig config) => config.CheckAccess(dataObject);
 
             return dataObject switch
             {
@@ -421,15 +416,10 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         /// <returns></returns>
         private IDxLineItemConfig GetLineItemConfigLazy(ExtensibleProjectDataObject dataObject)
         {
-            IDxLineItemConfig CreateNew()
-            {
-                return new DxProjectLineObjectSceneConfig(dataObject, GetVisualObjectCategory(dataObject)) {OnChangeInvalidatesNode = MarkSceneAsInvalid};
-            }
+            IDxLineItemConfig CreateNew() => new DxProjectLineObjectSceneConfig(dataObject, GetVisualObjectCategory(dataObject))
+                {OnChangeInvalidatesNode = MarkSceneAsInvalid};
 
-            bool CheckMatch(IDxSceneItemConfig config)
-            {
-                return config.CheckAccess(dataObject);
-            }
+            bool CheckMatch(IDxSceneItemConfig config) => config.CheckAccess(dataObject);
 
             return dataObject switch
             {
@@ -473,7 +463,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         private void OnRenderError(Exception e, [CallerMemberName] string callerMemberName = null)
         {
             PushErrorMessage(e, callerMemberName);
-            MessageBox.Show(Properties.Resources.Viewer3D_Error_Visual_Generation, Properties.Resources.Viewer3D_Error_Box_Caption, MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show(Properties.Resources.Viewer3D_Error_Visual_Generation, Properties.Resources.Viewer3D_Error_Box_Caption, MessageBoxButton.OK,
+                MessageBoxImage.Error);
         }
 
         /// <summary>
@@ -506,7 +497,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
 
                 SceneHost.AddSceneItem(sceneModel);
                 var setupTime = watch.Elapsed.TotalMilliseconds;
-                PushInfoMessage($"Scene Rebuilt Report: {cleanTime:0.0} ms for cleanup; {buildTime:0.0} ms for building new models; {setupTime:0.0} ms for viewport setup;");
+                PushInfoMessage(
+                    $"Scene Rebuilt Report: {cleanTime:0.0} ms for cleanup; {buildTime:0.0} ms for building new models; {setupTime:0.0} ms for viewport setup;");
                 IsInvalidScene = false;
             }
             catch (Exception exception)
@@ -682,7 +674,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         /// <param name="filterGeometricDuplicates"></param>
         /// <param name="anyFlipsOrientation"></param>
         /// <returns></returns>
-        private Matrix[] GetPathSceneItemTransforms(IEnumerable<Fractional3D> path, in FractionalBox3D renderBox, bool filterGeometricDuplicates, out bool anyFlipsOrientation)
+        private Matrix[] GetPathSceneItemTransforms(IEnumerable<Fractional3D> path, in FractionalBox3D renderBox, bool filterGeometricDuplicates,
+            out bool anyFlipsOrientation)
         {
             anyFlipsOrientation = false;
             return ModelControlViewModel.PathSymmetryExtensionMode switch
@@ -710,9 +703,10 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
             var firstVector = pathList[0];
             var vectorComparer = new VectorComparer3D<Fractional3D>(ModelProject.GeometryNumeric.RangeComparer);
             var result = SpaceGroupService.GetMinimalUnitCellP1PathExtensionOperations(pathList, filterGeometricDuplicates)
-                .Where(x => vectorComparer.Compare(x.Transform(firstVector).TrimToUnitCell(vectorComparer.ValueComparer), firstVector) == 0)
-                .Select(x => fractionalMatrix * x.ToDxMatrix() * cartesianMatrix)
-                .ToArray();
+                                          .Where(x => vectorComparer.Compare(x.Transform(firstVector).TrimToUnitCell(vectorComparer.ValueComparer),
+                                              firstVector) == 0)
+                                          .Select(x => fractionalMatrix * x.ToDxMatrix() * cartesianMatrix)
+                                          .ToArray();
 
             anyFlipsOrientation = result.Any(x => x.FlipsOrientation());
             return result;

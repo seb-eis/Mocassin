@@ -95,8 +95,8 @@ namespace Mocassin.UI.Xml.StructureModel
         public override IEnumerable<IModelObject> GetInputObjects()
         {
             return CellReferencePositions
-                .Select(x => x.GetInputObject())
-                .Concat(DummyPositions.Select(x => x.GetInputObject()));
+                   .Select(x => x.GetInputObject())
+                   .Concat(DummyPositions.Select(x => x.GetInputObject()));
         }
     }
 }

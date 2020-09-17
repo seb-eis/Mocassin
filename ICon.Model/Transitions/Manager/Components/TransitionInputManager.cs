@@ -205,15 +205,10 @@ namespace Mocassin.Model.Transitions
 
         /// <inheritdoc />
         [DataOperation(DataOperationType.ObjectCleaning)]
-        protected override IOperationReport TryCleanDeprecatedData()
-        {
-            return DefaultCleanDeprecatedData();
-        }
+        protected override IOperationReport TryCleanDeprecatedData() => DefaultCleanDeprecatedData();
 
         /// <inheritdoc />
-        protected override IDataConflictHandlerProvider<TransitionModelData> CreateDataConflictHandlerProvider()
-        {
-            return new TransitionDataConflictHandlerProvider(ModelProject);
-        }
+        protected override IDataConflictHandlerProvider<TransitionModelData> CreateDataConflictHandlerProvider() =>
+            new TransitionDataConflictHandlerProvider(ModelProject);
     }
 }

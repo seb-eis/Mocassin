@@ -60,29 +60,25 @@ namespace Mocassin.Model.Translator
         /// <summary>
         ///     Fixed 64 byte buffer for possible position particle ids
         /// </summary>
-        [NotMapped]
-        [InteropProperty(nameof(PositionParticleIdsBinary))]
+        [NotMapped, InteropProperty(nameof(PositionParticleIdsBinary))]
         public InteropObject<CByteBuffer64> PositionParticleIds { get; set; }
 
         /// <summary>
         ///     Fixed 64 byte buffer for particle ids that require delta update processes
         /// </summary>
-        [NotMapped]
-        [InteropProperty(nameof(UpdateParticleIdsBinary))]
+        [NotMapped, InteropProperty(nameof(UpdateParticleIdsBinary))]
         public InteropObject<CByteBuffer64> UpdateParticleIds { get; set; }
 
         /// <summary>
         ///     The list of pair definition entities affiliated with the environment
         /// </summary>
-        [NotMapped]
-        [OwnedBlobProperty(nameof(PairDefinitionListBinary))]
+        [NotMapped, OwnedBlobProperty(nameof(PairDefinitionListBinary))]
         public PairDefinitionListEntity PairDefinitionList { get; set; }
 
         /// <summary>
         ///     The list of cluster definition entities affiliated with the environment
         /// </summary>
-        [NotMapped]
-        [OwnedBlobProperty(nameof(ClusterDefinitionListBinary))]
+        [NotMapped, OwnedBlobProperty(nameof(ClusterDefinitionListBinary))]
         public ClusterDefinitionListEntity ClusterDefinitionList { get; set; }
     }
 }

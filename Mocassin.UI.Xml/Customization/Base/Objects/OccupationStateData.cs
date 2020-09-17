@@ -43,10 +43,7 @@ namespace Mocassin.UI.Xml.Customization
         }
 
         /// <inheritdoc />
-        object IDuplicable.Duplicate()
-        {
-            return Duplicate();
-        }
+        object IDuplicable.Duplicate() => Duplicate();
 
         /// <summary>
         ///     Get the object as an <see cref="IOccupationState" /> interface that is valid in the context of the passed
@@ -72,10 +69,8 @@ namespace Mocassin.UI.Xml.Customization
         /// <param name="occupationState"></param>
         /// <param name="parents"></param>
         /// <returns></returns>
-        public static OccupationStateData Create(IOccupationState occupationState, IList<ParticleData> parents)
-        {
-            return Create(occupationState.AsEnumerable(), parents);
-        }
+        public static OccupationStateData Create(IOccupationState occupationState, IList<ParticleData> parents) =>
+            Create(occupationState.AsEnumerable(), parents);
 
         /// <summary>
         ///     Creates a new <see cref="OccupationStateData" /> from the passed sequence of <see cref="IParticle" /> model object
@@ -92,9 +87,9 @@ namespace Mocassin.UI.Xml.Customization
             var obj = new OccupationStateData
             {
                 Particles = occupationParticles.Select(
-                        x => new ModelObjectReference<Particle>
-                            {Target = parents.Concat(ParticleData.VoidParticle.AsSingleton()).SingleOrDefault(y => y.Key == x.Key)})
-                    .ToObservableCollection()
+                                                   x => new ModelObjectReference<Particle>
+                                                       {Target = parents.Concat(ParticleData.VoidParticle.AsSingleton()).SingleOrDefault(y => y.Key == x.Key)})
+                                               .ToObservableCollection()
             };
             return obj;
         }
@@ -113,9 +108,6 @@ namespace Mocassin.UI.Xml.Customization
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public bool HasEqualState(OccupationStateData other)
-        {
-            return other != null && (ReferenceEquals(this, other) || Particles.SequenceEqual(other.Particles));
-        }
+        public bool HasEqualState(OccupationStateData other) => other != null && (ReferenceEquals(this, other) || Particles.SequenceEqual(other.Particles));
     }
 }

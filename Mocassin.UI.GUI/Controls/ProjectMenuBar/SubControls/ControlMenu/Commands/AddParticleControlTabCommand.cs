@@ -17,15 +17,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ControlMenu.Comman
         }
 
         /// <inheritdoc />
-        protected override ContentControl GetDataControl()
-        {
-            return new ParticleModelControlView {DataContext = new ParticleModelControlViewModel(ProjectControl)};
-        }
+        protected override ContentControl GetDataControl() => new ParticleModelControlView {DataContext = new ParticleModelControlViewModel(ProjectControl)};
 
         /// <inheritdoc />
-        protected override string GetTabName()
-        {
-            return "Particle Control";
-        }
+        protected override string GetTabName() => "Particle Control";
     }
 }

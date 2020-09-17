@@ -20,10 +20,10 @@ namespace Mocassin.Model.Translator.ModelContext
         public IList<IMetropolisSimulationModel> BuildModels(IEnumerable<IMetropolisSimulation> metropolisSimulations)
         {
             return metropolisSimulations
-                .Select(a => new MetropolisSimulationModel {Simulation = a})
-                .Action(a => a.TransitionModels = CreateTransitionModelPlaceholders(a.Simulation.Transitions))
-                .Cast<IMetropolisSimulationModel>()
-                .ToList();
+                   .Select(a => new MetropolisSimulationModel {Simulation = a})
+                   .Action(a => a.TransitionModels = CreateTransitionModelPlaceholders(a.Simulation.Transitions))
+                   .Cast<IMetropolisSimulationModel>()
+                   .ToList();
         }
 
         /// <inheritdoc />
@@ -66,9 +66,9 @@ namespace Mocassin.Model.Translator.ModelContext
         protected IList<IMetropolisTransitionModel> CreateTransitionModelPlaceholders(IEnumerable<IMetropolisTransition> transitions)
         {
             return transitions
-                .Select(a => new MetropolisTransitionModel {Transition = a})
-                .Cast<IMetropolisTransitionModel>()
-                .ToList();
+                   .Select(a => new MetropolisTransitionModel {Transition = a})
+                   .Cast<IMetropolisTransitionModel>()
+                   .ToList();
         }
 
         /// <summary>
@@ -145,7 +145,7 @@ namespace Mocassin.Model.Translator.ModelContext
                             break;
 
                         count += mappingModel.TransitionModel.RuleModels
-                            .Count(ruleModel => ruleModel.SelectableParticle.Index == particleId);
+                                             .Count(ruleModel => ruleModel.SelectableParticle.Index == particleId);
                     }
 
                     result = result > count ? result : count;

@@ -33,10 +33,8 @@ namespace Mocassin.Model.Basic
         /// <returns></returns>
         public static DataReaderSource<TData, TPort> Create<TData, TPort>(TData data, TPort dataPort, AccessLockSource lockSource)
             where TData : ModelData<TPort>
-            where TPort : class, IModelDataPort
-        {
-            return new DataReaderSource<TData, TPort>(data, lockSource);
-        }
+            where TPort : class, IModelDataPort =>
+            new DataReaderSource<TData, TPort>(data, lockSource);
     }
 
     /// <summary>
@@ -65,18 +63,12 @@ namespace Mocassin.Model.Basic
         }
 
         /// <inheritdoc />
-        public IDataReader<TPort> CreateInterface()
-        {
-            return Create();
-        }
+        public IDataReader<TPort> CreateInterface() => Create();
 
         /// <summary>
         ///     Creates a new model data reader for the internal data object
         /// </summary>
         /// <returns></returns>
-        public DataReader<TData, TPort> Create()
-        {
-            return new DataReader<TData, TPort>(DataObject, LockSource);
-        }
+        public DataReader<TData, TPort> Create() => new DataReader<TData, TPort>(DataObject, LockSource);
     }
 }

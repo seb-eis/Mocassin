@@ -29,8 +29,8 @@ namespace Mocassin.Model.Translator.ModelContext
         {
             LoadBuildDataFromProject();
             var positionModels = environmentModels
-                .SelectMany(CreatePositionModels)
-                .ToList();
+                                 .SelectMany(CreatePositionModels)
+                                 .ToList();
 
             IndexAndSortPositionModels(positionModels);
             return positionModels;
@@ -67,13 +67,13 @@ namespace Mocassin.Model.Translator.ModelContext
         {
             var sourceVector = environmentModel.CellSite.Vector;
             var targetInfos = environmentModel.PairInteractionModels
-                .Select(a => a.TargetPositionInfo)
-                .ToList();
+                                              .Select(a => a.TargetPositionInfo)
+                                              .ToList();
 
             var targetVectors = ModelProject.SpaceGroupService.GetUnitCellP1PositionExtension(environmentModel.CellSite.Vector);
             var positionModels = targetVectors
-                .Select(target => ModelProject.SpaceGroupService.GetOperationToTarget(sourceVector, target))
-                .Select(operation => CreatePositionModel(environmentModel, operation, targetInfos));
+                                 .Select(target => ModelProject.SpaceGroupService.GetOperationToTarget(sourceVector, target))
+                                 .Select(operation => CreatePositionModel(environmentModel, operation, targetInfos));
 
             return positionModels;
         }
@@ -143,12 +143,8 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <returns></returns>
         protected SetList<ITargetPositionInfo> CreateNewTargetInfoList(int capacity)
         {
-            int Compare(ITargetPositionInfo lhs, ITargetPositionInfo rhs)
-            {
-                return lhs.PairInteractionModel.ModelId.CompareTo(rhs.PairInteractionModel.ModelId);
-                //return lhs.RelativeVector4D.CompareTo(rhs.RelativeVector4D);
-            }
-
+            int Compare(ITargetPositionInfo lhs, ITargetPositionInfo rhs) => lhs.PairInteractionModel.ModelId.CompareTo(rhs.PairInteractionModel.ModelId);
+            //return lhs.RelativeVector4D.CompareTo(rhs.RelativeVector4D);
             return new SetList<ITargetPositionInfo>(Comparer<ITargetPositionInfo>.Create(Compare), capacity);
         }
     }

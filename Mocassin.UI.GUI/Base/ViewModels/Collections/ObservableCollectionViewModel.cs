@@ -73,10 +73,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Collections
         }
 
         /// <inheritdoc />
-        public bool Contains(T value)
-        {
-            return ObservableItems.Contains(value);
-        }
+        public bool Contains(T value) => ObservableItems.Contains(value);
 
         /// <inheritdoc />
         public void MoveItem(int oldIndex, int newIndex)
@@ -92,7 +89,8 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Collections
         }
 
         /// <summary>
-        ///     Calls dispose on all items that implement <see cref="IDisposable"/> and then clears the collection. This call is always executed on the application thread
+        ///     Calls dispose on all items that implement <see cref="IDisposable" /> and then clears the collection. This call is
+        ///     always executed on the application thread
         /// </summary>
         public void DisposeAllAndClear()
         {
@@ -100,7 +98,8 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Collections
         }
 
         /// <summary>
-        ///     Get the first occurence of an item that matches the predicate or creates a new one if no match is found. By default the new item is added to the collection
+        ///     Get the first occurence of an item that matches the predicate or creates a new one if no match is found. By default
+        ///     the new item is added to the collection
         /// </summary>
         /// <param name="predicate"></param>
         /// <param name="constructor"></param>
@@ -116,7 +115,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Collections
         }
 
         /// <summary>
-        ///     Internal implementation of <see cref="DisposeAllAndClear"/>
+        ///     Internal implementation of <see cref="DisposeAllAndClear" />
         /// </summary>
         protected virtual void DisposeAllAndClearInternal()
         {

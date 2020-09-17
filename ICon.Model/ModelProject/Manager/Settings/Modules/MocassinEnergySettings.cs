@@ -6,8 +6,7 @@ namespace Mocassin.Model.ModelProject
     /// <summary>
     ///     Settings data object for the energy managing module
     /// </summary>
-    [DataContract]
-    [ModuleSettings(typeof(IEnergyManager))]
+    [DataContract, ModuleSettings(typeof(IEnergyManager))]
     public class MocassinEnergySettings : MocassinModuleSettings
     {
         /// <summary>

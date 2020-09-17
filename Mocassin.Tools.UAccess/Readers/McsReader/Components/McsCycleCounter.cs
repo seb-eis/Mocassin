@@ -12,31 +12,37 @@ namespace Mocassin.Tools.UAccess.Readers.McsReader.Components
         /// <summary>
         ///     Get the number of skipped cycles (Non-zero only if frequency optimization is enabled)
         /// </summary>
-        [MarshalAs(UnmanagedType.I8)] public readonly long SkipCount;
+        [MarshalAs(UnmanagedType.I8)]
+        public readonly long SkipCount;
 
         /// <summary>
         ///     Get the number of successful cycles
         /// </summary>
-        [MarshalAs(UnmanagedType.I8)] public readonly long SuccessCount;
+        [MarshalAs(UnmanagedType.I8)]
+        public readonly long SuccessCount;
 
         /// <summary>
         ///     Get the number of rejected cycles
         /// </summary>
-        [MarshalAs(UnmanagedType.I8)] public readonly long RejectionCount;
+        [MarshalAs(UnmanagedType.I8)]
+        public readonly long RejectionCount;
 
         /// <summary>
         ///     Get the number of site blocked cycles
         /// </summary>
-        [MarshalAs(UnmanagedType.I8)] public readonly long SiteBlockingCount;
+        [MarshalAs(UnmanagedType.I8)]
+        public readonly long SiteBlockingCount;
 
         /// <summary>
         ///     Get the number of cycles with an energetically unstable start state
         /// </summary>
-        [MarshalAs(UnmanagedType.I8)] public readonly long StartStateUnstableCount;
+        [MarshalAs(UnmanagedType.I8)]
+        public readonly long StartStateUnstableCount;
 
         /// <summary>
         ///     Get the number of cycles with an energetically unstable end state
         /// </summary>
-        [MarshalAs(UnmanagedType.I8)] public readonly long EndStateUnstableCount;
+        [MarshalAs(UnmanagedType.I8)]
+        public readonly long EndStateUnstableCount;
     }
 }

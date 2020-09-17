@@ -11,7 +11,7 @@ namespace Mocassin.Model.Energies
     public class PairEnergyEntry : IEquatable<PairEnergyEntry>
     {
         /// <summary>
-        ///     The <see cref="Mocassin.Model.Energies.ParticleInteractionPair"/> that identifies the energy entry
+        ///     The <see cref="Mocassin.Model.Energies.ParticleInteractionPair" /> that identifies the energy entry
         /// </summary>
         [UseTrackedData(ReferenceCorrectionLevel = ReferenceCorrectionLevel.IgnoreTopLevel)]
         public ParticleInteractionPair ParticleInteractionPair { get; }
@@ -32,15 +32,6 @@ namespace Mocassin.Model.Energies
             Energy = energyValue;
         }
 
-        /// <summary>
-        ///     Get the hash code of the pair energy entry
-        /// </summary>
-        /// <returns></returns>
-        public override int GetHashCode()
-        {
-            return ParticleInteractionPair.GetHashCode();
-        }
-
         /// <inheritdoc />
         public bool Equals(PairEnergyEntry other)
         {
@@ -49,13 +40,16 @@ namespace Mocassin.Model.Energies
         }
 
         /// <summary>
+        ///     Get the hash code of the pair energy entry
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode() => ParticleInteractionPair.GetHashCode();
+
+        /// <summary>
         ///     Creates new pair energy entry with the same particle pair but a new energy value
         /// </summary>
         /// <param name="energyValue"></param>
         /// <returns></returns>
-        public PairEnergyEntry ChangeEnergy(double energyValue)
-        {
-            return new PairEnergyEntry(ParticleInteractionPair, energyValue);
-        }
+        public PairEnergyEntry ChangeEnergy(double energyValue) => new PairEnergyEntry(ParticleInteractionPair, energyValue);
     }
 }

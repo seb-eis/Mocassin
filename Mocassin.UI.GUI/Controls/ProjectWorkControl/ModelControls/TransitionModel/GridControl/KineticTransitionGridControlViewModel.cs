@@ -42,8 +42,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
         public IEnumerable<ModelObjectReference<AbstractTransition>> EnumerateAbstractTransitionOptions(KineticTransitionData current)
         {
             return ContentSource?.ProjectModelData?.TransitionModelData?.AbstractTransitions
-                .Where(x => x.StateExchangeGroups.Count > 2)
-                .Select(x => new ModelObjectReference<AbstractTransition>(x));
+                                .Where(x => x.StateExchangeGroups.Count > 2)
+                                .Select(x => new ModelObjectReference<AbstractTransition>(x));
         }
     }
 }

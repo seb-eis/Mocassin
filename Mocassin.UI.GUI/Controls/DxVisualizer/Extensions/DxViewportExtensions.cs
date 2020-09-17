@@ -36,10 +36,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Extensions
         /// </summary>
         /// <param name="element"></param>
         /// <returns></returns>
-        public static bool GetDisableMssaOnInteraction(DependencyObject element)
-        {
-            return (bool) element.GetValue(DisableMsaaOnInteractionProperty);
-        }
+        public static bool GetDisableMssaOnInteraction(DependencyObject element) => (bool) element.GetValue(DisableMsaaOnInteractionProperty);
 
         /// <summary>
         ///     Set the <see cref="IsInteractingProperty" /> for a <see cref="Viewport3DX" />
@@ -56,9 +53,6 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Extensions
         /// </summary>
         /// <param name="element"></param>
         /// <returns></returns>
-        public static bool GetIsInteracting(DependencyObject element)
-        {
-            return (bool) element.GetValue(IsInteractingProperty);
-        }
+        public static bool GetIsInteracting(DependencyObject element) => (bool) element.GetValue(IsInteractingProperty);
     }
 }

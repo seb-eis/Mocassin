@@ -358,11 +358,9 @@ namespace Mocassin.UI.Xml.Helper
         /// </summary>
         /// <param name="notifyCollectionChanged"></param>
         /// <returns></returns>
-        protected ICollection AsCollectionInterface(INotifyCollectionChanged notifyCollectionChanged)
-        {
-            return notifyCollectionChanged as ICollection
-                   ?? throw new InvalidOperationException("INotifyCollectionChanged requires ICollection to be implemented.");
-        }
+        protected ICollection AsCollectionInterface(INotifyCollectionChanged notifyCollectionChanged) =>
+            notifyCollectionChanged as ICollection
+            ?? throw new InvalidOperationException("INotifyCollectionChanged requires ICollection to be implemented.");
 
         /// <summary>
         ///     Action that is attached to all change events of the object tree

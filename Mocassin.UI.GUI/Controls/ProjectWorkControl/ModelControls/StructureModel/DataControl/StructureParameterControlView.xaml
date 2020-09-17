@@ -17,10 +17,10 @@
 
   <UserControl.Resources>
     <ToolTip x:Key="Local.ToolTip.SpaceGroup">
-      <TextBlock Text="{x:Static res:Tooltips.ModelObject_SpaceGroup}"/>
+      <TextBlock Text="{x:Static res:Tooltips.ModelObject_SpaceGroup}" />
     </ToolTip>
     <ToolTip x:Key="Local.ToolTip.Parameters">
-      <TextBlock Text="{x:Static res:Tooltips.ModelObject_CellParameterSettings}"/>
+      <TextBlock Text="{x:Static res:Tooltips.ModelObject_CellParameterSettings}" />
     </ToolTip>
   </UserControl.Resources>
   <Grid>

@@ -24,10 +24,7 @@ namespace Mocassin.Model.Structures.Handler
         /// <param name="eventArgs"></param>
         /// <returns></returns>
         [EventHandlingMethod]
-        protected IConflictReport HandleParticleListReindexing(IModelIndexingEventArgs<IParticle> eventArgs)
-        {
-            return new ConflictReport();
-        }
+        protected IConflictReport HandleParticleListReindexing(IModelIndexingEventArgs<IParticle> eventArgs) => new ConflictReport();
 
         /// <summary>
         ///     Event reaction to a changed particle set list indexing in the particle manager
@@ -35,9 +32,6 @@ namespace Mocassin.Model.Structures.Handler
         /// <param name="eventArgs"></param>
         /// <returns></returns>
         [EventHandlingMethod]
-        protected IConflictReport HandleParticleSetListReindexing(IModelIndexingEventArgs<IParticleSet> eventArgs)
-        {
-            return new ConflictReport();
-        }
+        protected IConflictReport HandleParticleSetListReindexing(IModelIndexingEventArgs<IParticleSet> eventArgs) => new ConflictReport();
     }
 }

@@ -20,8 +20,7 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         /// <summary>
         ///     Get or set the context id of the <see cref="MetaEntry" />
         /// </summary>
-        [Column("MetaEntryId")]
-        [ForeignKey(nameof(MetaEntry))]
+        [Column("MetaEntryId"), ForeignKey(nameof(MetaEntry))]
         public int MetaEntryId { get; set; }
 
         /// <summary>

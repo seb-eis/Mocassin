@@ -24,8 +24,8 @@ namespace Mocassin.Model.Translator.ModelContext
             var positionGroupInfos = manager.DataAccess.Query(port => port.GetPositionGroupInfos());
             var index = 0;
             var groupEnergyModels = groupInteractions
-                .Select(interaction => CreateEnergyModel(interaction, positionGroupInfos, ref index))
-                .ToList();
+                                    .Select(interaction => CreateEnergyModel(interaction, positionGroupInfos, ref index))
+                                    .ToList();
 
             return groupEnergyModels;
         }

@@ -85,7 +85,8 @@ namespace Mocassin.UI.Xml.ProjectLibrary
         Task<bool> CheckForModelChangesAsync();
 
         /// <summary>
-        ///     Creates and loads a <see cref="MocassinProject"/> as a default <see cref="IModelProject"/> with the provided <see cref="ProjectSettings"/> (Default settings if null)
+        ///     Creates and loads a <see cref="MocassinProject" /> as a default <see cref="IModelProject" /> with the provided
+        ///     <see cref="ProjectSettings" /> (Default settings if null)
         /// </summary>
         /// <param name="selectorExpression"></param>
         /// <param name="settings"></param>

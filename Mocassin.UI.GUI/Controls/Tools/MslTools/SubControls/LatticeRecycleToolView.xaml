@@ -12,28 +12,28 @@
     <StackPanel>
       <DockPanel Dock="Right" Margin="{StaticResource App.Margin.VerticalStack}">
         <Button Command="{Binding SelectImportPathCommand}" Content="Select Import File" Width="200"
-                Margin="{StaticResource App.Margin.HorizontalStack}"/>
-        <TextBox Text="{Binding PathToImportMsl}"/>
+                Margin="{StaticResource App.Margin.HorizontalStack}" />
+        <TextBox Text="{Binding PathToImportMsl}" />
       </DockPanel>
       <DockPanel Dock="Right" Margin="{StaticResource App.Margin.VerticalStack}">
         <Button Command="{Binding SelectExportPathCommand}" Content="Select Export File" Width="200"
-                Margin="{StaticResource App.Margin.HorizontalStack}"/>
-        <TextBox Text="{Binding PathToExportMsl}"/>
+                Margin="{StaticResource App.Margin.HorizontalStack}" />
+        <TextBox Text="{Binding PathToExportMsl}" />
       </DockPanel>
       <DockPanel Dock="Right" Margin="{StaticResource App.Margin.VerticalStack}">
         <Button Command="{Binding RefreshCanImportCommand}" Content="Check Can Import" Width="200"
-                Margin="{StaticResource App.Margin.HorizontalStack}"/>
+                Margin="{StaticResource App.Margin.HorizontalStack}" />
         <TextBox IsReadOnly="True">
           <TextBox.Style>
             <Style TargetType="{x:Type TextBox}">
               <Style.Triggers>
                 <DataTrigger Binding="{Binding CanRecycle}" Value="True">
-                  <Setter Property="Text" Value="No issues detected, can run import!"/>
-                  <Setter Property="Foreground" Value="Green"/>
+                  <Setter Property="Text" Value="No issues detected, can run import!" />
+                  <Setter Property="Foreground" Value="Green" />
                 </DataTrigger>
                 <DataTrigger Binding="{Binding CanRecycle}" Value="False">
-                  <Setter Property="Text" Value="Issues detected, cannot run import!"/>
-                  <Setter Property="Foreground" Value="Red"/>
+                  <Setter Property="Text" Value="Issues detected, cannot run import!" />
+                  <Setter Property="Foreground" Value="Red" />
                 </DataTrigger>
               </Style.Triggers>
             </Style>
@@ -42,14 +42,14 @@
       </DockPanel>
       <DockPanel Dock="Right" Margin="{StaticResource App.Margin.VerticalStack}">
         <Button Command="{Binding RunImportCommand}" Content="Run Import" Width="200"
-                Margin="{StaticResource App.Margin.HorizontalStack}"/>
+                Margin="{StaticResource App.Margin.HorizontalStack}" />
         <Grid>
-          <ProgressBar Maximum="{Binding ImportableCount, Mode=OneWay}" Value="{Binding ImportedCount, Mode=OneWay}"/>
+          <ProgressBar Maximum="{Binding ImportableCount, Mode=OneWay}" Value="{Binding ImportedCount, Mode=OneWay}" />
           <TextBlock HorizontalAlignment="Center">
-            <Run Text="Imported:"/>
-            <Run Text="{Binding ImportedCount, Mode=OneWay}"/>
-            <Run Text="/"/>
-            <Run Text="{Binding ImportableCount, Mode=OneWay}"/>
+            <Run Text="Imported:" />
+            <Run Text="{Binding ImportedCount, Mode=OneWay}" />
+            <Run Text="/" />
+            <Run Text="{Binding ImportableCount, Mode=OneWay}" />
           </TextBlock>
         </Grid>
       </DockPanel>

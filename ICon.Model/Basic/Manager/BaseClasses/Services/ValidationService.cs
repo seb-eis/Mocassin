@@ -98,10 +98,8 @@ namespace Mocassin.Model.Basic
 
         /// <inheritdoc />
         public IValidationReport ValidateParameter<TParameter>(TParameter obj, IDataReader<TPort> dataReader)
-            where TParameter : IModelParameter
-        {
-            return ParameterPipeline.Process(obj, dataReader);
-        }
+            where TParameter : IModelParameter =>
+            ParameterPipeline.Process(obj, dataReader);
 
         /// <summary>
         ///     Validates the alias of the passed model object for uniqueness and
@@ -175,19 +173,13 @@ namespace Mocassin.Model.Basic
         ///     Get the list of validation handlers for model objects defined by the implementing validation service
         /// </summary>
         /// <returns></returns>
-        protected List<IObjectProcessor<IValidationReport>> MakeObjectValidationProcessors()
-        {
-            return MakeValidationProcessors(ValidationType.Object).ToList();
-        }
+        protected List<IObjectProcessor<IValidationReport>> MakeObjectValidationProcessors() => MakeValidationProcessors(ValidationType.Object).ToList();
 
         /// <summary>
         ///     Get the list of validation handlers for model parameters defined by the implementing validation service
         /// </summary>
         /// <returns></returns>
-        protected List<IObjectProcessor<IValidationReport>> MakeParameterValidationProcessors()
-        {
-            return MakeValidationProcessors(ValidationType.Parameter).ToList();
-        }
+        protected List<IObjectProcessor<IValidationReport>> MakeParameterValidationProcessors() => MakeValidationProcessors(ValidationType.Parameter).ToList();
 
         /// <summary>
         ///     Searches the validation service for all non-public members marked as validation functions of the specified type and
@@ -205,7 +197,7 @@ namespace Mocassin.Model.Basic
                 return false;
             }
 
-            return new ObjectProcessorCreator().CreateProcessors<IValidationReport>(this, SearchMethod,
+            return new ObjectProcessorBuilder().CreateProcessors<IValidationReport>(this, SearchMethod,
                 BindingFlags.Instance | BindingFlags.NonPublic);
         }
     }

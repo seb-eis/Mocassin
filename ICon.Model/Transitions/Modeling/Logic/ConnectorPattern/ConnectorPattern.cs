@@ -79,20 +79,14 @@ namespace Mocassin.Model.Transitions
         /// </summary>
         /// <param name="connectors"></param>
         /// <returns></returns>
-        public bool IsValid(IEnumerable<ConnectorType> connectors)
-        {
-            return PatternRegex.IsMatch(MakeConnectorCode(connectors));
-        }
+        public bool IsValid(IEnumerable<ConnectorType> connectors) => PatternRegex.IsMatch(MakeConnectorCode(connectors));
 
         /// <summary>
         ///     Get a literal name of a connector enum
         /// </summary>
         /// <param name="connector"></param>
         /// <returns></returns>
-        public string GetName(ConnectorType connector)
-        {
-            return Enum.GetName(typeof(ConnectorType), connector);
-        }
+        public string GetName(ConnectorType connector) => Enum.GetName(typeof(ConnectorType), connector);
 
         /// <summary>
         ///     Creates a string code from a sequence of connectors that can be used for pattern matching
@@ -114,27 +108,23 @@ namespace Mocassin.Model.Transitions
         ///     Get the connector pattern for the basic kinetic transitions (D-{D}_1+)
         /// </summary>
         /// <returns></returns>
-        public static ConnectorPattern GetBasicKineticPattern()
-        {
-            return new ConnectorPattern
+        public static ConnectorPattern GetBasicKineticPattern() =>
+            new ConnectorPattern
             {
                 PatternRegex = new Regex($"^({ConnectorType.Dynamic}){{1}}({CodeSeparator}{ConnectorType.Dynamic}){{1,}}$"),
                 PatternType = ConnectorPatternType.BasicKinetic
             };
-        }
 
         /// <summary>
         ///     Get the connector pattern for a metropolis transition (D)
         /// </summary>
         /// <returns></returns>
-        public static ConnectorPattern GetMetropolisPattern()
-        {
-            return new ConnectorPattern
+        public static ConnectorPattern GetMetropolisPattern() =>
+            new ConnectorPattern
             {
                 PatternRegex = new Regex($"^({ConnectorType.Dynamic}){{1}}$"),
                 PatternType = ConnectorPatternType.Metropolis
             };
-        }
 
         /// <summary>
         ///     Get the connector pattern for a split vehicle mechanism with multiple transition positions (D-D{-S-D-D}_1+)
@@ -188,8 +178,8 @@ namespace Mocassin.Model.Transitions
         {
             var code = MakeConnectorCode(connectors);
             return (from pattern in GetAllSupportedPatterns()
-                where pattern.PatternRegex.IsMatch(code)
-                select pattern.PatternType).FirstOrDefault();
+                    where pattern.PatternRegex.IsMatch(code)
+                    select pattern.PatternType).FirstOrDefault();
         }
     }
 }

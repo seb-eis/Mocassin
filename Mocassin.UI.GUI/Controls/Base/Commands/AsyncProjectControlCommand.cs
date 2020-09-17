@@ -26,19 +26,13 @@ namespace Mocassin.UI.GUI.Controls.Base.Commands
         }
 
         /// <inheritdoc />
-        protected sealed override bool CanExecuteInternal(object parameter)
-        {
-            return CanExecuteInternal();
-        }
+        protected sealed override bool CanExecuteInternal(object parameter) => CanExecuteInternal();
 
         /// <summary>
         ///     Parameterless internal version of <see cref="CanExecuteInternal(object)" />
         /// </summary>
         /// <returns></returns>
-        protected virtual bool CanExecuteInternal()
-        {
-            return true;
-        }
+        protected virtual bool CanExecuteInternal() => true;
     }
 
     /// <summary>
@@ -63,9 +57,6 @@ namespace Mocassin.UI.GUI.Controls.Base.Commands
         }
 
         /// <inheritdoc />
-        public override bool CanExecuteInternal(T parameter)
-        {
-            return true;
-        }
+        public override bool CanExecuteInternal(T parameter) => true;
     }
 }

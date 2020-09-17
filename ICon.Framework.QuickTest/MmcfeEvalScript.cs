@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
@@ -20,7 +19,8 @@ namespace Mocassin.Framework.QuickTest
     {
         public static void Run()
         {
-            var rootPath = @"C:\Users\Sebastian\Documents\Promotion\HO_Backup_Corona\HO_Backup_Corona\Promotions_Unterlagen\Projekte\BaZrO3\Simulation\Model.650PM.Y030\";
+            var rootPath =
+                @"C:\Users\Sebastian\Documents\Promotion\HO_Backup_Corona\HO_Backup_Corona\Promotions_Unterlagen\Projekte\BaZrO3\Simulation\Model.650PM.Y030\";
             var mslName = "bzo_y030_650pm_mmcfe.msl";
             var evalDbName = "mmcfe.eval.db";
 
@@ -161,15 +161,13 @@ namespace Mocassin.Framework.QuickTest
             public bool UseRelativeMode { get; set; }
 
             public static MmcfeTemperatureDefectExtractArgs CreateForRoot(string rootPath, string mslName, string evalDbName,
-                string plotPathFormat = "exports\\ufs.{0:F2}.{1}.txt")
-            {
-                return new MmcfeTemperatureDefectExtractArgs
+                string plotPathFormat = "exports\\ufs.{0:F2}.{1}.txt") =>
+                new MmcfeTemperatureDefectExtractArgs
                 {
                     EvalDbPath = $"{rootPath}\\{evalDbName}",
                     MslPath = $"{rootPath}\\{mslName}",
                     PlotPathFormat = $"{rootPath}\\{plotPathFormat}"
                 };
-            }
         }
     }
 }

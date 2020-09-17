@@ -92,16 +92,10 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <inheritdoc />
-        public IEnumerable<Vector4I> GetTransitionSequence()
-        {
-            return TransitionSequence4D.AsEnumerable();
-        }
+        public IEnumerable<Vector4I> GetTransitionSequence() => TransitionSequence4D.AsEnumerable();
 
         /// <inheritdoc />
-        public ITransitionModel GetTransitionModel()
-        {
-            return TransitionModel;
-        }
+        public ITransitionModel GetTransitionModel() => TransitionModel;
 
         /// <summary>
         ///     Gets an inverted version of the fractional transition sequence

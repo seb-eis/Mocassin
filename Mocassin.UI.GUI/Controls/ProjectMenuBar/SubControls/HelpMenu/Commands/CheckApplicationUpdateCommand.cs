@@ -20,10 +20,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.HelpMenu.Commands
         }
 
         /// <inheritdoc />
-        public override bool CanExecuteInternal()
-        {
-            return ApplicationDeployment.IsNetworkDeployed && base.CanExecuteInternal();
-        }
+        public override bool CanExecuteInternal() => ApplicationDeployment.IsNetworkDeployed && base.CanExecuteInternal();
 
         /// <inheritdoc />
         public override void Execute()

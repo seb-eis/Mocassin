@@ -16,14 +16,14 @@ namespace Mocassin.UI.GUI.Controls.Tools.MslTools.SubControls
     {
         private int importableCount;
         private int importedCount;
-        private string mslFilePath;
-        private string jobFolderRootPath;
-        private bool isImporting;
-        private bool isZipRawActive;
-        private bool isAutoSelectRootByMslPath = true;
-        private bool isIndeterminateProgress;
         private int importsPerSave = 50;
+        private bool isAutoSelectRootByMslPath = true;
         private bool isDeleteJobFoldersActive;
+        private bool isImporting;
+        private bool isIndeterminateProgress;
+        private bool isZipRawActive;
+        private string jobFolderRootPath;
+        private string mslFilePath;
 
         /// <summary>
         ///     Get the lock object for access
@@ -147,10 +147,7 @@ namespace Mocassin.UI.GUI.Controls.Tools.MslTools.SubControls
         ///     Check if the import can currently be done
         /// </summary>
         /// <returns></returns>
-        public bool CanRunImport()
-        {
-            return !IsImporting && File.Exists(MslFilePath) && Directory.Exists(JobFolderRootPath);
-        }
+        public bool CanRunImport() => !IsImporting && File.Exists(MslFilePath) && Directory.Exists(JobFolderRootPath);
 
         /// <summary>
         ///     Runs the import action using the current settings

@@ -15,7 +15,8 @@
   d:DesignHeight="450" d:DesignWidth="800"
   Background="Transparent">
   <UserControl.Resources>
-    <adapter:AbstractTransitionExchangeGroupSelectionVmConverter x:Key="Local.AbstractTransitionExchangeGroupSelectionVmConverter"/>
+    <adapter:AbstractTransitionExchangeGroupSelectionVmConverter
+      x:Key="Local.AbstractTransitionExchangeGroupSelectionVmConverter" />
   </UserControl.Resources>
   <Grid>
     <DataGrid Name="AbstractTransitionDataGrid"
@@ -38,10 +39,10 @@
       </DataGrid.RowHeaderTemplate>
 
       <DataGrid.Columns>
-        <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
+        <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
         <comboBox:BindableDataGridComboBoxColumn Header="Connection Pattern"
                                                  ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:AbstractTransitionGridControlView}}, Path=DataContext.SelectableTransitionMechanisms.ObservableItems}"
-                                                 SelectedValueBinding="{Binding ConnectorString}" 
+                                                 SelectedValueBinding="{Binding ConnectorString}"
                                                  SelectedValuePath="ConnectionPattern"
                                                  DisplayMemberPath="Name"
                                                  x:Name="MechanismComboBoxColumn">
@@ -53,21 +54,22 @@
                     <Setter Property="ToolTip">
                       <Setter.Value>
                         <TextBlock d:DataContext="{d:DesignInstance local:TransitionMechanismViewModel}">
-                          <Run Text="Name:&#09;&#09;"/>
-                          <Run Text="{Binding Name}"/>
-                          <LineBreak/>
-                          <Run Text="Description:&#09;"/>
-                          <Run Text="{Binding Description}"/>
-                          <LineBreak/>
-                          <Run Text="Position Chain:&#09;"/>
-                          <Run Text="{Binding PositionChainDescription}"/>
-                          <LineBreak/>
-                          <Run Text="Link Pattern:&#09;"/>
-                          <Run Text="{Binding ConnectionPattern}"/>
-                          <LineBreak/>
-                          <Run Text="Two Options:&#09;"/>
-                          <Run Text="{Binding HasAssociationFlagSupport}"/>
-                          <Run Text="(If TRUE, association/dissociation and unidirectional movement (default) are distinct mechanisms.)"/>
+                          <Run Text="Name:&#09;&#09;" />
+                          <Run Text="{Binding Name}" />
+                          <LineBreak />
+                          <Run Text="Description:&#09;" />
+                          <Run Text="{Binding Description}" />
+                          <LineBreak />
+                          <Run Text="Position Chain:&#09;" />
+                          <Run Text="{Binding PositionChainDescription}" />
+                          <LineBreak />
+                          <Run Text="Link Pattern:&#09;" />
+                          <Run Text="{Binding ConnectionPattern}" />
+                          <LineBreak />
+                          <Run Text="Two Options:&#09;" />
+                          <Run Text="{Binding HasAssociationFlagSupport}" />
+                          <Run
+                            Text="(If TRUE, association/dissociation and unidirectional movement (default) are distinct mechanisms.)" />
                         </TextBlock>
                       </Setter.Value>
                     </Setter>
@@ -78,7 +80,7 @@
           </comboBox:BindableDataGridComboBoxColumn.EditingElementStyle>
         </comboBox:BindableDataGridComboBoxColumn>
 
-        <DataGridCheckBoxColumn Header="Association/Dissociation" Binding="{Binding IsAssociation}"/>
+        <DataGridCheckBoxColumn Header="Association/Dissociation" Binding="{Binding IsAssociation}" />
 
         <DataGridTemplateColumn Header="State Change Groups">
           <DataGridTemplateColumn.CellTemplate>

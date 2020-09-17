@@ -66,10 +66,7 @@ namespace Mocassin.UI.Xml.Customization
         }
 
         /// <inheritdoc />
-        object IDuplicable.Duplicate()
-        {
-            return Duplicate();
-        }
+        object IDuplicable.Duplicate() => Duplicate();
 
         /// <inheritdoc />
         public override void PushToModel(IModelProject modelProject)
@@ -111,19 +108,19 @@ namespace Mocassin.UI.Xml.Customization
             var obj = new EnergyModelCustomizationData
             {
                 StablePairEnergyParameterSets = energySetterProvider
-                    .GetStablePairEnergySetters()
-                    .Select(x => PairEnergySetData.Create(x, parent))
-                    .ToObservableCollection(),
+                                                .GetStablePairEnergySetters()
+                                                .Select(x => PairEnergySetData.Create(x, parent))
+                                                .ToObservableCollection(),
 
                 UnstablePairEnergyParameterSets = energySetterProvider
-                    .GetUnstablePairEnergySetters()
-                    .Select(x => PairEnergySetData.Create(x, parent))
-                    .ToObservableCollection(),
+                                                  .GetUnstablePairEnergySetters()
+                                                  .Select(x => PairEnergySetData.Create(x, parent))
+                                                  .ToObservableCollection(),
 
                 GroupEnergyParameterSets = energySetterProvider
-                    .GetGroupEnergySetters()
-                    .Select(x => GroupEnergySetData.Create(x, parent))
-                    .ToObservableCollection()
+                                           .GetGroupEnergySetters()
+                                           .Select(x => GroupEnergySetData.Create(x, parent))
+                                           .ToObservableCollection()
             };
 
             return obj;

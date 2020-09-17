@@ -6,8 +6,7 @@ namespace Mocassin.Model.ModelProject
     /// <summary>
     ///     The basic settings for the structure managing module data validations
     /// </summary>
-    [DataContract]
-    [ModuleSettings(typeof(IStructureManager))]
+    [DataContract, ModuleSettings(typeof(IStructureManager))]
     public class MocassinStructureSettings : MocassinModuleSettings
     {
         /// <summary>

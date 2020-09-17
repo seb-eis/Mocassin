@@ -77,11 +77,9 @@ namespace Mocassin.UI.Xml.TransitionModel
         ///     Checks if one of the key <see cref="string" /> values is null
         /// </summary>
         /// <returns></returns>
-        public bool HasNullKeys()
-        {
-            return AbstractTransition == null
-                   || FirstCellReferencePosition == null
-                   || SecondCellReferencePosition == null;
-        }
+        public bool HasNullKeys() =>
+            AbstractTransition == null
+            || FirstCellReferencePosition == null
+            || SecondCellReferencePosition == null;
     }
 }

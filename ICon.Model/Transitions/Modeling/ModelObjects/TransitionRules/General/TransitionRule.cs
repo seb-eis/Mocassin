@@ -61,28 +61,16 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <inheritdoc />
-        public IEnumerable<IParticle> GetStartStateOccupation()
-        {
-            return (StartState ?? new OccupationState()).AsEnumerable();
-        }
+        public IEnumerable<IParticle> GetStartStateOccupation() => (StartState ?? new OccupationState()).AsEnumerable();
 
         /// <inheritdoc />
-        public IEnumerable<IParticle> GetFinalStateOccupation()
-        {
-            return (FinalState ?? new OccupationState()).AsEnumerable();
-        }
+        public IEnumerable<IParticle> GetFinalStateOccupation() => (FinalState ?? new OccupationState()).AsEnumerable();
 
         /// <inheritdoc />
-        public IEnumerable<IParticle> GetTransitionStateOccupation()
-        {
-            return (TransitionState ?? new OccupationState()).AsEnumerable();
-        }
+        public IEnumerable<IParticle> GetTransitionStateOccupation() => (TransitionState ?? new OccupationState()).AsEnumerable();
 
         /// <inheritdoc />
-        public IEnumerable<int> GetMovementDescription()
-        {
-            return (MovementCode ?? new MovementCode()).AsEnumerable();
-        }
+        public IEnumerable<int> GetMovementDescription() => (MovementCode ?? new MovementCode()).AsEnumerable();
 
         /// <summary>
         ///     Performs a lexicographic compare of start and end states while detecting inverted equivalency as well
@@ -100,10 +88,7 @@ namespace Mocassin.Model.Transitions
         ///     Checks if the rule is marked as physically invalid
         /// </summary>
         /// <returns></returns>
-        public bool IsPhysicallyInvalid()
-        {
-            return (TransitionRuleFlags & TransitionRuleFlags.PhysicallyInvalid) != 0;
-        }
+        public bool IsPhysicallyInvalid() => (TransitionRuleFlags & TransitionRuleFlags.PhysicallyInvalid) != 0;
 
         /// <inheritdoc />
         public override ModelObject PopulateFrom(IModelObject obj)

@@ -32,10 +32,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         }
 
         /// <inheritdoc />
-        public override bool CanExecuteInternal(ProjectJobSetTemplate parameter)
-        {
-            return parameter?.Parent != null && base.CanExecuteInternal(parameter);
-        }
+        public override bool CanExecuteInternal(ProjectJobSetTemplate parameter) => parameter?.Parent != null && base.CanExecuteInternal(parameter);
 
         /// <summary>
         ///     Creates and adds  duplicate of a <see cref="ProjectJobSetTemplate" /> to its parent project

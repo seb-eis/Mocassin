@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Interop;
 using System.Windows.Media;
+
 // ReSharper disable InconsistentNaming
 
 namespace Mocassin.UI.GUI.Base.UiElements.Popup
@@ -19,7 +20,8 @@ namespace Mocassin.UI.GUI.Base.UiElements.Popup
         /// <summary>
         ///     The <see cref="Topmost" /> <see cref="DependencyProperty" />
         /// </summary>
-        public static DependencyProperty TopmostProperty = Window.TopmostProperty.AddOwner(typeof(ControlOverlay), new FrameworkPropertyMetadata(false, OnIsTopmostChanged));
+        public static DependencyProperty TopmostProperty =
+            Window.TopmostProperty.AddOwner(typeof(ControlOverlay), new FrameworkPropertyMetadata(false, OnIsTopmostChanged));
 
         /// <summary>
         ///     Get or set the parent <see cref="Window" />
@@ -27,7 +29,7 @@ namespace Mocassin.UI.GUI.Base.UiElements.Popup
         private Window ParentWindow { get; set; }
 
         /// <summary>
-        ///     Get or set the parent <see cref="UserControl"/>
+        ///     Get or set the parent <see cref="UserControl" />
         /// </summary>
         private UserControl ParentControl { get; set; }
 
@@ -83,7 +85,7 @@ namespace Mocassin.UI.GUI.Base.UiElements.Popup
             }
             finally
             {
-                AlreadyLoaded = false;   
+                AlreadyLoaded = false;
             }
         }
 
@@ -107,10 +109,7 @@ namespace Mocassin.UI.GUI.Base.UiElements.Popup
                     ParentWindow.LocationChanged += OnForceResetRequired;
                 }
 
-                if (ParentControl != null)
-                {
-                    ParentControl.SizeChanged += OnForceResetRequired;
-                }
+                if (ParentControl != null) ParentControl.SizeChanged += OnForceResetRequired;
             }
             finally
             {
@@ -133,7 +132,6 @@ namespace Mocassin.UI.GUI.Base.UiElements.Popup
         /// <param name="arg"></param>
         private void OnParentWindowActivated(object sender, EventArgs arg)
         {
-
         }
 
         /// <summary>
@@ -143,11 +141,11 @@ namespace Mocassin.UI.GUI.Base.UiElements.Popup
         /// <param name="arg"></param>
         private void OnParentWindowDeactivated(object sender, EventArgs arg)
         {
-
         }
 
         /// <summary>
-        ///     Event handler for changes of the parent <see cref="FrameworkElement"/> or <see cref="Window"/> that require a forced update of the overlay
+        ///     Event handler for changes of the parent <see cref="FrameworkElement" /> or <see cref="Window" /> that require a
+        ///     forced update of the overlay
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
@@ -174,10 +172,10 @@ namespace Mocassin.UI.GUI.Base.UiElements.Popup
         }
 
         /// <summary>
-        ///     Finds the parent control that hosts the provided <see cref="DependencyObject"/>
+        ///     Finds the parent control that hosts the provided <see cref="DependencyObject" />
         /// </summary>
         /// <returns></returns>
-        protected T FindParent<T>(DependencyObject child = null) where  T : class
+        protected T FindParent<T>(DependencyObject child = null) where T : class
         {
             if (child == null) throw new ArgumentNullException(nameof(child));
             while (child != null)
@@ -211,8 +209,7 @@ namespace Mocassin.UI.GUI.Base.UiElements.Popup
         private static readonly IntPtr HWND_TOP = new IntPtr(0);
         private static readonly IntPtr HWND_BOTTOM = new IntPtr(1);
 
-        [StructLayout(LayoutKind.Sequential)]
-        [DebuggerDisplay("L:{left},T:{top},R:{right},B:{bottom}")]
+        [StructLayout(LayoutKind.Sequential), DebuggerDisplay("L:{left},T:{top},R:{right},B:{bottom}")]
         internal struct RECT
         {
             internal int left;

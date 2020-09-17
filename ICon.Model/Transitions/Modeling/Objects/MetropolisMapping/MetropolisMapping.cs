@@ -49,10 +49,7 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <inheritdoc />
-        public bool Equals(MetropolisMapping other)
-        {
-            return other != null && PositionIndex0 == other.PositionIndex0 && PositionIndex1 == other.PositionIndex1;
-        }
+        public bool Equals(MetropolisMapping other) => other != null && PositionIndex0 == other.PositionIndex0 && PositionIndex1 == other.PositionIndex1;
 
         /// <summary>
         ///     Creates the geometric inversion of the <see cref="MetropolisMapping" />

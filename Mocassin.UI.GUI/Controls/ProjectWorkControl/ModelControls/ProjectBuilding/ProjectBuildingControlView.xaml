@@ -13,13 +13,13 @@
   Background="Transparent">
 
   <UserControl.Resources>
-    <ToolTip x:Key="Local.ToolTip.DeployInstruction" >
+    <ToolTip x:Key="Local.ToolTip.DeployInstruction">
       <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
         <Run
           Text="Define a full translation group containing a model project, customization and job definition source." />
       </TextBlock>
     </ToolTip>
-    <ToolTip x:Key="Local.ToolTip.LocalDeployment" >
+    <ToolTip x:Key="Local.ToolTip.LocalDeployment">
       <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
         <Run Text="Automatic deploy of simulation databases to your local machine." />
         <Run Text="The time and memory requirements primarily depend on the simulation count and lattice sizes." />
@@ -80,17 +80,17 @@
               IsReadOnly="True"
               AutoGenerateColumns="False">
               <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Id}" Header="Id"/>
-                <DataGridTextColumn Binding="{Binding CollectionName, Mode=OneTime}" Header="Collection"/>
-                <DataGridTextColumn Binding="{Binding ConfigName, Mode=OneTime}" Header="Config"/>
-                <DataGridTextColumn Binding="{Binding JobIndex, Mode=OneTime}" Header="Duplicate"/>
-                <DataGridTextColumn Binding="{Binding Mcsp, Mode=OneTime}" Header="MCSP"/>
-                <DataGridTextColumn Binding="{Binding PreRunMcsp, Mode=OneTime}" Header="MCSP (Prerun)"/>
-                <DataGridTextColumn Binding="{Binding FlagString, Mode=OneTime}" Header="Flags"/>
-                <DataGridTextColumn Binding="{Binding DopingInfo, Mode=OneTime}" Header="Doping"/>
-                <DataGridTextColumn Binding="{Binding LatticeInfo, Mode=OneTime}" Header="Lattice"/>
-                <DataGridTextColumn Binding="{Binding ElectricFieldModulus, Mode=OneTime}" Header="Field [V/m]"/>
-                <DataGridTextColumn Binding="{Binding BaseFrequency, Mode=OneTime}" Header="Max. Frequency [Hz]"/>
+                <DataGridTextColumn Binding="{Binding Id}" Header="Id" />
+                <DataGridTextColumn Binding="{Binding CollectionName, Mode=OneTime}" Header="Collection" />
+                <DataGridTextColumn Binding="{Binding ConfigName, Mode=OneTime}" Header="Config" />
+                <DataGridTextColumn Binding="{Binding JobIndex, Mode=OneTime}" Header="Duplicate" />
+                <DataGridTextColumn Binding="{Binding Mcsp, Mode=OneTime}" Header="MCSP" />
+                <DataGridTextColumn Binding="{Binding PreRunMcsp, Mode=OneTime}" Header="MCSP (Prerun)" />
+                <DataGridTextColumn Binding="{Binding FlagString, Mode=OneTime}" Header="Flags" />
+                <DataGridTextColumn Binding="{Binding DopingInfo, Mode=OneTime}" Header="Doping" />
+                <DataGridTextColumn Binding="{Binding LatticeInfo, Mode=OneTime}" Header="Lattice" />
+                <DataGridTextColumn Binding="{Binding ElectricFieldModulus, Mode=OneTime}" Header="Field [V/m]" />
+                <DataGridTextColumn Binding="{Binding BaseFrequency, Mode=OneTime}" Header="Max. Frequency [Hz]" />
               </DataGrid.Columns>
             </DataGrid>
           </content:HeaderedGroup>

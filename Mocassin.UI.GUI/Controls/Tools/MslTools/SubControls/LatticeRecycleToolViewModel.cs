@@ -8,18 +8,19 @@ using Mocassin.UI.GUI.Controls.Base.IO;
 namespace Mocassin.UI.GUI.Controls.Tools.MslTools.SubControls
 {
     /// <summary>
-    ///     The <see cref="ToolViewModel"/> for recycling result lattice data from one simulation database as initial states for another
+    ///     The <see cref="ToolViewModel" /> for recycling result lattice data from one simulation database as initial states
+    ///     for another
     /// </summary>
     public class LatticeRecycleToolViewModel : ToolViewModel
     {
-        private string pathToExportMsl;
-        private string pathToImportMsl;
         private bool canRecycle;
         private int importableCount;
         private int importedCount;
+        private string pathToExportMsl;
+        private string pathToImportMsl;
 
         /// <summary>
-        ///     Get the <see cref="UserFileSelectionSource"/>
+        ///     Get the <see cref="UserFileSelectionSource" />
         /// </summary>
         private UserFileSelectionSource FileSelectionSource { get; }
 
@@ -69,35 +70,38 @@ namespace Mocassin.UI.GUI.Controls.Tools.MslTools.SubControls
         }
 
         /// <summary>
-        ///     Get the <see cref="AsyncRelayCommand"/> to refresh if the data can be imported using the current settings
+        ///     Get the <see cref="AsyncRelayCommand" /> to refresh if the data can be imported using the current settings
         /// </summary>
         public AsyncRelayCommand RefreshCanImportCommand { get; }
 
         /// <summary>
-        ///     Get the <see cref="AsyncRelayCommand"/> to run the import
+        ///     Get the <see cref="AsyncRelayCommand" /> to run the import
         /// </summary>
         public AsyncRelayCommand RunImportCommand { get; }
 
         /// <summary>
-        ///     Get a <see cref="RelayCommand"/> to select the import path
+        ///     Get a <see cref="RelayCommand" /> to select the import path
         /// </summary>
         public RelayCommand SelectImportPathCommand { get; }
 
         /// <summary>
-        ///     Get a <see cref="RelayCommand"/> to select the export path
+        ///     Get a <see cref="RelayCommand" /> to select the export path
         /// </summary>
         public RelayCommand SelectExportPathCommand { get; }
 
         /// <summary>
-        ///     Creates a new <see cref="LatticeRecycleToolViewModel"/>
+        ///     Creates a new <see cref="LatticeRecycleToolViewModel" />
         /// </summary>
         public LatticeRecycleToolViewModel()
         {
             FileSelectionSource = UserFileSelectionSource.CreateForJobDbFiles(false);
-            RefreshCanImportCommand = AsyncRelayCommand.Create(CheckImportIsPossible, () => !RunImportCommand.IsExecuting && PathToExportMsl != null && PathToImportMsl != null);
+            RefreshCanImportCommand = AsyncRelayCommand.Create(CheckImportIsPossible,
+                () => !RunImportCommand.IsExecuting && PathToExportMsl != null && PathToImportMsl != null);
             RunImportCommand = AsyncRelayCommand.Create(RunImport, () => !RefreshCanImportCommand.IsExecuting && CanRecycle);
-            SelectImportPathCommand = new RelayCommand(() => PromptUserForMsl(x => PathToImportMsl = x), () => !RunImportCommand.IsExecuting && !RefreshCanImportCommand.IsExecuting);
-            SelectExportPathCommand = new RelayCommand(() => PromptUserForMsl(x => PathToExportMsl = x), () => !RunImportCommand.IsExecuting && !RefreshCanImportCommand.IsExecuting);
+            SelectImportPathCommand = new RelayCommand(() => PromptUserForMsl(x => PathToImportMsl = x),
+                () => !RunImportCommand.IsExecuting && !RefreshCanImportCommand.IsExecuting);
+            SelectExportPathCommand = new RelayCommand(() => PromptUserForMsl(x => PathToExportMsl = x),
+                () => !RunImportCommand.IsExecuting && !RefreshCanImportCommand.IsExecuting);
         }
 
         /// <summary>
@@ -113,10 +117,12 @@ namespace Mocassin.UI.GUI.Controls.Tools.MslTools.SubControls
                 LogMessage("It is currently not supported to repopulate an MSL file by its own result contents.");
                 return;
             }
+
             using var importer = CreateImporter();
             CanRecycle = importer.DataCanBeMapped(PathToExportMsl, PathToImportMsl, out var count);
             ImportableCount = count;
-            LogMessage($"Data migration from '{PathToExportMsl}' to '{pathToImportMsl}' is {(CanRecycle ? "possible":"not possible")} ({count} items mapped).");
+            LogMessage(
+                $"Data migration from '{PathToExportMsl}' to '{pathToImportMsl}' is {(CanRecycle ? "possible" : "not possible")} ({count} items mapped).");
         }
 
         /// <summary>
@@ -133,7 +139,7 @@ namespace Mocassin.UI.GUI.Controls.Tools.MslTools.SubControls
         }
 
         /// <summary>
-        ///     Creates a new <see cref="ResultLatticeImporter"/>
+        ///     Creates a new <see cref="ResultLatticeImporter" />
         /// </summary>
         /// <returns></returns>
         private ResultLatticeImporter CreateImporter()

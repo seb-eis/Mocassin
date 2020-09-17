@@ -13,10 +13,7 @@ namespace Mocassin.UI.GUI.Base.Converter
     public class NumericExpressionToValueConverter : ValueConverter
     {
         /// <inheritdoc />
-        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return value;
-        }
+        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture) => value;
 
         /// <inheritdoc />
         public override object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

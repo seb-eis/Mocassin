@@ -16,20 +16,14 @@ namespace Mocassin.Mathematics.Extensions
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static long ConvertToInt64Bits(this double value)
-        {
-            return BitConverter.DoubleToInt64Bits(value);
-        }
+        public static long ConvertToInt64Bits(this double value) => BitConverter.DoubleToInt64Bits(value);
 
         /// <summary>
         ///     Bit conversion of single value into 32 bit signed integer
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static int ConvertToInt32Bits(this float value)
-        {
-            return BitConverter.ToInt32(BitConverter.GetBytes(value), 0);
-        }
+        public static int ConvertToInt32Bits(this float value) => BitConverter.ToInt32(BitConverter.GetBytes(value), 0);
 
         /// <summary>
         ///     Almost equal double comparison based upon ULP steps and IEEE standard (Cannot be used for 0.0 comparisons)
@@ -56,10 +50,7 @@ namespace Mocassin.Mathematics.Extensions
         /// <param name="other"></param>
         /// <param name="range"></param>
         /// <returns></returns>
-        public static bool AlmostEqualByRange(this double value, double other, double range = 1.0e-10)
-        {
-            return Math.Abs(value - other) <= Math.Abs(range);
-        }
+        public static bool AlmostEqualByRange(this double value, double other, double range = 1.0e-10) => Math.Abs(value - other) <= Math.Abs(range);
 
         /// <summary>
         ///     Almost equal double comparison based upon relative range (cannot be used if factor or value are 0.0)
@@ -93,10 +84,7 @@ namespace Mocassin.Mathematics.Extensions
         /// <param name="value"></param>
         /// <param name="range"></param>
         /// <returns></returns>
-        public static bool AlmostZero(this double value, double range)
-        {
-            return value.AlmostEqualByRange(0.0, range);
-        }
+        public static bool AlmostZero(this double value, double range) => value.AlmostEqualByRange(0.0, range);
 
         /// <summary>
         ///     Alternative CompareTo() implementation utilizing almost equal double comparison by range
@@ -192,10 +180,7 @@ namespace Mocassin.Mathematics.Extensions
         /// <typeparam name="T1"></typeparam>
         /// <param name="matrix"></param>
         /// <returns></returns>
-        public static bool IsQuadratic<T1>(this T1[,] matrix)
-        {
-            return matrix.GetUpperBound(0) == matrix.GetUpperBound(1);
-        }
+        public static bool IsQuadratic<T1>(this T1[,] matrix) => matrix.GetUpperBound(0) == matrix.GetUpperBound(1);
 
         /// <summary>
         ///     Use the provided double equality comparer and set all values that compare equal to 0.0 to actual 0.0
@@ -249,22 +234,17 @@ namespace Mocassin.Mathematics.Extensions
         /// <param name="lhs"></param>
         /// <param name="rhs"></param>
         /// <returns></returns>
-        public static double[,] LeftMatrixMultiplication(this double[,] lhs, double[,] rhs)
-        {
-            return rhs.RightMatrixMultiplication(lhs);
-        }
+        public static double[,] LeftMatrixMultiplication(this double[,] lhs, double[,] rhs) => rhs.RightMatrixMultiplication(lhs);
 
         /// <summary>
         ///     Get the dimensions of a Double[,] array
         /// </summary>
         /// <param name="matrix"></param>
         /// <returns></returns>
-        public static (int Rows, int Cols) GetDimensions(this double[,] matrix)
-        {
-            return matrix != null
+        public static (int Rows, int Cols) GetDimensions(this double[,] matrix) =>
+            matrix != null
                 ? (matrix.GetUpperBound(0) + 1, matrix.GetUpperBound(1) + 1)
                 : throw new ArgumentNullException(nameof(matrix));
-        }
 
         /// <summary>
         ///     Rounds a double to the other value if close enough (Uses zero safe default ranged comparer)
@@ -272,10 +252,7 @@ namespace Mocassin.Mathematics.Extensions
         /// <param name="value"></param>
         /// <param name="other"></param>
         /// <returns></returns>
-        public static double ZeroSafeRound(this double value, double other)
-        {
-            return value.ZeroSafeRound(other, NumericComparer.Default());
-        }
+        public static double ZeroSafeRound(this double value, double other) => value.ZeroSafeRound(other, NumericComparer.Default());
 
         /// <summary>
         ///     Rounds a double to the other value if close enough (Zero safe, throws if one of the values is exactly zero and the

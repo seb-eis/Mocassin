@@ -81,10 +81,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
         /// <param name="args"></param>
         private void RelayPartnerEnergyChange(object sender, PropertyChangedEventArgs args)
         {
-            static bool PairGraphsAreEqual(PairEnergyData first, PairEnergyData second)
-            {
-                return first.CenterParticle.Equals(second.CenterParticle) && first.PartnerParticle.Equals(second.PartnerParticle);
-            }
+            static bool PairGraphsAreEqual(PairEnergyData first, PairEnergyData second) =>
+                first.CenterParticle.Equals(second.CenterParticle) && first.PartnerParticle.Equals(second.PartnerParticle);
 
             if (args.PropertyName != nameof(PairEnergyData.Energy)) return;
             if (!(sender is PairEnergyData source)) return;

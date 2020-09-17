@@ -7,7 +7,7 @@ namespace Mocassin.Framework.SQLiteCore
     /// <summary>
     ///     Adapter class to provide <see cref="DbContext" /> instances for read only query access
     /// </summary>
-    public sealed class ReadOnlyDbContext : IDisposable, IQueryableDataSource
+    public sealed class ReadOnlyDbContext : IDisposable, IDataContext
     {
         /// <summary>
         ///     The wrapped <see cref="DbContext" />
@@ -34,9 +34,6 @@ namespace Mocassin.Framework.SQLiteCore
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
         /// <returns></returns>
-        public IQueryable<TEntity> Set<TEntity>() where TEntity : class
-        {
-            return dbContext.Set<TEntity>();
-        }
+        public IQueryable<TEntity> Set<TEntity>() where TEntity : class => dbContext.Set<TEntity>();
     }
 }

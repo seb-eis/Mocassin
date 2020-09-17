@@ -36,10 +36,7 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <inheritdoc />
-        public (int Donor, int Acceptor) AsIndexTuple()
-        {
-            return (DonorParticle.Index, AcceptorParticle.Index);
-        }
+        public (int Donor, int Acceptor) AsIndexTuple() => (DonorParticle.Index, AcceptorParticle.Index);
 
         /// <summary>
         ///     Sorts by donor index than acceptor index. Does not check for inverse equality

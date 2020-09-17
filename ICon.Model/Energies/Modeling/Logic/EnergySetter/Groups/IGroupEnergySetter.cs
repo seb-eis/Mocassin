@@ -25,7 +25,7 @@ namespace Mocassin.Model.Energies
         IValueConstraint<double, double> EnergyConstraint { get; }
 
         /// <summary>
-        ///     Get the <see cref="IPositionGroupInfo"/> that describes the symmetry of the <see cref="IGroupInteraction"/>
+        ///     Get the <see cref="IPositionGroupInfo" /> that describes the symmetry of the <see cref="IGroupInteraction" />
         /// </summary>
         IPositionGroupInfo PositionGroupInfo { get; }
 

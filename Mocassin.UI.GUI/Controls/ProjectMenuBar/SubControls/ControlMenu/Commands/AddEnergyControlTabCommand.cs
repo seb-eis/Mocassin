@@ -18,15 +18,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ControlMenu.Comman
         }
 
         /// <inheritdoc />
-        protected override ContentControl GetDataControl()
-        {
-            return new EnergyModelControlView {DataContext = new EnergyModelControlViewModel(ProjectControl)};
-        }
+        protected override ContentControl GetDataControl() => new EnergyModelControlView {DataContext = new EnergyModelControlViewModel(ProjectControl)};
 
         /// <inheritdoc />
-        protected override string GetTabName()
-        {
-            return "Energy Control";
-        }
+        protected override string GetTabName() => "Energy Control";
     }
 }

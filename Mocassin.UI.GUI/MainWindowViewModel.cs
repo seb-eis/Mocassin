@@ -19,7 +19,6 @@ using Mocassin.UI.GUI.Controls.ProjectMenuBar;
 using Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager;
 using Mocassin.UI.GUI.Controls.ProjectStatusBar;
 using Mocassin.UI.GUI.Controls.ProjectWorkControl;
-using Mocassin.UI.GUI.Properties;
 using Mocassin.UI.Xml.Main;
 using Mocassin.UI.Xml.ProjectLibrary;
 
@@ -133,10 +132,7 @@ namespace Mocassin.UI.GUI
         }
 
         /// <inheritdoc />
-        public IModelProject CreateModelProject()
-        {
-            return ModelProjectFactory.Create(ServiceModelProject.Settings);
-        }
+        public IModelProject CreateModelProject() => ModelProjectFactory.Create(ServiceModelProject.Settings);
 
         /// <inheritdoc />
         public void DisposeServices()
@@ -158,10 +154,7 @@ namespace Mocassin.UI.GUI
         /// </summary>
         /// <returns></returns>
         /// <remarks>Will return a default config project without any attached model managers</remarks>
-        public IModelProject CreateServiceModelProject()
-        {
-            return ModelProject.Create(LoadProjectSettings());
-        }
+        public IModelProject CreateServiceModelProject() => ModelProject.Create(LoadProjectSettings());
 
         /// <summary>
         ///     Builds the window description string <see cref="string" />
@@ -243,10 +236,8 @@ namespace Mocassin.UI.GUI
         /// </summary>
         /// <param name="fileName"></param>
         /// <returns></returns>
-        public string GetFullResourceFilePath(string fileName)
-        {
-            return Environment.ExpandEnvironmentVariables(Properties.Resources.Folder_Userprofile_Resources + fileName);
-        }
+        public string GetFullResourceFilePath(string fileName) =>
+            Environment.ExpandEnvironmentVariables(Properties.Resources.Folder_Userprofile_Resources + fileName);
 
         /// <summary>
         ///     Handles the app startup program arguments, if the they are empty the system tries to get the data from the

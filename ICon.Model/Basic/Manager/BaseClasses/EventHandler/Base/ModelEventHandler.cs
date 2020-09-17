@@ -114,10 +114,8 @@ namespace Mocassin.Model.Basic
         ///     Builds the handler pipeline by searching the handler implementation for handling methods
         /// </summary>
         /// <returns></returns>
-        protected BreakPipeline<IConflictReport> CreatePipeline()
-        {
-            return new BreakPipeline<IConflictReport>(GetCannotProcessProcessor(), GetObjectProcessors().ToList());
-        }
+        protected BreakPipeline<IConflictReport> CreatePipeline() =>
+            new BreakPipeline<IConflictReport>(GetCannotProcessProcessor(), GetObjectProcessors().ToList());
 
         /// <summary>
         ///     Get the object processor list by searching the handler for marked methods and creating a set of object processors
@@ -125,12 +123,9 @@ namespace Mocassin.Model.Basic
         /// <returns></returns>
         protected IEnumerable<IObjectProcessor<IConflictReport>> GetObjectProcessors()
         {
-            bool MethodSearch(MethodInfo info)
-            {
-                return info.GetCustomAttribute(typeof(EventHandlingMethodAttribute)) != null;
-            }
+            bool MethodSearch(MethodInfo info) => info.GetCustomAttribute(typeof(EventHandlingMethodAttribute)) != null;
 
-            return new ObjectProcessorCreator().CreateProcessors<IConflictReport>(this, MethodSearch,
+            return new ObjectProcessorBuilder().CreateProcessors<IConflictReport>(this, MethodSearch,
                 BindingFlags.NonPublic | BindingFlags.Instance);
         }
 
@@ -138,20 +133,15 @@ namespace Mocassin.Model.Basic
         ///     Get the on cannot process processor, this usually simply returns a no-resolving required report
         /// </summary>
         /// <returns></returns>
-        protected virtual IObjectProcessor<IConflictReport> GetCannotProcessProcessor()
-        {
-            return new ObjectProcessor<object, IConflictReport>(ConflictReport.CreateNoResolveRequiredReport);
-        }
+        protected virtual IObjectProcessor<IConflictReport> GetCannotProcessProcessor() =>
+            new ObjectProcessor<object, IConflictReport>(ConflictReport.CreateNoResolveRequiredReport);
 
         /// <summary>
         ///     Default dummy reaction for model events
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        protected virtual IConflictReport DummyHandleEvent(object obj)
-        {
-            //ModelProject.MessageSystem.SendMessage(new InfoMessage(this, $"{obj} received on {ToString()}"));
-            return new ConflictReport();
-        }
+        //ModelProject.MessageSystem.SendMessage(new InfoMessage(this, $"{obj} received on {ToString()}"));
+        protected virtual IConflictReport DummyHandleEvent(object obj) => new ConflictReport();
     }
 }

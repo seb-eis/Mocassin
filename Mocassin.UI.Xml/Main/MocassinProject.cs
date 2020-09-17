@@ -18,12 +18,12 @@ namespace Mocassin.UI.Xml.Main
     public class MocassinProject : ProjectDataEntity
     {
         private ObservableCollection<ProjectCustomizationTemplate> customizationTemplates;
+        private bool isActiveProject;
         private ObservableCollection<ProjectJobSetTemplate> jobSetTemplates;
         private string projectGuid;
         private ProjectModelData projectModelData;
         private ResourcesData resources;
         private ObservableCollection<SimulationDbBuildTemplate> simulationDbBuildTemplates;
-        private bool isActiveProject;
 
         /// <summary>
         ///     Get or set a Guid for the project
@@ -38,8 +38,7 @@ namespace Mocassin.UI.Xml.Main
         /// <summary>
         ///     Get or set a name for the project (Alias property)
         /// </summary>
-        [XmlIgnore]
-        [JsonIgnore]
+        [XmlIgnore, JsonIgnore]
         public string ProjectName
         {
             get => Name;
@@ -53,9 +52,7 @@ namespace Mocassin.UI.Xml.Main
         /// <summary>
         ///     Get or set the contents of the object by a json string representation
         /// </summary>
-        [XmlIgnore]
-        [JsonIgnore]
-        [Column("ProjectJson")]
+        [XmlIgnore, JsonIgnore, Column("ProjectJson")]
         public virtual string Json
         {
             get => ToJson();
@@ -65,8 +62,7 @@ namespace Mocassin.UI.Xml.Main
         /// <summary>
         ///     Get or set the <see cref="ProjectModelData" /> that defines the reference information
         /// </summary>
-        [XmlElement]
-        [NotMapped]
+        [XmlElement, NotMapped]
         public ProjectModelData ProjectModelData
         {
             get => projectModelData;
@@ -77,8 +73,7 @@ namespace Mocassin.UI.Xml.Main
         ///     Get or set the list of <see cref="ProjectCustomizationTemplate" /> that defines parameters for auto generated
         ///     content
         /// </summary>
-        [XmlArray]
-        [NotMapped]
+        [XmlArray, NotMapped]
         public ObservableCollection<ProjectCustomizationTemplate> CustomizationTemplates
         {
             get => customizationTemplates;
@@ -89,8 +84,7 @@ namespace Mocassin.UI.Xml.Main
         ///     Get or set the list of <see cref="ProjectJobSetTemplate" /> that defines
         ///     <see cref="ISimulationLibrary" /> build instructions
         /// </summary>
-        [XmlArray]
-        [NotMapped]
+        [XmlArray, NotMapped]
         public ObservableCollection<ProjectJobSetTemplate> JobSetTemplates
         {
             get => jobSetTemplates;
@@ -101,8 +95,7 @@ namespace Mocassin.UI.Xml.Main
         ///     Get or set the list of <see cref="SimulationDbBuildTemplate" /> that defines
         ///     a full translation instruction for projects into databases
         /// </summary>
-        [XmlArray]
-        [NotMapped]
+        [XmlArray, NotMapped]
         public ObservableCollection<SimulationDbBuildTemplate> SimulationDbBuildTemplates
         {
             get => simulationDbBuildTemplates;
@@ -112,8 +105,7 @@ namespace Mocassin.UI.Xml.Main
         /// <summary>
         ///     Get or set the <see cref="ResourcesData" /> for the project
         /// </summary>
-        [NotMapped]
-        [XmlIgnore]
+        [NotMapped, XmlIgnore]
         public ResourcesData Resources
         {
             get => resources;
@@ -123,8 +115,7 @@ namespace Mocassin.UI.Xml.Main
         /// <summary>
         ///     Get or set a boolean flag if the project is set to be active
         /// </summary>
-        [NotMapped]
-        [XmlIgnore]
+        [NotMapped, XmlIgnore]
         public bool IsActiveProject
         {
             get => isActiveProject;

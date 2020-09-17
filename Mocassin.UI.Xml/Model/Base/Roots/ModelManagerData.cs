@@ -28,9 +28,6 @@ namespace Mocassin.UI.Xml.Base
         ///     Get the complete sequence of model parameters and model objects
         /// </summary>
         /// <returns></returns>
-        public virtual IEnumerable<object> GetInputSequence()
-        {
-            return GetInputParameters().Cast<object>().Concat(GetInputObjects());
-        }
+        public virtual IEnumerable<object> GetInputSequence() => GetInputParameters().Cast<object>().Concat(GetInputObjects());
     }
 }

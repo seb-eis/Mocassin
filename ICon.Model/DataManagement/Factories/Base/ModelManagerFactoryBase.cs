@@ -38,10 +38,10 @@ namespace Mocassin.Model.DataManagement
         {
             var properties = DataObjectType.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             return properties
-                .Select(property => property.GetCustomAttribute(typeof(ModelParameterAttribute)) as ModelParameterAttribute)
-                .Where(attribute => attribute != null)
-                .Select(attribute => attribute.InterfaceType)
-                .ToList();
+                   .Select(property => property.GetCustomAttribute(typeof(ModelParameterAttribute)) as ModelParameterAttribute)
+                   .Where(attribute => attribute != null)
+                   .Select(attribute => attribute.InterfaceType)
+                   .ToList();
         }
 
         /// <inheritdoc />
@@ -49,11 +49,11 @@ namespace Mocassin.Model.DataManagement
         {
             var properties = DataObjectType.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             return properties
-                .Select(property => property.GetCustomAttribute(typeof(IndexedModelDataAttribute)) as IndexedModelDataAttribute)
-                .Where(attribute => attribute != null)
-                .Where(attribute => !attribute.IsAutoManaged)
-                .Select(attribute => attribute.InterfaceType)
-                .ToList();
+                   .Select(property => property.GetCustomAttribute(typeof(IndexedModelDataAttribute)) as IndexedModelDataAttribute)
+                   .Where(attribute => attribute != null)
+                   .Where(attribute => !attribute.IsAutoManaged)
+                   .Select(attribute => attribute.InterfaceType)
+                   .ToList();
         }
 
         /// <summary>
@@ -64,11 +64,11 @@ namespace Mocassin.Model.DataManagement
         protected Type GetDataObjectType(Type managerType)
         {
             var dataType = GetBaseTypes(managerType)
-                .First(type => type.IsGenericType && type.GetGenericTypeDefinition() == typeof(ModelManager<,,,,,,,>))
-                .GetGenericArguments()
-                .Where(type => GetBaseTypes(type).Any(x => x.IsSubclassOf(typeof(ModelData))))
-                .SingleOrDefault(x =>
-                    GetBaseTypes(x).All(b => !b.IsGenericType || b.GetGenericTypeDefinition() != typeof(ModelDataCache<>)));
+                           .First(type => type.IsGenericType && type.GetGenericTypeDefinition() == typeof(ModelManager<,,,,,,,>))
+                           .GetGenericArguments()
+                           .Where(type => GetBaseTypes(type).Any(x => x.IsSubclassOf(typeof(ModelData))))
+                           .SingleOrDefault(x =>
+                               GetBaseTypes(x).All(b => !b.IsGenericType || b.GetGenericTypeDefinition() != typeof(ModelDataCache<>)));
 
             return dataType ?? throw new InvalidOperationException("Manager type does not inherit from generic model manager base class");
         }

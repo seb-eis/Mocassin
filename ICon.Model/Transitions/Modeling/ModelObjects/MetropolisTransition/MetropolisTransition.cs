@@ -31,10 +31,7 @@ namespace Mocassin.Model.Transitions
         public override string ObjectName => "Metropolis Transition";
 
         /// <inheritdoc />
-        public IEnumerable<IMetropolisRule> GetTransitionRules()
-        {
-            return (TransitionRules ?? new List<MetropolisRule>()).AsEnumerable();
-        }
+        public IEnumerable<IMetropolisRule> GetTransitionRules() => (TransitionRules ?? new List<MetropolisRule>()).AsEnumerable();
 
         /// <inheritdoc />
         public IEnumerable<IMetropolisRule> GetExtendedTransitionRules()
@@ -64,10 +61,7 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <inheritdoc />
-        public bool MappingsContainInversion()
-        {
-            return FirstCellSite == SecondCellSite;
-        }
+        public bool MappingsContainInversion() => FirstCellSite == SecondCellSite;
 
         /// <inheritdoc />
         public override ModelObject PopulateFrom(IModelObject obj)

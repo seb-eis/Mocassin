@@ -31,10 +31,8 @@ namespace Mocassin.Model.Energies
         /// <param name="dataReader"></param>
         /// <returns></returns>
         [ValidationOperation(ValidationType.Object)]
-        protected IValidationReport ValidateStableGroupInfo(IGroupInteraction groupInfo, IDataReader<IEnergyDataPort> dataReader)
-        {
-            return new GroupInteractionValidator(ModelProject, Settings, dataReader).Validate(groupInfo);
-        }
+        protected IValidationReport ValidateStableGroupInfo(IGroupInteraction groupInfo, IDataReader<IEnergyDataPort> dataReader) =>
+            new GroupInteractionValidator(ModelProject, Settings, dataReader).Validate(groupInfo);
 
         /// <summary>
         ///     Validates a new unstable environment info in terms of content and potential conflicts with existing data that is
@@ -44,10 +42,8 @@ namespace Mocassin.Model.Energies
         /// <param name="dataReader"></param>
         /// <returns></returns>
         [ValidationOperation(ValidationType.Object)]
-        protected IValidationReport ValidateUnstableEnvironmentInfo(IUnstableEnvironment envInfo, IDataReader<IEnergyDataPort> dataReader)
-        {
-            return new UnstableEnvironmentValidator(ModelProject, Settings, dataReader).Validate(envInfo);
-        }
+        protected IValidationReport ValidateUnstableEnvironmentInfo(IUnstableEnvironment envInfo, IDataReader<IEnergyDataPort> dataReader) =>
+            new UnstableEnvironmentValidator(ModelProject, Settings, dataReader).Validate(envInfo);
 
         /// <summary>
         ///     Validates the environment info parameter in terms of content and equality to the already existing data that is
@@ -57,9 +53,7 @@ namespace Mocassin.Model.Energies
         /// <param name="dataReader"></param>
         /// <returns></returns>
         [ValidationOperation(ValidationType.Parameter)]
-        protected IValidationReport ValidateEnvironmentInfo(IStableEnvironmentInfo envInfo, IDataReader<IEnergyDataPort> dataReader)
-        {
-            return new StableEnvironmentInfoValidator(ModelProject, Settings, dataReader).Validate(envInfo);
-        }
+        protected IValidationReport ValidateEnvironmentInfo(IStableEnvironmentInfo envInfo, IDataReader<IEnergyDataPort> dataReader) =>
+            new StableEnvironmentInfoValidator(ModelProject, Settings, dataReader).Validate(envInfo);
     }
 }

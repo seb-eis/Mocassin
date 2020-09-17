@@ -20,12 +20,12 @@ namespace Mocassin.Model.Translator.ModelContext
         {
             transitionBuildTask.Wait();
             var cellReferencePositions = ModelProject
-                .Manager<IStructureManager>().DataAccess
-                .Query(port => port.GetCellReferencePositions());
+                                         .Manager<IStructureManager>().DataAccess
+                                         .Query(port => port.GetCellReferencePositions());
 
             return cellReferencePositions
-                .Select(a => CreatePositionTransitionModel(a, modelContext))
-                .ToList();
+                   .Select(a => CreatePositionTransitionModel(a, modelContext))
+                   .ToList();
         }
 
         /// <summary>
@@ -57,8 +57,8 @@ namespace Mocassin.Model.Translator.ModelContext
             IList<IKineticTransitionModel> transitionModels)
         {
             return transitionModels
-                .Where(a => a.GetStartCellReferencePosition() == cellSite)
-                .ToList();
+                   .Where(a => a.GetStartCellReferencePosition() == cellSite)
+                   .ToList();
         }
 
         /// <summary>
@@ -71,8 +71,8 @@ namespace Mocassin.Model.Translator.ModelContext
             IList<IMetropolisTransitionModel> transitionModels)
         {
             return transitionModels
-                .Where(a => a.Transition.FirstCellSite == cellSite)
-                .ToList();
+                   .Where(a => a.Transition.FirstCellSite == cellSite)
+                   .ToList();
         }
     }
 }

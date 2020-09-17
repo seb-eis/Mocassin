@@ -93,10 +93,10 @@ namespace Mocassin.UI.Xml.TransitionModel
         public override IEnumerable<IModelObject> GetInputObjects()
         {
             return StateExchangePairs.Select(x => x.GetInputObject())
-                .Concat(StateExchangeGroups.Select(x => x.GetInputObject()))
-                .Concat(AbstractTransitions.Select(x => x.GetInputObject()))
-                .Concat(KineticTransitions.Select(x => x.GetInputObject()))
-                .Concat(MetropolisTransitions.Select(x => x.GetInputObject()));
+                                     .Concat(StateExchangeGroups.Select(x => x.GetInputObject()))
+                                     .Concat(AbstractTransitions.Select(x => x.GetInputObject()))
+                                     .Concat(KineticTransitions.Select(x => x.GetInputObject()))
+                                     .Concat(MetropolisTransitions.Select(x => x.GetInputObject()));
         }
     }
 }

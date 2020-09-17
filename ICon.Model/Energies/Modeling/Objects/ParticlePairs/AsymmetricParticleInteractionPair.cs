@@ -8,10 +8,8 @@ namespace Mocassin.Model.Energies
     public class AsymmetricParticleInteractionPair : ParticleInteractionPair, IEquatable<AsymmetricParticleInteractionPair>
     {
         /// <inheritdoc />
-        public bool Equals(AsymmetricParticleInteractionPair other)
-        {
-            return other != null && Particle0.Index == other.Particle0.Index && Particle1.Index == other.Particle1.Index;
-        }
+        public bool Equals(AsymmetricParticleInteractionPair other) =>
+            other != null && Particle0.Index == other.Particle0.Index && Particle1.Index == other.Particle1.Index;
 
         /// <inheritdoc />
         public override bool Equals(ParticleInteractionPair other)

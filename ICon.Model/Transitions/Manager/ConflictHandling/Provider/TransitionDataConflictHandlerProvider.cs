@@ -20,10 +20,7 @@ namespace Mocassin.Model.Transitions.ConflictHandling
         /// </summary>
         /// <returns></returns>
         [HandlerFactoryMethod(DataOperationType.NewObject)]
-        protected object CreateObjectAddedHandler()
-        {
-            return new TransitionObjectAddedHandler(ModelProject);
-        }
+        protected object CreateObjectAddedHandler() => new TransitionObjectAddedHandler(ModelProject);
 
         /// <summary>
         ///     Marked factory method to provide a custom model object change handler to the automated handling system of the
@@ -31,10 +28,7 @@ namespace Mocassin.Model.Transitions.ConflictHandling
         /// </summary>
         /// <returns></returns>
         [HandlerFactoryMethod(DataOperationType.ObjectChange)]
-        protected object CreateObjectChangedHandler()
-        {
-            return new TransitionObjectChangedHandler(ModelProject);
-        }
+        protected object CreateObjectChangedHandler() => new TransitionObjectChangedHandler(ModelProject);
 
         /// <summary>
         ///     Marked factory method to provide a custom model object removal handler to the automated handling system of the
@@ -42,9 +36,6 @@ namespace Mocassin.Model.Transitions.ConflictHandling
         /// </summary>
         /// <returns></returns>
         [HandlerFactoryMethod(DataOperationType.ObjectRemoval)]
-        protected object CreateObjectRemovedHandler()
-        {
-            return new TransitionObjectRemovedHandler(ModelProject);
-        }
+        protected object CreateObjectRemovedHandler() => new TransitionObjectRemovedHandler(ModelProject);
     }
 }

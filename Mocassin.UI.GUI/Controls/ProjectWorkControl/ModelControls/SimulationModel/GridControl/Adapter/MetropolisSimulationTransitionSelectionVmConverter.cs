@@ -14,9 +14,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.SimulationMo
     public class MetropolisSimulationTransitionSelectionVmConverter : HostGraphGuestSelectionVmConverter<MetropolisSimulationData>
     {
         /// <inheritdoc />
-        protected override IContentSupplier<MocassinProject> CreateSelectionViewModel(MetropolisSimulationData host)
-        {
-            return new MetropolisSimulationTransitionSelectionViewModel(host);
-        }
+        protected override IContentSupplier<MocassinProject> CreateSelectionViewModel(MetropolisSimulationData host) =>
+            new MetropolisSimulationTransitionSelectionViewModel(host);
     }
 }

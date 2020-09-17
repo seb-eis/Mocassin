@@ -13,45 +13,37 @@ namespace Mocassin.Model.Energies
         /// <summary>
         ///     The environment info parameter that describes the basic restrictions for all regular position environments
         /// </summary>
-        [DataMember]
-        [ModelParameter(typeof(IStableEnvironmentInfo))]
+        [DataMember, ModelParameter(typeof(IStableEnvironmentInfo))]
         public StableEnvironmentInfo StableEnvironmentInfo { get; set; }
 
         /// <summary>
         ///     The list of defined group interactions that can be used in environment descriptions
         /// </summary>
-        [DataMember]
-        [IndexedModelData(typeof(IGroupInteraction))]
+        [DataMember, IndexedModelData(typeof(IGroupInteraction))]
         public List<GroupInteraction> GroupInteractions { get; set; }
 
         /// <summary>
         ///     The list of unstable environment definitions that are defined to contain actual information and are non zero
         /// </summary>
-        [DataMember]
-        [IndexedModelData(typeof(IUnstableEnvironment))]
+        [DataMember, IndexedModelData(typeof(IUnstableEnvironment))]
         public List<UnstableEnvironment> UnstableEnvironments { get; set; }
 
         /// <summary>
         ///     The list of pair information that describe all existing pair interactions for stable positions (Auto-managed, no
         ///     input support)
         /// </summary>
-        [DataMember]
-        [IndexedModelData(typeof(IStablePairInteraction), IsAutoManaged = true)]
+        [DataMember, IndexedModelData(typeof(IStablePairInteraction), IsAutoManaged = true)]
         public List<StablePairInteraction> StablePairInteractions { get; set; }
 
         /// <summary>
         ///     The list of asymmetric pair interactions that describe transition pair interactions for unstable positions
         ///     (Auto-managed, no input support)
         /// </summary>
-        [DataMember]
-        [IndexedModelData(typeof(IUnstablePairInteraction), IsAutoManaged = true)]
+        [DataMember, IndexedModelData(typeof(IUnstablePairInteraction), IsAutoManaged = true)]
         public List<UnstablePairInteraction> UnstablePairInteractions { get; set; }
 
         /// <inheritdoc />
-        public override IEnergyDataPort AsReadOnly()
-        {
-            return new EnergyDataManager(this);
-        }
+        public override IEnergyDataPort AsReadOnly() => new EnergyDataManager(this);
 
         /// <inheritdoc />
         public override void ResetToDefault()

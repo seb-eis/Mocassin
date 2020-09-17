@@ -26,14 +26,14 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         private MmcfeEnergyEvaluator EnergyEvaluator { get; }
 
         /// <summary>
-        ///     Get a boolean flag if the <see cref="DataSource" /> should be disposed if the object is disposed
+        ///     Get a boolean flag if the <see cref="DataContext" /> should be disposed if the object is disposed
         /// </summary>
         private bool IsDataSourceDisposeWithObject { get; }
 
         /// <summary>
-        ///     Get the <see cref="IQueryableDataSource" /> that provides the evaluation data
+        ///     Get the <see cref="IDataContext" /> that provides the evaluation data
         /// </summary>
-        private IQueryableDataSource DataSource { get; }
+        private IDataContext DataContext { get; }
 
         /// <summary>
         ///     Get a <see cref="IReadOnlyList{T}" /> of all <see cref="MmcfeEnergyDataPoint" /> entries. Getting this value will
@@ -43,13 +43,13 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
 
         /// <summary>
         ///     Creates a new <see cref="MmcfeEnergyDataPointEvaluator" /> using the provided
-        ///     <see cref="IQueryableDataSource" /> with an optional flag
+        ///     <see cref="IDataContext" /> with an optional flag
         /// </summary>
-        /// <param name="dataSource"></param>
+        /// <param name="dataContext"></param>
         /// <param name="isDataSourceDisposeWithObject"></param>
-        public MmcfeEnergyDataPointEvaluator(IQueryableDataSource dataSource, bool isDataSourceDisposeWithObject = true)
+        public MmcfeEnergyDataPointEvaluator(IDataContext dataContext, bool isDataSourceDisposeWithObject = true)
         {
-            DataSource = dataSource ?? throw new ArgumentNullException(nameof(dataSource));
+            DataContext = dataContext ?? throw new ArgumentNullException(nameof(dataContext));
             IsDataSourceDisposeWithObject = isDataSourceDisposeWithObject;
             EnergyEvaluator = new MmcfeEnergyEvaluator();
         }
@@ -57,7 +57,7 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         /// <inheritdoc />
         public void Dispose()
         {
-            if (IsDataSourceDisposeWithObject) (DataSource as IDisposable)?.Dispose();
+            if (IsDataSourceDisposeWithObject) (DataContext as IDisposable)?.Dispose();
         }
 
         /// <summary>
@@ -75,10 +75,10 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         /// <returns></returns>
         public IQueryable<MmcfeLogEnergyEntry> SelectEnergyEntries(Expression<Func<MmcfeLogEnergyEntry, bool>> predicate)
         {
-            return DataSource.Set<MmcfeLogEnergyEntry>()
-                .Where(predicate)
-                .Include(x => x.LogEntry)
-                .Include(x => x.LogEntry.MetaEntry);
+            return DataContext.Set<MmcfeLogEnergyEntry>()
+                             .Where(predicate)
+                             .Include(x => x.LogEntry)
+                             .Include(x => x.LogEntry.MetaEntry);
         }
 
         /// <summary>
@@ -98,9 +98,10 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         public IEnumerable<MmcfeEnergyDataPoint> SelectEnergyDataPoints(Expression<Func<MmcfeLogEnergyEntry, bool>> predicate)
         {
             return SelectEnergyEntries(predicate)
-                .AsEnumerable()
-                .GroupBy(x => new {x.LogEntry.MetaEntry.CollectionIndex, x.LogEntry.MetaEntry.ConfigIndex, x.Alpha}, y => new {entry = y, y.LogEntry.MetaEntry})
-                .Select(x => CreateDataPoint(x, y => y.MetaEntry, y => y.entry));
+                   .AsEnumerable()
+                   .GroupBy(x => new {x.LogEntry.MetaEntry.CollectionIndex, x.LogEntry.MetaEntry.ConfigIndex, x.Alpha},
+                       y => new {entry = y, y.LogEntry.MetaEntry})
+                   .Select(x => CreateDataPoint(x, y => y.MetaEntry, y => y.entry));
         }
 
         /// <summary>
@@ -112,9 +113,9 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         {
             temperatureComparer ??= NumericComparer.CreateRangedCombined();
             return DataPoints
-                .GroupBy(x => x.MetaEntry.DopingInfo)
-                .ToDictionary(x => x.Key,
-                    y => (IDictionary<double, MmcfeEnergyDataPoint>) y.ToDictionary(arg => arg.EnergyState.Temperature, arg => arg, temperatureComparer));
+                   .GroupBy(x => x.MetaEntry.DopingInfo)
+                   .ToDictionary(x => x.Key,
+                       y => (IDictionary<double, MmcfeEnergyDataPoint>) y.ToDictionary(arg => arg.EnergyState.Temperature, arg => arg, temperatureComparer));
         }
 
         /// <summary>
@@ -126,10 +127,10 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         {
             temperatureComparer ??= NumericComparer.CreateRangedCombined();
             return DataPoints
-                .GroupBy(x => x.EnergyState.Temperature, temperatureComparer)
-                .OrderByDescending(x => x.Key)
-                .ToDictionary(x => x.Key, y => (IDictionary<string, MmcfeEnergyDataPoint>) y.ToDictionary(arg => arg.MetaEntry.DopingInfo, arg => arg),
-                    temperatureComparer);
+                   .GroupBy(x => x.EnergyState.Temperature, temperatureComparer)
+                   .OrderByDescending(x => x.Key)
+                   .ToDictionary(x => x.Key, y => (IDictionary<string, MmcfeEnergyDataPoint>) y.ToDictionary(arg => arg.MetaEntry.DopingInfo, arg => arg),
+                       temperatureComparer);
         }
 
         /// <summary>

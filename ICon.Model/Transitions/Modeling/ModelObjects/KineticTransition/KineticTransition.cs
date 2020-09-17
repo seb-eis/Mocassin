@@ -42,16 +42,10 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <inheritdoc />
-        public IEnumerable<Fractional3D> GetGeometrySequence()
-        {
-            return (PathGeometry ?? new List<Fractional3D>()).AsEnumerable();
-        }
+        public IEnumerable<Fractional3D> GetGeometrySequence() => (PathGeometry ?? new List<Fractional3D>()).AsEnumerable();
 
         /// <inheritdoc />
-        public IEnumerable<IKineticRule> GetTransitionRules()
-        {
-            return (TransitionRules ?? new List<KineticRule>()).AsEnumerable();
-        }
+        public IEnumerable<IKineticRule> GetTransitionRules() => (TransitionRules ?? new List<KineticRule>()).AsEnumerable();
 
         /// <inheritdoc />
         public override ModelObject PopulateFrom(IModelObject obj)

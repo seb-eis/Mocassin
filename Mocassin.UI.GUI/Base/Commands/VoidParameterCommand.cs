@@ -6,19 +6,13 @@ namespace Mocassin.UI.Base.Commands
     public abstract class VoidParameterCommand : Command
     {
         /// <inheritdoc />
-        public sealed override bool CanExecute(object parameter)
-        {
-            return CanExecute();
-        }
+        public sealed override bool CanExecute(object parameter) => CanExecute();
 
         /// <summary>
         ///     Parameterless can execute check
         /// </summary>
         /// <returns></returns>
-        public virtual bool CanExecute()
-        {
-            return true;
-        }
+        public virtual bool CanExecute() => true;
 
         /// <inheritdoc />
         public sealed override void Execute(object parameter)

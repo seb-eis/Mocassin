@@ -325,13 +325,11 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         /// <returns></returns>
         public Func<Transform3D, MeshGeometryVisual3D> BuildMeshVisualFactory(MeshGeometry3D meshGeometry)
         {
-            MeshGeometryVisual3D CreateInternal(Transform3D transform)
-            {
-                return new MeshGeometryVisual3D
+            MeshGeometryVisual3D CreateInternal(Transform3D transform) =>
+                new MeshGeometryVisual3D
                 {
                     MeshGeometry = meshGeometry, Transform = transform
                 };
-            }
 
             return CreateInternal;
         }
@@ -347,13 +345,11 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         {
             if (freezePoints) point3DCollection.Freeze();
 
-            LinesVisual3D CreateInternal(Transform3D transform)
-            {
-                return new LinesVisual3D
+            LinesVisual3D CreateInternal(Transform3D transform) =>
+                new LinesVisual3D
                 {
                     Points = point3DCollection, Transform = transform
                 };
-            }
 
             return CreateInternal;
         }

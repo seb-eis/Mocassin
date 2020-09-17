@@ -16,9 +16,7 @@ namespace Mocassin.UI.Xml.Base
         /// <summary>
         ///     Get or set the parent navigation property
         /// </summary>
-        [XmlIgnore]
-        [JsonIgnore]
-        [NotMapped]
+        [XmlIgnore, JsonIgnore, NotMapped]
         public TParent Parent
         {
             get => parent;
@@ -28,9 +26,7 @@ namespace Mocassin.UI.Xml.Base
         /// <summary>
         ///     Get or set the contents of the object by a json string representation
         /// </summary>
-        [XmlIgnore]
-        [JsonIgnore]
-        [NotMapped]
+        [XmlIgnore, JsonIgnore, NotMapped]
         public virtual string Json
         {
             get => ToJson();

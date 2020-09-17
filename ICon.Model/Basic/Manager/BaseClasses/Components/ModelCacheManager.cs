@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using Mocassin.Model.ModelProject;
@@ -65,10 +64,7 @@ namespace Mocassin.Model.Basic
         /// <typeparam name="TResult"></typeparam>
         /// <param name="creatorMethod"></param>
         /// <returns></returns>
-        protected TResult GetResultFromCache<TResult>(Func<TResult> creatorMethod)
-        {
-            return (TResult) Cache.FindCacheEntry(creatorMethod).GetValue();
-        }
+        protected TResult GetResultFromCache<TResult>(Func<TResult> creatorMethod) => (TResult) Cache.FindCacheEntry(creatorMethod).GetValue();
 
         /// <inheritdoc />
         public override void ClearCachedData()
@@ -87,16 +83,10 @@ namespace Mocassin.Model.Basic
         }
 
         /// <inheritdoc />
-        public override object GetDataCopy()
-        {
-            throw new NotImplementedException("Data copy of cached data currently not supported");
-        }
+        public override object GetDataCopy() => throw new NotImplementedException("Data copy of cached data currently not supported");
 
         /// <inheritdoc />
-        public override string JsonSerializeData()
-        {
-            throw new NotImplementedException("Json serialization for cached data currently not supported");
-        }
+        public override string JsonSerializeData() => throw new NotImplementedException("Json serialization for cached data currently not supported");
 
         /// <inheritdoc />
         public override void WriteDataContract(Stream stream, DataContractSerializerSettings settings)

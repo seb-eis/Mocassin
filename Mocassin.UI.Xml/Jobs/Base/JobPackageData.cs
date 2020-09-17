@@ -72,10 +72,7 @@ namespace Mocassin.UI.Xml.Jobs
         ///     Get the sequence of defined <see cref="ManualOptimizerData" /> objects pof the package
         /// </summary>
         /// <returns></returns>
-        public virtual IEnumerable<ManualOptimizerData> GetManualOptimizers()
-        {
-            return SelectionOptimizers;
-        }
+        public virtual IEnumerable<ManualOptimizerData> GetManualOptimizers() => SelectionOptimizers;
 
         /// <summary>
         ///     Get the sequence of defined <see cref="JobConfigData" /> objects of the package

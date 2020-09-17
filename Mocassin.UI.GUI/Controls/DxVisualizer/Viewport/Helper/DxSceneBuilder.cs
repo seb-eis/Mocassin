@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using HelixToolkit.Wpf.SharpDX;
 using HelixToolkit.Wpf.SharpDX.Model;
 using HelixToolkit.Wpf.SharpDX.Model.Scene;
-using Mocassin.UI.GUI.Properties;
 using SharpDX;
 
 namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
@@ -151,7 +149,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
             if (geometry == null) throw new ArgumentNullException(nameof(geometry));
             if (material == null) throw new ArgumentNullException(nameof(material));
             if (transforms == null) throw new ArgumentNullException(nameof(transforms));
-            if (transforms.Count == 0) throw new ArgumentException( Properties.Resources.ErrorMsg_Argument_EmptyCollection, nameof(transforms));
+            if (transforms.Count == 0) throw new ArgumentException(Properties.Resources.ErrorMsg_Argument_EmptyCollection, nameof(transforms));
 
             foreach (var matrix in transforms)
             {

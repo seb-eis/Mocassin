@@ -21,12 +21,10 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <inheritdoc />
-        public IList<IKineticSimulationModel> BuildModels(IEnumerable<IKineticSimulation> kineticSimulations)
-        {
-            return kineticSimulations
+        public IList<IKineticSimulationModel> BuildModels(IEnumerable<IKineticSimulation> kineticSimulations) =>
+            kineticSimulations
                 .Select(BuildSimulationModel)
                 .ToList();
-        }
 
         /// <inheritdoc />
         public void BuildLinkingDependentComponents(IEnumerable<IKineticSimulationModel> simulationModels)
@@ -77,9 +75,9 @@ namespace Mocassin.Model.Translator.ModelContext
             {
                 Simulation = simulation,
                 TransitionModels = simulation.Transitions
-                    .Select(a => new KineticTransitionModel {Transition = a})
-                    .Cast<IKineticTransitionModel>()
-                    .ToList()
+                                             .Select(a => new KineticTransitionModel {Transition = a})
+                                             .Cast<IKineticTransitionModel>()
+                                             .ToList()
             };
 
             AddNormalizedElectricFieldVector(simulationModel);
@@ -93,8 +91,8 @@ namespace Mocassin.Model.Translator.ModelContext
         protected void AddAttemptFrequencyInformation(IKineticSimulationModel simulationModel)
         {
             simulationModel.MaxAttemptFrequency = simulationModel.TransitionModels
-                .SelectMany(x => x.RuleModels)
-                .Max(x => x.KineticRule.AttemptFrequency);
+                                                                 .SelectMany(x => x.RuleModels)
+                                                                 .Max(x => x.KineticRule.AttemptFrequency);
         }
 
         /// <summary>
@@ -133,10 +131,10 @@ namespace Mocassin.Model.Translator.ModelContext
         protected int[,] CreateStaticTrackerMappingTable(IList<IStaticMovementTrackerModel> trackerModels)
         {
             var maxPositionId = ModelProject.Manager<IStructureManager>().DataAccess
-                .Query(port => port.GetLinearizedExtendedPositionCount());
+                                            .Query(port => port.GetLinearizedExtendedPositionCount());
 
             var maxParticleId = ModelProject.Manager<IParticleManager>().DataAccess
-                .Query(port => port.ParticleCount);
+                                            .Query(port => port.ParticleCount);
 
             var result = new int[maxPositionId, maxParticleId].Populate(() => -1);
 
@@ -157,12 +155,12 @@ namespace Mocassin.Model.Translator.ModelContext
         protected int[,] CreateGlobalTrackerMappingTable(IList<IGlobalTrackerModel> trackerModels, ISimulationEncodingModel encodingModel)
         {
             var maxTransitionId = 1 + trackerModels
-                .Select(trackerModel => encodingModel.TransitionModelToJumpCollectionId[trackerModel.KineticTransitionModel])
-                .Max();
+                                      .Select(trackerModel => encodingModel.TransitionModelToJumpCollectionId[trackerModel.KineticTransitionModel])
+                                      .Max();
 
             var maxParticleId = ModelProject
-                .Manager<IParticleManager>().DataAccess
-                .Query(port => port.ParticleCount);
+                                .Manager<IParticleManager>().DataAccess
+                                .Query(port => port.ParticleCount);
 
             var result = new int[maxTransitionId, maxParticleId].Populate(() => -1);
 
@@ -285,10 +283,8 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <param name="chargeTransportVector"></param>
         /// <param name="normalizedFieldVector"></param>
         /// <returns></returns>
-        protected double GetNormalizedElectricInfluence(in Cartesian3D chargeTransportVector, in Cartesian3D normalizedFieldVector)
-        {
-            return chargeTransportVector * normalizedFieldVector;
-        }
+        protected double GetNormalizedElectricInfluence(in Cartesian3D chargeTransportVector, in Cartesian3D normalizedFieldVector) =>
+            chargeTransportVector * normalizedFieldVector;
 
         /// <summary>
         ///     Builds and adds the kinetic tracking model for the passed simulation model

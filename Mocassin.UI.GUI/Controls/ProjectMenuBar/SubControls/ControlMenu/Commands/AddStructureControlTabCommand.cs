@@ -17,15 +17,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ControlMenu.Comman
         }
 
         /// <inheritdoc />
-        protected override ContentControl GetDataControl()
-        {
-            return new StructureModelControlView {DataContext = new StructureModelControlViewModel(ProjectControl)};
-        }
+        protected override ContentControl GetDataControl() => new StructureModelControlView {DataContext = new StructureModelControlViewModel(ProjectControl)};
 
         /// <inheritdoc />
-        protected override string GetTabName()
-        {
-            return "Structure Control";
-        }
+        protected override string GetTabName() => "Structure Control";
     }
 }

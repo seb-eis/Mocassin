@@ -25,8 +25,8 @@
         <x:Type TypeName="structures:PositionStability" />
       </ObjectDataProvider.MethodParameters>
     </ObjectDataProvider>
-    <ToolTip x:Key="Local.ToolTip.UnitCellPosition" >
-      <TextBlock Text="{x:Static res:Tooltips.ModelObject_UnitCellPosition}"/>
+    <ToolTip x:Key="Local.ToolTip.UnitCellPosition">
+      <TextBlock Text="{x:Static res:Tooltips.ModelObject_UnitCellPosition}" />
     </ToolTip>
   </UserControl.Resources>
 

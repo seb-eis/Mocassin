@@ -73,10 +73,7 @@ namespace Mocassin.UI.Xml.Jobs
         }
 
         /// <inheritdoc />
-        object IDuplicable.Duplicate()
-        {
-            return Duplicate();
-        }
+        object IDuplicable.Duplicate() => Duplicate();
 
         /// <inheritdoc />
         protected override JobConfiguration GetPreparedInternal(ISimulation baseSimulation)

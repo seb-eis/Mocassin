@@ -34,20 +34,14 @@ namespace Mocassin.Mathematics.Extensions
         /// </summary>
         /// <param name="degree"></param>
         /// <returns></returns>
-        public static double DegreeToRadian(double degree)
-        {
-            return degree / 180.0 * Math.PI;
-        }
+        public static double DegreeToRadian(double degree) => degree / 180.0 * Math.PI;
 
         /// <summary>
         ///     Transforms a radian double value to degree double
         /// </summary>
         /// <param name="radian"></param>
         /// <returns></returns>
-        public static double RadianToDegree(double radian)
-        {
-            return radian / Math.PI * 180.0;
-        }
+        public static double RadianToDegree(double radian) => radian / Math.PI * 180.0;
 
         /// <summary>
         ///     Checks if a value is zero using the provided double comparer (Throws if the tolerance comparer does not support
@@ -82,30 +76,21 @@ namespace Mocassin.Mathematics.Extensions
         /// <param name="value"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        public static int FloorToInt(this double value, IEqualityComparer<double> comparer)
-        {
-            return (int) Floor(value, comparer);
-        }
+        public static int FloorToInt(this double value, IEqualityComparer<double> comparer) => (int) Floor(value, comparer);
 
         /// <summary>
         ///     Rounds the provided double value to the largest integer that compares less or equal to value
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static int FloorToInt(this double value)
-        {
-            return (int) Math.Floor(value);
-        }
+        public static int FloorToInt(this double value) => (int) Math.Floor(value);
 
         /// <summary>
         ///     Rounds the provided double value to the smallest integer that compares greater or equal to value
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static int CeilToInt(this double value)
-        {
-            return (int) Math.Ceiling(value);
-        }
+        public static int CeilToInt(this double value) => (int) Math.Ceiling(value);
 
         /// <summary>
         ///     Rounds the provided double value to an integer
@@ -113,19 +98,14 @@ namespace Mocassin.Mathematics.Extensions
         /// <param name="value"></param>
         /// <param name="midpointRounding"></param>
         /// <returns></returns>
-        public static int RoundToInt(this double value, MidpointRounding midpointRounding = MidpointRounding.ToEven)
-        {
-            return (int) Math.Round(value, midpointRounding);
-        }
+        public static int RoundToInt(this double value, MidpointRounding midpointRounding = MidpointRounding.ToEven) =>
+            (int) Math.Round(value, midpointRounding);
 
         /// <summary>
         ///     Get the volume of a sphere with the provided radius
         /// </summary>
         /// <param name="radius"></param>
         /// <returns></returns>
-        public static double GetSphereVolume(double radius)
-        {
-            return 4.0 / 3.0 * Math.PI * Math.Pow(radius, 3);
-        }
+        public static double GetSphereVolume(double radius) => 4.0 / 3.0 * Math.PI * Math.Pow(radius, 3);
     }
 }

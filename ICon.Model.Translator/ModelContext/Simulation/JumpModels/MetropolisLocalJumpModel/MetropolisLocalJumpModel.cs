@@ -28,12 +28,10 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <inheritdoc />
-        public bool Equals(IMetropolisLocalJumpModel other)
-        {
-            return other != null
-                   && MappingModel.Equals(other.MappingModel)
-                   && RuleModel.Equals(other.RuleModel);
-        }
+        public bool Equals(IMetropolisLocalJumpModel other) =>
+            other != null
+            && MappingModel.Equals(other.MappingModel)
+            && RuleModel.Equals(other.RuleModel);
 
         /// <inheritdoc />
         public MobilityType GetMobilityType(int positionId, int particleId)

@@ -44,10 +44,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Commands
         }
 
         /// <inheritdoc />
-        public override bool CanExecute(Viewport3DX parameter)
-        {
-            return parameter != null && base.CanExecute(parameter);
-        }
+        public override bool CanExecute(Viewport3DX parameter) => parameter != null && base.CanExecute(parameter);
 
         /// <summary>
         ///     Gets the output width and height for the image

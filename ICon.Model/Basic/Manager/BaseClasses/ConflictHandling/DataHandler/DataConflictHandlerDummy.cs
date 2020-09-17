@@ -11,9 +11,6 @@ namespace Mocassin.Model.Basic
         where T1 : ModelData
     {
         /// <inheritdoc />
-        public IConflictReport ResolveConflicts(T2 source, IDataAccessor<T1> dataAccess)
-        {
-            return new ConflictReport();
-        }
+        public IConflictReport ResolveConflicts(T2 source, IDataAccessor<T1> dataAccess) => new ConflictReport();
     }
 }

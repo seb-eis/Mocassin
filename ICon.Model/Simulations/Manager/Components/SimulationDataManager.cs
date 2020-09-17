@@ -15,27 +15,15 @@ namespace Mocassin.Model.Simulations
         }
 
         /// <inheritdoc />
-        public IKineticSimulation GetKineticSimulation(int index)
-        {
-            return Data.KineticSimulations[index];
-        }
+        public IKineticSimulation GetKineticSimulation(int index) => Data.KineticSimulations[index];
 
         /// <inheritdoc />
-        public IReadOnlyList<IKineticSimulation> GetKineticSimulations()
-        {
-            return Data.KineticSimulations;
-        }
+        public IReadOnlyList<IKineticSimulation> GetKineticSimulations() => Data.KineticSimulations;
 
         /// <inheritdoc />
-        public IMetropolisSimulation GetMetropolisSimulation(int index)
-        {
-            return Data.MetropolisSimulations[index];
-        }
+        public IMetropolisSimulation GetMetropolisSimulation(int index) => Data.MetropolisSimulations[index];
 
         /// <inheritdoc />
-        public IReadOnlyList<IMetropolisSimulation> GetMetropolisSimulations()
-        {
-            return Data.MetropolisSimulations;
-        }
+        public IReadOnlyList<IMetropolisSimulation> GetMetropolisSimulations() => Data.MetropolisSimulations;
     }
 }

@@ -40,10 +40,7 @@ namespace Mocassin.Model.Simulations
         ///     Get the type of the manager interface
         /// </summary>
         /// <returns></returns>
-        public override Type GetManagerInterfaceType()
-        {
-            return typeof(ISimulationManager);
-        }
+        public override Type GetManagerInterfaceType() => typeof(ISimulationManager);
 
         /// <summary>
         ///     Get the validation service for simulation manager related parameters and objects

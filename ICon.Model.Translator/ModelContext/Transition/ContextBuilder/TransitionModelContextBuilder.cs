@@ -51,10 +51,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <inheritdoc />
-        protected override ITransitionModelContext GetEmptyDefaultContext()
-        {
-            return new TransitionModelContext();
-        }
+        protected override ITransitionModelContext GetEmptyDefaultContext() => new TransitionModelContext();
 
         /// <inheritdoc />
         protected override void SetNullBuildersToDefault()

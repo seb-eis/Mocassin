@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+
 #pragma warning disable 1591
 
 namespace Mocassin.Model.Translator
@@ -24,6 +25,7 @@ namespace Mocassin.Model.Translator
         [field: MarshalAs(UnmanagedType.I4)]
         public int AbortSampleInterval { get; set; }
 
-        [MarshalAs(UnmanagedType.I4)] private readonly int paddingInt;
+        [MarshalAs(UnmanagedType.I4)]
+        private readonly int paddingInt;
     }
 }

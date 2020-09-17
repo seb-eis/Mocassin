@@ -35,9 +35,6 @@ namespace Mocassin.Model.Particles
         }
 
         /// <inheritdoc />
-        public override Type GetManagerInterfaceType()
-        {
-            return typeof(IParticleManager);
-        }
+        public override Type GetManagerInterfaceType() => typeof(IParticleManager);
     }
 }

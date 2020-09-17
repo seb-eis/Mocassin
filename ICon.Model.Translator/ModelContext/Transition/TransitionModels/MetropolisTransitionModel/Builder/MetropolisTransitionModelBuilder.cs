@@ -96,11 +96,11 @@ namespace Mocassin.Model.Translator.ModelContext
         {
             var transitionManager = ModelProject.Manager<ITransitionManager>();
             var mappings = transitionManager.DataAccess
-                .Query(port => port.GetMetropolisMappingList(transitionModel.Transition.Index));
+                                            .Query(port => port.GetMetropolisMappingList(transitionModel.Transition.Index));
 
             transitionModel.MappingModels = mappings
-                .Select(mapping => CreateMappingModel(mapping, transitionModel))
-                .ToList();
+                                            .Select(mapping => CreateMappingModel(mapping, transitionModel))
+                                            .ToList();
 
             if (!transitionModel.Transition.MappingsContainInversion())
                 return;
@@ -189,8 +189,8 @@ namespace Mocassin.Model.Translator.ModelContext
         protected void CreateAndAddRuleModels(IMetropolisTransitionModel transitionModel)
         {
             var ruleModels = transitionModel.Transition.GetExtendedTransitionRules()
-                .Select(CreateRuleModel)
-                .ToList();
+                                            .Select(CreateRuleModel)
+                                            .ToList();
 
             CreateCodesAndLinkLogicRuleInversions(ruleModels);
 

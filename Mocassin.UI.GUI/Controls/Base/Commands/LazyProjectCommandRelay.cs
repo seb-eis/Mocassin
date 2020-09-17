@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Mocassin.UI.GUI.Base.DataContext;
 
 namespace Mocassin.UI.GUI.Controls.Base.Commands
@@ -17,10 +16,7 @@ namespace Mocassin.UI.GUI.Controls.Base.Commands
         }
 
         /// <inheritdoc />
-        public override bool CanExecute(Type parameter)
-        {
-            return GetCommand(parameter).CanExecute();
-        }
+        public override bool CanExecute(Type parameter) => GetCommand(parameter).CanExecute();
 
         /// <inheritdoc />
         public override void Execute(Type parameter)

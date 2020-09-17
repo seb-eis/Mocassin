@@ -50,22 +50,13 @@ namespace Mocassin.Model.Energies
         }
 
         /// <inheritdoc />
-        public IEnumerable<IInteractionFilter> GetInteractionFilters()
-        {
-            return (InteractionFilters ?? new List<UnstableInteractionFilter>()).AsEnumerable();
-        }
+        public IEnumerable<IInteractionFilter> GetInteractionFilters() => (InteractionFilters ?? new List<UnstableInteractionFilter>()).AsEnumerable();
 
         /// <inheritdoc />
-        public IEnumerable<IUnstablePairInteraction> GetPairInteractions()
-        {
-            return (PairInteractions ?? new List<IUnstablePairInteraction>()).AsEnumerable();
-        }
+        public IEnumerable<IUnstablePairInteraction> GetPairInteractions() => (PairInteractions ?? new List<IUnstablePairInteraction>()).AsEnumerable();
 
         /// <inheritdoc />
-        public IEnumerable<IGroupInteraction> GetGroupInteractions()
-        {
-            return (GroupInteractions ?? new List<IGroupInteraction>()).AsEnumerable();
-        }
+        public IEnumerable<IGroupInteraction> GetGroupInteractions() => (GroupInteractions ?? new List<IGroupInteraction>()).AsEnumerable();
 
         /// <inheritdoc />
         public override ModelObject PopulateFrom(IModelObject obj)

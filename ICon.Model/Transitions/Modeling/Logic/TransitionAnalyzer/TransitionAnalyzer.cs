@@ -65,9 +65,9 @@ namespace Mocassin.Model.Transitions
             ISpaceGroupService spaceGroupService)
         {
             return geometry
-                .SelectAsMovingPairs((first, second) => Fractional3D.CalculateMiddle(second, first))
-                .Select(spaceGroupService.GetUnitCellP1PositionExtension)
-                .ToList();
+                   .SelectAllConsecutivePairs((first, second) => Fractional3D.CalculateMiddle(second, first))
+                   .Select(spaceGroupService.GetUnitCellP1PositionExtension)
+                   .ToList();
         }
 
         /// <summary>
@@ -99,9 +99,9 @@ namespace Mocassin.Model.Transitions
                 return false;
 
             return lhs.GetStartStateOccupation().Select(a => a.Index)
-                       .SequenceEqual(rhs.GetStartStateOccupation().Reverse().Select(a => a.Index))
+                      .SequenceEqual(rhs.GetStartStateOccupation().Reverse().Select(a => a.Index))
                    && lhs.GetFinalStateOccupation().Select(a => a.Index)
-                       .SequenceEqual(rhs.GetFinalStateOccupation().Reverse().Select(a => a.Index));
+                         .SequenceEqual(rhs.GetFinalStateOccupation().Reverse().Select(a => a.Index));
         }
 
         /// <summary>
@@ -117,9 +117,9 @@ namespace Mocassin.Model.Transitions
                 return false;
 
             return lhs.GetStartStateOccupation().Select(a => a.Index)
-                       .SequenceEqual(rhs.GetFinalStateOccupation().Reverse().Select(a => a.Index))
+                      .SequenceEqual(rhs.GetFinalStateOccupation().Reverse().Select(a => a.Index))
                    && lhs.GetFinalStateOccupation().Select(a => a.Index)
-                       .SequenceEqual(rhs.GetStartStateOccupation().Reverse().Select(a => a.Index));
+                         .SequenceEqual(rhs.GetStartStateOccupation().Reverse().Select(a => a.Index));
         }
 
         /// <summary>
@@ -128,10 +128,8 @@ namespace Mocassin.Model.Transitions
         /// </summary>
         /// <param name="abstractTransition"></param>
         /// <returns></returns>
-        public bool IsSymmetricTransition(IAbstractTransition abstractTransition)
-        {
-            return abstractTransition.GetStateExchangeGroups().SequenceEqual(abstractTransition.GetStateExchangeGroups().Reverse());
-        }
+        public bool IsSymmetricTransition(IAbstractTransition abstractTransition) =>
+            abstractTransition.GetStateExchangeGroups().SequenceEqual(abstractTransition.GetStateExchangeGroups().Reverse());
 
         /// <summary>
         ///     Calculates the abstract transitions charge transport chain that assigns each state position a charge change value
@@ -167,9 +165,6 @@ namespace Mocassin.Model.Transitions
         /// </summary>
         /// <param name="statePair"></param>
         /// <returns></returns>
-        public double GetStatePairChargeTransport(IStateExchangePair statePair)
-        {
-            return statePair.DonorParticle.Charge - statePair.AcceptorParticle.Charge;
-        }
+        public double GetStatePairChargeTransport(IStateExchangePair statePair) => statePair.DonorParticle.Charge - statePair.AcceptorParticle.Charge;
     }
 }

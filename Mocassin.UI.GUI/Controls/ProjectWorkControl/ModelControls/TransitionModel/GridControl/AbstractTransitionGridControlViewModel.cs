@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Mocassin.UI.GUI.Base.ViewModels.Collections;
 using Mocassin.UI.GUI.Controls.Base.Interfaces;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
@@ -18,7 +17,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
         public MocassinProject ContentSource { get; protected set; }
 
         /// <summary>
-        ///     Get the <see cref="ObservableCollectionViewModel{T}"/> of selectable <see cref="TransitionMechanismViewModel"/> instances
+        ///     Get the <see cref="ObservableCollectionViewModel{T}" /> of selectable <see cref="TransitionMechanismViewModel" />
+        ///     instances
         /// </summary>
         public ObservableCollectionViewModel<TransitionMechanismViewModel> SelectableTransitionMechanisms { get; }
 
@@ -37,7 +37,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
         }
 
         /// <summary>
-        ///     Get a <see cref="IEnumerable{T}"/> of all supported <see cref="TransitionMechanismViewModel"/> instances
+        ///     Get a <see cref="IEnumerable{T}" /> of all supported <see cref="TransitionMechanismViewModel" /> instances
         /// </summary>
         /// <returns></returns>
         private IEnumerable<TransitionMechanismViewModel> GetSupportedMechanismViewModels()
@@ -74,7 +74,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
             {
                 Name = "5-Site 2-Species-Vehicle",
                 ConnectionPattern = "Dynamic Static Static Dynamic",
-                Description = "A vehicle of two 3-Position migration events where the transition state is described/modeled by a single shared transition site.",
+                Description =
+                    "A vehicle of two 3-Position migration events where the transition state is described/modeled by a single shared transition site.",
                 PositionChainDescription = "[Stable][Stable][Unstable][Stable][Stable]",
                 HasAssociationFlagSupport = true
             };

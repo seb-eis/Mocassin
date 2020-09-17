@@ -40,7 +40,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.
         public IEnumerable<ModelObjectReference<CellSite>> EnumerateReferencePositionOptions()
         {
             return ContentSource?.ProjectModelData?.StructureModelData?.CellReferencePositions
-                ?.Select(x => new ModelObjectReference<CellSite>(x));
+                                ?.Select(x => new ModelObjectReference<CellSite>(x));
         }
     }
 }

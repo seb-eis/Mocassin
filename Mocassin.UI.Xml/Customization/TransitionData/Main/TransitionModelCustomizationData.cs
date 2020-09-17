@@ -22,8 +22,7 @@ namespace Mocassin.UI.Xml.Customization
         /// <summary>
         ///     Get or set the list of <see cref="KineticRuleSetData" /> objects
         /// </summary>
-        [XmlArray("KineticTransitionSets")]
-        [XmlArrayItem("KineticTransitionSet")]
+        [XmlArray("KineticTransitionSets"), XmlArrayItem("KineticTransitionSet")]
         public ObservableCollection<KineticRuleSetData> KineticTransitionParameterSets
         {
             get => kineticTransitionParameterSets;
@@ -42,10 +41,7 @@ namespace Mocassin.UI.Xml.Customization
         }
 
         /// <inheritdoc />
-        object IDuplicable.Duplicate()
-        {
-            return Duplicate();
-        }
+        object IDuplicable.Duplicate() => Duplicate();
 
         /// <inheritdoc />
         public override void PushToModel(IModelProject modelProject)
@@ -75,9 +71,9 @@ namespace Mocassin.UI.Xml.Customization
             var obj = new TransitionModelCustomizationData
             {
                 KineticTransitionParameterSets = ruleSetterProvider
-                    .GetRuleSetters()
-                    .Select(x => KineticRuleSetData.Create(x, parent))
-                    .ToObservableCollection()
+                                                 .GetRuleSetters()
+                                                 .Select(x => KineticRuleSetData.Create(x, parent))
+                                                 .ToObservableCollection()
             };
 
             return obj;

@@ -69,31 +69,27 @@ namespace Mocassin.Model.Translator
         /// <summary>
         ///     The 2D jump count table that assigns each position id/particle id combination the number of possible jumps
         /// </summary>
-        [NotMapped]
-        [OwnedBlobProperty(nameof(JumpCountTableBinary))]
+        [NotMapped, OwnedBlobProperty(nameof(JumpCountTableBinary))]
         public JumpCountTableEntity JumpCountTable { get; set; }
 
         /// <summary>
         ///     The 3D jump assign table that assigns each position id/particle id combination its set of affiliated jump direction
         ///     ids
         /// </summary>
-        [NotMapped]
-        [OwnedBlobProperty(nameof(JumpAssignTableBinary))]
+        [NotMapped, OwnedBlobProperty(nameof(JumpAssignTableBinary))]
         public JumpAssignTableEntity JumpAssignTable { get; set; }
 
         /// <summary>
         ///     The 2D static tracker mapping table that assign each position id/particle id combination a static tracker index
         /// </summary>
-        [NotMapped]
-        [OwnedBlobProperty(nameof(StaticTrackerAssignTableBinary))]
+        [NotMapped, OwnedBlobProperty(nameof(StaticTrackerAssignTableBinary))]
         public TrackerAssignTableEntity StaticTrackerAssignTable { get; set; }
 
         /// <summary>
         ///     The 2D global tracker mapping table that assigns each jump collection id/particle id combination a global tracker
         ///     index
         /// </summary>
-        [NotMapped]
-        [OwnedBlobProperty(nameof(GlobalTrackerAssignTableBinary))]
+        [NotMapped, OwnedBlobProperty(nameof(GlobalTrackerAssignTableBinary))]
         public TrackerAssignTableEntity GlobalTrackerAssignTable { get; set; }
     }
 }

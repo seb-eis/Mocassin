@@ -105,20 +105,20 @@ namespace Mocassin.Model.Basic
         {
             const BindingFlags flags = BindingFlags.Public | BindingFlags.Instance;
 
-            var creator = new DelegateCreator();
-            var processorCreator = new ObjectProcessorCreator();
+            var creator = new DelegateBuilder();
+            var processorCreator = new ObjectProcessorBuilder();
             var delegates = propertyInfos
-                .Select(property => property.GetValue(this))
-                .Select(value =>
-                    creator.CreateWhere(value, info => info.GetCustomAttribute(typeof(EventPortConnectorAttribute)) != null)
-                        .SingleOrDefault());
+                            .Select(property => property.GetValue(this))
+                            .Select(value =>
+                                creator.CreateWhere(value, info => info.GetCustomAttribute(typeof(EventPortConnectorAttribute)) != null)
+                                       .SingleOrDefault());
 
             var bundleSubscriber = Activator.CreateInstance(typeof(EventPortSubscriber<>).MakeGenericType(eventSourceType), delegates);
 
             return processorCreator
-                .CreateProcessors<IDisposable>(bundleSubscriber,
-                    info => info.GetCustomAttribute(typeof(EventPortConnectorAttribute)) != null, flags)
-                .SingleOrDefault();
+                   .CreateProcessors<IDisposable>(bundleSubscriber,
+                       info => info.GetCustomAttribute(typeof(EventPortConnectorAttribute)) != null, flags)
+                   .SingleOrDefault();
         }
 
         /// <summary>
@@ -181,7 +181,7 @@ namespace Mocassin.Model.Basic
         {
             const BindingFlags flags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic;
             foreach (var propertyInfo in GetType().GetProperties(flags)
-                .Where(info => info.GetCustomAttribute(typeof(UpdateHandlerAttribute)) != null))
+                                                  .Where(info => info.GetCustomAttribute(typeof(UpdateHandlerAttribute)) != null))
             {
                 var handler = Activator.CreateInstance(propertyInfo.PropertyType, ModelProject, DataAccessorSource, EventManager);
                 propertyInfo.SetValue(this, handler);

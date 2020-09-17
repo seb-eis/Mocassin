@@ -46,9 +46,6 @@ namespace Mocassin.Model.DataManagement
         ///     Creates an <see cref="IModelProject" /> interface that provides the default set of components and default settings
         /// </summary>
         /// <returns></returns>
-        public static IModelProject CreateDefault()
-        {
-            return Create(ProjectSettings.CreateDefault());
-        }
+        public static IModelProject CreateDefault() => Create(ProjectSettings.CreateDefault());
     }
 }

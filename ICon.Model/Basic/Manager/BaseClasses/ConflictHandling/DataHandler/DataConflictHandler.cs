@@ -38,10 +38,7 @@ namespace Mocassin.Model.Basic
         }
 
         /// <inheritdoc />
-        public IConflictReport ResolveConflicts(T2 source, IDataAccessor<T1> dataAccess)
-        {
-            return ResolverPipeline.Process(source, dataAccess);
-        }
+        public IConflictReport ResolveConflicts(T2 source, IDataAccessor<T1> dataAccess) => ResolverPipeline.Process(source, dataAccess);
 
         /// <summary>
         ///     Searches the data conflict resolver for all marked methods and creates the resolver processors for the pipeline
@@ -49,12 +46,9 @@ namespace Mocassin.Model.Basic
         /// <returns></returns>
         protected IEnumerable<IObjectProcessor<IConflictReport>> CreateResolverProcessors()
         {
-            bool DelegateSearchMethod(MethodInfo methodInfo)
-            {
-                return methodInfo.GetCustomAttribute(typeof(ConflictHandlingMethodAttribute)) != null;
-            }
+            bool DelegateSearchMethod(MethodInfo methodInfo) => methodInfo.GetCustomAttribute(typeof(ConflictHandlingMethodAttribute)) != null;
 
-            return new ObjectProcessorCreator().CreateProcessors<IConflictReport>(this, DelegateSearchMethod,
+            return new ObjectProcessorBuilder().CreateProcessors<IConflictReport>(this, DelegateSearchMethod,
                 BindingFlags.Instance | BindingFlags.NonPublic);
         }
 

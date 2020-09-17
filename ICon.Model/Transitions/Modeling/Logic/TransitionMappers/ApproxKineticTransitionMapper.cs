@@ -122,7 +122,7 @@ namespace Mocassin.Model.Transitions
         protected IEnumerable<IList<LatticePoint<int>>> GetUniquePaths(IEnumerable<IList<LatticePoint<int>>> geometries, NumericComparer comparer)
         {
             var sequenceComparer = MakeCellEntrySequenceComparer(new VectorComparer3D<Fractional3D>(comparer), Comparer<int>.Default);
-            foreach (var item in ContainerFactory.CreateSetList(sequenceComparer, geometries))
+            foreach (var item in SetListFactory.CreateSetList(sequenceComparer, geometries))
                 yield return item.ToList();
         }
 

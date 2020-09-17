@@ -38,10 +38,8 @@ namespace Mocassin.Model.Energies
         }
 
         /// <inheritdoc />
-        public IReadOnlyDictionary<ParticleInteractionPair, double> GetEnergyDictionary()
-        {
-            return EnergyDictionary ?? new Dictionary<ParticleInteractionPair, double>();
-        }
+        public IReadOnlyDictionary<ParticleInteractionPair, double> GetEnergyDictionary() =>
+            EnergyDictionary ?? new Dictionary<ParticleInteractionPair, double>();
 
         /// <inheritdoc />
         public override IEnumerable<PairEnergyEntry> GetEnergyEntries()

@@ -53,11 +53,9 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <inheritdoc />
-        public bool Equals(IKineticLocalJumpModel other)
-        {
-            return other != null
-                   && MappingModel.Equals(other.MappingModel)
-                   && RuleModel.Equals(other.RuleModel);
-        }
+        public bool Equals(IKineticLocalJumpModel other) =>
+            other != null
+            && MappingModel.Equals(other.MappingModel)
+            && RuleModel.Equals(other.RuleModel);
     }
 }

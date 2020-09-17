@@ -48,10 +48,7 @@ namespace Mocassin.UI.GUI.Controls.Base.Commands
         ///     Builds the window description
         /// </summary>
         /// <returns></returns>
-        protected virtual string BuildWindowDescription()
-        {
-            return BaseWindowDescription + " " + ProjectControl.WindowDescription;
-        }
+        protected virtual string BuildWindowDescription() => BaseWindowDescription + " " + ProjectControl.WindowDescription;
 
         /// <summary>
         ///     Attaches to the <see cref="IProjectAppControl" /> property change events and relays the window description

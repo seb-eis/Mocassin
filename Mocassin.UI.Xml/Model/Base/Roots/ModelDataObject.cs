@@ -51,11 +51,9 @@ namespace Mocassin.UI.Xml.Base
         protected abstract ModelObject GetModelObjectInternal();
 
         /// <inheritdoc />
-        public override string ToString()
-        {
-            return string.IsNullOrWhiteSpace(Name)
+        public override string ToString() =>
+            string.IsNullOrWhiteSpace(Name)
                 ? $"[{Key}]"
                 : Name;
-        }
     }
 }

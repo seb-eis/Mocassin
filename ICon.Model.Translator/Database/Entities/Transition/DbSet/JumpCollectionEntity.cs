@@ -28,8 +28,7 @@ namespace Mocassin.Model.Translator
         /// <summary>
         ///     The list of existing jump roles for the collection
         /// </summary>
-        [NotMapped]
-        [OwnedBlobProperty(nameof(JumpRuleListBinary))]
+        [NotMapped, OwnedBlobProperty(nameof(JumpRuleListBinary))]
         public JumpRuleListEntity JumpRuleList { get; set; }
 
         /// <summary>

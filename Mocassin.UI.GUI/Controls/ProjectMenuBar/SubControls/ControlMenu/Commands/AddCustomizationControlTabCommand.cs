@@ -18,9 +18,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ControlMenu.Comman
         }
 
         /// <inheritdoc />
-        protected override ContentControl GetDataControl()
-        {
-            return new ModelCustomizationControlView {DataContext = new ModelCustomizationControlViewModel(ProjectControl)};
-        }
+        protected override ContentControl GetDataControl() => new ModelCustomizationControlView
+            {DataContext = new ModelCustomizationControlViewModel(ProjectControl)};
     }
 }

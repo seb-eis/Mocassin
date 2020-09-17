@@ -72,9 +72,9 @@ namespace Mocassin.UI.Xml.Helper.Migration
         private void Migrate(ICollection<KineticRuleSetData> source, ICollection<KineticRuleSetData> target)
         {
             source.Select(x => (SourceItem: x, TargetItem: target.FirstOrDefault(y => AreModelCompatible(x, y))))
-                .Where(pair => pair.TargetItem != null)
-                .Action(pair => Migrate(pair.SourceItem, pair.TargetItem))
-                .Load();
+                  .Where(pair => pair.TargetItem != null)
+                  .Action(pair => Migrate(pair.SourceItem, pair.TargetItem))
+                  .Load();
         }
 
         /// <summary>
@@ -87,9 +87,9 @@ namespace Mocassin.UI.Xml.Helper.Migration
             var migrationReporter = GetMigrationReporter(source, target);
             MigrateName(source, target, migrationReporter);
             source.KineticRules.Select(x => (SourceItem: x, TargetItem: FindMigrationTarget(x, target.KineticRules)))
-                .Where(pair => pair.TargetItem != null)
-                .Action(pair => Migrate(pair.SourceItem, pair.TargetItem, migrationReporter))
-                .Load();
+                  .Where(pair => pair.TargetItem != null)
+                  .Action(pair => Migrate(pair.SourceItem, pair.TargetItem, migrationReporter))
+                  .Load();
         }
 
         /// <summary>
@@ -100,9 +100,9 @@ namespace Mocassin.UI.Xml.Helper.Migration
         private void Migrate(ICollection<PairEnergySetData> source, ICollection<PairEnergySetData> target)
         {
             source.Select(x => (SourceItem: x, TargetItem: target.FirstOrDefault(y => AreModelCompatible(x, y))))
-                .Where(pair => pair.TargetItem != null)
-                .Action(pair => Migrate(pair.SourceItem, pair.TargetItem))
-                .Load();
+                  .Where(pair => pair.TargetItem != null)
+                  .Action(pair => Migrate(pair.SourceItem, pair.TargetItem))
+                  .Load();
         }
 
         /// <summary>
@@ -115,9 +115,9 @@ namespace Mocassin.UI.Xml.Helper.Migration
             var migrationReporter = GetMigrationReporter(source, target);
             MigrateName(source, target, migrationReporter);
             source.PairEnergyEntries.Select(x => (SourceItem: x, TargetItem: FindMigrationTarget(x, target.PairEnergyEntries)))
-                .Where(pair => pair.TargetItem != null)
-                .Action(pair => Migrate(pair.SourceItem, pair.TargetItem, migrationReporter))
-                .Load();
+                  .Where(pair => pair.TargetItem != null)
+                  .Action(pair => Migrate(pair.SourceItem, pair.TargetItem, migrationReporter))
+                  .Load();
         }
 
         /// <summary>
@@ -128,9 +128,9 @@ namespace Mocassin.UI.Xml.Helper.Migration
         private void Migrate(ICollection<GroupEnergySetData> source, ICollection<GroupEnergySetData> target)
         {
             source.Select(x => (SourceItem: x, TargetItem: target.FirstOrDefault(y => AreModelCompatible(x, y))))
-                .Where(pair => pair.TargetItem != null)
-                .Action(pair => Migrate(pair.SourceItem, pair.TargetItem))
-                .Load();
+                  .Where(pair => pair.TargetItem != null)
+                  .Action(pair => Migrate(pair.SourceItem, pair.TargetItem))
+                  .Load();
         }
 
 
@@ -144,9 +144,9 @@ namespace Mocassin.UI.Xml.Helper.Migration
             var migrationReporter = GetMigrationReporter(source, target);
             MigrateName(source, target, migrationReporter);
             source.EnergyEntries.Select(x => (SourceItem: x, TargetItem: FindMigrationTarget(x, target.EnergyEntries)))
-                .Where(pair => pair.TargetItem != null)
-                .Action(pair => Migrate(pair.SourceItem, pair.TargetItem, migrationReporter))
-                .Load();
+                  .Where(pair => pair.TargetItem != null)
+                  .Action(pair => Migrate(pair.SourceItem, pair.TargetItem, migrationReporter))
+                  .Load();
         }
 
         /// <summary>
@@ -278,9 +278,6 @@ namespace Mocassin.UI.Xml.Helper.Migration
         /// <param name="first"></param>
         /// <param name="second"></param>
         /// <returns></returns>
-        private bool AreModelCompatible(KineticRuleSetData first, KineticRuleSetData second)
-        {
-            return first.Transition.Equals(second.Transition);
-        }
+        private bool AreModelCompatible(KineticRuleSetData first, KineticRuleSetData second) => first.Transition.Equals(second.Transition);
     }
 }

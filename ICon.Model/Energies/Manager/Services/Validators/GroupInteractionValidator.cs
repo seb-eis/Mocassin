@@ -89,8 +89,8 @@ namespace Mocassin.Model.Energies.Validators
         {
             var comparer = new VectorComparer3D<Fractional3D>(ModelProject.GeometryNumeric.RangeComparer);
             var currentData = DataReader.Access.GetGroupInteractions()
-                .Where(value => !value.IsDeprecated && value.CenterCellSite == group.CenterCellSite)
-                .Select(value => (value, value.GetSurroundingGeometry().ToArray()));
+                                        .Where(value => !value.IsDeprecated && value.CenterCellSite == group.CenterCellSite)
+                                        .Select(value => (value, value.GetSurroundingGeometry().ToArray()));
 
             foreach (var (otherGroup, geometry) in currentData)
             {
@@ -158,9 +158,9 @@ namespace Mocassin.Model.Energies.Validators
             var start = group.CenterCellSite.AsPosition().Vector;
 
             return group.GetSurroundingGeometry()
-                .Select(vector => transformer.ToCartesian(vector - start).GetLength())
-                .Concat(new[] {0.0})
-                .Max();
+                        .Select(vector => transformer.ToCartesian(vector - start).GetLength())
+                        .Concat(new[] {0.0})
+                        .Max();
         }
 
         /// <summary>
@@ -197,17 +197,17 @@ namespace Mocassin.Model.Energies.Validators
             {
                 case PositionStability.Stable:
                     var stableFilters = DataReader.Access
-                        .GetStableEnvironmentInfo()
-                        .GetInteractionFilters()
-                        .ToList();
+                                                  .GetStableEnvironmentInfo()
+                                                  .GetInteractionFilters()
+                                                  .ToList();
 
                     return analyzer.CheckGroupGeometryValidity(group, stableFilters);
 
                 case PositionStability.Unstable:
                     var unstableFilters = DataReader.Access
-                        .GetUnstableEnvironment(group.CenterCellSite)
-                        .GetInteractionFilters()
-                        .ToList();
+                                                    .GetUnstableEnvironment(group.CenterCellSite)
+                                                    .GetInteractionFilters()
+                                                    .ToList();
 
                     return analyzer.CheckGroupGeometryValidity(group, unstableFilters);
 
@@ -228,7 +228,7 @@ namespace Mocassin.Model.Energies.Validators
             {
                 PositionStability.Stable => (object) DataReader.Access.GetStableEnvironmentInfo(),
                 PositionStability.Unstable => DataReader.Access.GetUnstableEnvironments()
-                    .SingleOrDefault(value => value.CellSite == group.CenterCellSite),
+                                                        .SingleOrDefault(value => value.CellSite == group.CenterCellSite),
                 _ => null
             };
         }

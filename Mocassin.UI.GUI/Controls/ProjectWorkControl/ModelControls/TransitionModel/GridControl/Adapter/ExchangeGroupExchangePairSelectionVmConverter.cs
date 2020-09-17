@@ -12,9 +12,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
     public class ExchangeGroupExchangePairSelectionVmConverter : HostGraphGuestSelectionVmConverter<StateExchangeGroupData>
     {
         /// <inheritdoc />
-        protected override IContentSupplier<MocassinProject> CreateSelectionViewModel(StateExchangeGroupData host)
-        {
-            return new ExchangeGroupExchangePairSelectionViewModel(host);
-        }
+        protected override IContentSupplier<MocassinProject> CreateSelectionViewModel(StateExchangeGroupData host) =>
+            new ExchangeGroupExchangePairSelectionViewModel(host);
     }
 }

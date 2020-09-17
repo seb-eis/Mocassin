@@ -28,22 +28,19 @@ namespace Mocassin.Model.Translator
         /// <summary>
         ///     The jump sequence that describes the jump geometry relative to the origin point
         /// </summary>
-        [NotMapped]
-        [OwnedBlobProperty(nameof(JumpSequenceBinary))]
+        [NotMapped, OwnedBlobProperty(nameof(JumpSequenceBinary))]
         public JumpSequenceEntity JumpSequence { get; set; }
 
         /// <summary>
         ///     The movement sequence that describes the data for the movement tracking system
         /// </summary>
-        [NotMapped]
-        [OwnedBlobProperty(nameof(MovementSequenceBinary))]
+        [NotMapped, OwnedBlobProperty(nameof(MovementSequenceBinary))]
         public MoveSequenceEntity MovementSequence { get; set; }
 
         /// <summary>
         ///     The jump collection context key
         /// </summary>
-        [Column("JumpCollectionId")]
-        [ForeignKey(nameof(JumpCollection))]
+        [Column("JumpCollectionId"), ForeignKey(nameof(JumpCollection))]
         public int JumpCollectionId { get; set; }
 
         /// <summary>

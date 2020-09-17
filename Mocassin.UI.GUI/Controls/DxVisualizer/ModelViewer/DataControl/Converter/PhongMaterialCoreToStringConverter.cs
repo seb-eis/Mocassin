@@ -36,15 +36,11 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.DataControl.Converte
         }
 
         /// <inheritdoc />
-        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return (value as PhongMaterialCore)?.Name ?? nameof(PhongMaterials.DefaultVRML);
-        }
+        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture) =>
+            (value as PhongMaterialCore)?.Name ?? nameof(PhongMaterials.DefaultVRML);
 
         /// <inheritdoc />
-        public override object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return MaterialCatalog[value as string ?? nameof(PhongMaterials.DefaultVRML)];
-        }
+        public override object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
+            MaterialCatalog[value as string ?? nameof(PhongMaterials.DefaultVRML)];
     }
 }

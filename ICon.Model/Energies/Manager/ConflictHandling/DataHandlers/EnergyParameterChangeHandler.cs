@@ -22,9 +22,7 @@ namespace Mocassin.Model.Energies.ConflictHandling
         /// <param name="dataAccess"></param>
         /// <returns></returns>
         [ConflictHandlingMethod]
-        protected IConflictReport HandleParameterChange(StableEnvironmentInfo info, IDataAccessor<EnergyModelData> dataAccess)
-        {
-            return new StableEnvironmentInfoChangeHandler(dataAccess, ModelProject).HandleConflicts(info);
-        }
+        protected IConflictReport HandleParameterChange(StableEnvironmentInfo info, IDataAccessor<EnergyModelData> dataAccess) =>
+            new StableEnvironmentInfoChangeHandler(dataAccess, ModelProject).HandleConflicts(info);
     }
 }

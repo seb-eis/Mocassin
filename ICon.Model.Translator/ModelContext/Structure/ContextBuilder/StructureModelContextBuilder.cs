@@ -45,10 +45,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <inheritdoc />
-        protected override IStructureModelContext GetEmptyDefaultContext()
-        {
-            return new StructureModelContext();
-        }
+        protected override IStructureModelContext GetEmptyDefaultContext() => new StructureModelContext();
 
         /// <inheritdoc />
         protected override void SetNullBuildersToDefault()

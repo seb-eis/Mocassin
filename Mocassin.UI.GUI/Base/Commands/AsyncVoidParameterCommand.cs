@@ -8,19 +8,13 @@ namespace Mocassin.UI.Base.Commands
     public abstract class AsyncVoidParameterCommand : AsyncCommand
     {
         /// <inheritdoc />
-        protected sealed override bool CanExecuteInternal(object parameter)
-        {
-            return CanExecuteInternal();
-        }
+        protected sealed override bool CanExecuteInternal(object parameter) => CanExecuteInternal();
 
         /// <summary>
         ///     Parameterless can execute check
         /// </summary>
         /// <returns></returns>
-        public virtual bool CanExecuteInternal()
-        {
-            return true;
-        }
+        public virtual bool CanExecuteInternal() => true;
 
         /// <inheritdoc />
         public sealed override async Task ExecuteAsync(object parameter)

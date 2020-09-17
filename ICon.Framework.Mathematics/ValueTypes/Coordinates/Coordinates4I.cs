@@ -59,9 +59,6 @@ namespace Mocassin.Mathematics.ValueTypes
         }
 
         /// <inheritdoc />
-        public bool Equals(Coordinates4I other)
-        {
-            return CompareTo(other) == 0;
-        }
+        public bool Equals(Coordinates4I other) => CompareTo(other) == 0;
     }
 }

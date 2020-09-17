@@ -9,7 +9,7 @@ using Mocassin.UI.Xml.TransitionModel;
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.SimulationModel.GridControl.Adapter
 {
     /// <summary>
-    ///     The <see cref="HostGraphModelObjectSelectionViewModel{TModelObject,TObjectGraph}" /> for the relation of
+    ///     The <see cref="HostGraphModelObjectSelectionViewModel{TModelObject,TDataObject}" /> for the relation of
     ///     <see cref="KineticTransitionData" /> to <see cref="KineticSimulationData" /> host instances
     /// </summary>
     public sealed class KineticSimulationTransitionSelectionViewModel :
@@ -24,16 +24,12 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.SimulationMo
         }
 
         /// <inheritdoc />
-        protected override IReadOnlyCollection<ModelDataObject> GetSourceCollection(MocassinProject project)
-        {
-            return project?.ProjectModelData?.TransitionModelData?.KineticTransitions;
-        }
+        protected override IReadOnlyCollection<ModelDataObject> GetSourceCollection(MocassinProject project) =>
+            project?.ProjectModelData?.TransitionModelData?.KineticTransitions;
 
         /// <inheritdoc />
         protected override ICollection<ModelObjectReference<KineticTransition>> GetTargetCollection(
-            KineticSimulationData sourceObject)
-        {
-            return sourceObject?.Transitions;
-        }
+            KineticSimulationData sourceObject) =>
+            sourceObject?.Transitions;
     }
 }

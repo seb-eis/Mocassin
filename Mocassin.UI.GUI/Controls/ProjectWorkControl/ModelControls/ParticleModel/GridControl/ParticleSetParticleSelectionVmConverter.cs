@@ -12,9 +12,6 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ParticleMode
     public class ParticleSetParticleSelectionVmConverter : HostGraphGuestSelectionVmConverter<ParticleSetData>
     {
         /// <inheritdoc />
-        protected override IContentSupplier<MocassinProject> CreateSelectionViewModel(ParticleSetData host)
-        {
-            return new ParticleSetParticleSelectionViewModel(host);
-        }
+        protected override IContentSupplier<MocassinProject> CreateSelectionViewModel(ParticleSetData host) => new ParticleSetParticleSelectionViewModel(host);
     }
 }

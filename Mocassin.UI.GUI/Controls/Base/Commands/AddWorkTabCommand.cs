@@ -17,10 +17,7 @@ namespace Mocassin.UI.GUI.Controls.Base.Commands
         }
 
         /// <inheritdoc />
-        public override bool CanExecuteInternal()
-        {
-            return ProjectControl.ProjectWorkTabControlViewModel != null;
-        }
+        public override bool CanExecuteInternal() => ProjectControl.ProjectWorkTabControlViewModel != null;
 
         /// <inheritdoc />
         public override void Execute()
@@ -33,27 +30,18 @@ namespace Mocassin.UI.GUI.Controls.Base.Commands
         ///     Get the <see cref="ViewModelBase" /> that the tab should use
         /// </summary>
         /// <returns></returns>
-        protected virtual ViewModelBase GetViewModel()
-        {
-            return new EmptyViewModel();
-        }
+        protected virtual ViewModelBase GetViewModel() => new EmptyViewModel();
 
         /// <summary>
         ///     Get the <see cref="UserControl" /> of the tab
         /// </summary>
         /// <returns></returns>
-        protected virtual UserControl GetUserControl()
-        {
-            return new NoContentView();
-        }
+        protected virtual UserControl GetUserControl() => new NoContentView();
 
         /// <summary>
         ///     Get the name <see cref="string" /> of the tab
         /// </summary>
         /// <returns></returns>
-        protected virtual string GetTabName()
-        {
-            return "New Tab";
-        }
+        protected virtual string GetTabName() => "New Tab";
     }
 }

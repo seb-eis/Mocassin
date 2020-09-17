@@ -26,7 +26,7 @@ namespace Mocassin.Tools.Evaluation.Context
         public JobContext this[int index] => JobContexts[index];
 
         /// <summary>
-        ///     Creates an <see cref="EvaluableJobSet"/> from a <see cref="IList{T}"/> of <see cref="JobContext"/> instances
+        ///     Creates an <see cref="EvaluableJobSet" /> from a <see cref="IList{T}" /> of <see cref="JobContext" /> instances
         /// </summary>
         /// <param name="jobContexts"></param>
         /// <exception cref="ArgumentException"></exception>
@@ -45,21 +45,12 @@ namespace Mocassin.Tools.Evaluation.Context
         }
 
         /// <inheritdoc />
-        public bool CompatibleTo(IEvaluableJobSet other)
-        {
-            return ReferenceEquals(EvaluationContext, other?.EvaluationContext);
-        }
+        public bool CompatibleTo(IEvaluableJobSet other) => ReferenceEquals(EvaluationContext, other?.EvaluationContext);
 
         /// <inheritdoc />
-        public IEnumerator<JobContext> GetEnumerator()
-        {
-            return JobContexts.GetEnumerator();
-        }
+        public IEnumerator<JobContext> GetEnumerator() => JobContexts.GetEnumerator();
 
         /// <inheritdoc />
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return ((IEnumerable) JobContexts).GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable) JobContexts).GetEnumerator();
     }
 }

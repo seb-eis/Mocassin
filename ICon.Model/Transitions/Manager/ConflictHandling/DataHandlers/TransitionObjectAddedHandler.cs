@@ -23,10 +23,8 @@ namespace Mocassin.Model.Transitions.ConflictHandling
         /// <param name="dataAccess"></param>
         /// <returns></returns>
         [ConflictHandlingMethod]
-        protected IConflictReport HandleNewKineticTransition(KineticTransition transition, IDataAccessor<TransitionModelData> dataAccess)
-        {
-            return new KineticTransitionAddedHandler(dataAccess, ModelProject).HandleConflicts(transition);
-        }
+        protected IConflictReport HandleNewKineticTransition(KineticTransition transition, IDataAccessor<TransitionModelData> dataAccess) =>
+            new KineticTransitionAddedHandler(dataAccess, ModelProject).HandleConflicts(transition);
 
         /// <summary>
         ///     Handles the internal changes within the transition model data required due to a new metropolis transition added by
@@ -37,9 +35,7 @@ namespace Mocassin.Model.Transitions.ConflictHandling
         /// <returns></returns>
         [ConflictHandlingMethod]
         protected IConflictReport HandleNewMetropolisTransition(MetropolisTransition transition,
-            IDataAccessor<TransitionModelData> dataAccess)
-        {
-            return new MetropolisTransitionAddedHandler(dataAccess, ModelProject).HandleConflicts(transition);
-        }
+            IDataAccessor<TransitionModelData> dataAccess) =>
+            new MetropolisTransitionAddedHandler(dataAccess, ModelProject).HandleConflicts(transition);
     }
 }

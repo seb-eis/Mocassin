@@ -31,10 +31,7 @@ namespace Mocassin.Model.Energies
         }
 
         /// <inheritdoc />
-        public bool Equals(IDefectEnergy other)
-        {
-            return CompareTo(other) == 0;
-        }
+        public bool Equals(IDefectEnergy other) => CompareTo(other) == 0;
 
         /// <inheritdoc />
         public override int GetHashCode()

@@ -120,23 +120,25 @@
               </Path>
             </ToggleButton.Content>
           </ToggleButton>
-          <popup:ControlOverlay Grid.Column="0" StaysOpen="True" IsOpen="{Binding ElementName=DropToggleButton, Path=IsChecked}"
-                 HorizontalOffset="0" AllowsTransparency="True">
+          <popup:ControlOverlay Grid.Column="0" StaysOpen="True"
+                                IsOpen="{Binding ElementName=DropToggleButton, Path=IsChecked}"
+                                HorizontalOffset="0" AllowsTransparency="True">
             <Grid>
               <Border Background="White" BorderThickness="1" BorderBrush="Gray">
                 <StackPanel Margin="0,2,0,0">
-                  <TextBlock Text="Command Line:"/>
+                  <TextBlock Text="Command Line:" />
                   <TextBox ToolTip="Enter a line command, e.g. '-loadroutine name' to load a routine template.">
                     <TextBox.InputBindings>
-                      <KeyBinding Key="Enter" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}, Path=Text}"
-                                  Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}, Path=DataContext.ExecuteStringInstructionCommand}">
-                      </KeyBinding>
+                      <KeyBinding Key="Enter"
+                                  CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}, Path=Text}"
+                                  Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}, Path=DataContext.ExecuteStringInstructionCommand}" />
                     </TextBox.InputBindings>
                   </TextBox>
-                  <TextBlock Text="Instruction:"/>
+                  <TextBlock Text="Instruction:" />
                   <TextBox Text="{Binding Instruction}"
                            Width="{Binding ElementName=InstructionTextBox, Path=ActualWidth}" Height="300"
-                           TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True" VerticalScrollBarVisibility="Auto" />
+                           TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True"
+                           VerticalScrollBarVisibility="Auto" />
                 </StackPanel>
                 <Border.Effect>
                   <DropShadowEffect ShadowDepth="4" Direction="290" Color="Black" Opacity=".5" BlurRadius="4" />

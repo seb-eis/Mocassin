@@ -45,12 +45,10 @@ namespace Mocassin.Model.Translator
         ///     Tries to get an exclusive lock on the target
         /// </summary>
         /// <returns></returns>
-        public LockedMarshalMemory GetLocked()
-        {
-            return Monitor.TryEnter(LockObj)
+        public LockedMarshalMemory GetLocked() =>
+            Monitor.TryEnter(LockObj)
                 ? new LockedMarshalMemory(this)
                 : null;
-        }
 
         /// <summary>
         ///     Unlocks the target
@@ -82,7 +80,7 @@ namespace Mocassin.Model.Translator
         public int TypeSize => MemoryProvider.TypeSize;
 
         /// <summary>
-        ///     Creates a <see cref="LockedMarshalMemory"/> using a <see cref="MarshalMemoryProvider"/>
+        ///     Creates a <see cref="LockedMarshalMemory" /> using a <see cref="MarshalMemoryProvider" />
         /// </summary>
         /// <param name="memoryProvider"></param>
         public LockedMarshalMemory(MarshalMemoryProvider memoryProvider)

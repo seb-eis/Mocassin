@@ -50,10 +50,7 @@ namespace Mocassin.Tools.Evaluation.Helper
             var mapper4D = GetPositionIndexToVector4Mapper(latticeSize);
             var cellSize = latticeSize.P;
 
-            Vector4I GetValue(int index)
-            {
-                return mapper4D.Invoke(index * cellSize);
-            }
+            Vector4I GetValue(int index) => mapper4D.Invoke(index * cellSize);
 
             return GetValue;
         }
@@ -70,12 +67,10 @@ namespace Mocassin.Tools.Evaluation.Helper
             if (vectorEncoder.PositionCount != latticeSize.P) throw new ArgumentException("Size mismatch between encoder and lattice information.");
             var mapper4D = GetPositionIndexToVector4Mapper(latticeSize);
 
-            Fractional3D GetValue(int index)
-            {
-                return vectorEncoder.TryDecode(mapper4D.Invoke(index), out Fractional3D decoded)
+            Fractional3D GetValue(int index) =>
+                vectorEncoder.TryDecode(mapper4D.Invoke(index), out Fractional3D decoded)
                     ? decoded
                     : throw new ArgumentException("Provided index cannot be mapped onto 3D information.");
-            }
 
             return GetValue;
         }
@@ -92,12 +87,10 @@ namespace Mocassin.Tools.Evaluation.Helper
             if (vectorEncoder.PositionCount != latticeSize.P) throw new ArgumentException("Size mismatch between encoder and lattice information.");
             var mapper4D = GetPositionIndexToVector4Mapper(latticeSize);
 
-            Cartesian3D GetValue(int index)
-            {
-                return vectorEncoder.TryDecode(mapper4D(index), out Cartesian3D decoded)
+            Cartesian3D GetValue(int index) =>
+                vectorEncoder.TryDecode(mapper4D(index), out Cartesian3D decoded)
                     ? decoded
                     : throw new ArgumentException("Provided index cannot be mapped onto 3D information.");
-            }
 
             return GetValue;
         }
@@ -167,12 +160,10 @@ namespace Mocassin.Tools.Evaluation.Helper
             var mapper4D = GetStaticTrackerIndexToVector4Mapper(modelContext, simulationModel, latticeSize);
             var vectorEncoder = modelContext.GetUnitCellVectorEncoder();
 
-            Fractional3D GetValue(int trackerIndex)
-            {
-                return vectorEncoder.TryDecode(mapper4D.Invoke(trackerIndex), out Fractional3D decoded)
+            Fractional3D GetValue(int trackerIndex) =>
+                vectorEncoder.TryDecode(mapper4D.Invoke(trackerIndex), out Fractional3D decoded)
                     ? decoded
                     : throw new ArgumentException("Provided index cannot be mapped onto a 3D position.");
-            }
 
             return GetValue;
         }
@@ -191,12 +182,10 @@ namespace Mocassin.Tools.Evaluation.Helper
             var mapper4D = GetStaticTrackerIndexToVector4Mapper(modelContext, simulationModel, latticeSize);
             var vectorEncoder = modelContext.GetUnitCellVectorEncoder();
 
-            Cartesian3D GetValue(int trackerIndex)
-            {
-                return vectorEncoder.TryDecode(mapper4D.Invoke(trackerIndex), out Cartesian3D decoded)
+            Cartesian3D GetValue(int trackerIndex) =>
+                vectorEncoder.TryDecode(mapper4D.Invoke(trackerIndex), out Cartesian3D decoded)
                     ? decoded
                     : throw new ArgumentException("Provided index cannot be mapped onto a 3D position.");
-            }
 
             return GetValue;
         }

@@ -76,9 +76,6 @@ namespace Mocassin.Mathematics.Bitmask
         }
 
         /// <inheritdoc />
-        public bool Equals(Bitmask128 other)
-        {
-            return other != null && Mask0 == other.Mask0 && Mask1 == other.Mask1;
-        }
+        public bool Equals(Bitmask128 other) => other != null && Mask0 == other.Mask0 && Mask1 == other.Mask1;
     }
 }

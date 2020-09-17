@@ -13,10 +13,7 @@ namespace Mocassin.UI.Base.Commands
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public virtual bool CanExecute(object parameter)
-        {
-            return true;
-        }
+        public virtual bool CanExecute(object parameter) => true;
 
         /// <summary>
         ///     Execute the command with the passed parameter
@@ -49,20 +46,14 @@ namespace Mocassin.UI.Base.Commands
     public abstract class Command<T> : Command
     {
         /// <inheritdoc />
-        public sealed override bool CanExecute(object parameter)
-        {
-            return CanExecute((T) parameter);
-        }
+        public sealed override bool CanExecute(object parameter) => CanExecute((T) parameter);
 
         /// <summary>
         ///     Checks if the command can be executed
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public virtual bool CanExecute(T parameter)
-        {
-            return true;
-        }
+        public virtual bool CanExecute(T parameter) => true;
 
 
         /// <inheritdoc />

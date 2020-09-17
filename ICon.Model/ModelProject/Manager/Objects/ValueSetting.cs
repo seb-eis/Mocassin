@@ -80,10 +80,7 @@ namespace Mocassin.Model.ModelProject
         ///     Get the minimal and maximal value as a two value tuple
         /// </summary>
         /// <returns></returns>
-        public (T Min, T Max) GetMinMaxTuple()
-        {
-            return (MinValue, MaxValue);
-        }
+        public (T Min, T Max) GetMinMaxTuple() => (MinValue, MaxValue);
 
         /// <summary>
         ///     Parses the value and checks for limitation violations and supplies affiliated warning messages. Returned integer
@@ -136,10 +133,7 @@ namespace Mocassin.Model.ModelProject
         ///     Creates a <see cref="IValueConstraint{TSource,TTarget}" /> of matching type from the setting
         /// </summary>
         /// <returns></returns>
-        public IValueConstraint<T, T> ToConstraint()
-        {
-            return new ValueConstraint<T>(true, MinValue, MaxValue, true);
-        }
+        public IValueConstraint<T, T> ToConstraint() => new ValueConstraint<T>(true, MinValue, MaxValue, true);
 
         /// <summary>
         ///     Parses the value for violation of upper warning limit or restriction value. Returns 0, 1 or 2 depending on the

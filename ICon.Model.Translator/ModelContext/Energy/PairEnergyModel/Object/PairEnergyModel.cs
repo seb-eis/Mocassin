@@ -43,9 +43,6 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <inheritdoc />
-        public int GetMaxParticleIndex()
-        {
-            return EnergyTable.GetUpperBound(0);
-        }
+        public int GetMaxParticleIndex() => EnergyTable.GetUpperBound(0);
     }
 }

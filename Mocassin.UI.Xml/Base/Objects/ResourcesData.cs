@@ -29,10 +29,7 @@ namespace Mocassin.UI.Xml.Base
         ///     Checks if the <see cref="ResourcesData" /> has a resource with the provided key
         /// </summary>
         /// <returns></returns>
-        public bool HasResource(string key)
-        {
-            return Content.ContainsKey(key);
-        }
+        public bool HasResource(string key) => Content.ContainsKey(key);
 
         /// <summary>
         ///     Sets a generic resource with the supplied key and converter <see cref="Func{T,TResult}" />
@@ -169,9 +166,6 @@ namespace Mocassin.UI.Xml.Base
         /// <param name="key"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public bool TryGetResource(string key, out bool value)
-        {
-            return TryGetResource(key, bool.Parse, out value);
-        }
+        public bool TryGetResource(string key, out bool value) => TryGetResource(key, bool.Parse, out value);
     }
 }

@@ -14,10 +14,10 @@
 
   <UserControl.Resources>
     <ToolTip x:Key="Local.ToolTip.CutoffRange">
-      <TextBlock Text="{x:Static res:Tooltips.ModelObject_EnvironmentCutoffRange}"/>
+      <TextBlock Text="{x:Static res:Tooltips.ModelObject_EnvironmentCutoffRange}" />
     </ToolTip>
     <ToolTip x:Key="Local.ToolTip.InteractionFilters">
-      <TextBlock Text="{x:Static res:Tooltips.ModelObject_InteractionFilter}"/>
+      <TextBlock Text="{x:Static res:Tooltips.ModelObject_InteractionFilter}" />
     </ToolTip>
   </UserControl.Resources>
   <Grid>

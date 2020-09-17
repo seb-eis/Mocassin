@@ -36,9 +36,6 @@ namespace Mocassin.Model.Structures
         }
 
         /// <inheritdoc />
-        public override Type GetManagerInterfaceType()
-        {
-            return typeof(IStructureManager);
-        }
+        public override Type GetManagerInterfaceType() => typeof(IStructureManager);
     }
 }

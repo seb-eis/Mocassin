@@ -77,9 +77,6 @@ namespace Mocassin.Model.Energies
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public PairCandidate CopyWithNewIndex(int index)
-        {
-            return new PairCandidate(Position0, Position1, PositionVector, Distance, index);
-        }
+        public PairCandidate CopyWithNewIndex(int index) => new PairCandidate(Position0, Position1, PositionVector, Distance, index);
     }
 }

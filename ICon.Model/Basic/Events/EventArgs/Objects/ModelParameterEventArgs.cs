@@ -14,10 +14,8 @@ namespace Mocassin.Model.Basic
         /// <param name="modelParameter"></param>
         /// <returns></returns>
         public static ModelParameterEventArgs<T1> Create<T1>(T1 modelParameter)
-            where T1 : IModelParameter
-        {
-            return new ModelParameterEventArgs<T1>(modelParameter);
-        }
+            where T1 : IModelParameter =>
+            new ModelParameterEventArgs<T1>(modelParameter);
     }
 
     /// <summary>

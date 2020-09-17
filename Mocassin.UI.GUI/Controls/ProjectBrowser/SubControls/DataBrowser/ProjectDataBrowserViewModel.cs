@@ -11,7 +11,6 @@ using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Base.ViewModels;
 using Mocassin.UI.GUI.Base.ViewModels.JsonBrowser;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
-using Mocassin.UI.GUI.Properties;
 using Mocassin.UI.Xml.ProjectLibrary;
 using Newtonsoft.Json;
 
@@ -23,8 +22,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.DataBrowser
     public class ProjectDataBrowserViewModel : PrimaryControlViewModel, IDataObjectAcceptor
     {
         private JsonBrowserViewModel jsonBrowserViewModel;
-        private TextDocument xmlTextDocument;
         private TextDocument jsonTextDocument;
+        private TextDocument xmlTextDocument;
 
         /// <summary>
         ///     Get the <see cref="JsonBrowserViewModel" /> that provides the <see cref="IMocassinProjectLibrary" /> data as a JSON
@@ -37,7 +36,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.DataBrowser
         }
 
         /// <summary>
-        ///     Get or set the <see cref="TextDocument"/> for the XML view
+        ///     Get or set the <see cref="TextDocument" /> for the XML view
         /// </summary>
         public TextDocument XmlTextDocument
         {
@@ -46,7 +45,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.DataBrowser
         }
 
         /// <summary>
-        ///     Get or set the <see cref="TextDocument"/> for the JSON view
+        ///     Get or set the <see cref="TextDocument" /> for the JSON view
         /// </summary>
         public TextDocument JsonTextDocument
         {
@@ -80,10 +79,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.DataBrowser
         {
             JsonBrowserViewModel = new JsonBrowserViewModel();
 
-            static bool CanExecute(object obj)
-            {
-                return obj != null;
-            }
+            static bool CanExecute(object obj) => obj != null;
 
             XmlTextDocument = new TextDocument();
             JsonTextDocument = new TextDocument();
@@ -128,7 +124,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.DataBrowser
         {
             try
             {
-                var xml = await Task.Run(() => XmlStreamService.Serialize(obj, Encoding.UTF8));
+                var xml = await Task.Run(() => XmlSerializationHelper.Serialize(obj, Encoding.UTF8));
                 XmlTextDocument.Text = xml;
             }
             catch (Exception exception)
@@ -170,9 +166,12 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.DataBrowser
         /// <param name="dataObject"></param>
         private async void SetObjectDropByFormat(IDataObject dataObject)
         {
-            if (dataObject.GetData(Properties.Resources.DataObjectFormatKey_ViewFormat_Json) is { } jsonConvertible) await SetActiveObjectJsonAsync(jsonConvertible);
-            if (dataObject.GetData(Properties.Resources.DataObjectFormatKey_ViewFormat_Xml) is { } xmlConvertible) await SetActiveObjectXmlAsync(xmlConvertible);
-            if (dataObject.GetData(Properties.Resources.DataObjectFormatKey_ViewFormat_Tree) is { } treeConvertible) await SetActiveObjectTreeViewAsync(treeConvertible);
+            if (dataObject.GetData(Properties.Resources.DataObjectFormatKey_ViewFormat_Json) is { } jsonConvertible)
+                await SetActiveObjectJsonAsync(jsonConvertible);
+            if (dataObject.GetData(Properties.Resources.DataObjectFormatKey_ViewFormat_Xml) is { } xmlConvertible)
+                await SetActiveObjectXmlAsync(xmlConvertible);
+            if (dataObject.GetData(Properties.Resources.DataObjectFormatKey_ViewFormat_Tree) is { } treeConvertible)
+                await SetActiveObjectTreeViewAsync(treeConvertible);
         }
 
         /// <inheritdoc />

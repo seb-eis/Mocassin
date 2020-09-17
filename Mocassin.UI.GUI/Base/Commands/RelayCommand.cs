@@ -39,10 +39,7 @@ namespace Mocassin.UI.Base.Commands
         }
 
         /// <inheritdoc />
-        public override bool CanExecute()
-        {
-            return canExecuteFunction?.Invoke() ?? base.CanExecute();
-        }
+        public override bool CanExecute() => canExecuteFunction?.Invoke() ?? base.CanExecute();
 
         /// <inheritdoc />
         public override void Execute()
@@ -81,7 +78,8 @@ namespace Mocassin.UI.Base.Commands
         }
 
         /// <summary>
-        ///     Wraps a <see cref="Command{T}" /> provider and a parameter provider <see cref="Func{TResult}" /> into a parameterless <see cref="RelayCommand" />
+        ///     Wraps a <see cref="Command{T}" /> provider and a parameter provider <see cref="Func{TResult}" /> into a
+        ///     parameterless <see cref="RelayCommand" />
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="commandProvider"></param>
@@ -93,13 +91,18 @@ namespace Mocassin.UI.Base.Commands
             if (paramProvider == null) throw new ArgumentNullException(nameof(paramProvider));
 
             void LocalExecute() => commandProvider()?.Execute(paramProvider());
-            bool LocalCanExecute() { var command = commandProvider(); return command != null && command.CanExecute(paramProvider());}
+
+            bool LocalCanExecute()
+            {
+                var command = commandProvider();
+                return command != null && command.CanExecute(paramProvider());
+            }
 
             return new RelayCommand(LocalExecute, LocalCanExecute);
         }
 
         /// <summary>
-        ///     Creates a new <see cref="RelayCommand"/> that executes an <see cref="Action"/>
+        ///     Creates a new <see cref="RelayCommand" /> that executes an <see cref="Action" />
         /// </summary>
         /// <param name="executeAction"></param>
         /// <returns></returns>
@@ -110,7 +113,7 @@ namespace Mocassin.UI.Base.Commands
         }
 
         /// <summary>
-        ///     Creates a new <see cref="RelayCommand"/> that executes an <see cref="Action"/> with a can execute check
+        ///     Creates a new <see cref="RelayCommand" /> that executes an <see cref="Action" /> with a can execute check
         /// </summary>
         /// <param name="executeAction"></param>
         /// <param name="canExecuteFunc"></param>
@@ -123,7 +126,7 @@ namespace Mocassin.UI.Base.Commands
         }
 
         /// <summary>
-        ///     Creates a new <see cref="RelayCommand{T}"/> that executes an <see cref="Action{T}"/>
+        ///     Creates a new <see cref="RelayCommand{T}" /> that executes an <see cref="Action{T}" />
         /// </summary>
         /// <param name="executeAction"></param>
         /// <returns></returns>
@@ -134,7 +137,7 @@ namespace Mocassin.UI.Base.Commands
         }
 
         /// <summary>
-        ///     Creates a new <see cref="RelayCommand{T}"/> that executes an <see cref="Action"/>
+        ///     Creates a new <see cref="RelayCommand{T}" /> that executes an <see cref="Action" />
         /// </summary>
         /// <param name="executeAction"></param>
         /// <param name="canExecuteFunc"></param>
@@ -182,10 +185,7 @@ namespace Mocassin.UI.Base.Commands
         }
 
         /// <inheritdoc />
-        public override bool CanExecute(T parameter)
-        {
-            return canExecuteFunction?.Invoke(parameter) ?? base.CanExecute(parameter);
-        }
+        public override bool CanExecute(T parameter) => canExecuteFunction?.Invoke(parameter) ?? base.CanExecute(parameter);
 
         /// <inheritdoc />
         public override void Execute(T parameter)

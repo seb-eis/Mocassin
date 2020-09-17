@@ -23,9 +23,7 @@ namespace Mocassin.UI.Xml.Main
         private ProjectModelData projectModelData;
 
         /// <inheritdoc />
-        [NotMapped]
-        [XmlIgnore]
-        [JsonIgnore]
+        [NotMapped, XmlIgnore, JsonIgnore]
         public override string Json
         {
             get => base.Json;
@@ -35,8 +33,7 @@ namespace Mocassin.UI.Xml.Main
         /// <summary>
         ///     Get or set the <see cref="ProjectModelData" />
         /// </summary>
-        [XmlElement]
-        [JsonIgnore]
+        [XmlElement, JsonIgnore]
         public ProjectModelData ProjectModelData
         {
             get => projectModelData;
@@ -59,8 +56,7 @@ namespace Mocassin.UI.Xml.Main
         /// <summary>
         ///     Get or set the <see cref="ProjectCustomizationTemplate" />
         /// </summary>
-        [XmlElement]
-        [JsonIgnore]
+        [XmlElement, JsonIgnore]
         public ProjectCustomizationTemplate ProjectCustomizationTemplate
         {
             get => projectCustomizationTemplate;
@@ -83,8 +79,7 @@ namespace Mocassin.UI.Xml.Main
         /// <summary>
         ///     Get or set the <see cref="ProjectJobSetTemplate" />
         /// </summary>
-        [XmlElement]
-        [JsonIgnore]
+        [XmlElement, JsonIgnore]
         public ProjectJobSetTemplate ProjectJobSetTemplate
         {
             get => projectJobSetTemplate;
@@ -111,9 +106,9 @@ namespace Mocassin.UI.Xml.Main
         {
             ProjectModelData = Parent?.ProjectModelData;
             ProjectCustomizationTemplate = Parent?.CustomizationTemplates
-                .SingleOrDefault(x => x.Key == CustomizationKey);
+                                                 .SingleOrDefault(x => x.Key == CustomizationKey);
             ProjectJobSetTemplate = Parent?.JobSetTemplates
-                .SingleOrDefault(x => x.Key == JobTranslationKey);
+                                          .SingleOrDefault(x => x.Key == JobTranslationKey);
         }
     }
 }

@@ -21,9 +21,6 @@ namespace Mocassin.Model.Basic
         }
 
         /// <inheritdoc />
-        public override IDisposable SubscribeToEvent(T1 eventPort)
-        {
-            return eventPort.WhenModelObjectRemoved.Subscribe(ProcessEvent);
-        }
+        public override IDisposable SubscribeToEvent(T1 eventPort) => eventPort.WhenModelObjectRemoved.Subscribe(ProcessEvent);
     }
 }

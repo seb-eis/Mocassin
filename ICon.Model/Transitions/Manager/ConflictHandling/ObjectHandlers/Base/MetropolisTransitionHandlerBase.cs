@@ -28,8 +28,8 @@ namespace Mocassin.Model.Transitions.ConflictHandling
             var particles = ModelProject.Manager<IParticleManager>().DataAccess.Query(port => port.GetParticles());
             var creator = new TransitionRuleGenerator<MetropolisRule>(particles);
             return creator.MakeUniqueRules(transition.AbstractTransition.AsSingleton(), true)
-                .SingleOrDefault()
-                .Action(rule => rule.Transition = transition);
+                          .SingleOrDefault()
+                          .Action(rule => rule.Transition = transition);
         }
 
         /// <summary>

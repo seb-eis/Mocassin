@@ -140,9 +140,9 @@ namespace Mocassin.Model.Translator.ModelContext
             var index = 0;
             var result = new List<int>(transitionRule.PathLength).Populate(() => index++, transitionRule.PathLength);
 
-            var movementPairs = transitionRule.GetMovementDescription().SelectAsPairs((lhs, rhs) => (lhs, rhs));
+            var movementPairs = transitionRule.GetMovementDescription().SelectInPairs((lhs, rhs) => (lhs, rhs));
 
-            foreach (var (lhs, rhs) in movementPairs) 
+            foreach (var (lhs, rhs) in movementPairs)
                 result.Swap(lhs, rhs);
 
             for (var i = 0; i < result.Count; i++)

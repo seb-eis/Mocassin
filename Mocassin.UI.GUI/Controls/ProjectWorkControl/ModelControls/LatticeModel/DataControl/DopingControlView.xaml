@@ -46,7 +46,7 @@
         <comboBox:BindableDataGridComboBoxColumn Header="Building Block Binding"
                                                  ItemsSource="{Binding ElementName=DopingDataGrid, Path=DataContext.SelectableBuildingBlocks}"
                                                  SelectedItemBinding="{Binding BuildingBlock}"
-                                                 DisplayMemberPath="Name"/>
+                                                 DisplayMemberPath="Name" />
 
       </DataGrid.Columns>
     </DataGrid>

@@ -61,8 +61,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.
         public IEnumerable<ModelObjectReference<CellSite>> EnumerateReferencePositionOptions()
         {
             return ContentSource?.ProjectModelData?.StructureModelData?.CellReferencePositions?
-                .Where(x => x.Stability == PositionStability.Stable)
-                .Select(x => new ModelObjectReference<CellSite>(x));
+                                .Where(x => x.Stability == PositionStability.Stable)
+                                .Select(x => new ModelObjectReference<CellSite>(x));
         }
     }
 }

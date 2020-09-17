@@ -47,10 +47,7 @@ namespace Mocassin.UI.Xml.Jobs
         public int CollectionId { get; set; }
 
         /// <inheritdoc />
-        public ISimulation GetSimulation()
-        {
-            return Simulation;
-        }
+        public ISimulation GetSimulation() => Simulation;
 
         /// <inheritdoc />
         public IEnumerable<IPostBuildOptimizer> GetPostBuildOptimizers()
@@ -59,16 +56,10 @@ namespace Mocassin.UI.Xml.Jobs
         }
 
         /// <inheritdoc />
-        public IEnumerator<JobConfiguration> GetEnumerator()
-        {
-            return GetJobConfigurations().GetEnumerator();
-        }
+        public IEnumerator<JobConfiguration> GetEnumerator() => GetJobConfigurations().GetEnumerator();
 
         /// <inheritdoc />
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         /// <summary>
         ///     Get the sequence of <see cref="JobConfiguration" /> instances of the <see cref="IJobCollection" />
@@ -82,8 +73,8 @@ namespace Mocassin.UI.Xml.Jobs
 
             var configIndex = 0;
             return JobPackageDescription.GetConfigurations()
-                .SelectMany(x => ExpandToJobCount(x.ToInternal(BaseConfiguration, ModelProject, configIndex++), jobCount))
-                .Action(x => x.CollectionName = JobPackageDescription.Name);
+                                        .SelectMany(x => ExpandToJobCount(x.ToInternal(BaseConfiguration, ModelProject, configIndex++), jobCount))
+                                        .Action(x => x.CollectionName = JobPackageDescription.Name);
         }
 
         /// <summary>

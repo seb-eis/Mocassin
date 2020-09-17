@@ -1,17 +1,16 @@
 ﻿using System;
-using Mocassin.Framework.Events;
 using Mocassin.UI.GUI.Base.ViewModels;
 using Mocassin.UI.GUI.Base.ViewModels.Collections;
 
 namespace Mocassin.UI.GUI.Controls.Tools
 {
     /// <summary>
-    ///     Extended <see cref="ViewModelBase"/> for tool controls
+    ///     Extended <see cref="ViewModelBase" /> for tool controls
     /// </summary>
     public class ToolViewModel : ViewModelBase
     {
         /// <summary>
-        ///     Get the <see cref="ObservableCollectionViewModel{T}"/> that manages the messages
+        ///     Get the <see cref="ObservableCollectionViewModel{T}" /> that manages the messages
         /// </summary>
         public ObservableCollectionViewModel<Tuple<DateTime, string>> MessagesViewModel { get; }
 
@@ -22,7 +21,7 @@ namespace Mocassin.UI.GUI.Controls.Tools
         }
 
         /// <summary>
-        ///     Logs a message <see cref="string"/>
+        ///     Logs a message <see cref="string" />
         /// </summary>
         /// <param name="value"></param>
         public void LogMessage(string value)

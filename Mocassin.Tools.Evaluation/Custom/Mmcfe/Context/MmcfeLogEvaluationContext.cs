@@ -34,20 +34,14 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         ///     Gets a non-tracking <see cref="IQueryable{T}" /> of the <see cref="MmcfeLogEntry" /> set
         /// </summary>
         /// <returns></returns>
-        public IQueryable<MmcfeLogEntry> LogSet()
-        {
-            return DataContext.Set<MmcfeLogEntry>();
-        }
+        public IQueryable<MmcfeLogEntry> LogSet() => DataContext.Set<MmcfeLogEntry>();
 
         /// <summary>
         ///     Gets a <see cref="IQueryable{T}" /> of <see cref="MmcfeLogReader" /> for all <see cref="MmcfeLogEntry" />
         ///     entities in the context
         /// </summary>
         /// <returns></returns>
-        public IQueryable<MmcfeLogReader> FullReaderSet()
-        {
-            return CreateReaders(LogSet());
-        }
+        public IQueryable<MmcfeLogReader> FullReaderSet() => CreateReaders(LogSet());
 
         /// <summary>
         ///     Creates a <see cref="IQueryable{T}" /> of <see cref="MmcfeLogReader" /> from a <see cref="IQueryable{T}" /> of
@@ -66,9 +60,7 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         /// </summary>
         /// <param name="filepath"></param>
         /// <returns></returns>
-        public static MmcfeLogEvaluationContext OpenFile(string filepath)
-        {
-            return new MmcfeLogEvaluationContext(SqLiteContext.OpenDatabase<MmcfeLogDbContext>(filepath));
-        }
+        public static MmcfeLogEvaluationContext OpenFile(string filepath) =>
+            new MmcfeLogEvaluationContext(SqLiteContext.OpenDatabase<MmcfeLogDbContext>(filepath));
     }
 }

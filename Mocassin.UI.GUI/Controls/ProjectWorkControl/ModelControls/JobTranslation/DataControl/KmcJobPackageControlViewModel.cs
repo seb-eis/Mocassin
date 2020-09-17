@@ -79,7 +79,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         public IEnumerable<ModelObjectReference<KineticSimulation>> GetSelectableSimulations(ProjectJobSetTemplate jobTranslation)
         {
             return jobTranslation?.Parent?.ProjectModelData?.SimulationModelData?.KineticSimulations
-                ?.Select(x => new ModelObjectReference<KineticSimulation>(x));
+                                 ?.Select(x => new ModelObjectReference<KineticSimulation>(x));
         }
     }
 }

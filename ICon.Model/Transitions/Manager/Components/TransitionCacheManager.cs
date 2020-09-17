@@ -21,82 +21,45 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <inheritdoc />
-        public IList<IList<KineticMapping>> GetAllKineticMappingLists()
-        {
-            return GetResultFromCache(CreateAllKineticMappings);
-        }
+        public IList<IList<KineticMapping>> GetAllKineticMappingLists() => GetResultFromCache(CreateAllKineticMappings);
 
         /// <inheritdoc />
-        public IList<IList<KineticRule>> GetAllKineticRuleLists()
-        {
-            return GetResultFromCache(CreateAllKineticRules);
-        }
+        public IList<IList<KineticRule>> GetAllKineticRuleLists() => GetResultFromCache(CreateAllKineticRules);
 
         /// <inheritdoc />
-        public IList<IList<MetropolisMapping>> GetAllMetropolisMappingLists()
-        {
-            return GetResultFromCache(CreateAllMetropolisMappings);
-        }
+        public IList<IList<MetropolisMapping>> GetAllMetropolisMappingLists() => GetResultFromCache(CreateAllMetropolisMappings);
 
         /// <inheritdoc />
-        public IList<IList<MetropolisRule>> GetAllMetropolisRuleLists()
-        {
-            return GetResultFromCache(CreateAllMetropolisRules);
-        }
+        public IList<IList<MetropolisRule>> GetAllMetropolisRuleLists() => GetResultFromCache(CreateAllMetropolisRules);
 
         /// <inheritdoc />
-        public IList<KineticMapping> GetKineticMappingList(int index)
-        {
-            return GetAllKineticMappingLists()[index];
-        }
+        public IList<KineticMapping> GetKineticMappingList(int index) => GetAllKineticMappingLists()[index];
 
         /// <inheritdoc />
-        public IList<KineticRule> GetKineticRuleList(int index)
-        {
-            return GetAllKineticRuleLists()[index];
-        }
+        public IList<KineticRule> GetKineticRuleList(int index) => GetAllKineticRuleLists()[index];
 
         /// <inheritdoc />
-        public IList<MetropolisMapping> GetMetropolisMappingList(int index)
-        {
-            return GetAllMetropolisMappingLists()[index];
-        }
+        public IList<MetropolisMapping> GetMetropolisMappingList(int index) => GetAllMetropolisMappingLists()[index];
 
         /// <inheritdoc />
-        public IList<MetropolisRule> GetMetropolisRuleList(int index)
-        {
-            return GetAllMetropolisRuleLists()[index];
-        }
+        public IList<MetropolisRule> GetMetropolisRuleList(int index) => GetAllMetropolisRuleLists()[index];
 
         /// <inheritdoc />
-        public IDictionary<ICellSite, HashSet<IKineticTransition>> GetKineticTransitionPositionDictionary()
-        {
-            return GetResultFromCache(CreateKineticTransitionPositionDictionary);
-        }
+        public IDictionary<ICellSite, HashSet<IKineticTransition>> GetKineticTransitionPositionDictionary() =>
+            GetResultFromCache(CreateKineticTransitionPositionDictionary);
 
         /// <inheritdoc />
-        public IDictionary<ICellSite, HashSet<IMetropolisTransition>> GetMetropolisTransitionPositionDictionary()
-        {
-            return GetResultFromCache(CreateMetropolisTransitionPositionDictionary);
-        }
+        public IDictionary<ICellSite, HashSet<IMetropolisTransition>> GetMetropolisTransitionPositionDictionary() =>
+            GetResultFromCache(CreateMetropolisTransitionPositionDictionary);
 
         /// <inheritdoc />
-        public IList<double> GetAbstractChargeTransportChain(int index)
-        {
-            return GetAbstractChargeTransportChains()[index];
-        }
+        public IList<double> GetAbstractChargeTransportChain(int index) => GetAbstractChargeTransportChains()[index];
 
         /// <inheritdoc />
-        public IList<IList<double>> GetAbstractChargeTransportChains()
-        {
-            return GetResultFromCache(CreateAbstractChargeTransportChains);
-        }
+        public IList<IList<double>> GetAbstractChargeTransportChains() => GetResultFromCache(CreateAbstractChargeTransportChains);
 
         /// <inheritdoc />
-        public IRuleSetterProvider GetRuleSetterProvider()
-        {
-            return GetResultFromCache(CreateRuleSetterProvider);
-        }
+        public IRuleSetterProvider GetRuleSetterProvider() => GetResultFromCache(CreateRuleSetterProvider);
 
         /// <summary>
         ///     Creates a dictionary that assigns each unit cell position its possible list of metropolis transitions
@@ -162,7 +125,7 @@ namespace Mocassin.Model.Transitions
             var result = new List<IList<MetropolisMapping>>();
 
             foreach (var transition in ModelProject.Manager<ITransitionManager>().DataAccess
-                .Query(port => port.GetMetropolisTransitions()))
+                                                   .Query(port => port.GetMetropolisTransitions()))
             {
                 if (transition.IsDeprecated)
                 {
@@ -220,12 +183,12 @@ namespace Mocassin.Model.Transitions
 
             var index = -1;
             return ruleGenerator
-                .MakeUniqueRules(transitions.Select(a => a.AbstractTransition), true)
-                .Select(result =>
-                {
-                    ++index;
-                    return (IList<MetropolisRule>) result.Action(value => value.Transition = transitions[index]).ToList();
-                }).ToList();
+                   .MakeUniqueRules(transitions.Select(a => a.AbstractTransition), true)
+                   .Select(result =>
+                   {
+                       ++index;
+                       return (IList<MetropolisRule>) result.Action(value => value.Transition = transitions[index]).ToList();
+                   }).ToList();
         }
 
         /// <summary>
@@ -244,12 +207,12 @@ namespace Mocassin.Model.Transitions
 
             var index = -1;
             return ruleGenerator
-                .MakeUniqueRules(transitions.Select(a => a.AbstractTransition), true)
-                .Select(result =>
-                {
-                    ++index;
-                    return (IList<KineticRule>) result.Action(value => value.Transition = transitions[index]).ToList();
-                }).ToList();
+                   .MakeUniqueRules(transitions.Select(a => a.AbstractTransition), true)
+                   .Select(result =>
+                   {
+                       ++index;
+                       return (IList<KineticRule>) result.Action(value => value.Transition = transitions[index]).ToList();
+                   }).ToList();
         }
 
         /// <summary>

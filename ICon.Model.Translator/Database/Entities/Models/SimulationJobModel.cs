@@ -59,36 +59,31 @@ namespace Mocassin.Model.Translator
         /// <summary>
         ///     The simulation package context id
         /// </summary>
-        [Column("PackageId")]
-        [ForeignKey(nameof(SimulationJobPackageModel))]
+        [Column("PackageId"), ForeignKey(nameof(SimulationJobPackageModel))]
         public int SimulationPackageId { get; set; }
 
         /// <summary>
         ///     The lattice model context id
         /// </summary>
-        [Column("LatticeModelId")]
-        [ForeignKey(nameof(SimulationLatticeModel))]
+        [Column("LatticeModelId"), ForeignKey(nameof(SimulationLatticeModel))]
         public int LatticeModelId { get; set; }
 
         /// <summary>
         ///     The structure model context id
         /// </summary>
-        [Column("StructureModelId")]
-        [ForeignKey(nameof(SimulationStructureModel))]
+        [Column("StructureModelId"), ForeignKey(nameof(SimulationStructureModel))]
         public int StructureModelId { get; set; }
 
         /// <summary>
         ///     The energy model context id
         /// </summary>
-        [Column("EnergyModelId")]
-        [ForeignKey(nameof(SimulationEnergyModel))]
+        [Column("EnergyModelId"), ForeignKey(nameof(SimulationEnergyModel))]
         public int EnergyModelId { get; set; }
 
         /// <summary>
         ///     The transition model context id
         /// </summary>
-        [Column("TransitionModelId")]
-        [ForeignKey(nameof(SimulationTransitionModel))]
+        [Column("TransitionModelId"), ForeignKey(nameof(SimulationTransitionModel))]
         public int TransitionModelId { get; set; }
 
         /// <summary>
@@ -112,28 +107,22 @@ namespace Mocassin.Model.Translator
         /// <summary>
         ///     The job info object that describes the job specifications
         /// </summary>
-        [NotMapped]
-        [InteropProperty(nameof(JobInfoBinary))]
+        [NotMapped, InteropProperty(nameof(JobInfoBinary))]
         public InteropObject<CJobInfo> JobInfo { get; set; }
 
         /// <summary>
         ///     The job header object that describes the job type and behavior
         /// </summary>
-        [NotMapped]
-        [InteropProperty(nameof(JobHeaderBinary))]
+        [NotMapped, InteropProperty(nameof(JobHeaderBinary))]
         public InteropObject JobHeader { get; set; }
 
         /// <summary>
         ///     The <see cref="RoutineDataEntity" /> that stores additional information for custom routines
         /// </summary>
-        [NotMapped]
-        [OwnedBlobProperty(nameof(RoutineDataBinary))]
+        [NotMapped, OwnedBlobProperty(nameof(RoutineDataBinary))]
         public RoutineDataEntity RoutineData { get; set; }
 
         /// <inheritdoc />
-        public override string ToString()
-        {
-            return $"Job.{Id}";
-        }
+        public override string ToString() => $"Job.{Id}";
     }
 }

@@ -50,10 +50,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
                 ContentSource.SimulationDbBuildTemplates.Last().ProjectModelData = ContentSource.ProjectModelData;
             }
 
-            bool CanExecute()
-            {
-                return ContentSource?.SimulationDbBuildTemplates?.LastOrDefault() != null;
-            }
+            bool CanExecute() => ContentSource?.SimulationDbBuildTemplates?.LastOrDefault() != null;
 
             return new RelayCommand(Execute, CanExecute);
         }

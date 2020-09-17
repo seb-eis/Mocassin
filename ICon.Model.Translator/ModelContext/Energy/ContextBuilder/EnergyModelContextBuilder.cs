@@ -26,10 +26,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <inheritdoc />
-        public override bool CheckLinkDependentBuildRequirements()
-        {
-            return true;
-        }
+        public override bool CheckLinkDependentBuildRequirements() => true;
 
         /// <inheritdoc />
         protected override IEnergyModelContext PopulateContext(IEnergyModelContext modelContext)
@@ -53,10 +50,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <inheritdoc />
-        protected override IEnergyModelContext GetEmptyDefaultContext()
-        {
-            return new EnergyModelContext();
-        }
+        protected override IEnergyModelContext GetEmptyDefaultContext() => new EnergyModelContext();
 
         /// <inheritdoc />
         protected override void SetNullBuildersToDefault()

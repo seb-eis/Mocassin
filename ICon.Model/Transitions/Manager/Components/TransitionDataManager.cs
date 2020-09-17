@@ -18,16 +18,10 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <inheritdoc />
-        public IAbstractTransition GetAbstractTransition(int index)
-        {
-            return Data.AbstractTransitions[index];
-        }
+        public IAbstractTransition GetAbstractTransition(int index) => Data.AbstractTransitions[index];
 
         /// <inheritdoc />
-        public ListReadOnlyWrapper<IAbstractTransition> GetAbstractTransitions()
-        {
-            return ListReadOnlyWrapper<IAbstractTransition>.FromEnumerable(Data.AbstractTransitions);
-        }
+        public FixedList<IAbstractTransition> GetAbstractTransitions() => FixedList<IAbstractTransition>.FromEnumerable(Data.AbstractTransitions);
 
         /// <inheritdoc />
         public int GetKineticTransitionCount()
@@ -36,16 +30,10 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <inheritdoc />
-        public ListReadOnlyWrapper<IKineticTransition> GetKineticTransitions()
-        {
-            return ListReadOnlyWrapper<IKineticTransition>.FromEnumerable(Data.KineticTransitions);
-        }
+        public FixedList<IKineticTransition> GetKineticTransitions() => FixedList<IKineticTransition>.FromEnumerable(Data.KineticTransitions);
 
         /// <inheritdoc />
-        public ListReadOnlyWrapper<IMetropolisTransition> GetMetropolisTransitions()
-        {
-            return ListReadOnlyWrapper<IMetropolisTransition>.FromEnumerable(Data.MetropolisTransitions);
-        }
+        public FixedList<IMetropolisTransition> GetMetropolisTransitions() => FixedList<IMetropolisTransition>.FromEnumerable(Data.MetropolisTransitions);
 
         /// <inheritdoc />
         public int GetMetropolisTransitionCount()
@@ -54,31 +42,19 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <inheritdoc />
-        public IStateExchangeGroup GetStateExchangeGroup(int index)
-        {
-            return Data.StateExchangeGroups[index];
-        }
+        public IStateExchangeGroup GetStateExchangeGroup(int index) => Data.StateExchangeGroups[index];
 
         /// <summary>
         ///     Get a read only list of all state exchange groups
         /// </summary>
         /// <returns></returns>
-        public ListReadOnlyWrapper<IStateExchangeGroup> GetStateExchangeGroups()
-        {
-            return ListReadOnlyWrapper<IStateExchangeGroup>.FromEnumerable(Data.StateExchangeGroups);
-        }
+        public FixedList<IStateExchangeGroup> GetStateExchangeGroups() => FixedList<IStateExchangeGroup>.FromEnumerable(Data.StateExchangeGroups);
 
         /// <inheritdoc />
-        public ListReadOnlyWrapper<IStateExchangePair> GetStateExchangePairs()
-        {
-            return ListReadOnlyWrapper<IStateExchangePair>.FromEnumerable(Data.StateExchangePairs);
-        }
+        public FixedList<IStateExchangePair> GetStateExchangePairs() => FixedList<IStateExchangePair>.FromEnumerable(Data.StateExchangePairs);
 
         /// <inheritdoc />
-        public IStateExchangePair GetStateExchangePair(int index)
-        {
-            return Data.StateExchangePairs[index];
-        }
+        public IStateExchangePair GetStateExchangePair(int index) => Data.StateExchangePairs[index];
 
         /// <inheritdoc />
         public IRuleSetterProvider GetRuleSetterProvider(ProjectSettings projectSettings)

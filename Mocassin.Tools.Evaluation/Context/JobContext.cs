@@ -66,10 +66,7 @@ namespace Mocassin.Tools.Evaluation.Context
         }
 
         /// <inheritdoc />
-        public bool Equals(JobContext other)
-        {
-            return JobModel.Equals(other?.JobModel);
-        }
+        public bool Equals(JobContext other) => JobModel.Equals(other?.JobModel);
 
         /// <summary>
         ///     Creates a new <see cref="JobContext" /> that targets the primary results of the passed
@@ -79,10 +76,8 @@ namespace Mocassin.Tools.Evaluation.Context
         /// <param name="evaluationContext"></param>
         /// <param name="dataId"></param>
         /// <returns></returns>
-        public static JobContext CreatePrimary(SimulationJobModel jobModel, MslEvaluationContext evaluationContext, int dataId)
-        {
-            return CreateInternal(jobModel, evaluationContext, dataId, false);
-        }
+        public static JobContext CreatePrimary(SimulationJobModel jobModel, MslEvaluationContext evaluationContext, int dataId) =>
+            CreateInternal(jobModel, evaluationContext, dataId, false);
 
         /// <summary>
         ///     Creates a new <see cref="JobContext" /> that targets the secondary results of the passed
@@ -92,10 +87,8 @@ namespace Mocassin.Tools.Evaluation.Context
         /// <param name="evaluationContext"></param>
         /// <param name="dataId"></param>
         /// <returns></returns>
-        public static JobContext CreateSecondary(SimulationJobModel jobModel, MslEvaluationContext evaluationContext, int dataId)
-        {
-            return CreateInternal(jobModel, evaluationContext, dataId, true);
-        }
+        public static JobContext CreateSecondary(SimulationJobModel jobModel, MslEvaluationContext evaluationContext, int dataId) =>
+            CreateInternal(jobModel, evaluationContext, dataId, true);
 
         /// <summary>
         ///     Tries to switch the <see cref="McsReader" /> target to the passed binary set

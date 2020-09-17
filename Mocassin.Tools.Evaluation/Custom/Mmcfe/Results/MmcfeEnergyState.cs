@@ -73,21 +73,17 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         /// </summary>
         /// <param name="defectCount"></param>
         /// <returns></returns>
-        public MmcfeEnergyState AsPerDefect(int defectCount)
-        {
-            return new MmcfeEnergyState(Alpha, Temperature, FreeEnergy / defectCount, InnerEnergy / defectCount, Entropy / defectCount);
-        }
+        public MmcfeEnergyState AsPerDefect(int defectCount) =>
+            new MmcfeEnergyState(Alpha, Temperature, FreeEnergy / defectCount, InnerEnergy / defectCount, Entropy / defectCount);
 
         /// <summary>
         ///     Get a <see cref="MmcfeEnergyState" /> where the energy values are relative to the provided reference
         /// </summary>
         /// <param name="reference"></param>
         /// <returns></returns>
-        public MmcfeEnergyState AsRelative(in MmcfeEnergyState reference)
-        {
-            return new MmcfeEnergyState(Alpha, Temperature, FreeEnergy - reference.FreeEnergy, InnerEnergy - reference.InnerEnergy,
+        public MmcfeEnergyState AsRelative(in MmcfeEnergyState reference) =>
+            new MmcfeEnergyState(Alpha, Temperature, FreeEnergy - reference.FreeEnergy, InnerEnergy - reference.InnerEnergy,
                 Entropy - reference.Entropy);
-        }
 
         /// <summary>
         ///     Get a formatted string of the energy values in the order "InnerEnergy", "FreeEnergy" and "Entropy"

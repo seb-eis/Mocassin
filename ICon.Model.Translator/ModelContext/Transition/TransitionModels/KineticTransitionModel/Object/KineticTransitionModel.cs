@@ -28,21 +28,14 @@ namespace Mocassin.Model.Translator.ModelContext
         public IList<int> AbstractMovement { get; set; }
 
         /// <inheritdoc />
-        public override IEnumerable<ITransitionMappingModel> GetMappingModels()
-        {
-            return MappingModels.AsEnumerable();
-        }
+        public override IEnumerable<ITransitionMappingModel> GetMappingModels() => MappingModels.AsEnumerable();
 
         /// <inheritdoc />
-        public override IEnumerable<ITransitionRuleModel> GetRuleModels()
-        {
-            return RuleModels.AsEnumerable();
-        }
+        public override IEnumerable<ITransitionRuleModel> GetRuleModels() => RuleModels.AsEnumerable();
 
         /// <inheritdoc />
-        public IKineticTransitionModel CreateGeometricInverse()
-        {
-            return new KineticTransitionModel
+        public IKineticTransitionModel CreateGeometricInverse() =>
+            new KineticTransitionModel
             {
                 Transition = Transition,
                 InverseTransitionModel = this,
@@ -50,7 +43,6 @@ namespace Mocassin.Model.Translator.ModelContext
                 SelectableParticles = SelectableParticles,
                 EffectiveParticle = EffectiveParticle
             };
-        }
 
         /// <inheritdoc />
         public bool MappingsContainInversion()
@@ -75,10 +67,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <inheritdoc />
-        public ICellSite GetStartCellReferencePosition()
-        {
-            return MappingModels.First().Mapping.StartCellSite;
-        }
+        public ICellSite GetStartCellReferencePosition() => MappingModels.First().Mapping.StartCellSite;
 
         /// <summary>
         ///     Gets the inverted abstract movement description

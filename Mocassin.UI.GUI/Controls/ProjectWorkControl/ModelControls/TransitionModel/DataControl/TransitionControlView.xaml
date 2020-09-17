@@ -14,11 +14,11 @@
   Background="Transparent">
 
   <UserControl.Resources>
-    <ToolTip x:Key="Local.ToolTip.MetropolisTransitions" >
-      <TextBlock Text="{x:Static res:Tooltips.ModelObject_MetropolisTransition}"/>
+    <ToolTip x:Key="Local.ToolTip.MetropolisTransitions">
+      <TextBlock Text="{x:Static res:Tooltips.ModelObject_MetropolisTransition}" />
     </ToolTip>
-    <ToolTip x:Key="Local.ToolTip.KineticTransitions" >
-      <TextBlock Text="{x:Static res:Tooltips.ModelObject_KineticTransition}"/>
+    <ToolTip x:Key="Local.ToolTip.KineticTransitions">
+      <TextBlock Text="{x:Static res:Tooltips.ModelObject_KineticTransition}" />
     </ToolTip>
   </UserControl.Resources>
 

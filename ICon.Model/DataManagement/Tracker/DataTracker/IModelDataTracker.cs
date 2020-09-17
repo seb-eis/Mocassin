@@ -62,7 +62,7 @@ namespace Mocassin.Model.DataManagement
         int ObjectCount<TObject>() where TObject : IModelObject;
 
         /// <summary>
-        ///     Creates an array of <see cref="IModelProject"/> types that assigns each objects to its affiliated index
+        ///     Creates an array of <see cref="IModelProject" /> types that assigns each objects to its affiliated index
         /// </summary>
         /// <typeparam name="TObject"></typeparam>
         /// <returns></returns>

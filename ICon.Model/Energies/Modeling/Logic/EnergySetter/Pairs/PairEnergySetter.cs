@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Mocassin.Framework.Constraints;
 using Mocassin.Framework.Extensions;
-using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Basic;
 
 namespace Mocassin.Model.Energies
@@ -108,10 +106,7 @@ namespace Mocassin.Model.Energies
         /// </summary>
         /// <param name="pairInteraction"></param>
         /// <returns></returns>
-        protected HashSet<PairEnergyEntry> CreateEnergySet(PairInteraction pairInteraction)
-        {
-            return new HashSet<PairEnergyEntry>(pairInteraction.GetEnergyEntries());
-        }
+        protected HashSet<PairEnergyEntry> CreateEnergySet(PairInteraction pairInteraction) => new HashSet<PairEnergyEntry>(pairInteraction.GetEnergyEntries());
 
         /// <summary>
         ///     Calculates the interaction counts after P1 extension at each origin and partner site

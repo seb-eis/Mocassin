@@ -126,10 +126,7 @@ namespace Mocassin.Model.Basic
         public abstract TPort AsReadOnly();
 
         /// <inheritdoc />
-        public override IModelDataPort GetModelDataPort()
-        {
-            return AsReadOnly();
-        }
+        public override IModelDataPort GetModelDataPort() => AsReadOnly();
 
         /// <summary>
         ///     Replaces all null index data by new containers of their type or cleans the affiliated lists (Containers require a

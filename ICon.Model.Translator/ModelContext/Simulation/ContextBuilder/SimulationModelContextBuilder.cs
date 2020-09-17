@@ -54,10 +54,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <inheritdoc />
-        protected override ISimulationModelContext GetEmptyDefaultContext()
-        {
-            return new SimulationModelContext();
-        }
+        protected override ISimulationModelContext GetEmptyDefaultContext() => new SimulationModelContext();
 
         /// <inheritdoc />
         protected override void SetNullBuildersToDefault()

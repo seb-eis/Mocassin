@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
 using Mocassin.Framework.Extensions;
 using Mocassin.UI.GUI.Base.DataContext;

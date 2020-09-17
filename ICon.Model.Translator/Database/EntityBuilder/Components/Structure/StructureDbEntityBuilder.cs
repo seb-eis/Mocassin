@@ -99,8 +99,9 @@ namespace Mocassin.Model.Translator.EntityBuilder
             if (environmentModel.CellSite.OccupationSet.All(particle => particle.Index != particleId)) return false;
 
             if (environmentModel.PairInteractionModels.Select(x => x.PairEnergyModel)
-                .Any(energyModel => energyModel.EnergyEntries.Any(x =>
-                    x.ParticleInteractionPair.Particle0.Index == particleId && comparer.Compare(x.Energy, 0.0) != 0)))
+                                .Any(energyModel => energyModel.EnergyEntries.Any(x =>
+                                    x.ParticleInteractionPair.Particle0.Index == particleId &&
+                                    comparer.Compare(x.Energy, 0.0) != 0)))
                 return true;
 
             return environmentModel.GroupInteractionModels.Select(x => x.GroupEnergyModel).Any(energyModel =>
@@ -112,20 +113,14 @@ namespace Mocassin.Model.Translator.EntityBuilder
         /// </summary>
         /// <param name="simulationModel"></param>
         /// <returns></returns>
-        protected int GetStaticTrackerCountPerCell(ISimulationModel simulationModel)
-        {
-            return simulationModel.SimulationTrackingModel.StaticTrackerCount;
-        }
+        protected int GetStaticTrackerCountPerCell(ISimulationModel simulationModel) => simulationModel.SimulationTrackingModel.StaticTrackerCount;
 
         /// <summary>
         ///     Get the number of global trackers that the passed simulation model requires
         /// </summary>
         /// <param name="simulationModel"></param>
         /// <returns></returns>
-        protected int GetGlobalTrackerCount(ISimulationModel simulationModel)
-        {
-            return simulationModel.SimulationTrackingModel.GlobalTrackerCount;
-        }
+        protected int GetGlobalTrackerCount(ISimulationModel simulationModel) => simulationModel.SimulationTrackingModel.GlobalTrackerCount;
 
         /// <summary>
         ///     Get the wrapped <see cref="CInteractionRange" /> interop object for the current project context
@@ -156,9 +151,9 @@ namespace Mocassin.Model.Translator.EntityBuilder
         protected InteropObject<CStructureMetaData> GetStructureMetaData(ISimulationModel simulationModel)
         {
             var (cellVectorA, cellVectorB, cellVectorC) = ModelContext.ModelProject
-                .Manager<IStructureManager>()
-                .DataAccess.Query(x => x.GetVectorEncoder())
-                .Transformer.FractionalSystem.GetBaseVectors();
+                                                                      .Manager<IStructureManager>()
+                                                                      .DataAccess.Query(x => x.GetVectorEncoder())
+                                                                      .Transformer.FractionalSystem.GetBaseVectors();
 
             var charges = new double[64].Populate(double.NaN);
             foreach (var particle in ModelContext.ModelProject.Manager<IParticleManager>().DataAccess.Query(x => x.GetParticles()))
@@ -183,8 +178,8 @@ namespace Mocassin.Model.Translator.EntityBuilder
         protected List<EnvironmentDefinitionEntity> GetEnvironmentDefinitions()
         {
             var definitions = ModelContext.StructureModelContext.PositionModels
-                .Select(GetEnvironmentDefinition)
-                .ToList();
+                                          .Select(GetEnvironmentDefinition)
+                                          .ToList();
 
             return definitions;
         }
@@ -242,8 +237,8 @@ namespace Mocassin.Model.Translator.EntityBuilder
         protected PairDefinitionListEntity GetPairDefinitionList(IPositionModel positionModel)
         {
             var definitions = positionModel.TargetPositionInfos
-                .Select(info => GetPairDefinitionStruct(info.PairInteractionModel, info))
-                .ToList();
+                                           .Select(info => GetPairDefinitionStruct(info.PairInteractionModel, info))
+                                           .ToList();
 
             return new PairDefinitionListEntity
             {
@@ -276,8 +271,8 @@ namespace Mocassin.Model.Translator.EntityBuilder
         protected ClusterDefinitionListEntity GetClusterDefinitionList(IList<IGroupInteractionModel> groupModels)
         {
             var definitions = groupModels
-                .Select(GetClusterDefinitionStruct)
-                .ToList();
+                              .Select(GetClusterDefinitionStruct)
+                              .ToList();
 
             return new ClusterDefinitionListEntity
             {

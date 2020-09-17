@@ -15,7 +15,7 @@ namespace Mocassin.Tools.UAccess.Readers
         private readonly McsHeader header;
 
         /// <summary>
-        ///     Get the value that indicates if data is not set on the <see cref="McsHeader"/>
+        ///     Get the value that indicates if data is not set on the <see cref="McsHeader" />
         /// </summary>
         public static int DataNotPresentOffsetIndicator { get; } = -1;
 
@@ -54,79 +54,60 @@ namespace Mocassin.Tools.UAccess.Readers
         /// <summary>
         ///     Get a reference to the <see cref="McsHeader" /> directly from the buffer
         /// </summary>
-        public ref McsHeader ReadHeader()
-        {
-            return ref BinaryReader.ReadAs<McsHeader>(0);
-        }
+        public ref McsHeader ReadHeader() => ref BinaryReader.ReadAs<McsHeader>(0);
 
         /// <summary>
         ///     Get a reference to the <see cref="McsMetaData" /> that store the meta results
         /// </summary>
-        public ref McsMetaData ReadMetaData()
-        {
-            return ref BinaryReader.ReadAs<McsMetaData>(ReadHeader().MetaOffset);
-        }
+        public ref McsMetaData ReadMetaData() => ref BinaryReader.ReadAs<McsMetaData>(ReadHeader().MetaOffset);
 
         /// <summary>
         ///     Get a <see cref="ReadOnlySpan{T}" /> of <see cref="byte" /> that represents the simulation lattice result
         /// </summary>
-        public ReadOnlySpan<byte> ReadLattice()
-        {
-            return BinaryReader.ReadAreaAs<byte>(Header.LatticeOffset, Header.CountersOffset);
-        }
+        public ReadOnlySpan<byte> ReadLattice() => BinaryReader.ReadAreaAs<byte>(Header.LatticeOffset, Header.CountersOffset);
 
         /// <summary>
         ///     Get a <see cref="ReadOnlySpan{T}" /> of <see cref="McsCycleCounter" /> that store the species cycle results
         ///     occurence info
         /// </summary>
-        public ReadOnlySpan<McsCycleCounter> ReadCycleCounters()
-        {
-            return BinaryReader.ReadAreaAs<McsCycleCounter>(Header.CountersOffset, IsReadingMmcState ? BinaryReader.ByteCount : Header.GlobalTrackerOffset);
-        }
+        public ReadOnlySpan<McsCycleCounter> ReadCycleCounters() => BinaryReader.ReadAreaAs<McsCycleCounter>(Header.CountersOffset,
+            IsReadingMmcState ? BinaryReader.ByteCount : Header.GlobalTrackerOffset);
 
         /// <summary>
         ///     Get a <see cref="ReadOnlySpan{T}" /> of <see cref="McsMovementTracker" /> that store the global tracking system
         ///     results
         /// </summary>
-        public ReadOnlySpan<McsMovementTracker> ReadGlobalTrackers()
-        {
-            return IsReadingMmcState
+        public ReadOnlySpan<McsMovementTracker> ReadGlobalTrackers() =>
+            IsReadingMmcState
                 ? ReadOnlySpan<McsMovementTracker>.Empty
                 : BinaryReader.ReadAreaAs<McsMovementTracker>(Header.GlobalTrackerOffset, Header.MobileTrackerOffset);
-        }
 
         /// <summary>
         ///     Get a <see cref="ReadOnlySpan{T}" /> of <see cref="McsMovementTracker" /> that store the mobile tracking system
         ///     results
         /// </summary>
-        public ReadOnlySpan<McsMovementTracker> ReadMobileTrackers()
-        {
-            return IsReadingMmcState
+        public ReadOnlySpan<McsMovementTracker> ReadMobileTrackers() =>
+            IsReadingMmcState
                 ? ReadOnlySpan<McsMovementTracker>.Empty
                 : BinaryReader.ReadAreaAs<McsMovementTracker>(Header.MobileTrackerOffset, Header.StaticTrackerOffset);
-        }
 
         /// <summary>
         ///     Get a <see cref="ReadOnlySpan{T}" /> of <see cref="McsMovementTracker" /> that store the static tracking system
         ///     results
         /// </summary>
-        public ReadOnlySpan<McsMovementTracker> ReadStaticTrackers()
-        {
-            return IsReadingMmcState
+        public ReadOnlySpan<McsMovementTracker> ReadStaticTrackers() =>
+            IsReadingMmcState
                 ? ReadOnlySpan<McsMovementTracker>.Empty
                 : BinaryReader.ReadAreaAs<McsMovementTracker>(Header.StaticTrackerOffset, Header.MobileTrackerIndexingOffset);
-        }
 
         /// <summary>
         ///     Get a <see cref="ReadOnlySpan{T}" /> of <see cref="int" /> that maps mobile tracker indices onto their affiliated
         ///     lattice position indices
         /// </summary>
-        public ReadOnlySpan<int> ReadMobileTrackerMapping()
-        {
-            return IsReadingMmcState
+        public ReadOnlySpan<int> ReadMobileTrackerMapping() =>
+            IsReadingMmcState
                 ? ReadOnlySpan<int>.Empty
                 : BinaryReader.ReadAreaAs<int>(Header.MobileTrackerIndexingOffset, Header.JumpStatisticsOffset);
-        }
 
         /// <summary>
         ///     Get a <see cref="ReadOnlySpan{T}" /> of <see cref="McsJumpStatistic" /> that store the jump histogram system
@@ -145,10 +126,7 @@ namespace Mocassin.Tools.UAccess.Readers
         /// </summary>
         /// <param name="bytes"></param>
         /// <returns></returns>
-        public static McsContentReader Create(byte[] bytes)
-        {
-            return new McsContentReader(new BinaryStructureReader(bytes));
-        }
+        public static McsContentReader Create(byte[] bytes) => new McsContentReader(new BinaryStructureReader(bytes));
 
         /// <summary>
         ///     Creates a new <see cref="McsContentReader" /> for the provided filepath

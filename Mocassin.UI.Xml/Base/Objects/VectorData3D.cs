@@ -44,40 +44,25 @@ namespace Mocassin.UI.Xml.Base
         }
 
         /// <inheritdoc />
-        public VectorData3D Duplicate()
-        {
-            return new VectorData3D {a = a, b = b, c = c};
-        }
+        public VectorData3D Duplicate() => new VectorData3D {a = a, b = b, c = c};
 
         /// <inheritdoc />
-        object IDuplicable.Duplicate()
-        {
-            return Duplicate();
-        }
+        object IDuplicable.Duplicate() => Duplicate();
 
         /// <summary>
         ///     Get the data as a <see cref="Fractional3D" />
         /// </summary>
         /// <returns></returns>
-        public Fractional3D AsFractional3D()
-        {
-            return new Fractional3D(A, B, C);
-        }
+        public Fractional3D AsFractional3D() => new Fractional3D(A, B, C);
 
         /// <summary>
         ///     Creates a new serializable <see cref="VectorData3D" /> from a passed <see cref="IVector3D" /> interface
         /// </summary>
         /// <param name="vector"></param>
         /// <returns></returns>
-        public static VectorData3D Create(IVector3D vector)
-        {
-            return new VectorData3D {A = vector.Coordinates.A, B = vector.Coordinates.B, C = vector.Coordinates.C};
-        }
+        public static VectorData3D Create(IVector3D vector) => new VectorData3D {A = vector.Coordinates.A, B = vector.Coordinates.B, C = vector.Coordinates.C};
 
         /// <inheritdoc />
-        public override string ToString()
-        {
-            return $"({A.ToString(DefaultCultureInfo)}, {B.ToString(DefaultCultureInfo)}, {C.ToString(DefaultCultureInfo)})";
-        }
+        public override string ToString() => $"({A.ToString(DefaultCultureInfo)}, {B.ToString(DefaultCultureInfo)}, {C.ToString(DefaultCultureInfo)})";
     }
 }

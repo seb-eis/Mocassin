@@ -14,15 +14,10 @@ namespace Mocassin.UI.GUI.Base.Converter
         public abstract object Convert(object value, Type targetType, object parameter, CultureInfo culture);
 
         /// <inheritdoc />
-        public virtual object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
+        public virtual object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
             throw new NotSupportedException("Back conversion is not supported by this converter");
-        }
 
         /// <inheritdoc />
-        public override object ProvideValue(IServiceProvider serviceProvider)
-        {
-            return this;
-        }
+        public override object ProvideValue(IServiceProvider serviceProvider) => this;
     }
 }

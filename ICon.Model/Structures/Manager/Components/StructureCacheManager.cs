@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -28,58 +27,31 @@ namespace Mocassin.Model.Structures
         }
 
         /// <inheritdoc />
-        public SetList<FractionalPosition> GetExtendedPositionList(int index)
-        {
-            return GetExtendedPositionLists()[index];
-        }
+        public SetList<FractionalPosition> GetExtendedPositionList(int index) => GetExtendedPositionLists()[index];
 
         /// <inheritdoc />
-        public IList<SetList<FractionalPosition>> GetExtendedPositionLists()
-        {
-            return GetResultFromCache(CreateExtendedPositionLists);
-        }
+        public IList<SetList<FractionalPosition>> GetExtendedPositionLists() => GetResultFromCache(CreateExtendedPositionLists);
 
         /// <inheritdoc />
-        public SetList<FractionalPosition> GetLinearizedExtendedPositionList()
-        {
-            return GetResultFromCache(CreateLinearizedExtendedPositionList);
-        }
+        public SetList<FractionalPosition> GetLinearizedExtendedPositionList() => GetResultFromCache(CreateLinearizedExtendedPositionList);
 
         /// <inheritdoc />
-        public SetList<Vector4I> GetEncodedExtendedPositionList(int index)
-        {
-            return GetEncodedExtendedPositionLists()[index];
-        }
+        public SetList<Vector4I> GetEncodedExtendedPositionList(int index) => GetEncodedExtendedPositionLists()[index];
 
         /// <inheritdoc />
-        public IList<SetList<Vector4I>> GetEncodedExtendedPositionLists()
-        {
-            return GetResultFromCache(CreateExtendedEncodedPositionLists);
-        }
+        public IList<SetList<Vector4I>> GetEncodedExtendedPositionLists() => GetResultFromCache(CreateExtendedEncodedPositionLists);
 
         /// <inheritdoc />
-        public IUnitCellVectorEncoder GetVectorEncoder()
-        {
-            return GetResultFromCache(CreateVectorEncoder);
-        }
+        public IUnitCellVectorEncoder GetVectorEncoder() => GetResultFromCache(CreateVectorEncoder);
 
         /// <inheritdoc />
-        public IUnitCellProvider<FractionalPosition> GetUnitCellProvider()
-        {
-            return GetResultFromCache(CreateUnitCellProvider);
-        }
+        public IUnitCellProvider<FractionalPosition> GetUnitCellProvider() => GetResultFromCache(CreateUnitCellProvider);
 
         /// <inheritdoc />
-        public IUnitCellProvider<int> GetOccupationUnitCellProvider()
-        {
-            return GetResultFromCache(CreateOccupationUnitCellProvider);
-        }
+        public IUnitCellProvider<int> GetOccupationUnitCellProvider() => GetResultFromCache(CreateOccupationUnitCellProvider);
 
         /// <inheritdoc />
-        public IUnitCellProvider<ICellSite> GetFullUnitCellProvider()
-        {
-            return GetResultFromCache(CreateFullUnitCellProvider);
-        }
+        public IUnitCellProvider<ICellSite> GetFullUnitCellProvider() => GetResultFromCache(CreateFullUnitCellProvider);
 
         /// <inheritdoc />
         public SetList<FractionalPosition> GetExtendedPositionList(in Vector4I vector)
@@ -88,39 +60,24 @@ namespace Mocassin.Model.Structures
                 throw new ArgumentException("4D vector cannot be decoded into a valid 3D equivalent", nameof(vector));
 
             return GetExtendedPositionLists()
-                .SkipWhile(set => !set.Contains(new FractionalPosition(decoded, 0, PositionStability.Stable)))
-                .First();
+                   .SkipWhile(set => !set.Contains(new FractionalPosition(decoded, 0, PositionStability.Stable)))
+                   .First();
         }
 
         /// <inheritdoc />
-        public IReadOnlyList<ICellSite> GetExtendedIndexToPositionList()
-        {
-            return GetResultFromCache(CreateExtendedIndexToPositionList);
-        }
+        public IReadOnlyList<ICellSite> GetExtendedIndexToPositionList() => GetResultFromCache(CreateExtendedIndexToPositionList);
 
         /// <inheritdoc />
-        public SetList<Fractional3D> GetExtendedDummyPositionList(int index)
-        {
-            return GetExtendedDummyPositionLists()[index];
-        }
+        public SetList<Fractional3D> GetExtendedDummyPositionList(int index) => GetExtendedDummyPositionLists()[index];
 
         /// <inheritdoc />
-        public IList<SetList<Fractional3D>> GetExtendedDummyPositionLists()
-        {
-            return GetResultFromCache(CreateExtendedDummyPositionLists);
-        }
+        public IList<SetList<Fractional3D>> GetExtendedDummyPositionLists() => GetResultFromCache(CreateExtendedDummyPositionLists);
 
         /// <inheritdoc />
-        public IReadOnlyList<SetList<int>> GetWyckoffIndexingLists()
-        {
-            return GetResultFromCache(CreateWyckoffIndexingSets);
-        }
+        public IReadOnlyList<SetList<int>> GetWyckoffIndexingLists() => GetResultFromCache(CreateWyckoffIndexingSets);
 
         /// <inheritdoc />
-        public int GetLinearizedExtendedPositionCount()
-        {
-            return GetLinearizedExtendedPositionList()?.Count ?? 0;
-        }
+        public int GetLinearizedExtendedPositionCount() => GetLinearizedExtendedPositionList()?.Count ?? 0;
 
         /// <inheritdoc />
         public LatticeTarget[] FindLatticeTargets(in Fractional3D origin, double maxDistance, Func<ICellSite, bool> targetAcceptor)
@@ -133,12 +90,14 @@ namespace Mocassin.Model.Structures
         }
 
         /// <inheritdoc />
-        public IDictionary<int, LatticeTarget[]> FindUnitCellLatticeTargets(double maxDistance, Func<FractionalPosition, bool> originAcceptor, Func<ICellSite, bool> targetAcceptor)
+        public IDictionary<int, LatticeTarget[]> FindUnitCellLatticeTargets(double maxDistance, Func<FractionalPosition, bool> originAcceptor,
+            Func<ICellSite, bool> targetAcceptor)
         {
             var provider = GetFullUnitCellProvider();
             var tasks = GetLinearizedExtendedPositionList()
-                .Select((x,i) => (task: originAcceptor.Invoke(x) ? Task.Run(() => FindLatticeTargets(x.Vector, maxDistance, targetAcceptor)) : null, i))
-                .ToList();
+                        .Select((x, i) => (task: originAcceptor.Invoke(x) ? Task.Run(() => FindLatticeTargets(x.Vector, maxDistance, targetAcceptor)) : null,
+                            i))
+                        .ToList();
             return tasks.Where(tuple => tuple.task != null).ToDictionary(x => x.i, y => y.task.Result);
         }
 
@@ -164,9 +123,9 @@ namespace Mocassin.Model.Structures
         {
             var positions = ModelProject.Manager<IStructureManager>().DataAccess.Query(port => port.GetDummyPositions());
             return MocassinTaskingExtensions
-                .RunAndGetResults(positions
-                    .Select(value => MakeWyckoffExtensionDelegate(value.Vector, value.IsDeprecated)))
-                .ToList();
+                   .RunAndGetResults(positions
+                       .Select(value => MakeWyckoffExtensionDelegate(value.Vector, value.IsDeprecated)))
+                   .ToList();
         }
 
         /// <summary>
@@ -178,9 +137,9 @@ namespace Mocassin.Model.Structures
         {
             var positions = ModelProject.Manager<IStructureManager>().DataAccess.Query(port => port.GetCellReferencePositions());
             var result = MocassinTaskingExtensions
-                .RunAndGetResults(positions
-                    .Select(value => MakeWyckoffExtensionDelegate(value.AsPosition(), value.IsDeprecated)))
-                .ToList();
+                         .RunAndGetResults(positions
+                             .Select(value => MakeWyckoffExtensionDelegate(value.AsPosition(), value.IsDeprecated)))
+                         .ToList();
             return result;
         }
 
@@ -249,8 +208,8 @@ namespace Mocassin.Model.Structures
         {
             var encodedExtendedPositionLists = GetEncodedExtendedPositionLists();
             var ucpList = ModelProject
-                .Manager<IStructureManager>().DataAccess
-                .Query(port => port.GetCellReferencePositions());
+                          .Manager<IStructureManager>().DataAccess
+                          .Query(port => port.GetCellReferencePositions());
 
             var index = 0;
             var result = encodedExtendedPositionLists.SelectMany(x => x).Select(x => default(ICellSite)).ToList();
@@ -270,20 +229,16 @@ namespace Mocassin.Model.Structures
         /// </summary>
         /// <returns></returns>
         [CacheMethodResult]
-        protected IUnitCellProvider<FractionalPosition> CreateUnitCellProvider()
-        {
-            return LatticeWrapping.ToUnitCell(GetLinearizedExtendedPositionList(), GetVectorEncoder());
-        }
+        protected IUnitCellProvider<FractionalPosition> CreateUnitCellProvider() =>
+            LatticeWrapping.ToUnitCell(GetLinearizedExtendedPositionList(), GetVectorEncoder());
 
         /// <summary>
         ///     Creates the full unit cell provider
         /// </summary>
         /// <returns></returns>
         [CacheMethodResult]
-        protected IUnitCellProvider<ICellSite> CreateFullUnitCellProvider()
-        {
-            return LatticeWrapping.ToUnitCell(GetExtendedIndexToPositionList().ToList(), GetVectorEncoder());
-        }
+        protected IUnitCellProvider<ICellSite> CreateFullUnitCellProvider() =>
+            LatticeWrapping.ToUnitCell(GetExtendedIndexToPositionList().ToList(), GetVectorEncoder());
 
         /// <summary>
         ///     Creates a unit cell provider that carries only occupations as entries
@@ -305,12 +260,10 @@ namespace Mocassin.Model.Structures
         /// <returns></returns>
         protected Func<SetList<Fractional3D>> MakeWyckoffExtensionDelegate(Fractional3D vector, bool isDeprecated)
         {
-            SetList<Fractional3D> Create()
-            {
-                return isDeprecated
+            SetList<Fractional3D> Create() =>
+                isDeprecated
                     ? new SetList<Fractional3D>(ModelProject.SpaceGroupService.Comparer)
                     : ModelProject.SpaceGroupService.GetUnitCellP1PositionExtension(vector);
-            }
 
             return Create;
         }
@@ -330,7 +283,7 @@ namespace Mocassin.Model.Structures
                     return new SetList<FractionalPosition>(ModelProject.SpaceGroupService.GetSpecialVectorComparer<FractionalPosition>());
                 var comparer = ModelProject.SpaceGroupService.GetSpecialVectorComparer<FractionalPosition>();
                 var result = ModelProject.SpaceGroupService.GetUnitCellP1PositionExtension(position.Vector)
-                    .Select(x => new FractionalPosition(x, position.OccupationIndex, position.Stability)).ToSetList(comparer);
+                                         .Select(x => new FractionalPosition(x, position.OccupationIndex, position.Stability)).ToSetList(comparer);
                 return result;
             }
 

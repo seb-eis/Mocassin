@@ -3,7 +3,8 @@
 namespace Mocassin.Model.Translator.Jobs
 {
     /// <summary>
-    ///     Basic simulation job flags that are shared between the different simulation types. These flags are used by the internal system
+    ///     Basic simulation job flags that are shared between the different simulation types. These flags are used by the
+    ///     internal system
     /// </summary>
     [Flags]
     public enum SimulationExecutionFlags
@@ -55,7 +56,8 @@ namespace Mocassin.Model.Translator.Jobs
     }
 
     /// <summary>
-    ///     Custom simulation job flags that provides customizable parts of <see cref="SimulationExecutionFlags" /> as overwrites
+    ///     Custom simulation job flags that provides customizable parts of <see cref="SimulationExecutionFlags" /> as
+    ///     overwrites
     /// </summary>
     [Flags]
     public enum SimulationExecutionOverwriteFlags

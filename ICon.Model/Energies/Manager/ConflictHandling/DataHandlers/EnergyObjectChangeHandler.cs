@@ -23,10 +23,8 @@ namespace Mocassin.Model.Energies.ConflictHandling
         /// <param name="dataAccess"></param>
         /// <returns></returns>
         [ConflictHandlingMethod]
-        protected IConflictReport HandleObjectChange(UnstableEnvironment envInfo, IDataAccessor<EnergyModelData> dataAccess)
-        {
-            return new UnstableEnvironmentChangeHandler(dataAccess, ModelProject).HandleConflicts(envInfo);
-        }
+        protected IConflictReport HandleObjectChange(UnstableEnvironment envInfo, IDataAccessor<EnergyModelData> dataAccess) =>
+            new UnstableEnvironmentChangeHandler(dataAccess, ModelProject).HandleConflicts(envInfo);
 
         /// <summary>
         ///     Resolves conflicts and data changes if a group interaction is added. The passed object has to be the changed model
@@ -36,9 +34,7 @@ namespace Mocassin.Model.Energies.ConflictHandling
         /// <param name="dataAccess"></param>
         /// <returns></returns>
         [ConflictHandlingMethod]
-        protected IConflictReport HandleObjectChange(GroupInteraction groupInteraction, IDataAccessor<EnergyModelData> dataAccess)
-        {
-            return new GroupInteractionChangeHandler(dataAccess, ModelProject).HandleConflicts(groupInteraction);
-        }
+        protected IConflictReport HandleObjectChange(GroupInteraction groupInteraction, IDataAccessor<EnergyModelData> dataAccess) =>
+            new GroupInteractionChangeHandler(dataAccess, ModelProject).HandleConflicts(groupInteraction);
     }
 }

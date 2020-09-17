@@ -9,7 +9,6 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.OperationConsole
     public partial class OperationReportConsoleView : UserControl
     {
         /// <summary>
-        /// 
         /// </summary>
         public OperationReportConsoleView()
         {

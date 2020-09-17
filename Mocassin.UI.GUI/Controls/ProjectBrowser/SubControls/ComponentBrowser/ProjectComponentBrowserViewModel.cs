@@ -19,8 +19,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.ComponentBrowser
     /// </summary>
     public class ProjectComponentBrowserViewModel : PrimaryControlViewModel
     {
-        private ObservableCollection<MocassinProject> mocassinProjects;
         private MocassinProject activeProject;
+        private ObservableCollection<MocassinProject> mocassinProjects;
 
         /// <summary>
         ///     Get a <see cref="RelayCommand" /> to remove the passed <see cref="MocassinProject" />

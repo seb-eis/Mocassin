@@ -42,10 +42,7 @@ namespace Mocassin.Model.Transitions
         /// </summary>
         /// <param name="donorIndex"></param>
         /// <returns></returns>
-        public static StatePair MakeUnstable(int donorIndex)
-        {
-            return new StatePair(donorIndex, 0, PositionStability.Unstable);
-        }
+        public static StatePair MakeUnstable(int donorIndex) => new StatePair(donorIndex, 0, PositionStability.Unstable);
 
         /// <summary>
         ///     Creates for the correct position status, i.e. the acceptor state of non-stables will be corrected to 0
@@ -54,12 +51,10 @@ namespace Mocassin.Model.Transitions
         /// <param name="acceptorIndex"></param>
         /// <param name="positionStability"></param>
         /// <returns></returns>
-        public static StatePair CreateForStatus(int donorIndex, int acceptorIndex, PositionStability positionStability)
-        {
-            return positionStability == PositionStability.Unstable
+        public static StatePair CreateForStatus(int donorIndex, int acceptorIndex, PositionStability positionStability) =>
+            positionStability == PositionStability.Unstable
                 ? MakeUnstable(donorIndex)
                 : new StatePair(donorIndex, acceptorIndex, positionStability);
-        }
 
         /// <summary>
         ///     Compares donor index than acceptor index

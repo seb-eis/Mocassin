@@ -42,14 +42,16 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
         public IEnumerable<ModelObjectReference<Particle>> CurrentAcceptorOptions => EnumerateCurrentAcceptorOptions();
 
         /// <summary>
-        ///     Get the <see cref="Command{T}"/> to convert an <see cref="StateExchangePairData"/> to an <see cref="StateExchangeGroupData"/> and add it to the parent model
+        ///     Get the <see cref="Command{T}" /> to convert an <see cref="StateExchangePairData" /> to an
+        ///     <see cref="StateExchangeGroupData" /> and add it to the parent model
         /// </summary>
         public ICommand AddToModelAsExchangeGroupCommand { get; }
 
         /// <inheritdoc />
         public ExchangePairGridControlViewModel()
         {
-            AddToModelAsExchangeGroupCommand = new RelayCommand<object>(obj => AddToModelAsExchangeGroup((StateExchangePairData) obj), obj => ContentSource != null && obj is StateExchangePairData);
+            AddToModelAsExchangeGroupCommand = new RelayCommand<object>(obj => AddToModelAsExchangeGroup((StateExchangePairData) obj),
+                obj => ContentSource != null && obj is StateExchangePairData);
         }
 
         /// <inheritdoc />
@@ -104,12 +106,13 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
             if (donorKey == null || acceptorKey == null) return false;
             return donorKey == acceptorKey
                    || defined != null && defined
-                       .Where(x => x != SelectedItem)
-                       .Any(x => x.AcceptorParticle?.Key == acceptorKey && x.DonorParticle?.Key == donorKey);
+                                         .Where(x => x != SelectedItem)
+                                         .Any(x => x.AcceptorParticle?.Key == acceptorKey && x.DonorParticle?.Key == donorKey);
         }
 
         /// <summary>
-        ///     Converts an <see cref="StateExchangePairData"/> to a matching <see cref="StateExchangeGroupData"/> and adds it to the content source model
+        ///     Converts an <see cref="StateExchangePairData" /> to a matching <see cref="StateExchangeGroupData" /> and adds it to
+        ///     the content source model
         /// </summary>
         /// <param name="exchangePairData"></param>
         private void AddToModelAsExchangeGroup(StateExchangePairData exchangePairData)

@@ -43,16 +43,10 @@ namespace Mocassin.Tools.Evaluation.Queries
         }
 
         /// <inheritdoc />
-        public IEnumerator<T> GetEnumerator()
-        {
-            return Result.GetEnumerator();
-        }
+        public IEnumerator<T> GetEnumerator() => Result.GetEnumerator();
 
         /// <inheritdoc />
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         /// <summary>
         ///     Executes the query for a single <see cref="JobContext" /> without checking if the passed context is part of the
@@ -123,9 +117,6 @@ namespace Mocassin.Tools.Evaluation.Queries
         ///     Provide the <see cref="JobEvaluation{T}" /> as a delegate
         /// </summary>
         /// <returns></returns>
-        public Func<JobContext, T> AsSelector()
-        {
-            return GetValue;
-        }
+        public Func<JobContext, T> AsSelector() => GetValue;
     }
 }

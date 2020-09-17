@@ -19,10 +19,7 @@ namespace Mocassin.Model.Basic
         ///     Basic string representation with name and json format serialization values
         /// </summary>
         /// <returns></returns>
-        public override string ToString()
-        {
-            return $"{GetParameterName()}\n{JsonConvert.SerializeObject(this)}";
-        }
+        public override string ToString() => $"{GetParameterName()}\n{JsonConvert.SerializeObject(this)}";
 
         /// <summary>
         ///     Builds a new object of the specified type and populates it from the provided matching interface (Returns null if
@@ -32,10 +29,8 @@ namespace Mocassin.Model.Basic
         /// <param name="modelParameter"></param>
         /// <returns></returns>
         public static TParam BuildInternalObject<TParam>(IModelParameter modelParameter)
-            where TParam : ModelParameter, new()
-        {
-            return new TParam().PopulateObject(modelParameter) as TParam;
-        }
+            where TParam : ModelParameter, new() =>
+            new TParam().PopulateObject(modelParameter) as TParam;
 
         /// <summary>
         ///     Consumes the provided interface if possible and returns the model object filled with the parameter info (Returns

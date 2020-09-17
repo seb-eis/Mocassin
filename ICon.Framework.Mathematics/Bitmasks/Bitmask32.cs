@@ -44,25 +44,16 @@ namespace Mocassin.Mathematics.Bitmask
         ///     Implicit conversion operator for unsigned 32 bit integer
         /// </summary>
         /// <param name="value"></param>
-        public static implicit operator Bitmask32(uint value)
-        {
-            return new Bitmask32(value);
-        }
+        public static implicit operator Bitmask32(uint value) => new Bitmask32(value);
 
         /// <summary>
         ///     Compares the wrapped integer
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public int CompareTo(Bitmask32 other)
-        {
-            return Mask.CompareTo(other.Mask);
-        }
+        public int CompareTo(Bitmask32 other) => Mask.CompareTo(other.Mask);
 
         /// <inheritdoc />
-        public bool Equals(Bitmask32 other)
-        {
-            return Mask == other.Mask;
-        }
+        public bool Equals(Bitmask32 other) => Mask == other.Mask;
     }
 }

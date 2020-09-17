@@ -69,7 +69,8 @@ namespace Mocassin.Model.Energies
         }
 
         /// <summary>
-        ///     Tries to set the passed <see cref="PairEnergyEntry"/> in the pair interaction energy dictionary. Returns false if value cannot be
+        ///     Tries to set the passed <see cref="PairEnergyEntry" /> in the pair interaction energy dictionary. Returns false if
+        ///     value cannot be
         ///     set
         /// </summary>
         /// <param name="energyEntry"></param>

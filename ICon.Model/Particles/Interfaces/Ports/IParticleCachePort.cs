@@ -7,6 +7,5 @@ namespace Mocassin.Model.Particles
     /// </summary>
     public interface IParticleCachePort : IModelCachePort
     {
-
     }
 }

@@ -38,8 +38,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
                 if (ParentLatticeConfiguration.DopingValues.Count != ContentSource.ProjectModelData.LatticeModelData.Dopings.Count)
                 {
                     ParentLatticeConfiguration.DopingValues = ContentSource.ProjectModelData.LatticeModelData.Dopings
-                        .Select(x => new DopingValueData {Value = 0, Doping = new ModelObjectReference<Doping>(x)})
-                        .ToObservableCollection();
+                                                                           .Select(x => new DopingValueData
+                                                                               {Value = 0, Doping = new ModelObjectReference<Doping>(x)})
+                                                                           .ToObservableCollection();
                 }
             }
 

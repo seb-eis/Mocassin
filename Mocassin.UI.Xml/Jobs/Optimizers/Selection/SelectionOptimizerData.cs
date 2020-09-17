@@ -41,21 +41,16 @@ namespace Mocassin.UI.Xml.Jobs
         }
 
         /// <inheritdoc />
-        public SelectionOptimizerData Duplicate()
-        {
-            return new SelectionOptimizerData
+        public SelectionOptimizerData Duplicate() =>
+            new SelectionOptimizerData
             {
                 Name = Name,
                 StartReferencePosition = StartReferencePosition.Duplicate(),
                 RemovedParticle = RemovedParticle.Duplicate()
             };
-        }
 
         /// <inheritdoc />
-        object IDuplicable.Duplicate()
-        {
-            return Duplicate();
-        }
+        object IDuplicable.Duplicate() => Duplicate();
 
         /// <inheritdoc />
         public override IPostBuildOptimizer ToInternal(IModelProject modelProject)

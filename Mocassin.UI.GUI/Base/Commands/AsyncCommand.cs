@@ -33,20 +33,14 @@ namespace Mocassin.UI.Base.Commands
         }
 
         /// <inheritdoc />
-        public sealed override bool CanExecute(object parameter)
-        {
-            return !IsExecuting && CanExecuteInternal(parameter);
-        }
+        public sealed override bool CanExecute(object parameter) => !IsExecuting && CanExecuteInternal(parameter);
 
         /// <summary>
         ///     Internal can execute check that extends the check for current execution
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        protected virtual bool CanExecuteInternal(object parameter)
-        {
-            return true;
-        }
+        protected virtual bool CanExecuteInternal(object parameter) => true;
 
         /// <inheritdoc />
         public sealed override async void Execute(object parameter)
@@ -76,20 +70,14 @@ namespace Mocassin.UI.Base.Commands
     public abstract class AsyncCommand<T> : AsyncCommand
     {
         /// <inheritdoc />
-        protected sealed override bool CanExecuteInternal(object parameter)
-        {
-            return CanExecuteInternal((T) parameter);
-        }
+        protected sealed override bool CanExecuteInternal(object parameter) => CanExecuteInternal((T) parameter);
 
         /// <summary>
         ///     Check if the command can be executed with the passed parameter
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public virtual bool CanExecuteInternal(T parameter)
-        {
-            return true;
-        }
+        public virtual bool CanExecuteInternal(T parameter) => true;
 
         /// <inheritdoc />
         public sealed override async Task ExecuteAsync(object parameter)

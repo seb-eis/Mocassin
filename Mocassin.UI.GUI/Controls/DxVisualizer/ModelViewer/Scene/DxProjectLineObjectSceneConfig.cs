@@ -6,7 +6,6 @@ using HelixToolkit.Wpf.SharpDX.Model.Scene;
 using Mocassin.Mathematics.Extensions;
 using Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Scene;
 using Mocassin.UI.GUI.Controls.Visualizer.Objects;
-using Mocassin.UI.GUI.Properties;
 using Mocassin.UI.Xml.Base;
 
 namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
@@ -61,16 +60,10 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
         }
 
         /// <inheritdoc />
-        public LineMaterialCore CreateMaterial()
-        {
-            return new LineMaterialCore {LineColor = Color.ToColor4(), Thickness = (float) LineThickness};
-        }
+        public LineMaterialCore CreateMaterial() => new LineMaterialCore {LineColor = Color.ToColor4(), Thickness = (float) LineThickness};
 
         /// <inheritdoc />
-        public sealed override bool CheckSupport(SceneNode node)
-        {
-            return node is LineNode;
-        }
+        public sealed override bool CheckSupport(SceneNode node) => node is LineNode;
 
         /// <summary>
         ///     Action that is called when the <see cref="LineThickness" /> property changed

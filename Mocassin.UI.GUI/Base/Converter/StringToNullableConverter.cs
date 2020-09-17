@@ -17,10 +17,7 @@ namespace Mocassin.UI.GUI.Base.Converter
         private static Dictionary<Type, Delegate> ParsingDictionary { get; } = new Dictionary<Type, Delegate>();
 
         /// <inheritdoc />
-        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return value?.ToString();
-        }
+        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture) => value?.ToString();
 
         /// <inheritdoc />
         public override object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

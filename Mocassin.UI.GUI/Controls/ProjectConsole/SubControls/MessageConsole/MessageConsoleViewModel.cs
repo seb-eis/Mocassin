@@ -16,11 +16,11 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.MessageConsole
     /// </summary>
     public sealed class MessageConsoleViewModel : PrimaryControlViewModel, IObservableCollectionViewModel<PushMessage>
     {
-        private PushMessage selectedMessage;
         private DispatcherPriority priority = DispatcherPriority.Background;
+        private PushMessage selectedMessage;
 
         /// <summary>
-        ///     Get or set the <see cref="ConsoleOutputSpy"/> of the message system
+        ///     Get or set the <see cref="ConsoleOutputSpy" /> of the message system
         /// </summary>
         private ConsoleOutputSpy ConsoleSpy { get; } = new ConsoleOutputSpy();
 
@@ -43,11 +43,12 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.MessageConsole
         public ObservableCollection<PushMessage> ObservableItems => PushMessageCollectionViewModel.ObservableItems;
 
         /// <summary>
-        ///     Get or set the <see cref="DispatcherPriority"/> of the console messages (Default is <see cref="DispatcherPriority.Background"/>)
+        ///     Get or set the <see cref="DispatcherPriority" /> of the console messages (Default is
+        ///     <see cref="DispatcherPriority.Background" />)
         /// </summary>
-        public DispatcherPriority Priority 
-        { 
-            get => priority; 
+        public DispatcherPriority Priority
+        {
+            get => priority;
             set => SetProperty(ref priority, value);
         }
 
@@ -85,10 +86,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.MessageConsole
         }
 
         /// <inheritdoc />
-        public bool Contains(PushMessage value)
-        {
-            return PushMessageCollectionViewModel.Contains(value);
-        }
+        public bool Contains(PushMessage value) => PushMessageCollectionViewModel.Contains(value);
 
         /// <inheritdoc />
         public void MoveItem(int oldIndex, int newIndex)

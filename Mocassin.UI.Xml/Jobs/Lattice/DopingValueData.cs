@@ -45,9 +45,6 @@ namespace Mocassin.UI.Xml.Jobs
         }
 
         /// <inheritdoc />
-        object IDuplicable.Duplicate()
-        {
-            return Duplicate();
-        }
+        object IDuplicable.Duplicate() => Duplicate();
     }
 }

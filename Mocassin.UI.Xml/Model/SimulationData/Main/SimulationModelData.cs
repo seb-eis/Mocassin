@@ -58,7 +58,7 @@ namespace Mocassin.UI.Xml.SimulationModel
         public override IEnumerable<IModelObject> GetInputObjects()
         {
             return MetropolisSimulations.Select(x => x.GetInputObject())
-                .Concat(KineticSimulations.Select(x => x.GetInputObject()));
+                                        .Concat(KineticSimulations.Select(x => x.GetInputObject()));
         }
     }
 }

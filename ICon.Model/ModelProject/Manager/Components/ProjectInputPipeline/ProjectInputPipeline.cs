@@ -149,10 +149,7 @@ namespace Mocassin.Model.ModelProject
         /// <returns></returns>
         private static Func<IModelParameter, Task<IOperationReport>> MakeParameterInputDelegate(IModelInputPort inputPort)
         {
-            Task<IOperationReport> Operation(IModelParameter modelParameter)
-            {
-                return inputPort.SetModelParameter(modelParameter);
-            }
+            Task<IOperationReport> Operation(IModelParameter modelParameter) => inputPort.SetModelParameter(modelParameter);
 
             return Operation;
         }
@@ -164,10 +161,7 @@ namespace Mocassin.Model.ModelProject
         /// <returns></returns>
         private static Func<IModelObject, Task<IOperationReport>> MakeObjectInputDelegate(IModelInputPort inputPort)
         {
-            Task<IOperationReport> Operation(IModelObject modelObject)
-            {
-                return inputPort.InputModelObject(modelObject);
-            }
+            Task<IOperationReport> Operation(IModelObject modelObject) => inputPort.InputModelObject(modelObject);
 
             return Operation;
         }

@@ -10,10 +10,7 @@
         public int TrackedPositionIndex { get; set; }
 
         /// <inheritdoc />
-        public bool Equals(IStaticMovementTrackerModel other)
-        {
-            return CompareTo(other) == 0;
-        }
+        public bool Equals(IStaticMovementTrackerModel other) => CompareTo(other) == 0;
 
         /// <inheritdoc />
         public int CompareTo(IStaticMovementTrackerModel other)

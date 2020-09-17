@@ -18,10 +18,10 @@
   Background="Transparent">
 
   <UserControl.Resources>
-    <ToolTip x:Key="Local.ToolTip.MetropolisSimulations" >
+    <ToolTip x:Key="Local.ToolTip.MetropolisSimulations">
       <StackPanel>
-        <TextBlock Text="{x:Static res:Tooltips.ModelObject_MetropolisSimulation}"/>
-        <TextBlock Text="{x:Static res:Tooltips.ModelObject_Simulation_SharedSettings}"/>
+        <TextBlock Text="{x:Static res:Tooltips.ModelObject_MetropolisSimulation}" />
+        <TextBlock Text="{x:Static res:Tooltips.ModelObject_Simulation_SharedSettings}" />
       </StackPanel>
     </ToolTip>
   </UserControl.Resources>

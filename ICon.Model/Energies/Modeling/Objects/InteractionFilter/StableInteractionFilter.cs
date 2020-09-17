@@ -6,7 +6,8 @@ using Mocassin.Model.Structures;
 namespace Mocassin.Model.Energies
 {
     /// <summary>
-    ///     Stable pair interaction filter to customize ignored interaction in <see cref="IPairInteractionFinder" /> search routines of stable interactions
+    ///     Stable pair interaction filter to customize ignored interaction in <see cref="IPairInteractionFinder" /> search
+    ///     routines of stable interactions
     /// </summary>
     public class StableInteractionFilter : IInteractionFilter, IEquatable<StableInteractionFilter>
     {
@@ -25,14 +26,12 @@ namespace Mocassin.Model.Energies
         public double EndRadius { get; set; }
 
         /// <inheritdoc />
-        public bool Equals(StableInteractionFilter other)
-        {
-            return other != null
-                   && PartnerCellSite == other.PartnerCellSite
-                   && CenterCellSite == other.CenterCellSite
-                   && EndRadius.AlmostEqualByRange(other.EndRadius)
-                   && StartRadius.AlmostEqualByRange(other.StartRadius);
-        }
+        public bool Equals(StableInteractionFilter other) =>
+            other != null
+            && PartnerCellSite == other.PartnerCellSite
+            && CenterCellSite == other.CenterCellSite
+            && EndRadius.AlmostEqualByRange(other.EndRadius)
+            && StartRadius.AlmostEqualByRange(other.StartRadius);
 
         /// <inheritdoc />
         public bool IsApplicable(double distance, ICellSite centerCellSite, ICellSite partnerCellSite)
@@ -60,10 +59,7 @@ namespace Mocassin.Model.Energies
         }
 
         /// <inheritdoc />
-        public bool IsEqualFilter(IInteractionFilter other)
-        {
-            return Equals(FromInterface(other));
-        }
+        public bool IsEqualFilter(IInteractionFilter other) => Equals(FromInterface(other));
 
         /// <summary>
         ///     Creates new interaction filter that matches the passed filter interface

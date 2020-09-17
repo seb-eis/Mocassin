@@ -23,10 +23,8 @@ namespace Mocassin.Model.Simulations.ConflictHandling
         /// <param name="dataAccess"></param>
         /// <returns></returns>
         [ConflictHandlingMethod]
-        protected IConflictReport ResolveSpaceGroupChange(KineticSimulation simulation, IDataAccessor<SimulationModelData> dataAccess)
-        {
-            return new KineticSimulationChangeHandler(dataAccess, ModelProject).HandleConflicts(simulation);
-        }
+        protected IConflictReport ResolveSpaceGroupChange(KineticSimulation simulation, IDataAccessor<SimulationModelData> dataAccess) =>
+            new KineticSimulationChangeHandler(dataAccess, ModelProject).HandleConflicts(simulation);
 
         /// <summary>
         ///     Resolver method that handles the required internal changes if the <see cref="MetropolisSimulation" /> changes
@@ -35,9 +33,7 @@ namespace Mocassin.Model.Simulations.ConflictHandling
         /// <param name="dataAccess"></param>
         /// <returns></returns>
         [ConflictHandlingMethod]
-        protected IConflictReport ResolveCellParametersChange(MetropolisSimulation simulation, IDataAccessor<SimulationModelData> dataAccess)
-        {
-            return new MetropolisSimulationChangeHandler(dataAccess, ModelProject).HandleConflicts(simulation);
-        }
+        protected IConflictReport ResolveCellParametersChange(MetropolisSimulation simulation, IDataAccessor<SimulationModelData> dataAccess) =>
+            new MetropolisSimulationChangeHandler(dataAccess, ModelProject).HandleConflicts(simulation);
     }
 }

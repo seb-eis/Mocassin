@@ -12,27 +12,32 @@ namespace Mocassin.Tools.UAccess.Readers.McsReader.Components
         /// <summary>
         ///     Get the minimal tracked energy value (Included)
         /// </summary>
-        [MarshalAs(UnmanagedType.R8)] public readonly double MinEnergyValue;
+        [MarshalAs(UnmanagedType.R8)]
+        public readonly double MinEnergyValue;
 
         /// <summary>
         ///     Get the maximal tracked energy value (Excluded)
         /// </summary>
-        [MarshalAs(UnmanagedType.R8)] public readonly double MaxEnergyValue;
+        [MarshalAs(UnmanagedType.R8)]
+        public readonly double MaxEnergyValue;
 
         /// <summary>
         ///     Get the tracked energy sample stepping inverse
         /// </summary>
-        [MarshalAs(UnmanagedType.R8)] public readonly double InverseStepping;
+        [MarshalAs(UnmanagedType.R8)]
+        public readonly double InverseStepping;
 
         /// <summary>
         ///     Get the counter for energy occurrences that where above or equal to the max energy value
         /// </summary>
-        [MarshalAs(UnmanagedType.I8)] public readonly long AboveMaxCount;
+        [MarshalAs(UnmanagedType.I8)]
+        public readonly long AboveMaxCount;
 
         /// <summary>
         ///     Get the counter for energy occurrences that where below the min energy value
         /// </summary>
-        [MarshalAs(UnmanagedType.I8)] public readonly long BelowMinCount;
+        [MarshalAs(UnmanagedType.I8)]
+        public readonly long BelowMinCount;
 
         /// <summary>
         ///     Fixed histogram buffer that stores the occurence counters

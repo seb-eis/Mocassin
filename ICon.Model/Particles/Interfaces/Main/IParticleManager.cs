@@ -8,6 +8,5 @@ namespace Mocassin.Model.Particles
     /// </summary>
     public interface IParticleManager : IModelManager<IParticleInputPort, IParticleEventPort, IParticleQueryPort>
     {
-
     }
 }

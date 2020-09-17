@@ -6,7 +6,7 @@ namespace Mocassin.Model.Basic
     /// <summary>
     ///     Exception thrown if a data lock source cannot get a valid read or write lock within its specified await period
     /// </summary>
-    public class DataAccessTimeoutException : CustomException
+    public class DataAccessTimeoutException : MocassinException
     {
         /// <summary>
         ///     The data object that was used during the invalid access
@@ -25,9 +25,6 @@ namespace Mocassin.Model.Basic
         }
 
         /// <inheritdoc />
-        public override string ToString()
-        {
-            return $"Locking attempt was aborted due to a timeout{Environment.NewLine}Details:{Environment.NewLine}{Message}";
-        }
+        public override string ToString() => $"Locking attempt was aborted due to a timeout{Environment.NewLine}Details:{Environment.NewLine}{Message}";
     }
 }

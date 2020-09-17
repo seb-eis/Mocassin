@@ -7,12 +7,13 @@ using Mocassin.Tools.Evaluation.PlotData;
 namespace Mocassin.Tools.Evaluation.Queries
 {
     /// <summary>
-    ///     Describes a radial distribution around a position in the lattice as a set of <see cref="CoordinationShell"/> items
+    ///     Describes a radial distribution around a position in the lattice as a set of <see cref="CoordinationShell" /> items
     /// </summary>
     public class SiteCoordination : IDatFileWritable<CoordinationShell>
     {
         /// <summary>
-        ///     Get the temporary <see cref="Dictionary{TKey,TValue}" /> that stores the particle count information for each distance in [fm]
+        ///     Get the temporary <see cref="Dictionary{TKey,TValue}" /> that stores the particle count information for each
+        ///     distance in [fm]
         /// </summary>
         private Dictionary<int, int> TempCounters { get; set; }
 
@@ -43,6 +44,15 @@ namespace Mocassin.Tools.Evaluation.Queries
         {
             Particle = particle;
         }
+
+        /// <inheritdoc />
+        public int GetDatEntriesPerLine() => 2;
+
+        /// <inheritdoc />
+        public string GetDatHeader(string format) => string.Format(format, "distance[Ang]", "CN");
+
+        /// <inheritdoc />
+        public IEnumerable<CoordinationShell> GetDatLines() => Shells;
 
         /// <summary>
         ///     Increments the counter for the provided distance without checking for existent key
@@ -82,7 +92,7 @@ namespace Mocassin.Tools.Evaluation.Queries
             var itemCount = (double) TempCounters.Sum(x => x.Value);
 
             var result = new CoordinationShell[count];
-            foreach (var (pair, index) in TempCounters.Where(x => x.Value != 0).Select((x, i) => (x,i)))
+            foreach (var (pair, index) in TempCounters.Where(x => x.Value != 0).Select((x, i) => (x, i)))
             {
                 var value = new CoordinationShell(pair.Key / 1e5, pair.Value / (double) siteCount);
                 result[index] = value;
@@ -90,24 +100,6 @@ namespace Mocassin.Tools.Evaluation.Queries
 
             TempCounters = null;
             Shells = result;
-        }
-
-        /// <inheritdoc />
-        public int GetDatEntriesPerLine()
-        {
-            return 2;
-        }
-
-        /// <inheritdoc />
-        public string GetDatHeader(string format)
-        {
-            return string.Format(format, "distance[Ang]", "CN");
-        }
-
-        /// <inheritdoc />
-        public IEnumerable<CoordinationShell> GetDatLines()
-        {
-            return Shells;
         }
     }
 }

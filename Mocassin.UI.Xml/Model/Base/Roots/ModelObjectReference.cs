@@ -26,8 +26,7 @@ namespace Mocassin.UI.Xml.Base
         /// <summary>
         ///     Get or set the key of the reference
         /// </summary>
-        [JsonIgnore]
-        [XmlAttribute]
+        [JsonIgnore, XmlAttribute]
         public string Key
         {
             get => key ?? Target?.Key;
@@ -41,16 +40,14 @@ namespace Mocassin.UI.Xml.Base
         /// <summary>
         ///     Get the name of the object reference
         /// </summary>
-        [JsonIgnore]
-        [XmlIgnore]
+        [JsonIgnore, XmlIgnore]
         public string Name => Target == null ? "[Error:NullTarget]" : string.IsNullOrWhiteSpace(Target.Name) ? $"[{Target.GetType().Name}:{Key}]" : Target.Name;
 
         /// <summary>
         ///     Get or set the reference target <see cref="ModelDataObject" />. Only serialized in JSON mode with reference
         ///     handling
         /// </summary>
-        [XmlIgnore]
-        [NotMapped]
+        [XmlIgnore, NotMapped]
         public ModelDataObject Target
         {
             get => target;
@@ -80,10 +77,7 @@ namespace Mocassin.UI.Xml.Base
         }
 
         /// <inheritdoc />
-        public int CompareTo(object obj)
-        {
-            return CompareTo(obj as ModelObjectReference<T>);
-        }
+        public int CompareTo(object obj) => CompareTo(obj as ModelObjectReference<T>);
 
         /// <inheritdoc />
         public int CompareTo(ModelObjectReference<T> other)
@@ -94,16 +88,10 @@ namespace Mocassin.UI.Xml.Base
         }
 
         /// <inheritdoc />
-        public ModelObjectReference<T> Duplicate()
-        {
-            return new ModelObjectReference<T>(Target);
-        }
+        public ModelObjectReference<T> Duplicate() => new ModelObjectReference<T>(Target);
 
         /// <inheritdoc />
-        object IDuplicable.Duplicate()
-        {
-            return Duplicate();
-        }
+        object IDuplicable.Duplicate() => Duplicate();
 
         /// <inheritdoc />
         public bool Equals(ModelObjectReference<T> other)
@@ -118,16 +106,10 @@ namespace Mocassin.UI.Xml.Base
         ///     Get the internal model object
         /// </summary>
         /// <returns></returns>
-        public ModelObject GetInputObject()
-        {
-            return new T {Key = Target?.Key ?? Key};
-        }
+        public ModelObject GetInputObject() => new T {Key = Target?.Key ?? Key};
 
         /// <inheritdoc />
-        public override bool Equals(object obj)
-        {
-            return Equals(obj as ModelObjectReference<T>);
-        }
+        public override bool Equals(object obj) => Equals(obj as ModelObjectReference<T>);
 
         /// <inheritdoc />
         public override int GetHashCode()
@@ -156,7 +138,6 @@ namespace Mocassin.UI.Xml.Base
             if (ParticleData.VoidParticle.Key != value) return false;
             Target = ParticleData.VoidParticle;
             return true;
-
         }
     }
 }

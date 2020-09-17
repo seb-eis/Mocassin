@@ -68,8 +68,8 @@ namespace Mocassin.UI.Xml.LatticeModel
         public override IEnumerable<IModelObject> GetInputObjects()
         {
             return BuildingBlocks.Select(x => x.GetInputObject()).Cast<IModelObject>()
-                .Concat(DopingCombination.Select(x => x.GetInputObject()))
-                .Concat(Dopings.Select(x => x.GetInputObject()));
+                                 .Concat(DopingCombination.Select(x => x.GetInputObject()))
+                                 .Concat(Dopings.Select(x => x.GetInputObject()));
         }
     }
 }

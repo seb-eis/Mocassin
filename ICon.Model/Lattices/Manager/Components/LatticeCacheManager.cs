@@ -22,10 +22,7 @@ namespace Mocassin.Model.Lattices
 
 
         /// <inheritdoc />
-        public IDopedByteLatticeSource GetDefaultByteLatticeSource()
-        {
-            return GetResultFromCache(CreateDefaultLatticeSource);
-        }
+        public IDopedByteLatticeSource GetDefaultByteLatticeSource() => GetResultFromCache(CreateDefaultLatticeSource);
 
         /// <summary>
         ///     Creates the default thread safe <see cref="IDopedByteLatticeSource" />

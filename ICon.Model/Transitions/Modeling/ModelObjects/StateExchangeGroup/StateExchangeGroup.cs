@@ -26,10 +26,7 @@ namespace Mocassin.Model.Transitions
         public override string ObjectName => "State Exchange Group";
 
         /// <inheritdoc />
-        public IEnumerable<IStateExchangePair> GetStateExchangePairs()
-        {
-            return (StateExchangePairs ?? new List<IStateExchangePair>()).AsEnumerable();
-        }
+        public IEnumerable<IStateExchangePair> GetStateExchangePairs() => (StateExchangePairs ?? new List<IStateExchangePair>()).AsEnumerable();
 
         /// <inheritdoc />
         public bool Equals(IStateExchangeGroup other)
@@ -38,12 +35,12 @@ namespace Mocassin.Model.Transitions
                 return false;
 
             var firstContainsSecond = other.GetStateExchangePairs()
-                .Select(a => a.Index)
-                .All(index => StateExchangePairs.Select(a => a.Index).Contains(index));
+                                           .Select(a => a.Index)
+                                           .All(index => StateExchangePairs.Select(a => a.Index).Contains(index));
 
             var secondContainsFirst = StateExchangePairs
-                .Select(a => a.Index)
-                .All(index => other.GetStateExchangePairs().Select(a => a.Index).Contains(index));
+                                      .Select(a => a.Index)
+                                      .All(index => other.GetStateExchangePairs().Select(a => a.Index).Contains(index));
 
             return firstContainsSecond || secondContainsFirst;
         }

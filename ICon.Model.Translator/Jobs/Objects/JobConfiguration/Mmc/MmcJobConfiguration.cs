@@ -39,9 +39,8 @@
         }
 
         /// <inheritdoc />
-        public override InteropObject GetInteropJobHeader()
-        {
-            return new InteropObject<CMmcJobHeader>
+        public override InteropObject GetInteropJobHeader() =>
+            new InteropObject<CMmcJobHeader>
             {
                 Structure = new CMmcJobHeader
                 {
@@ -52,7 +51,6 @@
                     JobFlags = default
                 }
             };
-        }
 
         /// <inheritdoc />
         public override JobConfiguration DeepCopy()

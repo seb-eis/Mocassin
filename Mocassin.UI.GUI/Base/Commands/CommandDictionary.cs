@@ -6,7 +6,8 @@ using System.Windows.Input;
 namespace Mocassin.UI.Base.Commands
 {
     /// <summary>
-    ///     Adapter that supplies <see cref="Command{T}" /> implementation where the parameter identifies the parameterless <see cref="Command" /> to execute
+    ///     Adapter that supplies <see cref="Command{T}" /> implementation where the parameter identifies the parameterless
+    ///     <see cref="Command" /> to execute
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TCommand"></typeparam>
@@ -52,16 +53,10 @@ namespace Mocassin.UI.Base.Commands
         }
 
         /// <inheritdoc />
-        public IEnumerator<KeyValuePair<TKey, TCommand>> GetEnumerator()
-        {
-            return Dictionary.GetEnumerator();
-        }
+        public IEnumerator<KeyValuePair<TKey, TCommand>> GetEnumerator() => Dictionary.GetEnumerator();
 
         /// <inheritdoc />
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return ((IEnumerable) Dictionary).GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable) Dictionary).GetEnumerator();
 
         /// <inheritdoc />
         public void Add(KeyValuePair<TKey, TCommand> item)
@@ -76,10 +71,7 @@ namespace Mocassin.UI.Base.Commands
         }
 
         /// <inheritdoc />
-        public bool Contains(KeyValuePair<TKey, TCommand> item)
-        {
-            return Dictionary.Contains(item);
-        }
+        public bool Contains(KeyValuePair<TKey, TCommand> item) => Dictionary.Contains(item);
 
         /// <inheritdoc />
         public void CopyTo(KeyValuePair<TKey, TCommand>[] array, int arrayIndex)
@@ -88,16 +80,10 @@ namespace Mocassin.UI.Base.Commands
         }
 
         /// <inheritdoc />
-        public bool Remove(KeyValuePair<TKey, TCommand> item)
-        {
-            return Dictionary.Remove(item);
-        }
+        public bool Remove(KeyValuePair<TKey, TCommand> item) => Dictionary.Remove(item);
 
         /// <inheritdoc />
-        public bool ContainsKey(TKey key)
-        {
-            return Dictionary.ContainsKey(key);
-        }
+        public bool ContainsKey(TKey key) => Dictionary.ContainsKey(key);
 
         /// <inheritdoc />
         public void Add(TKey key, TCommand value)
@@ -106,16 +92,10 @@ namespace Mocassin.UI.Base.Commands
         }
 
         /// <inheritdoc />
-        public bool Remove(TKey key)
-        {
-            return Dictionary.Remove(key);
-        }
+        public bool Remove(TKey key) => Dictionary.Remove(key);
 
         /// <inheritdoc />
-        public bool TryGetValue(TKey key, out TCommand value)
-        {
-            return Dictionary.TryGetValue(key, out value);
-        }
+        public bool TryGetValue(TKey key, out TCommand value) => Dictionary.TryGetValue(key, out value);
 
         /// <inheritdoc />
         public override void Execute(TKey parameter)
@@ -124,9 +104,6 @@ namespace Mocassin.UI.Base.Commands
         }
 
         /// <inheritdoc />
-        public override bool CanExecute(TKey parameter)
-        {
-            return Dictionary.TryGetValue(parameter, out var relayCommand) && relayCommand.CanExecute(null);
-        }
+        public override bool CanExecute(TKey parameter) => Dictionary.TryGetValue(parameter, out var relayCommand) && relayCommand.CanExecute(null);
     }
 }

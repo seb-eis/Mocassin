@@ -41,19 +41,13 @@ namespace Mocassin.Tools.UAccess.Readers
         ///     Reads the histogram header bytes as an <see cref="DynamicHistogramHeader" /> structure
         /// </summary>
         /// <returns></returns>
-        public ref DynamicHistogramHeader ReadHeader()
-        {
-            return ref BinaryReader.ReadAs<DynamicHistogramHeader>(0);
-        }
+        public ref DynamicHistogramHeader ReadHeader() => ref BinaryReader.ReadAs<DynamicHistogramHeader>(0);
 
         /// <summary>
         ///     Reads the histogram counters as a <see cref="ReadOnlySpan{T}" /> of <see cref="long" /> values
         /// </summary>
         /// <returns></returns>
-        public ReadOnlySpan<long> ReadCounters()
-        {
-            return BinaryReader.ReadAreaAs<long>(HeaderByteCount, BinaryReader.ByteCount);
-        }
+        public ReadOnlySpan<long> ReadCounters() => BinaryReader.ReadAreaAs<long>(HeaderByteCount, BinaryReader.ByteCount);
 
         /// <summary>
         ///     Creates a new <see cref="DynamicHistogramReader" /> using the provided <see cref="byte" /> array and checks for

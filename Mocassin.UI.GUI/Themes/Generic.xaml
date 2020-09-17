@@ -16,7 +16,7 @@
                 <RowDefinition Height="*" />
               </Grid.RowDefinitions>
               <ContentPresenter Name="PART_HeaderPresenter"
-                                Grid.Row="0" 
+                                Grid.Row="0"
                                 Margin="{TemplateBinding HeaderMargin}"
                                 ContentSource="Header"
                                 ContentTemplate="{TemplateBinding HeaderTemplate}" />

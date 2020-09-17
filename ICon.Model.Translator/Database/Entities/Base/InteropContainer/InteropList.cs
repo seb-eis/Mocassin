@@ -55,18 +55,12 @@ namespace Mocassin.Model.Translator
         ///     Calculates the binary object size for the current value list
         /// </summary>
         /// <returns></returns>
-        public int GetBinarySizeOfValueList()
-        {
-            return Marshal.SizeOf(typeof(T)) * (Values?.Count ?? 0);
-        }
+        public int GetBinarySizeOfValueList() => Marshal.SizeOf(typeof(T)) * (Values?.Count ?? 0);
 
         /// <summary>
         ///     Calculates the number of objects in the current binary state
         /// </summary>
         /// <returns></returns>
-        public int GetItemCountOfBinaryState()
-        {
-            return (BinaryState?.Length ?? 0) / Marshal.SizeOf<T>();
-        }
+        public int GetItemCountOfBinaryState() => (BinaryState?.Length ?? 0) / Marshal.SizeOf<T>();
     }
 }

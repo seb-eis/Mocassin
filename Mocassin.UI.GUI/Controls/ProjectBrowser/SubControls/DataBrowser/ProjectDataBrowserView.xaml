@@ -37,34 +37,37 @@
 
       <TabItem x:Name="XmlViewerTab" Style="{StaticResource App.Style.RotatedTabItemLeft}">
         <TabItem.Header>
-          <TextBlock Text="XML Viewer" x:Name="XmlHeaderTextBlock" AllowDrop="True" DragOver="UIElement_OnDragOver" Drop="UIElement_OnDrop">
-              <TextBlock.ContextMenu>
-                <ContextMenu>
-                  <MenuItem Header="Load Project XML"
-                            ItemsSource="{Binding ProjectControl.ProjectGraphs}">
-                    <MenuItem.ItemContainerStyle>
-                      <Style TargetType="{x:Type MenuItem}">
-                        <Setter Property="Command"
-                                Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.SetObjectXmlCommand}" />
-                        <Setter Property="CommandParameter"
-                                Value="{Binding}" />
-                        <Setter Property="Header" Value="{Binding Path=Name}" />
-                      </Style>
-                    </MenuItem.ItemContainerStyle>
-                  </MenuItem>
-                  <Separator/>
-                  <MenuItem Header="Generate Folding Markers" Click="XmlMenu_UpdateFolding"></MenuItem>
-                </ContextMenu>
-              </TextBlock.ContextMenu>
-            </TextBlock>
+          <TextBlock Text="XML Viewer" x:Name="XmlHeaderTextBlock" AllowDrop="True" DragOver="UIElement_OnDragOver"
+                     Drop="UIElement_OnDrop">
+            <TextBlock.ContextMenu>
+              <ContextMenu>
+                <MenuItem Header="Load Project XML"
+                          ItemsSource="{Binding ProjectControl.ProjectGraphs}">
+                  <MenuItem.ItemContainerStyle>
+                    <Style TargetType="{x:Type MenuItem}">
+                      <Setter Property="Command"
+                              Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.SetObjectXmlCommand}" />
+                      <Setter Property="CommandParameter"
+                              Value="{Binding}" />
+                      <Setter Property="Header" Value="{Binding Path=Name}" />
+                    </Style>
+                  </MenuItem.ItemContainerStyle>
+                </MenuItem>
+                <Separator />
+                <MenuItem Header="Generate Folding Markers" Click="XmlMenu_UpdateFolding" />
+              </ContextMenu>
+            </TextBlock.ContextMenu>
+          </TextBlock>
         </TabItem.Header>
-        <avalonEdit:TextEditor x:Name="XmlTextEditor" Document="{Binding XmlTextDocument}" BorderThickness="0" SyntaxHighlighting="XML" ShowLineNumbers="True"
-                               HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"/>
+        <avalonEdit:TextEditor x:Name="XmlTextEditor" Document="{Binding XmlTextDocument}" BorderThickness="0"
+                               SyntaxHighlighting="XML" ShowLineNumbers="True"
+                               HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" />
       </TabItem>
 
       <TabItem Name="JsonViewerTab" Style="{StaticResource App.Style.RotatedTabItemLeft}">
         <TabItem.Header>
-          <TextBlock Text="JSON Viewer"  x:Name="JsonHeaderTextBlock" AllowDrop="True" DragOver="UIElement_OnDragOver" Drop="UIElement_OnDrop">
+          <TextBlock Text="JSON Viewer" x:Name="JsonHeaderTextBlock" AllowDrop="True" DragOver="UIElement_OnDragOver"
+                     Drop="UIElement_OnDrop">
             <TextBlock.ContextMenu>
               <ContextMenu>
                 <MenuItem Header="Load Project JSON"
@@ -83,8 +86,9 @@
             </TextBlock.ContextMenu>
           </TextBlock>
         </TabItem.Header>
-        <avalonEdit:TextEditor x:Name="JsonTextEditor"  Document="{Binding JsonTextDocument}" BorderThickness="0" SyntaxHighlighting="JavaScript" ShowLineNumbers="True"
-                               HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"/>
+        <avalonEdit:TextEditor x:Name="JsonTextEditor" Document="{Binding JsonTextDocument}" BorderThickness="0"
+                               SyntaxHighlighting="JavaScript" ShowLineNumbers="True"
+                               HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" />
       </TabItem>
     </TabControl>
   </Grid>

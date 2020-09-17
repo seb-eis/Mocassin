@@ -20,25 +20,17 @@ namespace Mocassin.Model.Translator.ModelContext
         public IList<IMetropolisRuleModel> RuleModels { get; set; }
 
         /// <inheritdoc />
-        public override IEnumerable<ITransitionMappingModel> GetMappingModels()
-        {
-            return MappingModels.AsEnumerable();
-        }
+        public override IEnumerable<ITransitionMappingModel> GetMappingModels() => MappingModels.AsEnumerable();
 
         /// <inheritdoc />
-        public override IEnumerable<ITransitionRuleModel> GetRuleModels()
-        {
-            return RuleModels.AsEnumerable();
-        }
+        public override IEnumerable<ITransitionRuleModel> GetRuleModels() => RuleModels.AsEnumerable();
 
         /// <inheritdoc />
-        public IMetropolisTransitionModel CreateGeometricInversion()
-        {
-            return new MetropolisTransitionModel
+        public IMetropolisTransitionModel CreateGeometricInversion() =>
+            new MetropolisTransitionModel
             {
                 InverseTransitionModel = this,
                 Transition = Transition
             };
-        }
     }
 }

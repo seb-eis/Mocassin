@@ -132,12 +132,10 @@ namespace Mocassin.Model.Energies.ConflictHandling
         /// <param name="comparer"></param>
         /// <returns></returns>
         protected bool IsEquivalentInteraction(IUnstablePairInteraction lhs, IUnstablePairInteraction rhs,
-            VectorComparer3D<Fractional3D> comparer)
-        {
-            return lhs.Position0 == rhs.Position0
-                   && lhs.Position1 == rhs.Position1
-                   && comparer.Equals(lhs.SecondPositionVector, rhs.SecondPositionVector);
-        }
+            VectorComparer3D<Fractional3D> comparer) =>
+            lhs.Position0 == rhs.Position0
+            && lhs.Position1 == rhs.Position1
+            && comparer.Equals(lhs.SecondPositionVector, rhs.SecondPositionVector);
 
         /// <summary>
         ///     Makes an asymmetric pair interaction comparer that sorts by unit cell position index and target vector

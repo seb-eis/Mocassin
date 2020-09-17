@@ -80,7 +80,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
             ProjectJobSetTemplate jobTranslation)
         {
             return jobTranslation?.Parent?.ProjectModelData?.SimulationModelData?.MetropolisSimulations
-                ?.Select(x => new ModelObjectReference<MetropolisSimulation>(x));
+                                 ?.Select(x => new ModelObjectReference<MetropolisSimulation>(x));
         }
     }
 }

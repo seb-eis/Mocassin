@@ -23,9 +23,9 @@ namespace Mocassin.UI.Xml.Customization
         private ObservableCollection<VectorData3D> baseGeometry;
         private ModelObjectReference<CellSite> centerPosition;
         private ObservableCollection<GroupEnergyData> energyEntries;
+        private int extensionCountPerSite;
         private ModelObjectReference<GroupInteraction> groupInteraction;
         private int modelIndex;
-        private int extensionCountPerSite;
 
         /// <summary>
         ///     Get or set the <see cref="ModelObjectReference{T}" /> of the group interaction that the graph is based upon
@@ -116,10 +116,7 @@ namespace Mocassin.UI.Xml.Customization
         }
 
         /// <inheritdoc />
-        object IDuplicable.Duplicate()
-        {
-            return Duplicate();
-        }
+        object IDuplicable.Duplicate() => Duplicate();
 
         /// <summary>
         ///     Set all data on the passed <see cref="IGroupEnergySetter" /> and push the values to the affiliated

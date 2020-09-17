@@ -29,10 +29,7 @@ namespace Mocassin.Mathematics.Extensions
         /// <param name="matrix"></param>
         /// <param name="vector"></param>
         /// <returns></returns>
-        public static Cartesian3D MultiplyWith(this double[,] matrix, in Cartesian3D vector)
-        {
-            return new Cartesian3D(matrix.MultiplyWith(vector.Coordinates));
-        }
+        public static Cartesian3D MultiplyWith(this double[,] matrix, in Cartesian3D vector) => new Cartesian3D(matrix.MultiplyWith(vector.Coordinates));
 
         /// <summary>
         ///     Multiplies an array with the provided basic fractional vector (matrix * vector)
@@ -40,10 +37,7 @@ namespace Mocassin.Mathematics.Extensions
         /// <param name="matrix"></param>
         /// <param name="vector"></param>
         /// <returns></returns>
-        public static Fractional3D MultiplyWith(this double[,] matrix, in Fractional3D vector)
-        {
-            return new Fractional3D(matrix.MultiplyWith(vector.Coordinates));
-        }
+        public static Fractional3D MultiplyWith(this double[,] matrix, in Fractional3D vector) => new Fractional3D(matrix.MultiplyWith(vector.Coordinates));
 
         /// <summary>
         ///     Multiplies an array with the provided basic spherical vector (matrix * vector)
@@ -51,20 +45,15 @@ namespace Mocassin.Mathematics.Extensions
         /// <param name="matrix"></param>
         /// <param name="vector"></param>
         /// <returns></returns>
-        public static Spherical3D MultiplyWith(this double[,] matrix, in Spherical3D vector)
-        {
-            return new Spherical3D(matrix.MultiplyWith(vector.Coordinates));
-        }
+        public static Spherical3D MultiplyWith(this double[,] matrix, in Spherical3D vector) => new Spherical3D(matrix.MultiplyWith(vector.Coordinates));
 
         /// <summary>
         ///     Calculates the euclidean length of a 3D coordinate tuple (Only useful if the tuple represents cartesian values)
         /// </summary>
         /// <param name="coordinates"></param>
         /// <returns></returns>
-        public static double GetLength(this Coordinates3D coordinates)
-        {
-            return Math.Sqrt(coordinates.A * coordinates.A + coordinates.B * coordinates.B + coordinates.C * coordinates.C);
-        }
+        public static double GetLength(this Coordinates3D coordinates) =>
+            Math.Sqrt(coordinates.A * coordinates.A + coordinates.B * coordinates.B + coordinates.C * coordinates.C);
 
         /// <summary>
         ///     Calculates the cross product with another 3D coordinate tuple

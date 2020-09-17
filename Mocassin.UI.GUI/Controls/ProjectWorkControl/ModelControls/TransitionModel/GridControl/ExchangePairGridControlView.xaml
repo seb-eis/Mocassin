@@ -30,7 +30,7 @@
                                      PreviewMouseLeftButtonDown="RowHeaderLogo_OnPreviewMouseLeftButtonDown"
                                      PreviewMouseLeftButtonUp="RowHeaderLogo_OnPreviewMouseLeftButtonUp"
                                      PreviewMouseMove="RowHeaderLogo_OnPreviewMouseMove"
-                                     Cursor="Hand"/>
+                                     Cursor="Hand" />
         </DataTemplate>
       </DataGrid.RowHeaderTemplate>
 
@@ -49,9 +49,9 @@
         <DataGridTemplateColumn Header="Quick Grouping" CanUserSort="False">
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate DataType="{x:Type transitionModel:StateExchangePairData}">
-              <Button Content="Make Group" 
-                      Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ExchangePairGridControlView}}, Path=DataContext.AddToModelAsExchangeGroupCommand}" 
-                      CommandParameter="{Binding}"/>
+              <Button Content="Make Group"
+                      Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ExchangePairGridControlView}}, Path=DataContext.AddToModelAsExchangeGroupCommand}"
+                      CommandParameter="{Binding}" />
             </DataTemplate>
           </DataGridTemplateColumn.CellTemplate>
         </DataGridTemplateColumn>

@@ -160,10 +160,8 @@ namespace Mocassin.Model.ModelProject
         ///     the search for <see cref="MocassinModuleSettings" /> implementations
         /// </summary>
         /// <param name="additionalAssemblies"></param>
-        public string Serialize(IEnumerable<Assembly> additionalAssemblies = null)
-        {
-            return DataContractConvert.Serialize(this, null, GetDefaultSerializer(additionalAssemblies));
-        }
+        public string Serialize(IEnumerable<Assembly> additionalAssemblies = null) =>
+            DataContractConvert.Serialize(this, null, GetDefaultSerializer(additionalAssemblies));
 
         /// <summary>
         ///     Serializes the <see cref="ProjectSettings" /> to the passed file path with optional indentation and search
@@ -184,10 +182,8 @@ namespace Mocassin.Model.ModelProject
         /// <param name="filePath"></param>
         /// <param name="additionalAssemblies"></param>
         /// <returns></returns>
-        public static ProjectSettings Deserialize(string filePath, IEnumerable<Assembly> additionalAssemblies = null)
-        {
-            return DataContractConvert.DeserializeFromFile<ProjectSettings>(filePath, null, GetDefaultSerializer(additionalAssemblies));
-        }
+        public static ProjectSettings Deserialize(string filePath, IEnumerable<Assembly> additionalAssemblies = null) =>
+            DataContractConvert.DeserializeFromFile<ProjectSettings>(filePath, null, GetDefaultSerializer(additionalAssemblies));
 
         /// <summary>
         ///     Get the default <see cref="DataContractSerializer" /> for the settings that includes the passed additional search
@@ -195,9 +191,7 @@ namespace Mocassin.Model.ModelProject
         /// </summary>
         /// <param name="additionalAssemblies"></param>
         /// <returns></returns>
-        private static DataContractSerializer GetDefaultSerializer(IEnumerable<Assembly> additionalAssemblies = null)
-        {
-            return new DataContractSerializer(typeof(ProjectSettings), GetModuleSettingTypes(additionalAssemblies));
-        }
+        private static DataContractSerializer GetDefaultSerializer(IEnumerable<Assembly> additionalAssemblies = null) =>
+            new DataContractSerializer(typeof(ProjectSettings), GetModuleSettingTypes(additionalAssemblies));
     }
 }

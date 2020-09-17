@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Windows;
 using System.Windows.Controls;
 using Mocassin.UI.GUI.Base.ViewModels;
 
 namespace Mocassin.UI.GUI.Base.Objects
 {
     /// <summary>
-    ///     Container for passing <see cref="VvmContainer"/> instances that are created lazy
+    ///     Container for passing <see cref="VvmContainer" /> instances that are created lazy
     /// </summary>
     public class LazyVvmContainer : ViewModelBase
     {
@@ -18,12 +17,13 @@ namespace Mocassin.UI.GUI.Base.Objects
         public string Name { get; }
 
         /// <summary>
-        ///     Get the lazy initialized <see cref="VvmContainer"/>
+        ///     Get the lazy initialized <see cref="VvmContainer" />
         /// </summary>
         public VvmContainer Value => lazyContainer.Value;
 
         /// <summary>
-        ///     Creates a new named <see cref="LazyVvmContainer"/> from delegates for <see cref="UserControl"/> and <see cref="ViewModelBase"/>
+        ///     Creates a new named <see cref="LazyVvmContainer" /> from delegates for <see cref="UserControl" /> and
+        ///     <see cref="ViewModelBase" />
         /// </summary>
         /// <param name="viewFactory"></param>
         /// <param name="viewModelFactory"></param>
@@ -40,9 +40,6 @@ namespace Mocassin.UI.GUI.Base.Objects
         /// <typeparam name="T"></typeparam>
         /// <param name="factory"></param>
         /// <returns></returns>
-        protected virtual T InvokeFactory<T>(Func<T> factory)
-        {
-            return ExecuteOnAppThread(factory);
-        }
+        protected virtual T InvokeFactory<T>(Func<T> factory) => ExecuteOnAppThread(factory);
     }
 }

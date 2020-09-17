@@ -24,22 +24,13 @@ namespace Mocassin.Model.Energies
         public List<DefectEnergy> DefectEnergies { get; set; }
 
         /// <inheritdoc />
-        public IEnumerable<IInteractionFilter> GetInteractionFilters()
-        {
-            return (InteractionFilters ?? new List<StableInteractionFilter>()).AsEnumerable();
-        }
+        public IEnumerable<IInteractionFilter> GetInteractionFilters() => (InteractionFilters ?? new List<StableInteractionFilter>()).AsEnumerable();
 
         /// <inheritdoc />
-        public IEnumerable<IDefectEnergy> GetDefectEnergies()
-        {
-            return (DefectEnergies ?? new List<DefectEnergy>()).AsEnumerable();
-        }
+        public IEnumerable<IDefectEnergy> GetDefectEnergies() => (DefectEnergies ?? new List<DefectEnergy>()).AsEnumerable();
 
         /// <inheritdoc />
-        public override string GetParameterName()
-        {
-            return "Stable Environment Info";
-        }
+        public override string GetParameterName() => "Stable Environment Info";
 
         /// <inheritdoc />
         public override bool Equals(IModelParameter other)
@@ -78,14 +69,12 @@ namespace Mocassin.Model.Energies
         ///     Create a default environment info parameter (Range of one internal unit and no interaction filters)
         /// </summary>
         /// <returns></returns>
-        public static StableEnvironmentInfo CreateDefault()
-        {
-            return new StableEnvironmentInfo
+        public static StableEnvironmentInfo CreateDefault() =>
+            new StableEnvironmentInfo
             {
                 InteractionFilters = new List<StableInteractionFilter>(0),
                 DefectEnergies = new List<DefectEnergy>(0),
                 MaxInteractionRange = 1.0
             };
-        }
     }
 }

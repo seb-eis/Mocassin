@@ -105,16 +105,11 @@ namespace Mocassin.Model.Energies
 
 
         /// <inheritdoc />
-        protected override IDataConflictHandlerProvider<EnergyModelData> CreateDataConflictHandlerProvider()
-        {
-            return new EnergyDataConflictHandlerProvider(ModelProject);
-        }
+        protected override IDataConflictHandlerProvider<EnergyModelData> CreateDataConflictHandlerProvider() =>
+            new EnergyDataConflictHandlerProvider(ModelProject);
 
         /// <inheritdoc />
         [DataOperation(DataOperationType.ObjectCleaning)]
-        protected override IOperationReport TryCleanDeprecatedData()
-        {
-            return DefaultCleanDeprecatedData();
-        }
+        protected override IOperationReport TryCleanDeprecatedData() => DefaultCleanDeprecatedData();
     }
 }

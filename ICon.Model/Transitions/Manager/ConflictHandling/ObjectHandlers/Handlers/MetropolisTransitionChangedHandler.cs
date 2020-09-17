@@ -17,9 +17,6 @@ namespace Mocassin.Model.Transitions.ConflictHandling
         }
 
         /// <inheritdoc />
-        public override ConflictReport HandleConflicts(MetropolisTransition obj)
-        {
-            return new ConflictReport();
-        }
+        public override ConflictReport HandleConflicts(MetropolisTransition obj) => new ConflictReport();
     }
 }

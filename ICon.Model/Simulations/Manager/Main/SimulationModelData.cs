@@ -14,22 +14,17 @@ namespace Mocassin.Model.Simulations
         /// <summary>
         ///     List of all indexed single kinetic simulation model objects
         /// </summary>
-        [DataMember]
-        [IndexedModelData(typeof(IKineticSimulation))]
+        [DataMember, IndexedModelData(typeof(IKineticSimulation))]
         public List<KineticSimulation> KineticSimulations { get; set; }
 
         /// <summary>
         ///     List of all indexed single metropolis simulation model objects
         /// </summary>
-        [DataMember]
-        [IndexedModelData(typeof(IMetropolisSimulation))]
+        [DataMember, IndexedModelData(typeof(IMetropolisSimulation))]
         public List<MetropolisSimulation> MetropolisSimulations { get; set; }
 
         /// <inheritdoc />
-        public override ISimulationDataPort AsReadOnly()
-        {
-            return new SimulationDataManager(this);
-        }
+        public override ISimulationDataPort AsReadOnly() => new SimulationDataManager(this);
 
         /// <inheritdoc />
         public override void ResetToDefault()
@@ -41,9 +36,6 @@ namespace Mocassin.Model.Simulations
         ///     Creates a new default simulation model data object
         /// </summary>
         /// <returns></returns>
-        public static SimulationModelData CreateNew()
-        {
-            return CreateDefault<SimulationModelData>();
-        }
+        public static SimulationModelData CreateNew() => CreateDefault<SimulationModelData>();
     }
 }

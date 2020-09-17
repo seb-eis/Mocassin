@@ -32,9 +32,7 @@ namespace Mocassin.UI.Xml.Base
         /// <summary>
         ///     Get or set a display name for the object graph
         /// </summary>
-        [XmlAttribute("Name")]
-        [JsonProperty("Name")]
-        [Column("Name")]
+        [XmlAttribute("Name"), JsonProperty("Name"), Column("Name")]
         public virtual string Name
         {
             get => name;
@@ -46,10 +44,8 @@ namespace Mocassin.UI.Xml.Base
         /// </summary>
         /// <param name="xmlEventHandlers"></param>
         /// <returns></returns>
-        public string ToXml(XmlEventHandlers xmlEventHandlers = null)
-        {
-            return XmlStreamService.Serialize(this, DefaultEncoding, xmlEventHandlers ?? GetDefaultXmlEventHandlers());
-        }
+        public string ToXml(XmlEventHandlers xmlEventHandlers = null) =>
+            XmlSerializationHelper.Serialize(this, DefaultEncoding, xmlEventHandlers ?? GetDefaultXmlEventHandlers());
 
         /// <summary>
         ///     Populates the <see cref="ProjectDataObject" /> from its xml representation
@@ -60,7 +56,7 @@ namespace Mocassin.UI.Xml.Base
         public void FromXml(string xml, XmlEventHandlers xmlEventHandlers = null)
         {
             if (xml == null) throw new ArgumentNullException(nameof(xml));
-            var obj = (ProjectDataObject) XmlStreamService.Deserialize(xml, GetType(), xmlEventHandlers);
+            var obj = (ProjectDataObject) XmlSerializationHelper.Deserialize(xml, GetType(), xmlEventHandlers);
             FromJson(obj.ToJson());
         }
 
@@ -74,7 +70,7 @@ namespace Mocassin.UI.Xml.Base
         public static T CreateFromXml<T>(string xml, XmlEventHandlers xmlEventHandlers = null) where T : ProjectDataObject
         {
             if (xml == null) throw new ArgumentNullException(nameof(xml));
-            var obj = (T) XmlStreamService.Deserialize(xml, typeof(T), xmlEventHandlers);
+            var obj = (T) XmlSerializationHelper.Deserialize(xml, typeof(T), xmlEventHandlers);
             return obj;
         }
 
@@ -83,10 +79,8 @@ namespace Mocassin.UI.Xml.Base
         /// </summary>
         /// <param name="serializerSettings"></param>
         /// <returns></returns>
-        public string ToJson(JsonSerializerSettings serializerSettings = null)
-        {
-            return JsonConvert.SerializeObject(this, serializerSettings ?? GetDefaultJsonSerializerSettings());
-        }
+        public string ToJson(JsonSerializerSettings serializerSettings = null) =>
+            JsonConvert.SerializeObject(this, serializerSettings ?? GetDefaultJsonSerializerSettings());
 
         /// <summary>
         ///     Populates the <see cref="ProjectDataObject" /> from its json representation
@@ -132,29 +126,21 @@ namespace Mocassin.UI.Xml.Base
         ///     Get the default <see cref="XmlEventHandlers" /> for xml serialization
         /// </summary>
         /// <returns></returns>
-        protected virtual XmlEventHandlers GetDefaultXmlEventHandlers()
-        {
-            return null;
-        }
+        protected virtual XmlEventHandlers GetDefaultXmlEventHandlers() => null;
 
         /// <summary>
         ///     Get the default <see cref="JsonSerializerSettings" /> for json serialization
         /// </summary>
         /// <returns></returns>
-        protected virtual JsonSerializerSettings GetDefaultJsonSerializerSettings()
-        {
-            return new JsonSerializerSettings
+        protected virtual JsonSerializerSettings GetDefaultJsonSerializerSettings() =>
+            new JsonSerializerSettings
             {
                 PreserveReferencesHandling = PreserveReferencesHandling.All,
                 TypeNameHandling = TypeNameHandling.Auto,
                 Culture = DefaultCultureInfo
             };
-        }
 
         /// <inheritdoc />
-        public override string ToString()
-        {
-            return Name ?? base.ToString();
-        }
+        public override string ToString() => Name ?? base.ToString();
     }
 }

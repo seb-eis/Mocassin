@@ -50,9 +50,6 @@ namespace Mocassin.Model.Transitions
         /// <param name="lhs"></param>
         /// <param name="rhs"></param>
         /// <returns></returns>
-        protected bool TransitionsAreEqual(IKineticTransition lhs, IKineticTransition rhs)
-        {
-            return lhs.Index == rhs.Index || lhs.Key.Equals(rhs.Key);
-        }
+        protected bool TransitionsAreEqual(IKineticTransition lhs, IKineticTransition rhs) => lhs.Index == rhs.Index || lhs.Key.Equals(rhs.Key);
     }
 }

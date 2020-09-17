@@ -24,9 +24,6 @@ namespace Mocassin.Model.Transitions.Handler
         /// <param name="eventArgs"></param>
         /// <returns></returns>
         [EventHandlingMethod]
-        protected IConflictReport HandleCellReferencePositionListReindexing(IModelIndexingEventArgs<ICellSite> eventArgs)
-        {
-            return new ConflictReport();
-        }
+        protected IConflictReport HandleCellReferencePositionListReindexing(IModelIndexingEventArgs<ICellSite> eventArgs) => new ConflictReport();
     }
 }

@@ -30,13 +30,11 @@ namespace Mocassin.Model.Energies
         ///     Generates the hash code for the particle pair
         /// </summary>
         /// <returns></returns>
-        public override int GetHashCode()
-        {
-            return Particle0.Index + Particle1.Index;
-        }
+        public override int GetHashCode() => Particle0.Index + Particle1.Index;
 
         /// <summary>
-        ///     Creates a new particle pair from center and interaction <see cref="IParticle"/> with an information if its symmetric or not
+        ///     Creates a new particle pair from center and interaction <see cref="IParticle" /> with an information if its
+        ///     symmetric or not
         /// </summary>
         /// <param name="center"></param>
         /// <param name="other"></param>

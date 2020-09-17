@@ -30,10 +30,7 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <inheritdoc />
-        public IEnumerable<IKineticRule> GetDependentRules()
-        {
-            return DependentRules.AsEnumerable();
-        }
+        public IEnumerable<IKineticRule> GetDependentRules() => DependentRules.AsEnumerable();
 
         /// <inheritdoc />
         public override ModelObject PopulateFrom(IModelObject obj)

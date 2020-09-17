@@ -106,13 +106,10 @@ namespace Mocassin.Model.Translator
         ///     dependent
         /// </summary>
         /// <param name="str"></param>
-        public virtual bool TryParseParameters(string str)
-        {
-            return true;
-        }
+        public virtual bool TryParseParameters(string str) => true;
 
         /// <summary>
-        ///     Implementation defined behavior that returns a <see cref="string"/> template for the routine
+        ///     Implementation defined behavior that returns a <see cref="string" /> template for the routine
         /// </summary>
         /// <returns></returns>
         public virtual string GetTemplate()
@@ -127,7 +124,8 @@ namespace Mocassin.Model.Translator
         }
 
         /// <summary>
-        ///     Implementation defined behavior that returns <see cref="KeyValuePair{TKey,TValue}"/> of <see cref="string"/> data that describes parameters and default values
+        ///     Implementation defined behavior that returns <see cref="KeyValuePair{TKey,TValue}" /> of <see cref="string" /> data
+        ///     that describes parameters and default values
         /// </summary>
         /// <returns></returns>
         public virtual IEnumerable<KeyValuePair<string, string>> GetTemplateParameters()
@@ -140,10 +138,7 @@ namespace Mocassin.Model.Translator
         ///     Creates an empty <see cref="RoutineDataEntity" /> with an empty guid and one byte of data (17 total)
         /// </summary>
         /// <returns></returns>
-        public static RoutineDataEntity CreateEmpty()
-        {
-            return new RoutineDataEntity<Unit> {ParameterObject = InteropObject.Create(Unit.Default)};
-        }
+        public static RoutineDataEntity CreateEmpty() => new RoutineDataEntity<Unit> {ParameterObject = InteropObject.Create(Unit.Default)};
 
         /// <summary>
         ///     Tries to parse a routine instruction from a <see cref="string" /> into the matching
@@ -204,30 +199,22 @@ namespace Mocassin.Model.Translator
         }
 
         /// <inheritdoc />
-        protected override InteropObject GetInteropObjectFromBinaryState(IMarshalService marshalService)
-        {
-            return InteropObject.Create(marshalService.GetStructure<T>(BinaryState, 16));
-        }
+        protected override InteropObject GetInteropObjectFromBinaryState(IMarshalService marshalService) =>
+            InteropObject.Create(marshalService.GetStructure<T>(BinaryState, 16));
 
         /// <summary>
         ///     Internal GUID lookup that uses the <see cref="MocsimExtensionComponentAttribute" /> marker, returns the empty
         ///     <see cref="Guid" /> if the marker is missing
         /// </summary>
         /// <returns></returns>
-        protected virtual Guid GetGuidInternal()
-        {
-            return GetType().GetCustomAttribute<MocsimExtensionComponentAttribute>()?.ExtensionGuid ?? Guid.Empty;
-        }
+        protected virtual Guid GetGuidInternal() => GetType().GetCustomAttribute<MocsimExtensionComponentAttribute>()?.ExtensionGuid ?? Guid.Empty;
 
         /// <summary>
         ///     Internal alias lookup that uses the <see cref="MocsimExtensionComponentAttribute" /> marker, returns an empty
         ///     <see cref="string" /> if the marker is missing
         /// </summary>
         /// <returns></returns>
-        protected virtual string GetAliasInternal()
-        {
-            return GetType().GetCustomAttribute<MocsimExtensionComponentAttribute>()?.ExtensionAlias ?? "";
-        }
+        protected virtual string GetAliasInternal() => GetType().GetCustomAttribute<MocsimExtensionComponentAttribute>()?.ExtensionAlias ?? "";
 
         /// <summary>
         ///     Tries to parse the passed parameters and uses the parameter names for value setting using reflection

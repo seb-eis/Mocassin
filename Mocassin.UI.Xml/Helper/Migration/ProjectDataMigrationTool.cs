@@ -42,10 +42,8 @@ namespace Mocassin.UI.Xml.Helper.Migration
         /// <param name="source"></param>
         /// <param name="target"></param>
         /// <returns></returns>
-        protected MigrationReport GenerateReport(ProjectDataObject source, ProjectDataObject target)
-        {
-            return new MigrationReport(ReportEntries.ToList(ReportEntries.Count).AsReadOnly(), source, target);
-        }
+        protected MigrationReport GenerateReport(ProjectDataObject source, ProjectDataObject target) =>
+            new MigrationReport(ReportEntries.ToList(ReportEntries.Count).AsReadOnly(), source, target);
 
         /// <summary>
         ///     Resets the tool and empties the stored report information

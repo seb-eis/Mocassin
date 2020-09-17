@@ -586,7 +586,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
                     FarPlaneDistance = CameraFarPlaneDistance,
                     NearPlaneDistance = CameraNearPlaneDistance
                 },
-                _ => throw new ArgumentOutOfRangeException(nameof(value), value, null),
+                _ => throw new ArgumentOutOfRangeException(nameof(value), value, null)
             };
         }
 

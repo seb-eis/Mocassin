@@ -70,22 +70,13 @@ namespace Mocassin.Model.Basic
         }
 
         /// <inheritdoc />
-        public object GetValue()
-        {
-            return GetData();
-        }
+        public object GetValue() => GetData();
 
         /// <inheritdoc />
-        public Task<object> GetValueAsync()
-        {
-            return Task.Run(GetValue);
-        }
+        public Task<object> GetValueAsync() => Task.Run(GetValue);
 
         /// <inheritdoc />
-        public bool Equals(ICachedObjectSource other)
-        {
-            return other != null && FactoryDelegate.Equals(other.FactoryDelegate);
-        }
+        public bool Equals(ICachedObjectSource other) => other != null && FactoryDelegate.Equals(other.FactoryDelegate);
 
         /// <inheritdoc />
         public void MarkAsDeprecated()
@@ -114,10 +105,7 @@ namespace Mocassin.Model.Basic
         ///     Start data object retrieval as a new task, triggers data update if deprecated flag is set
         /// </summary>
         /// <returns></returns>
-        public Task<T1> GetDataAsync()
-        {
-            return Task.Run(GetData);
-        }
+        public Task<T1> GetDataAsync() => Task.Run(GetData);
 
         /// <summary>
         ///     Triggers update function and sets the deprecated flag to false

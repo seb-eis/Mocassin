@@ -23,22 +23,19 @@ namespace Mocassin.Model.Translator
         /// <summary>
         ///     Fixed 64 bytes buffer for the redirection of particle ids to table ids
         /// </summary>
-        [NotMapped]
-        [InteropProperty(nameof(ParticleToTableIdsBinary))]
+        [NotMapped, InteropProperty(nameof(ParticleToTableIdsBinary))]
         public InteropObject<CByteBuffer64> ParticleToTableIds { get; set; }
 
         /// <summary>
         ///     The 2D energy table entity that stores the energy values mapped by table id and cluster code id
         /// </summary>
-        [NotMapped]
-        [OwnedBlobProperty(nameof(EnergyTableBinary))]
+        [NotMapped, OwnedBlobProperty(nameof(EnergyTableBinary))]
         public EnergyTableEntity EnergyTable { get; set; }
 
         /// <summary>
         ///     The occupation code list that is used to lookup cluster code ids
         /// </summary>
-        [NotMapped]
-        [OwnedBlobProperty(nameof(OccupationCodeListBinary))]
+        [NotMapped, OwnedBlobProperty(nameof(OccupationCodeListBinary))]
         public OccupationCodeListEntity OccupationCodeList { get; set; }
 
         /// <summary>

@@ -84,8 +84,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         {
             var baseCollection = ContentSource?.ProjectModelData?.StructureModelData?.CellReferencePositions;
             return baseCollection
-                ?.Where(x => x.Stability == PositionStability.Stable)
-                .Select(x => new ModelObjectReference<CellSite>(x));
+                   ?.Where(x => x.Stability == PositionStability.Stable)
+                   .Select(x => new ModelObjectReference<CellSite>(x));
         }
     }
 }

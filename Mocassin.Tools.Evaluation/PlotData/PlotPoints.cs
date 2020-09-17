@@ -23,11 +23,11 @@ namespace Mocassin.Tools.Evaluation.PlotData
         /// <param name="capacity"></param>
         public PlotPoints(int capacity = 0)
         {
-            Values = new List<DataPoint<TX,TY>>(capacity);
+            Values = new List<DataPoint<TX, TY>>(capacity);
         }
 
         /// <summary>
-        ///     Creates new <see cref="PlotPoints{TX,TY}"/> from a sequence of <see cref="DataPoint{TX,TY}"/>
+        ///     Creates new <see cref="PlotPoints{TX,TY}" /> from a sequence of <see cref="DataPoint{TX,TY}" />
         /// </summary>
         /// <param name="points"></param>
         public PlotPoints(IEnumerable<DataPoint<TX, TY>> points)
@@ -36,16 +36,10 @@ namespace Mocassin.Tools.Evaluation.PlotData
         }
 
         /// <inheritdoc />
-        public IEnumerator<DataPoint<TX, TY>> GetEnumerator()
-        {
-            return Values.GetEnumerator();
-        }
+        public IEnumerator<DataPoint<TX, TY>> GetEnumerator() => Values.GetEnumerator();
 
         /// <inheritdoc />
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return ((IEnumerable) Values).GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable) Values).GetEnumerator();
 
         /// <summary>
         ///     Adds a plot point to the data
@@ -67,10 +61,7 @@ namespace Mocassin.Tools.Evaluation.PlotData
         public void WriteToFile(string path, string format = "{}\t{}")
         {
             using var stream = File.CreateText(path);
-            foreach (var point in Values)
-            {
-                stream.WriteLine(format, point.X, point.Y);
-            }
+            foreach (var point in Values) stream.WriteLine(format, point.X, point.Y);
         }
     }
 }

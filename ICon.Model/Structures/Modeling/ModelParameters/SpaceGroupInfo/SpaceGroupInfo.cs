@@ -19,10 +19,7 @@ namespace Mocassin.Model.Structures
         public string SpecifierName => GroupEntry.CrystalVariation.ToString();
 
         /// <inheritdoc />
-        public override string GetParameterName()
-        {
-            return "Space Group Info";
-        }
+        public override string GetParameterName() => "Space Group Info";
 
         /// <inheritdoc />
         public override bool Equals(IModelParameter other)
@@ -41,10 +38,7 @@ namespace Mocassin.Model.Structures
         ///     Implicit cast of a space group entry to the wrapper class object
         /// </summary>
         /// <param name="groupEntry"></param>
-        public static implicit operator SpaceGroupInfo(SpaceGroupEntry groupEntry)
-        {
-            return new SpaceGroupInfo {GroupEntry = groupEntry};
-        }
+        public static implicit operator SpaceGroupInfo(SpaceGroupEntry groupEntry) => new SpaceGroupInfo {GroupEntry = groupEntry};
 
         /// <inheritdoc />
         public override ModelParameter PopulateObject(IModelParameter modelParameter)

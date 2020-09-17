@@ -13,14 +13,14 @@
   d:DesignHeight="450" d:DesignWidth="800">
 
   <UserControl.Resources>
-    <ToolTip x:Key="Local.ToolTip.UnstableEnvironment" >
-      <TextBlock Text="{x:Static res:Tooltips.ModelObject_UnstableEnvironment}"/>
+    <ToolTip x:Key="Local.ToolTip.UnstableEnvironment">
+      <TextBlock Text="{x:Static res:Tooltips.ModelObject_UnstableEnvironment}" />
     </ToolTip>
-    <ToolTip x:Key="Local.ToolTip.GroupInteractions" >
-      <TextBlock Text="{x:Static res:Tooltips.ModelObject_GroupInteraction}"/>
+    <ToolTip x:Key="Local.ToolTip.GroupInteractions">
+      <TextBlock Text="{x:Static res:Tooltips.ModelObject_GroupInteraction}" />
     </ToolTip>
-    <ToolTip x:Key="Local.ToolTip.DefectEnergies" >
-      <TextBlock Text="{x:Static res:Tooltips.ModelObject_DefectEnergy}"/>
+    <ToolTip x:Key="Local.ToolTip.DefectEnergies">
+      <TextBlock Text="{x:Static res:Tooltips.ModelObject_DefectEnergy}" />
     </ToolTip>
   </UserControl.Resources>
   <Grid>

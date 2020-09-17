@@ -42,9 +42,6 @@ namespace Mocassin.UI.GUI.Controls.Base.Commands
         }
 
         /// <inheritdoc />
-        public override bool CanExecuteInternal(T parameter)
-        {
-            return CollectionViewModel.Items != null && CollectionViewModel.Items.Contains(parameter);
-        }
+        public override bool CanExecuteInternal(T parameter) => CollectionViewModel.Items != null && CollectionViewModel.Items.Contains(parameter);
     }
 }

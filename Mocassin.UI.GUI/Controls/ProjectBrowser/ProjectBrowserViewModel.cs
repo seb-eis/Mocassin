@@ -43,9 +43,6 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser
         ///     Retrieves the currently user selected <see cref="MocassinProject" />
         /// </summary>
         /// <returns></returns>
-        public MocassinProject GetActiveWorkProject()
-        {
-            return ComponentBrowserViewModel.ActiveProject;
-        }
+        public MocassinProject GetActiveWorkProject() => ComponentBrowserViewModel.ActiveProject;
     }
 }

@@ -44,32 +44,22 @@ namespace Mocassin.Model.Particles
         }
 
         /// <inheritdoc />
-        public bool EqualsInModelProperties(IParticle other, IComparer<double> comparer)
-        {
-            return Name == other.Name && Symbol == other.Symbol && comparer.Compare(Charge, other.Charge) == 0;
-        }
+        public bool EqualsInModelProperties(IParticle other, IComparer<double> comparer) =>
+            Name == other.Name && Symbol == other.Symbol && comparer.Compare(Charge, other.Charge) == 0;
 
         /// <inheritdoc />
-        public string GetIonString()
-        {
-            return Math.Abs(Charge) < 1e-10 ? Symbol : $"{Symbol}{(Charge < 0 ? $"{Math.Abs(Charge):#.-}" : $"{Charge:#.+}")}";
-        }
+        public string GetIonString() => Math.Abs(Charge) < 1e-10 ? Symbol : $"{Symbol}{(Charge < 0 ? $"{Math.Abs(Charge):#.-}" : $"{Charge:#.+}")}";
 
         /// <inheritdoc />
-        public bool Equals(IParticle other)
-        {
-            return other != null && Index == other.Index;
-        }
+        public bool Equals(IParticle other) => other != null && Index == other.Index;
 
         /// <summary>
         ///     Creates a void particle, this particle represents an active but context unavailable particle and should always have
         ///     the index 0 in a particle manager
         /// </summary>
         /// <returns></returns>
-        public static Particle CreateVoid()
-        {
-            return new Particle {Name = "Void", Symbol = "Void", Key = "Particle.Void", Charge = 0.0, Index = VoidIndex, IsVoid = true};
-        }
+        public static Particle CreateVoid() => new Particle
+            {Name = "Void", Symbol = "Void", Key = "Particle.Void", Charge = 0.0, Index = VoidIndex, IsVoid = true};
 
 
         /// <inheritdoc />
@@ -89,9 +79,6 @@ namespace Mocassin.Model.Particles
         ///     Get the hash code of the particle based upon the particle index
         /// </summary>
         /// <returns></returns>
-        public override int GetHashCode()
-        {
-            return 1 << Index;
-        }
+        public override int GetHashCode() => 1 << Index;
     }
 }

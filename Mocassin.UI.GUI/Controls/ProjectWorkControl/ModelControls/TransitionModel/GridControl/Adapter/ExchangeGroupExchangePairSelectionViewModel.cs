@@ -8,7 +8,7 @@ using Mocassin.UI.Xml.TransitionModel;
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionModel.GridControl.Adapter
 {
     /// <summary>
-    ///     The <see cref="HostGraphModelObjectSelectionViewModel{TModelObject,TObjectGraph}" /> for the relation of
+    ///     The <see cref="HostGraphModelObjectSelectionViewModel{TModelObject,TDataObject}" /> for the relation of
     ///     <see cref="StateExchangePairData" /> to <see cref="StateExchangeGroupData" /> host instances
     /// </summary>
     public sealed class ExchangeGroupExchangePairSelectionViewModel : HostGraphModelObjectSelectionViewModel<StateExchangePair,
@@ -23,16 +23,12 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
         }
 
         /// <inheritdoc />
-        protected override IReadOnlyCollection<ModelDataObject> GetSourceCollection(MocassinProject project)
-        {
-            return project?.ProjectModelData?.TransitionModelData?.StateExchangePairs;
-        }
+        protected override IReadOnlyCollection<ModelDataObject> GetSourceCollection(MocassinProject project) =>
+            project?.ProjectModelData?.TransitionModelData?.StateExchangePairs;
 
         /// <inheritdoc />
         protected override ICollection<ModelObjectReference<StateExchangePair>> GetTargetCollection(
-            StateExchangeGroupData sourceObject)
-        {
-            return sourceObject?.StateExchangePairs;
-        }
+            StateExchangeGroupData sourceObject) =>
+            sourceObject?.StateExchangePairs;
     }
 }

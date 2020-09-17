@@ -17,10 +17,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Extensions
         /// <param name="transformer"></param>
         /// <param name="vector"></param>
         /// <returns></returns>
-        public static Vector3 ToCartesianDx(this IVectorTransformer transformer, in Fractional3D vector)
-        {
-            return transformer.ToCartesian(vector).ToDxVector();
-        }
+        public static Vector3 ToCartesianDx(this IVectorTransformer transformer, in Fractional3D vector) => transformer.ToCartesian(vector).ToDxVector();
 
         /// <summary>
         ///     Transforms a <see cref="Cartesian3D" /> vector into fractional coordinates and narrows the result to a SharpDX
@@ -29,9 +26,6 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Extensions
         /// <param name="transformer"></param>
         /// <param name="vector"></param>
         /// <returns></returns>
-        public static Vector3 ToFractionalDx(this IVectorTransformer transformer, in Cartesian3D vector)
-        {
-            return transformer.ToFractional(vector).ToDxVector();
-        }
+        public static Vector3 ToFractionalDx(this IVectorTransformer transformer, in Cartesian3D vector) => transformer.ToFractional(vector).ToDxVector();
     }
 }

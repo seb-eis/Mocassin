@@ -153,15 +153,15 @@ namespace Mocassin.Model.Translator.ModelContext
         protected void CreateAndAddAbstractMovement(IKineticTransitionModel transitionModel)
         {
             var unitCellProvider = ModelProject.Manager<IStructureManager>()
-                .DataAccess.Query(port => port.GetFullUnitCellProvider());
+                                               .DataAccess.Query(port => port.GetFullUnitCellProvider());
 
             var positions = transitionModel.Transition.GetGeometrySequence()
-                .Select(vector => unitCellProvider.GetEntryValueAt(vector))
-                .ToList();
+                                           .Select(vector => unitCellProvider.GetEntryValueAt(vector))
+                                           .ToList();
 
             var connectors = transitionModel.Transition.AbstractTransition
-                .GetConnectorSequence()
-                .ToList();
+                                            .GetConnectorSequence()
+                                            .ToList();
 
             transitionModel.AbstractMovement = CalculateAbstractMovement(connectors, positions);
         }
@@ -174,9 +174,9 @@ namespace Mocassin.Model.Translator.ModelContext
         {
             var comparer = ModelProject.CommonNumeric.RangeComparer;
             var ruleModels = transitionModel.Transition.GetExtendedTransitionRules()
-                .Select(kineticRule => CreateRuleModel(kineticRule, comparer))
-                .Action(ruleModel => ruleModel.TransitionModel = transitionModel)
-                .ToList();
+                                            .Select(kineticRule => CreateRuleModel(kineticRule, comparer))
+                                            .Action(ruleModel => ruleModel.TransitionModel = transitionModel)
+                                            .ToList();
 
             CreateCodesAndLinkLogicRuleInversions(ruleModels);
             AddRuleDirectionInformation(ruleModels);
@@ -222,7 +222,7 @@ namespace Mocassin.Model.Translator.ModelContext
             IVectorTransformer transformer)
         {
             var geometry = transformer.ToCartesian(ruleModel.TransitionModel.Transition.GetGeometrySequence())
-                .ToList();
+                                      .ToList();
 
             var origin = geometry.First();
 
@@ -266,8 +266,8 @@ namespace Mocassin.Model.Translator.ModelContext
             var mappings = manager.DataAccess.Query(port => port.GetKineticMappingList(index));
 
             transitionModel.MappingModels = mappings
-                .Select(a => CreateMappingModel(a, transitionModel))
-                .ToList();
+                                            .Select(a => CreateMappingModel(a, transitionModel))
+                                            .ToList();
 
             if (!transitionModel.MappingsContainInversion()) return;
 

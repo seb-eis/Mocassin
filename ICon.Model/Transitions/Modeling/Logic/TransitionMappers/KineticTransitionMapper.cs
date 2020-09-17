@@ -49,10 +49,7 @@ namespace Mocassin.Model.Transitions
         /// </summary>
         /// <param name="transition"></param>
         /// <returns></returns>
-        public IEnumerable<KineticMapping> GetMappings(IKineticTransition transition)
-        {
-            return GetMappings(transition.GetGeometrySequence(), transition);
-        }
+        public IEnumerable<KineticMapping> GetMappings(IKineticTransition transition) => GetMappings(transition.GetGeometrySequence(), transition);
 
         /// <summary>
         ///     Takes the provided reference geometry of a transition in fractional position information and creates all symmetry

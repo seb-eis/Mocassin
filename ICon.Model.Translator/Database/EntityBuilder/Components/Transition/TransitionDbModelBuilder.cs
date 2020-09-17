@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Mocassin.Framework.Extensions;
 using Mocassin.Mathematics.ValueTypes;
@@ -34,11 +33,15 @@ namespace Mocassin.Model.Translator.EntityBuilder
         protected void LinkModel(SimulationTransitionModel simulationTransitionModel)
         {
             simulationTransitionModel.JumpDirections = simulationTransitionModel.JumpCollections
-                .Action(collection => collection.SimulationTransitionModel = simulationTransitionModel)
-                .Action(collection => collection.JumpDirections.ForEach(direction => direction.JumpCollection = collection))
-                .SelectMany(collection => collection.JumpDirections)
-                .Action(direction => direction.SimulationTransitionModel = simulationTransitionModel)
-                .ToList();
+                                                                                .Action(collection =>
+                                                                                    collection.SimulationTransitionModel = simulationTransitionModel)
+                                                                                .Action(collection =>
+                                                                                    collection.JumpDirections.ForEach(direction =>
+                                                                                        direction.JumpCollection = collection))
+                                                                                .SelectMany(collection => collection.JumpDirections)
+                                                                                .Action(direction =>
+                                                                                    direction.SimulationTransitionModel = simulationTransitionModel)
+                                                                                .ToList();
 
             simulationTransitionModel.NumOfJumpCollections = simulationTransitionModel.JumpCollections.Count;
             simulationTransitionModel.NumOfJumpDirections = simulationTransitionModel.JumpDirections.Count;
@@ -49,40 +52,32 @@ namespace Mocassin.Model.Translator.EntityBuilder
         /// </summary>
         /// <param name="encodingModel"></param>
         /// <returns></returns>
-        protected JumpCountTableEntity GetJumpCountTableEntity(ISimulationEncodingModel encodingModel)
-        {
-            return new JumpCountTableEntity(encodingModel.JumpCountMappingTable);
-        }
+        protected JumpCountTableEntity GetJumpCountTableEntity(ISimulationEncodingModel encodingModel) =>
+            new JumpCountTableEntity(encodingModel.JumpCountMappingTable);
 
         /// <summary>
         ///     Get the jump assign table database entity that can be extracted from the passed simulation encoding model
         /// </summary>
         /// <param name="encodingModel"></param>
         /// <returns></returns>
-        protected JumpAssignTableEntity GetJumpAssignTableEntity(ISimulationEncodingModel encodingModel)
-        {
-            return new JumpAssignTableEntity(encodingModel.JumpDirectionIdMappingTable);
-        }
+        protected JumpAssignTableEntity GetJumpAssignTableEntity(ISimulationEncodingModel encodingModel) =>
+            new JumpAssignTableEntity(encodingModel.JumpDirectionIdMappingTable);
 
         /// <summary>
         ///     Get the static tracker assign table database entity that can be extracted from the passed simulation tracking model
         /// </summary>
         /// <param name="trackingModel"></param>
         /// <returns></returns>
-        protected TrackerAssignTableEntity GetStaticTrackerAssignTableEntity(ISimulationTrackingModel trackingModel)
-        {
-            return new TrackerAssignTableEntity(trackingModel.StaticTrackerMappingTable);
-        }
+        protected TrackerAssignTableEntity GetStaticTrackerAssignTableEntity(ISimulationTrackingModel trackingModel) =>
+            new TrackerAssignTableEntity(trackingModel.StaticTrackerMappingTable);
 
         /// <summary>
         ///     Get the global tracker assign table database entity that can be extracted from the passed simulation tracking model
         /// </summary>
         /// <param name="trackingModel"></param>
         /// <returns></returns>
-        protected TrackerAssignTableEntity GetGlobalTrackerAssignTableEntity(ISimulationTrackingModel trackingModel)
-        {
-            return new TrackerAssignTableEntity(trackingModel.GlobalTrackerMappingTable);
-        }
+        protected TrackerAssignTableEntity GetGlobalTrackerAssignTableEntity(ISimulationTrackingModel trackingModel) =>
+            new TrackerAssignTableEntity(trackingModel.GlobalTrackerMappingTable);
 
         /// <summary>
         ///     Creates all jump collection database entities for the passed simulation model
@@ -92,8 +87,8 @@ namespace Mocassin.Model.Translator.EntityBuilder
         protected List<JumpCollectionEntity> GetJumpCollectionEntities(ISimulationModel simulationModel)
         {
             return simulationModel.GetTransitionModels()
-                .Select(x => GetJumpCollectionEntity(x, simulationModel))
-                .ToList();
+                                  .Select(x => GetJumpCollectionEntity(x, simulationModel))
+                                  .ToList();
         }
 
         /// <summary>
@@ -126,8 +121,8 @@ namespace Mocassin.Model.Translator.EntityBuilder
         protected List<JumpDirectionEntity> GetJumpDirectionEntities(ITransitionModel transitionModel, ISimulationModel simulationModel)
         {
             var directions = transitionModel.GetMappingModels()
-                .Select(x => GetJumpDirectionEntity(x, simulationModel))
-                .ToList();
+                                            .Select(x => GetJumpDirectionEntity(x, simulationModel))
+                                            .ToList();
 
             return directions;
         }
@@ -175,8 +170,8 @@ namespace Mocassin.Model.Translator.EntityBuilder
         protected MoveSequenceEntity GetMovementSequenceEntity(ITransitionMappingModel mappingModel)
         {
             var cMoveVectors = mappingModel.GetMovementSequence()
-                .Select(x => new CMoveVector(x))
-                .ToList();
+                                           .Select(x => new CMoveVector(x))
+                                           .ToList();
 
             return new MoveSequenceEntity {Values = cMoveVectors};
         }

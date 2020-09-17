@@ -23,22 +23,13 @@ namespace Mocassin.Model.Structures
         public override string ObjectName => "Unit Cell Position";
 
         /// <inheritdoc />
-        public FractionalPosition AsPosition()
-        {
-            return new FractionalPosition(Vector, OccupationSet.Index, Stability);
-        }
+        public FractionalPosition AsPosition() => new FractionalPosition(Vector, OccupationSet.Index, Stability);
 
         /// <inheritdoc />
-        public bool IsValidAndStable()
-        {
-            return !IsDeprecated && Stability == PositionStability.Stable;
-        }
+        public bool IsValidAndStable() => !IsDeprecated && Stability == PositionStability.Stable;
 
         /// <inheritdoc />
-        public bool IsValidAndUnstable()
-        {
-            return !IsDeprecated && Stability == PositionStability.Unstable;
-        }
+        public bool IsValidAndUnstable() => !IsDeprecated && Stability == PositionStability.Unstable;
 
         /// <inheritdoc />
         public override ModelObject PopulateFrom(IModelObject obj)

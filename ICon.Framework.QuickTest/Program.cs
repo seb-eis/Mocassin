@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.Linq;
 using Mocassin.Tools.Evaluation.Context;
 using Mocassin.Tools.Evaluation.Queries;
-using Newtonsoft.Json;
 
 namespace Mocassin.Framework.QuickTest
 {

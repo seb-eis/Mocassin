@@ -30,10 +30,8 @@ namespace Mocassin.Model.Transitions
         /// <param name="dataReader"></param>
         /// <returns></returns>
         [ValidationOperation(ValidationType.Object)]
-        protected IValidationReport ValidateStateExchangePair(IStateExchangePair pair, IDataReader<ITransitionDataPort> dataReader)
-        {
-            return new PropertyStatePairValidator(ModelProject, Settings, dataReader).Validate(pair);
-        }
+        protected IValidationReport ValidateStateExchangePair(IStateExchangePair pair, IDataReader<ITransitionDataPort> dataReader) =>
+            new PropertyStatePairValidator(ModelProject, Settings, dataReader).Validate(pair);
 
         /// <summary>
         ///     Validates a new state exchange group in terms of content and potential conflicts with existing data
@@ -42,10 +40,8 @@ namespace Mocassin.Model.Transitions
         /// <param name="dataReader"></param>
         /// <returns></returns>
         [ValidationOperation(ValidationType.Object)]
-        protected IValidationReport ValidateStateExchangeGroup(IStateExchangeGroup group, IDataReader<ITransitionDataPort> dataReader)
-        {
-            return new PropertyGroupValidator(ModelProject, Settings, dataReader).Validate(group);
-        }
+        protected IValidationReport ValidateStateExchangeGroup(IStateExchangeGroup group, IDataReader<ITransitionDataPort> dataReader) =>
+            new PropertyGroupValidator(ModelProject, Settings, dataReader).Validate(group);
 
         /// <summary>
         ///     Validates a new abstract transition in terms of content and potential conflicts with existing data
@@ -54,10 +50,8 @@ namespace Mocassin.Model.Transitions
         /// <param name="dataReader"></param>
         /// <returns></returns>
         [ValidationOperation(ValidationType.Object)]
-        protected IValidationReport ValidateAbstractTransition(IAbstractTransition transition, IDataReader<ITransitionDataPort> dataReader)
-        {
-            return new AbstractTransitionValidator(ModelProject, Settings, dataReader).Validate(transition);
-        }
+        protected IValidationReport ValidateAbstractTransition(IAbstractTransition transition, IDataReader<ITransitionDataPort> dataReader) =>
+            new AbstractTransitionValidator(ModelProject, Settings, dataReader).Validate(transition);
 
         /// <summary>
         ///     Validates a new model transition in terms of content and potential conflicts with existing data
@@ -66,10 +60,8 @@ namespace Mocassin.Model.Transitions
         /// <param name="dataReader"></param>
         /// <returns></returns>
         [ValidationOperation(ValidationType.Object)]
-        protected IValidationReport ValidateKineticTransition(IKineticTransition transition, IDataReader<ITransitionDataPort> dataReader)
-        {
-            return new KineticTransitionValidator(ModelProject, Settings, dataReader).Validate(transition);
-        }
+        protected IValidationReport ValidateKineticTransition(IKineticTransition transition, IDataReader<ITransitionDataPort> dataReader) =>
+            new KineticTransitionValidator(ModelProject, Settings, dataReader).Validate(transition);
 
         /// <summary>
         ///     Validates a new metropolis transition in terms of content and potential conflicts with existing data
@@ -79,9 +71,7 @@ namespace Mocassin.Model.Transitions
         /// <returns></returns>
         [ValidationOperation(ValidationType.Object)]
         protected IValidationReport ValidateMetropolisTransition(IMetropolisTransition transition,
-            IDataReader<ITransitionDataPort> dataReader)
-        {
-            return new MetropolisTransitionValidator(ModelProject, Settings, dataReader).Validate(transition);
-        }
+            IDataReader<ITransitionDataPort> dataReader) =>
+            new MetropolisTransitionValidator(ModelProject, Settings, dataReader).Validate(transition);
     }
 }

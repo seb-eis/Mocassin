@@ -12,18 +12,18 @@ namespace Mocassin.Model.Lattices
         ///     Get read only list of used dopings
         /// </summary>
         /// <returns></returns>
-        ListReadOnlyWrapper<IDoping> GetDopings();
+        FixedList<IDoping> GetDopings();
 
         /// <summary>
         ///     Get read only list of DopingCombinations (dopant, doped element, unit cell entry)
         /// </summary>
         /// <returns></returns>
-        ListReadOnlyWrapper<IDopingCombination> GetDopingCombinations();
+        FixedList<IDopingCombination> GetDopingCombinations();
 
         /// <summary>
         ///     Get read only list of building blocks
         /// </summary>
         /// <returns></returns>
-        ListReadOnlyWrapper<IBuildingBlock> GetBuildingBlocks();
+        FixedList<IBuildingBlock> GetBuildingBlocks();
     }
 }

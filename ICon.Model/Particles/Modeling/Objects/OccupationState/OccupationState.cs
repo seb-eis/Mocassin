@@ -44,22 +44,13 @@ namespace Mocassin.Model.Particles
         }
 
         /// <inheritdoc />
-        public bool Equals(OccupationState other)
-        {
-            return Equals(other as IOccupationState);
-        }
+        public bool Equals(OccupationState other) => Equals(other as IOccupationState);
 
         /// <inheritdoc />
-        public IEnumerator<IParticle> GetEnumerator()
-        {
-            return Particles.AsEnumerable().GetEnumerator();
-        }
+        public IEnumerator<IParticle> GetEnumerator() => Particles.AsEnumerable().GetEnumerator();
 
         /// <inheritdoc />
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         /// <inheritdoc />
         public bool Equals(IOccupationState other)
@@ -68,8 +59,8 @@ namespace Mocassin.Model.Particles
             if (StateLength != other.StateLength) return false;
 
             return !Particles
-                .Where((t, i) => !t.Equals(other.Particles[i]))
-                .Any();
+                    .Where((t, i) => !t.Equals(other.Particles[i]))
+                    .Any();
         }
 
         /// <summary>

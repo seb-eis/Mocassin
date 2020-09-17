@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Mocassin.Framework.Collections;
+using Mocassin.Framework.Comparer;
 using Mocassin.Framework.Extensions;
 
 namespace Mocassin.Model.Transitions
@@ -93,7 +94,7 @@ namespace Mocassin.Model.Transitions
         public StatePairGroup MergeGroups(IEnumerable<StatePairGroup> groups)
         {
             IComparer<(int, int)> comparer = new TupleComparer<int, int>();
-            var result = ContainerFactory.CreateSetList(comparer, groups.SelectMany(group => group.StatePairs));
+            var result = SetListFactory.CreateSetList(comparer, groups.SelectMany(group => group.StatePairs));
             return new StatePairGroup(result.ToArray());
         }
 

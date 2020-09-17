@@ -69,20 +69,16 @@ namespace Mocassin.UI.GUI.Controls.Base.IO
         /// </summary>
         /// <param name="useSaveDialog"></param>
         /// <returns></returns>
-        public static UserFileSelectionSource CreateForProjectFiles(bool useSaveDialog)
-        {
-            return new UserFileSelectionSource(useSaveDialog, ("Project file", "mocprj"));
-        }
+        public static UserFileSelectionSource CreateForProjectFiles(bool useSaveDialog) =>
+            new UserFileSelectionSource(useSaveDialog, ("Project file", "mocprj"));
 
         /// <summary>
         ///     Creates  a new <see cref="UserFileSelectionSource" /> tailored to simulation databases
         /// </summary>
         /// <param name="useSaveDialog"></param>
         /// <returns></returns>
-        public static UserFileSelectionSource CreateForJobDbFiles(bool useSaveDialog)
-        {
-            return new UserFileSelectionSource(useSaveDialog, ("Simulation library", "msl"));
-        }
+        public static UserFileSelectionSource CreateForJobDbFiles(bool useSaveDialog) =>
+            new UserFileSelectionSource(useSaveDialog, ("Simulation library", "msl"));
 
         /// <summary>
         ///     Converts a set of name and file extension strings into a <see cref="OpenFileDialog" /> selection filter

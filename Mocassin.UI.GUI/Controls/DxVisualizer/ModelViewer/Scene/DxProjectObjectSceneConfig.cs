@@ -4,7 +4,6 @@ using HelixToolkit.Wpf.SharpDX.Model.Scene;
 using Mocassin.UI.GUI.Base.ViewModels;
 using Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Scene;
 using Mocassin.UI.GUI.Controls.Visualizer.Objects;
-using Mocassin.UI.GUI.Properties;
 using Mocassin.UI.Xml.Base;
 
 namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
@@ -106,16 +105,10 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
         }
 
         /// <inheritdoc />
-        public virtual bool Equals(IDxSceneItemConfig other)
-        {
-            return other != null && ReferenceEquals(this, other);
-        }
+        public virtual bool Equals(IDxSceneItemConfig other) => other != null && ReferenceEquals(this, other);
 
         /// <inheritdoc />
-        public virtual bool CheckAccess(object model)
-        {
-            return model != null && ReferenceEquals(model, DataObject);
-        }
+        public virtual bool CheckAccess(object model) => model != null && ReferenceEquals(model, DataObject);
 
         /// <summary>
         ///     Performs implementation based behavior to check if the scene node is supported

@@ -4,15 +4,12 @@ using System.Windows.Input;
 namespace Mocassin.UI.Base.Commands
 {
     /// <summary>
-    ///     Provides a <see cref="ICommand"/> interface that relays calls to lazy initialized command instances
+    ///     Provides a <see cref="ICommand" /> interface that relays calls to lazy initialized command instances
     /// </summary>
     public class LazyCommandRelay : CommandDictionary<Type, ICommand>
     {
         /// <inheritdoc />
-        public override bool CanExecute(Type parameter)
-        {
-            return GetCommand(parameter).CanExecute(null);
-        }
+        public override bool CanExecute(Type parameter) => GetCommand(parameter).CanExecute(null);
 
         /// <inheritdoc />
         public override void Execute(Type parameter)

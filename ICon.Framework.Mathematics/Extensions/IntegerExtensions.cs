@@ -14,10 +14,7 @@ namespace Mocassin.Mathematics.Extensions
         /// <param name="integer"></param>
         /// <param name="index"></param>
         /// <returns></returns>
-        public static bool GetBit(this uint integer, int index)
-        {
-            return (integer & (1U << index)) != 0U;
-        }
+        public static bool GetBit(this uint integer, int index) => (integer & (1U << index)) != 0U;
 
         /// <summary>
         ///     Set a single bit within an integer to true
@@ -25,10 +22,7 @@ namespace Mocassin.Mathematics.Extensions
         /// <param name="integer"></param>
         /// <param name="index"></param>
         /// <returns></returns>
-        public static uint SetBit(this uint integer, int index)
-        {
-            return integer | (1U << index);
-        }
+        public static uint SetBit(this uint integer, int index) => integer | (1U << index);
 
         /// <summary>
         ///     Set a single bit within an integer to false
@@ -36,10 +30,7 @@ namespace Mocassin.Mathematics.Extensions
         /// <param name="integer"></param>
         /// <param name="index"></param>
         /// <returns></returns>
-        public static uint UnsetBit(this uint integer, int index)
-        {
-            return integer - (integer & (1U << index));
-        }
+        public static uint UnsetBit(this uint integer, int index) => integer - (integer & (1U << index));
 
         /// <summary>
         ///     Sets all true bits of secoond integer to true in the first
@@ -47,10 +38,7 @@ namespace Mocassin.Mathematics.Extensions
         /// <param name="integer"></param>
         /// <param name="flags"></param>
         /// <returns></returns>
-        public static uint SetBits(this uint integer, uint flags)
-        {
-            return integer + (~integer & flags);
-        }
+        public static uint SetBits(this uint integer, uint flags) => integer + (~integer & flags);
 
         /// <summary>
         ///     Sets all true bits in the second integer to false in the first
@@ -58,10 +46,7 @@ namespace Mocassin.Mathematics.Extensions
         /// <param name="integer"></param>
         /// <param name="flags"></param>
         /// <returns></returns>
-        public static uint UnsetBits(this uint integer, uint flags)
-        {
-            return integer - (integer & flags);
-        }
+        public static uint UnsetBits(this uint integer, uint flags) => integer - (integer & flags);
 
         /// <summary>
         ///     Get true/false of a single bit
@@ -69,10 +54,7 @@ namespace Mocassin.Mathematics.Extensions
         /// <param name="integer"></param>
         /// <param name="index"></param>
         /// <returns></returns>
-        public static bool GetBit(this ulong integer, int index)
-        {
-            return (integer & (1U << index)) != 0U;
-        }
+        public static bool GetBit(this ulong integer, int index) => (integer & (1U << index)) != 0U;
 
         /// <summary>
         ///     Set a single bit within an integer to true
@@ -80,10 +62,7 @@ namespace Mocassin.Mathematics.Extensions
         /// <param name="integer"></param>
         /// <param name="index"></param>
         /// <returns></returns>
-        public static ulong SetBit(this ulong integer, int index)
-        {
-            return integer | (1U << index);
-        }
+        public static ulong SetBit(this ulong integer, int index) => integer | (1U << index);
 
         /// <summary>
         ///     Set a single bit within an integer to false
@@ -91,10 +70,7 @@ namespace Mocassin.Mathematics.Extensions
         /// <param name="integer"></param>
         /// <param name="index"></param>
         /// <returns></returns>
-        public static ulong UnsetBit(this ulong integer, int index)
-        {
-            return integer - (integer & (1U << index));
-        }
+        public static ulong UnsetBit(this ulong integer, int index) => integer - (integer & (1U << index));
 
         /// <summary>
         ///     Sets all true bits of second integer to true in the first
@@ -102,10 +78,7 @@ namespace Mocassin.Mathematics.Extensions
         /// <param name="integer"></param>
         /// <param name="flags"></param>
         /// <returns></returns>
-        public static ulong SetBits(this ulong integer, ulong flags)
-        {
-            return integer + (~integer & flags);
-        }
+        public static ulong SetBits(this ulong integer, ulong flags) => integer + (~integer & flags);
 
         /// <summary>
         ///     Sets all true bits in the second integer to false in the first
@@ -113,10 +86,7 @@ namespace Mocassin.Mathematics.Extensions
         /// <param name="integer"></param>
         /// <param name="flags"></param>
         /// <returns></returns>
-        public static ulong UnsetBits(this ulong integer, ulong flags)
-        {
-            return integer - (integer & flags);
-        }
+        public static ulong UnsetBits(this ulong integer, ulong flags) => integer - (integer & flags);
 
         /// <summary>
         ///     Performs a population count on an 64 bit unsigned integer
@@ -137,26 +107,21 @@ namespace Mocassin.Mathematics.Extensions
         /// <typeparam name="T1"></typeparam>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static int PopCount<T1>(this T1 value) where T1 : struct, IConvertible
-        {
-            return value.ToUInt64(CultureInfo.InvariantCulture).PopCount();
-        }
+        public static int PopCount<T1>(this T1 value) where T1 : struct, IConvertible => value.ToUInt64(CultureInfo.InvariantCulture).PopCount();
 
         /// <summary>
         ///     Invert the byte order of a long value
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static long InvertBytes(this long value)
-        {
-            return ((value & 0xffL) << 56) |
-                   ((value & (0xffL << 8)) << 40) |
-                   ((value & (0xffL << 16)) << 24) |
-                   ((value & (0xffL << 24)) << 8) |
-                   ((value & (0xffL << 32)) >> 8) |
-                   ((value & (0xffL << 40)) >> 24) |
-                   ((value & (0xffL << 48)) >> 40) |
-                   ((value & (0xffL << 56)) >> 56);
-        }
+        public static long InvertBytes(this long value) =>
+            ((value & 0xffL) << 56) |
+            ((value & (0xffL << 8)) << 40) |
+            ((value & (0xffL << 16)) << 24) |
+            ((value & (0xffL << 24)) << 8) |
+            ((value & (0xffL << 32)) >> 8) |
+            ((value & (0xffL << 40)) >> 24) |
+            ((value & (0xffL << 48)) >> 40) |
+            ((value & (0xffL << 56)) >> 56);
     }
 }

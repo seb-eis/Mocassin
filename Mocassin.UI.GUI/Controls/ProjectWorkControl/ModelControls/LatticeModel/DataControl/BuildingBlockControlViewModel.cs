@@ -75,7 +75,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel
         }
 
         /// <summary>
-        ///     Temporary workaround that ensures that a default <see cref="BuildingBlockData"/> exists and is the first block
+        ///     Temporary workaround that ensures that a default <see cref="BuildingBlockData" /> exists and is the first block
         /// </summary>
         /// <param name="contentSource"></param>
         private void EnsureFirstBlockIsDefaultBlock(MocassinProject contentSource)
@@ -87,6 +87,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel
                 var defaultBlock = new BuildingBlockData {Name = "Default"};
                 blocks.Add(defaultBlock);
             }
+
             blocks.First().ParticleList.Clear();
             blocks.First().ParticleList.AddRange(positionList.Select(x => x.Particle));
         }
@@ -110,8 +111,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel
                 var sequence = particleData.Cast<object>().Concat(structureData).Concat(structureObjects);
                 var reports = ModelProject.InputPipeline.PushToProject(sequence);
                 UnitCellProvider = ModelProject
-                    .Manager<IStructureManager>().DataAccess
-                    .Query(x => x.GetFullUnitCellProvider());
+                                   .Manager<IStructureManager>().DataAccess
+                                   .Query(x => x.GetFullUnitCellProvider());
 
                 if (reports.All(x => x.IsGood)) return true;
             }

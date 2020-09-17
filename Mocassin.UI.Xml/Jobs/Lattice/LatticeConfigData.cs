@@ -84,10 +84,7 @@ namespace Mocassin.UI.Xml.Jobs
         }
 
         /// <inheritdoc />
-        object IDuplicable.Duplicate()
-        {
-            return Duplicate();
-        }
+        object IDuplicable.Duplicate() => Duplicate();
 
         /// <summary>
         ///     Creates an internal <see cref="LatticeConfiguration" /> from the serializable data object

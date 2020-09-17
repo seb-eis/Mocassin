@@ -44,8 +44,7 @@ namespace Mocassin.UI.Xml.Customization
         /// <summary>
         ///     Get or set the list of affiliated <see cref="KineticRuleData" /> objects to customize the rules
         /// </summary>
-        [XmlArray("TransitionRules")]
-        [XmlArrayItem("TransitionRule")]
+        [XmlArray("TransitionRules"), XmlArrayItem("TransitionRule")]
         public ObservableCollection<KineticRuleData> KineticRules
         {
             get => kineticRules;
@@ -66,10 +65,7 @@ namespace Mocassin.UI.Xml.Customization
         }
 
         /// <inheritdoc />
-        object IDuplicable.Duplicate()
-        {
-            return Duplicate();
-        }
+        object IDuplicable.Duplicate() => Duplicate();
 
         /// <summary>
         ///     Set all data on the passed <see cref="IKineticRuleSetter" /> and push the values to the affiliated

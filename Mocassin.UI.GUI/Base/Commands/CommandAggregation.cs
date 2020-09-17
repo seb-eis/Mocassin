@@ -7,7 +7,8 @@ using System.Windows.Input;
 namespace Mocassin.UI.Base.Commands
 {
     /// <summary>
-    ///     Generic <see cref="ICommand" /> wrapper to form a single <see cref="ICommand" /> interface for multiple unordered commands
+    ///     Generic <see cref="ICommand" /> wrapper to form a single <see cref="ICommand" /> interface for multiple unordered
+    ///     commands
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public sealed class CommandAggregation<T> : Command, IList<T> where T : ICommand
@@ -42,16 +43,10 @@ namespace Mocassin.UI.Base.Commands
         }
 
         /// <inheritdoc />
-        public IEnumerator<T> GetEnumerator()
-        {
-            return commandList.GetEnumerator();
-        }
+        public IEnumerator<T> GetEnumerator() => commandList.GetEnumerator();
 
         /// <inheritdoc />
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return ((IEnumerable) commandList).GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable) commandList).GetEnumerator();
 
         /// <inheritdoc />
         public void Add(T item)
@@ -66,10 +61,7 @@ namespace Mocassin.UI.Base.Commands
         }
 
         /// <inheritdoc />
-        public bool Contains(T item)
-        {
-            return commandList.Contains(item);
-        }
+        public bool Contains(T item) => commandList.Contains(item);
 
         /// <inheritdoc />
         public void CopyTo(T[] array, int arrayIndex)
@@ -78,16 +70,10 @@ namespace Mocassin.UI.Base.Commands
         }
 
         /// <inheritdoc />
-        public bool Remove(T item)
-        {
-            return commandList.Remove(item);
-        }
+        public bool Remove(T item) => commandList.Remove(item);
 
         /// <inheritdoc />
-        public int IndexOf(T item)
-        {
-            return commandList.IndexOf(item);
-        }
+        public int IndexOf(T item) => commandList.IndexOf(item);
 
         /// <inheritdoc />
         public void Insert(int index, T item)

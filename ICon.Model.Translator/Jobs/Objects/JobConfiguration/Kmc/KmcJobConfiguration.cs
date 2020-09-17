@@ -47,9 +47,8 @@
         }
 
         /// <inheritdoc />
-        public override InteropObject GetInteropJobHeader()
-        {
-            return new InteropObject<CKmcJobHeader>
+        public override InteropObject GetInteropJobHeader() =>
+            new InteropObject<CKmcJobHeader>
             {
                 Structure = new CKmcJobHeader
                 {
@@ -60,7 +59,6 @@
                     JobFlags = default
                 }
             };
-        }
 
         /// <inheritdoc />
         public override JobConfiguration DeepCopy()

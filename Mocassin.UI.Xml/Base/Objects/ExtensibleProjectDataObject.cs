@@ -13,8 +13,7 @@ namespace Mocassin.UI.Xml.Base
         /// <summary>
         ///     Get or set the <see cref="ResourcesData" /> for attached properties
         /// </summary>
-        [XmlIgnore]
-        [NotMapped]
+        [XmlIgnore, NotMapped]
         public ResourcesData Resources
         {
             get => resources;

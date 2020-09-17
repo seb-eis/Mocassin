@@ -14,6 +14,7 @@ using Mocassin.UI.Xml.Customization;
 using Mocassin.UI.Xml.Jobs;
 using Mocassin.UI.Xml.Main;
 using Mocassin.UI.Xml.Model;
+
 #pragma warning disable 1591
 
 namespace Mocassin.UI.Xml.ProjectBuilding
@@ -280,8 +281,9 @@ namespace Mocassin.UI.Xml.ProjectBuilding
                 BuildCounter = 0;
                 var totalJobCount = jobTranslation.GetTotalJobCount(modelContext.ModelProject);
                 jobPackageModels = jobTranslation.ToInternals(modelContext.ModelProject)
-                    .Select(jobs => GetPreparedJobBuilder(modelContext, jobs, totalJobCount).BuildJobPackageModel(jobs, CancellationToken))
-                    .ToList();
+                                                 .Select(jobs => GetPreparedJobBuilder(modelContext, jobs, totalJobCount)
+                                                     .BuildJobPackageModel(jobs, CancellationToken))
+                                                 .ToList();
 
                 return true;
             }

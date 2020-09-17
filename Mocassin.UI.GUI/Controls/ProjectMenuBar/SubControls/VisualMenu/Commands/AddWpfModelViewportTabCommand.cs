@@ -18,15 +18,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.VisualMenu.Command
         }
 
         /// <inheritdoc />
-        protected override ContentControl GetDataControl()
-        {
-            return new ModelViewport3DView {DataContext = new ModelViewport3DViewModel(ProjectControl)};
-        }
+        protected override ContentControl GetDataControl() => new ModelViewport3DView {DataContext = new ModelViewport3DViewModel(ProjectControl)};
 
         /// <inheritdoc />
-        protected override string GetTabName()
-        {
-            return "3D Model Viewer [DX9]";
-        }
+        protected override string GetTabName() => "3D Model Viewer [DX9]";
     }
 }

@@ -345,12 +345,16 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
             await Task.WhenAll(awaitables);
 
             for (var i = 0; i < stableInteractions.Count; i++)
+            {
                 VisualViewModel.AddVisualGroup(stableBuildTasks[i].Result, stableInteractions[i].Name,
                     GetProjectObjectViewModel(stableInteractions[i]).IsVisible);
+            }
 
             for (var i = 0; i < unstableInteractions.Count; i++)
+            {
                 VisualViewModel.AddVisualGroup(unstableBuildTasks[i].Result, unstableInteractions[i].Name,
                     GetProjectObjectViewModel(unstableInteractions[i]).IsVisible);
+            }
 
             for (var i = 0; i < groupInteractions.Count; i++)
                 VisualViewModel.AddVisualGroup(groupBuildTasks[i].Result, groupInteractions[i].Name, GetProjectObjectViewModel(groupInteractions[i]).IsVisible);
@@ -376,10 +380,11 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         {
             var (startVector, endVector) = RenderResourcesViewModel.GetRenderCuboidVectors();
             return ContentSource.ProjectModelData.StructureModelData.CellReferencePositions
-                .Select(graph => (new Fractional3D(graph.A, graph.B, graph.C), GetProjectObjectViewModel(graph)))
-                .SelectMany(tuple => SpaceGroupService.GetPositionsInCuboid(tuple.Item1, startVector, endVector).Select(vec => (vec, tuple.Item2)))
-                .OrderBy(value => value.vec, SpaceGroupService.Comparer)
-                .ToList();
+                                .Select(graph => (new Fractional3D(graph.A, graph.B, graph.C), GetProjectObjectViewModel(graph)))
+                                .SelectMany(tuple =>
+                                    SpaceGroupService.GetPositionsInCuboid(tuple.Item1, startVector, endVector).Select(vec => (vec, tuple.Item2)))
+                                .OrderBy(value => value.vec, SpaceGroupService.Comparer)
+                                .ToList();
         }
 
         /// <summary>
@@ -505,10 +510,10 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
 
                 var stepTransforms = new List<Transform3D>(rawPathTransforms.Count);
                 var filteredTransforms = rawPathTransforms
-                    .Select(transform3D => (transform3D, transform3D.Transform(startPoint), transform3D.Transform(endPoint)))
-                    .Where(x => RenderAreaContainsPoint(x.Item2, renderAreaStart, renderAreaEnd) &&
-                                RenderAreaContainsPoint(x.Item3, renderAreaStart, renderAreaEnd))
-                    .Select(x => x.transform3D);
+                                         .Select(transform3D => (transform3D, transform3D.Transform(startPoint), transform3D.Transform(endPoint)))
+                                         .Where(x => RenderAreaContainsPoint(x.Item2, renderAreaStart, renderAreaEnd) &&
+                                                     RenderAreaContainsPoint(x.Item3, renderAreaStart, renderAreaEnd))
+                                         .Select(x => x.transform3D);
 
                 stepTransforms.AddRange(filteredTransforms);
                 result.Add(stepTransforms);
@@ -619,9 +624,8 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
                 for (var j = i + 1; j < points.Count; j++)
                 {
                     for (var k = j + 1; k < points.Count; k++)
-                    {
-                        foreach (var x in transforms) meshBuilder.AddTriangle(x.Transform(points[i]), x.Transform(points[j]), x.Transform(points[k]));
-                    }
+                        foreach (var x in transforms)
+                            meshBuilder.AddTriangle(x.Transform(points[i]), x.Transform(points[j]), x.Transform(points[k]));
                 }
             }
 
@@ -702,7 +706,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         private IList<Transform3D> GetVisuallyUniqueP1PathTransformsForRenderArea(IEnumerable<Fractional3D> pathGeometry, bool freezeTransforms = true)
         {
             var cellTransforms = SpaceGroupService.GetMinimalUnitCellP1PathExtensionOperations(pathGeometry, true)
-                .Select(x => x.ToTransform3D(VectorTransformer.FractionalSystem));
+                                                  .Select(x => x.ToTransform3D(VectorTransformer.FractionalSystem));
             if (freezeTransforms) cellTransforms = cellTransforms.Action(x => x.Freeze());
             return ExtendUnitCellTransformsToRenderArea(cellTransforms).ToList();
         }

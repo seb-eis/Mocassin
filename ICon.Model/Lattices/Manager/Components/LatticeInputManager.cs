@@ -26,10 +26,8 @@ namespace Mocassin.Model.Lattices
         ///     manager
         /// </summary>
         /// <returns></returns>
-        protected override IDataConflictHandlerProvider<LatticeModelData> CreateDataConflictHandlerProvider()
-        {
-            return new LatticeDataConflictResolverProvider(ModelProject);
-        }
+        protected override IDataConflictHandlerProvider<LatticeModelData> CreateDataConflictHandlerProvider() =>
+            new LatticeDataConflictResolverProvider(ModelProject);
 
         /// <summary>
         ///     Tries to clean deprecated data by removing deprecated model objects and reindexing the model object lists.
@@ -37,10 +35,7 @@ namespace Mocassin.Model.Lattices
         /// </summary>
         /// <returns></returns>
         [DataOperation(DataOperationType.ObjectCleaning)]
-        protected override IOperationReport TryCleanDeprecatedData()
-        {
-            return DefaultCleanDeprecatedData();
-        }
+        protected override IOperationReport TryCleanDeprecatedData() => DefaultCleanDeprecatedData();
 
         /// <summary>
         ///     Registers a new BuildingBlock to the manager if it passes validation (Awaits distribution of affiliated events in

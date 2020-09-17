@@ -115,10 +115,7 @@ namespace Mocassin.UI.Xml.Customization
         }
 
         /// <inheritdoc />
-        object IDuplicable.Duplicate()
-        {
-            return Duplicate();
-        }
+        object IDuplicable.Duplicate() => Duplicate();
 
         /// <summary>
         ///     Creates a new serializable <see cref="KineticRuleData" /> by pulling the required data from the passed
@@ -153,13 +150,11 @@ namespace Mocassin.UI.Xml.Customization
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public bool HasEqualStates(KineticRuleData other)
-        {
-            return other != null &&
-                   (ReferenceEquals(this, other) ||
-                    StartState.HasEqualState(other.StartState) &&
-                    TransitionState.HasEqualState(other.TransitionState) &&
-                    FinalState.HasEqualState(other.FinalState));
-        }
+        public bool HasEqualStates(KineticRuleData other) =>
+            other != null &&
+            (ReferenceEquals(this, other) ||
+             StartState.HasEqualState(other.StartState) &&
+             TransitionState.HasEqualState(other.TransitionState) &&
+             FinalState.HasEqualState(other.FinalState));
     }
 }

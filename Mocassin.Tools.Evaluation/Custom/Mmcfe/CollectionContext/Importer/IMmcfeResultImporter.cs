@@ -15,7 +15,7 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe.Importer
         IObservable<int> JobImportedNotification { get; }
 
         /// <summary>
-        ///     Get the <see cref="IObservable{T}"/> that supplies messages
+        ///     Get the <see cref="IObservable{T}" /> that supplies messages
         /// </summary>
         IObservable<string> MessageNotifications { get; }
 

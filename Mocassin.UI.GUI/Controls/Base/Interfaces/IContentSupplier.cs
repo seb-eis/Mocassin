@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace Mocassin.UI.GUI.Controls.Base.Interfaces
+﻿namespace Mocassin.UI.GUI.Controls.Base.Interfaces
 {
     /// <summary>
     ///     Provides a generic interface for sub UI elements that supply selection dependent content of a managing view model

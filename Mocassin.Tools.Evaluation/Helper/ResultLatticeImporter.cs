@@ -40,6 +40,12 @@ namespace Mocassin.Tools.Evaluation.Helper
             ImportCountEvent = new ReactiveEvent<int>();
         }
 
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            ImportCountEvent.OnCompleted();
+        }
+
         /// <summary>
         ///     Checks if two <see cref="IJobMetaData" /> entries should have matching data required for simulation lattice
         ///     importing
@@ -47,14 +53,12 @@ namespace Mocassin.Tools.Evaluation.Helper
         /// <param name="first"></param>
         /// <param name="second"></param>
         /// <returns></returns>
-        public bool AreCompatibleForLatticeImport(IJobMetaData first, IJobMetaData second)
-        {
-            return first.ConfigName == second.ConfigName &&
-                   first.CollectionName == second.CollectionName &&
-                   first.JobIndex == second.JobIndex &&
-                   first.DopingInfo == second.DopingInfo &&
-                   first.LatticeInfo == second.LatticeInfo;
-        }
+        public bool AreCompatibleForLatticeImport(IJobMetaData first, IJobMetaData second) =>
+            first.ConfigName == second.ConfigName &&
+            first.CollectionName == second.CollectionName &&
+            first.JobIndex == second.JobIndex &&
+            first.DopingInfo == second.DopingInfo &&
+            first.LatticeInfo == second.LatticeInfo;
 
         /// <summary>
         ///     Enumerates the source/target import pairs based on <see cref="JobMetaDataEntity" /> collections. Throws if at least
@@ -77,6 +81,7 @@ namespace Mocassin.Tools.Evaluation.Helper
                 usedImportTargets.Add(importTarget);
                 yield return (exportTarget, importTarget);
             }
+
             usedImportTargets.Clear();
         }
 
@@ -179,9 +184,9 @@ namespace Mocassin.Tools.Evaluation.Helper
         public IList<JobMetaDataEntity> LoadAsImporting(IQueryable<JobMetaDataEntity> metaData)
         {
             return metaData
-                .Include(x => x.JobModel)
-                .ThenInclude(x => x.SimulationLatticeModel)
-                .ToList();
+                   .Include(x => x.JobModel)
+                   .ThenInclude(x => x.SimulationLatticeModel)
+                   .ToList();
         }
 
         /// <summary>
@@ -192,15 +197,9 @@ namespace Mocassin.Tools.Evaluation.Helper
         public IList<JobMetaDataEntity> LoadAsExporting(IQueryable<JobMetaDataEntity> metaData)
         {
             return metaData
-                .Include(x => x.JobModel)
-                .ThenInclude(x => x.JobResultData)
-                .ToList();
-        }
-
-        /// <inheritdoc />
-        public void Dispose()
-        {
-            ImportCountEvent.OnCompleted();
+                   .Include(x => x.JobModel)
+                   .ThenInclude(x => x.JobResultData)
+                   .ToList();
         }
     }
 }

@@ -13,9 +13,6 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Extensions
         /// </summary>
         /// <param name="matrix"></param>
         /// <returns></returns>
-        public static bool FlipsOrientation(this Matrix matrix)
-        {
-            return matrix.Determinant() < 0;
-        }
+        public static bool FlipsOrientation(this Matrix matrix) => matrix.Determinant() < 0;
     }
 }

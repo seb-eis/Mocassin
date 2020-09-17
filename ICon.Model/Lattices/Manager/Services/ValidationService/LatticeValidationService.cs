@@ -34,10 +34,8 @@ namespace Mocassin.Model.Lattices
         /// <param name="dataReader"></param>
         /// <returns></returns>
         [ValidationOperation(ValidationType.Object)]
-        protected IValidationReport ValidateBuildingBlock(IBuildingBlock buildingBlock, IDataReader<ILatticeDataPort> dataReader)
-        {
-            return new BuildingBlockValidator(ModelProject, Settings, dataReader).Validate(buildingBlock);
-        }
+        protected IValidationReport ValidateBuildingBlock(IBuildingBlock buildingBlock, IDataReader<ILatticeDataPort> dataReader) =>
+            new BuildingBlockValidator(ModelProject, Settings, dataReader).Validate(buildingBlock);
 
 
         /// <summary>
@@ -48,10 +46,8 @@ namespace Mocassin.Model.Lattices
         /// <param name="dataReader"></param>
         /// <returns></returns>
         [ValidationOperation(ValidationType.Object)]
-        protected IValidationReport ValidateDopingCombination(IDopingCombination dopingCombination, IDataReader<ILatticeDataPort> dataReader)
-        {
-            return new DopingCombinationValidator(ModelProject, Settings, dataReader).Validate(dopingCombination);
-        }
+        protected IValidationReport ValidateDopingCombination(IDopingCombination dopingCombination, IDataReader<ILatticeDataPort> dataReader) =>
+            new DopingCombinationValidator(ModelProject, Settings, dataReader).Validate(dopingCombination);
 
         /// <summary>
         ///     Validate a Doping in terms of conflicts with basic limitations
@@ -60,9 +56,7 @@ namespace Mocassin.Model.Lattices
         /// <param name="dataReader"></param>
         /// <returns></returns>
         [ValidationOperation(ValidationType.Object)]
-        protected IValidationReport ValidateDoping(IDoping doping, IDataReader<ILatticeDataPort> dataReader)
-        {
-            return new DopingValidator(ModelProject, Settings, dataReader).Validate(doping);
-        }
+        protected IValidationReport ValidateDoping(IDoping doping, IDataReader<ILatticeDataPort> dataReader) =>
+            new DopingValidator(ModelProject, Settings, dataReader).Validate(doping);
     }
 }

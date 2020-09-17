@@ -25,7 +25,7 @@ namespace Mocassin.Model.Translator.Routines
         }
 
         /// <summary>
-        ///     Get the default <see cref="CMmcfeParams"/> structure
+        ///     Get the default <see cref="CMmcfeParams" /> structure
         /// </summary>
         /// <returns></returns>
         public static CMmcfeParams GetDefaultStructure()

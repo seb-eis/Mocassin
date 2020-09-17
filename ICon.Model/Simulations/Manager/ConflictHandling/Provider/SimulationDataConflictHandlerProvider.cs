@@ -19,9 +19,6 @@ namespace Mocassin.Model.Simulations.ConflictHandling
         /// </summary>
         /// <returns></returns>
         [HandlerFactoryMethod(DataOperationType.NewObject)]
-        protected object CreateObjectHandler()
-        {
-            return new SimulationObjectChangedHandler(ModelProject);
-        }
+        protected object CreateObjectHandler() => new SimulationObjectChangedHandler(ModelProject);
     }
 }

@@ -27,7 +27,7 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe.Importer
         private ReactiveEvent<int> JobImportedEvent { get; }
 
         /// <summary>
-        ///     Get the <see cref="ReactiveEvent{TSubject}"/> for messages
+        ///     Get the <see cref="ReactiveEvent{TSubject}" /> for messages
         /// </summary>
         private ReactiveEvent<string> MessageEvent { get; }
 
@@ -94,6 +94,13 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe.Importer
         }
 
         /// <inheritdoc />
+        public void Dispose()
+        {
+            JobImportedEvent.OnCompleted();
+            MessageEvent.OnCompleted();
+        }
+
+        /// <inheritdoc />
         public void Import(Expression<Func<JobMetaDataEntity, bool>> predicate = null)
         {
             predicate ??= x => true;
@@ -124,6 +131,7 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe.Importer
                     importCount = 0;
                 }
             }
+
             AsyncSaveAndDetachEntities(importTasks, saveTask).Wait();
             IsImporting = false;
         }
@@ -149,10 +157,7 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe.Importer
         ///     Opens the <see cref="ISimulationLibrary" /> that provides the import meta information
         /// </summary>
         /// <returns></returns>
-        protected virtual ISimulationLibrary OpenSimulationLibrary()
-        {
-            return SqLiteContext.OpenDatabase<SimulationDbContext>(SimulationLibraryPath);
-        }
+        protected virtual ISimulationLibrary OpenSimulationLibrary() => SqLiteContext.OpenDatabase<SimulationDbContext>(SimulationLibraryPath);
 
         /// <summary>
         ///     Tries to import a single MMCFE result that belongs to the passed <see cref="JobMetaDataEntity" /> and provides
@@ -171,17 +176,17 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe.Importer
                 var results = new List<object>(250);
                 using var context = GetEvaluationContext(metaData);
                 var readers = context
-                    .FullReaderSet()
-                    .ToList();
+                              .FullReaderSet()
+                              .ToList();
                 var metaEntry = new MmcfeLogMetaEntry(metaData);
                 var logEntries = context
-                    .LogSet()
-                    .OrderBy(x => x.Alpha)
-                    .Select(x => MmcfeExtendedLogEntry.Create(x, metaEntry, IsExcludeRawData))
-                    .ToList();
+                                 .LogSet()
+                                 .OrderBy(x => x.Alpha)
+                                 .Select(x => MmcfeExtendedLogEntry.Create(x, metaEntry, IsExcludeRawData))
+                                 .ToList();
                 var energyEntries = energyEvaluator
-                    .CalculateEnergyStates(readers, metaData.Temperature, MetaDataHelper.GetNumberOfUnitCells(metaEntry))
-                    .Zip(logEntries, (state, entry) => MmcfeLogEnergyEntry.Create(state, entry));
+                                    .CalculateEnergyStates(readers, metaData.Temperature, MetaDataHelper.GetNumberOfUnitCells(metaEntry))
+                                    .Zip(logEntries, (state, entry) => MmcfeLogEnergyEntry.Create(state, entry));
 
                 results.Add(metaEntry);
                 results.AddRange(logEntries);
@@ -210,7 +215,7 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe.Importer
         }
 
         /// <summary>
-        ///     Deletes the job folder affiliated with the passed <see cref="JobMetaDataEntity"/>
+        ///     Deletes the job folder affiliated with the passed <see cref="JobMetaDataEntity" />
         /// </summary>
         /// <param name="metaData"></param>
         protected void DeleteJobFolder(JobMetaDataEntity metaData)
@@ -233,13 +238,13 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe.Importer
             Import();
             MessageEvent.OnNext($"Raw import to '{rawPath}' completed, creating clean evaluation database '{evalPath}'.");
             context.CopyDatabaseWithoutRawData(evalPath);
-            MessageEvent.OnNext($"Eval database created.");
+            MessageEvent.OnNext("Eval database created.");
             if (zipRawDatabase)
             {
                 var zipPath = $"{JobFolderRootPath}\\mmcfe.raw.zip";
                 ZipFile(rawPath, zipPath);
-
             }
+
             ImportDbContext = null;
         }
 
@@ -261,7 +266,8 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe.Importer
                 var entry = archive.CreateEntryFromFile(sourceFilePath, Path.GetFileName(sourceFilePath));
                 var sourceInfo = new FileInfo(sourceFilePath);
                 var targetInfo = new FileInfo(targetFilePath);
-                var message = $"Archive created @ {sourceInfo.Length / 1024.0} KB ==> {targetInfo.Length / 1024.0} KB ({ (double) targetInfo.Length / sourceInfo.Length} %)";
+                var message =
+                    $"Archive created @ {sourceInfo.Length / 1024.0} KB ==> {targetInfo.Length / 1024.0} KB ({(double) targetInfo.Length / sourceInfo.Length} %)";
                 MessageEvent.OnNext(message);
             }
 
@@ -276,13 +282,6 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe.Importer
         {
             using var context = OpenSimulationLibrary();
             return context.JobMetaData.Count();
-        }
-
-        /// <inheritdoc />
-        public void Dispose()
-        {
-            JobImportedEvent.OnCompleted();
-            MessageEvent.OnCompleted();
         }
     }
 }

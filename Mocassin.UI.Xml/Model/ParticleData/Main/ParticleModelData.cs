@@ -56,8 +56,8 @@ namespace Mocassin.UI.Xml.ParticleModel
         public override IEnumerable<IModelObject> GetInputObjects()
         {
             return Particles
-                .Select(x => x.GetInputObject())
-                .Concat(ParticleSets.Select(x => x.GetInputObject()));
+                   .Select(x => x.GetInputObject())
+                   .Concat(ParticleSets.Select(x => x.GetInputObject()));
         }
     }
 }

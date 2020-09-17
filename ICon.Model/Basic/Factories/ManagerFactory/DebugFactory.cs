@@ -24,13 +24,11 @@ namespace Mocassin.Model.Basic
             /// </summary>
             /// <param name="settings"></param>
             /// <returns></returns>
-            public static ManagerPackage CreateProjectServicesSystem(ProjectSettings settings)
-            {
-                return new ManagerPackage
+            public static ManagerPackage CreateProjectServicesSystem(ProjectSettings settings) =>
+                new ManagerPackage
                 {
                     ModelProject = ModelProject.ModelProject.Create(settings ?? ProjectSettings.CreateDefault())
                 };
-            }
 
             /// <summary>
             ///     Creates and links default project services and particle manager for testing
@@ -110,10 +108,7 @@ namespace Mocassin.Model.Basic
             /// </summary>
             /// <param name="settings"></param>
             /// <returns></returns>
-            public static ManagerPackage CreateFullManagementSystem(ProjectSettings settings)
-            {
-                return CreateSimulationManagementPackage(settings);
-            }
+            public static ManagerPackage CreateFullManagementSystem(ProjectSettings settings) => CreateSimulationManagementPackage(settings);
         }
     }
 }

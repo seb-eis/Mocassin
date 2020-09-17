@@ -97,10 +97,7 @@ namespace Mocassin.Model.ModelProject
         }
 
         /// <inheritdoc />
-        public IModelManager CreateAndRegister(IModelManagerFactory factory)
-        {
-            return DataTracker.CreateAndRegister(this, factory);
-        }
+        public IModelManager CreateAndRegister(IModelManagerFactory factory) => DataTracker.CreateAndRegister(this, factory);
 
         /// <inheritdoc />
         public void CreateAndRegister(IEnumerable<IModelManagerFactory> factories)
@@ -144,17 +141,11 @@ namespace Mocassin.Model.ModelProject
 
 
         /// <inheritdoc />
-        public IModelManager Manager(Type interfaceType)
-        {
-            return ActiveManagers.SingleOrDefault(interfaceType.IsInstanceOfType);
-        }
+        public IModelManager Manager(Type interfaceType) => ActiveManagers.SingleOrDefault(interfaceType.IsInstanceOfType);
 
 
         /// <inheritdoc />
-        public IEnumerable<IModelManager> Managers()
-        {
-            return ActiveManagers;
-        }
+        public IEnumerable<IModelManager> Managers() => ActiveManagers;
 
         /// <inheritdoc />
         public void ResetProject()

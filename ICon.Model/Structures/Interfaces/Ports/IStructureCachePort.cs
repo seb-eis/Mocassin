@@ -112,7 +112,8 @@ namespace Mocassin.Model.Structures
         int GetLinearizedExtendedPositionCount();
 
         /// <summary>
-        ///     Finds the array of <see cref="LatticeTarget"/> data around a <see cref="Fractional3D"/> position till a cutoff range in [Ang]
+        ///     Finds the array of <see cref="LatticeTarget" /> data around a <see cref="Fractional3D" /> position till a cutoff
+        ///     range in [Ang]
         /// </summary>
         /// <param name="origin"></param>
         /// <param name="maxDistance"></param>
@@ -121,12 +122,13 @@ namespace Mocassin.Model.Structures
         LatticeTarget[] FindLatticeTargets(in Fractional3D origin, double maxDistance, Func<ICellSite, bool> targetAcceptor);
 
         /// <summary>
-        ///     Finds all <see cref="LatticeTarget"/> data around all positions in the unit cell till cutoff distance in [Ang]
+        ///     Finds all <see cref="LatticeTarget" /> data around all positions in the unit cell till cutoff distance in [Ang]
         /// </summary>
         /// <param name="maxDistance"></param>
         /// <param name="originAcceptor"></param>
         /// <param name="targetAcceptor"></param>
         /// <returns></returns>
-        IDictionary<int, LatticeTarget[]> FindUnitCellLatticeTargets(double maxDistance, Func<FractionalPosition, bool> originAcceptor, Func<ICellSite, bool> targetAcceptor);
+        IDictionary<int, LatticeTarget[]> FindUnitCellLatticeTargets(double maxDistance, Func<FractionalPosition, bool> originAcceptor,
+            Func<ICellSite, bool> targetAcceptor);
     }
 }

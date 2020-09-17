@@ -11,8 +11,7 @@ namespace Mocassin.Model.Translator
         /// <summary>
         ///     The database entity context key
         /// </summary>
-        [Key]
-        [XmlIgnore]
+        [Key, XmlIgnore]
         public virtual int Id { get; set; }
     }
 }

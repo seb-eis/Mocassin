@@ -12,8 +12,8 @@
     <Menu Background="Transparent">
       <MenuItem Header="View">
         <MenuItem Header="Work Window" Command="{Binding CommandRelay}"
-                  CommandParameter="{x:Type commands:OpenProjectWorkTabHostWindow}"/>
-        <Separator/>
+                  CommandParameter="{x:Type commands:OpenProjectWorkTabHostWindow}" />
+        <Separator />
         <MenuItem Header="3D Model Viewer [DX9]" Command="{Binding CommandRelay}"
                   CommandParameter="{x:Type commands:AddWpfModelViewportTabCommand}" />
         <MenuItem Header="3D Model Viewer [DX10+]" Command="{Binding CommandRelay}"

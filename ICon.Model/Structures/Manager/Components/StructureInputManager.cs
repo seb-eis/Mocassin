@@ -129,15 +129,10 @@ namespace Mocassin.Model.Structures
 
         /// <inheritdoc />
         [DataOperation(DataOperationType.ObjectCleaning)]
-        protected override IOperationReport TryCleanDeprecatedData()
-        {
-            return DefaultCleanDeprecatedData();
-        }
+        protected override IOperationReport TryCleanDeprecatedData() => DefaultCleanDeprecatedData();
 
         /// <inheritdoc />
-        protected override IDataConflictHandlerProvider<StructureModelData> CreateDataConflictHandlerProvider()
-        {
-            return new StructureDataConflictHandlerProvider(ModelProject);
-        }
+        protected override IDataConflictHandlerProvider<StructureModelData> CreateDataConflictHandlerProvider() =>
+            new StructureDataConflictHandlerProvider(ModelProject);
     }
 }

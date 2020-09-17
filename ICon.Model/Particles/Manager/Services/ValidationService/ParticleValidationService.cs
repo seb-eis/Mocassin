@@ -30,10 +30,8 @@ namespace Mocassin.Model.Particles
         /// <param name="dataReader"></param>
         /// <returns></returns>
         [ValidationOperation(ValidationType.Object)]
-        protected IValidationReport ValidateParticle(IParticle particle, IDataReader<IParticleDataPort> dataReader)
-        {
-            return new ParticleValidator(ModelProject, Settings, dataReader).Validate(particle);
-        }
+        protected IValidationReport ValidateParticle(IParticle particle, IDataReader<IParticleDataPort> dataReader) =>
+            new ParticleValidator(ModelProject, Settings, dataReader).Validate(particle);
 
         /// <summary>
         ///     Validates a particle set interface and checks if the contents are not a duplicate using the provided data reader
@@ -42,9 +40,7 @@ namespace Mocassin.Model.Particles
         /// <param name="dataReader"></param>
         /// <returns></returns>
         [ValidationOperation(ValidationType.Object)]
-        protected IValidationReport ValidateParticleSet(IParticleSet particleSet, IDataReader<IParticleDataPort> dataReader)
-        {
-            return new ParticleSetValidator(ModelProject, Settings, dataReader).Validate(particleSet);
-        }
+        protected IValidationReport ValidateParticleSet(IParticleSet particleSet, IDataReader<IParticleDataPort> dataReader) =>
+            new ParticleSetValidator(ModelProject, Settings, dataReader).Validate(particleSet);
     }
 }

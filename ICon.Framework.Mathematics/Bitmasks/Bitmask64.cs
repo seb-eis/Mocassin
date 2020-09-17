@@ -50,43 +50,28 @@ namespace Mocassin.Mathematics.Bitmask
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public int CompareTo(Bitmask64 other)
-        {
-            return Mask.CompareTo(other.Mask);
-        }
+        public int CompareTo(Bitmask64 other) => Mask.CompareTo(other.Mask);
 
         /// <inheritdoc />
-        public bool Equals(Bitmask64 other)
-        {
-            return Mask == other.Mask;
-        }
+        public bool Equals(Bitmask64 other) => Mask == other.Mask;
 
         /// <summary>
         ///     Counts the number of set bits
         /// </summary>
         /// <returns></returns>
-        public int PopCount()
-        {
-            return Mask.PopCount();
-        }
+        public int PopCount() => Mask.PopCount();
 
 
         /// <summary>
         ///     Implicit conversion operator for unsigned 64 bit integer
         /// </summary>
         /// <param name="value"></param>
-        public static implicit operator Bitmask64(ulong value)
-        {
-            return new Bitmask64(value);
-        }
+        public static implicit operator Bitmask64(ulong value) => new Bitmask64(value);
 
         /// <summary>
         ///     String representation fo the bitmask
         /// </summary>
         /// <returns></returns>
-        public override string ToString()
-        {
-            return $"Bitmask ({Mask.ToString()})";
-        }
+        public override string ToString() => $"Bitmask ({Mask.ToString()})";
     }
 }

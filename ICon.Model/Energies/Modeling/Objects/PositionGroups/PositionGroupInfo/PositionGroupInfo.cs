@@ -43,9 +43,9 @@ namespace Mocassin.Model.Energies
         public IReadOnlyList<GroupEnergyEntry> GetEnergyEntryList()
         {
             return ExtendedPositionGroup
-                .UniqueEnergyDictionary
-                .SelectMany(outer => outer.Value.Select(inner => new GroupEnergyEntry(outer.Key, inner.Key, inner.Value)))
-                .ToList();
+                   .UniqueEnergyDictionary
+                   .SelectMany(outer => outer.Value.Select(inner => new GroupEnergyEntry(outer.Key, inner.Key, inner.Value)))
+                   .ToList();
         }
 
         /// <inheritdoc />

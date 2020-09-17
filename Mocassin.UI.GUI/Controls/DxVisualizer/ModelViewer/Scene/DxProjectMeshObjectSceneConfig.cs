@@ -131,7 +131,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
         static DxProjectMeshObjectSceneConfig()
         {
             MaterialCatalog = Application.Current.Dispatcher?.Invoke(() => new PhongMaterialCollection()
-                .Select(x => (PhongMaterialCore) x.Core).ToDictionary(x => x.Name));
+                                                                           .Select(x => (PhongMaterialCore) x.Core).ToDictionary(x => x.Name));
             if (MaterialCatalog == null) throw new InvalidOperationException("Failed to setup the material catalog.");
         }
 
@@ -142,10 +142,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
         }
 
         /// <inheritdoc />
-        public sealed override bool CheckSupport(SceneNode sceneNode)
-        {
-            return sceneNode is MeshNode || sceneNode is BatchedMeshNode;
-        }
+        public sealed override bool CheckSupport(SceneNode sceneNode) => sceneNode is MeshNode || sceneNode is BatchedMeshNode;
 
         /// <inheritdoc />
         public MaterialCore CreateMaterial()

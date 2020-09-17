@@ -101,10 +101,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.DataControl
         ///     Get the <see cref="FractionalBox3D" /> that describes the render limits in fractional coordinates
         /// </summary>
         /// <returns></returns>
-        public FractionalBox3D GetRenderBox3D()
-        {
-            return RenderResourcesViewModel.GetRenderBox3D();
-        }
+        public FractionalBox3D GetRenderBox3D() => RenderResourcesViewModel.GetRenderBox3D();
 
         /// <summary>
         ///     Get an <see cref="IEnumerable{T}" /> of all selectable <see cref="Scene.PathSymmetryExtensionMode" /> values

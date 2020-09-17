@@ -32,16 +32,10 @@ namespace Mocassin.Model.Energies
         public override string ObjectName => "Group Interaction";
 
         /// <inheritdoc />
-        public IEnumerable<Fractional3D> GetSurroundingGeometry()
-        {
-            return (GeometryVectors ?? new List<Fractional3D>()).AsEnumerable();
-        }
+        public IEnumerable<Fractional3D> GetSurroundingGeometry() => (GeometryVectors ?? new List<Fractional3D>()).AsEnumerable();
 
         /// <inheritdoc />
-        public IEnumerable<Fractional3D> GetFullGeometry()
-        {
-            return CenterCellSite.Vector.AsSingleton().Concat(GetSurroundingGeometry());
-        }
+        public IEnumerable<Fractional3D> GetFullGeometry() => CenterCellSite.Vector.AsSingleton().Concat(GetSurroundingGeometry());
 
         /// <inheritdoc />
         public IReadOnlyDictionary<IParticle, IReadOnlyDictionary<OccupationState, double>> GetEnergyDictionarySet()

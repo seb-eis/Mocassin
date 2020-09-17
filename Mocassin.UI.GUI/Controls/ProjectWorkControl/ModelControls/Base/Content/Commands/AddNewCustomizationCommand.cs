@@ -42,10 +42,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         }
 
         /// <inheritdoc />
-        protected override bool CanExecuteInternal()
-        {
-            return ProjectGetter() != null && base.CanExecuteInternal();
-        }
+        protected override bool CanExecuteInternal() => ProjectGetter() != null && base.CanExecuteInternal();
 
         /// <summary>
         ///     Tries to create and add a new <see cref="ProjectCustomizationTemplate" /> to the passed

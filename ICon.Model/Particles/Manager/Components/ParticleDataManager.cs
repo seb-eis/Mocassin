@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Mocassin.Framework.Collections;
 using Mocassin.Model.Basic;
 
@@ -23,16 +22,10 @@ namespace Mocassin.Model.Particles
         }
 
         /// <inheritdoc />
-        public ListReadOnlyWrapper<IParticle> GetParticles()
-        {
-            return ListReadOnlyWrapper<IParticle>.FromEnumerable(Data.Particles);
-        }
+        public FixedList<IParticle> GetParticles() => FixedList<IParticle>.FromEnumerable(Data.Particles);
 
         /// <inheritdoc />
-        public ListReadOnlyWrapper<IParticleSet> GetParticleSets()
-        {
-            return ListReadOnlyWrapper<IParticleSet>.FromEnumerable(Data.ParticleSets);
-        }
+        public FixedList<IParticleSet> GetParticleSets() => FixedList<IParticleSet>.FromEnumerable(Data.ParticleSets);
 
         /// <inheritdoc />
         public int GetValidParticleCount()
@@ -47,33 +40,18 @@ namespace Mocassin.Model.Particles
         }
 
         /// <inheritdoc />
-        public IParticleSet GetValidParticlesAsSet()
-        {
-            return new ParticleSet {Particles = Data.Particles.Cast<IParticle>().ToList(), Index = -1};
-        }
+        public IParticleSet GetValidParticlesAsSet() => new ParticleSet {Particles = Data.Particles.Cast<IParticle>().ToList(), Index = -1};
 
         /// <inheritdoc />
-        public IParticle GetParticle(int index)
-        {
-            return Data.Particles[index];
-        }
+        public IParticle GetParticle(int index) => Data.Particles[index];
 
         /// <inheritdoc />
-        public IParticleSet GetParticleSet(int index)
-        {
-            return Data.ParticleSets[index];
-        }
+        public IParticleSet GetParticleSet(int index) => Data.ParticleSets[index];
 
         /// <inheritdoc />
-        public ReindexingList GetCleanParticleIndexing()
-        {
-            return CreateReindexing(Data.Particles, Data.Particles.Count);
-        }
+        public ReindexingList GetCleanParticleIndexing() => CreateReindexing(Data.Particles, Data.Particles.Count);
 
         /// <inheritdoc />
-        public ReindexingList GetCleanParticleSetIndexing()
-        {
-            return CreateReindexing(Data.ParticleSets, Data.ParticleSets.Count);
-        }
+        public ReindexingList GetCleanParticleSetIndexing() => CreateReindexing(Data.ParticleSets, Data.ParticleSets.Count);
     }
 }

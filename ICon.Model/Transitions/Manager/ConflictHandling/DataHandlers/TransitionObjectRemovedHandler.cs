@@ -24,10 +24,8 @@ namespace Mocassin.Model.Transitions.ConflictHandling
         /// <returns></returns>
         [ConflictHandlingMethod]
         protected IConflictReport HandleRemovedKineticTransition(KineticTransition transition,
-            IDataAccessor<TransitionModelData> dataAccess)
-        {
+            IDataAccessor<TransitionModelData> dataAccess) =>
             throw new NotImplementedException();
-        }
 
         /// <summary>
         ///     Handles the internal changes within the transition model data required due to a removed metropolis transition
@@ -37,9 +35,7 @@ namespace Mocassin.Model.Transitions.ConflictHandling
         /// <returns></returns>
         [ConflictHandlingMethod]
         protected IConflictReport HandleRemovedMetropolisTransition(MetropolisTransition transition,
-            IDataAccessor<TransitionModelData> dataAccess)
-        {
+            IDataAccessor<TransitionModelData> dataAccess) =>
             throw new NotImplementedException();
-        }
     }
 }

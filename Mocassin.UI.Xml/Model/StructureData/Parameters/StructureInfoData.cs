@@ -20,9 +20,6 @@ namespace Mocassin.UI.Xml.StructureModel
         }
 
         /// <inheritdoc />
-        protected override ModelParameter GetModelObjectInternal()
-        {
-            return new StructureInfo {Name = Name};
-        }
+        protected override ModelParameter GetModelObjectInternal() => new StructureInfo {Name = Name};
     }
 }

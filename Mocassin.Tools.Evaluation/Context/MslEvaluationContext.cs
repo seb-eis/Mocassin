@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using Mocassin.Framework.Extensions;
 using Mocassin.Framework.SQLiteCore;
@@ -16,8 +15,10 @@ using Mocassin.UI.Xml.Main;
 namespace Mocassin.Tools.Evaluation.Context
 {
     /// <summary>
-    ///     Context for a evaluation of contents and results provided by <see cref="ISimulationLibrary" /> interfaces. This context manages the lifetimes of <see cref="JobContext"/> instances
-    ///     and not properly disposing the context or creating <see cref="JobContext"/> instances not known by the this context will cause memory leaking
+    ///     Context for a evaluation of contents and results provided by <see cref="ISimulationLibrary" /> interfaces. This
+    ///     context manages the lifetimes of <see cref="JobContext" /> instances
+    ///     and not properly disposing the context or creating <see cref="JobContext" /> instances not known by the this
+    ///     context will cause memory leaking
     /// </summary>
     public class MslEvaluationContext : IDisposable
     {
@@ -36,7 +37,7 @@ namespace Mocassin.Tools.Evaluation.Context
         private Dictionary<int, ISimulationModel> SimulationModelCache { get; }
 
         /// <summary>
-        ///     Stores all <see cref="JobContext"/> instances that were provided by the context
+        ///     Stores all <see cref="JobContext" /> instances that were provided by the context
         /// </summary>
         private HashSet<JobContext> KnownJobContexts { get; }
 
@@ -80,12 +81,13 @@ namespace Mocassin.Tools.Evaluation.Context
         }
 
         /// <summary>
-        ///     A convenience function to quickly combine querying and calling <see cref="MakeEvaluableSet"/>
+        ///     A convenience function to quickly combine querying and calling <see cref="MakeEvaluableSet" />
         /// </summary>
         /// <param name="queryMutator"></param>
         /// <param name="targetSecondaryState"></param>
         /// <returns></returns>
-        public IEvaluableJobSet LoadJobsAsEvaluable(Func<IQueryable<SimulationJobModel>, IQueryable<SimulationJobModel>> queryMutator, bool targetSecondaryState = false)
+        public IEvaluableJobSet LoadJobsAsEvaluable(Func<IQueryable<SimulationJobModel>, IQueryable<SimulationJobModel>> queryMutator,
+            bool targetSecondaryState = false)
         {
             var query = queryMutator.Invoke(EvaluationJobSet());
             return MakeEvaluableSet(query, targetSecondaryState);
@@ -96,10 +98,7 @@ namespace Mocassin.Tools.Evaluation.Context
         ///     without any includes
         /// </summary>
         /// <returns></returns>
-        public IQueryable<SimulationJobModel> BasicJobSet()
-        {
-            return DataContext.Set<SimulationJobModel>();
-        }
+        public IQueryable<SimulationJobModel> BasicJobSet() => DataContext.Set<SimulationJobModel>();
 
         /// <summary>
         ///     Get a <see cref="IQueryable{T}" /> for queries against the <see cref="SimulationJobModel" /> set of the context
@@ -109,9 +108,9 @@ namespace Mocassin.Tools.Evaluation.Context
         public IQueryable<SimulationJobModel> EvaluationJobSet()
         {
             return BasicJobSet().Include(x => x.SimulationJobPackageModel)
-                .Include(x => x.JobMetaData)
-                .Include(x => x.JobResultData)
-                .Where(x => x.JobResultData.SimulationStateBinary != null);
+                                .Include(x => x.JobMetaData)
+                                .Include(x => x.JobResultData)
+                                .Where(x => x.JobResultData.SimulationStateBinary != null);
         }
 
         /// <summary>
@@ -173,8 +172,8 @@ namespace Mocassin.Tools.Evaluation.Context
         public IQueryable<IProjectModelContext> RestoreProjectModelContext(IQueryable<SimulationJobPackageModel> jobPackageModels)
         {
             return jobPackageModels
-                .Include(x => x.ProjectXml)
-                .Select(x => RestoreProjectModelContext(x.ProjectXml));
+                   .Include(x => x.ProjectXml)
+                   .Select(x => RestoreProjectModelContext(x.ProjectXml));
         }
 
         /// <summary>
@@ -278,9 +277,6 @@ namespace Mocassin.Tools.Evaluation.Context
         /// </summary>
         /// <param name="filename"></param>
         /// <returns></returns>
-        public static MslEvaluationContext Create(string filename)
-        {
-            return Create(filename, ModelProjectFactory.CreateDefault);
-        }
+        public static MslEvaluationContext Create(string filename) => Create(filename, ModelProjectFactory.CreateDefault);
     }
 }

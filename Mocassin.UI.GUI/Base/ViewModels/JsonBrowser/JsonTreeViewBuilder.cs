@@ -156,10 +156,8 @@ namespace Mocassin.UI.GUI.Base.ViewModels.JsonBrowser
         /// <param name="jValue"></param>
         /// <param name="parent"></param>
         /// <returns></returns>
-        public static string CreateHeaderWithValue(JValue jValue, TreeViewItem parent)
-        {
-            return $"{parent.Header} : \"{jValue.ToString(CultureInfo.InvariantCulture)}\"";
-        }
+        public static string CreateHeaderWithValue(JValue jValue, TreeViewItem parent) =>
+            $"{parent.Header} : \"{jValue.ToString(CultureInfo.InvariantCulture)}\"";
 
         /// <summary>
         ///     Creates the base header of an item

@@ -15,10 +15,7 @@ namespace Mocassin.UI.Xml.Base
         /// <summary>
         ///     Get or set the primary context key
         /// </summary>
-        [Column("Id")]
-        [JsonIgnore]
-        [XmlIgnore]
-        [Key]
+        [Column("Id"), JsonIgnore, XmlIgnore, Key]
         public int Id { get; set; }
     }
 }

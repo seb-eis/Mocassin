@@ -15,8 +15,7 @@ namespace Mocassin.Model.Translator.Database.Entities.Other.Meta
         /// <summary>
         ///     Get or set the affiliated <see cref="SimulationJobModel" /> id
         /// </summary>
-        [Column("JobModelId")]
-        [ForeignKey(nameof(JobModelId))]
+        [Column("JobModelId"), ForeignKey(nameof(JobModelId))]
         public int JobModelId { get; set; }
 
         /// <summary>

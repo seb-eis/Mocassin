@@ -93,16 +93,11 @@ namespace Mocassin.Model.Simulations
         ///     Get the conflict handler provider that supplies handlers for internal data conflicts due to user induced changes
         /// </summary>
         /// <returns></returns>
-        protected override IDataConflictHandlerProvider<SimulationModelData> CreateDataConflictHandlerProvider()
-        {
-            return new SimulationDataConflictHandlerProvider(ModelProject);
-        }
+        protected override IDataConflictHandlerProvider<SimulationModelData> CreateDataConflictHandlerProvider() =>
+            new SimulationDataConflictHandlerProvider(ModelProject);
 
         /// <inheritdoc />
         [DataOperation(DataOperationType.ObjectCleaning)]
-        protected override IOperationReport TryCleanDeprecatedData()
-        {
-            return DefaultCleanDeprecatedData();
-        }
+        protected override IOperationReport TryCleanDeprecatedData() => DefaultCleanDeprecatedData();
     }
 }

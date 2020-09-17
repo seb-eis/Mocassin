@@ -31,10 +31,8 @@ namespace Mocassin.Model.Structures
         /// <param name="dataReader"></param>
         /// <returns></returns>
         [ValidationOperation(ValidationType.Object)]
-        protected IValidationReport ValidateCellReferencePosition(ICellSite position, IDataReader<IStructureDataPort> dataReader)
-        {
-            return new CellReferencePositionValidator(ModelProject, Settings, dataReader).Validate(position);
-        }
+        protected IValidationReport ValidateCellReferencePosition(ICellSite position, IDataReader<IStructureDataPort> dataReader) =>
+            new CellReferencePositionValidator(ModelProject, Settings, dataReader).Validate(position);
 
         /// <summary>
         ///     Validates a position dummy in terms of conflicts with basic limitations
@@ -43,10 +41,8 @@ namespace Mocassin.Model.Structures
         /// <param name="dataReader"></param>
         /// <returns></returns>
         [ValidationOperation(ValidationType.Object)]
-        protected IValidationReport ValidatePositionDummy(ICellDummyPosition cellDummyPosition, IDataReader<IStructureDataPort> dataReader)
-        {
-            return new PositionDummyValidator(ModelProject, Settings, dataReader).Validate(cellDummyPosition);
-        }
+        protected IValidationReport ValidatePositionDummy(ICellDummyPosition cellDummyPosition, IDataReader<IStructureDataPort> dataReader) =>
+            new PositionDummyValidator(ModelProject, Settings, dataReader).Validate(cellDummyPosition);
 
         /// <summary>
         ///     Validate a structure info in terms of conflicts with basic limitations
@@ -55,10 +51,8 @@ namespace Mocassin.Model.Structures
         /// <param name="dataReader"></param>
         /// <returns></returns>
         [ValidationOperation(ValidationType.Parameter)]
-        protected IValidationReport ValidateStructureInfo(IStructureInfo info, IDataReader<IStructureDataPort> dataReader)
-        {
-            return new StructureInfoValidator(ModelProject, Settings, dataReader).Validate(info);
-        }
+        protected IValidationReport ValidateStructureInfo(IStructureInfo info, IDataReader<IStructureDataPort> dataReader) =>
+            new StructureInfoValidator(ModelProject, Settings, dataReader).Validate(info);
 
         /// <summary>
         ///     Validates a set of cell parameters in terms of conflicts with basic limitations and the currently active space
@@ -68,10 +62,8 @@ namespace Mocassin.Model.Structures
         /// <param name="dataReader"></param>
         /// <returns></returns>
         [ValidationOperation(ValidationType.Parameter)]
-        protected IValidationReport ValidateCellParameters(ICellParameters parameters, IDataReader<IStructureDataPort> dataReader)
-        {
-            return new UnitCellParameterValidator(ModelProject, Settings, dataReader).Validate(parameters);
-        }
+        protected IValidationReport ValidateCellParameters(ICellParameters parameters, IDataReader<IStructureDataPort> dataReader) =>
+            new UnitCellParameterValidator(ModelProject, Settings, dataReader).Validate(parameters);
 
         /// <summary>
         ///     Validates a space group info in terms of conflicts with basic limitations (Does not load group into the service!)
@@ -80,9 +72,7 @@ namespace Mocassin.Model.Structures
         /// <param name="dataReader"></param>
         /// <returns></returns>
         [ValidationOperation(ValidationType.Parameter)]
-        protected IValidationReport ValidateSpaceGroupInfo(ISpaceGroupInfo groupInfo, IDataReader<IStructureDataPort> dataReader)
-        {
-            return new SpaceGroupInfoValidator(ModelProject, Settings, dataReader).Validate(groupInfo);
-        }
+        protected IValidationReport ValidateSpaceGroupInfo(ISpaceGroupInfo groupInfo, IDataReader<IStructureDataPort> dataReader) =>
+            new SpaceGroupInfoValidator(ModelProject, Settings, dataReader).Validate(groupInfo);
     }
 }

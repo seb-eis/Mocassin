@@ -28,8 +28,7 @@ namespace Mocassin.Model.Translator
         /// <summary>
         ///     The simulation package context key
         /// </summary>
-        [Column("PackageId")]
-        [ForeignKey(nameof(SimulationJobPackageModel))]
+        [Column("PackageId"), ForeignKey(nameof(SimulationJobPackageModel))]
         public int SimulationPackageId { get; set; }
 
         /// <summary>
@@ -53,22 +52,19 @@ namespace Mocassin.Model.Translator
         /// <summary>
         ///     The lattice information that carries simulation run infos about the lattice
         /// </summary>
-        [NotMapped]
-        [InteropProperty(nameof(LatticeInfoBinary))]
+        [NotMapped, InteropProperty(nameof(LatticeInfoBinary))]
         public InteropObject<CLatticeInfo> LatticeInfo { get; set; }
 
         /// <summary>
         ///     The lattice occupation entity
         /// </summary>
-        [NotMapped]
-        [OwnedBlobProperty(nameof(LatticeBinary))]
+        [NotMapped, OwnedBlobProperty(nameof(LatticeBinary))]
         public LatticeEntity Lattice { get; set; }
 
         /// <summary>
         ///     The energy background entity
         /// </summary>
-        [NotMapped]
-        [OwnedBlobProperty(nameof(EnergyBackgroundBinary))]
+        [NotMapped, OwnedBlobProperty(nameof(EnergyBackgroundBinary))]
         public EnergyBackgroundEntity EnergyBackground { get; set; }
     }
 }

@@ -168,15 +168,13 @@ namespace Mocassin.Model.Translator.EntityBuilder
                 if (match.Success)
                 {
                     if (RoutineDataEntity.TryParse(jobConfiguration.Instruction, out var routineData))
-                    {
                         result.RoutineData = routineData;
-                    }
                     else
-                    {
-                        Console.WriteLine($"Warning: Routine parser matched '{match.Groups[1].Value}' but data parsing failed. Data definition is invalid or routine alias does not exist.");
-                    }
+                        Console.WriteLine(
+                            $"Warning: Routine parser matched '{match.Groups[1].Value}' but data parsing failed. Data definition is invalid or routine alias does not exist.");
                 }
             }
+
             result.JobMetaData.JobModel = result;
             result.JobResultData.JobModel = result;
             SetSimulationJobInfoFlags(result, simulationModel);
@@ -288,9 +286,9 @@ namespace Mocassin.Model.Translator.EntityBuilder
             }
 
             packageModel.LatticeModels = packageModel.JobModels
-                .Select(x => x.SimulationLatticeModel)
-                .Action(x => x.SimulationJobPackageModel = packageModel)
-                .ToList();
+                                                     .Select(x => x.SimulationLatticeModel)
+                                                     .Action(x => x.SimulationJobPackageModel = packageModel)
+                                                     .ToList();
         }
 
         /// <summary>
@@ -302,8 +300,8 @@ namespace Mocassin.Model.Translator.EntityBuilder
         protected void RunPostBuildOptimizers(SimulationJobPackageModel packageModel, IJobCollection jobCollection)
         {
             var removedFlags = PostBuildOptimizers
-                .Concat(jobCollection.GetPostBuildOptimizers())
-                .Aggregate(SimulationExecutionFlags.None, (current, optimizer) => current | optimizer.Run(ProjectModelContext, packageModel));
+                               .Concat(jobCollection.GetPostBuildOptimizers())
+                               .Aggregate(SimulationExecutionFlags.None, (current, optimizer) => current | optimizer.Run(ProjectModelContext, packageModel));
 
             foreach (var jobModel in packageModel.JobModels)
             {

@@ -7,7 +7,8 @@ using Mocassin.Framework.Extensions;
 namespace Mocassin.Model.Translator
 {
     /// <summary>
-    ///     Provides a wrapper system for <see cref="Array" /> objects to convert from and into the binary layout used by the C
+    ///     Provides a wrapper system for multidimensional <see cref="Array" /> objects to convert from and into the binary
+    ///     layout used by the C
     ///     simulator
     /// </summary>
     public abstract class InteropArray<T> : BlobEntityBase where T : struct
@@ -52,11 +53,10 @@ namespace Mocassin.Model.Translator
         }
 
         /// <summary>
-        ///     Creates an empty <see cref="InteropArray{T}"/>
+        ///     Creates an empty <see cref="InteropArray{T}" />
         /// </summary>
         protected InteropArray()
         {
-
         }
 
         /// <summary>
@@ -65,10 +65,7 @@ namespace Mocassin.Model.Translator
         /// </summary>
         /// <param name="indices"></param>
         /// <returns></returns>
-        public T GetValue(params int[] indices)
-        {
-            return (T) InternalArray.GetValue(indices);
-        }
+        public T GetValue(params int[] indices) => (T) InternalArray.GetValue(indices);
 
         /// <summary>
         ///     Set the value at the given indices. Throws if the number of indices does not match dimension (Slow, not intended
@@ -98,20 +95,14 @@ namespace Mocassin.Model.Translator
         /// </summary>
         /// <param name="rank"></param>
         /// <returns></returns>
-        protected bool IsPaddingRequired(int rank)
-        {
-            return rank % 2 == 0;
-        }
+        protected bool IsPaddingRequired(int rank) => rank % 2 == 0;
 
         /// <summary>
-        ///  Get the number of index skip entries by the array rank
+        ///     Get the number of index skip entries by the array rank
         /// </summary>
         /// <param name="rank"></param>
         /// <returns></returns>
-        protected int GetItemBlocksCount(int rank)
-        {
-            return rank - 1;
-        }
+        protected int GetItemBlocksCount(int rank) => rank - 1;
 
         /// <inheritdoc />
         public override void ChangeStateToObject(IMarshalService marshalService)
@@ -222,10 +213,7 @@ namespace Mocassin.Model.Translator
         ///     Get the dimensions of the interop array
         /// </summary>
         /// <returns></returns>
-        public int[] GetDimensions()
-        {
-            return BlocksToDimensions(BlockLengths, Length);
-        }
+        public int[] GetDimensions() => BlocksToDimensions(BlockLengths, Length);
 
         /// <summary>
         ///     Performs a array buffer overwrite based on a linear data source
@@ -246,6 +234,7 @@ namespace Mocassin.Model.Translator
         /// </exception>
         private void Initialize(Array array)
         {
+            if (array.Rank < 2) throw new InvalidOperationException("Array must be multidimensional.");
             if (!typeof(T).IsAssignableFrom(array.GetType().GetElementType()))
                 throw new ArgumentException($"Passed array element type cannot be assigned to type {typeof(T)}", nameof(array));
             BlockLengths = array.MakeBlockItemCounts();

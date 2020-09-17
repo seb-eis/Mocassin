@@ -72,7 +72,7 @@ namespace Mocassin.Model.Transitions
         public IEnumerable<TRule> MakeUniqueRules(IAbstractTransition abstractTransition, IList<StatePairGroup> statePairGroups)
         {
             var stateDescription = abstractTransition.GetStateExchangeGroups()
-                .Select(value => statePairGroups[value.Index].AutoChangeStatus());
+                                                     .Select(value => statePairGroups[value.Index].AutoChangeStatus());
 
             foreach (var rule in MakeUniqueRules(stateDescription, abstractTransition.GetConnectorSequence()))
             {
@@ -89,10 +89,8 @@ namespace Mocassin.Model.Transitions
         /// <param name="pairGroups"></param>
         /// <param name="connectorTypes"></param>
         /// <returns></returns>
-        public IEnumerable<TRule> MakeUniqueRules(IEnumerable<StatePairGroup> pairGroups, IEnumerable<ConnectorType> connectorTypes)
-        {
-            return GetValidTransitionRules(pairGroups.ToArray(), connectorTypes.ToArray());
-        }
+        public IEnumerable<TRule> MakeUniqueRules(IEnumerable<StatePairGroup> pairGroups, IEnumerable<ConnectorType> connectorTypes) =>
+            GetValidTransitionRules(pairGroups.ToArray(), connectorTypes.ToArray());
 
         /// <summary>
         ///     Creates a state pair permutation source for the possible state pair configurations of the transition sequence
@@ -102,9 +100,9 @@ namespace Mocassin.Model.Transitions
         protected IPermutationSource<StatePair> MakeStateSetPermutationSource(StatePairGroup[] statePairGroups)
         {
             var objectSet = statePairGroups
-                .Select(group =>
-                    group.StatePairs.Select(value => StatePair.CreateForStatus(value.Donor, value.Acceptor, group.PositionStability)))
-                .ToArray();
+                            .Select(group =>
+                                group.StatePairs.Select(value => StatePair.CreateForStatus(value.Donor, value.Acceptor, group.PositionStability)))
+                            .ToArray();
 
             return new PermutationSlotMachine<StatePair>(objectSet);
         }

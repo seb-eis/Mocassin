@@ -1,9 +1,6 @@
 ﻿using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using Mocassin.Model.Translator;
 using Mocassin.Tools.Evaluation.Context;
-using Mocassin.Tools.Evaluation.Helper;
-using Mocassin.Tools.Evaluation.Queries;
 
 namespace Mocassin.Framework.QuickTest
 {
@@ -13,8 +10,8 @@ namespace Mocassin.Framework.QuickTest
         {
             using var evalContext = MslEvaluationContext.Create(".\\MySimulations.msl");
             var jobModels = evalContext
-                .EvaluationJobSet()
-                .Include(x => x.SimulationLatticeModel);
+                            .EvaluationJobSet()
+                            .Include(x => x.SimulationLatticeModel);
             var evaluableSet = evalContext.MakeEvaluableSet(jobModels);
             var jobContext = evaluableSet.First();
         }

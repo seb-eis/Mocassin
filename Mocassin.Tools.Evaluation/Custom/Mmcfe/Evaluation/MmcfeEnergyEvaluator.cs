@@ -13,7 +13,9 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
     public class MmcfeEnergyEvaluator
     {
         /// <summary>
-        ///     Calculates the complete set of <see cref="MmcfeEnergyState" /> objects resulting from a <see cref="IReadOnlyList{T}" /> of <see cref="MmcfeLogReader" /> and a base temperature using the number of unit cells for normalization
+        ///     Calculates the complete set of <see cref="MmcfeEnergyState" /> objects resulting from a
+        ///     <see cref="IReadOnlyList{T}" /> of <see cref="MmcfeLogReader" /> and a base temperature using the number of unit
+        ///     cells for normalization
         /// </summary>
         /// <param name="logReaders"></param>
         /// <param name="baseTemperature"></param>
@@ -27,7 +29,7 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
             var result = new List<MmcfeEnergyState>(logReaders.Count - 1);
             var dAlphas = CalculateAlphaDeltaList(logReaders);
             var sumOfLnMij = 0.0;
-            
+
             // Normalizes the free energy calculation to one unit cell to prevent issues with exp(...) for very large absolute energy values
             var energyNormalization = 1.0 / numberOfUnitCells;
 
@@ -63,14 +65,14 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
                 }
 
                 var lnOfMij = Math.Log(nominator, Math.E) - Math.Log(denominator, Math.E);
-                if (double.IsNaN(lnOfMij) || double.IsInfinity(lnOfMij)) 
+                if (double.IsNaN(lnOfMij) || double.IsInfinity(lnOfMij))
                     throw new InvalidOperationException("Calculation is numerically unstable.");
 
                 // The free energy at each temperature is defined as: -k*T*sum(ln(m_ij))
                 sumOfLnMij += lnOfMij;
                 var temperature = baseTemperature / lowParams.AlphaCurrent;
                 var innerEnergy = CalculateInnerEnergy(lowReader);
-                var freeEnergy = - temperature * Equations.Constants.BlotzmannEv * sumOfLnMij / energyNormalization;
+                var freeEnergy = -temperature * Equations.Constants.BlotzmannEv * sumOfLnMij / energyNormalization;
                 result.Add(new MmcfeEnergyState(lowParams.AlphaCurrent, temperature, freeEnergy, innerEnergy));
             }
 
@@ -78,7 +80,8 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         }
 
         /// <summary>
-        ///     Checks if the provided <see cref="IReadOnlyList{T}" /> of <see cref="MmcfeLogReader" /> instances is ordered by alpha (ascending)
+        ///     Checks if the provided <see cref="IReadOnlyList{T}" /> of <see cref="MmcfeLogReader" /> instances is ordered by
+        ///     alpha (ascending)
         /// </summary>
         /// <param name="logReaders"></param>
         /// <returns></returns>
@@ -146,7 +149,7 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         public MmcfeEnergyState LinearInterpolateEnergyState(IList<MmcfeEnergyState> energyStates, double targetTemperature)
         {
             // Note: By default the list is sorted by alpha, and T is ~ 1 / alpha => Do the comparison inverse for the binary search to work
-            var index = energyStates.CppLowerBound(new MmcfeEnergyState(0, targetTemperature, 0, 0),
+            var index = energyStates.BinarySearchFirstNotLessThanValue(new MmcfeEnergyState(0, targetTemperature, 0, 0),
                 Comparer<MmcfeEnergyState>.Create((a, b) => b.Temperature.CompareTo(a.Temperature)));
 
             if (index == 0) index = 1;

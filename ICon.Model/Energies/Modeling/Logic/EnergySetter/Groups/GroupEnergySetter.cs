@@ -103,23 +103,19 @@ namespace Mocassin.Model.Energies
         ///     Creates an empty group energy setter with an invalid group interaction and an empty energy entry set
         /// </summary>
         /// <returns></returns>
-        public static GroupEnergySetter CreateEmpty()
-        {
-            return new GroupEnergySetter
+        public static GroupEnergySetter CreateEmpty() =>
+            new GroupEnergySetter
             {
                 GroupInteraction = new GroupInteraction {Index = -1, IsDeprecated = true},
                 EnergyEntries = new HashSet<GroupEnergyEntry>()
             };
-        }
 
         /// <summary>
         ///     Creates the hash set of energy entries for local manipulation from the passed group interaction
         /// </summary>
         /// <param name="groupInteraction"></param>
         /// <returns></returns>
-        protected HashSet<GroupEnergyEntry> CreateEnergyEntries(GroupInteraction groupInteraction)
-        {
-            return new HashSet<GroupEnergyEntry>(groupInteraction.GetEnergyEntries());
-        }
+        protected HashSet<GroupEnergyEntry> CreateEnergyEntries(GroupInteraction groupInteraction) =>
+            new HashSet<GroupEnergyEntry>(groupInteraction.GetEnergyEntries());
     }
 }

@@ -14,14 +14,14 @@
   Background="Transparent">
 
   <UserControl.Resources>
-    <ToolTip x:Key="Local.ToolTip.StateExchangePair" >
-      <TextBlock Text="{x:Static res:Tooltips.ModelObject_StateExchangePair}"/>
+    <ToolTip x:Key="Local.ToolTip.StateExchangePair">
+      <TextBlock Text="{x:Static res:Tooltips.ModelObject_StateExchangePair}" />
     </ToolTip>
-    <ToolTip x:Key="Local.ToolTip.StateExchangeGroup" >
-      <TextBlock Text="{x:Static res:Tooltips.ModelObject_StateExchangeGroup}"/>
+    <ToolTip x:Key="Local.ToolTip.StateExchangeGroup">
+      <TextBlock Text="{x:Static res:Tooltips.ModelObject_StateExchangeGroup}" />
     </ToolTip>
-    <ToolTip x:Key="Local.ToolTip.AbstractTransition" >
-      <TextBlock Text="{x:Static res:Tooltips.ModelObject_AbstractTransition}"/>
+    <ToolTip x:Key="Local.ToolTip.AbstractTransition">
+      <TextBlock Text="{x:Static res:Tooltips.ModelObject_AbstractTransition}" />
     </ToolTip>
   </UserControl.Resources>
   <Grid>

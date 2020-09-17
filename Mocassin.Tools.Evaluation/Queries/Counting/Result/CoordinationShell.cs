@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using Mocassin.Tools.Evaluation.PlotData;
+﻿using Mocassin.Tools.Evaluation.PlotData;
 
 namespace Mocassin.Tools.Evaluation.Queries
 {
@@ -31,25 +29,16 @@ namespace Mocassin.Tools.Evaluation.Queries
         }
 
         /// <inheritdoc />
-        public override string ToString()
-        {
-            return $"(Distance: {DistanceInAng} Ang; CN: {CoordinationNumber})";
-        }
+        public override string ToString() => $"(Distance: {DistanceInAng} Ang; CN: {CoordinationNumber})";
 
         /// <inheritdoc />
-        public string ToDatLine(string format)
-        {
-            return string.Format(format, DistanceInAng, CoordinationNumber);
-        }
+        public string ToDatLine(string format) => string.Format(format, DistanceInAng, CoordinationNumber);
 
         /// <summary>
         ///     Creates a dummy entry with zeros and a distances offset by the provided value
         /// </summary>
         /// <param name="distanceOffset"></param>
         /// <returns></returns>
-        public CoordinationShell MakeDummy(double distanceOffset)
-        {
-            return new CoordinationShell(DistanceInAng + distanceOffset, 0);
-        }
+        public CoordinationShell MakeDummy(double distanceOffset) => new CoordinationShell(DistanceInAng + distanceOffset, 0);
     }
 }

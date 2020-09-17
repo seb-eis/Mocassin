@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Mocassin.Model.Translator;
@@ -22,7 +21,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         private JobConfigData JobDescription { get; }
 
         /// <summary>
-        ///  Get the <see cref="Command{T}"/> to parse string instruction commands
+        ///     Get the <see cref="Command{T}" /> to parse string instruction commands
         /// </summary>
         public Command<string> ExecuteStringInstructionCommand { get; }
 
@@ -123,7 +122,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         }
 
         /// <summary>
-        ///     Executes a <see cref="string"/> command for editing the job instruction
+        ///     Executes a <see cref="string" /> command for editing the job instruction
         /// </summary>
         /// <param name="value"></param>
         private void ExecuteInstructionSearch(string value)
@@ -134,7 +133,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         }
 
         /// <summary>
-        ///     Finds and appends a <see cref="RoutineDataEntity"/> template to the instruction string
+        ///     Finds and appends a <see cref="RoutineDataEntity" /> template to the instruction string
         /// </summary>
         /// <param name="alias"></param>
         private void FindAndAppendRoutineTemplate(string alias)
@@ -145,6 +144,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
                 Console.WriteLine($"Could not find the routine with alias '{alias}'.");
                 return;
             }
+
             var template = constructor().GetTemplate();
             Instruction = string.IsNullOrWhiteSpace(Instruction) ? template : Instruction + Environment.NewLine + template;
         }

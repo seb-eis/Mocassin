@@ -29,9 +29,6 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.FileMenu.Commands
         }
 
         /// <inheritdoc />
-        public override bool CanExecuteInternal()
-        {
-            return ProjectControl.ProjectManagerViewModel != null;
-        }
+        public override bool CanExecuteInternal() => ProjectControl.ProjectManagerViewModel != null;
     }
 }

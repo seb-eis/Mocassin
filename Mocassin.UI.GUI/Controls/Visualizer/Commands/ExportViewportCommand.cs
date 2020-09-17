@@ -37,10 +37,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Commands
         }
 
         /// <inheritdoc />
-        public override bool CanExecute(HelixViewport3D parameter)
-        {
-            return parameter != null && base.CanExecute(parameter);
-        }
+        public override bool CanExecute(HelixViewport3D parameter) => parameter != null && base.CanExecute(parameter);
 
         /// <inheritdoc />
         public override void Execute(HelixViewport3D parameter)

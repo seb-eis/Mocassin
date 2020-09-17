@@ -35,10 +35,7 @@ namespace Mocassin.Model.Basic
         }
 
         /// <inheritdoc />
-        public bool Equals(SubscriptionCollection other)
-        {
-            return other != null && EventPortType == other.EventPortType;
-        }
+        public bool Equals(SubscriptionCollection other) => other != null && EventPortType == other.EventPortType;
 
         /// <summary>
         ///     Disposes the collection only if the specified port type the internal stored type, returns true if dispose was

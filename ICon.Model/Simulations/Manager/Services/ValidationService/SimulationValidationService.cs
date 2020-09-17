@@ -28,10 +28,8 @@ namespace Mocassin.Model.Simulations
         /// <param name="dataReader"></param>
         /// <returns></returns>
         [ValidationOperation(ValidationType.Object)]
-        protected IValidationReport Validate(IKineticSimulation simulation, IDataReader<ISimulationDataPort> dataReader)
-        {
-            return new KineticSimulationValidator(ModelProject, Settings, dataReader).Validate(simulation);
-        }
+        protected IValidationReport Validate(IKineticSimulation simulation, IDataReader<ISimulationDataPort> dataReader) =>
+            new KineticSimulationValidator(ModelProject, Settings, dataReader).Validate(simulation);
 
         /// <summary>
         ///     Validates the passed metropolis simulation and returns the validation report
@@ -40,9 +38,7 @@ namespace Mocassin.Model.Simulations
         /// <param name="dataReader"></param>
         /// <returns></returns>
         [ValidationOperation(ValidationType.Object)]
-        protected IValidationReport Validate(IMetropolisSimulation simulation, IDataReader<ISimulationDataPort> dataReader)
-        {
-            return new MetropolisSimulationValidator(ModelProject, Settings, dataReader).Validate(simulation);
-        }
+        protected IValidationReport Validate(IMetropolisSimulation simulation, IDataReader<ISimulationDataPort> dataReader) =>
+            new MetropolisSimulationValidator(ModelProject, Settings, dataReader).Validate(simulation);
     }
 }

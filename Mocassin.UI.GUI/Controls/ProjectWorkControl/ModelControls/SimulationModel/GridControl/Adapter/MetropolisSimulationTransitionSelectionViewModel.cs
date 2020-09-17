@@ -9,7 +9,7 @@ using Mocassin.UI.Xml.TransitionModel;
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.SimulationModel.GridControl.Adapter
 {
     /// <summary>
-    ///     The <see cref="HostGraphModelObjectSelectionViewModel{TModelObject,TObjectGraph}" /> for the relation of
+    ///     The <see cref="HostGraphModelObjectSelectionViewModel{TModelObject,TDataObject}" /> for the relation of
     ///     <see cref="MetropolisTransitionData" /> to <see cref="MetropolisSimulationData" /> host instances
     /// </summary>
     public sealed class MetropolisSimulationTransitionSelectionViewModel :
@@ -24,16 +24,12 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.SimulationMo
         }
 
         /// <inheritdoc />
-        protected override IReadOnlyCollection<ModelDataObject> GetSourceCollection(MocassinProject project)
-        {
-            return project?.ProjectModelData?.TransitionModelData?.MetropolisTransitions;
-        }
+        protected override IReadOnlyCollection<ModelDataObject> GetSourceCollection(MocassinProject project) =>
+            project?.ProjectModelData?.TransitionModelData?.MetropolisTransitions;
 
         /// <inheritdoc />
         protected override ICollection<ModelObjectReference<MetropolisTransition>> GetTargetCollection(
-            MetropolisSimulationData sourceObject)
-        {
-            return sourceObject?.Transitions;
-        }
+            MetropolisSimulationData sourceObject) =>
+            sourceObject?.Transitions;
     }
 }

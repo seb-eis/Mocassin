@@ -10,7 +10,7 @@ using Mocassin.UI.Xml.TransitionModel;
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionModel.GridControl.Adapter
 {
     /// <summary>
-    ///     The <see cref="HostGraphModelObjectSelectionViewModel{TModelObject,TObjectGraph}" /> for the relation of
+    ///     The <see cref="HostGraphModelObjectSelectionViewModel{TModelObject,TDataObject}" /> for the relation of
     ///     <see cref="StateExchangeGroupData" /> to <see cref="AbstractTransitionData" /> host instances
     /// </summary>
     public sealed class AbstractTransitionExchangeGroupSelectionViewModel : HostGraphModelObjectSelectionViewModel<StateExchangeGroup,
@@ -25,17 +25,13 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
         }
 
         /// <inheritdoc />
-        protected override IReadOnlyCollection<ModelDataObject> GetSourceCollection(MocassinProject project)
-        {
-            return project?.ProjectModelData?.TransitionModelData?.StateExchangeGroups;
-        }
+        protected override IReadOnlyCollection<ModelDataObject> GetSourceCollection(MocassinProject project) =>
+            project?.ProjectModelData?.TransitionModelData?.StateExchangeGroups;
 
         /// <inheritdoc />
         protected override ICollection<ModelObjectReference<StateExchangeGroup>> GetTargetCollection(
-            AbstractTransitionData sourceObject)
-        {
-            return sourceObject?.StateExchangeGroups;
-        }
+            AbstractTransitionData sourceObject) =>
+            sourceObject?.StateExchangeGroups;
 
         /// <inheritdoc />
         protected override IEnumerable<Predicate<IDataObject>> GetDropRejectPredicates()
@@ -47,10 +43,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
         ///     Checks if the host collection is full in the context of the current connector string
         /// </summary>
         /// <returns></returns>
-        public bool HostCollectionIsFull()
-        {
-            return HostObject.StateExchangeGroups.Count
-                   >= AbstractTransitionData.ConnectorRegex.Matches(HostObject.ConnectorString).Count + 1;
-        }
+        public bool HostCollectionIsFull() =>
+            HostObject.StateExchangeGroups.Count
+            >= AbstractTransitionData.ConnectorRegex.Matches(HostObject.ConnectorString).Count + 1;
     }
 }

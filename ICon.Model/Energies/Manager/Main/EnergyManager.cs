@@ -27,10 +27,7 @@ namespace Mocassin.Model.Energies
         }
 
         /// <inheritdoc />
-        public override Type GetManagerInterfaceType()
-        {
-            return typeof(IEnergyManager);
-        }
+        public override Type GetManagerInterfaceType() => typeof(IEnergyManager);
 
         /// <inheritdoc />
         public override IValidationService CreateValidationService(ProjectSettings settings)

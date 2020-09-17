@@ -55,18 +55,12 @@ namespace Mocassin.Model.Transitions
         ///     Returns a new state pair group that contains the same information but carries a new position status
         /// </summary>
         /// <param name="stability"></param>
-        public StatePairGroup GetStatusChanged(PositionStability stability)
-        {
-            return new StatePairGroup(StatePairs, stability);
-        }
+        public StatePairGroup GetStatusChanged(PositionStability stability) => new StatePairGroup(StatePairs, stability);
 
         /// <summary>
         ///     Creates an empty state pair group
         /// </summary>
         /// <returns></returns>
-        public static StatePairGroup CreateEmpty()
-        {
-            return new StatePairGroup(new (int, int)[0], PositionStability.Stable);
-        }
+        public static StatePairGroup CreateEmpty() => new StatePairGroup(new (int, int)[0], PositionStability.Stable);
     }
 }

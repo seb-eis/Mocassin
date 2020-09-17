@@ -56,7 +56,8 @@ namespace Mocassin.Model.Basic
         {
             const BindingFlags flags = BindingFlags.Public | BindingFlags.Instance;
             foreach (var propertyInfo in GetType().GetProperties(flags)
-                .Where(property => property.GetCustomAttribute(typeof(ConflictHandlerAttribute)) != null)) AutoAssignResolver(propertyInfo);
+                                                  .Where(property => property.GetCustomAttribute(typeof(ConflictHandlerAttribute)) != null))
+                AutoAssignResolver(propertyInfo);
         }
 
         /// <summary>
@@ -82,11 +83,9 @@ namespace Mocassin.Model.Basic
         /// </summary>
         /// <param name="propertyInfo"></param>
         /// <returns></returns>
-        protected virtual object MakeEmptyResolver(PropertyInfo propertyInfo)
-        {
-            return Activator.CreateInstance(
+        protected virtual object MakeEmptyResolver(PropertyInfo propertyInfo) =>
+            Activator.CreateInstance(
                 typeof(DataConflictHandlerDummy<,>).MakeGenericType(propertyInfo.PropertyType.GetGenericArguments()));
-        }
 
         /// <summary>
         ///     Finds the method that is marked as a resolver source for the passed resolver property info and returns a delegate
@@ -108,7 +107,7 @@ namespace Mocassin.Model.Basic
             }
 
             const BindingFlags flags = BindingFlags.NonPublic | BindingFlags.Instance;
-            if (!(new DelegateCreator().CreateWhere(this, SourceDelegateSearchPredicate, flags).SingleOrDefault() is { } @delegate)
+            if (!(new DelegateBuilder().CreateWhere(this, SourceDelegateSearchPredicate, flags).SingleOrDefault() is { } @delegate)
             ) return null;
 
             if (@delegate.Method.ReturnParameter != null && @delegate.Method.ReturnParameter.ParameterType != typeof(object))

@@ -34,10 +34,7 @@ namespace Mocassin.Model.Lattices
         public override string ObjectName => "DopingCombination";
 
         /// <inheritdoc />
-        public double GetChargeDelta()
-        {
-            return Dopant.Charge - Dopable.Charge;
-        }
+        public double GetChargeDelta() => Dopant.Charge - Dopable.Charge;
 
         /// <summary>
         ///     Copies the information from the provided parameter interface and returns the object (Returns null if type mismatch)

@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using System.IO;
+﻿using System.IO;
 using System.Text;
 using Mocassin.Framework.Extensions;
 using Mocassin.Tools.Evaluation.PlotData;

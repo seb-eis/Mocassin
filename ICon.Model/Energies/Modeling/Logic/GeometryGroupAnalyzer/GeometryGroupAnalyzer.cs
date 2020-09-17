@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Mocassin.Framework.Collections;
+using Mocassin.Framework.Comparer;
 using Mocassin.Framework.Extensions;
 using Mocassin.Mathematics.Permutation;
 using Mocassin.Mathematics.ValueTypes;
@@ -21,22 +21,22 @@ namespace Mocassin.Model.Energies
         ///     The group is valid
         /// </summary>
         IsValid,
-        
+
         /// <summary>
         ///     Defined positions partially do not exist
         /// </summary>
         ContainsNonExistentPositions,
-        
+
         /// <summary>
         ///     Defined positions are partially affected by a filter
         /// </summary>
         ContainsFilteredPositions,
-        
+
         /// <summary>
         ///     Defined positions are partially unstable
         /// </summary>
         ContainsUnstablePositions,
-        
+
         /// <summary>
         ///     Defines positions contain a ring definition
         /// </summary>
@@ -150,15 +150,12 @@ namespace Mocassin.Model.Energies
             if (partnerPositions.Any(x => x == null)) return GroupGeometryValidity.ContainsNonExistentPositions;
             if (partnerPositions.Any(x => !x.IsValidAndStable())) return GroupGeometryValidity.ContainsUnstablePositions;
 
-            if (ContainsRing(groupInteraction.GetFullGeometry(), SpaceGroupService.Comparer))
-            {
-                return GroupGeometryValidity.ContainsRingDefinition;
-            }
+            if (ContainsRing(groupInteraction.GetFullGeometry(), SpaceGroupService.Comparer)) return GroupGeometryValidity.ContainsRingDefinition;
 
             var distances = groupInteraction.GetSurroundingGeometry()
-                .Select(vector => vector - groupInteraction.CenterCellSite.Vector)
-                .Select(x => UnitCellProvider.VectorEncoder.Transformer.ToCartesian(x).GetLength())
-                .ToList();
+                                            .Select(vector => vector - groupInteraction.CenterCellSite.Vector)
+                                            .Select(x => UnitCellProvider.VectorEncoder.Transformer.ToCartesian(x).GetLength())
+                                            .ToList();
 
             return filters.Any(x =>
                 distances.Where((t, i) => x.IsApplicable(t, groupInteraction.CenterCellSite, partnerPositions[i])).Any())
@@ -177,9 +174,9 @@ namespace Mocassin.Model.Energies
             var positionList = positionGeometry.AsList();
             for (var i = 0; i < positionList.Count; i++)
             {
-                for (var j = i+1; j < positionList.Count; j++)
+                for (var j = i + 1; j < positionList.Count; j++)
                 {
-                    if (equalityComparer.Compare(positionList[i], positionList[j]) == 0) 
+                    if (equalityComparer.Compare(positionList[i], positionList[j]) == 0)
                         return true;
                 }
             }
@@ -196,7 +193,7 @@ namespace Mocassin.Model.Energies
         protected IEnumerable<OccupationState> GetUniqueGroupOccupationStates(IPointOperationGroup operationGroup,
             IPermutationSource<IParticle> permProvider)
         {
-            var comparer = new EqualityCompareAdapter<IParticle>((a, b) => a.Index == b.Index);
+            var comparer = new RelayEqualityComparer<IParticle>((a, b) => a.Index == b.Index);
             var rawPermutations = operationGroup.GetUniquePermutations(permProvider, comparer, a => 1 << a.Index);
             return rawPermutations.Select(value => new OccupationState {Particles = value.ToList()});
         }
@@ -233,10 +230,8 @@ namespace Mocassin.Model.Energies
         /// </summary>
         /// <param name="group"></param>
         /// <returns></returns>
-        public IPermutationSource<IParticle> GetGroupStatePermutationSource(IGroupInteraction group)
-        {
-            return GetGroupStatePermutationSource(group.GetSurroundingGeometry());
-        }
+        public IPermutationSource<IParticle> GetGroupStatePermutationSource(IGroupInteraction group) =>
+            GetGroupStatePermutationSource(group.GetSurroundingGeometry());
 
         /// <summary>
         ///     Creates a permutation provider for a sequence of fractional position vectors (Without center position) describing

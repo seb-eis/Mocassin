@@ -92,9 +92,6 @@ namespace Mocassin.Tools.UAccess.Readers.Base
         /// <param name="startIndex"></param>
         /// <param name="endIndex"></param>
         /// <returns></returns>
-        public ReadOnlySpan<T> ReadAreaAs<T>(int startIndex, int endIndex) where T : struct
-        {
-            return ReadLengthAs<T>(startIndex, endIndex - startIndex);
-        }
+        public ReadOnlySpan<T> ReadAreaAs<T>(int startIndex, int endIndex) where T : struct => ReadLengthAs<T>(startIndex, endIndex - startIndex);
     }
 }

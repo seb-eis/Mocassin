@@ -14,9 +14,9 @@ namespace Mocassin.UI.Xml.StructureModel
     [XmlRoot]
     public class SpaceGroupInfoData : ModelParameterObject
     {
+        private CrystalSystemVariation crystalVariation;
         private string literal;
         private int number;
-        private CrystalSystemVariation crystalVariation;
 
         /// <summary>
         ///     Get or set the number of the space group
@@ -39,7 +39,7 @@ namespace Mocassin.UI.Xml.StructureModel
         }
 
         /// <summary>
-        ///     Get or set the <see cref="CrystalSystemVariation"/> of the space group
+        ///     Get or set the <see cref="CrystalSystemVariation" /> of the space group
         /// </summary>
         [XmlAttribute]
         public CrystalSystemVariation CrystalVariation
@@ -59,13 +59,11 @@ namespace Mocassin.UI.Xml.StructureModel
         }
 
         /// <inheritdoc />
-        protected override ModelParameter GetModelObjectInternal()
-        {
-            return new SpaceGroupInfo
+        protected override ModelParameter GetModelObjectInternal() =>
+            new SpaceGroupInfo
             {
                 GroupEntry = GetSpaceGroupEntry()
             };
-        }
 
         /// <summary>
         ///     Get the space group entry object for the set properties

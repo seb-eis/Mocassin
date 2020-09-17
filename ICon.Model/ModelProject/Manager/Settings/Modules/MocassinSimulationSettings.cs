@@ -6,8 +6,7 @@ namespace Mocassin.Model.ModelProject
     /// <summary>
     ///     Settings object for the simulation manager
     /// </summary>
-    [DataContract]
-    [ModuleSettings(typeof(ISimulationManager))]
+    [DataContract, ModuleSettings(typeof(ISimulationManager))]
     public class MocassinSimulationSettings : MocassinModuleSettings
     {
         /// <summary>

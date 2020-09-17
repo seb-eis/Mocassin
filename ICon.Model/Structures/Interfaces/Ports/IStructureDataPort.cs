@@ -31,7 +31,7 @@ namespace Mocassin.Model.Structures
         ///     Get read only access to the unit cell position list
         /// </summary>
         /// <returns></returns>
-        ListReadOnlyWrapper<ICellSite> GetCellReferencePositions();
+        FixedList<ICellSite> GetCellReferencePositions();
 
         /// <summary>
         ///     Get a unit cell position by index
@@ -44,7 +44,7 @@ namespace Mocassin.Model.Structures
         ///     Get a read only list of all position dummies
         /// </summary>
         /// <returns></returns>
-        ListReadOnlyWrapper<ICellDummyPosition> GetDummyPositions();
+        FixedList<ICellDummyPosition> GetDummyPositions();
 
         /// <summary>
         ///     Get the position dummy at the specified index

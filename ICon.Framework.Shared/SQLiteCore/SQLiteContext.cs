@@ -41,10 +41,7 @@ namespace Mocassin.Framework.SQLiteCore
         ///     Get a <see cref="ReadOnlyDbContext" /> of the current
         /// </summary>
         /// <returns></returns>
-        public ReadOnlyDbContext AsReadOnly()
-        {
-            return new ReadOnlyDbContext(this);
-        }
+        public ReadOnlyDbContext AsReadOnly() => new ReadOnlyDbContext(this);
 
         /// <summary>
         ///     Creates a new generic <see cref="DbContext" /> of using the provided file path and ensures
@@ -114,10 +111,8 @@ namespace Mocassin.Framework.SQLiteCore
         /// </summary>
         /// <param name="filePath"></param>
         /// <returns></returns>
-        public static ReadOnlyDbContext OpenDatabaseAsReadOnly<TContext>(string filePath) where TContext : SqLiteContext
-        {
-            return OpenDatabase<TContext>(filePath).AsReadOnly();
-        }
+        public static ReadOnlyDbContext OpenDatabaseAsReadOnly<TContext>(string filePath) where TContext : SqLiteContext =>
+            OpenDatabase<TContext>(filePath).AsReadOnly();
     }
 
     /// <summary>

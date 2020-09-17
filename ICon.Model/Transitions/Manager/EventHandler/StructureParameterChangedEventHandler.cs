@@ -24,10 +24,7 @@ namespace Mocassin.Model.Transitions.Handler
         /// <param name="eventArgs"></param>
         /// <returns></returns>
         [EventHandlingMethod]
-        protected IConflictReport HandleChangedCellParameters(IModelParameterEventArgs<ICellParameters> eventArgs)
-        {
-            return DummyHandleEvent(eventArgs);
-        }
+        protected IConflictReport HandleChangedCellParameters(IModelParameterEventArgs<ICellParameters> eventArgs) => DummyHandleEvent(eventArgs);
 
         /// <summary>
         ///     Event reaction to a change in the space group info of the structure manager
@@ -35,10 +32,7 @@ namespace Mocassin.Model.Transitions.Handler
         /// <param name="eventArgs"></param>
         /// <returns></returns>
         [EventHandlingMethod]
-        protected IConflictReport HandleChangedSpaceGroupInfo(IModelParameterEventArgs<ISpaceGroupInfo> eventArgs)
-        {
-            return DummyHandleEvent(eventArgs);
-        }
+        protected IConflictReport HandleChangedSpaceGroupInfo(IModelParameterEventArgs<ISpaceGroupInfo> eventArgs) => DummyHandleEvent(eventArgs);
 
         /// <summary>
         ///     Event reaction to a change in the structure info of the structure manager
@@ -46,9 +40,6 @@ namespace Mocassin.Model.Transitions.Handler
         /// <param name="eventArgs"></param>
         /// <returns></returns>
         [EventHandlingMethod]
-        protected IConflictReport HandleStructureInfoChange(IModelParameterEventArgs<IStructureInfo> eventArgs)
-        {
-            return DummyHandleEvent(eventArgs);
-        }
+        protected IConflictReport HandleStructureInfoChange(IModelParameterEventArgs<IStructureInfo> eventArgs) => DummyHandleEvent(eventArgs);
     }
 }

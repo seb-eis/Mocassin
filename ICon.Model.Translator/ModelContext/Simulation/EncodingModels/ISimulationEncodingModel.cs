@@ -11,12 +11,12 @@ namespace Mocassin.Model.Translator.ModelContext
         ///     The particle is immobile
         /// </summary>
         Immobile,
-        
+
         /// <summary>
         ///     The particle is mobile
         /// </summary>
         Mobile,
-        
+
         /// <summary>
         ///     The particle is mobile and can be selected
         /// </summary>

@@ -16,10 +16,10 @@
 
   <UserControl.Resources>
     <ToolTip x:Key="Local.ToolTip.Particle">
-      <TextBlock Text="{x:Static res:Tooltips.ModelObject_Particle}"/>
+      <TextBlock Text="{x:Static res:Tooltips.ModelObject_Particle}" />
     </ToolTip>
     <ToolTip x:Key="Local.ToolTip.ParticleSet">
-      <TextBlock Text="{x:Static res:Tooltips.ModelObject_ParticleSet}"/>
+      <TextBlock Text="{x:Static res:Tooltips.ModelObject_ParticleSet}" />
     </ToolTip>
   </UserControl.Resources>
 

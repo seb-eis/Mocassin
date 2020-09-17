@@ -18,15 +18,10 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ControlMenu.Comman
         }
 
         /// <inheritdoc />
-        protected override ContentControl GetDataControl()
-        {
-            return new TransitionModelControlView {DataContext = new TransitionModelControlViewModel(ProjectControl)};
-        }
+        protected override ContentControl GetDataControl() =>
+            new TransitionModelControlView {DataContext = new TransitionModelControlViewModel(ProjectControl)};
 
         /// <inheritdoc />
-        protected override string GetTabName()
-        {
-            return "Transition Control";
-        }
+        protected override string GetTabName() => "Transition Control";
     }
 }

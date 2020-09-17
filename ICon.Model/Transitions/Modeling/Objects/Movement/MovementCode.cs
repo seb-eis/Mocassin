@@ -7,7 +7,7 @@ namespace Mocassin.Model.Transitions
     /// <summary>
     ///     Describes a physical movement during a transition as a set of integer values
     /// </summary>
-    public class MovementCode : ArrayCode<int>
+    public class MovementCode : CodeArray<int>
     {
         /// <summary>
         ///     Returns the movement code as an exchange pair instruction
@@ -20,21 +20,16 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <inheritdoc />
-        public override string GetTypeName()
-        {
-            return "Movement Code";
-        }
+        public override string GetTypeName() => "Movement Code";
 
         /// <summary>
         ///     Get the inverted movement code
         /// </summary>
         /// <returns></returns>
-        public MovementCode GetInverse()
-        {
-            return new MovementCode
+        public MovementCode GetInverse() =>
+            new MovementCode
             {
                 CodeValues = CodeValues.Reverse().ToArray()
             };
-        }
     }
 }

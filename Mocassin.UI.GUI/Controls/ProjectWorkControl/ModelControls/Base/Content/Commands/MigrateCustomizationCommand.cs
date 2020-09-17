@@ -34,10 +34,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         }
 
         /// <inheritdoc />
-        public override bool CanExecuteInternal(ProjectCustomizationTemplate parameter)
-        {
-            return parameter?.Parent != null && base.CanExecuteInternal(parameter);
-        }
+        public override bool CanExecuteInternal(ProjectCustomizationTemplate parameter) => parameter?.Parent != null && base.CanExecuteInternal(parameter);
 
         /// <summary>
         ///     Creates a new <see cref="ProjectCustomizationTemplate" />, adds it to its parent project and migrates matching data

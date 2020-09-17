@@ -40,10 +40,7 @@ namespace Mocassin.Model.Lattices
         ///     Get the  type of the manager interface this class supports
         /// </summary>
         /// <returns></returns>
-        public override Type GetManagerInterfaceType()
-        {
-            return typeof(ILatticeManager);
-        }
+        public override Type GetManagerInterfaceType() => typeof(ILatticeManager);
 
         /// <summary>
         ///     Get a new validation service for this manager that uses the settings from the provided project settings and handles

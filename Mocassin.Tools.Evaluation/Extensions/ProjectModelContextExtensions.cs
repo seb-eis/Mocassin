@@ -18,10 +18,8 @@ namespace Mocassin.Tools.Evaluation.Extensions
         /// <typeparam name="TObject"></typeparam>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static IEnumerable<TObject> GetModelObjects<TObject>(this IProjectModelContext value) where TObject : IModelObject
-        {
-            return value.ModelProject.DataTracker.Objects<TObject>();
-        }
+        public static IEnumerable<TObject> GetModelObjects<TObject>(this IProjectModelContext value) where TObject : IModelObject =>
+            value.ModelProject.DataTracker.Objects<TObject>();
 
         /// <summary>
         ///     Get a <see cref="IModelObject" /> of specified type by index
@@ -30,18 +28,14 @@ namespace Mocassin.Tools.Evaluation.Extensions
         /// <param name="value"></param>
         /// <param name="index"></param>
         /// <returns></returns>
-        public static TObject GetModelObject<TObject>(this IProjectModelContext value, int index) where TObject : IModelObject
-        {
-            return value.ModelProject.DataTracker.FindObject<TObject>(index);
-        }
+        public static TObject GetModelObject<TObject>(this IProjectModelContext value, int index) where TObject : IModelObject =>
+            value.ModelProject.DataTracker.FindObject<TObject>(index);
 
         /// <summary>
         ///     Get a <see cref="IModelObject" /> of specified type by key
         /// </summary>
-        public static TObject GetModelObject<TObject>(this IProjectModelContext value, string key) where TObject : IModelObject
-        {
-            return value.ModelProject.DataTracker.FindObject<TObject>(key);
-        }
+        public static TObject GetModelObject<TObject>(this IProjectModelContext value, string key) where TObject : IModelObject =>
+            value.ModelProject.DataTracker.FindObject<TObject>(key);
 
         /// <summary>
         ///     Gets the <see cref="IUnitCellProvider{T1}" /> for the context
@@ -58,9 +52,6 @@ namespace Mocassin.Tools.Evaluation.Extensions
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static IUnitCellVectorEncoder GetUnitCellVectorEncoder(this IProjectModelContext value)
-        {
-            return value.GetUnitCellProvider().VectorEncoder;
-        }
+        public static IUnitCellVectorEncoder GetUnitCellVectorEncoder(this IProjectModelContext value) => value.GetUnitCellProvider().VectorEncoder;
     }
 }

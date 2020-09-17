@@ -69,11 +69,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel
         /// </summary>
         /// <param name="positions"></param>
         /// <returns></returns>
-        private bool CheckCurrentPositionListValidity(IList<CellPositionData> positions)
-        {
-            // ToDo: Change this to detect all possible invalidity reasons 
-            return positions.Count == ContentSource.ParticleList.Count;
-        }
+        // ToDo: Change this to detect all possible invalidity reasons 
+        private bool CheckCurrentPositionListValidity(IList<CellPositionData> positions) => positions.Count == ContentSource.ParticleList.Count;
 
         /// <summary>
         ///     Get the sequence of <see cref="ModelObjectReference{T}" /> to <see cref="Particle" /> model objects that are
@@ -95,7 +92,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel
             if (positionGraph.Stability == PositionStability.Unstable) return voidResult;
 
             return BlockControlViewModel.ContentSource?.ProjectModelData?.ParticleModelData?.ParticleSets
-                ?.Single(x => x.Key == positionGraph.Occupation.Key).Particles;
+                                        ?.Single(x => x.Key == positionGraph.Occupation.Key).Particles;
         }
     }
 }

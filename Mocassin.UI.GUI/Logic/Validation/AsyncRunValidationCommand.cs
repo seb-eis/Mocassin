@@ -58,11 +58,9 @@ namespace Mocassin.UI.GUI.Logic.Validation
         ///     Get a <see cref="Task" /> that completes when the last execution has finished
         /// </summary>
         /// <returns></returns>
-        public Task WhenCurrentExecutionFinished()
-        {
-            return CurrentExecutionTask == null || !CurrentExecutionTask.IsCompleted
+        public Task WhenCurrentExecutionFinished() =>
+            CurrentExecutionTask == null || !CurrentExecutionTask.IsCompleted
                 ? Task.CompletedTask
                 : Task.WhenAll(CurrentExecutionTask);
-        }
     }
 }

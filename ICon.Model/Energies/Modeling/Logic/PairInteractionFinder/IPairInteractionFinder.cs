@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Mocassin.Mathematics.Comparer;
 using Mocassin.Model.Structures;
 using Mocassin.Symmetry.Analysis;
@@ -24,7 +23,8 @@ namespace Mocassin.Model.Energies
         IUnitCellProvider<ICellSite> UnitCellProvider { get; }
 
         /// <summary>
-        ///     Create a unique set of <see cref="UnstablePairInteraction"/> objects that results from the passed <see cref="IUnstableEnvironment"/> set.
+        ///     Create a unique set of <see cref="UnstablePairInteraction" /> objects that results from the passed
+        ///     <see cref="IUnstableEnvironment" /> set.
         ///     Comparer is used for geometric tolerance comparisons
         /// </summary>
         /// <param name="unstableEnvironments"></param>
@@ -34,7 +34,8 @@ namespace Mocassin.Model.Energies
             NumericComparer comparer);
 
         /// <summary>
-        ///     Create a unique set of <see cref="StablePairInteraction"/> objects that results from the passed <see cref="IStableEnvironmentInfo"/>.
+        ///     Create a unique set of <see cref="StablePairInteraction" /> objects that results from the passed
+        ///     <see cref="IStableEnvironmentInfo" />.
         ///     Comparer is used for geometric tolerance comparisons
         /// </summary>
         /// <param name="positions"></param>

@@ -37,10 +37,7 @@ namespace Mocassin.Model.Translator
         }
 
         /// <inheritdoc />
-        public TStruct GetStructure<TStruct>(byte[] buffer, int offset) where TStruct : struct
-        {
-            return (TStruct) GetStructure(buffer, offset, typeof(TStruct));
-        }
+        public TStruct GetStructure<TStruct>(byte[] buffer, int offset) where TStruct : struct => (TStruct) GetStructure(buffer, offset, typeof(TStruct));
 
         /// <inheritdoc />
         public object GetStructure(byte[] buffer, int offset, Type structType)

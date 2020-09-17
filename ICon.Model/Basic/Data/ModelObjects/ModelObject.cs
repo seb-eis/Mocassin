@@ -52,10 +52,7 @@ namespace Mocassin.Model.Basic
         ///     Basic string representation with name
         /// </summary>
         /// <returns></returns>
-        public override string ToString()
-        {
-            return $"{ObjectName}:{Name ?? "??"}";
-        }
+        public override string ToString() => $"{ObjectName}:{Name ?? "??"}";
 
         /// <summary>
         ///     Builds the specified object and populates it by the passed interface
@@ -88,9 +85,6 @@ namespace Mocassin.Model.Basic
         /// <typeparam name="T1"></typeparam>
         /// <param name="obj"></param>
         /// <returns></returns>
-        protected T1 CastIfNotDeprecated<T1>(IModelObject obj) where T1 : class, IModelObject
-        {
-            return obj.IsDeprecated ? null : obj as T1;
-        }
+        protected T1 CastIfNotDeprecated<T1>(IModelObject obj) where T1 : class, IModelObject => obj.IsDeprecated ? null : obj as T1;
     }
 }

@@ -8,29 +8,25 @@ namespace Mocassin.Model.ModelProject
     ///     Concurrency settings that specifies how long the program should wait for concurrent read/write access to free
     ///     dependent locks before it throws timeout exceptions
     /// </summary>
-    [DataContract]
-    [XmlRoot("MocassinConcurrencySettings")]
+    [DataContract, XmlRoot("MocassinConcurrencySettings")]
     public class MocassinConcurrencySettings
     {
         /// <summary>
         ///     The maximum number of locking attempts
         /// </summary>
-        [DataMember]
-        [XmlAttribute("MaxAttempts")]
+        [DataMember, XmlAttribute("MaxAttempts")]
         public int MaxAttempts { get; set; } = 20;
 
         /// <summary>
         ///     The interval in between locking attempts
         /// </summary>
-        [DataMember]
-        [XmlIgnore]
+        [DataMember, XmlIgnore]
         public TimeSpan AttemptInterval { get; set; } = TimeSpan.FromMilliseconds(25);
 
         /// <summary>
         ///     Get or set the time interval as a string representation
         /// </summary>
-        [IgnoreDataMember]
-        [XmlAttribute("AttemptInterval")]
+        [IgnoreDataMember, XmlAttribute("AttemptInterval")]
         public string AttemptIntervalString
         {
             get => AttemptInterval.ToString();

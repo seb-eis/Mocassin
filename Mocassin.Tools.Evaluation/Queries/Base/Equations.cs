@@ -42,10 +42,8 @@ namespace Mocassin.Tools.Evaluation.Queries.Base
             /// <param name="time"></param>
             /// <returns></returns>
             public static double DisplacementToMobility(in Cartesian3D meanShift, in Cartesian3D normField, double fieldModulus,
-                double time)
-            {
-                return meanShift * normField / (fieldModulus * time);
-            }
+                double time) =>
+                meanShift * normField / (fieldModulus * time);
 
             /// <summary>
             ///     Calculates the mobility in field direction from mean shift, electric filed vector and time information
@@ -54,10 +52,8 @@ namespace Mocassin.Tools.Evaluation.Queries.Base
             /// <param name="field"></param>
             /// <param name="time"></param>
             /// <returns></returns>
-            public static double DisplacementToMobility(in Cartesian3D meanShift, in Cartesian3D field, double time)
-            {
-                return DisplacementToMobility(meanShift, field.GetNormalized(), field.GetLength(), time);
-            }
+            public static double DisplacementToMobility(in Cartesian3D meanShift, in Cartesian3D field, double time) =>
+                DisplacementToMobility(meanShift, field.GetNormalized(), field.GetLength(), time);
 
             /// <summary>
             ///     Calculates the conductivity value from mobility, charge number and particle density
@@ -66,10 +62,8 @@ namespace Mocassin.Tools.Evaluation.Queries.Base
             /// <param name="chargeNumber"></param>
             /// <param name="particleDensity"></param>
             /// <returns></returns>
-            public static double MobilityToConductivity(double mobility, double chargeNumber, double particleDensity)
-            {
-                return mobility * chargeNumber * particleDensity * Constants.ElementalCharge;
-            }
+            public static double MobilityToConductivity(double mobility, double chargeNumber, double particleDensity) =>
+                mobility * chargeNumber * particleDensity * Constants.ElementalCharge;
         }
 
         /// <summary>
@@ -83,10 +77,7 @@ namespace Mocassin.Tools.Evaluation.Queries.Base
             /// <param name="shift"></param>
             /// <param name="time"></param>
             /// <returns></returns>
-            public static double MeanSquareToCoefficient(double shift, double time)
-            {
-                return shift / (2 * time);
-            }
+            public static double MeanSquareToCoefficient(double shift, double time) => shift / (2 * time);
 
             /// <summary>
             ///     Get the diffusion coefficient by mean square displacement vector and time in X,Y,Z directions
@@ -94,12 +85,10 @@ namespace Mocassin.Tools.Evaluation.Queries.Base
             /// <param name="vector"></param>
             /// <param name="time"></param>
             /// <returns></returns>
-            public static (double X, double Y, double Z) MeanSquareToCoefficient(in Cartesian3D vector, double time)
-            {
-                return (MeanSquareToCoefficient(vector.X, time),
+            public static (double X, double Y, double Z) MeanSquareToCoefficient(in Cartesian3D vector, double time) =>
+                (MeanSquareToCoefficient(vector.X, time),
                     MeanSquareToCoefficient(vector.Y, time),
                     MeanSquareToCoefficient(vector.Z, time));
-            }
         }
 
         /// <summary>
@@ -114,10 +103,8 @@ namespace Mocassin.Tools.Evaluation.Queries.Base
             /// <param name="source"></param>
             /// <param name="selector"></param>
             /// <returns></returns>
-            public static (double Average, double Deviation) AverageWithDeviation<T>(IEnumerable<T> source, Func<T, double> selector)
-            {
-                return AverageWithDeviation(source as IReadOnlyCollection<T> ?? source.ToList(), selector);
-            }
+            public static (double Average, double Deviation) AverageWithDeviation<T>(IEnumerable<T> source, Func<T, double> selector) =>
+                AverageWithDeviation(source as IReadOnlyCollection<T> ?? source.ToList(), selector);
 
             /// <summary>
             ///     Calculates the average values with standard deviation of a value sequence using a selector
@@ -140,10 +127,8 @@ namespace Mocassin.Tools.Evaluation.Queries.Base
             /// <param name="source"></param>
             /// <param name="selector"></param>
             /// <returns></returns>
-            public static (double Average, double Error) AverageWithSem<T>(IEnumerable<T> source, Func<T, double> selector)
-            {
-                return AverageWithSem(source as IReadOnlyCollection<T> ?? source.ToList(), selector);
-            }
+            public static (double Average, double Error) AverageWithSem<T>(IEnumerable<T> source, Func<T, double> selector) =>
+                AverageWithSem(source as IReadOnlyCollection<T> ?? source.ToList(), selector);
 
             /// <summary>
             ///     Calculates the average values with standard error of measurement of a value sequence using a selector
@@ -168,10 +153,8 @@ namespace Mocassin.Tools.Evaluation.Queries.Base
             /// <param name="temperature"></param>
             /// <returns></returns>
             public static double CubicOnsagerKuboGreen(in Cartesian3D lhs, in Cartesian3D rhs, double volume, double time,
-                double temperature)
-            {
-                return lhs.GetLength() * rhs.GetLength() / (6 * volume * temperature * time * Constants.BlotzmannEv);
-            }
+                double temperature) =>
+                lhs.GetLength() * rhs.GetLength() / (6 * volume * temperature * time * Constants.BlotzmannEv);
         }
     }
 }

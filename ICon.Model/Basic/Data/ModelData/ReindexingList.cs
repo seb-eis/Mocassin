@@ -57,10 +57,7 @@ namespace Mocassin.Model.Basic
         }
 
         /// <inheritdoc />
-        public bool Contains((int Old, int New) item)
-        {
-            return Data.Contains(item);
-        }
+        public bool Contains((int Old, int New) item) => Data.Contains(item);
 
         /// <inheritdoc />
         public void CopyTo((int Old, int New)[] array, int arrayIndex)
@@ -69,16 +66,10 @@ namespace Mocassin.Model.Basic
         }
 
         /// <inheritdoc />
-        public IEnumerator<(int Old, int New)> GetEnumerator()
-        {
-            return Data.GetEnumerator();
-        }
+        public IEnumerator<(int Old, int New)> GetEnumerator() => Data.GetEnumerator();
 
         /// <inheritdoc />
-        public int IndexOf((int Old, int New) item)
-        {
-            return Data.IndexOf(item);
-        }
+        public int IndexOf((int Old, int New) item) => Data.IndexOf(item);
 
         /// <inheritdoc />
         public void Insert(int index, (int Old, int New) item)
@@ -87,10 +78,7 @@ namespace Mocassin.Model.Basic
         }
 
         /// <inheritdoc />
-        public bool Remove((int Old, int New) item)
-        {
-            return Data.Remove(item);
-        }
+        public bool Remove((int Old, int New) item) => Data.Remove(item);
 
         /// <inheritdoc />
         public void RemoveAt(int index)
@@ -99,10 +87,7 @@ namespace Mocassin.Model.Basic
         }
 
         /// <inheritdoc />
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return Data.GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => Data.GetEnumerator();
 
         /// <summary>
         ///     Set the internal list capacity to the actual number of entries

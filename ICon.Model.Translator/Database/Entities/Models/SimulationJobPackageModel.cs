@@ -48,22 +48,19 @@ namespace Mocassin.Model.Translator
         /// <summary>
         ///     The structure model context key
         /// </summary>
-        [Column("StructureModelId")]
-        [ForeignKey(nameof(SimulationStructureModel))]
+        [Column("StructureModelId"), ForeignKey(nameof(SimulationStructureModel))]
         public int StructureModelId { get; set; }
 
         /// <summary>
         ///     The transition model context key
         /// </summary>
-        [Column("TransitionModelId")]
-        [ForeignKey(nameof(SimulationTransitionModel))]
+        [Column("TransitionModelId"), ForeignKey(nameof(SimulationTransitionModel))]
         public int TransitionModelId { get; set; }
 
         /// <summary>
         ///     The energy model context key
         /// </summary>
-        [Column("EnergyModelId")]
-        [ForeignKey(nameof(SimulationEnergyModel))]
+        [Column("EnergyModelId"), ForeignKey(nameof(SimulationEnergyModel))]
         public int EnergyModelId { get; set; }
 
         /// <summary>

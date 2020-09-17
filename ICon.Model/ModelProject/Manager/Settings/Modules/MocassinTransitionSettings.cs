@@ -6,8 +6,7 @@ namespace Mocassin.Model.ModelProject
     /// <summary>
     ///     Basic settings object for transitions that limits the possible input for transitions
     /// </summary>
-    [DataContract]
-    [ModuleSettings(typeof(ITransitionManager))]
+    [DataContract, ModuleSettings(typeof(ITransitionManager))]
     public class MocassinTransitionSettings : MocassinModuleSettings
     {
         /// <summary>

@@ -32,7 +32,7 @@ namespace Mocassin.Model.Energies
         bool IsChiral { get; }
 
         /// <summary>
-        ///     Get a boolean flag if the interaction is symmetric 
+        ///     Get a boolean flag if the interaction is symmetric
         /// </summary>
         bool IsSymmetric { get; }
 

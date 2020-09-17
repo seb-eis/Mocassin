@@ -195,10 +195,7 @@ namespace Mocassin.Model.Lattices
         /// <param name="b"></param>
         /// <param name="c"></param>
         /// <returns></returns>
-        public byte[,,,] CreateEmptyLattice(int a, int b, int c)
-        {
-            return new byte[a, b, c, UnitCellProvider.VectorEncoder.PositionCount];
-        }
+        public byte[,,,] CreateEmptyLattice(int a, int b, int c) => new byte[a, b, c, UnitCellProvider.VectorEncoder.PositionCount];
 
         /// <summary>
         ///     Creates a population table for a supercell of specified size that assigns each [Wyckoff][Particle] index

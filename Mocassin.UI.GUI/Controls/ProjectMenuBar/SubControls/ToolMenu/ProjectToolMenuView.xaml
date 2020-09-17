@@ -18,11 +18,11 @@
 
         <MenuItem Header="Simulation Builder" Command="{Binding ProjectCommandRelay}"
                   CommandParameter="{x:Type commands:AddProjectDeploymentTabCommand}" />
-        <Separator/>
+        <Separator />
         <MenuItem Header="Msl Tools" Command="{Binding ProjectCommandRelay}"
-                  CommandParameter="{x:Type commands:AddMslToolsTabCommand}"/>
+                  CommandParameter="{x:Type commands:AddMslToolsTabCommand}" />
 
-        </MenuItem>
+      </MenuItem>
     </Menu>
   </Grid>
 </UserControl>

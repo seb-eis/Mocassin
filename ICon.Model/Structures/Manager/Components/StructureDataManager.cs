@@ -15,51 +15,27 @@ namespace Mocassin.Model.Structures
         }
 
         /// <inheritdoc />
-        public ICellParameters GetCellParameters()
-        {
-            return Data.CrystalParameters;
-        }
+        public ICellParameters GetCellParameters() => Data.CrystalParameters;
 
         /// <inheritdoc />
-        public ISpaceGroupInfo GetSpaceGroupInfo()
-        {
-            return Data.SpaceGroupInfo;
-        }
+        public ISpaceGroupInfo GetSpaceGroupInfo() => Data.SpaceGroupInfo;
 
         /// <inheritdoc />
-        public IStructureInfo GetStructureInfo()
-        {
-            return Data.StructureInfo;
-        }
+        public IStructureInfo GetStructureInfo() => Data.StructureInfo;
 
         /// <inheritdoc />
-        public ListReadOnlyWrapper<ICellSite> GetCellReferencePositions()
-        {
-            return ListReadOnlyWrapper<ICellSite>.FromEnumerable(Data.CellReferencePositions);
-        }
+        public FixedList<ICellSite> GetCellReferencePositions() => FixedList<ICellSite>.FromEnumerable(Data.CellReferencePositions);
 
         /// <inheritdoc />
-        public ReindexingList GetCleanReferencePositionIndexing()
-        {
-            return CreateReindexing(Data.CellReferencePositions, Data.CellReferencePositions.Count);
-        }
+        public ReindexingList GetCleanReferencePositionIndexing() => CreateReindexing(Data.CellReferencePositions, Data.CellReferencePositions.Count);
 
         /// <inheritdoc />
-        public ICellSite GetCellReferencePosition(int index)
-        {
-            return Data.CellReferencePositions[index];
-        }
+        public ICellSite GetCellReferencePosition(int index) => Data.CellReferencePositions[index];
 
         /// <inheritdoc />
-        public ListReadOnlyWrapper<ICellDummyPosition> GetDummyPositions()
-        {
-            return ListReadOnlyWrapper<ICellDummyPosition>.FromEnumerable(Data.PositionDummies);
-        }
+        public FixedList<ICellDummyPosition> GetDummyPositions() => FixedList<ICellDummyPosition>.FromEnumerable(Data.PositionDummies);
 
         /// <inheritdoc />
-        public ICellDummyPosition GetDummyPosition(int index)
-        {
-            return Data.PositionDummies[index];
-        }
+        public ICellDummyPosition GetDummyPosition(int index) => Data.PositionDummies[index];
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows.Controls;
 using Mocassin.UI.GUI.Base.Objects;
-using Mocassin.UI.GUI.Base.ViewModels;
 
 namespace Mocassin.UI.GUI.Controls.Tools
 {
@@ -16,7 +15,7 @@ namespace Mocassin.UI.GUI.Controls.Tools
         public string Description { get; }
 
         /// <summary>
-        ///     Get the <see cref="ToolViewModel"/>
+        ///     Get the <see cref="ToolViewModel" />
         /// </summary>
         public ToolViewModel ViewModel => (ToolViewModel) Value.ViewModel;
 

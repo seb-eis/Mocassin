@@ -51,10 +51,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
                 TabHost.RemoveAndDispose(this);
             }
 
-            bool CanCloseTab()
-            {
-                return TabHost.Contains(this);
-            }
+            bool CanCloseTab() => TabHost.Contains(this);
 
             return new RelayCommand(CloseTab, CanCloseTab);
         }
@@ -89,9 +86,6 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
         ///     Determines the current index of the <see cref="DynamicControlTabItem" /> in its <see cref="IControlTabHost" />
         /// </summary>
         /// <returns></returns>
-        public int GetIndexInHost()
-        {
-            return TabHost.ObservableItems.IndexOf(this);
-        }
+        public int GetIndexInHost() => TabHost.ObservableItems.IndexOf(this);
     }
 }

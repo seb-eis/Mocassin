@@ -15,10 +15,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Extensions
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static Vector3 ToDxVector(this Cartesian3D source)
-        {
-            return source.Coordinates.ToDxVector();
-        }
+        public static Vector3 ToDxVector(this Cartesian3D source) => source.Coordinates.ToDxVector();
 
         /// <summary>
         ///     Narrowing conversion of a double precision <see cref="Fractional3D" /> to a SharpDX single precision
@@ -26,10 +23,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Extensions
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static Vector3 ToDxVector(this Fractional3D source)
-        {
-            return source.Coordinates.ToDxVector();
-        }
+        public static Vector3 ToDxVector(this Fractional3D source) => source.Coordinates.ToDxVector();
 
         /// <summary>
         ///     Narrowing conversion of a double precision <see cref="Coordinates3D" /> to a SharpDX single precision
@@ -37,9 +31,6 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Extensions
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static Vector3 ToDxVector(this Coordinates3D source)
-        {
-            return new Vector3((float) source.A, (float) source.B, (float) source.C);
-        }
+        public static Vector3 ToDxVector(this Coordinates3D source) => new Vector3((float) source.A, (float) source.B, (float) source.C);
     }
 }

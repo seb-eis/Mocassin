@@ -92,15 +92,10 @@ namespace Mocassin.Model.Particles
 
         /// <inheritdoc />
         [DataOperation(DataOperationType.ObjectCleaning)]
-        protected override IOperationReport TryCleanDeprecatedData()
-        {
-            return DefaultCleanDeprecatedData();
-        }
+        protected override IOperationReport TryCleanDeprecatedData() => DefaultCleanDeprecatedData();
 
         /// <inheritdoc />
-        protected override IDataConflictHandlerProvider<ParticleModelData> CreateDataConflictHandlerProvider()
-        {
-            return new ParticleDataConflictHandlerProvider(ModelProject);
-        }
+        protected override IDataConflictHandlerProvider<ParticleModelData> CreateDataConflictHandlerProvider() =>
+            new ParticleDataConflictHandlerProvider(ModelProject);
     }
 }

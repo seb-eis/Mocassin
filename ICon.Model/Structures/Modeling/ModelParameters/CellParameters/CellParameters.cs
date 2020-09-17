@@ -41,10 +41,7 @@ namespace Mocassin.Model.Structures
         public double GammaDegree => MocassinMath.RadianToDegree(Gamma);
 
         /// <inheritdoc />
-        public override string GetParameterName()
-        {
-            return "Cell Parameters";
-        }
+        public override string GetParameterName() => "Cell Parameters";
 
         /// <inheritdoc />
         public override bool Equals(IModelParameter other)
@@ -64,19 +61,13 @@ namespace Mocassin.Model.Structures
         }
 
         /// <inheritdoc />
-        public CrystalParameterSet AsParameterSet()
-        {
-            return new CrystalParameterSet(ParamA, ParamB, ParamC, Alpha, Beta, Gamma);
-        }
+        public CrystalParameterSet AsParameterSet() => new CrystalParameterSet(ParamA, ParamB, ParamC, Alpha, Beta, Gamma);
 
         /// <summary>
         ///     Implicit cast of crystal parameter set to the wrapper object
         /// </summary>
         /// <param name="paramSet"></param>
-        public static implicit operator CellParameters(CrystalParameterSet paramSet)
-        {
-            return new CellParameters {ParameterSet = paramSet};
-        }
+        public static implicit operator CellParameters(CrystalParameterSet paramSet) => new CellParameters {ParameterSet = paramSet};
 
         /// <inheritdoc />
         public override ModelParameter PopulateObject(IModelParameter modelParameter)

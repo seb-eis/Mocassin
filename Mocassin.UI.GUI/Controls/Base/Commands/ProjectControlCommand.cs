@@ -25,19 +25,13 @@ namespace Mocassin.UI.GUI.Controls.Base.Commands
         }
 
         /// <inheritdoc />
-        public sealed override bool CanExecute()
-        {
-            return base.CanExecute() && CanExecuteInternal();
-        }
+        public sealed override bool CanExecute() => base.CanExecute() && CanExecuteInternal();
 
         /// <summary>
         ///     Internal implementation of can execute check
         /// </summary>
         /// <returns></returns>
-        public virtual bool CanExecuteInternal()
-        {
-            return true;
-        }
+        public virtual bool CanExecuteInternal() => true;
     }
 
     /// <summary>
@@ -62,18 +56,12 @@ namespace Mocassin.UI.GUI.Controls.Base.Commands
         }
 
         /// <inheritdoc />
-        public sealed override bool CanExecute(T parameter)
-        {
-            return base.CanExecute(parameter) && CanExecuteInternal(parameter);
-        }
+        public sealed override bool CanExecute(T parameter) => base.CanExecute(parameter) && CanExecuteInternal(parameter);
 
         /// <summary>
         ///     Internal implementation of can execute check
         /// </summary>
         /// <returns></returns>
-        public virtual bool CanExecuteInternal(T parameter)
-        {
-            return true;
-        }
+        public virtual bool CanExecuteInternal(T parameter) => true;
     }
 }

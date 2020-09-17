@@ -20,8 +20,8 @@ namespace Mocassin.Model.Translator.ModelContext
         {
             var index = 0;
             var pairModels = pairInteractions
-                .Select(pair => CreateEnergyModel(pair, ref index))
-                .ToList();
+                             .Select(pair => CreateEnergyModel(pair, ref index))
+                             .ToList();
 
             return pairModels;
         }

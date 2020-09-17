@@ -13,9 +13,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
     public class AbstractTransitionExchangeGroupSelectionVmConverter : HostGraphGuestSelectionVmConverter<AbstractTransitionData>
     {
         /// <inheritdoc />
-        protected override IContentSupplier<MocassinProject> CreateSelectionViewModel(AbstractTransitionData host)
-        {
-            return new AbstractTransitionExchangeGroupSelectionViewModel(host);
-        }
+        protected override IContentSupplier<MocassinProject> CreateSelectionViewModel(AbstractTransitionData host) =>
+            new AbstractTransitionExchangeGroupSelectionViewModel(host);
     }
 }

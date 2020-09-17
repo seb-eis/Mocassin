@@ -1,18 +1,18 @@
 ﻿using Mocassin.UI.GUI.Base.ViewModels;
-using System;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionModel.GridControl
 {
     /// <summary>
-    ///     A <see cref="ViewModelBase"/> for a transition mechanism that can be translated into a connection pattern for the model processing system
+    ///     A <see cref="ViewModelBase" /> for a transition mechanism that can be translated into a connection pattern for the
+    ///     model processing system
     /// </summary>
     public class TransitionMechanismViewModel : ViewModelBase
     {
-        private string name;
-        private string description;
         private string connectionPattern;
-        private string positionChainDescription;
+        private string description;
         private bool hasAssociationFlagSupport;
+        private string name;
+        private string positionChainDescription;
 
         /// <summary>
         ///     Get or set a name for the mechanism
@@ -33,7 +33,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
         }
 
         /// <summary>
-        ///     Get or set the connection pattern <see cref="string"/>
+        ///     Get or set the connection pattern <see cref="string" />
         /// </summary>
         public string ConnectionPattern
         {

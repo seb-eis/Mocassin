@@ -72,10 +72,7 @@ namespace Mocassin.UI.Xml.Jobs
         }
 
         /// <inheritdoc />
-        object IDuplicable.Duplicate()
-        {
-            return Duplicate();
-        }
+        object IDuplicable.Duplicate() => Duplicate();
 
         /// <inheritdoc />
         public override IJobCollection ToInternal(IModelProject modelProject, int collectionId)
@@ -87,10 +84,7 @@ namespace Mocassin.UI.Xml.Jobs
         }
 
         /// <inheritdoc />
-        public override IEnumerable<JobConfigData> GetConfigurations()
-        {
-            return JobConfigurations.AsEnumerable();
-        }
+        public override IEnumerable<JobConfigData> GetConfigurations() => JobConfigurations.AsEnumerable();
 
         /// <inheritdoc />
         public override int GetTotalJobCount(IModelProject modelProject)
@@ -104,11 +98,9 @@ namespace Mocassin.UI.Xml.Jobs
         /// </summary>
         /// <param name="modelProject"></param>
         /// <returns></returns>
-        public int GetJobCountPerConfig(IModelProject modelProject)
-        {
-            return int.TryParse(JobCountPerConfig, out var count)
+        public int GetJobCountPerConfig(IModelProject modelProject) =>
+            int.TryParse(JobCountPerConfig, out var count)
                 ? count
                 : modelProject.DataTracker.FindObject<IMetropolisSimulation>(Simulation.Key).JobCount;
-        }
     }
 }

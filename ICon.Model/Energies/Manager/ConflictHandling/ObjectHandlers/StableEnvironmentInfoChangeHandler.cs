@@ -110,12 +110,10 @@ namespace Mocassin.Model.Energies.ConflictHandling
         /// <param name="comparer"></param>
         /// <returns></returns>
         protected bool IsEquivalentInteraction(StablePairInteraction lhs, StablePairInteraction rhs,
-            VectorComparer3D<Fractional3D> comparer)
-        {
-            return lhs.Position0 == rhs.Position0
-                   && lhs.Position1 == rhs.Position1
-                   && comparer.Equals(lhs.SecondPositionVector, rhs.SecondPositionVector);
-        }
+            VectorComparer3D<Fractional3D> comparer) =>
+            lhs.Position0 == rhs.Position0
+            && lhs.Position1 == rhs.Position1
+            && comparer.Equals(lhs.SecondPositionVector, rhs.SecondPositionVector);
 
         /// <summary>
         ///     Calculates the new set of pair interactions with the provided project services and new stable environment info

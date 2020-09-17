@@ -14,9 +14,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.SimulationMo
     public class KineticSimulationTransitionSelectionVmConverter : HostGraphGuestSelectionVmConverter<KineticSimulationData>
     {
         /// <inheritdoc />
-        protected override IContentSupplier<MocassinProject> CreateSelectionViewModel(KineticSimulationData host)
-        {
-            return new KineticSimulationTransitionSelectionViewModel(host);
-        }
+        protected override IContentSupplier<MocassinProject> CreateSelectionViewModel(KineticSimulationData host) =>
+            new KineticSimulationTransitionSelectionViewModel(host);
     }
 }

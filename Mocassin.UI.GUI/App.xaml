@@ -133,7 +133,7 @@
         <Setter Property="RowBackground" Value="White" />
         <Setter Property="Background" Value="White" />
         <Setter Property="AlternatingRowBackground" Value="White" />
-        <Setter Property="VirtualizingPanel.VirtualizationMode" Value="Standard"></Setter>
+        <Setter Property="VirtualizingPanel.VirtualizationMode" Value="Standard" />
       </Style>
 
       <Style TargetType="{x:Type DataGridCell}">
@@ -295,7 +295,7 @@
             <DataTemplate>
               <WrapPanel>
                 <TextBlock Text="{Binding}" Style="{StaticResource App.Style.TextBlock.DemiBold}" />
-                <TextBlock Text="[?]" Margin="5,0,0,0" 
+                <TextBlock Text="[?]" Margin="5,0,0,0"
                            ToolTip="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type content:HeaderedGroup}}, Path=HeaderToolTip}"
                            Visibility="{Binding RelativeSource={RelativeSource Self}, Path=ToolTip, Converter={StaticResource App.Converter.NullToVisibility}}">
                   <TextBlock.Style>
@@ -315,8 +315,8 @@
         <Setter Property="MaxWidth" Value="500" />
         <Style.Resources>
           <Style TargetType="{x:Type TextBlock}">
-            <Setter Property="TextWrapping" Value="Wrap"/>
-            <Setter Property="TextAlignment" Value="Justify"/>
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="TextAlignment" Value="Justify" />
           </Style>
         </Style.Resources>
       </Style>

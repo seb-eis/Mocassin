@@ -18,15 +18,10 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ToolMenu.Commands
         }
 
         /// <inheritdoc />
-        protected override ContentControl GetDataControl()
-        {
-            return new ProjectBuildingControlView {DataContext = new ProjectBuildingControlViewModel(ProjectControl)};
-        }
+        protected override ContentControl GetDataControl() =>
+            new ProjectBuildingControlView {DataContext = new ProjectBuildingControlViewModel(ProjectControl)};
 
         /// <inheritdoc />
-        protected override string GetTabName()
-        {
-            return "Simulation Builder";
-        }
+        protected override string GetTabName() => "Simulation Builder";
     }
 }

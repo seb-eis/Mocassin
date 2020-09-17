@@ -34,8 +34,8 @@ namespace Mocassin.Model.Translator.ModelContext
             foreach (var transitionModel in transitionModels)
             {
                 var mappingModels = transitionModel.GetMappingModels()
-                    .Cast<TMappingModel>()
-                    .ToList();
+                                                   .Cast<TMappingModel>()
+                                                   .ToList();
 
                 foreach (var particle in transitionModel.SelectableParticles)
                     InsertMappingModelsIntoRawMatrix(listResult, mappingModels, particle);
@@ -101,10 +101,10 @@ namespace Mocassin.Model.Translator.ModelContext
             where TMappingModel : ITransitionMappingModel
         {
             var maxParticleId = ModelProject.Manager<IParticleManager>()
-                .DataAccess.Query(port => port.ParticleCount);
+                                            .DataAccess.Query(port => port.ParticleCount);
 
             var maxPositionId = ModelProject.Manager<IStructureManager>()
-                .DataAccess.Query(port => port.GetLinearizedExtendedPositionCount());
+                                            .DataAccess.Query(port => port.GetLinearizedExtendedPositionCount());
 
             return (maxPositionId, maxParticleId, rawMatrix.SelectMany(a => a.Select(b => b).Select(c => c.Count)).Max());
         }
@@ -308,10 +308,10 @@ namespace Mocassin.Model.Translator.ModelContext
             var result = new List<MobilityType[]>();
 
             var particleCount = ModelProject.Manager<IParticleManager>().DataAccess
-                .Query(port => port.GetParticles().Count);
+                                            .Query(port => port.GetParticles().Count);
 
             var positionCount = ModelProject.Manager<IStructureManager>().DataAccess
-                .Query(port => port.GetLinearizedExtendedPositionCount());
+                                            .Query(port => port.GetLinearizedExtendedPositionCount());
 
             for (var i = 0; i < positionCount; i++) result.Add(new MobilityType[particleCount]);
 

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Mocassin.Mathematics.Codes
 {
     /// <summary>
-    ///     Represents a index code value that contains 8 byte entries
+    ///     Represents a index code value that contains 8 byte entries and can be converted to a <see cref="long"/> value
     /// </summary>
     public readonly struct ByteCode64
     {
@@ -26,19 +26,13 @@ namespace Mocassin.Mathematics.Codes
         ///     Get the data as a long value
         /// </summary>
         /// <returns></returns>
-        public long AsLong()
-        {
-            return encoded;
-        }
+        public long AsLong() => encoded;
 
         /// <summary>
         ///     Decodes the value into a byte array
         /// </summary>
         /// <returns></returns>
-        public byte[] Decode()
-        {
-            return BitConverter.GetBytes(encoded);
-        }
+        public byte[] Decode() => BitConverter.GetBytes(encoded);
 
         /// <summary>
         ///     Access the code entries by index
@@ -55,10 +49,7 @@ namespace Mocassin.Mathematics.Codes
         }
 
         /// <inheritdoc />
-        public override string ToString()
-        {
-            return $"Code: {encoded} [{this[0]}-{this[1]}-{this[2]}-{this[3]}-{this[4]}-{this[5]}-{this[6]}-{this[7]}]";
-        }
+        public override string ToString() => $"Code: {encoded} [{this[0]}-{this[1]}-{this[2]}-{this[3]}-{this[4]}-{this[5]}-{this[6]}-{this[7]}]";
 
         /// <summary>
         ///     Create a <see cref="ByteCode64" /> from a byte array with 8 entries
@@ -89,8 +80,11 @@ namespace Mocassin.Mathematics.Codes
             }
 
             if (trailingValues != 0)
+            {
                 while (++index < buffer.Length)
                     buffer[index] = trailingValues;
+            }
+
             var code = BitConverter.ToInt64(buffer, 0);
             return new ByteCode64(code);
         }

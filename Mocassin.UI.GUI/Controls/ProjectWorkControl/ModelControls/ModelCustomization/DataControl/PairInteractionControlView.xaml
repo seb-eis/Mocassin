@@ -41,14 +41,17 @@
                             IsReadOnly="True" />
         <DataGridTextColumn Header="Partner Site" Binding="{Binding PairEnergySet.PartnerPosition.Name}"
                             IsReadOnly="True" />
-        <DataGridTextColumn Header="Distance [&#x212b;]" Binding="{Binding PairEnergySet.Distance, StringFormat={}{0:f7}}"
+        <DataGridTextColumn Header="Distance [&#x212b;]"
+                            Binding="{Binding PairEnergySet.Distance, StringFormat={}{0:f7}}"
                             IsReadOnly="True" />
         <DataGridTextColumn Header="#Unique Permutations" Binding="{Binding PairEnergySet.PairEnergyEntries.Count}"
-                            IsReadOnly="True"/>
-        <DataGridTextColumn Header="#P1 Geometries / Center" Binding="{Binding PairEnergySet.InteractionCountPerStartSite}" 
-                            IsReadOnly="True"/>
-        <DataGridTextColumn Header="#P1 Geometries / Partner" Binding="{Binding PairEnergySet.InteractionCountPerEndSite}"
-                            IsReadOnly="True"/>
+                            IsReadOnly="True" />
+        <DataGridTextColumn Header="#P1 Geometries / Center"
+                            Binding="{Binding PairEnergySet.InteractionCountPerStartSite}"
+                            IsReadOnly="True" />
+        <DataGridTextColumn Header="#P1 Geometries / Partner"
+                            Binding="{Binding PairEnergySet.InteractionCountPerEndSite}"
+                            IsReadOnly="True" />
         <DataGridTextColumn Header="Chiral To" Binding="{Binding ChiralPairEnergySet.Name}"
                             IsReadOnly="True" />
       </DataGrid.Columns>

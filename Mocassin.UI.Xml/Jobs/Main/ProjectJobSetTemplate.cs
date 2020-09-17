@@ -26,8 +26,7 @@ namespace Mocassin.UI.Xml.Jobs
         /// <summary>
         ///     Get or set a key for the customization
         /// </summary>
-        [XmlAttribute]
-        [NotMapped]
+        [XmlAttribute, NotMapped]
         public string Key
         {
             get => key;
@@ -38,8 +37,7 @@ namespace Mocassin.UI.Xml.Jobs
         ///     Get or set the list of <see cref="KmcJobPackageData" /> that defines
         ///     <see cref="Mocassin.Model.Simulations.IKineticSimulation" /> database build instructions
         /// </summary>
-        [XmlArray]
-        [NotMapped]
+        [XmlArray, NotMapped]
         public ObservableCollection<KmcJobPackageData> KmcJobPackageDescriptions
         {
             get => kmcJobPackageDescriptions;
@@ -50,8 +48,7 @@ namespace Mocassin.UI.Xml.Jobs
         ///     Get or set the list of <see cref="MmcJobPackageData" /> that defines
         ///     <see cref="Mocassin.Model.Simulations.IMetropolisSimulation" /> database build instructions
         /// </summary>
-        [XmlArray]
-        [NotMapped]
+        [XmlArray, NotMapped]
         public ObservableCollection<MmcJobPackageData> MmcJobPackageDescriptions
         {
             get => mmcJobPackageDescriptions;
@@ -83,10 +80,7 @@ namespace Mocassin.UI.Xml.Jobs
         }
 
         /// <inheritdoc />
-        object IDuplicable.Duplicate()
-        {
-            return Duplicate();
-        }
+        object IDuplicable.Duplicate() => Duplicate();
 
         /// <summary>
         ///     Get the sequence of <see cref="IJobCollection" /> objects defined in the object
@@ -110,9 +104,9 @@ namespace Mocassin.UI.Xml.Jobs
         {
             if (modelProject == null) throw new ArgumentNullException(nameof(modelProject));
             return KmcJobPackageDescriptions
-                .Cast<JobPackageData>()
-                .Concat(MmcJobPackageDescriptions)
-                .Sum(x => x.GetTotalJobCount(modelProject));
+                   .Cast<JobPackageData>()
+                   .Concat(MmcJobPackageDescriptions)
+                   .Sum(x => x.GetTotalJobCount(modelProject));
         }
 
         /// <summary>
@@ -120,13 +114,11 @@ namespace Mocassin.UI.Xml.Jobs
         /// </summary>
         /// <param name="parentProject"></param>
         /// <returns></returns>
-        public static ProjectJobSetTemplate Create(MocassinProject parentProject)
-        {
-            return new ProjectJobSetTemplate
+        public static ProjectJobSetTemplate Create(MocassinProject parentProject) =>
+            new ProjectJobSetTemplate
             {
                 Parent = parentProject,
                 Name = $"Job translation [{parentProject.ProjectName}]"
             };
-        }
     }
 }

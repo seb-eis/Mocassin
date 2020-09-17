@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using Mocassin.Model.Basic;
@@ -39,7 +38,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.GridCon
         public bool IsDuplicateFiltered { get; }
 
         /// <summary>
-        ///     Get the hosting <see cref="ModelDataObject"/>
+        ///     Get the hosting <see cref="ModelDataObject" />
         /// </summary>
         public TDataObject HostObject { get; }
 

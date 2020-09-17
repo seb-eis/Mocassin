@@ -47,7 +47,8 @@
     </content:HeaderedGroup>
 
     <content:HeaderedGroup Grid.Row="0" Grid.Column="4" Header="Simulation Block Count:">
-      <TextBox Text="{Binding SimulationBlockCount, Converter={StaticResource App.Converter.NumericExpressionToValue}}" IsReadOnly="True">
+      <TextBox Text="{Binding SimulationBlockCount, Converter={StaticResource App.Converter.NumericExpressionToValue}}"
+               IsReadOnly="True">
         <TextBox.InputBindings>
           <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
                       CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
