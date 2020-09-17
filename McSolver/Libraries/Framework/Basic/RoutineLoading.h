@@ -12,8 +12,8 @@
 
 #include "Extensions/MocassinSolverExtension.h"
 #include "DlLoading.h"
-#include "Libraries/Framework/Basic/Macros/Macros.h"
-#include "Libraries/Framework/Basic/Buffers/Buffers.h"
+#include "Macros.h"
+#include "Libraries/Framework/Basic/Buffers.h"
 
 #if defined(_WIN32)
 #define MOCASSIN_EXTENSION_FILEENDING ".mocext.dll"

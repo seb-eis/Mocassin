@@ -9,7 +9,7 @@
 //////////////////////////////////////////
 
 #pragma once
-#include "Libraries/Framework/Basic/BaseTypes/BaseTypes.h"
+#include "Libraries/Framework/Basic/BaseTypes.h"
 #include "Libraries/Framework/Errors/McErrors.h"
 
 #define MC_USE_PLUGIN_SUPPORT

@@ -11,7 +11,7 @@
 #pragma once
 #include "Libraries/Framework/Errors/McErrors.h"
 #include "Libraries/Simulator/Logic/Helper/Constants.h"
-#include "Libraries/Framework/Basic/BaseTypes/BaseTypes.h"
+#include "Libraries/Framework/Basic/BaseTypes.h"
 #include "Libraries/Simulator/Data/SimContext/SimulationContextAccess.h"
 #include "Libraries/Simulator/Data/SimContext/SimulationContext.h"
 

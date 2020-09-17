@@ -9,7 +9,7 @@
 //////////////////////////////////////////
 
 #include "JumpStatusInititialization.h"
-#include "Libraries/Simulator/Logic/Routines/Helper/HelperRoutines.h"
+#include "Libraries/Simulator/Logic/Routines/HelperRoutines.h"
 
 // Allocates the memory for the jump status collection array
 static void AllocateJumpStatusArray(SCONTEXT_PARAMETER)

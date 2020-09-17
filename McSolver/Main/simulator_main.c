@@ -8,12 +8,11 @@
 // Short:   Main simulation entry point //
 //////////////////////////////////////////
 
-#include "Libraries/Framework/Basic/DlLoading/RoutineLoading.h"
+#include "Libraries/Framework/Basic/RoutineLoading.h"
 #include "Libraries/ProgressPrint/ProgressPrint.h"
 #include "Libraries/JobLoader/JobLoader.h"
-#include "Simulator/Data/SimContext/ContextAccess.h"
-#include "Simulator/Logic/Routines/Main/MainRoutines.h"
-#include "Simulator/Logic/Initializers/CmdArgResolver/CmdArgumentResolver.h"
+#include "Libraries/Simulator/Logic/Routines/MainRoutines.h"
+#include "Libraries/Simulator/Logic/Initialization/CmdArgumentResolver.h"
 
 // Internal main function that requires argv to be in utf8 encoding
 static int InternalMain(int argc, char const * const *argv);

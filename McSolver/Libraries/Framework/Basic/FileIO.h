@@ -18,8 +18,8 @@
 #include <unistd.h>
 #include <string.h>
 #include "Libraries/Framework/Errors/McErrors.h"
-#include "Libraries/Framework/Basic/BaseTypes/BaseTypes.h"
-#include "Libraries/Framework/Basic/Buffers/Buffers.h"
+#include "Libraries/Framework/Basic/BaseTypes.h"
+#include "Libraries/Framework/Basic/Buffers.h"
 
 #define FORMAT_I8(...)   "%" #__VA_ARGS__ PRIi8
 #define FORMAT_I16(...)  "%" #__VA_ARGS__ PRIi16

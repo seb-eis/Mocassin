@@ -13,10 +13,10 @@
 #include <stdint.h>
 #include <errno.h>
 #include "Extensions/MocassinSolverExtension.h"
-#include "Libraries/Framework/Math/Random/PcgRandom.h"
-#include "Libraries/Framework/Basic/BaseTypes/BaseTypes.h"
-#include "Libraries/Framework/Math/Types/Vector.h"
-#include "SimContext.h"
+#include "Libraries/Framework/Math/PcgRandom.h"
+#include "Libraries/Framework/Basic/BaseTypes.h"
+#include "Libraries/Framework/Math/Vectors.h"
+#include "SimulationContext.h"
 
 /* Context access defines */
 

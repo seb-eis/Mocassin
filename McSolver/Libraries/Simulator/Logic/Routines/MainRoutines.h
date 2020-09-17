@@ -11,7 +11,7 @@
 #pragma once
 #include <math.h>
 #include "Libraries/Framework/Errors/McErrors.h"
-#include "Libraries/Framework/Basic/BaseTypes/BaseTypes.h"
+#include "Libraries/Framework/Basic/BaseTypes.h"
 #include "Libraries/Simulator/Data/SimContext/SimulationContextAccess.h"
 
 /* Initializer and synchronization routines */

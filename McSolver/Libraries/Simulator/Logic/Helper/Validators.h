@@ -10,7 +10,7 @@
 
 #pragma once
 #include "Libraries/Framework/Errors/McErrors.h"
-#include "Libraries/Framework/Basic/BaseTypes/BaseTypes.h"
+#include "Libraries/Framework/Basic/BaseTypes.h"
 
 // Empty validation that is always true
 static inline error_t ValidateAsTrue(void const *value)

@@ -10,8 +10,8 @@
 
 #pragma once
 #include "Libraries/Framework/Errors/McErrors.h"
-#include "Libraries/Framework/Math/Random/PcgRandom.h"
-#include "Libraries/Framework/Basic/BaseTypes/BaseTypes.h"
+#include "Libraries/Framework/Math/PcgRandom.h"
+#include "Libraries/Framework/Basic/BaseTypes.h"
 #include "Libraries/Simulator/Data/SimContext/SimulationContextAccess.h"
 
 /* Initializer routines*/

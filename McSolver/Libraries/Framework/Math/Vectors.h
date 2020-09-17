@@ -13,8 +13,8 @@
 #include <math.h>
 #include <stdint.h>
 #include <immintrin.h>
-#include "Libraries/Framework/Basic/BaseTypes/BaseTypes.h"
-#include "Libraries/Framework/Basic/Macros/Macros.h"
+#include "Libraries/Framework/Basic/BaseTypes.h"
+#include "Libraries/Framework/Basic/Macros.h"
 
 // Defines the 256 bit 3D double vector struct (A,B,C) and the affiliated type
 typedef struct Vector3 { double A, B, C; } Vector3_t;

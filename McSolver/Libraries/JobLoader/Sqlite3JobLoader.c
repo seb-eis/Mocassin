@@ -4,11 +4,12 @@
 // Author:	John Arnold 			    //
 //			Workgroup Martin, IPC       //
 //			RWTH Aachen University      //
-//			© 2018 John Arnold          //
+//			© 2018 Sebastian Eisele,    //
+//			John Arnold                 //
 // Short:   Db sqlite reader interface  //
 //////////////////////////////////////////
 
-#include <Simulator/Data/Database/DbModel.h>
+#include "Libraries/Simulator/Data/Jobs/JobDbModel.h"
 #include "Sqlite3JobLoader.h"
 
 void LoadMocassinSimulationDatabaseModelToContext(SCONTEXT_PARAMETER)
@@ -36,7 +37,7 @@ static error_t PrepareSqlStatement(char *sqlQuery, sqlite3 *db, sqlite3_stmt **s
     return error;
 }
 
-static error_t GetJobModelFromDb_Deprecated(char *sqlQuery, sqlite3 *db, DbModel_t *dbModel)
+static error_t GetJobModelFromDb_Deprecated(char *sqlQuery, sqlite3 *db, JobDbModel_t *dbModel)
 {
     let localQuery = "select StructureModelId, EnergyModelId, TransitionModelId, LatticeModelId, PackageId, JobInfo, JobHeader "
                      "from JobModels where Id = ?1";
@@ -65,7 +66,7 @@ static error_t GetJobModelFromDb_Deprecated(char *sqlQuery, sqlite3 *db, DbModel
 }
 
 
-static error_t GetJobModelFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *dbModel)
+static error_t GetJobModelFromDb(char *sqlQuery, sqlite3 *db, JobDbModel_t *dbModel)
 {
     let localQuery = "select StructureModelId, EnergyModelId, TransitionModelId, LatticeModelId, PackageId, JobInfo, JobHeader, RoutineData "
                      "from JobModels where Id = ?1";
@@ -110,7 +111,7 @@ static error_t GetJobModelFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *dbModel
 }
 
 // Invokes the passed load operation set using the provided database and model
-static error_t InvokeLoadOperations(sqlite3 *db, DbModel_t *dbModel, const DbModelLoadOperations_t operations)
+static error_t InvokeLoadOperations(sqlite3 *db, JobDbModel_t *dbModel, const DbModelLoadOperations_t operations)
 {
     return_if(dbModel == NULL || db == NULL, ERR_NULLPOINTER);
 
@@ -126,7 +127,7 @@ static error_t InvokeLoadOperations(sqlite3 *db, DbModel_t *dbModel, const DbMod
 }
 
 // Invokes the passed on load operation set using the provided database and model
-static error_t InvokeOnLoadedOperations(DbModel_t* dbModel, const DbModelOnLoadedOperations_t operations)
+static error_t InvokeOnLoadedOperations(JobDbModel_t* dbModel, const DbModelOnLoadedOperations_t operations)
 {
     return_if(dbModel == NULL, ERR_NULLPOINTER);
 
@@ -141,7 +142,7 @@ static error_t InvokeOnLoadedOperations(DbModel_t* dbModel, const DbModelOnLoade
 
 
 
-static error_t GetStructureModelFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *dbModel)
+static error_t GetStructureModelFromDb(char *sqlQuery, sqlite3 *db, JobDbModel_t *dbModel)
 {
     let localQuery = "select NumOfTrackersPerCell, NumOfGlobalTrackers, InteractionRange, NumOfEnvironmentDefinitions"
                      ", MetaData from StructureModels where Id = ?1";
@@ -170,7 +171,7 @@ static error_t GetStructureModelFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *d
 }
 
 // Compatibility function to enable the system to load older databases without the defect background column
-static error_t GetEnergyModelFromDb_Deprecated(char *sqlQuery, sqlite3 *db, DbModel_t *dbModel)
+static error_t GetEnergyModelFromDb_Deprecated(char *sqlQuery, sqlite3 *db, JobDbModel_t *dbModel)
 {
     let localQuery = "select NumOfPairTables, NumOfClusterTables from EnergyModels where Id = ?1";
     sqlQuery = localQuery;
@@ -191,7 +192,7 @@ static error_t GetEnergyModelFromDb_Deprecated(char *sqlQuery, sqlite3 *db, DbMo
     return error;
 }
 
-static error_t GetEnergyModelFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *dbModel)
+static error_t GetEnergyModelFromDb(char *sqlQuery, sqlite3 *db, JobDbModel_t *dbModel)
 {
     let localQuery = "select NumOfPairTables, NumOfClusterTables, DefectBackground from EnergyModels where Id = ?1";
     sqlQuery = localQuery;
@@ -222,7 +223,7 @@ static error_t GetEnergyModelFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *dbMo
     return error;
 }
 
-static error_t GetTransitionModelFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *dbModel)
+static error_t GetTransitionModelFromDb(char *sqlQuery, sqlite3 *db, JobDbModel_t *dbModel)
 {
     let localQuery = "select JumpMappingTable, JumpCountTable, StaticTrackerMapping, GlobalTrackerMapping, NumOfCollections, NumOfDirections "
                      "from TransitionModels where Id = ?1";
@@ -248,7 +249,7 @@ static error_t GetTransitionModelFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *
     return error;
 }
 
-static error_t GetLatticeModelFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *dbModel)
+static error_t GetLatticeModelFromDb(char *sqlQuery, sqlite3 *db, JobDbModel_t *dbModel)
 {
     let localQuery = "select Lattice, LatticeInfo, EnergyBackground from LatticeModels where Id = ?1";
     sqlQuery = localQuery;
@@ -267,7 +268,7 @@ static error_t GetLatticeModelFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *dbM
     return error;
 }
 
-static error_t GetEnvironmentDefinitionsFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *dbModel)
+static error_t GetEnvironmentDefinitionsFromDb(char *sqlQuery, sqlite3 *db, JobDbModel_t *dbModel)
 {
     let localQuery = "select ObjectId, SelectionMask, UpdateParticleIds, PairDefinitions, ClusterDefinitions, "
                      "PositionParticleIds from EnvironmentDefinitions where StructureModelId = ?1 order by ObjectId";
@@ -303,7 +304,7 @@ static error_t GetEnvironmentDefinitionsFromDb(char *sqlQuery, sqlite3 *db, DbMo
     return error;
 }
 
-static error_t GetPairEnergyTablesFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *dbModel)
+static error_t GetPairEnergyTablesFromDb(char *sqlQuery, sqlite3 *db, JobDbModel_t *dbModel)
 {
     let localQuery = "select ObjectId, EnergyTable "
                      "from PairEnergyTables where EnergyModelId = ?1 order by ObjectId";
@@ -332,7 +333,7 @@ static error_t GetPairEnergyTablesFromDb(char *sqlQuery, sqlite3 *db, DbModel_t 
     return error;
 }
 
-static error_t GetClusterEnergyTablesFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *dbModel)
+static error_t GetClusterEnergyTablesFromDb(char *sqlQuery, sqlite3 *db, JobDbModel_t *dbModel)
 {
     let localQuery = "select ObjectId, EnergyTable, OccupationCodes, TableIndexing from ClusterEnergyTables "
                      "where EnergyModelId = ?1 order by ObjectId";
@@ -366,7 +367,7 @@ static error_t GetClusterEnergyTablesFromDb(char *sqlQuery, sqlite3 *db, DbModel
     return error;
 }
 
-static error_t GetJumpCollectionsFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *dbModel)
+static error_t GetJumpCollectionsFromDb(char *sqlQuery, sqlite3 *db, JobDbModel_t *dbModel)
 {
     let localQuery = "select ObjectId, SelectionMask, JumpRules "
                      "from JumpCollections where TransitionModelId = ?1 order by ObjectId";
@@ -397,7 +398,7 @@ static error_t GetJumpCollectionsFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *
     return error;
 }
 
-static error_t GetJumpDirectionsFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *dbModel)
+static error_t GetJumpDirectionsFromDb(char *sqlQuery, sqlite3 *db, JobDbModel_t *dbModel)
 {
     let localQuery = "select ObjectId, PositionId, JumpLength, FieldProjection, CollectionId, JumpSequence, LocalMoveSequence "
                      "from JumpDirections where TransitionModelId = ?1 order by ObjectId";
@@ -434,7 +435,7 @@ static error_t GetJumpDirectionsFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *d
 }
 
 // Assigns each jump collection its sub-span access to the main jump direction buffer
-static error_t AssignDirectionBuffersToJumpCollections(DbModel_t *dbModel)
+static error_t AssignDirectionBuffersToJumpCollections(JobDbModel_t *dbModel)
 {
     int32_t newBegin = 0, newEnd = 0, collectionID = 0;
 
@@ -458,7 +459,7 @@ static error_t AssignDirectionBuffersToJumpCollections(DbModel_t *dbModel)
 }
 
 
-error_t PopulateDbModelFromDatabaseFilePath(DbModel_t *dbModel, const char *dbFile, int32_t jobContextId)
+error_t PopulateDbModelFromDatabaseFilePath(JobDbModel_t *dbModel, const char *dbFile, int32_t jobContextId)
 {
     error_t error;
     sqlite3 *db;

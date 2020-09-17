@@ -9,8 +9,8 @@
 //////////////////////////////////////////
 
 #include "Libraries/Simulator/Logic/Helper/Constants.h"
-#include "Libraries/Simulator/Logic/Routines/Helper/HelperRoutines.h"
-#include "JumpSelection.h"
+#include "HelperRoutines.h"
+#include "JumpSelectionRoutines.h"
 
 /* Local helper routines */
 

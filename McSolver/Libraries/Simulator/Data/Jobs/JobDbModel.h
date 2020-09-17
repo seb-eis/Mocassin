@@ -10,10 +10,10 @@
 
 #pragma once
 #include "Libraries/Framework/Errors/McErrors.h"
-#include "Libraries/Framework/Basic/BaseTypes/BaseTypes.h"
-#include "Libraries/Framework/Math/Types/Vector.h"
-#include "Libraries/Framework/Basic/Buffers/Buffers.h"
-#include "Libraries/Simulator/Logic/Constants/Constants.h"
+#include "Libraries/Framework/Basic/BaseTypes.h"
+#include "Libraries/Framework/Math/Vectors.h"
+#include "Libraries/Framework/Basic/Buffers.h"
+#include "Libraries/Simulator/Logic/Helper/Constants.h"
 
 /* General definitions */
 

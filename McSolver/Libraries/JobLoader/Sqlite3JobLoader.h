@@ -13,9 +13,9 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdint.h>
-#include "Simulator/Data/Database/DbModel.h"
-#include "ExternalLibraries/sqlite3.h"
-#include "InternalLibraries/Interfaces/JobLoader.h"
+#include "Libraries/Simulator/Data/Jobs/JobDbModel.h"
+#include "Libraries/Sqlite/sqlite3.h"
+#include "JobLoader.h"
 
 // Macro that call finalize on a sql statement and returns an error code if the condition is true
 #define SQLFinalizeAndReturnIf(COND, STMT, ERR) if (COND) return (sqlite3_finalize(STMT), ERR)
@@ -24,10 +24,10 @@
 #define SQLCloseAndReturnIf(COND, DB) if (COND) return sqlite3_close(DB)
 
 // Function pointer for database load operations that get a query, database and target database model
-typedef error_t (*FDbModelLoad_t)(char* sqlQuery, sqlite3* db, DbModel_t* dbModel);
+typedef error_t (*FDbModelLoad_t)(char* sqlQuery, sqlite3* db, JobDbModel_t* dbModel);
 
 // Function pointer for operations that should be performed on the loaded model after successful loading from the database
-typedef error_t (*FDbOnModelLoaded_t)(DbModel_t* dbModel);
+typedef error_t (*FDbOnModelLoaded_t)(JobDbModel_t* dbModel);
 
 // List for model load operation function pointers
 // Layout@ggc_x86_64 => 24@[8,8,8]
@@ -46,5 +46,5 @@ DbModelLoadOperations_t GetChildObjectLoadOperations();
 // Get an access struct for the set of after loading operations
 DbModelOnLoadedOperations_t GetDataLoadedPostOperations();
 
-// Main function - assign the provided DbModel object with the provided database and job context id
-error_t PopulateDbModelFromDatabaseFilePath(DbModel_t *dbModel, const char *dbFile, int32_t jobContextId);
+// Main function - assign the provided JobDbModel object with the provided database and job context id
+error_t PopulateDbModelFromDatabaseFilePath(JobDbModel_t *dbModel, const char *dbFile, int32_t jobContextId);

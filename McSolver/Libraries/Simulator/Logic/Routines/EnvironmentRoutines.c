@@ -11,9 +11,9 @@
 #include <math.h>
 #include <string.h>
 #include "Libraries/Simulator/Logic/Helper/Constants.h"
-#include "Libraries/Simulator/Logic/Routines/Helper/HelperRoutines.h"
-#include "Libraries/Simulator/Logic/Routines/Statistics/McStatistics.h"
-#include "EnvRoutines.h"
+#include "HelperRoutines.h"
+#include "StatisticsRoutines.h"
+#include "EnvironmentRoutines.h"
 
 /* Local helper routines */
 

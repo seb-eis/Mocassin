@@ -8,7 +8,7 @@
 // Short:   Simulation state utilities  //
 //////////////////////////////////////////
 
-#include "StateUtility.h"
+#include "SimulationStateUtility.h"
 
 
 static error_t RestoreStateHeaderAccess(SimulationState_t* simulationState)

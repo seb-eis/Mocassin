@@ -10,7 +10,7 @@
 
 #include <string.h>
 #include "CmdArgumentResolver.h"
-#include "Libraries/Simulator/Logic/Validators/Validators.h"
+#include "Libraries/Simulator/Logic/Helper/Validators.h"
 
 // Checks if the set of command arguments contains the build call flag and terminates the execution if true
 static void TerminateOnSetBuildCallFlag(SCONTEXT_PARAMETER)

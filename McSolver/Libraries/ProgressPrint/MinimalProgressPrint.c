@@ -8,9 +8,9 @@
 // Short:   Minimal print routines      //
 //////////////////////////////////////////
 
-#include "Simulator/Logic/Routines/Helper/HelperRoutines.h"
-#include "Simulator/Logic/Routines/Statistics/McStatistics.h"
-#include "InternalLibraries/Interfaces/ProgressPrint.h"
+#include "Libraries/Simulator/Logic/Routines/HelperRoutines.h"
+#include "Libraries/Simulator/Logic/Routines/StatisticsRoutines.h"
+#include "ProgressPrint.h"
 
 void PrintMocassinSimulationBlockInfo(SCONTEXT_PARAMETER, file_t *fstream, bool_t onlyMobiles)
 {

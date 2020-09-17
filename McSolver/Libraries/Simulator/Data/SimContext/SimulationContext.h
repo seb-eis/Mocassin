@@ -10,11 +10,11 @@
 
 #pragma once
 #include "Libraries/Framework/Errors/McErrors.h"
-#include "Libraries/Framework/Basic/BaseTypes/BaseTypes.h"
-#include "Libraries/Framework/Basic/Buffers/Buffers.h"
-#include "Libraries/Framework/Math/Random/PcgRandom.h"
-#include "Libraries/Simulator/Data/Database/JobDbModel.h"
-#include "Libraries/Simulator/Data/State/StateModel.h"
+#include "Libraries/Framework/Basic/BaseTypes.h"
+#include "Libraries/Framework/Basic/Buffers.h"
+#include "Libraries/Framework/Math/PcgRandom.h"
+#include "Libraries/Simulator/Data/Jobs/JobDbModel.h"
+#include "Libraries/Simulator/Data/State/SimulationState.h"
 
 // Marks the "no result yet" cycle outcome case
 #define MC_UNFINISHED_CYCLE     0

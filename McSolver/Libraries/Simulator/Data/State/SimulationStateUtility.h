@@ -10,8 +10,8 @@
 
 #pragma once
 
-#include "StateModel.h"
-#include "Libraries/Framework/Basic/FileIO/FileIO.h"
+#include "SimulationState.h"
+#include "Libraries/Framework/Basic/FileIO.h"
 
 // Function type for all state restore callbacks
 typedef error_t (*FStateRestoreCallback_t)(SimulationState_t* simulationState);

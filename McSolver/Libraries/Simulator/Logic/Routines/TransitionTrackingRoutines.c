@@ -9,8 +9,8 @@
 //////////////////////////////////////////
 
 #include <math.h>
-#include "TransitionTracking.h"
-#include "Libraries/Simulator/Logic/Routines/Helper/HelperRoutines.h"
+#include "TransitionTrackingRoutines.h"
+#include "Libraries/Simulator/Logic/Routines/HelperRoutines.h"
 
 // Updates the mobile tracker index on path environment state by path id using the previously set backup data
 static inline void UpdateMobileTrackerMappingByPathId(SCONTEXT_PARAMETER, const int32_t pathId, const JumpRule_t*restrict jumpRule, const EnvironmentBackup_t*restrict envBackup)

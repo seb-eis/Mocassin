@@ -10,7 +10,7 @@
 
 
 #include "RoutineLoading.h"
-#include "Libraries/Framework/Basic/FileIO/FileIO.h"
+#include "FileIO.h"
 
 FMocassinRoutine_t TryFindMocassinExtensionRoutine(const MocsimUuid_t* routineUuid, const char* searchPath)
 {

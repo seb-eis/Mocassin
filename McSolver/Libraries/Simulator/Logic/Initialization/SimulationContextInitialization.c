@@ -10,14 +10,14 @@
 
 #include <strings.h>
 #include "SimulationContextInitialization.h"
-#include "Libraries/Simulator/Logic/Routines/Statistics/McStatistics.h"
-#include "Libraries/Simulator/Logic/JumpSelection/JumpSelection.h"
-#include "Libraries/Framework/Basic/DlLoading/DlLoading.h"
-#include "Libraries/Simulator/Logic/Routines/Environment/EnvRoutines.h"
-#include "Libraries/Simulator/Logic/Routines/Main/MainRoutines.h"
-#include "Libraries/Simulator/Logic/Routines/Helper/HelperRoutines.h"
-#include "Libraries/Simulator/Logic/Initializers/JumpStatusInit/JumpStatusInititialization.h"
-#include "Libraries/Simulator/Logic/Routines/Tracking/TransitionTracking.h"
+#include "Libraries/Simulator/Logic/Routines/StatisticsRoutines.h"
+#include "Libraries/Simulator/Logic/Routines/JumpSelectionRoutines.h"
+#include "Libraries/Framework/Basic/DlLoading.h"
+#include "Libraries/Simulator/Logic/Routines/EnvironmentRoutines.h"
+#include "Libraries/Simulator/Logic/Routines/MainRoutines.h"
+#include "Libraries/Simulator/Logic/Routines/HelperRoutines.h"
+#include "Libraries/Simulator/Logic/Initialization/JumpStatusInititialization.h"
+#include "Libraries/Simulator/Logic/Routines/TransitionTrackingRoutines.h"
 
 // Allocates the environment energy and cluster buffers with the required sizes
 static void AllocateEnvironmentBuffers(EnvironmentState_t *restrict env, EnvironmentDefinition_t *restrict envDef)

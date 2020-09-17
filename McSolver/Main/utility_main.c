@@ -8,7 +8,7 @@
 // Short:   Utility entry point         //
 //////////////////////////////////////////
 
-#include "Utility/JumpHistogram/JumpHistogramPrint.h"
+#include "Libraries/Utility/JumpHistogram/JumpHistogramPrint.h"
 
 int InternalMain(int argc, char const * const *argv);
 

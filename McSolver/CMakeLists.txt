@@ -17,53 +17,53 @@ set(COMPILE_FLAGS_SSE_INTEL "-axSSE4.2 -xSSE2")
 set(COMPILE_FLAGS_SSE_GNU "-msse2 -msse3 -msse4.2 -mavx")
 
 # Resursive search for source files
-file(GLOB_RECURSE FRAMEWORK_HEADER ./Framework/*.h)
-file(GLOB_RECURSE FRAMEWORK_SOURCE ./Framework/*.c)
-file(GLOB_RECURSE SIMULATOR_HEADER ./Simulator/*.h)
-file(GLOB_RECURSE SIMULATOR_SOURCE ./Simulator/*.c)
-file(GLOB_RECURSE UTILITY_HEADER ./Utility/*.h)
-file(GLOB_RECURSE UTILITY_SOURCE ./Utility/*.c)
+file(GLOB_RECURSE FRAMEWORK_HEADER Libraries/Framework/*.h)
+file(GLOB_RECURSE FRAMEWORK_SOURCE Libraries/Framework/*.c)
+file(GLOB_RECURSE SIMULATOR_HEADER Libraries/Simulator/*.h)
+file(GLOB_RECURSE SIMULATOR_SOURCE Libraries/Simulator/*.c)
+file(GLOB_RECURSE UTILITY_HEADER Libraries/Utility/*.h)
+file(GLOB_RECURSE UTILITY_SOURCE Libraries/Utility/*.c)
 file(GLOB_RECURSE EXE_RESOURCES ./Main/Resources/*.rc)
 
 set(VAR_LIBRARY_TYPE "SHARED")
 set(VAR_COMPILE_SQLITE "TRUE")
 
 # Library and executable definitions
-add_executable(Mocassin.Simulator ./Main/main.c ${EXE_RESOURCES})
+add_executable(Mocassin.Simulator Main/simulator_main.c ${EXE_RESOURCES})
 set_target_properties(Mocassin.Simulator PROPERTIES C_STANDARD 11)
 
 add_library(simulator ${VAR_LIBRARY_TYPE} ${SIMULATOR_SOURCE})
 set_target_properties(simulator PROPERTIES C_STANDARD 11)
 
 if ("${VAR_COMPILE_SQLITE}" STREQUAL "TRUE")
-    add_library(sqlite3 ${VAR_LIBRARY_TYPE} ./ExternalLibraries/sqlite3.h ./ExternalLibraries/sqlite3.c)
-    set_target_properties(sqlite3 PROPERTIES PUBLIC_HEADER ./ExternalLibraries/sqlite3.h C_STANDARD 11)
+    add_library(sqlite3 ${VAR_LIBRARY_TYPE} Libraries/Sqlite/sqlite3.h Libraries/Sqlite/sqlite3.c)
+    set_target_properties(sqlite3 PROPERTIES PUBLIC_HEADER Libraries/Sqlite/sqlite3.h C_STANDARD 11)
 endif()
 
-add_library(jobloader ${VAR_LIBRARY_TYPE} ./InternalLibraries/SqliteJobLoader/Sqlite3JobLoader.h ./InternalLibraries/SqliteJobLoader/Sqlite3JobLoader.c)
-set_target_properties(jobloader PROPERTIES PUBLIC_HEADER ./InternalLibraries/Interfaces/JobLoader.h C_STANDARD 11)
+add_library(jobloader ${VAR_LIBRARY_TYPE} Libraries/JobLoader/Sqlite3JobLoader.h Libraries/JobLoader/Sqlite3JobLoader.c)
+set_target_properties(jobloader PROPERTIES PUBLIC_HEADER Libraries/JobLoader/JobLoader.h C_STANDARD 11)
 
-add_library(progressprint ${VAR_LIBRARY_TYPE} InternalLibraries/Interfaces/ProgressPrint.h InternalLibraries/ProgressPrint/ProgressPrint.c
-            Simulator/Logic/Routines/Statistics/McStatistics.c Simulator/Logic/Routines/Statistics/McStatistics.h)
-set_target_properties(progressprint PROPERTIES PUBLIC_HEADER InternalLibraries/Interfaces/ProgressPrint.h C_STANDARD 11)
+add_library(progressprint ${VAR_LIBRARY_TYPE} Libraries/ProgressPrint/ProgressPrint.h Libraries/ProgressPrint/ProgressPrint.c
+        Libraries/Simulator/Logic/Routines/StatisticsRoutines.c Libraries/Simulator/Logic/Routines/StatisticsRoutines.h)
+set_target_properties(progressprint PROPERTIES PUBLIC_HEADER Libraries/ProgressPrint/ProgressPrint.h C_STANDARD 11)
 
 add_library(framework ${VAR_LIBRARY_TYPE} ${FRAMEWORK_SOURCE})
 set_target_properties(framework PROPERTIES C_STANDARD 11)
 
-add_library(progressprint.minimal ${VAR_LIBRARY_TYPE} InternalLibraries/Interfaces/ProgressPrint.h InternalLibraries/ProgressPrint/MinimalProgressPrint.c
-            Simulator/Logic/Routines/Statistics/McStatistics.c Simulator/Logic/Routines/Statistics/McStatistics.h)
-set_target_properties(progressprint.minimal PROPERTIES PUBLIC_HEADER InternalLibraries/Interfaces/ProgressPrint.h C_STANDARD 11)
+add_library(progressprint.minimal ${VAR_LIBRARY_TYPE} Libraries/ProgressPrint/ProgressPrint.h Libraries/ProgressPrint/MinimalProgressPrint.c
+        Libraries/Simulator/Logic/Routines/StatisticsRoutines.c Libraries/Simulator/Logic/Routines/StatisticsRoutines.h)
+set_target_properties(progressprint.minimal PROPERTIES PUBLIC_HEADER Libraries/ProgressPrint/ProgressPrint.h C_STANDARD 11)
 
 # Utility executables and library
-add_executable(Mocassin.Utility Main/UtilityMain.c ${EXE_RESOURCES})
+add_executable(Mocassin.Utility Main/utility_main.c ${EXE_RESOURCES})
 set_target_properties(Mocassin.Utility PROPERTIES C_STANDARD 11)
 
 add_library(utility SHARED ${UTILITY_SOURCE})
 set_target_properties(utility PROPERTIES C_STANDARD 11)
 
 # Extensions
-add_library(mmcfe.mocext SHARED Extensions/Mmcfe/MmcFERoutine.h Extensions/Mmcfe/MmcFERoutine.c)
-set_target_properties(mmcfe.mocext PROPERTIES C_STANDARD 11 PUBLIC_HEADER Extensions/Interface/IMocsimExtension.h)
+add_library(mmcfe.mocext SHARED Extensions/MmcfeExtension.h Extensions/MmcfeExtension.c)
+set_target_properties(mmcfe.mocext PROPERTIES C_STANDARD 11 PUBLIC_HEADER Extensions/MocassinSolverExtension.h)
 
 # Compiler settings
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")

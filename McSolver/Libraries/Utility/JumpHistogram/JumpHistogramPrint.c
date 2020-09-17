@@ -1,4 +1,4 @@
-#include "Utility/JumpHistogram/JumpHistogramPrint.h"
+#include "JumpHistogramPrint.h"
 
 static void PrintJumpHistogramHeader(SimulationState_t* simulationState, file_t* fstream)
 {

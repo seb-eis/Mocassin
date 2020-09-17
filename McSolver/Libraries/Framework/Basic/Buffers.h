@@ -13,8 +13,8 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include "Libraries/Framework/Errors/McErrors.h"
-#include "Libraries/Framework/Basic/Macros/Macros.h"
-#include "Libraries/Framework/Basic/BaseTypes/BaseTypes.h"
+#include "Macros.h"
+#include "Libraries/Framework/Basic/BaseTypes.h"
 
 /* Span definition */
 

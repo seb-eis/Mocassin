@@ -10,7 +10,7 @@
 
 #pragma once
 
-#include "Libraries/Framework/Basic/BaseTypes/Fundamental.h"
+#include "Libraries/Framework/Basic/Fundamental.h"
 #include <stdlib.h>
 
 /* Macro evaluation */

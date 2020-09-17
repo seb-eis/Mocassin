@@ -8,8 +8,8 @@
 // Short:   Error codes + messages      //
 //////////////////////////////////////////
 
-#include "Framework/Errors/McErrors.h"
-#include "Framework/Basic/FileIO/FileIO.h"
+#include "McErrors.h"
+#include "Libraries/Framework/Basic/FileIO.h"
 
 const char* ConvertMocassinErrorCodeToString(error_t errCode)
 {

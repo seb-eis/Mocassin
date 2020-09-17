@@ -9,10 +9,10 @@
 //////////////////////////////////////////
 
 #pragma once
-#include "Libraries/Framework/Math/Types/Vector.h"
-#include "Libraries/Framework/Basic/BaseTypes/BaseTypes.h"
-#include "Libraries/Framework/Basic/Buffers/Buffers.h"
-#include "Libraries/Simulator/Logic/Constants/Constants.h"
+#include "Libraries/Framework/Math/Vectors.h"
+#include "Libraries/Framework/Basic/BaseTypes.h"
+#include "Libraries/Framework/Basic/Buffers.h"
+#include "Libraries/Simulator/Logic/Helper/Constants.h"
 
 // Type for 3d movement tracking without tracker id (Does currently not support 16 bit alignment!)
 // Layout@ggc_x86_64 => 32@[24]

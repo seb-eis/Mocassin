@@ -11,7 +11,7 @@
 #pragma once
 
 #include "Libraries/Framework/Errors/McErrors.h"
-#include "Libraries/Framework/Basic/Time/McTime.h"
+#include "Libraries/Framework/Basic/TimeHelper.h"
 #include <time.h>
 #include <stdint.h>
 #include <limits.h>

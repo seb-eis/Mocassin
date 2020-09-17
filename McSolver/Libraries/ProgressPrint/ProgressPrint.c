@@ -10,10 +10,10 @@
 
 #include <math.h>
 
-#include "Framework/Basic/Buffers/Buffers.h"
-#include "Simulator/Logic/Routines/Helper/HelperRoutines.h"
-#include "Simulator/Logic/Routines/Statistics/McStatistics.h"
-#include "InternalLibraries/Interfaces/ProgressPrint.h"
+#include "Libraries/Framework/Basic/Buffers.h"
+#include "Libraries/Simulator/Logic/Routines/HelperRoutines.h"
+#include "Libraries/Simulator/Logic/Routines/StatisticsRoutines.h"
+#include "ProgressPrint.h"
 
 #define MC_OUTTAG_FORMAT "%-35s"
 #define MC_OUTPRC_FORMAT "%+.3e%%"

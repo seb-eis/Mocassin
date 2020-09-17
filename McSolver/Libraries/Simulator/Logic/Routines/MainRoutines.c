@@ -9,14 +9,14 @@
 //////////////////////////////////////////
 
 #include "MainRoutines.h"
-#include "Libraries/Simulator/Logic/JumpSelection/JumpSelection.h"
-#include "Libraries/Simulator/Logic/Routines/Environment/EnvRoutines.h"
-#include "Libraries/Simulator/Logic/Routines/Helper/HelperRoutines.h"
-#include "Libraries/Simulator/Logic/Routines/Statistics/McStatistics.h"
+#include "Libraries/Simulator/Logic/Routines/JumpSelectionRoutines.h"
+#include "Libraries/Simulator/Logic/Routines/EnvironmentRoutines.h"
+#include "Libraries/Simulator/Logic/Routines/HelperRoutines.h"
+#include "StatisticsRoutines.h"
 #include "Libraries/Simulator/Logic/Initialization/SimulationContextInitialization.h"
-#include "Libraries/Simulator/Logic/Routines/Tracking/TransitionTracking.h"
+#include "TransitionTrackingRoutines.h"
 #include "Libraries/ProgressPrint/ProgressPrint.h"
-#include "Libraries/Framework/Math/Random/Approx.h"
+#include "Libraries/Framework/Math/Approximation.h"
 
 // Calculates the result of the exponential function depending on the settings
 static inline double CalculateExp(SCONTEXT_PARAMETER, const double exponent)

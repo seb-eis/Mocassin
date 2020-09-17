@@ -10,8 +10,8 @@
 
 #include <math.h>
 #include "Libraries/Simulator/Logic/Helper/Constants.h"
-#include "McStatistics.h"
-#include "Libraries/Simulator/Logic/Routines/Helper/HelperRoutines.h"
+#include "StatisticsRoutines.h"
+#include "Libraries/Simulator/Logic/Routines/HelperRoutines.h"
 
 static inline Vector3_t TransformFractionalToCartesian(Vector3_t *vector, const UnitCellVectors_t* cellVectors)
 {

@@ -8,9 +8,8 @@
 // Short:   MMC free energy routine     //
 //////////////////////////////////////////
 
-#include "MmcFERoutine.h"
-#include "InternalLibraries/Interfaces/ProgressPrint.h"
-#include "Framework/Math/Random/Approx.h"
+#include "MmcfeExtension.h"
+#include "Libraries/Framework/Math/Approximation.h"
 #include <math.h>
 
 #define MMCFE_RELAXBUFFER_SIZE  100000
@@ -23,13 +22,13 @@
 
 /* Extension interface implementation */
 
-const mocuuid_t* MOCEXTENSION_GET_UUID_FUNC()
+const MocsimUuid_t* MOCASSIN_EXTENSION_GET_ENTRY_FUNC()
 {
-    const static mocuuid_t routineGuid = {.A = 0xb7f2dded, .B =0xdaf1, .C =0x40c0, .D = {0x4d, 0x4d, 0x43, 0x46, 0x45, 0x00, 0x00, 0x00}};
+    const static MocsimUuid_t routineGuid = {.A = 0xb7f2dded, .B =0xdaf1, .C =0x40c0, .D = {0x4d, 0x4d, 0x43, 0x46, 0x45, 0x00, 0x00, 0x00}};
     return &routineGuid;
 }
 
-FMocassinRoutine_t MOCEXTENSION_GET_ROUTINE_FUNC()
+FMocassinRoutine_t MOCASSIN_EXTENSION_GET_UUID_FUNC()
 {
     return StartMmcfeRoutine;
 }
@@ -176,7 +175,7 @@ static error_t TryLoadRoutineParameters(SCONTEXT_PARAMETER, MmcfeParams_t*restri
 {
     let routineData = getCustomRoutineData(simContext);
 
-    let testGuid = MOCEXTENSION_GET_UUID_FUNC();
+    let testGuid = MOCASSIN_EXTENSION_GET_ENTRY_FUNC();
     return_if(CompareMocuuid(routineData->Guid, testGuid) != 0, ERR_DATACONSISTENCY);
 
     let length = span_Length(routineData->ParamData);

@@ -9,7 +9,7 @@
 //////////////////////////////////////////
 
 #include "DlLoading.h"
-#include "Libraries/Framework/Basic/FileIO/FileIO.h"
+#include "FileIO.h"
 
 #if !defined(MC_USE_PLUGIN_SUPPORT)
     void* LibraryLoadingImportFunction(const char* restrict libraryPath, const char* restrict exportName, error_t* restrict error)

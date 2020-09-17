@@ -10,7 +10,7 @@
 
 #pragma once
 
-#include "Simulator/Data/State/StateUtility.h"
+#include "Libraries/Simulator/Data/State/SimulationStateUtility.h"
 
 // Prints the jump histogram collection of the passed state to the passed file stream
 error_t PrintJumpHistogramsToStream(SimulationState_t *simulationState, file_t *fstream);

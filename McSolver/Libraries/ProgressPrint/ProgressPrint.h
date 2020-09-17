@@ -9,8 +9,8 @@
 //////////////////////////////////////////
 
 #pragma once
-#include "Framework/Errors/McErrors.h"
-#include "Simulator/Data/SimContext/ContextAccess.h"
+#include "Libraries/Framework/Errors/McErrors.h"
+#include "Libraries/Simulator/Data/SimContext/SimulationContextAccess.h"
 
 // Print action that is called on blocks finished
 void PrintMocassinSimulationBlockInfo(SCONTEXT_PARAMETER, file_t *fstream, bool_t onlyMobiles);

@@ -10,10 +10,10 @@
 
 #pragma once
 
-#include "ExternalLibraries/sqlite3.h"
+#include "Libraries/Sqlite/sqlite3.h"
 #include "Extensions/MocassinSolverExtension.h"
-#include "Simulator/Logic/Routines/Main/MainRoutines.h"
-#include "Simulator/Logic/Routines/Tracking/TransitionTracking.h"
+#include "Libraries/Simulator/Logic/Routines/MainRoutines.h"
+#include "Libraries/Simulator/Logic/Routines/TransitionTrackingRoutines.h"
 
 /* Routine type definitions */
 
