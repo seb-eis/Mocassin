@@ -1,0 +1,58 @@
+﻿<Window x:Class="Mocassin.UI.GUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Mocassin.UI.GUI"
+        xmlns:projectStatusBar="clr-namespace:Mocassin.UI.GUI.Controls.ProjectStatusBar"
+        xmlns:projectMenuBar="clr-namespace:Mocassin.UI.GUI.Controls.ProjectMenuBar"
+        xmlns:projectConsole="clr-namespace:Mocassin.UI.GUI.Controls.ProjectConsole"
+        xmlns:projectBrowser="clr-namespace:Mocassin.UI.GUI.Controls.ProjectBrowser"
+        xmlns:projectWorkControl="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl"
+        mc:Ignorable="d"
+        Title="{Binding WindowDescription, StringFormat=Mocassin {0}}"
+        Height="{Binding Source={x:Static SystemParameters.PrimaryScreenHeight}}"
+        Width="{Binding Source={x:Static SystemParameters.PrimaryScreenWidth}}"
+        WindowStartupLocation="CenterScreen"
+        d:DataContext="{d:DesignInstance local:MainWindowViewModel}"
+        WindowState="Maximized"
+        Closing="MainWindow_OnClosing">
+
+  <Window.InputBindings>
+    <KeyBinding Gesture="Ctrl+S" Command="{Binding ProjectManagerViewModel.SaveProjectLibraryChangesCommand}" />
+  </Window.InputBindings>
+
+  <Grid Margin="5,5,5,5">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="80*" />
+      <RowDefinition Height="{StaticResource App.Default.GridLength.Splitter}" />
+      <RowDefinition Height="20*" />
+      <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="1*" />
+      <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}" />
+      <ColumnDefinition Width="6*" />
+    </Grid.ColumnDefinitions>
+
+    <projectMenuBar:ProjectMenuBarView Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" SnapsToDevicePixels="True"
+                                       DataContext="{Binding ProjectMenuBarViewModel}" />
+
+    <GridSplitter Grid.Row="1" Grid.Column="1" Grid.RowSpan="3" />
+
+    <projectBrowser:ProjectBrowserView Grid.Row="1" Grid.Column="0" Grid.RowSpan="4" SnapsToDevicePixels="True"
+                                       DataContext="{Binding ProjectBrowserViewModel}" />
+
+    <projectWorkControl:ProjectWorkTabControlView Grid.Row="1" Grid.Column="2" SnapsToDevicePixels="True"
+                                                  DataContext="{Binding ProjectWorkTabControlViewModel}" />
+
+    <GridSplitter Grid.Row="2" Grid.Column="2" />
+
+    <projectConsole:ProjectConsoleTabControlView Grid.Row="3" Grid.Column="2" SnapsToDevicePixels="True"
+                                                 DataContext="{Binding ProjectConsoleTabControlViewModel}" />
+
+    <projectStatusBar:ProjectStatusBarView Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" SnapsToDevicePixels="True"
+                                           DataContext="{Binding ProjectStatusBarViewModel}" />
+  </Grid>
+</Window>

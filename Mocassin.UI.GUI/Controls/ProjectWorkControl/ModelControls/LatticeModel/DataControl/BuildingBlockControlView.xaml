@@ -1,0 +1,53 @@
+﻿<UserControl
+  x:Class="Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel.DataControl.BuildingBlockControlView"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel.DataControl"
+  xmlns:gridControl="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel.GridControl"
+  xmlns:adapter="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel.GridControl.Adapter"
+  xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
+  d:DataContext="{d:DesignInstance local:BuildingBlockControlViewModel, IsDesignTimeCreatable=True}"
+  mc:Ignorable="d"
+  d:DesignHeight="450" d:DesignWidth="800"
+  Background="Transparent">
+
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*" />
+      <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}" />
+      <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
+    <DataGrid Name="BuildingBlockDataGrid" Grid.Column="0"
+              ItemsSource="{Binding BuildingBlockCollectionViewModel.Items}"
+              SelectedItem="{Binding BuildingBlockCollectionViewModel.SelectedItem}"
+              AutoGenerateColumns="False"
+              IsReadOnly="True"
+              ColumnWidth="*">
+      <DataGrid.RowHeaderTemplate>
+        <DataTemplate>
+          <views:ObjectRowHeaderLogo x:Name="RowHeaderLogo"
+                                     PreviewMouseLeftButtonDown="RowHeaderLogo_OnPreviewMouseLeftButtonDown"
+                                     PreviewMouseLeftButtonUp="RowHeaderLogo_OnPreviewMouseLeftButtonUp"
+                                     PreviewMouseMove="RowHeaderLogo_OnPreviewMouseMove"
+                                     Cursor="Hand" />
+        </DataTemplate>
+      </DataGrid.RowHeaderTemplate>
+      <DataGrid.Columns>
+        <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
+      </DataGrid.Columns>
+
+    </DataGrid>
+    <gridControl:BuildingBlockContentControlView Grid.Column="2">
+      <gridControl:BuildingBlockContentControlView.DataContext>
+        <MultiBinding Converter="{adapter:BuildingBlockBuildingBlockContentViewModelConverter}">
+          <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type local:BuildingBlockControlView}}"
+                   Path="DataContext" />
+          <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type local:BuildingBlockControlView}}"
+                   Path="DataContext.BuildingBlockCollectionViewModel.SelectedItem" />
+        </MultiBinding>
+      </gridControl:BuildingBlockContentControlView.DataContext>
+    </gridControl:BuildingBlockContentControlView>
+  </Grid>
+</UserControl>

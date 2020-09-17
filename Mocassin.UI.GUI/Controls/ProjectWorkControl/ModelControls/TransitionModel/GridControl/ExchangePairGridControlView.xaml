@@ -1,0 +1,61 @@
+﻿<UserControl
+  x:Class="Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionModel.GridControl.ExchangePairGridControlView"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionModel.GridControl"
+  xmlns:comboBox="clr-namespace:Mocassin.UI.GUI.Base.UiElements.ComboBox"
+  xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
+  xmlns:transitionModel="clr-namespace:Mocassin.UI.Xml.TransitionModel;assembly=Mocassin.UI.Xml"
+  mc:Ignorable="d"
+  d:DataContext="{d:DesignInstance local:ExchangePairGridControlViewModel, IsDesignTimeCreatable=True}"
+  d:DesignHeight="450" d:DesignWidth="800"
+  Background="Transparent">
+  <Grid>
+    <DataGrid Name="ExchangePairDataGrid"
+              ItemsSource="{Binding Items}"
+              SelectedItem="{Binding SelectedItem}"
+              Background="Transparent"
+              VerticalAlignment="Stretch"
+              VerticalContentAlignment="Stretch"
+              VerticalScrollBarVisibility="Auto"
+              AutoGenerateColumns="False"
+              ColumnWidth="*"
+              Sorting="ExchangePairDataGrid_OnSorting">
+
+      <DataGrid.RowHeaderTemplate>
+        <DataTemplate>
+          <views:ObjectRowHeaderLogo x:Name="RowHeaderLogo"
+                                     PreviewMouseLeftButtonDown="RowHeaderLogo_OnPreviewMouseLeftButtonDown"
+                                     PreviewMouseLeftButtonUp="RowHeaderLogo_OnPreviewMouseLeftButtonUp"
+                                     PreviewMouseMove="RowHeaderLogo_OnPreviewMouseMove"
+                                     Cursor="Hand" />
+        </DataTemplate>
+      </DataGrid.RowHeaderTemplate>
+
+      <DataGrid.Columns>
+        <DataGridTextColumn Binding="{Binding Name}" Header="Name" />
+
+        <comboBox:BindableDataGridComboBoxColumn Header="Acceptor State"
+                                                 ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.CurrentAcceptorOptions}"
+                                                 DisplayMemberPath="Name"
+                                                 SelectedItemBinding="{Binding AcceptorParticle}" />
+
+        <comboBox:BindableDataGridComboBoxColumn Header="Donor State"
+                                                 ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.CurrentDonorOptions}"
+                                                 DisplayMemberPath="Name"
+                                                 SelectedItemBinding="{Binding DonorParticle}" />
+        <DataGridTemplateColumn Header="Quick Grouping" CanUserSort="False">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate DataType="{x:Type transitionModel:StateExchangePairData}">
+              <Button Content="Make Group"
+                      Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ExchangePairGridControlView}}, Path=DataContext.AddToModelAsExchangeGroupCommand}"
+                      CommandParameter="{Binding}" />
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+      </DataGrid.Columns>
+    </DataGrid>
+  </Grid>
+</UserControl>

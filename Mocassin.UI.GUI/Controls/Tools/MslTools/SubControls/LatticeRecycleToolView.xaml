@@ -1,0 +1,58 @@
+﻿<UserControl x:Class="Mocassin.UI.GUI.Controls.Tools.MslTools.SubControls.LatticeRecycleToolView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.Tools.MslTools.SubControls"
+             xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance local:LatticeRecycleToolViewModel, IsDesignTimeCreatable=True}"
+             d:DesignHeight="450" d:DesignWidth="800">
+  <Grid>
+    <StackPanel>
+      <DockPanel Dock="Right" Margin="{StaticResource App.Margin.VerticalStack}">
+        <Button Command="{Binding SelectImportPathCommand}" Content="Select Import File" Width="200"
+                Margin="{StaticResource App.Margin.HorizontalStack}" />
+        <TextBox Text="{Binding PathToImportMsl}" />
+      </DockPanel>
+      <DockPanel Dock="Right" Margin="{StaticResource App.Margin.VerticalStack}">
+        <Button Command="{Binding SelectExportPathCommand}" Content="Select Export File" Width="200"
+                Margin="{StaticResource App.Margin.HorizontalStack}" />
+        <TextBox Text="{Binding PathToExportMsl}" />
+      </DockPanel>
+      <DockPanel Dock="Right" Margin="{StaticResource App.Margin.VerticalStack}">
+        <Button Command="{Binding RefreshCanImportCommand}" Content="Check Can Import" Width="200"
+                Margin="{StaticResource App.Margin.HorizontalStack}" />
+        <TextBox IsReadOnly="True">
+          <TextBox.Style>
+            <Style TargetType="{x:Type TextBox}">
+              <Style.Triggers>
+                <DataTrigger Binding="{Binding CanRecycle}" Value="True">
+                  <Setter Property="Text" Value="No issues detected, can run import!" />
+                  <Setter Property="Foreground" Value="Green" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding CanRecycle}" Value="False">
+                  <Setter Property="Text" Value="Issues detected, cannot run import!" />
+                  <Setter Property="Foreground" Value="Red" />
+                </DataTrigger>
+              </Style.Triggers>
+            </Style>
+          </TextBox.Style>
+        </TextBox>
+      </DockPanel>
+      <DockPanel Dock="Right" Margin="{StaticResource App.Margin.VerticalStack}">
+        <Button Command="{Binding RunImportCommand}" Content="Run Import" Width="200"
+                Margin="{StaticResource App.Margin.HorizontalStack}" />
+        <Grid>
+          <ProgressBar Maximum="{Binding ImportableCount, Mode=OneWay}" Value="{Binding ImportedCount, Mode=OneWay}" />
+          <TextBlock HorizontalAlignment="Center">
+            <Run Text="Imported:" />
+            <Run Text="{Binding ImportedCount, Mode=OneWay}" />
+            <Run Text="/" />
+            <Run Text="{Binding ImportableCount, Mode=OneWay}" />
+          </TextBlock>
+        </Grid>
+      </DockPanel>
+    </StackPanel>
+  </Grid>
+</UserControl>

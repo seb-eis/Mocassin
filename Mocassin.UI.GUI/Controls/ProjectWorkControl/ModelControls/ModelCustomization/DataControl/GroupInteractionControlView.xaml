@@ -1,0 +1,57 @@
+﻿<UserControl
+  x:Class="Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomization.DataControl.GroupInteractionControlView"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomization.DataControl"
+  xmlns:gridControl="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomization.GridControl"
+  xmlns:converter="clr-namespace:Mocassin.UI.GUI.Base.Converter"
+  xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
+  d:DataContext="{d:DesignInstance local:GroupInteractionControlViewModel, IsDesignTimeCreatable=True}"
+  mc:Ignorable="d"
+  d:DesignHeight="450" d:DesignWidth="800"
+  Background="Transparent">
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*" />
+      <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}" />
+      <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
+    <DataGrid Name="GroupEnergySetDataGrid" Grid.Column="0"
+              ItemsSource="{Binding Items}"
+              SelectedItem="{Binding SelectedItem}"
+              AutoGenerateColumns="False"
+              CanUserAddRows="False"
+              ColumnWidth="*">
+      <DataGrid.RowHeaderTemplate>
+        <DataTemplate>
+          <views:ObjectRowHeaderLogo x:Name="RowHeaderLogo"
+                                     PreviewMouseLeftButtonDown="RowHeaderLogo_OnPreviewMouseLeftButtonDown"
+                                     PreviewMouseLeftButtonUp="RowHeaderLogo_OnPreviewMouseLeftButtonUp"
+                                     PreviewMouseMove="RowHeaderLogo_OnPreviewMouseMove"
+                                     Cursor="Hand" />
+        </DataTemplate>
+      </DataGrid.RowHeaderTemplate>
+
+      <DataGrid.Columns>
+        <DataGridTextColumn Header="Name" Binding="{Binding GroupEnergySet.Name}" />
+        <DataGridTextColumn Header="Source Interaction" Binding="{Binding GroupEnergySet.GroupInteraction.Name}"
+                            IsReadOnly="True" />
+        <DataGridTextColumn Header="Center Cell Site" Binding="{Binding GroupEnergySet.CenterPosition.Name}"
+                            IsReadOnly="True" />
+        <DataGridTextColumn Header="#P1 Geometries / Center Site"
+                            Binding="{Binding GroupEnergySet.ExtensionCountPerSite}"
+                            IsReadOnly="True" />
+        <DataGridTextColumn Header="#Unique Permutations / Group"
+                            Binding="{Binding GroupEnergySet.EnergyEntries.Count}"
+                            IsReadOnly="True" />
+      </DataGrid.Columns>
+
+    </DataGrid>
+    <GridSplitter Grid.Column="1" />
+    <gridControl:GroupEnergySetControlView Grid.Column="2"
+                                           DataContext="{Binding SelectedItem}"
+                                           Visibility="{Binding Converter={converter:NullToVisibilityConverter}}" />
+  </Grid>
+</UserControl>

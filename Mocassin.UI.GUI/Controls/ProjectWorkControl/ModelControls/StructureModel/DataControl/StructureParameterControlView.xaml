@@ -1,0 +1,193 @@
+﻿<UserControl
+  x:Class="Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureModel.DataControl.StructureParameterControlView"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureModel.DataControl"
+  xmlns:converter="clr-namespace:Mocassin.UI.GUI.Base.Converter"
+  xmlns:crystalSystems="clr-namespace:Mocassin.Symmetry.CrystalSystems;assembly=Mocassin.Symmetry"
+  xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
+  xmlns:content="clr-namespace:Mocassin.UI.GUI.Base.UiElements.Content"
+  xmlns:res="clr-namespace:Mocassin.UI.GUI.Resources"
+  d:DataContext="{d:DesignInstance local:StructureParameterControlViewModel, IsDesignTimeCreatable = True}"
+  mc:Ignorable="d"
+  d:DesignHeight="450" d:DesignWidth="800"
+  Background="Transparent">
+
+  <UserControl.Resources>
+    <ToolTip x:Key="Local.ToolTip.SpaceGroup">
+      <TextBlock Text="{x:Static res:Tooltips.ModelObject_SpaceGroup}" />
+    </ToolTip>
+    <ToolTip x:Key="Local.ToolTip.Parameters">
+      <TextBlock Text="{x:Static res:Tooltips.ModelObject_CellParameterSettings}" />
+    </ToolTip>
+  </UserControl.Resources>
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*" />
+      <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+
+    <content:HeaderedGroup Grid.Row="0" Style="{StaticResource App.Style.HeaderedGroup.BoldText}"
+                           HeaderToolTip="{StaticResource Local.ToolTip.SpaceGroup}"
+                           Header="Space Group Selection:">
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="2*" />
+          <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}" />
+          <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="*" />
+          <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <DataGrid x:Name="SpaceGroupDataGrid"
+                  Grid.Row="0" Grid.Column="0"
+                  ColumnWidth="*"
+                  ItemsSource="{Binding SpaceGroups, Mode=OneTime}"
+                  SelectedItem="{Binding SelectedSpaceGroup}"
+                  IsReadOnly="True"
+                  AutoGenerateColumns="False"
+                  SelectionChanged="SpaceGroupDataGrid_OnSelectionChanged">
+          <DataGrid.RowHeaderTemplate>
+            <DataTemplate>
+              <views:ObjectRowHeaderLogo />
+            </DataTemplate>
+          </DataGrid.RowHeaderTemplate>
+
+          <DataGrid.Columns>
+            <DataGridTextColumn Binding="{Binding InternationalIndex, Mode=OneTime}" Header="Group Number" />
+            <DataGridTextColumn Binding="{Binding MauguinNotation, Mode=OneTime}" Header="Mauguin" />
+            <DataGridTextColumn Binding="{Binding CrystalType, Mode=OneTime}" Header="Crystal Type" />
+            <DataGridTextColumn Binding="{Binding VariationName, Mode=OneTime}" Header="Variation Name" />
+            <DataGridTextColumn Binding="{Binding CrystalVariation, Mode=OneTime}" Header="Variation Type" />
+
+          </DataGrid.Columns>
+        </DataGrid>
+        <DataGrid Grid.Row="0" Grid.Column="2"
+                  AutoGenerateColumns="False"
+                  ColumnWidth="*"
+                  ItemsSource="{Binding CurrentSymmetryOperations}">
+          <DataGrid.RowHeaderTemplate>
+            <DataTemplate>
+              <views:ObjectRowHeaderLogo />
+            </DataTemplate>
+          </DataGrid.RowHeaderTemplate>
+
+          <DataGrid.Columns>
+            <DataGridTextColumn Binding="{Binding Literal, Mode=OneTime}" Width="*">
+              <DataGridTextColumn.HeaderTemplate>
+                <DataTemplate>
+                  <TextBlock
+                    DataContext="{Binding ElementName=SpaceGroupDataGrid, Path=DataContext.SelectedSpaceGroup}">
+                    <Run Text="{Binding InternationalIndex, Mode=OneTime, StringFormat={}#{0}}" />
+                    <Run Text="&#x2794;" />
+                    <Run Text="{Binding MauguinNotation, Mode=OneTime}" />
+                    <Run Text="&#x2794;" />
+                    <Run
+                      Text="{Binding CrystalType, Mode=OneTime, Converter={converter:Int32ToEnumConverter}, ConverterParameter={x:Type crystalSystems:CrystalSystemType}}" />
+                    <Run Text="&#x2794;" />
+                    <Run Text="{Binding VariationName, Mode=OneTime}" />
+                    <Run Text="&#x2794;" />
+                    <Run Text="{Binding Operations.Count, Mode=OneTime, StringFormat={}#Op. {0}}" />
+                  </TextBlock>
+                </DataTemplate>
+              </DataGridTextColumn.HeaderTemplate>
+            </DataGridTextColumn>
+            <DataGridCheckBoxColumn IsReadOnly="True" Binding="{Binding FlipsOrientation, Mode=OneTime}" Width="Auto">
+              <DataGridCheckBoxColumn.HeaderTemplate>
+                <DataTemplate>
+                  <TextBlock Text="Det(T) &lt; 0"
+                             ToolTip="Marks if the equivalent 4x4 transform matrix has a negative determinant (Causes orientation change)." />
+                </DataTemplate>
+              </DataGridCheckBoxColumn.HeaderTemplate>
+            </DataGridCheckBoxColumn>
+          </DataGrid.Columns>
+        </DataGrid>
+      </Grid>
+    </content:HeaderedGroup>
+
+    <content:HeaderedGroup Grid.Row="1" Grid.Column="0" Style="{StaticResource App.Style.HeaderedGroup.BoldText}"
+                           HeaderToolTip="{StaticResource Local.ToolTip.Parameters}"
+                           Header="Cell Settings:">
+      <StackPanel>
+        <content:HeaderedGroup Header="Structure Name:">
+          <TextBox Text="{Binding StructureInfo.Name}"
+                   HorizontalAlignment="Left"
+                   Width="{Binding ElementName=CellParameterATextBox, Path=ActualWidth}" />
+        </content:HeaderedGroup>
+
+        <Grid DataContext="{Binding ParameterSetter}">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="2*" />
+          </Grid.ColumnDefinitions>
+
+          <StackPanel Grid.Column="0">
+            <content:HeaderedGroup Header="Cell Parameter 'a' [&#x212b;]:">
+              <TextBox Text="{Binding ParamA, Converter={StaticResource App.Converter.NumericExpressionToValue}}"
+                       x:Name="CellParameterATextBox"
+                       IsReadOnly="{Binding IsReadOnlyParamA}">
+                <TextBox.InputBindings>
+                  <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                              CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
+                </TextBox.InputBindings>
+              </TextBox>
+            </content:HeaderedGroup>
+            <content:HeaderedGroup Header="Cell Parameter 'b' [&#x212b;]:">
+              <TextBox Text="{Binding ParamB, Converter={StaticResource App.Converter.NumericExpressionToValue}}"
+                       IsReadOnly="{Binding IsReadOnlyParamB}">
+                <TextBox.InputBindings>
+                  <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                              CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
+                </TextBox.InputBindings>
+              </TextBox>
+            </content:HeaderedGroup>
+            <content:HeaderedGroup Header="Cell Parameter 'c' [&#x212b;]:">
+              <TextBox Text="{Binding ParamC, Converter={StaticResource App.Converter.NumericExpressionToValue}}"
+                       IsReadOnly="{Binding IsReadOnlyParamC}">
+                <TextBox.InputBindings>
+                  <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                              CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
+                </TextBox.InputBindings>
+              </TextBox>
+            </content:HeaderedGroup>
+          </StackPanel>
+          <StackPanel Grid.Column="2">
+            <content:HeaderedGroup Header="Angle &#x3B1; [°]:">
+              <TextBox Text="{Binding Alpha, Converter={StaticResource App.Converter.NumericExpressionToValue}}"
+                       IsReadOnly="{Binding IsReadOnlyAlpha}">
+                <TextBox.InputBindings>
+                  <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                              CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
+                </TextBox.InputBindings>
+              </TextBox>
+            </content:HeaderedGroup>
+            <content:HeaderedGroup Header="Angle &#x3B2; [°]:">
+              <TextBox Text="{Binding Beta, Converter={StaticResource App.Converter.NumericExpressionToValue}}"
+                       IsReadOnly="{Binding IsReadOnlyBeta}">
+                <TextBox.InputBindings>
+                  <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                              CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
+                </TextBox.InputBindings>
+              </TextBox>
+            </content:HeaderedGroup>
+            <content:HeaderedGroup Header="Angle &#x3B3; [°]:">
+              <TextBox Text="{Binding Gamma, Converter={StaticResource App.Converter.NumericExpressionToValue}}"
+                       IsReadOnly="{Binding IsReadOnlyGamma}">
+                <TextBox.InputBindings>
+                  <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                              CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
+                </TextBox.InputBindings>
+              </TextBox>
+            </content:HeaderedGroup>
+          </StackPanel>
+        </Grid>
+      </StackPanel>
+    </content:HeaderedGroup>
+  </Grid>
+</UserControl>

@@ -1,0 +1,210 @@
+﻿<UserControl x:Class="Mocassin.UI.GUI.Controls.Visualizer.DataControl.Viewport3DView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.Visualizer.DataControl"
+             xmlns:h="http://helix-toolkit.org/wpf"
+             xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance local:Viewport3DViewModel, IsDesignTimeCreatable=True}"
+             d:DesignHeight="450" d:DesignWidth="800">
+  <UserControl.Resources>
+    <ObjectDataProvider x:Key="ColorProvider" ObjectInstance="{x:Type Colors}" MethodName="GetProperties" />
+  </UserControl.Resources>
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="Auto" />
+      <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
+    <h:HelixViewport3D ItemsSource="{Binding Visuals}" Grid.Column="1"
+                       ShowCoordinateSystem="{Binding IsCoordinateSystemActive}"
+                       ShowViewCube="{Binding IsVisualCubeActive}"
+                       Name="HelixViewport3D"
+                       ShowFrameRate="{Binding IsFrameRateCounterActive}"
+                       ShowCameraInfo="{Binding IsCameraInfoActive}"
+                       ShowTriangleCountInfo="{Binding IsRenderInfoActive}"
+                       LimitFPS="True"
+                       Background="{Binding ElementName=BackgroundColorComboBox, Path=Text}" />
+    <Expander Name="SettingsExpander" Grid.Column="0" ExpandDirection="Down" Background="White" IsExpanded="True">
+      <Expander.Header>
+        <TextBlock Text="Viewer options:" Style="{StaticResource App.Style.TextBlock.DemiBold}"
+                   Visibility="{Binding ElementName=SettingsExpander, Path=IsExpanded, Converter={StaticResource App.Converter.BooleanToVisibility}}" />
+      </Expander.Header>
+      <Expander.ContextMenu>
+        <ContextMenu Name="QuickActionContextMenu">
+          <MenuItem Header="Reset camera" Click="QuickActionContextMenu_ResetCameraItem_OnClick" />
+          <MenuItem Header="Clear visual" Command="{Binding ClearVisualCommand}" />
+          <MenuItem Header="Update visual" Command="{Binding UpdateVisualCommand}" />
+        </ContextMenu>
+      </Expander.ContextMenu>
+      <Border>
+        <Grid>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+          </Grid.RowDefinitions>
+
+          <HeaderedContentControl Grid.Row="0">
+            <StackPanel>
+              <DockPanel Margin="0,5">
+                <RadioButton IsChecked="{Binding IsAutoUpdating}" Name="AutoUpdateRadioButton" Content="Auto update"
+                             Margin="0,2,10,0"
+                             VerticalContentAlignment="Center" />
+                <RadioButton Content="Manual update"
+                             Name="ManualUpdateRadioButton"
+                             VerticalContentAlignment="Center" HorizontalAlignment="Right"
+                             Margin="0,2,0,0" />
+              </DockPanel>
+              <Grid>
+                <Grid.RowDefinitions>
+                  <RowDefinition />
+                  <RowDefinition />
+                  <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition />
+                  <ColumnDefinition Width="5" />
+                  <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Button Content="Clear visual" Command="{Binding ClearVisualCommand}"
+                        Margin="{StaticResource App.Margin.VerticalStack}"
+                        Grid.Row="0" Grid.Column="0" />
+                <Button Content="Update visual" Command="{Binding UpdateVisualCommand}"
+                        IsEnabled="{Binding ElementName=ManualUpdateRadioButton, Path=IsChecked}"
+                        Margin="{StaticResource App.Margin.VerticalStack}"
+                        Grid.Row="0" Grid.Column="2" />
+                <Button Content="Reset camera" Click="QuickActionContextMenu_ResetCameraItem_OnClick"
+                        Margin="{StaticResource App.Margin.VerticalStack}"
+                        Grid.Row="1" Grid.Column="0" />
+                <Button Content="Export" Command="{Binding ExportViewCommand}"
+                        CommandParameter="{Binding ElementName=HelixViewport3D}"
+                        Margin="{StaticResource App.Margin.VerticalStack}"
+                        Grid.Row="1" Grid.Column="2"
+                        ToolTip="Warning: Async image export is currently not supported." />
+                <Grid Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3">
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                  </Grid.ColumnDefinitions>
+                  <TextBlock Text="Image export: " Grid.Column="0" />
+                  <TextBox
+                    Text="{Binding ExportWidth, Converter={StaticResource App.Converter.NumericExpressionToValue}}"
+                    Grid.Column="1" HorizontalContentAlignment="Right">
+                    <TextBox.InputBindings>
+                      <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                                  CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
+                    </TextBox.InputBindings>
+                  </TextBox>
+                  <TextBlock Text="x" Grid.Column="2" />
+                  <TextBox
+                    Text="{Binding ExportHeight, Converter={StaticResource App.Converter.NumericExpressionToValue}}"
+                    Grid.Column="3" HorizontalContentAlignment="Left">
+                    <TextBox.InputBindings>
+                      <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                                  CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
+                    </TextBox.InputBindings>
+                  </TextBox>
+                </Grid>
+              </Grid>
+            </StackPanel>
+          </HeaderedContentControl>
+          <HeaderedContentControl Grid.Row="1">
+            <HeaderedContentControl.Header>
+              <TextBlock Text="Toggle items:" Style="{StaticResource App.Style.TextBlock.DemiBold}" />
+            </HeaderedContentControl.Header>
+            <StackPanel>
+              <Grid>
+                <Grid.RowDefinitions>
+                  <RowDefinition />
+                  <RowDefinition />
+                  <RowDefinition />
+                  <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition />
+                  <ColumnDefinition Width="5" />
+                  <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <ToggleButton IsChecked="{Binding IsVisualCubeActive}" Name="VisualCubeActiveCheckBox"
+                              Grid.Row="0" Grid.Column="0"
+                              Content="View cube"
+                              Background="Transparent" Margin="{StaticResource App.Margin.VerticalStack}" />
+                <ToggleButton IsChecked="{Binding IsCoordinateSystemActive}" Content="View arrows"
+                              Grid.Row="0" Grid.Column="2"
+                              Name="CoordinateSystemActiveCheckBox"
+                              Background="Transparent" Margin="{StaticResource App.Margin.VerticalStack}" />
+                <ToggleButton IsChecked="{Binding IsFrameRateCounterActive}" Name="ShowFrameRateCheckBox"
+                              Grid.Row="1" Grid.Column="0"
+                              Content="Frame info"
+                              Background="Transparent" Margin="{StaticResource App.Margin.VerticalStack}" />
+                <ToggleButton IsChecked="{Binding IsCameraInfoActive}" Content="Camera info"
+                              Grid.Row="1" Grid.Column="2"
+                              Name="ShowCameraInfoCheckBox"
+                              Background="Transparent" Margin="{StaticResource App.Margin.VerticalStack}"
+                              VerticalContentAlignment="Center" />
+                <ToggleButton IsChecked="{Binding IsRenderInfoActive}" Content="Triangle info" Grid.Row="2"
+                              Grid.Column="0"
+                              Name="ShowTriangleInfoCheckBox"
+                              Background="Transparent" Margin="{StaticResource App.Margin.VerticalStack}" />
+                <ToggleButton IsChecked="True"
+                              Grid.Row="2" Grid.Column="2"
+                              Name="CameraSwitchToggleButton"
+                              Background="Transparent" Margin="{StaticResource App.Margin.VerticalStack}"
+                              Command="{Binding ToggleCameraCommand}"
+                              CommandParameter="{Binding ElementName=HelixViewport3D}"
+                              ToolTip="Orthographic/Perspective camera">
+                  <ToggleButton.Style>
+                    <Style TargetType="{x:Type ToggleButton}">
+                      <Style.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                          <Setter Property="Content" Value="Perspective" />
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="False">
+                          <Setter Property="Content" Value="Orthographic" />
+                        </Trigger>
+                      </Style.Triggers>
+                    </Style>
+                  </ToggleButton.Style>
+                </ToggleButton>
+                <Border Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3"
+                        BorderThickness="0,0,0,2"
+                        BorderBrush="{Binding ElementName=BackgroundColorComboBox, Path=Text}">
+                  <ComboBox ToolTip="Background color"
+                            ItemsSource="{Binding Source={StaticResource ColorProvider}}"
+                            Style="{StaticResource App.Style.ColorSelectionComboBox}"
+                            IsEditable="True"
+                            DisplayMemberPath="Name"
+                            Name="BackgroundColorComboBox" />
+                </Border>
+              </Grid>
+            </StackPanel>
+          </HeaderedContentControl>
+          <HeaderedContentControl Grid.Row="2">
+            <HeaderedContentControl.Header>
+              <TextBlock Text="Display groups:" Style="{StaticResource App.Style.TextBlock.DemiBold}" />
+            </HeaderedContentControl.Header>
+            <DataGrid ItemsSource="{Binding VisualGroups}" CanUserAddRows="False" CanUserDeleteRows="False"
+                      AutoGenerateColumns="False"
+                      ColumnWidth="Auto">
+              <DataGrid.RowHeaderTemplate>
+                <DataTemplate>
+                  <views:ObjectRowHeaderLogo />
+                </DataTemplate>
+              </DataGrid.RowHeaderTemplate>
+              <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Binding="{Binding Name, Mode=OneWay}" IsReadOnly="True" />
+                <DataGridTextColumn Header="Items" Binding="{Binding ItemCount, Mode=OneWay}" IsReadOnly="True" />
+                <DataGridCheckBoxColumn Binding="{Binding IsVisible, UpdateSourceTrigger=PropertyChanged}"
+                                        Header="Render" />
+              </DataGrid.Columns>
+            </DataGrid>
+          </HeaderedContentControl>
+        </Grid>
+      </Border>
+    </Expander>
+  </Grid>
+</UserControl>

@@ -1,0 +1,108 @@
+﻿<UserControl
+  x:Class="Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslation.GridControl.MmcJobDescriptionSetControlView"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslation.GridControl"
+  xmlns:adapter="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslation.GridControl.Adapter"
+  xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
+  xmlns:content="clr-namespace:Mocassin.UI.GUI.Base.UiElements.Content"
+  d:DataContext="{d:DesignInstance local:MmcJobDescriptionSetControlViewModel, IsDesignTimeCreatable=True}"
+  mc:Ignorable="d"
+  d:DesignHeight="450" d:DesignWidth="800"
+  Background="Transparent">
+
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*" />
+      <RowDefinition Height="{StaticResource App.Default.GridLength.Splitter}" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="{StaticResource App.Default.GridLength.Splitter}" />
+      <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+
+    <content:HeaderedGroup Grid.Row="0">
+      <content:HeaderedGroup.Header>
+        <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
+          <Run Text="Job Collection Configurations:" />
+          <Run Text="{Binding MmcJobPackage.Name, StringFormat={}[{0}]}" />
+        </TextBlock>
+      </content:HeaderedGroup.Header>
+
+      <DataGrid Name="JobConfigurationsDataGrid"
+                ItemsSource="{Binding Items}"
+                SelectedItem="{Binding SelectedItem}"
+                AutoGenerateColumns="False"
+                ColumnWidth="*"
+                Background="Transparent">
+
+        <DataGrid.ContextMenu>
+          <ContextMenu
+            DataContext="{Binding RelativeSource={RelativeSource Mode=Self}, Path=PlacementTarget.DataContext}">
+            <MenuItem Command="{Binding DuplicateItemCommand}" CommandParameter="{Binding SelectedItem}">
+              <MenuItem.Header>
+                <WrapPanel>
+                  <TextBlock Text="Make Duplicates:" Margin="0,0,5,0" />
+                  <TextBox Text="{Binding Path=DuplicateCount, UpdateSourceTrigger=PropertyChanged}" Width="25" />
+                </WrapPanel>
+              </MenuItem.Header>
+            </MenuItem>
+          </ContextMenu>
+        </DataGrid.ContextMenu>
+
+        <DataGrid.RowHeaderTemplate>
+          <DataTemplate>
+            <views:ObjectRowHeaderLogo x:Name="RowHeaderLogo"
+                                       PreviewMouseLeftButtonDown="RowHeaderLogo_OnPreviewMouseLeftButtonDown"
+                                       PreviewMouseLeftButtonUp="RowHeaderLogo_OnPreviewMouseLeftButtonUp"
+                                       PreviewMouseMove="RowHeaderLogo_OnPreviewMouseMove"
+                                       Cursor="Hand" />
+          </DataTemplate>
+        </DataGrid.RowHeaderTemplate>
+
+        <DataGrid.Columns>
+          <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
+          <DataGridTextColumn Header="Cell Size A" Binding="{Binding LatticeConfiguration.SizeA}" />
+          <DataGridTextColumn Header="Cell Size B" Binding="{Binding LatticeConfiguration.SizeB}" />
+          <DataGridTextColumn Header="Cell Size C" Binding="{Binding LatticeConfiguration.SizeC}" />
+        </DataGrid.Columns>
+      </DataGrid>
+    </content:HeaderedGroup>
+
+    <content:HeaderedGroup Grid.Row="2" x:Name="ConfigurationSettingsGroupBox">
+      <content:HeaderedGroup.Header>
+        <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
+          <Run Text="Configuration Settings:" />
+          <Run Text="{Binding SelectedItem.Name, StringFormat={}[{0}]}" />
+        </TextBlock>
+      </content:HeaderedGroup.Header>
+
+      <local:MmcJobDescriptionControlView
+        DataContext="{Binding SelectedItem, Converter={adapter:MmcJobDescriptionMmcJobDescriptionViewModelConverter}}" />
+    </content:HeaderedGroup>
+
+    <content:HeaderedGroup Grid.Row="4">
+      <content:HeaderedGroup.Header>
+        <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
+          <Run Text="Configuration Block Doping Settings:" />
+          <Run Text="{Binding SelectedItem.Name, StringFormat={}[{0}]}" />
+        </TextBlock>
+      </content:HeaderedGroup.Header>
+
+      <local:DopingValueControlView>
+        <local:DopingValueControlView.DataContext>
+          <MultiBinding Converter="{adapter:LatticeConfigurationDopingValueControlViewModelConverter}">
+            <Binding
+              RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type local:MmcJobDescriptionSetControlView}}"
+              Path="DataContext.Project" />
+            <Binding
+              RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type local:MmcJobDescriptionSetControlView}}"
+              Path="DataContext.SelectedItem.LatticeConfiguration" />
+          </MultiBinding>
+        </local:DopingValueControlView.DataContext>
+      </local:DopingValueControlView>
+    </content:HeaderedGroup>
+
+  </Grid>
+</UserControl>

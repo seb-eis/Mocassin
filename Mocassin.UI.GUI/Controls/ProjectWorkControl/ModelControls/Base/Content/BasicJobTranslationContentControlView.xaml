@@ -1,0 +1,60 @@
+﻿<UserControl
+  x:Class="Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content.BasicJobTranslationContentControlView"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  d:DataContext="{d:DesignInstance local:BasicJobTranslationContentControlViewModel, IsDesignTimeCreatable=True}"
+  xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content"
+  mc:Ignorable="d"
+  d:DesignHeight="450" d:DesignWidth="800"
+  Background="Transparent">
+
+  <Grid Margin="{StaticResource App.Margin.Default}">
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="100*" />
+      <ColumnDefinition Width="1*" />
+      <ColumnDefinition Width="100*" />
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="1*" />
+      <RowDefinition Height="200*" />
+    </Grid.RowDefinitions>
+
+    <ComboBox Grid.Column="0" Grid.Row="0"
+              Margin="{StaticResource App.Margin.HorizontalStack}"
+              ItemsSource="{Binding ProjectControl.ProjectGraphs}"
+              SelectedItem="{Binding SelectedProject}"
+              ToolTip="{StaticResource App.ToolTip.ProjectSelection}"
+              DisplayMemberPath="Name"
+              IsEditable="True"
+              IsTextSearchEnabled="True" />
+
+    <ComboBox Grid.Column="2" Grid.Row="0"
+              ItemsSource="{Binding JobTranslationGraphs}"
+              SelectedItem="{Binding SelectedJobSetTemplate}"
+              ToolTip="{StaticResource App.ToolTip.JobTranslationSelection}"
+              DisplayMemberPath="Name"
+              IsEditable="True"
+              IsTextSearchEnabled="True">
+
+      <ComboBox.ContextMenu>
+        <ContextMenu>
+          <MenuItem Header="New Template" Command="{Binding AddJobSetTemplateCommand}" />
+          <Separator />
+          <MenuItem Header="Duplicate Selected" Command="{Binding DuplicateSetTemplateCommand}"
+                    CommandParameter="{Binding SelectedJobSetTemplate}" />
+          <Separator />
+          <MenuItem Header="Delete Selected" Command="{Binding DeleteSetTemplateCommand}"
+                    CommandParameter="{Binding SelectedJobSetTemplate}" />
+        </ContextMenu>
+      </ComboBox.ContextMenu>
+    </ComboBox>
+
+    <ContentPresenter Content="{Binding DataContentControl}"
+                      Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3"
+                      VerticalAlignment="Stretch"
+                      HorizontalAlignment="Stretch" />
+  </Grid>
+</UserControl>

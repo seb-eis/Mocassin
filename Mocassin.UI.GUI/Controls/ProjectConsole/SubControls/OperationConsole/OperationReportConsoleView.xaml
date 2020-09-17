@@ -1,0 +1,98 @@
+﻿<UserControl
+  x:Class="Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.OperationConsole.OperationReportConsoleView"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.OperationConsole"
+  xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
+  d:DataContext="{d:DesignInstance local:OperationReportConsoleViewModel, IsDesignTimeCreatable=True}"
+  mc:Ignorable="d"
+  d:DesignHeight="450" d:DesignWidth="800"
+  Background="Transparent">
+
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*" />
+      <ColumnDefinition Width="Auto" />
+    </Grid.ColumnDefinitions>
+    <ComboBox Grid.Row="0" Grid.ColumnSpan="2"
+              ItemsSource="{Binding ProjectGraphs}"
+              SelectedItem="{Binding SelectedProject}"
+              Margin="{StaticResource App.Margin.VerticalStack}"
+              ToolTip="{StaticResource App.ToolTip.ProjectSelection}"
+              VerticalAlignment="Center"
+              IsEditable="True"
+              DisplayMemberPath="ProjectName"
+              Visibility="{Binding ElementName=ShowSelectionCheckMenuItem, Path=IsChecked, Converter={StaticResource App.Converter.BooleanToVisibility}}" />
+
+    <DataGrid Grid.Row="1" Grid.Column="0"
+              Name="ReportDataGrid"
+              ItemsSource="{Binding OperationCollectionViewModel.ObservableItems}"
+              SelectedItem="{Binding SelectedReport}"
+              AutoGenerateColumns="False"
+              IsReadOnly="True"
+              GridLinesVisibility="None"
+              BorderThickness="0"
+              ColumnWidth="*">
+      <DataGrid.RowHeaderTemplate>
+        <DataTemplate>
+          <views:ObjectRowHeaderLogo />
+        </DataTemplate>
+      </DataGrid.RowHeaderTemplate>
+
+      <i:Interaction.Triggers>
+        <i:EventTrigger EventName="MouseEnter">
+          <i:InvokeCommandAction Command="{Binding SoftUpdateStopCommand}"
+                                 CommandParameter="{StaticResource Bool.True}" />
+        </i:EventTrigger>
+        <i:EventTrigger EventName="MouseLeave">
+          <i:InvokeCommandAction Command="{Binding SoftUpdateStopCommand}"
+                                 CommandParameter="{StaticResource Bool.False}" />
+        </i:EventTrigger>
+      </i:Interaction.Triggers>
+
+      <DataGrid.ContextMenu>
+        <ContextMenu>
+          <MenuItem Header="Deactivate auto-updates" IsCheckable="True"
+                    IsChecked="{Binding ValidatorViewModel.IsIgnoreContentChange}" />
+          <MenuItem Header="Show errors only" IsCheckable="True"
+                    IsChecked="{Binding IsErrorContentFiltered}" />
+          <MenuItem Header="Show target selection" IsCheckable="True" IsChecked="True"
+                    Name="ShowSelectionCheckMenuItem" />
+        </ContextMenu>
+      </DataGrid.ContextMenu>
+
+      <DataGrid.RowStyle>
+        <Style TargetType="DataGridRow">
+          <Setter Property="ToolTip">
+            <Setter.Value>
+              <TextBlock Text="{Binding Mode=OneTime}" TextWrapping="Wrap" />
+            </Setter.Value>
+          </Setter>
+        </Style>
+      </DataGrid.RowStyle>
+
+      <DataGrid.Columns>
+        <DataGridTextColumn Header="Time" Width="Auto"
+                            Binding="{Binding TimeStamp, Mode=OneTime}" />
+        <DataGridTextColumn Header="Operation information"
+                            Binding="{Binding OperationDescription, Mode=OneTime}" />
+        <DataGridCheckBoxColumn Header="Accepted" Width="Auto"
+                                Binding="{Binding IsGood, Mode=OneTime}" />
+        <DataGridCheckBoxColumn Header="Invalid" Width="Auto"
+                                Binding="{Binding HasValidationError, Mode=OneTime}" />
+        <DataGridCheckBoxColumn Header="Conflict" Width="Auto"
+                                Binding="{Binding HasUnsolvedConflict, Mode=OneTime}" />
+        <DataGridCheckBoxColumn Header="Exception" Width="Auto"
+                                Binding="{Binding IsError, Mode=OneTime}" />
+
+      </DataGrid.Columns>
+    </DataGrid>
+  </Grid>
+</UserControl>

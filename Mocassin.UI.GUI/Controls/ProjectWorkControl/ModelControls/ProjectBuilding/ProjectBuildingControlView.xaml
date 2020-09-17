@@ -1,0 +1,102 @@
+﻿<UserControl
+  x:Class="Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuilding.ProjectBuildingControlView"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuilding"
+  xmlns:dataControl="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuilding.DataControl"
+  xmlns:content="clr-namespace:Mocassin.UI.GUI.Base.UiElements.Content"
+  d:DataContext="{d:DesignInstance local:ProjectBuildingControlViewModel, IsDesignTimeCreatable=True}"
+  mc:Ignorable="d"
+  d:DesignHeight="450" d:DesignWidth="800"
+  Background="Transparent">
+
+  <UserControl.Resources>
+    <ToolTip x:Key="Local.ToolTip.DeployInstruction">
+      <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+        <Run
+          Text="Define a full translation group containing a model project, customization and job definition source." />
+      </TextBlock>
+    </ToolTip>
+    <ToolTip x:Key="Local.ToolTip.LocalDeployment">
+      <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+        <Run Text="Automatic deploy of simulation databases to your local machine." />
+        <Run Text="The time and memory requirements primarily depend on the simulation count and lattice sizes." />
+        <Run Text="System uses all available cores and the system's responsiveness may be influenced." />
+      </TextBlock>
+    </ToolTip>
+  </UserControl.Resources>
+  <Grid>
+    <TabControl>
+
+      <TabItem Header="Localhost Deploy">
+        <Grid>
+
+          <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="{StaticResource App.Default.GridLength.Splitter}" />
+            <RowDefinition Height="*" />
+          </Grid.RowDefinitions>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}" />
+            <ColumnDefinition Width="*" />
+          </Grid.ColumnDefinitions>
+
+          <content:HeaderedGroup Grid.Column="0" Grid.Row="0" x:Name="BuildGraphControlGroupBox"
+                                 Style="{StaticResource App.Style.HeaderedGroup.BoldText}"
+                                 HeaderToolTip="{StaticResource Local.ToolTip.DeployInstruction}"
+                                 Header="Build Instruction Definitions:">
+            <dataControl:ProjectBuildGraphControlView DataContext="{Binding BuildGraphControlViewModel}" />
+          </content:HeaderedGroup>
+
+          <content:HeaderedGroup Grid.Row="2" Grid.Column="0"
+                                 HeaderToolTip="{StaticResource Local.ToolTip.LocalDeployment}">
+            <content:HeaderedGroup.Header>
+              <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
+                <Run Text="Deploy to Localhost:" />
+                <Run
+                  Text="{Binding BuildGraphControlViewModel.ProjectBuildCollectionViewModel.SelectedItem.Name, StringFormat={}[{0}]}" />
+              </TextBlock>
+            </content:HeaderedGroup.Header>
+
+            <dataControl:LocalProjectDeployControlView DataContext="{Binding LocalDeployControlViewModel}" />
+          </content:HeaderedGroup>
+
+          <GridSplitter Grid.Row="0" Grid.RowSpan="3" Grid.Column="1" />
+
+          <content:HeaderedGroup Grid.Row="0" Grid.Column="2" Grid.RowSpan="3"
+                                 HeaderToolTip="Metadata table of the last deploy process.">
+            <HeaderedContentControl.Header>
+              <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
+                <Run Text="Deploy Metadata Table:" />
+                <Run
+                  Text="{Binding LocalDeployControlViewModel.BuildTargetFilePath, StringFormat={}[{0}], TargetNullValue={}}" />
+              </TextBlock>
+            </HeaderedContentControl.Header>
+            <DataGrid
+              ItemsSource="{Binding LocalDeployControlViewModel.JobMetaDataCollectionControlViewModel.ObservableItems}"
+              IsReadOnly="True"
+              AutoGenerateColumns="False">
+              <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Id}" Header="Id" />
+                <DataGridTextColumn Binding="{Binding CollectionName, Mode=OneTime}" Header="Collection" />
+                <DataGridTextColumn Binding="{Binding ConfigName, Mode=OneTime}" Header="Config" />
+                <DataGridTextColumn Binding="{Binding JobIndex, Mode=OneTime}" Header="Duplicate" />
+                <DataGridTextColumn Binding="{Binding Mcsp, Mode=OneTime}" Header="MCSP" />
+                <DataGridTextColumn Binding="{Binding PreRunMcsp, Mode=OneTime}" Header="MCSP (Prerun)" />
+                <DataGridTextColumn Binding="{Binding FlagString, Mode=OneTime}" Header="Flags" />
+                <DataGridTextColumn Binding="{Binding DopingInfo, Mode=OneTime}" Header="Doping" />
+                <DataGridTextColumn Binding="{Binding LatticeInfo, Mode=OneTime}" Header="Lattice" />
+                <DataGridTextColumn Binding="{Binding ElectricFieldModulus, Mode=OneTime}" Header="Field [V/m]" />
+                <DataGridTextColumn Binding="{Binding BaseFrequency, Mode=OneTime}" Header="Max. Frequency [Hz]" />
+              </DataGrid.Columns>
+            </DataGrid>
+          </content:HeaderedGroup>
+        </Grid>
+      </TabItem>
+    </TabControl>
+
+  </Grid>
+</UserControl>

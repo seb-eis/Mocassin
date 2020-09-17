@@ -1,0 +1,153 @@
+﻿<UserControl
+  x:Class="Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslation.GridControl.BaseJobDescriptionControlView"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslation.GridControl"
+  xmlns:converter="clr-namespace:Mocassin.UI.GUI.Base.Converter"
+  xmlns:system="clr-namespace:System;assembly=mscorlib"
+  xmlns:jobs="clr-namespace:Mocassin.Model.Translator.Jobs;assembly=Mocassin.Model.Translator"
+  xmlns:content="clr-namespace:Mocassin.UI.GUI.Base.UiElements.Content"
+  xmlns:popup="clr-namespace:Mocassin.UI.GUI.Base.UiElements.Popup"
+  d:DataContext="{d:DesignInstance local:BaseJobDescriptionControlViewModel, IsDesignTimeCreatable=True}"
+  mc:Ignorable="d"
+  d:DesignHeight="450" d:DesignWidth="800"
+  Background="Transparent">
+
+  <UserControl.Resources>
+    <ObjectDataProvider MethodName="GetValues"
+                        ObjectType="{x:Type system:Enum}"
+                        x:Key="FlagValues">
+      <ObjectDataProvider.MethodParameters>
+        <x:Type TypeName="jobs:SimulationExecutionOverwriteFlags" />
+      </ObjectDataProvider.MethodParameters>
+    </ObjectDataProvider>
+  </UserControl.Resources>
+
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*" />
+      <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}" />
+      <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
+
+    <StackPanel Grid.Column="0">
+      <content:HeaderedGroup Header="Temperature [K]:">
+        <TextBox
+          Text="{Binding Temperature, Converter={StaticResource App.Converter.NumericExpressionToValue}, TargetNullValue=...}">
+          <TextBox.InputBindings>
+            <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
+          </TextBox.InputBindings>
+        </TextBox>
+      </content:HeaderedGroup>
+
+      <content:HeaderedGroup Header="Steps Per Particle (MCSP):">
+        <TextBox
+          Text="{Binding TargetMcsp, Converter={StaticResource App.Converter.NumericExpressionToValue}, TargetNullValue=...}">
+          <TextBox.InputBindings>
+            <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
+          </TextBox.InputBindings>
+        </TextBox>
+      </content:HeaderedGroup>
+
+      <content:HeaderedGroup Header="Execution Flags:">
+        <content:HeaderedGroup.HeaderToolTip>
+          <StackPanel>
+            <TextBlock Text="Possible Flags:" />
+            <ListView ItemsSource="{Binding Source={StaticResource FlagValues}}" Background="Transparent" />
+          </StackPanel>
+        </content:HeaderedGroup.HeaderToolTip>
+        <TextBox
+          Text="{Binding ExecutionFlags, Converter={StaticResource App.Converter.EnumToString}, TargetNullValue=...}">
+          <TextBox.InputBindings>
+            <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
+          </TextBox.InputBindings>
+        </TextBox>
+      </content:HeaderedGroup>
+    </StackPanel>
+    <StackPanel Grid.Column="2">
+      <content:HeaderedGroup Header="Time Limit (dd.hh:mm:ss):">
+        <TextBox
+          Text="{Binding TimeLimit, StringFormat={}{0:dd\\.hh\\:mm\\:ss}, Converter={converter:StringToNullableConverter}, TargetNullValue=...}">
+          <TextBox.InputBindings>
+            <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
+          </TextBox.InputBindings>
+        </TextBox>
+      </content:HeaderedGroup>
+
+      <content:HeaderedGroup Header="Minimal Success Rate [Hz]:">
+        <TextBox
+          Text="{Binding MinimalSuccessRate, Converter={StaticResource App.Converter.NumericExpressionToValue}, TargetNullValue=...}">
+          <TextBox.InputBindings>
+            <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
+          </TextBox.InputBindings>
+        </TextBox>
+      </content:HeaderedGroup>
+
+      <content:HeaderedGroup
+        HeaderToolTip="Advanced Option: Attaches a string instruction for the build system (e.g. custom routine data)"
+        Header="Instruction String:">
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+          </Grid.ColumnDefinitions>
+          <TextBox Name="InstructionTextBox" Grid.Column="0"
+                   Text="{Binding SingleLineInstruction, Mode=OneWay}"
+                   IsReadOnly="True">
+            <TextBox.InputBindings>
+              <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                          CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
+            </TextBox.InputBindings>
+          </TextBox>
+          <ToggleButton Grid.Column="0" Name="DropToggleButton"
+                        Height="{Binding ElementName=InstructionTextBox, Path=ActualHeight}"
+                        VerticalAlignment="Bottom" HorizontalAlignment="Right"
+                        HorizontalContentAlignment="Center" BorderBrush="{x:Static SystemColors.ActiveBorderBrush}"
+                        Width="16"
+                        Background="White"
+                        ToolTip="Toggle edit">
+            <ToggleButton.Content>
+              <Path Stroke="Gray" Fill="Black">
+                <Path.Data>
+                  <PathGeometry Figures="M 4,0 L 8,0 4,8 0,0 4,0" />
+                </Path.Data>
+              </Path>
+            </ToggleButton.Content>
+          </ToggleButton>
+          <popup:ControlOverlay Grid.Column="0" StaysOpen="True"
+                                IsOpen="{Binding ElementName=DropToggleButton, Path=IsChecked}"
+                                HorizontalOffset="0" AllowsTransparency="True">
+            <Grid>
+              <Border Background="White" BorderThickness="1" BorderBrush="Gray">
+                <StackPanel Margin="0,2,0,0">
+                  <TextBlock Text="Command Line:" />
+                  <TextBox ToolTip="Enter a line command, e.g. '-loadroutine name' to load a routine template.">
+                    <TextBox.InputBindings>
+                      <KeyBinding Key="Enter"
+                                  CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}, Path=Text}"
+                                  Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}, Path=DataContext.ExecuteStringInstructionCommand}" />
+                    </TextBox.InputBindings>
+                  </TextBox>
+                  <TextBlock Text="Instruction:" />
+                  <TextBox Text="{Binding Instruction}"
+                           Width="{Binding ElementName=InstructionTextBox, Path=ActualWidth}" Height="300"
+                           TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True"
+                           VerticalScrollBarVisibility="Auto" />
+                </StackPanel>
+                <Border.Effect>
+                  <DropShadowEffect ShadowDepth="4" Direction="290" Color="Black" Opacity=".5" BlurRadius="4" />
+                </Border.Effect>
+              </Border>
+            </Grid>
+          </popup:ControlOverlay>
+        </Grid>
+      </content:HeaderedGroup>
+    </StackPanel>
+  </Grid>
+</UserControl>

@@ -1,0 +1,25 @@
+﻿<UserControl x:Class="Mocassin.UI.GUI.Base.Views.NoContentView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800"
+             Width="Auto" Height="Auto">
+
+  <UserControl.Resources>
+    <Style TargetType="{x:Type TextBlock}" x:Key="ShadowTextStyle">
+      <Setter Property="FontSize" Value="20" />
+      <Setter Property="HorizontalAlignment" Value="Center" />
+      <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+  </UserControl.Resources>
+  <Grid>
+    <Image Source="pack://application:,,,/Resources/Icons/MocassinLogoRound3.png" Opacity=".25" />
+    <TextBlock Style="{StaticResource ShadowTextStyle}" Text="Empty">
+      <TextBlock.Effect>
+        <DropShadowEffect ShadowDepth="4" Direction="330" Color="Black" Opacity=".5" BlurRadius="4" />
+      </TextBlock.Effect>
+    </TextBlock>
+  </Grid>
+</UserControl>

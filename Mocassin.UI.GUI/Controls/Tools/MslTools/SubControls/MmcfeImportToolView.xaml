@@ -1,0 +1,63 @@
+﻿<UserControl x:Class="Mocassin.UI.GUI.Controls.Tools.MslTools.SubControls.MmcfeImportToolView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.Tools.MslTools.SubControls"
+             d:DataContext="{d:DesignInstance local:MmcfeImportToolViewModel, IsDesignTimeCreatable=True}"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800">
+  <Grid>
+    <StackPanel>
+      <DockPanel Dock="Right" Margin="{StaticResource App.Margin.VerticalStack}">
+        <Button Command="{Binding SelectMslPathCommand}" Content="Select Msl File" Width="200"
+                Margin="{StaticResource App.Margin.HorizontalStack}" />
+        <TextBox Text="{Binding MslFilePath}" />
+      </DockPanel>
+      <DockPanel Dock="Right" Margin="{StaticResource App.Margin.VerticalStack}">
+        <Button Command="{Binding SelectJobRootPathCommand}" Content="Select Job Root" Width="200"
+                Margin="{StaticResource App.Margin.HorizontalStack}" />
+        <TextBox Text="{Binding JobFolderRootPath}" />
+      </DockPanel>
+      <DockPanel Dock="Right" Margin="{StaticResource App.Margin.VerticalStack}">
+        <TextBlock Text="Compress Raw Data:" Margin="{StaticResource App.Margin.HorizontalStack}" />
+        <CheckBox IsChecked="{Binding IsZipRawActive}" Margin="{StaticResource App.Margin.HorizontalStack}"
+                  VerticalAlignment="Center" />
+        <TextBlock Text="Auto Select Root Path:" Margin="{StaticResource App.Margin.HorizontalStack}" />
+        <CheckBox IsChecked="{Binding IsAutoSelectRootByMslPath}" Margin="{StaticResource App.Margin.HorizontalStack}"
+                  VerticalAlignment="Center" />
+        <TextBlock Text="Delete Job Folders:" Margin="{StaticResource App.Margin.HorizontalStack}" />
+        <CheckBox IsChecked="{Binding IsDeleteJobFoldersActive}" Margin="{StaticResource App.Margin.HorizontalStack}"
+                  VerticalAlignment="Center" />
+        <TextBox Visibility="Hidden" />
+      </DockPanel>
+      <DockPanel Dock="Right" Margin="{StaticResource App.Margin.VerticalStack}">
+        <Button Command="{Binding RunImportCommand}" Content="Run Import" Width="200"
+                Margin="{StaticResource App.Margin.HorizontalStack}" />
+        <Grid>
+          <ProgressBar Maximum="{Binding ImportableCount, Mode=OneWay}" Value="{Binding ImportedCount, Mode=OneWay}"
+                       IsIndeterminate="{Binding IsIndeterminateProgress}">
+            <ProgressBar.Style>
+              <Style TargetType="{x:Type ProgressBar}">
+                <Style.Triggers>
+                  <DataTrigger Binding="{Binding IsIndeterminateProgress}" Value="False">
+                    <Setter Property="Opacity" Value="1" />
+                  </DataTrigger>
+                  <DataTrigger Binding="{Binding IsIndeterminateProgress}" Value="True">
+                    <Setter Property="Opacity" Value=".5" />
+                  </DataTrigger>
+                </Style.Triggers>
+              </Style>
+            </ProgressBar.Style>
+          </ProgressBar>
+          <TextBlock HorizontalAlignment="Center">
+            <Run Text="Imported:" />
+            <Run Text="{Binding ImportedCount, Mode=OneWay}" />
+            <Run Text="/" />
+            <Run Text="{Binding ImportableCount, Mode=OneWay}" />
+          </TextBlock>
+        </Grid>
+      </DockPanel>
+    </StackPanel>
+  </Grid>
+</UserControl>

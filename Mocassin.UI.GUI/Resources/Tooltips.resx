@@ -1,0 +1,424 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ModelObject_AbstractTransition" xml:space="preserve">
+    <value>State change chains or abstract transitions describe complex state change processes (mechanisms) as linearized chains of state change groups and their sequential dependencies independent of the actual geometry. Each chain can contain up to eight involved positions and the supported chain connection types are predefined by Mocassin. The chains are later bound to reference geometries of matching size and can be reused for multiple geometry bindings.
+
+[Properties]
+
+[Connection Pattern]
+Defines the connection pattern for the state change groups of the process chain. Each selectable entry defines how many positions are involved and the requirements for position stability. This restricts to which geometries the process chain can be bound later.
+
+[Activate Association/Dissociation]
+This flag marks a vehicle process chain to behave in an association/dissociation style, that is, the two subprocesses are executed in opposite movement directions within the linear chain, instead of the default unidirectional treatment, that is, both parts of the vehicle migrate in the same direction. If both processes are required, two processes must be defined due to the way Mocassin stores electric field influences for simulation. The flag has no effect for non-vehicle processes.
+
+[State Change Groups]
+The list of state change groups in the correct order for the process to take place. E.g., for a three-position migration this should contain three groups in order ‘species to vacancy’, ‘void to species’, and ‘species to vacancy’ in accordance with the state changes on the involved positions.</value>
+  </data>
+  <data name="ModelObject_BuildingBlock" xml:space="preserve">
+    <value>Lattice building block objects describe a default host matrix for supercell creation to which doping processes can be applied. The system is currently unfinished and allows only the default host matrix to be used for the entire supercell.</value>
+  </data>
+  <data name="ModelObject_CellParameterSettings" xml:space="preserve">
+    <value>The unit cell settings define the geometry of the unit cell using cell parameters and angles. The data is limited by the selected space group, e.g. if the underlying space group is cubic, the system automatically enforces cubic parameters and angles.
+
+[Properties]
+
+[Structure Name]
+Name your structure.  This property currently has no meaningful effect.
+
+[Parameter a,b,c]
+The cell parameters of the unit cell in [Å].
+
+[Angle α,β,γ] 
+The angles of the unit cell in degree.</value>
+  </data>
+  <data name="ModelObject_DefectEnergy" xml:space="preserve">
+    <value>Position defect energies can be used to assign each possible occupation that is not ‘Void’ for each defined unit cell position a basic offset energy. The most common use for this model object is to provide basic barriers for KMC simulations by assigning migrating species non-zero energies on unstable positions.
+
+[Properties]
+
+[Particle] (readonly)
+The particle that the energy value will be affiliated with.
+
+[Cell Position] (readonly)
+The unit cell position the energy value will be affiliated with.
+
+[Energy]
+The offset energy in [eV].</value>
+  </data>
+  <data name="ModelObject_Doping" xml:space="preserve">
+    <value>Doping objects describe how a lattice building block is manipulated by particle exchanges. Doping is always subjected to uniform random placement rules and can be performed in a sequential order to perform dependent replacement operations. Each doping defined here can later be quantified in generated parameterization templates.
+
+[Properties]
+
+[Auto Charge Balance]
+Activating this flag causes Mocassin to automatically calculate the required amount of dependent exchange to achieve charge neutrality. Since supercells have integer occupation numbers, charge compensation always rounds down to the primary exchange fraction to the first value that allows the doping to counter doping particle ratio to be described by integer numbers.
+
+[Order of Application]
+Defines an integer order number. All dopings will be applied in ascending order.
+
+[Primary Exchange]
+The primary exchange of the doping. The value of replacement will be given as 0 to 100% during model parameterization.
+
+[Dependent Exchange]
+The dependent exchange used for charge balancing. Settings this to the same value as the primary exchange allows to define uncompensated dopings.
+
+[Building Block Binding]
+Binds the doping to a building block. This is currently limited to the default building block.</value>
+  </data>
+  <data name="ModelObject_EnvironmentCutoffRange" xml:space="preserve">
+    <value>The stable environment cutoff radius defines the maximum range until which Mocassin will automatically search and list pair interactions and accept multi-body clusters. The value is given in Å and is applied to all stable environments.</value>
+  </data>
+  <data name="ModelObject_GroupInteraction" xml:space="preserve">
+    <value>Group interactions or clusters are multi-body interactions consisting of a center or start position and up-to eight surrounding positions that are defined by a symmetry-reduced reference geometry. The provided data is symmetry extended and permuted with respect to the space group symmetry and duplicates that can be projected onto each other are removed. It is important to note that clusters are additive to existing pair interactions. During simulation building, cluster geometries are encoded using existing pair interactions to reduce redundant occupation lookups, thus surrounding positions that are affected by the cutoff or filters relative to the center will be rejected by Mocassin.
+
+[Properties]
+
+[Center Reference Position]
+The unit cell position that serves as the center point for building the cluster. The later quantified interaction energy will be associated with this position, that is, the cluster energy will be considered only on positions that are symmetry equivalent to this position.
+
+[Surrounding Geometry]
+The list of surrounding positions that are included in the permutation generation and occupation lookup during simulation. In contrast to the center position, the energy of these position is not affected by the defined cluster during simulation.</value>
+  </data>
+  <data name="ModelObject_InteractionFilter" xml:space="preserve">
+    <value>Interaction filters are used to remove specific subsets of interactions from the pair interaction search and permutation system. They are implemented as hollow sphere filters that filter all interactions between two sublattices within a given range interval.
+
+[Properties]
+
+[Min. Radius]
+The lower limiting radius in [Å] from which the filter is applied.
+
+[Max. Radius]
+The upper limiting radius in [Å] from which the filter is no longer applied.
+
+[Reference Position 1]
+The first position to which the filter is applied. For consistency reasons removing an A-B interaction requires the B-A interaction to be removed as well.
+
+[Reference Position 2]
+The second position to which the filter is applied. For consistency reasons removing an A-B interaction requires the B-A interaction to be removed as well.</value>
+  </data>
+  <data name="ModelObject_KineticSimulation" xml:space="preserve">
+    <value>Kinetic or KMC simulation model objects serve as the base definitions for simulations that target the Kinetic Monte Carlo solver. They define the allowed transitions within a simulation and provide a set of fallback simulation parameters. Each KMC simulation job set later requires the definition of which MMC simulation base object to use for data generation.
+
+[Properties]
+
+[Transitions]
+Defines the list of allowed Kinetic transitions during simulation. Transitions are added selecting values from the drop-down menu.
+
+[Relaxation Steps per Particle]
+The number of pre-run/autonormalization steps per mobile particle in the system. This defines the fallback value for how long each simulation is pre-equilibrated and the normalization is dynamically before the main run is conducted.
+
+[Normalization Probability]
+The normalization probability defines a new upper acceptance probability limit in range (0…1] that can be used to deliberately over-normalize a simulation. Unity means no overnormalization.
+
+[Electric Field Modulus]
+The amplitude of the simulated external electric field. Setting the value to zero disables the electric field.
+
+[Electric Field Vector]
+Provides a direction vector for the external electric field in cell coordinates a,b,c. The provided vector is implicitly normalized behind the scenes and is not required to have a length of unity.</value>
+  </data>
+  <data name="ModelObject_KineticTransition" xml:space="preserve">
+    <value>Kinetic or KMC transition objects define time and space dependent state changes for the lattices by binding a complex process chain to a symmetry-reduced reference geometry. They serve as definition objects and can later be assigned to actual simulations. The resulting migration paths are deduced with the space group symmetry and the existing subprocesses after occupation permutation can be customized later to assign an attempt frequency to each migration.
+
+[Properties]
+
+[State Change Chain]
+Refer to the metropolis tooltip for an explanation. Here, all non-metropolis chains can be selected.
+
+[Binding Geometry]
+An arbitrary reference geometry of the KMC transition as a chain of positions. It is important that each position exists in the context of symmetry and has the correct stability. It is usually recommended to choose the starting position in the origin unit cell.</value>
+  </data>
+  <data name="ModelObject_MetropolisSimulation" xml:space="preserve">
+    <value>Metropolis or MMC simulation model objects serve as the base definitions for simulations that target the Metropolis Monte Carlo solver. They define the allowed transitions within a simulation and provide a set of fallback simulation parameters. Each MMC simulation job set later requires the definition of which MMC simulation base object to use for data generation.
+
+[Properties]
+
+[Transitions]
+Defines the list of allowed Metropolis transitions during simulation. Transitions are added selecting values from the drop-down menu.
+
+[Relative Energy Break Tolerance]
+Defines a relative tolerance delta below which two close consecutive system energy averages trigger an automated simulation interrupt, that is, the solver assumes the system is fully converged. It is usually recommended to leave this value at zero for productions runs and use it to estimate the number of steps required in pre-production test runs only.
+
+[Break Check Sample]
+The number of successful steps that are collected and used to calculate an averaged system energy before the next break check is performed.
+
+[Break Check Interval]
+This value is currently not supported.
+
+[Result Sample Size]
+This value is currently not supported. MMC system energy samples can be recorded into histograms using the MMCFE extension routine, also called simulated annealing.</value>
+  </data>
+  <data name="ModelObject_MetropolisTransition" xml:space="preserve">
+    <value>Metropolis or MMC transition objects describe time and space independent particles swaps between two or within one sublattice. They serve as definition objects only and can later be assigned to actual simulations. Defining more transitions than required has no negative impact as the simulations only include transitions assigned to them.
+
+[Properties]
+
+[State Change Chain]
+Select a previously created state change chain that describes the abstract transition for the metropolis transition. The system automatically deducts which state changes can be executed using the given sublattice bindings. Only chains with ‘2-Site Metropolis’ pattern can be selected here.
+
+[Reference Position 1,2]
+The two reference positions 1,2 describing the sublattice bindings for the first and second state exchange group of the process chain, respectively.</value>
+  </data>
+  <data name="ModelObject_OccupationExchange" xml:space="preserve">
+    <value>Occupation exchanges define a partial doping by providing replacement of one particle with another on a specific sublattice. Two occupation exchanges with opposite charge deltas can be used by Mocassin to infer charge compensation.
+
+[Properties]
+
+[Cell Position]
+The unit cell reference position of the affected sublattice.
+
+[Old Particle]
+The original particle that is replaced.
+
+[New Particle]
+The new particle that serves as the replacement.</value>
+  </data>
+  <data name="ModelObject_Particle" xml:space="preserve">
+    <value>The particle model object describes a species of the simulation. A total of 63 custom species can be created and an implicit empty state called ‘Void’ exists. It is recommended to define as few particles as possible and to use placeholders for reusability if multiple doping types are to be simulated, e.g. “trivalent doping ion”.
+
+[Properties]
+
+[Symbol]
+Assign an element or pseudoelement symbol that identifies the type of the particle. This symbol will be used to detect and process mass conservation between multiple charge states of the same species, e.g. Ce3+ and Ce4+.
+
+[Charge]
+Assign a charge value as multiples of the elemental charge 'e'. It is recommended to define relative charge values instead of absolute values when simulating charge transfer via small polaran hopping since the conductivity dumps by the simulator use the charge of the mobile species for mobility/conductivity calculations.
+
+[Vacancy Flag]
+Assigns the vacancy flag which identifies a particle to behave like a vacancy pseudoparticle instead of a regular particle. One vacancy type can be used for all purposes, it is however recommended to define one vacancy per mobile sublattice. This causes the simulator to track the movement individually.</value>
+  </data>
+  <data name="ModelObject_ParticleSet" xml:space="preserve">
+    <value>Particle sets define the possible occupations sets required within the simulation. Each unit cell position requires a particle set to define the allowed occupations and limit the permutation options. E.g., a simple vacancy mechanism with one sublattice requires two particle sets: (i) the set for the stable position containing the mobiles species and a vacancy; (ii) the set for the unstable transition state which contains only the mobile particle since the usual state of unstable positions is the ‘Void’ particle by default. Occupation sets can be reused and assigned to multiple unit cell positions if required.
+
+[Properties]
+
+[Particles]
+The list of particles of the set. The first particle in this set defines the default state if the occupation set is assigned to a stable unit cell position. If the occupation is assigned to an unstable position, then the ‘Void’ states is used as a default. Particles can be added by drag &amp; drop from the particle definition grid.</value>
+  </data>
+  <data name="ModelObject_Simulation_SharedSettings" xml:space="preserve">
+    <value>
+[Temperature]
+The simulation temperature in [K].
+
+[Target Steps per Particle]
+The minimum number of Monte Carlo steps per mobile particle (MCSP) that is conducted in the main run before the solver stops the simulation. This value is usually not reached exactly as the solver executes simulations with specific block sizes for performance reasons.
+
+[Simulation Block Count]
+This value is currently not supported.
+
+[Random Number Generator Seed]
+Provides a fallback seed for the RNG. Settings this value is not recommended.
+
+[Time Limit]
+Defines a total runtime limit after which the solver stops execution.
+
+[Minimal Step Rate]
+Defines the minimal Monte Carlo success rate of the solver in [Hz]. If the solver cannot achieve this value it will automatically stop. This value is intended to detect very slow or partially stuck simulations, it can however not detect completely stuck simulations.
+
+[Job Duplication Count]
+Defines how many duplicates of each job will be generated for statistical data evaluation.</value>
+  </data>
+  <data name="ModelObject_SpaceGroup" xml:space="preserve">
+    <value>The space group is a unique model object that defines the cell symmetry operations. Mocassin ships with a database for all 230 space groups, some of which with multiple unique axis options. The group is defined by selecting an entry from the provided list.
+
+[Properties]
+
+[Group Number] (readonly)
+The number/index of the group in the international tables of crystallography. 
+
+[Mauguin] (readonly)
+The Hermann-Mauguin symbol of the space group.
+
+[Crystal Type] (readonly)
+The crystal system affiliated with the space group.
+
+[Variation Name] (readonly)
+The name of the variation. This entry is only relevant for space groups with multiple unique axis or origin choices.
+
+[Variation Type] (readonly)
+The type of the variation.</value>
+  </data>
+  <data name="ModelObject_StateExchangeGroup" xml:space="preserve">
+    <value>The state exchange group defines allowed state changes for a local position. Due to the way Mocassin stores electric field influences for simulations, it is only allowed to group state changes that describe equivalent charge changes. Often, each state change group contains only one entry. A possible example for more than one entry would be treatment of equivalent species with a single process, e.g. vacancy movement with multiple halogen ions in the same sublattice, where the type of the moving ion is not relevant to the user. For typical use cases, it is recommended to use the auto convert button on the state changes grid to create these entries.
+
+[Properties]
+
+[State Changes]
+The list of affiliated state changes that can be treated in an equivalent fashion. The items can be defined in any order and are added by drag &amp; drop from the state change definition grid.</value>
+  </data>
+  <data name="ModelObject_StateExchangePair" xml:space="preserve">
+    <value>The state change object or state exchange pair defines a pair of interchangeable local states required to describe complex state changes for the system as a swap between two particles. The two states are arbitrarily named ‘donor state’ and ‘acceptor state’ and can be conducted in both directions. For KMC it is usually recommended to assign the vacancy state as the acceptor. E.g. a vacancy mechanism requires two state changes: (i) a local particle can switch from a vacancy state (acceptor) to the mobile species (donor) on the stable positions; (ii) the unstable position switches from the ‘Void’ particle (acceptor) to the mobile species (donor) during the transition state.
+
+[Properties]
+
+[Acceptor State]
+Defines the occupying particle in the acceptor/first state of the state change.
+
+[Donor State]
+Defines the occupying particle in the donor/second state of the state change.
+
+
+[Other]
+
+[Quick Grouping]
+Automatically creates and adds a state exchange group containing only this state change definition. This is a convenience functionality for basic mechanisms and processes that do not require complex state change groups with multiple change entries.</value>
+  </data>
+  <data name="ModelObject_UnitCellPosition" xml:space="preserve">
+    <value>The cell positions define the symmetry reduced position of the simulation unit cell. Since Mocassin uses fixed positions, it is also required to define the unstable transition sites when KMC simulations are conducted.
+
+[Properties]
+
+[A, B, C]
+The a,b,c offset of the unit cell position in range [0…1).
+
+[Stability]
+The stability flag of the position. Choose ‘stable’ for regular lattice positions and ‘unstable’ for KMC transition positions.
+
+[Occupation]
+The occupation set of the unit cell position that defines the allowed species/particles. The previously defined particle sets can be selected from the drop-down menu.</value>
+  </data>
+  <data name="ModelObject_UnstableEnvironment" xml:space="preserve">
+    <value>Unstable environment model objects behave like the regular environment settings. The difference is that each unstable position has its own interaction range and filter set since the interaction is one way from unstable to stable. These model objects cannot be added manually, they are automatically generated by the model building system.
+
+[Properties]
+
+[Center] (readonly)
+The center unit cell position the environment data is applied to.
+
+[Cutoff Radius]
+The maximum interaction radius in [Å].
+
+[Interaction Filters]
+The hollow sphere interaction filters of the environment. The first reference position cannot be defined as it is implicitly defined by the object.</value>
+  </data>
+  <data name="Parametrization_KineticTransitionRule" xml:space="preserve">
+    <value>Kinetic transition rule sets are generated for each KMC transition allowed in the simulation. The contain the symmetry reduced set of transition rules describing the start state, transition state, and final state of the migration path during a transition attempt. They are used to customize the transition attempt frequency of KMC events.
+
+[Properties]
+
+[Unique Rules] (readonly)
+Defines how many unique rule permutations exist.
+
+[Source Transition] (readonly)
+Defines the name of the transition model object that was used for rule generation.
+
+[Transition Rules]
+Each transition rule defines how man hidden rules (symmetry equivalent) exist and provides an option to set the event attempt frequency in [Hz].</value>
+  </data>
+</root>

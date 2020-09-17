@@ -1,0 +1,46 @@
+﻿<UserControl
+  x:Class="Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel.GridControl.BuildingBlockContentControlView"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel.GridControl"
+  xmlns:comboBox="clr-namespace:Mocassin.UI.GUI.Base.UiElements.ComboBox"
+  xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
+  d:DataContext="{d:DesignInstance local:BuildingBlockContentControlViewModel, IsDesignTimeCreatable=True}"
+  mc:Ignorable="d"
+  d:DesignHeight="450" d:DesignWidth="800"
+  Background="Transparent">
+  <Grid>
+    <DataGrid ItemsSource="{Binding Items}"
+              SelectedItem="{Binding SelectedItem}"
+              ColumnWidth="*"
+              AutoGenerateColumns="False"
+              CanUserAddRows="False"
+              CanUserDeleteRows="False">
+      <DataGrid.RowHeaderTemplate>
+        <DataTemplate>
+          <views:ObjectRowHeaderLogo />
+        </DataTemplate>
+      </DataGrid.RowHeaderTemplate>
+
+      <DataGrid.Columns>
+        <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
+        <DataGridTextColumn Header="Cell Position" Binding="{Binding ReferencePosition.Name}"
+                            IsReadOnly="True" />
+        <DataGridTextColumn Header="A" Binding="{Binding Vector.A}"
+                            IsReadOnly="True" />
+        <DataGridTextColumn Header="B" Binding="{Binding Vector.B}"
+                            IsReadOnly="True" />
+        <DataGridTextColumn Header="C" Binding="{Binding Vector.C}"
+                            IsReadOnly="True" />
+        <comboBox:BindableDataGridComboBoxColumn Header="Occupation"
+                                                 CanUserSort="False"
+                                                 ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.SelectableOccupationParticles}"
+                                                 SelectedItemBinding="{Binding Particle}"
+                                                 DisplayMemberPath="Name"
+                                                 IsReadOnly="True" />
+      </DataGrid.Columns>
+    </DataGrid>
+  </Grid>
+</UserControl>

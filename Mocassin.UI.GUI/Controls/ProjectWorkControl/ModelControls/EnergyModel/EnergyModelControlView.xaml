@@ -1,0 +1,67 @@
+﻿<UserControl
+  x:Class="Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.EnergyModelControlView"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel"
+  xmlns:dataControl="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.DataControl"
+  xmlns:content="clr-namespace:Mocassin.UI.GUI.Base.UiElements.Content"
+  xmlns:res="clr-namespace:Mocassin.UI.GUI.Resources"
+  mc:Ignorable="d"
+  d:DataContext="{d:DesignInstance local:EnergyModelControlViewModel, IsDesignTimeCreatable=True}"
+  d:DesignHeight="450" d:DesignWidth="800">
+
+  <UserControl.Resources>
+    <ToolTip x:Key="Local.ToolTip.UnstableEnvironment">
+      <TextBlock Text="{x:Static res:Tooltips.ModelObject_UnstableEnvironment}" />
+    </ToolTip>
+    <ToolTip x:Key="Local.ToolTip.GroupInteractions">
+      <TextBlock Text="{x:Static res:Tooltips.ModelObject_GroupInteraction}" />
+    </ToolTip>
+    <ToolTip x:Key="Local.ToolTip.DefectEnergies">
+      <TextBlock Text="{x:Static res:Tooltips.ModelObject_DefectEnergy}" />
+    </ToolTip>
+  </UserControl.Resources>
+  <Grid>
+    <TabControl>
+      <TabItem Header="Environment Ranges &amp; Filters">
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}" />
+            <ColumnDefinition Width="*" />
+          </Grid.ColumnDefinitions>
+          <dataControl:EnergyParameterControlView Grid.Column="0" DataContext="{Binding ParameterControlViewModel}" />
+          <GridSplitter Grid.Column="1" />
+          <content:HeaderedGroup Grid.Column="2" Style="{StaticResource App.Style.HeaderedGroup.BoldText}"
+                                 HeaderToolTip="{StaticResource Local.ToolTip.UnstableEnvironment}"
+                                 Header="Unstable Environment Settings:">
+            <dataControl:UnstableEnvironmentControlView DataContext="{Binding UnstableEnvironmentViewModel}" />
+          </content:HeaderedGroup>
+        </Grid>
+      </TabItem>
+
+      <TabItem Header="Advanced Options">
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}" />
+            <ColumnDefinition Width="*" />
+          </Grid.ColumnDefinitions>
+          <content:HeaderedGroup Grid.Column="0" Style="{StaticResource App.Style.HeaderedGroup.BoldText}"
+                                 HeaderToolTip="{StaticResource Local.ToolTip.GroupInteractions}"
+                                 Header="Interaction Group Definitions:">
+            <dataControl:GroupInteractionControlView DataContext="{Binding GroupInteractionViewModel}" />
+          </content:HeaderedGroup>
+          <GridSplitter Grid.Column="1" />
+          <content:HeaderedGroup Grid.Column="2" Style="{StaticResource App.Style.HeaderedGroup.BoldText}"
+                                 HeaderToolTip="{StaticResource Local.ToolTip.DefectEnergies}"
+                                 Header="Position Defect Energies:">
+            <dataControl:DefectEnergyControlView DataContext="{Binding DefectEnergyViewModel}" />
+          </content:HeaderedGroup>
+        </Grid>
+      </TabItem>
+    </TabControl>
+  </Grid>
+</UserControl>

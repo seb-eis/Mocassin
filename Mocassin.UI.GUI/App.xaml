@@ -1,0 +1,491 @@
+<Application x:Class="Mocassin.UI.GUI.App" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" d1p1:Ignorable="d"
+             xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:s="clr-namespace:System;assembly=mscorlib"
+             xmlns:uiCommands="clr-namespace:Mocassin.UI.Base.Commands.UiCommands"
+             xmlns:converter="clr-namespace:Mocassin.UI.GUI.Base.Converter"
+             xmlns:reflection="clr-namespace:System.Reflection;assembly=mscorlib"
+             xmlns:content="clr-namespace:Mocassin.UI.GUI.Base.UiElements.Content">
+  <Application.Resources>
+    <ResourceDictionary>
+
+      <!-- Converters and commands -->
+      <BooleanToVisibilityConverter x:Key="App.Converter.BooleanToVisibility" />
+      <converter:NullToVisibilityConverter x:Key="App.Converter.NullToVisibility" />
+      <converter:NumericExpressionToValueConverter x:Key="App.Converter.NumericExpressionToValue" />
+      <converter:EnumToStringConverter x:Key="App.Converter.EnumToString" />
+      <uiCommands:UpdateTextBoxSourceCommand x:Key="App.Command.UpdateTextBoxSource" />
+
+      <!-- System color overwrites -->
+
+      <!-- Margins -->
+      <Thickness x:Key="App.Margin.Default" Bottom="2" Top="2" Left="2" Right="2" />
+      <Thickness x:Key="App.Margin.HorizontalStack" Bottom="0" Top="0" Left="0" Right="4" />
+      <Thickness x:Key="App.Margin.VerticalStack" Bottom="4" Top="0" Left="0" Right="0" />
+      <Thickness x:Key="App.Margin.VerticalStackLarge" Bottom="10" Top="0" Left="0" Right="0" />
+      <Thickness x:Key="App.Margin.HeaderedContent.Content" Bottom="0" Top="4" Left="0" Right="0" />
+      <Thickness x:Key="App.Margin.HeaderedContent.Header" Bottom="0" Top="2" Left="0" Right="0" />
+
+      <!-- Default values -->
+      <s:Double x:Key="App.Default.FontSize">12</s:Double>
+      <s:Double x:Key="App.Default.Size.Splitter">12</s:Double>
+      <GridLength x:Key="App.Default.GridLength.Splitter">5</GridLength>
+
+      <!-- Always on styles -->
+      <Style TargetType="{x:Type UserControl}">
+        <Setter Property="Background" Value="Transparent" />
+      </Style>
+
+      <Style TargetType="{x:Type TabItem}">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Template">
+          <Setter.Value>
+            <ControlTemplate TargetType="{x:Type TabItem}">
+              <Border Margin="-3,0,3,0" Name="Border">
+                <Grid Name="Grid" Margin="5,2,5,2">
+                  <ContentPresenter Name="ContentSite" ContentSource="Header" />
+                </Grid>
+              </Border>
+              <ControlTemplate.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                  <Setter TargetName="Border" Property="Background"
+                          Value="{x:Static SystemColors.InactiveCaptionBrush}" />
+                </Trigger>
+                <Trigger SourceName="Border" Property="IsMouseOver" Value="True">
+                  <Setter TargetName="Border" Property="Background" Value="{x:Static SystemColors.ActiveCaptionBrush}" />
+                </Trigger>
+                <Trigger Property="IsFocused" Value="True">
+                  <Setter TargetName="Border" Property="Background" Value="{x:Static SystemColors.ActiveCaptionBrush}" />
+                </Trigger>
+              </ControlTemplate.Triggers>
+            </ControlTemplate>
+          </Setter.Value>
+        </Setter>
+      </Style>
+
+      <Style TargetType="{x:Type TabItem}" x:Key="App.Style.RotatedTabItemLeft">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Template">
+          <Setter.Value>
+            <ControlTemplate TargetType="{x:Type TabItem}">
+              <Border Margin="-3,-2,-1,2" Name="Border">
+                <Grid Name="Grid" Margin="0,10,0,10">
+                  <ContentPresenter Name="ContentSite" ContentSource="Header">
+                    <ContentPresenter.LayoutTransform>
+                      <RotateTransform Angle="270" />
+                    </ContentPresenter.LayoutTransform>
+                  </ContentPresenter>
+                </Grid>
+              </Border>
+              <ControlTemplate.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                  <Setter TargetName="Border" Property="Background"
+                          Value="{x:Static SystemColors.InactiveCaptionBrush}" />
+                </Trigger>
+                <Trigger SourceName="Border" Property="IsMouseOver" Value="True">
+                  <Setter TargetName="Border" Property="Background" Value="{x:Static SystemColors.ActiveCaptionBrush}" />
+                </Trigger>
+                <Trigger Property="IsFocused" Value="True">
+                  <Setter TargetName="Border" Property="Background" Value="{x:Static SystemColors.ActiveCaptionBrush}" />
+                </Trigger>
+              </ControlTemplate.Triggers>
+            </ControlTemplate>
+          </Setter.Value>
+        </Setter>
+      </Style>
+
+      <Style TargetType="{x:Type TabControl}">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="FontSize" Value="{DynamicResource App.Default.FontSize}" />
+        <Style.Triggers>
+          <Trigger Property="TabStripPlacement" Value="Left">
+            <Setter Property="BorderThickness" Value="2,1,1,1" />
+          </Trigger>
+          <Trigger Property="TabStripPlacement" Value="Top">
+            <Setter Property="BorderThickness" Value="1,2,1,1" />
+          </Trigger>
+          <Trigger Property="TabStripPlacement" Value="Right">
+            <Setter Property="BorderThickness" Value="1,1,2,1" />
+          </Trigger>
+          <Trigger Property="TabStripPlacement" Value="Bottom">
+            <Setter Property="BorderThickness" Value="1,1,1,2" />
+          </Trigger>
+        </Style.Triggers>
+      </Style>
+
+      <Style TargetType="{x:Type Button}">
+        <Setter Property="Background" Value="Transparent" />
+      </Style>
+
+      <Style TargetType="{x:Type ComboBox}">
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Background" Value="Transparent" />
+      </Style>
+
+      <Style TargetType="{x:Type ScrollBar}">
+        <Setter Property="Background" Value="Transparent" />
+      </Style>
+
+      <Style TargetType="{x:Type DataGrid}">
+        <Setter Property="HeadersVisibility" Value="All" />
+        <Setter Property="GridLinesVisibility" Value="All" />
+        <Setter Property="RowBackground" Value="White" />
+        <Setter Property="Background" Value="White" />
+        <Setter Property="AlternatingRowBackground" Value="White" />
+        <Setter Property="VirtualizingPanel.VirtualizationMode" Value="Standard" />
+      </Style>
+
+      <Style TargetType="{x:Type DataGridCell}">
+        <Setter Property="Template">
+          <Setter.Value>
+            <ControlTemplate TargetType="{x:Type DataGridCell}">
+              <Grid Background="{TemplateBinding Background}">
+                <ContentPresenter VerticalAlignment="Center" Margin="2,2,2,2" />
+              </Grid>
+            </ControlTemplate>
+          </Setter.Value>
+        </Setter>
+      </Style>
+
+      <Style TargetType="{x:Type Thumb}" x:Key="App.Style.ColumnHeader.ThumbStyle">
+        <Setter Property="Template">
+          <Setter.Value>
+            <ControlTemplate TargetType="{x:Type Thumb}">
+              <Rectangle Width="1" Stroke="Transparent" Cursor="SizeWE" />
+            </ControlTemplate>
+          </Setter.Value>
+        </Setter>
+      </Style>
+
+      <Style TargetType="{x:Type DataGridRowHeader}">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Template">
+          <Setter.Value>
+            <ControlTemplate TargetType="{x:Type DataGridRowHeader}">
+              <Grid>
+                <Border BorderThickness="0,0,0,1" BorderBrush="Black" Background="Transparent" Name="HeaderBorder">
+                  <ContentPresenter />
+                </Border>
+              </Grid>
+              <ControlTemplate.Triggers>
+                <DataTrigger
+                  Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=GridLinesVisibility}"
+                  Value="None">
+                  <Setter TargetName="HeaderBorder" Property="BorderThickness" Value="0" />
+                </DataTrigger>
+              </ControlTemplate.Triggers>
+            </ControlTemplate>
+          </Setter.Value>
+        </Setter>
+      </Style>
+
+      <Style TargetType="{x:Type DataGridColumnHeader}">
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="MinWidth" Value="0" />
+        <Setter Property="MinHeight" Value="0" />
+        <Setter Property="Foreground" Value="Black" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+          <Setter.Value>
+            <ControlTemplate TargetType="{x:Type DataGridColumnHeader}">
+              <Grid>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="*" />
+                  <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Border x:Name="BackgroundBorder" BorderThickness="0,0,0,2"
+                        Background="Transparent"
+                        BorderBrush="Black"
+                        Grid.ColumnSpan="2" />
+                <ContentPresenter Grid.Column="0" Margin="6,3,6,3" VerticalAlignment="Center" />
+                <Path x:Name="SortArrow" Visibility="Collapsed" Data="M 0,0 L 1,0 0.5,1 z" Stretch="Fill"
+                      Grid.Column="1" Width="8" Height="6" Fill="Black" Margin="0,0,8,0"
+                      VerticalAlignment="Center" RenderTransformOrigin="0.5, 0.4" />
+                <Rectangle Grid.Column="0" Width="1" Fill="#FF808080" HorizontalAlignment="Right" Grid.ColumnSpan="2" />
+                <Thumb x:Name="PART_LeftHeaderGripper" Grid.Column="0" HorizontalAlignment="Left"
+                       Style="{StaticResource App.Style.ColumnHeader.ThumbStyle}" />
+                <Thumb x:Name="PART_RightHeaderGripper" Grid.Column="1" HorizontalAlignment="Right"
+                       Style="{StaticResource App.Style.ColumnHeader.ThumbStyle}" />
+              </Grid>
+              <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                  <Setter TargetName="BackgroundBorder" Property="Background"
+                          Value="{x:Static SystemColors.MenuHighlightBrush}" />
+                  <Setter TargetName="BackgroundBorder" Property="BorderBrush"
+                          Value="{x:Static SystemColors.HighlightBrush}" />
+                </Trigger>
+                <Trigger Property="SortDirection" Value="Ascending">
+                  <Setter TargetName="SortArrow" Property="Visibility" Value="Visible" />
+                  <Setter TargetName="SortArrow" Property="RenderTransform">
+                    <Setter.Value>
+                      <RotateTransform Angle="180" />
+                    </Setter.Value>
+                  </Setter>
+                </Trigger>
+                <Trigger Property="SortDirection" Value="Descending">
+                  <Setter TargetName="SortArrow" Property="Visibility" Value="Visible" />
+                </Trigger>
+                <Trigger Property="DisplayIndex" Value="0">
+                  <Setter TargetName="PART_LeftHeaderGripper" Property="Visibility" Value="Collapsed" />
+                </Trigger>
+              </ControlTemplate.Triggers>
+            </ControlTemplate>
+          </Setter.Value>
+        </Setter>
+
+      </Style>
+
+      <Style TargetType="{x:Type Menu}">
+        <Setter Property="FontSize" Value="{DynamicResource App.Default.FontSize}" />
+      </Style>
+
+      <Style TargetType="{x:Type TextBlock}">
+        <Setter Property="FontSize" Value="{DynamicResource App.Default.FontSize}" />
+      </Style>
+
+      <Style TargetType="{x:Type TextBox}">
+        <Setter Property="FontSize" Value="{DynamicResource App.Default.FontSize}" />
+        <Style.Triggers>
+          <Trigger Property="IsReadOnly" Value="True">
+            <Setter Property="Opacity" Value=".5" />
+          </Trigger>
+          <Trigger Property="IsReadOnly" Value="False">
+            <Setter Property="Opacity" Value="1" />
+          </Trigger>
+        </Style.Triggers>
+      </Style>
+
+      <Style TargetType="{x:Type GridSplitter}">
+        <Setter Property="ShowsPreview" Value="True" />
+        <Setter Property="ResizeBehavior" Value="PreviousAndNext" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+      </Style>
+
+      <Style TargetType="{x:Type ComboBox}" x:Key="App.Style.ColorSelectionComboBox">
+        <Setter Property="ItemTemplate">
+          <Setter.Value>
+            <DataTemplate DataType="{x:Type reflection:PropertyInfo}">
+              <StackPanel Orientation="Horizontal">
+                <Rectangle Fill="{Binding Name, Mode=OneTime}" Width="16" Height="16"
+                           Margin="{StaticResource App.Margin.HorizontalStack}" />
+                <TextBlock Text="{Binding Name, Mode=OneTime}" />
+              </StackPanel>
+            </DataTemplate>
+          </Setter.Value>
+        </Setter>
+      </Style>
+
+      <Style TargetType="{x:Type TextBlock}" x:Key="App.Style.TextBlock.DemiBold">
+        <Setter Property="FontWeight" Value="DemiBold" />
+      </Style>
+
+      <Style TargetType="{x:Type content:HeaderedGroup}">
+        <Setter Property="ContentMargin" Value="{StaticResource App.Margin.HeaderedContent.Content}" />
+        <Setter Property="HeaderMargin" Value="{StaticResource App.Margin.HeaderedContent.Header}" />
+      </Style>
+
+      <Style TargetType="{x:Type content:HeaderedGroup}" BasedOn="{StaticResource {x:Type content:HeaderedGroup}}"
+             x:Key="App.Style.HeaderedGroup.BoldText">
+        <Setter Property="HeaderTemplate">
+          <Setter.Value>
+            <DataTemplate>
+              <WrapPanel>
+                <TextBlock Text="{Binding}" Style="{StaticResource App.Style.TextBlock.DemiBold}" />
+                <TextBlock Text="[?]" Margin="5,0,0,0"
+                           ToolTip="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type content:HeaderedGroup}}, Path=HeaderToolTip}"
+                           Visibility="{Binding RelativeSource={RelativeSource Self}, Path=ToolTip, Converter={StaticResource App.Converter.NullToVisibility}}">
+                  <TextBlock.Style>
+                    <Style TargetType="{x:Type TextBlock}">
+                      <Setter Property="Foreground" Value="Blue" />
+                      <Setter Property="FontWeight" Value="Bold" />
+                    </Style>
+                  </TextBlock.Style>
+                </TextBlock>
+              </WrapPanel>
+            </DataTemplate>
+          </Setter.Value>
+        </Setter>
+      </Style>
+
+      <Style TargetType="{x:Type ToolTip}">
+        <Setter Property="MaxWidth" Value="500" />
+        <Style.Resources>
+          <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="TextAlignment" Value="Justify" />
+          </Style>
+        </Style.Resources>
+      </Style>
+
+      <!-- Styles with keys -->
+
+      <Style TargetType="{x:Type Button}" x:Key="App.Style.Button.NullCommand">
+        <Style.Triggers>
+          <Trigger Property="Command" Value="{x:Null}">
+            <Setter Property="IsEnabled" Value="False" />
+          </Trigger>
+        </Style.Triggers>
+      </Style>
+
+      <Style TargetType="{x:Type Run}" x:Key="App.Style.Run.Keyword">
+        <Setter Property="Foreground" Value="Blue" />
+        <Setter Property="FontWeight" Value="Bold" />
+      </Style>
+
+      <Style TargetType="{x:Type Run}" x:Key="App.Style.Run.Important">
+        <Setter Property="FontStyle" Value="Italic" />
+      </Style>
+
+      <Style TargetType="{x:Type Run}" x:Key="App.Style.Run.ModelObject">
+        <Setter Property="Foreground" Value="ForestGreen" />
+        <Setter Property="FontWeight" Value="Bold" />
+      </Style>
+
+      <Style TargetType="{x:Type Run}" x:Key="App.Style.Run.Property">
+        <Setter Property="Foreground" Value="OrangeRed" />
+        <Setter Property="FontWeight" Value="Bold" />
+      </Style>
+
+      <Style TargetType="{x:Type TextBlock}" x:Key="App.Style.ToolTip.TextBlock">
+        <Setter Property="TextWrapping" Value="Wrap" />
+        <Setter Property="TextAlignment" Value="Justify" />
+      </Style>
+
+      <Style TargetType="Border" x:Key="App.Style.Border.Box">
+        <Setter Property="BorderThickness" Value=".5" />
+        <Setter Property="BorderBrush" Value="{x:Static SystemColors.ControlDarkDarkBrush}" />
+      </Style>
+
+      <Style TargetType="{x:Type GroupBox}" x:Key="App.Style.GroupBox.NoBorder">
+        <Setter Property="BorderThickness" Value="0,0,0,0" />
+        <Setter Property="BorderBrush" Value="{x:Static SystemColors.ControlDarkBrush}" />
+      </Style>
+
+      <Style TargetType="{x:Type GroupBox}" x:Key="App.Style.GroupBox.RightBorder">
+        <Setter Property="BorderThickness" Value="0,0,2,0" />
+        <Setter Property="BorderBrush" Value="{x:Static SystemColors.ControlDarkBrush}" />
+      </Style>
+
+      <Style TargetType="{x:Type TextBox}" x:Key="App.Style.TextBox.GreyOutIfReadOnly">
+        <Style.Triggers>
+          <Trigger Property="IsReadOnly" Value="True">
+            <Setter Property="Opacity" Value=".5" />
+          </Trigger>
+          <Trigger Property="IsReadOnly" Value="False">
+            <Setter Property="Opacity" Value="1" />
+          </Trigger>
+        </Style.Triggers>
+      </Style>
+
+      <!-- Static objects -->
+
+      <s:Boolean x:Key="Bool.True">True</s:Boolean>
+      <s:Boolean x:Key="Bool.False">False</s:Boolean>
+      <s:Double x:Key="App.Size.RowHeaderLogo">20</s:Double>
+
+      <s:String x:Key="App.String.ToolTip.PropertyInfo">[Property Information]</s:String>
+
+      <s:String x:Key="App.String.Particle">Particle</s:String>
+      <s:String x:Key="App.String.Particle.Charge">Charge</s:String>
+      <s:String x:Key="App.String.Particle.Symbol">Symbol</s:String>
+      <s:String x:Key="App.String.Particle.Vacancy">Vacancy Flag</s:String>
+      <s:String x:Key="App.String.Particle.Void">Void-Particle</s:String>
+
+      <s:String x:Key="App.String.ParticleSet">[ParticleSet]</s:String>
+      <s:String x:Key="App.String.ParticleSet.Particles">[ParticleSet.Particles]</s:String>
+
+      <s:String x:Key="App.String.UnitCellPosition">Cell Position</s:String>
+      <s:String x:Key="App.String.UnitCellPosition.A">Coordinate 'A'</s:String>
+      <s:String x:Key="App.String.UnitCellPosition.B">Coordinate 'B'</s:String>
+      <s:String x:Key="App.String.UnitCellPosition.C">Coordinate 'C'</s:String>
+      <s:String x:Key="App.String.UnitCellPosition.Occupation">Occupation Set</s:String>
+      <s:String x:Key="App.String.UnitCellPosition.Stability">Stability</s:String>
+
+      <s:String x:Key="App.String.SpaceGroup">Space Group</s:String>
+      <s:String x:Key="App.String.SpaceGroup.Index">Index</s:String>
+      <s:String x:Key="App.String.SpaceGroup.Literal">Literal</s:String>
+      <s:String x:Key="App.String.SpaceGroup.Info">Information</s:String>
+      <s:String x:Key="App.String.SpaceGroup.System">Crystal System</s:String>
+
+      <s:String x:Key="App.String.CellParameters">Unit Cell Parameters</s:String>
+      <s:String x:Key="App.String.CellParameters.Name">Structure Name</s:String>
+      <s:String x:Key="App.String.CellParameters.A">Cell Parameter 'a'</s:String>
+      <s:String x:Key="App.String.CellParameters.B">Cell Parameter 'b'</s:String>
+      <s:String x:Key="App.String.CellParameters.C">Cell Parameter 'c'</s:String>
+      <s:String x:Key="App.String.CellParameters.Alpha">Cell Parameter &#x3B1;</s:String>
+      <s:String x:Key="App.String.CellParameters.Beta">Cell Parameters &#x3B2;</s:String>
+      <s:String x:Key="App.String.CellParameters.Gamma">Cell Parameters &#x3B3;</s:String>
+
+      <s:String x:Key="App.String.StateExchangePair">State Change</s:String>
+      <s:String x:Key="App.String.StateExchangePair.AcceptorState">Acceptor State</s:String>
+      <s:String x:Key="App.String.StateExchangePair.DonorState">Donor State</s:String>
+
+      <s:String x:Key="App.String.StateExchangeGroup">State Change Group</s:String>
+      <s:String x:Key="App.String.StateExchangeGroup.StateExchangePairs">State Changes</s:String>
+
+      <s:String x:Key="App.String.AbstractTransition">State Change Chain</s:String>
+      <s:String x:Key="App.String.AbstractTransition.Connection">Connection Pattern</s:String>
+      <s:String x:Key="App.String.AbstractTransition.AssociationFlag">Association Flag</s:String>
+      <s:String x:Key="App.String.AbstractTransition.StateExchangeGroups">State Change Group Chain</s:String>
+
+      <s:String x:Key="App.String.MetropolisTransition">Metropolis Transition</s:String>
+      <s:String x:Key="App.String.MetropolisTransition.Abstract">State Change Chain</s:String>
+      <s:String x:Key="App.String.MetropolisTransition.FirstWyckoff">1. Cell Position</s:String>
+      <s:String x:Key="App.String.MetropolisTransition.SecondWyckoff">2. Cell Position</s:String>
+
+      <s:String x:Key="App.String.KineticsTransition">Kinetic Transition</s:String>
+      <s:String x:Key="App.String.KineticsTransition.Abstract">State Change Chain</s:String>
+      <s:String x:Key="App.String.KineticsTransition.PathGeometry">Path Geometry Binding</s:String>
+
+      <s:String x:Key="App.String.StableEnvironment">Regular Environment</s:String>
+      <s:String x:Key="App.String.StableEnvironment.CutoffRange">Cutoff Radius</s:String>
+      <s:String x:Key="App.String.InteractionFilter">Hollow Sphere Interaction Filter</s:String>
+      <s:String x:Key="App.String.InteractionFilter.StartRadius">Min Filter Radius</s:String>
+      <s:String x:Key="App.String.InteractionFilter.EndRadius">Max Filter Radius</s:String>
+      <s:String x:Key="App.String.InteractionFilter.CenterWyckoff">Center Position</s:String>
+      <s:String x:Key="App.String.InteractionFilter.PartnerWyckoff">Partner Position</s:String>
+
+      <s:String x:Key="App.String.SymmetricPairInteraction">Regular Pair Interaction</s:String>
+
+      <s:String x:Key="App.String.UnstableEnvironment">Transition Environment</s:String>
+      <s:String x:Key="App.String.UnstableEnvironment.CenterWyckoff">Center Position</s:String>
+      <s:String x:Key="App.String.UnstableEnvironment.InteractionFilters">Hollow Sphere Interaction Filter</s:String>
+
+      <s:String x:Key="App.String.GroupInteraction">Interaction Group</s:String>
+      <s:String x:Key="App.String.GroupInteraction.CenterWyckoff">Center Position</s:String>
+      <s:String x:Key="App.String.GroupInteraction.Geometry">Surrounding Geometry</s:String>
+
+      <s:String x:Key="App.String.MetropolisSimulation">Metropolis Simulation Base</s:String>
+      <s:String x:Key="App.String.MetropolisSimulation.Transitions">Transitions</s:String>
+
+      <s:String x:Key="App.String.KineticSimulation">Kinetic Simulation Base</s:String>
+      <s:String x:Key="App.String.KineticSimulation.Transitions">Transitions</s:String>
+
+      <s:String x:Key="App.String.BuildingBlock">Cell Building Block</s:String>
+
+      <s:String x:Key="App.String.ComboBox.SearchModeToggle">Enable search mode</s:String>
+      <s:String x:Key="App.String.DropLocationText">Drop to add...</s:String>
+
+      <ToolTip x:Key="App.ToolTip.ModelSelection">
+        <TextBlock Text="Model" />
+      </ToolTip>
+
+      <ToolTip x:Key="App.ToolTip.CustomizationSelection">
+        <TextBlock Text="Customization" />
+      </ToolTip>
+
+      <ToolTip x:Key="App.ToolTip.JobTranslationSelection">
+        <TextBlock Text="Translation" />
+      </ToolTip>
+
+      <ToolTip x:Key="App.ToolTip.ProjectSelection">
+        <TextBlock Text="Project" />
+      </ToolTip>
+
+    </ResourceDictionary>
+  </Application.Resources>
+</Application>

@@ -1,0 +1,680 @@
+<?xml version="1.0"?>
+
+<doc>
+  <assembly>
+    <name>Mocassin.Tools.UAccess</name>
+  </assembly>
+  <members>
+    <member name="T:Mocassin.Tools.UAccess.Readers.Base.BinaryStructureReader">
+      <summary>
+        Provides generic read only reference access to structure contents of a byte buffer
+      </summary>
+    </member>
+    <member name="P:Mocassin.Tools.UAccess.Readers.Base.BinaryStructureReader.BytesGcHandle">
+      <summary>
+        Get the <see cref="T:System.Runtime.InteropServices.GCHandle" /> that pins the
+        <see cref="P:Mocassin.Tools.UAccess.Readers.Base.BinaryStructureReader.Bytes" />
+      </summary>
+    </member>
+    <member name="P:Mocassin.Tools.UAccess.Readers.Base.BinaryStructureReader.Bytes">
+      <summary>
+        Get the byte array buffer that is accessed
+      </summary>
+    </member>
+    <member name="P:Mocassin.Tools.UAccess.Readers.Base.BinaryStructureReader.ByteCount">
+      <summary>
+        Get the length of the accessed binary content
+      </summary>
+    </member>
+    <member name="M:Mocassin.Tools.UAccess.Readers.Base.BinaryStructureReader.#ctor(System.Byte[])">
+      <summary>
+        Creates a new <see cref="T:Mocassin.Tools.UAccess.Readers.Base.BinaryStructureReader" /> for the provided byte array. Array is pinned till the reader is
+        disposed
+      </summary>
+      <param name="bytes"></param>
+    </member>
+    <member name="M:Mocassin.Tools.UAccess.Readers.Base.BinaryStructureReader.Dispose">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.Tools.UAccess.Readers.Base.BinaryStructureReader.ReadAs``1(System.Int32)">
+      <summary>
+        Gets a reference to a value of specified type from the internal buffer starting at the specified byte start index
+      </summary>
+      <typeparam name="T"></typeparam>
+      <param name="startIndex"></param>
+      <returns></returns>
+    </member>
+    <member
+      name="M:Mocassin.Tools.UAccess.Readers.Base.BinaryStructureReader.ReadLengthAs``1(System.Int32,System.Int32)">
+      <summary>
+        Gets a <see cref="T:System.ReadOnlySpan`1" /> to a value area of the internal buffer starting at the specified index
+      </summary>
+      <typeparam name="T"></typeparam>
+      <param name="startIndex"></param>
+      <param name="length"></param>
+      <returns></returns>
+    </member>
+    <member name="M:Mocassin.Tools.UAccess.Readers.Base.BinaryStructureReader.ReadAreaAs``1(System.Int32,System.Int32)">
+      <summary>
+        Gets a <see cref="T:System.ReadOnlySpan`1" /> to a value area of the internal buffer defined by the passed start and end
+        index
+      </summary>
+      <typeparam name="T"></typeparam>
+      <param name="startIndex"></param>
+      <param name="endIndex"></param>
+      <returns></returns>
+    </member>
+    <member name="T:Mocassin.Tools.UAccess.Readers.HistogramReader.Components.DynamicHistogramHeader">
+      <summary>
+        Header of a single dynamic size histogram struct of the 'C' Simulator
+      </summary>
+    </member>
+    <member name="P:Mocassin.Tools.UAccess.Readers.HistogramReader.Components.DynamicHistogramHeader.MinValue">
+      <summary>
+        The min value of the histogram (included)
+      </summary>
+    </member>
+    <member name="P:Mocassin.Tools.UAccess.Readers.HistogramReader.Components.DynamicHistogramHeader.MaxValue">
+      <summary>
+        The max value of the histogram (excluded)
+      </summary>
+    </member>
+    <member name="P:Mocassin.Tools.UAccess.Readers.HistogramReader.Components.DynamicHistogramHeader.Stepping">
+      <summary>
+        The sampling width of the counters
+      </summary>
+    </member>
+    <member name="P:Mocassin.Tools.UAccess.Readers.HistogramReader.Components.DynamicHistogramHeader.SteppingInverse">
+      <summary>
+        The sampling width inverse of the counters
+      </summary>
+    </member>
+    <member name="P:Mocassin.Tools.UAccess.Readers.HistogramReader.Components.DynamicHistogramHeader.OverflowCount">
+      <summary>
+        The counter for values above or equal to
+        <see cref="P:Mocassin.Tools.UAccess.Readers.HistogramReader.Components.DynamicHistogramHeader.MaxValue" />
+      </summary>
+    </member>
+    <member name="P:Mocassin.Tools.UAccess.Readers.HistogramReader.Components.DynamicHistogramHeader.UnderflowCount">
+      <summary>
+        The counter for values below
+        <see cref="P:Mocassin.Tools.UAccess.Readers.HistogramReader.Components.DynamicHistogramHeader.MinValue" />
+      </summary>
+    </member>
+    <member name="P:Mocassin.Tools.UAccess.Readers.HistogramReader.Components.DynamicHistogramHeader.EntryCount">
+      <summary>
+        The number of entries in the histogram
+      </summary>
+    </member>
+    <member name="T:Mocassin.Tools.UAccess.Readers.DynamicHistogramReader">
+      <summary>
+        Provides fast read only access to the unmanaged binary state raw variable size histograms of the 'C'
+        Mocassin.Simulator
+      </summary>
+      <remarks>The access is context free and requires the affiliated model context for evaluation</remarks>
+    </member>
+    <member name="P:Mocassin.Tools.UAccess.Readers.DynamicHistogramReader.HeaderByteCount">
+      <summary>
+        Get the byte count of the
+        <see cref="T:Mocassin.Tools.UAccess.Readers.HistogramReader.Components.DynamicHistogramHeader" />
+      </summary>
+    </member>
+    <member name="P:Mocassin.Tools.UAccess.Readers.DynamicHistogramReader.BinaryReader">
+      <summary>
+        Get the <see cref="T:Mocassin.Tools.UAccess.Readers.Base.BinaryStructureReader" /> for the binary representation
+      </summary>
+    </member>
+    <member
+      name="M:Mocassin.Tools.UAccess.Readers.DynamicHistogramReader.#ctor(Mocassin.Tools.UAccess.Readers.Base.BinaryStructureReader)">
+      <summary>
+        Creates a new <see cref="T:Mocassin.Tools.UAccess.Readers.DynamicHistogramReader" /> using the provided
+        <see cref="T:Mocassin.Tools.UAccess.Readers.Base.BinaryStructureReader" />
+      </summary>
+      <param name="binaryReader"></param>
+    </member>
+    <member name="M:Mocassin.Tools.UAccess.Readers.DynamicHistogramReader.Dispose">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.Tools.UAccess.Readers.DynamicHistogramReader.ReadHeader">
+      <summary>
+        Reads the histogram header bytes as an
+        <see cref="T:Mocassin.Tools.UAccess.Readers.HistogramReader.Components.DynamicHistogramHeader" /> structure
+      </summary>
+      <returns></returns>
+    </member>
+    <member name="M:Mocassin.Tools.UAccess.Readers.DynamicHistogramReader.ReadCounters">
+      <summary>
+        Reads the histogram counters as a <see cref="T:System.ReadOnlySpan`1" /> of <see cref="T:System.Int64" />
+        values
+      </summary>
+      <returns></returns>
+    </member>
+    <member name="M:Mocassin.Tools.UAccess.Readers.DynamicHistogramReader.Create(System.Byte[])">
+      <summary>
+        Creates a new <see cref="T:Mocassin.Tools.UAccess.Readers.DynamicHistogramReader" /> using the provided
+        <see cref="T:System.Byte" /> array and checks for
+        data consistency
+      </summary>
+      <param name="bytes"></param>
+      <returns></returns>
+    </member>
+    <member name="T:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsCycleCounter">
+      <summary>
+        Simulation state counter collection struct that contains cycle counters of a single species of a 'C' Simulator
+        state file
+      </summary>
+    </member>
+    <member name="F:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsCycleCounter.SkipCount">
+      <summary>
+        Get the number of skipped cycles (Non-zero only if frequency optimization is enabled)
+      </summary>
+    </member>
+    <member name="F:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsCycleCounter.SuccessCount">
+      <summary>
+        Get the number of successful cycles
+      </summary>
+    </member>
+    <member name="F:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsCycleCounter.RejectionCount">
+      <summary>
+        Get the number of rejected cycles
+      </summary>
+    </member>
+    <member name="F:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsCycleCounter.SiteBlockingCount">
+      <summary>
+        Get the number of site blocked cycles
+      </summary>
+    </member>
+    <member name="F:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsCycleCounter.StartStateUnstableCount">
+      <summary>
+        Get the number of cycles with an energetically unstable start state
+      </summary>
+    </member>
+    <member name="F:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsCycleCounter.EndStateUnstableCount">
+      <summary>
+        Get the number of cycles with an energetically unstable end state
+      </summary>
+    </member>
+    <member name="T:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsHeader">
+      <summary>
+        Simulation state header struct that provides build information about a 'C' Simulator state file
+      </summary>
+    </member>
+    <member name="F:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsHeader.McsCount">
+      <summary>
+        Get the number of performed monte carlo steps
+      </summary>
+    </member>
+    <member name="F:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsHeader.CycleCount">
+      <summary>
+        Get the number of performed simulation cycles
+      </summary>
+    </member>
+    <member name="F:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsHeader.Flags">
+      <summary>
+        Get set simulation flags
+      </summary>
+    </member>
+    <member name="F:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsHeader.MetaOffset">
+      <summary>
+        Get the byte offset for the start of the meta data block
+      </summary>
+    </member>
+    <member name="F:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsHeader.LatticeOffset">
+      <summary>
+        Get the byte offset for the start of the lattice data block
+      </summary>
+    </member>
+    <member name="F:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsHeader.CountersOffset">
+      <summary>
+        Get the byte offset for the start of the counter data block
+      </summary>
+    </member>
+    <member name="F:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsHeader.GlobalTrackerOffset">
+      <summary>
+        Get the byte offset for the start of the global tracker data block
+      </summary>
+    </member>
+    <member name="F:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsHeader.MobileTrackerOffset">
+      <summary>
+        Get the byte offset for the start of the mobile tracker data block
+      </summary>
+    </member>
+    <member name="F:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsHeader.StaticTrackerOffset">
+      <summary>
+        Get the byte offset for the start of the static tracker data block
+      </summary>
+    </member>
+    <member name="F:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsHeader.MobileTrackerIndexingOffset">
+      <summary>
+        Get the byte offset for the start of the mobile tracker indexing data block
+      </summary>
+    </member>
+    <member name="F:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsHeader.JumpStatisticsOffset">
+      <summary>
+        Get the byte offset for the start of the jump statistics data block
+      </summary>
+    </member>
+    <member name="T:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsJumpHistogram">
+      <summary>
+        Simulation jump histogram struct that contains the jump occurence sampling. Layout 'C' Simulator state file
+      </summary>
+    </member>
+    <member name="F:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsJumpHistogram.MinEnergyValue">
+      <summary>
+        Get the minimal tracked energy value (Included)
+      </summary>
+    </member>
+    <member name="F:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsJumpHistogram.MaxEnergyValue">
+      <summary>
+        Get the maximal tracked energy value (Excluded)
+      </summary>
+    </member>
+    <member name="F:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsJumpHistogram.InverseStepping">
+      <summary>
+        Get the tracked energy sample stepping inverse
+      </summary>
+    </member>
+    <member name="F:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsJumpHistogram.AboveMaxCount">
+      <summary>
+        Get the counter for energy occurrences that where above or equal to the max energy value
+      </summary>
+    </member>
+    <member name="F:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsJumpHistogram.BelowMinCount">
+      <summary>
+        Get the counter for energy occurrences that where below the min energy value
+      </summary>
+    </member>
+    <member name="F:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsJumpHistogram._histogramBuffer">
+      <summary>
+        Fixed histogram buffer that stores the occurence counters
+      </summary>
+    </member>
+    <member name="P:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsJumpHistogram.Item(System.Int32)">
+      <summary>
+        Get a counter entry from the fixed counter buffer
+      </summary>
+      <param name="index"></param>
+      <returns></returns>
+    </member>
+    <member name="P:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsJumpHistogram.Counters">
+      <summary>
+        Get a <see cref="T:System.ReadOnlySpan`1" /> to the counters
+      </summary>
+    </member>
+    <member name="T:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsJumpStatistic">
+      <summary>
+        Simulation jump histogram struct that contains energy histogram data from a 'C' Simulator state file
+      </summary>
+    </member>
+    <member name="F:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsJumpStatistic.EdgeEnergyHistogram">
+      <summary>
+        Get the <see cref="T:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsJumpHistogram" /> that contains the sampling of edge energy occurrences
+      </summary>
+    </member>
+    <member
+      name="F:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsJumpStatistic.PositiveConformationEnergyHistogram">
+      <summary>
+        Get the <see cref="T:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsJumpHistogram" /> that contains the sampling of positive conformation energy
+        occurrences
+      </summary>
+    </member>
+    <member
+      name="F:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsJumpStatistic.NegativeConformationEnergyHistogram">
+      <summary>
+        Get the <see cref="T:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsJumpHistogram" /> that contains the sampling of negative conformation energy
+        occurrences
+      </summary>
+    </member>
+    <member name="F:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsJumpStatistic.JumpEnergyHistogram">
+      <summary>
+        Get the <see cref="T:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsJumpHistogram" /> that contains the sampling of actual jump energy occurrences
+      </summary>
+    </member>
+    <member name="T:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMetaData">
+      <summary>
+        Simulation state meta data struct that contains the meta information of a 'C' Simulator state file
+      </summary>
+    </member>
+    <member name="F:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMetaData.SimulatedTime">
+      <summary>
+        Get the simulated time span in [s]
+      </summary>
+    </member>
+    <member name="F:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMetaData.JumpNormalization">
+      <summary>
+        Get the jump normalization during simulation
+      </summary>
+    </member>
+    <member name="F:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMetaData.MaxRawJumpProbability">
+      <summary>
+        Get the raw max jump probability used for normalization calculation
+      </summary>
+    </member>
+    <member name="F:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMetaData.LatticeEnergy">
+      <summary>
+        Get the lattice energy in [eV]
+      </summary>
+    </member>
+    <member name="F:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMetaData.TotalExecutionTime">
+      <summary>
+        Get the total program execution time in [s]
+      </summary>
+    </member>
+    <member name="F:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMetaData.SimulationCycleRate">
+      <summary>
+        Get the simulation cycle execution rate in [Hz]
+      </summary>
+    </member>
+    <member name="F:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMetaData.SimulationSuccessRate">
+      <summary>
+        Get the simulation cycle success rate in [Hz]
+      </summary>
+    </member>
+    <member name="F:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMetaData.BlockExecutionTime">
+      <summary>
+        Get the execution time per block in [s]
+      </summary>
+    </member>
+    <member name="F:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMetaData.Pcg32State">
+      <summary>
+        Get the 64 bit state of the PCG32 random number generator as a <see cref="T:System.Int64" /> value
+      </summary>
+    </member>
+    <member name="F:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMetaData.Pcg32Increase">
+      <summary>
+        Get the 64 bit increase of the PCG32 random number generator as a <see cref="T:System.Int64" /> value
+      </summary>
+    </member>
+    <member name="T:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMovementTracker">
+      <summary>
+        Simulation state movement tracker struct that stores a fractional movement information within the 'C' simulation
+        state
+      </summary>
+    </member>
+    <member name="F:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMovementTracker.A">
+      <summary>
+        Get the 'A' component of the tracker (Fractional coordinate context)
+      </summary>
+    </member>
+    <member name="F:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMovementTracker.B">
+      <summary>
+        Get the 'B' component of the tracker (Fractional coordinate context)
+      </summary>
+    </member>
+    <member name="F:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMovementTracker.C">
+      <summary>
+        Get the 'C' component of the tracker (Fractional coordinate context)
+      </summary>
+    </member>
+    <member
+      name="P:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMovementTracker.Mocassin#Mathematics#ValueTypes#IFractional3D#A">
+      <inheritdoc />
+    </member>
+    <member
+      name="P:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMovementTracker.Mocassin#Mathematics#ValueTypes#IFractional3D#B">
+      <inheritdoc />
+    </member>
+    <member
+      name="P:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMovementTracker.Mocassin#Mathematics#ValueTypes#IFractional3D#C">
+      <inheritdoc />
+    </member>
+    <member
+      name="P:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMovementTracker.Mocassin#Mathematics#ValueTypes#IVector3D#Coordinates">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMovementTracker.AsVector">
+      <summary>
+        Get the contents of the <see cref="T:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMovementTracker" />
+        as a <see cref="T:Mocassin.Mathematics.ValueTypes.Fractional3D" /> vector type
+      </summary>
+      <returns></returns>
+    </member>
+    <member
+      name="M:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMovementTracker.op_Addition(Mocassin.Mathematics.ValueTypes.Fractional3D@,Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMovementTracker@)">
+      <summary>
+        Adds a <see cref="T:Mocassin.Mathematics.ValueTypes.Fractional3D" /> to a
+        <see cref="T:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMovementTracker" />
+      </summary>
+      <param name="lhs"></param>
+      <param name="rhs"></param>
+      <returns></returns>
+    </member>
+    <member
+      name="M:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMovementTracker.op_Addition(Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMovementTracker@,Mocassin.Mathematics.ValueTypes.Fractional3D@)">
+      <summary>
+        Adds a <see cref="T:Mocassin.Mathematics.ValueTypes.Fractional3D" /> to a
+        <see cref="T:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMovementTracker" />
+      </summary>
+      <param name="lhs"></param>
+      <param name="rhs"></param>
+      <returns></returns>
+    </member>
+    <member
+      name="M:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMovementTracker.op_Addition(Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMovementTracker@,Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMovementTracker@)">
+      <summary>
+        Adds a <see cref="T:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMovementTracker" /> to a
+        <see cref="T:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMovementTracker" />
+      </summary>
+      <param name="lhs"></param>
+      <param name="rhs"></param>
+      <returns></returns>
+    </member>
+    <member
+      name="M:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMovementTracker.op_Addition(Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMovementTracker@,Mocassin.Mathematics.ValueTypes.IFractional3D)">
+      <summary>
+        Adds a <see cref="T:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMovementTracker" /> to a
+        <see cref="T:Mocassin.Mathematics.ValueTypes.IFractional3D" />
+      </summary>
+      <param name="lhs"></param>
+      <param name="rhs"></param>
+      <returns></returns>
+    </member>
+    <member
+      name="M:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMovementTracker.op_Subtraction(Mocassin.Mathematics.ValueTypes.Fractional3D@,Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMovementTracker@)">
+      <summary>
+        Subtract a <see cref="T:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMovementTracker" /> from a
+        <see cref="T:Mocassin.Mathematics.ValueTypes.Fractional3D" />
+      </summary>
+      <param name="lhs"></param>
+      <param name="rhs"></param>
+      <returns></returns>
+    </member>
+    <member
+      name="M:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMovementTracker.op_Subtraction(Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMovementTracker@,Mocassin.Mathematics.ValueTypes.Fractional3D@)">
+      <summary>
+        Subtract a <see cref="T:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMovementTracker" /> from a
+        <see cref="T:Mocassin.Mathematics.ValueTypes.Fractional3D" />
+      </summary>
+      <param name="lhs"></param>
+      <param name="rhs"></param>
+    </member>
+    <member
+      name="M:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMovementTracker.op_Subtraction(Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMovementTracker@,Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMovementTracker@)">
+      <summary>
+        Subtract a <see cref="T:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMovementTracker" /> from a
+        <see cref="T:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMovementTracker" />
+      </summary>
+      <param name="lhs"></param>
+      <param name="rhs"></param>
+    </member>
+    <member
+      name="M:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMovementTracker.op_Subtraction(Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMovementTracker@,Mocassin.Mathematics.ValueTypes.IFractional3D)">
+      <summary>
+        Subtract a <see cref="T:Mocassin.Mathematics.ValueTypes.IFractional3D" /> from a
+        <see cref="T:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMovementTracker" />
+      </summary>
+      <param name="lhs"></param>
+      <param name="rhs"></param>
+    </member>
+    <member
+      name="M:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMovementTracker.op_Multiply(Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMovementTracker@,System.Double)">
+      <summary>
+        Scalar multiply a <see cref="T:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMovementTracker" />
+      </summary>
+      <param name="lhs"></param>
+      <param name="rhs"></param>
+      <returns></returns>
+    </member>
+    <member name="T:Mocassin.Tools.UAccess.Readers.McsContentReader">
+      <summary>
+        Provides fast read only access to the unmanaged binary state raw output 'mcs' data file of the 'C'
+        Mocassin.Simulator
+      </summary>
+      <remarks>The access is context free and requires the affiliated model context for evaluation</remarks>
+    </member>
+    <member name="P:Mocassin.Tools.UAccess.Readers.McsContentReader.DataNotPresentOffsetIndicator">
+      <summary>
+        Get the value that indicates if data is not set on the
+        <see cref="T:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsHeader" />
+      </summary>
+    </member>
+    <member name="P:Mocassin.Tools.UAccess.Readers.McsContentReader.BinaryReader">
+      <summary>
+        Get the <see cref="P:Mocassin.Tools.UAccess.Readers.McsContentReader.BinaryReader" /> to access the byte array contents
+      </summary>
+    </member>
+    <member name="P:Mocassin.Tools.UAccess.Readers.McsContentReader.Header">
+      <summary>
+        Get a reference to the <see cref="T:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsHeader" /> read from the buffer at object creation
+      </summary>
+    </member>
+    <member name="P:Mocassin.Tools.UAccess.Readers.McsContentReader.IsReadingMmcState">
+      <summary>
+        Get a boolean flag if the reader is reading an MMC file with reduced data
+      </summary>
+    </member>
+    <member
+      name="M:Mocassin.Tools.UAccess.Readers.McsContentReader.#ctor(Mocassin.Tools.UAccess.Readers.Base.BinaryStructureReader)">
+      <summary>
+        Create a new <see cref="T:Mocassin.Tools.UAccess.Readers.McsContentReader" /> that uses the passed
+        <see cref="T:Mocassin.Tools.UAccess.Readers.Base.BinaryStructureReader" />
+      </summary>
+      <param name="binaryStructureReader"></param>
+    </member>
+    <member name="M:Mocassin.Tools.UAccess.Readers.McsContentReader.Dispose">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.Tools.UAccess.Readers.McsContentReader.ReadHeader">
+      <summary>
+        Get a reference to the <see cref="T:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsHeader" /> directly from the buffer
+      </summary>
+    </member>
+    <member name="M:Mocassin.Tools.UAccess.Readers.McsContentReader.ReadMetaData">
+      <summary>
+        Get a reference to the <see cref="T:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMetaData" /> that store the meta results
+      </summary>
+    </member>
+    <member name="M:Mocassin.Tools.UAccess.Readers.McsContentReader.ReadLattice">
+      <summary>
+        Get a <see cref="T:System.ReadOnlySpan`1" /> of <see cref="T:System.Byte" /> that represents the simulation lattice result
+      </summary>
+    </member>
+    <member name="M:Mocassin.Tools.UAccess.Readers.McsContentReader.ReadCycleCounters">
+      <summary>
+        Get a <see cref="T:System.ReadOnlySpan`1" /> of
+        <see cref="T:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsCycleCounter" /> that store the species cycle results
+        occurence info
+      </summary>
+    </member>
+    <member name="M:Mocassin.Tools.UAccess.Readers.McsContentReader.ReadGlobalTrackers">
+      <summary>
+        Get a <see cref="T:System.ReadOnlySpan`1" /> of
+        <see cref="T:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMovementTracker" /> that store the global tracking system
+        results
+      </summary>
+    </member>
+    <member name="M:Mocassin.Tools.UAccess.Readers.McsContentReader.ReadMobileTrackers">
+      <summary>
+        Get a <see cref="T:System.ReadOnlySpan`1" /> of
+        <see cref="T:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMovementTracker" /> that store the mobile tracking system
+        results
+      </summary>
+    </member>
+    <member name="M:Mocassin.Tools.UAccess.Readers.McsContentReader.ReadStaticTrackers">
+      <summary>
+        Get a <see cref="T:System.ReadOnlySpan`1" /> of
+        <see cref="T:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsMovementTracker" /> that store the static tracking system
+        results
+      </summary>
+    </member>
+    <member name="M:Mocassin.Tools.UAccess.Readers.McsContentReader.ReadMobileTrackerMapping">
+      <summary>
+        Get a <see cref="T:System.ReadOnlySpan`1" /> of <see cref="T:System.Int32" /> that maps mobile tracker indices onto their affiliated
+        lattice position indices
+      </summary>
+    </member>
+    <member name="M:Mocassin.Tools.UAccess.Readers.McsContentReader.ReadJumpStatistics">
+      <summary>
+        Get a <see cref="T:System.ReadOnlySpan`1" /> of
+        <see cref="T:Mocassin.Tools.UAccess.Readers.McsReader.Components.McsJumpStatistic" /> that store the jump histogram system
+        results
+      </summary>
+    </member>
+    <member name="M:Mocassin.Tools.UAccess.Readers.McsContentReader.Create(System.Byte[])">
+      <summary>
+        Creates a new <see cref="T:Mocassin.Tools.UAccess.Readers.McsContentReader" /> for the provided byte array
+      </summary>
+      <param name="bytes"></param>
+      <returns></returns>
+    </member>
+    <member name="M:Mocassin.Tools.UAccess.Readers.McsContentReader.Create(System.String)">
+      <summary>
+        Creates a new <see cref="T:Mocassin.Tools.UAccess.Readers.McsContentReader" /> for the provided filepath
+      </summary>
+      <param name="filename"></param>
+      <returns></returns>
+    </member>
+    <member name="T:Mocassin.Tools.UAccess.Readers.MmcfeLogReader">
+      <summary>
+        Provides fast read only access to the unmanaged binary output of the MMCFE routine of the 'C' Mocassin.Simulator
+      </summary>
+      <remarks>The access is context free and requires the affiliated model context for evaluation</remarks>
+    </member>
+    <member name="P:Mocassin.Tools.UAccess.Readers.MmcfeLogReader.ParameterReader">
+      <summary>
+        Get the <see cref="T:Mocassin.Tools.UAccess.Readers.Base.BinaryStructureReader" /> for the
+        <see cref="T:Mocassin.Model.Translator.Routines.CMmcfeParams" /> state bytes
+      </summary>
+    </member>
+    <member name="P:Mocassin.Tools.UAccess.Readers.MmcfeLogReader.StateReader">
+      <summary>
+        Get the <see cref="T:Mocassin.Tools.UAccess.Readers.McsContentReader" /> for the simulation state
+      </summary>
+    </member>
+    <member name="P:Mocassin.Tools.UAccess.Readers.MmcfeLogReader.EnergyHistogramReader">
+      <summary>
+        Get the <see cref="T:Mocassin.Tools.UAccess.Readers.DynamicHistogramReader" /> for the energy histogram
+      </summary>
+    </member>
+    <member
+      name="M:Mocassin.Tools.UAccess.Readers.MmcfeLogReader.#ctor(Mocassin.Tools.UAccess.Readers.Base.BinaryStructureReader,Mocassin.Tools.UAccess.Readers.McsContentReader,Mocassin.Tools.UAccess.Readers.DynamicHistogramReader)">
+      <summary>
+        Creates a new <see cref="T:Mocassin.Tools.UAccess.Readers.MmcfeLogReader" /> that provides read only access to all relevant components of the MMCFE
+        log
+      </summary>
+      <param name="parameterReader"></param>
+      <param name="stateReader"></param>
+      <param name="energyHistogramReader"></param>
+    </member>
+    <member name="M:Mocassin.Tools.UAccess.Readers.MmcfeLogReader.Dispose">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.Tools.UAccess.Readers.MmcfeLogReader.ReadParameters">
+      <summary>
+        Reads the byte representation of the parameters as an
+        <see cref="T:Mocassin.Model.Translator.Routines.CMmcfeParams" />
+      </summary>
+      <returns></returns>
+    </member>
+    <member name="M:Mocassin.Tools.UAccess.Readers.MmcfeLogReader.Create(System.Byte[],System.Byte[],System.Byte[])">
+      <summary>
+        Creates a new <see cref="T:Mocassin.Tools.UAccess.Readers.MmcfeLogReader" /> for the provided set of binary representations and performs consistency
+        checks
+      </summary>
+      <param name="stateBytes"></param>
+      <param name="histogramBytes"></param>
+      <param name="parameterBytes"></param>
+      <returns></returns>
+    </member>
+  </members>
+</doc>

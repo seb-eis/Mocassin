@@ -1,0 +1,3681 @@
+<?xml version="1.0"?>
+
+<doc>
+  <assembly>
+    <name>Mocassin.UI.Xml</name>
+  </assembly>
+  <members>
+    <member name="T:Mocassin.UI.Xml.Base.ProjectChildEntity`1">
+      <summary>
+        Generic base for <see cref="T:Mocassin.UI.Xml.Base.ProjectDataEntity" /> that have a parent entity and are stored by their json data
+      </summary>
+      <typeparam name="TParent"></typeparam>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Base.ProjectChildEntity`1.Parent">
+      <summary>
+        Get or set the parent navigation property
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Base.ProjectChildEntity`1.Json">
+      <summary>
+        Get or set the contents of the object by a json string representation
+      </summary>
+    </member>
+    <member name="T:Mocassin.UI.Xml.Base.ProjectDataEntity">
+      <summary>
+        Base class for all objects that support both xml, json serialization and storage in a
+        <see cref="T:Mocassin.UI.Xml.ProjectLibrary.IMocassinProjectLibrary" />
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Base.ProjectDataEntity.Id">
+      <summary>
+        Get or set the primary context key
+      </summary>
+    </member>
+    <member name="T:Mocassin.UI.Xml.Base.IDuplicable">
+      <summary>
+        General interface for objects that support logical duplication with some reference preservation
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Base.IDuplicable.Duplicate">
+      <summary>
+        Duplicates the object
+      </summary>
+      <returns></returns>
+    </member>
+    <member name="T:Mocassin.UI.Xml.Base.IDuplicable`1">
+      <summary>
+        General interface for objects that support logical duplication with some reference preservation
+      </summary>
+      <typeparam name="T"></typeparam>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Base.IDuplicable`1.Duplicate">
+      <summary>
+        Duplicates the object
+      </summary>
+    </member>
+    <member name="T:Mocassin.UI.Xml.Base.CellPositionData">
+      <summary>
+        Serializable helper object for serialization of cell position information
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Base.CellPositionData.ReferencePosition">
+      <summary>
+        Get or set the <see cref="T:Mocassin.UI.Xml.Base.ModelObjectReference`1" /> to the affiliated
+        <see cref="T:Mocassin.Model.Structures.CellSite" />
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Base.CellPositionData.Vector">
+      <summary>
+        Get or set the affiliated <see cref="T:Mocassin.UI.Xml.Base.VectorData3D" /> that describes the fractional position
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Base.CellPositionData.Particle">
+      <summary>
+        Get or set the <see cref="T:Mocassin.UI.Xml.Base.ModelObjectReference`1" /> to the occupation
+        <see cref="T:Mocassin.Model.Particles.Particle" />
+      </summary>
+    </member>
+    <member name="T:Mocassin.UI.Xml.Base.ExtensibleProjectDataObject">
+      <summary>
+        Base class for all <see cref="T:Mocassin.UI.Xml.Base.ProjectDataObject" /> instances that support a resource container
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Base.ExtensibleProjectDataObject.Resources">
+      <summary>
+        Get or set the <see cref="T:Mocassin.UI.Xml.Base.ResourcesData" /> for attached properties
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Base.ExtensibleProjectDataObject.#ctor">
+      <summary>
+        Creates a new <see cref="T:Mocassin.UI.Xml.Base.ExtensibleProjectDataObject" /> with empty resources
+      </summary>
+    </member>
+    <member name="T:Mocassin.UI.Xml.Base.ProjectDataObject">
+      <summary>
+        Base class for all JSON/Xml serializable project objects with a INotifyPropertyChanged implementation for the
+        WPF binding infrastructure
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Base.ProjectDataObject.DefaultEncoding">
+      <summary>
+        Specifies the default serialization encoding
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Base.ProjectDataObject.DefaultCultureInfo">
+      <summary>
+        Specifies the default culture info for serialization
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Base.ProjectDataObject.Name">
+      <summary>
+        Get or set a display name for the object graph
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Base.ProjectDataObject.ToXml(Mocassin.Framework.Xml.XmlEventHandlers)">
+      <summary>
+        Converts the <see cref="T:Mocassin.UI.Xml.Base.ProjectDataObject" /> to ist xml representation
+      </summary>
+      <param name="xmlEventHandlers"></param>
+      <returns></returns>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Base.ProjectDataObject.FromXml(System.String,Mocassin.Framework.Xml.XmlEventHandlers)">
+      <summary>
+        Populates the <see cref="T:Mocassin.UI.Xml.Base.ProjectDataObject" /> from its xml representation
+      </summary>
+      <param name="xml"></param>
+      <param name="xmlEventHandlers"></param>
+      <remarks> Warning currently requires two serialization steps and is slow! </remarks>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Base.ProjectDataObject.CreateFromXml``1(System.String,Mocassin.Framework.Xml.XmlEventHandlers)">
+      <summary>
+        Creates a <see cref="T:Mocassin.UI.Xml.Base.ProjectDataObject" /> from an xml representation
+      </summary>
+      <typeparam name="T"></typeparam>
+      <param name="xml"></param>
+      <param name="xmlEventHandlers"></param>
+      <returns></returns>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Base.ProjectDataObject.ToJson(Newtonsoft.Json.JsonSerializerSettings)">
+      <summary>
+        Converts the <see cref="T:Mocassin.UI.Xml.Base.ProjectDataObject" /> to a json representation
+      </summary>
+      <param name="serializerSettings"></param>
+      <returns></returns>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Base.ProjectDataObject.FromJson(System.String,Newtonsoft.Json.JsonSerializerSettings)">
+      <summary>
+        Populates the <see cref="T:Mocassin.UI.Xml.Base.ProjectDataObject" /> from its json representation
+      </summary>
+      <param name="json"></param>
+      <param name="serializerSettings"></param>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Base.ProjectDataObject.CreateFromJson``1(System.String,Newtonsoft.Json.JsonSerializerSettings)">
+      <summary>
+        Populates the <see cref="T:Mocassin.UI.Xml.Base.ProjectDataObject" /> from its json representation
+      </summary>
+      <param name="json"></param>
+      <param name="serializerSettings"></param>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Base.ProjectDataObject.DeepCopy(Newtonsoft.Json.PreserveReferencesHandling)">
+      <summary>
+        Creates a deep copy of the <see cref="T:Mocassin.UI.Xml.Base.ProjectDataObject" /> using its json representation. By default the system
+        preserves object references
+      </summary>
+      <param name="referencesHandling"></param>
+      <returns></returns>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Base.ProjectDataObject.GetDefaultXmlEventHandlers">
+      <summary>
+        Get the default <see cref="T:Mocassin.Framework.Xml.XmlEventHandlers" /> for xml serialization
+      </summary>
+      <returns></returns>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Base.ProjectDataObject.GetDefaultJsonSerializerSettings">
+      <summary>
+        Get the default <see cref="T:Newtonsoft.Json.JsonSerializerSettings" /> for json serialization
+      </summary>
+      <returns></returns>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Base.ProjectDataObject.ToString">
+      <inheritdoc />
+    </member>
+    <member name="T:Mocassin.UI.Xml.Base.PropertyChangeNotifier">
+      <summary>
+        Base class for all objects that provide basic <see cref="T:System.ComponentModel.INotifyPropertyChanged" />
+        functionality
+      </summary>
+    </member>
+    <member name="E:Mocassin.UI.Xml.Base.PropertyChangeNotifier.PropertyChanged">
+      <summary>
+        Property changed event (Dummy)
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Base.PropertyChangeNotifier.SetProperty``1(``0@,``0,System.String)">
+      <summary>
+        Sets a property value and invokes the changed event
+      </summary>
+      <typeparam name="T"></typeparam>
+      <param name="backingField"></param>
+      <param name="value"></param>
+      <param name="propertyName"></param>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Base.PropertyChangeNotifier.OnPropertyChanged(System.String)">
+      <summary>
+        Notify about a property change
+      </summary>
+      <param name="propertyName"></param>
+    </member>
+    <member name="T:Mocassin.UI.Xml.Base.RadialInteractionFilterData">
+      <summary>
+        Serializable helper object for serialization of <see cref="T:Mocassin.Model.Energies.IInteractionFilter" />
+        data
+        objects
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Base.RadialInteractionFilterData.StartRadius">
+      <summary>
+        Get or set the start radius of the filter
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Base.RadialInteractionFilterData.EndRadius">
+      <summary>
+        Get or set the end radius of the filter
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Base.RadialInteractionFilterData.CenterCellReferencePosition">
+      <summary>
+        Get or set the center unit cell position key
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Base.RadialInteractionFilterData.PartnerCellReferencePosition">
+      <summary>
+        Get or set the partner unit cell position key
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Base.RadialInteractionFilterData.AsSymmetric">
+      <summary>
+        Creates a symmetric interaction filter from the set information
+      </summary>
+      <returns></returns>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Base.RadialInteractionFilterData.AsAsymmetric">
+      <summary>
+        Creates an asymmetric interaction filter from the set information
+      </summary>
+      <returns></returns>
+    </member>
+    <member name="T:Mocassin.UI.Xml.Base.ResourcesData">
+      <summary>
+        Serializable data class for attacking a JSON serializable resource dictionary to project graphs
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Base.ResourcesData.Content">
+      <summary>
+        Get or set the <see cref="T:System.Collections.Generic.Dictionary`2" /> that stores resources of the project as string values (It is
+        advised to use the get/set helper functions to access the resource dictionary)
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Base.ResourcesData.#ctor">
+      <summary>
+        Creates a new <see cref="T:Mocassin.UI.Xml.Base.ResourcesData" /> with empty dictionary
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Base.ResourcesData.HasResource(System.String)">
+      <summary>
+        Checks if the <see cref="T:Mocassin.UI.Xml.Base.ResourcesData" /> has a resource with the provided key
+      </summary>
+      <returns></returns>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Base.ResourcesData.SetResource``1(System.String,``0,System.Func{``0,System.String})">
+      <summary>
+        Sets a generic resource with the supplied key and converter <see cref="T:System.Func`2" />
+      </summary>
+      <param name="key"></param>
+      <param name="value"></param>
+      <param name="converter"></param>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Base.ResourcesData.SetResource(System.String,System.String)">
+      <summary>
+        Sets a <see cref="T:System.String" /> resource with the specified key
+      </summary>
+      <param name="key"></param>
+      <param name="value"></param>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Base.ResourcesData.SetResource(System.String,System.Int32)">
+      <summary>
+        Sets a <see cref="T:System.Int32" /> resource with the specified key
+      </summary>
+      <param name="key"></param>
+      <param name="value"></param>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Base.ResourcesData.SetResource(System.String,System.Int64)">
+      <summary>
+        Sets a <see cref="T:System.Int64" /> resource with the specified key
+      </summary>
+      <param name="key"></param>
+      <param name="value"></param>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Base.ResourcesData.SetResource(System.String,System.Double)">
+      <summary>
+        Sets a <see cref="T:System.Double" /> resource with the specified key
+      </summary>
+      <param name="key"></param>
+      <param name="value"></param>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Base.ResourcesData.SetResource(System.String,System.Boolean)">
+      <summary>
+        Sets a <see cref="T:System.Boolean" /> resource with the specified key
+      </summary>
+      <param name="key"></param>
+      <param name="value"></param>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Base.ResourcesData.TryGetResource``1(System.String,System.Func{System.String,``0},``0@)">
+      <summary>
+        Tries to get a stored generic resource that belongs to the supplied key
+      </summary>
+      <typeparam name="T"></typeparam>
+      <param name="key"></param>
+      <param name="converter"></param>
+      <param name="value"></param>
+      <returns></returns>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Base.ResourcesData.TryGetResource(System.String,System.String@)">
+      <summary>
+        Tries to get a stored <see cref="T:System.String" /> resource with the supplied key
+      </summary>
+      <param name="key"></param>
+      <param name="value"></param>
+      <returns></returns>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Base.ResourcesData.TryGetResource(System.String,System.Int32@)">
+      <summary>
+        Tries to get a stored <see cref="T:System.Int32" /> resource with the supplied key
+      </summary>
+      <param name="key"></param>
+      <param name="value"></param>
+      <returns></returns>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Base.ResourcesData.TryGetResource(System.String,System.Int64@)">
+      <summary>
+        Tries to get a stored <see cref="T:System.Int64" /> resource with the supplied key
+      </summary>
+      <param name="key"></param>
+      <param name="value"></param>
+      <returns></returns>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Base.ResourcesData.TryGetResource(System.String,System.Double@)">
+      <summary>
+        Tries to get a stored <see cref="T:System.Double" /> resource with the supplied key
+      </summary>
+      <param name="key"></param>
+      <param name="value"></param>
+      <returns></returns>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Base.ResourcesData.TryGetResource(System.String,System.Boolean@)">
+      <summary>
+        Tries to get a stored <see cref="T:System.Boolean" /> resource with the supplied key
+      </summary>
+      <param name="key"></param>
+      <param name="value"></param>
+      <returns></returns>
+    </member>
+    <member name="T:Mocassin.UI.Xml.Base.VectorData3D">
+      <summary>
+        Serializable helper object for serialization of <see cref="T:Mocassin.Mathematics.ValueTypes.IVector3D" /> data
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Base.VectorData3D.A">
+      <summary>
+        Get or set the A coordinate
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Base.VectorData3D.B">
+      <summary>
+        Get or set the B coordinate
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Base.VectorData3D.C">
+      <summary>
+        Get or set the C coordinate
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Base.VectorData3D.Duplicate">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.Base.VectorData3D.Mocassin#UI#Xml#Base#IDuplicable#Duplicate">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.Base.VectorData3D.AsFractional3D">
+      <summary>
+        Get the data as a <see cref="T:Mocassin.Mathematics.ValueTypes.Fractional3D" />
+      </summary>
+      <returns></returns>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Base.VectorData3D.Create(Mocassin.Mathematics.ValueTypes.IVector3D)">
+      <summary>
+        Creates a new serializable <see cref="T:Mocassin.UI.Xml.Base.VectorData3D" /> from a passed
+        <see cref="T:Mocassin.Mathematics.ValueTypes.IVector3D" /> interface
+      </summary>
+      <param name="vector"></param>
+      <returns></returns>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Base.VectorData3D.ToString">
+      <inheritdoc />
+    </member>
+    <member name="T:Mocassin.UI.Xml.Base.ModelDataObject">
+      <summary>
+        Base class for all serializable data objects that supply <see cref="T:Mocassin.Model.Basic.ModelObject" />
+        conversion for data input
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Base.ModelDataObject.Key">
+      <summary>
+        The key of the model object. Has to be unique within the object graph type group
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Base.ModelDataObject.#ctor">
+      <summary>
+        Creates a new <see cref="T:Mocassin.UI.Xml.Base.ModelDataObject" /> with a unique object key
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Base.ModelDataObject.GetInputObject">
+      <summary>
+        Get the input <see cref="T:Mocassin.Model.Basic.ModelObject" /> for the automated data input system of the model management
+      </summary>
+      <returns></returns>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Base.ModelDataObject.GetModelObjectInternal">
+      <summary>
+        Get a prepared <see cref="T:Mocassin.Model.Basic.ModelObject" /> with all specific input data set
+      </summary>
+      <returns></returns>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Base.ModelDataObject.ToString">
+      <inheritdoc />
+    </member>
+    <member name="T:Mocassin.UI.Xml.Base.ModelManagerData">
+      <summary>
+        Base class for all serializable data objects that supply the data required for
+        <see cref="T:Mocassin.Model.Basic.IModelManager" /> input pipelines
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Base.ModelManagerData.GetInputParameters">
+      <summary>
+        Get the sequence of model input parameters defined in the data root
+      </summary>
+      <returns></returns>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Base.ModelManagerData.GetInputObjects">
+      <summary>
+        Get the sequence of model input objects defined in the data root
+      </summary>
+      <returns></returns>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Base.ModelManagerData.GetInputSequence">
+      <summary>
+        Get the complete sequence of model parameters and model objects
+      </summary>
+      <returns></returns>
+    </member>
+    <member name="T:Mocassin.UI.Xml.Base.ModelObjectReference`1">
+      <summary>
+        Generic serializable class to store and provide key based references to specific
+        <see cref="T:Mocassin.Model.Basic.ModelObject" />
+        instances
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Base.ModelObjectReference`1.Key">
+      <summary>
+        Get or set the key of the reference
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Base.ModelObjectReference`1.Name">
+      <summary>
+        Get the name of the object reference
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Base.ModelObjectReference`1.Target">
+      <summary>
+        Get or set the reference target <see cref="T:Mocassin.UI.Xml.Base.ModelDataObject" />. Only serialized in JSON mode with reference
+        handling
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Base.ModelObjectReference`1.#ctor(Mocassin.UI.Xml.Base.ModelDataObject)">
+      <summary>
+        Creates new <see cref="T:Mocassin.UI.Xml.Base.ModelObjectReference`1" /> that targets the passed graph
+      </summary>
+      <param name="targetGraph"></param>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Base.ModelObjectReference`1.#ctor">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.Base.ModelObjectReference`1.CompareTo(System.Object)">
+      <inheritdoc />
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Base.ModelObjectReference`1.CompareTo(Mocassin.UI.Xml.Base.ModelObjectReference{`0})">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.Base.ModelObjectReference`1.Duplicate">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.Base.ModelObjectReference`1.Mocassin#UI#Xml#Base#IDuplicable#Duplicate">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.Base.ModelObjectReference`1.Equals(Mocassin.UI.Xml.Base.ModelObjectReference{`0})">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.Base.ModelObjectReference`1.GetInputObject">
+      <summary>
+        Get the internal model object
+      </summary>
+      <returns></returns>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Base.ModelObjectReference`1.Equals(System.Object)">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.Base.ModelObjectReference`1.GetHashCode">
+      <inheritdoc />
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Base.ModelObjectReference`1.RelayTargetNameChange(System.Object,System.ComponentModel.PropertyChangedEventArgs)">
+      <summary>
+        Relays a name change of the <see cref="T:Mocassin.UI.Xml.Base.ProjectDataObject" /> target to a name change of this reference
+      </summary>
+      <param name="sender"></param>
+      <param name="args"></param>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Base.ModelObjectReference`1.TryTreatStaticKey(System.String)">
+      <summary>
+        Reacts to special key values that target static objects
+      </summary>
+      <param name="value"></param>
+    </member>
+    <member name="T:Mocassin.UI.Xml.Base.ModelParameterObject">
+      <summary>
+        Base class for all serializable data objects that supply <see cref="T:Mocassin.Model.Basic.ModelParameter" />
+        conversion for data input
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Base.ModelParameterObject.GetInputObject">
+      <summary>
+        Get the <see cref="T:Mocassin.Model.Basic.ModelParameter" /> object for the automated data input system of the model management
+      </summary>
+      <returns></returns>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Base.ModelParameterObject.GetModelObjectInternal">
+      <summary>
+        Get a prepared <see cref="T:Mocassin.Model.Basic.ModelParameter" /> object with all specific input data set
+      </summary>
+      <returns></returns>
+    </member>
+    <member name="T:Mocassin.UI.Xml.Customization.OccupationStateData">
+      <summary>
+        Serializable helper object for serialization of <see cref="T:Mocassin.Model.Particles.OccupationState" /> data
+        objects
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Customization.OccupationStateData.Particles">
+      <summary>
+        Get or set the list of particles that describe the occupation
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Customization.OccupationStateData.Duplicate">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.Customization.OccupationStateData.Mocassin#UI#Xml#Base#IDuplicable#Duplicate">
+      <inheritdoc />
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Customization.OccupationStateData.ToInternal(Mocassin.Model.ModelProject.IModelProject)">
+      <summary>
+        Get the object as an <see cref="T:Mocassin.Model.Particles.IOccupationState" /> interface that is valid in the context of the passed
+        <see cref="T:Mocassin.Model.ModelProject.IModelProject" />
+      </summary>
+      <param name="modelProject"></param>
+      <returns></returns>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Customization.OccupationStateData.Create(Mocassin.Model.Particles.IOccupationState,System.Collections.Generic.IList{Mocassin.UI.Xml.ParticleModel.ParticleData})">
+      <summary>
+        Creates a new <see cref="T:Mocassin.UI.Xml.Customization.OccupationStateData" /> from the passed
+        <see cref="T:Mocassin.Model.Particles.IOccupationState" /> interface and
+        <see cref="T:Mocassin.UI.Xml.ParticleModel.ParticleModelData" /> parent collection
+      </summary>
+      <param name="occupationState"></param>
+      <param name="parents"></param>
+      <returns></returns>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Customization.OccupationStateData.Create(System.Collections.Generic.IEnumerable{Mocassin.Model.Particles.IParticle},System.Collections.Generic.IList{Mocassin.UI.Xml.ParticleModel.ParticleData})">
+      <summary>
+        Creates a new <see cref="T:Mocassin.UI.Xml.Customization.OccupationStateData" /> from the passed sequence of
+        <see cref="T:Mocassin.Model.Particles.IParticle" /> model object
+        interfaces and <see cref="T:Mocassin.UI.Xml.ParticleModel.ParticleData" /> parent instances
+      </summary>
+      <param name="occupationParticles"></param>
+      <param name="parents"></param>
+      <returns></returns>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Customization.OccupationStateData.ToString">
+      <inheritdoc />
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Customization.OccupationStateData.HasEqualState(Mocassin.UI.Xml.Customization.OccupationStateData)">
+      <summary>
+        Checks if the occupation describes by the other
+        <see cref="T:Mocassin.UI.Xml.Customization.OccupationStateData" /> is equal to this one
+      </summary>
+      <param name="other"></param>
+      <returns></returns>
+    </member>
+    <member name="T:Mocassin.UI.Xml.Customization.ModelCustomizationData">
+      <summary>
+        Abstract base class for all serializable data objects that enable customization of
+        <see cref="T:Mocassin.Model.ModelProject.IModelProject" />
+        auto generated content
+      </summary>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Customization.ModelCustomizationData.PushToModel(Mocassin.Model.ModelProject.IModelProject)">
+      <summary>
+        Pushes all set data on the customization to the passed
+        <see cref="T:Mocassin.Model.ModelProject.IModelProject" />
+      </summary>
+      <param name="modelProject"></param>
+    </member>
+    <member name="T:Mocassin.UI.Xml.Customization.EnergyModelCustomizationData">
+      <summary>
+        Serializable object that carries data for customization of
+        <see cref="T:Mocassin.Model.Energies.IEnergyManager" />
+        interaction settings through the <see cref="T:Mocassin.Model.Energies.IEnergySetterProvider" /> system
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Customization.EnergyModelCustomizationData.StablePairEnergyParameterSets">
+      <summary>
+        Get or set the list of <see cref="T:Mocassin.Model.Energies.IStablePairInteraction" /> customization data sets
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Customization.EnergyModelCustomizationData.UnstablePairEnergyParameterSets">
+      <summary>
+        Get or set the list of <see cref="T:Mocassin.Model.Energies.IUnstablePairInteraction" /> customization data sets
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Customization.EnergyModelCustomizationData.GroupEnergyParameterSets">
+      <summary>
+        Get or set the list of <see cref="T:Mocassin.Model.Energies.IGroupInteraction" /> customization data sets
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Customization.EnergyModelCustomizationData.Duplicate">
+      <inheritdoc />
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Customization.EnergyModelCustomizationData.Mocassin#UI#Xml#Base#IDuplicable#Duplicate">
+      <inheritdoc />
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Customization.EnergyModelCustomizationData.PushToModel(Mocassin.Model.ModelProject.IModelProject)">
+      <inheritdoc />
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Customization.EnergyModelCustomizationData.Create(Mocassin.Model.Energies.IEnergySetterProvider,Mocassin.UI.Xml.Model.ProjectModelData)">
+      <summary>
+        Creates a new <see cref="T:Mocassin.UI.Xml.Customization.EnergyModelCustomizationData" /> by transforming all defined data in the passed
+        <see cref="T:Mocassin.Model.Energies.IEnergySetterProvider" /> into serializable data formats referencing the
+        <see cref="T:Mocassin.UI.Xml.Model.ProjectModelData" /> parent
+      </summary>
+      <param name="energySetterProvider"></param>
+      <param name="parent"></param>
+      <returns></returns>
+    </member>
+    <member name="T:Mocassin.UI.Xml.Customization.GroupEnergyData">
+      <summary>
+        Serializable helper object for serialization of <see cref="T:Mocassin.Model.Energies.GroupEnergyEntry" /> data
+        objects
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Customization.GroupEnergyData.CenterParticle">
+      <summary>
+        Get or set the <see cref="T:Mocassin.UI.Xml.Base.ModelObjectReference`1" /> of the
+        <see cref="T:Mocassin.Model.Particles.Particle" /> that describes the center
+        occupation
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Customization.GroupEnergyData.Energy">
+      <summary>
+        Get or set the energy value in [eV]
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Customization.GroupEnergyData.OccupationState">
+      <summary>
+        Get or set the occupation state of the surrounding positions
+      </summary>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Customization.GroupEnergyData.CompareTo(Mocassin.UI.Xml.Customization.GroupEnergyData)">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.Customization.GroupEnergyData.Duplicate">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.Customization.GroupEnergyData.Mocassin#UI#Xml#Base#IDuplicable#Duplicate">
+      <inheritdoc />
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Customization.GroupEnergyData.ToInternal(Mocassin.Model.ModelProject.IModelProject)">
+      <summary>
+        Get the contained information as a <see cref="T:Mocassin.Model.Energies.GroupEnergyEntry" /> entry that is valid in the context of the passed
+        <see cref="T:Mocassin.Model.ModelProject.IModelProject" /> and describes an occupation permutation an
+        <see cref="T:Mocassin.Model.Energies.IGroupInteraction" />
+      </summary>
+      <param name="modelProject"></param>
+      <returns></returns>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Customization.GroupEnergyData.Create(Mocassin.Model.Energies.GroupEnergyEntry@,Mocassin.UI.Xml.Model.ProjectModelData)">
+      <summary>
+        Creates a new serializable <see cref="T:Mocassin.UI.Xml.Customization.GroupEnergyData" /> by pulling the required data from the passed
+        <see cref="T:Mocassin.Model.Energies.GroupEnergyEntry" /> context and
+        <see cref="T:Mocassin.UI.Xml.Model.ProjectModelData" /> parent
+      </summary>
+      <param name="energyEntry"></param>
+      <param name="parent"></param>
+      <returns></returns>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Customization.GroupEnergyData.GetOccupationIonString(Mocassin.Model.Particles.IParticle,Mocassin.Model.Particles.IOccupationState)">
+      <summary>
+        Creates a short <see cref="T:System.String" /> description for a
+        <see cref="T:Mocassin.Model.Particles.IOccupationState" /> interface and center
+        <see cref="T:Mocassin.Model.Particles.IParticle" />
+      </summary>
+      <param name="center"></param>
+      <param name="state"></param>
+      <returns></returns>
+    </member>
+    <member name="T:Mocassin.UI.Xml.Customization.GroupEnergySetData">
+      <summary>
+        Serializable base data object for <see cref="T:Mocassin.Model.Energies.IGroupInteraction" /> model object parameter
+        customization
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Customization.GroupEnergySetData.GroupInteraction">
+      <summary>
+        Get or set the <see cref="T:Mocassin.UI.Xml.Base.ModelObjectReference`1" /> of the group interaction that the graph is based upon
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Customization.GroupEnergySetData.CenterPosition">
+      <summary>
+        Get or set the <see cref="T:Mocassin.UI.Xml.Base.ModelObjectReference`1" /> of the center position that the graph is based upon
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Customization.GroupEnergySetData.BaseGeometry">
+      <summary>
+        Get or set the base geometry list of the surroundings
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Customization.GroupEnergySetData.EnergyEntries">
+      <summary>
+        Get or set the list of affiliated energy entries
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Customization.GroupEnergySetData.ModelIndex">
+      <summary>
+        Get or set the internal index of the interaction
+      </summary>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Customization.GroupEnergySetData.CompareTo(Mocassin.UI.Xml.Customization.GroupEnergySetData)">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.Customization.GroupEnergySetData.Duplicate">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.Customization.GroupEnergySetData.Mocassin#UI#Xml#Base#IDuplicable#Duplicate">
+      <inheritdoc />
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Customization.GroupEnergySetData.PushToModel(Mocassin.Model.ModelProject.IModelProject,Mocassin.Model.Energies.IGroupEnergySetter)">
+      <summary>
+        Set all data on the passed <see cref="T:Mocassin.Model.Energies.IGroupEnergySetter" /> and push the values to the affiliated
+        <see cref="T:Mocassin.Model.ModelProject.IModelProject" />
+      </summary>
+      <param name="energySetter"></param>
+      <param name="modelProject"></param>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Customization.GroupEnergySetData.Create(Mocassin.Model.Energies.IGroupEnergySetter,Mocassin.UI.Xml.Model.ProjectModelData)">
+      <summary>
+        Creates a new serializable <see cref="T:Mocassin.UI.Xml.Customization.GroupEnergySetData" /> by pulling all data defined in the passed
+        <see cref="T:Mocassin.Model.Energies.IGroupEnergySetter" /> context and
+        <see cref="T:Mocassin.UI.Xml.Model.ProjectModelData" /> parent
+      </summary>
+      <param name="energySetter"></param>
+      <param name="parent"></param>
+      <returns></returns>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Customization.GroupEnergySetData.AsVectorPath(System.Boolean)">
+      <summary>
+        Gets the surrounding geometry as a <see cref="T:System.Collections.Generic.IEnumerable`1" /> of
+        <see cref="T:Mocassin.Mathematics.ValueTypes.Fractional3D" /> (Center position
+        not included on default)
+      </summary>
+      <param name="includeCenter"></param>
+      <returns></returns>
+    </member>
+    <member name="T:Mocassin.UI.Xml.Customization.PairEnergyData">
+      <summary>
+        Serializable helper object for serialization of <see cref="T:Mocassin.Model.Energies.PairEnergyEntry" /> data objects
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Customization.PairEnergyData.CenterParticle">
+      <summary>
+        Get or set the <see cref="T:Mocassin.UI.Xml.Base.ModelObjectReference`1" /> that targets the center particle
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Customization.PairEnergyData.PartnerParticle">
+      <summary>
+        Get or set the <see cref="T:Mocassin.UI.Xml.Base.ModelObjectReference`1" /> that targets the center particle
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Customization.PairEnergyData.Energy">
+      <summary>
+        Get or set the energy value in [eV]
+      </summary>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Customization.PairEnergyData.CompareTo(Mocassin.UI.Xml.Customization.PairEnergyData)">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.Customization.PairEnergyData.Duplicate">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.Customization.PairEnergyData.Mocassin#UI#Xml#Base#IDuplicable#Duplicate">
+      <inheritdoc />
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Customization.PairEnergyData.ToInternal(Mocassin.Model.ModelProject.IModelProject,Mocassin.Model.Energies.IPairInteraction)">
+      <summary>
+        Get the contained information as a <see cref="T:Mocassin.Model.Energies.PairEnergyEntry" /> entry that is valid in the context of the passed
+        <see cref="T:Mocassin.Model.ModelProject.IModelProject" /> and type of
+        <see cref="T:Mocassin.Model.Energies.IPairInteraction" />
+      </summary>
+      <param name="modelProject"></param>
+      <param name="pairInteraction"></param>
+      <returns></returns>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Customization.PairEnergyData.Create(Mocassin.Model.Energies.PairEnergyEntry@,Mocassin.UI.Xml.Model.ProjectModelData)">
+      <summary>
+        Creates a new serializable <see cref="T:Mocassin.UI.Xml.Customization.PairEnergyData" /> by pulling the required data from the passed
+        <see cref="T:Mocassin.Model.Energies.PairEnergyEntry" /> and
+        <see cref="T:Mocassin.UI.Xml.Model.ProjectModelData" /> parent
+      </summary>
+      <param name="energyEntry"></param>
+      <param name="parent"></param>
+      <returns></returns>
+    </member>
+    <member name="T:Mocassin.UI.Xml.Customization.PairEnergySetData">
+      <summary>
+        Serializable base data object for <see cref="T:Mocassin.Model.Energies.IPairInteraction" /> model object parameter
+        customization
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Customization.PairEnergySetData.CenterPosition">
+      <summary>
+        Get or set the <see cref="T:Mocassin.UI.Xml.Base.ModelObjectReference`1" /> that targets the center wyckoff position
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Customization.PairEnergySetData.PartnerPosition">
+      <summary>
+        Get or set the <see cref="T:Mocassin.UI.Xml.Base.ModelObjectReference`1" /> that targets the partner wyckoff position
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Customization.PairEnergySetData.Distance">
+      <summary>
+        Get or set the distance in [Ang]
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Customization.PairEnergySetData.StartVector">
+      <summary>
+        Get or set the 3D vector of the center
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Customization.PairEnergySetData.EndVector">
+      <summary>
+        Get or set the 3D vector of the partner
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Customization.PairEnergySetData.ModelIndex">
+      <summary>
+        Get or set the index of the pair interaction the data is valid for
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Customization.PairEnergySetData.PairEnergyEntries">
+      <summary>
+        Get or set the pair energy entry permutations for this pair interaction
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Customization.PairEnergySetData.ChiralPartnerModelIndex">
+      <summary>
+        Get or set the interaction index of a chiral partner. Negative values indicate that none exists
+      </summary>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Customization.PairEnergySetData.CompareTo(Mocassin.UI.Xml.Customization.PairEnergySetData)">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.Customization.PairEnergySetData.Duplicate">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.Customization.PairEnergySetData.Mocassin#UI#Xml#Base#IDuplicable#Duplicate">
+      <inheritdoc />
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Customization.PairEnergySetData.PushToModel(Mocassin.Model.ModelProject.IModelProject,Mocassin.Model.Energies.IPairEnergySetter)">
+      <summary>
+        Set all data on the passed <see cref="T:Mocassin.Model.Energies.IPairEnergySetter" /> and push the values to the affiliated
+        <see cref="T:Mocassin.Model.ModelProject.IModelProject" />
+      </summary>
+      <param name="modelProject"></param>
+      <param name="energySetter"></param>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Customization.PairEnergySetData.Create(Mocassin.Model.Energies.IPairEnergySetter,Mocassin.UI.Xml.Model.ProjectModelData)">
+      <summary>
+        Creates a new serializable <see cref="T:Mocassin.UI.Xml.Customization.PairEnergySetData" /> by pulling all data defined in the passed
+        <see cref="T:Mocassin.Model.Energies.IPairEnergySetter" /> context and
+        <see cref="T:Mocassin.UI.Xml.Model.ProjectModelData" /> parent
+      </summary>
+      <param name="energySetter"></param>
+      <param name="parent"></param>
+      <returns></returns>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Customization.PairEnergySetData.AsVectorPath">
+      <summary>
+        Gets the interaction geometry as a <see cref="T:Mocassin.Mathematics.ValueTypes.Fractional3D" /> path (Yields always two positions)
+      </summary>
+      <returns></returns>
+    </member>
+    <member name="T:Mocassin.UI.Xml.Customization.ModelCustomizationRootAttribute">
+      <summary>
+        Attribute to mark a property as a model customization root for
+        <see cref="T:Mocassin.Model.ModelProject.IModelProject" /> auto generated content manipulation
+      </summary>
+    </member>
+    <member name="T:Mocassin.UI.Xml.Customization.ProjectCustomizationTemplate">
+      <summary>
+        The main root for storage and serialization of customizable parametrization data of
+        <see cref="T:Mocassin.Model.ModelProject.IModelProject" />
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Customization.ProjectCustomizationTemplate.Empty">
+      <summary>
+        Get the <see cref="T:Mocassin.UI.Xml.Customization.ProjectCustomizationTemplate" /> that represents an empty customization
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Customization.ProjectCustomizationTemplate.Key">
+      <summary>
+        Get or set a key for the customization
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Customization.ProjectCustomizationTemplate.EnergyModelCustomization">
+      <summary>
+        Get or set the <see cref="T:Mocassin.UI.Xml.Customization.EnergyModelCustomizationData" /> that stores energy customization data
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Customization.ProjectCustomizationTemplate.TransitionModelCustomization">
+      <summary>
+        Get or set the <see cref="T:Mocassin.UI.Xml.Customization.TransitionModelCustomizationData" /> that stores transition customization data
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Customization.ProjectCustomizationTemplate.#ctor">
+      <summary>
+        Creates new <see cref="T:Mocassin.UI.Xml.Customization.ProjectCustomizationTemplate" /> with auto generated key value
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Customization.ProjectCustomizationTemplate.Duplicate">
+      <inheritdoc />
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Customization.ProjectCustomizationTemplate.Mocassin#UI#Xml#Base#IDuplicable#Duplicate">
+      <inheritdoc />
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Customization.ProjectCustomizationTemplate.PushToModel(Mocassin.Model.ModelProject.IModelProject)">
+      <inheritdoc />
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Customization.ProjectCustomizationTemplate.Create(Mocassin.Model.ModelProject.IModelProject,Mocassin.UI.Xml.Model.ProjectModelData)">
+      <summary>
+        Create a new <see cref="T:Mocassin.UI.Xml.Customization.ProjectCustomizationTemplate" /> by pulling all data from the passed
+        <see cref="T:Mocassin.Model.ModelProject.IModelProject" /> and
+        <see cref="T:Mocassin.UI.Xml.Model.ProjectModelData" /> parent
+      </summary>
+      <param name="modelProject"></param>
+      <param name="parent"></param>
+      <returns></returns>
+    </member>
+    <member name="T:Mocassin.UI.Xml.Customization.TransitionModelCustomizationData">
+      <summary>
+        Serializable object that carries data for customization of
+        <see cref="T:Mocassin.Model.Transitions.ITransitionManager" /> rule settings through
+        the <see cref="T:Mocassin.Model.Transitions.IRuleSetterProvider" /> system
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Customization.TransitionModelCustomizationData.KineticTransitionParameterSets">
+      <summary>
+        Get or set the list of <see cref="T:Mocassin.UI.Xml.Customization.KineticRuleSetData" /> objects
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Customization.TransitionModelCustomizationData.Duplicate">
+      <inheritdoc />
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Customization.TransitionModelCustomizationData.Mocassin#UI#Xml#Base#IDuplicable#Duplicate">
+      <inheritdoc />
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Customization.TransitionModelCustomizationData.PushToModel(Mocassin.Model.ModelProject.IModelProject)">
+      <inheritdoc />
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Customization.TransitionModelCustomizationData.Create(Mocassin.Model.Transitions.IRuleSetterProvider,Mocassin.UI.Xml.Model.ProjectModelData)">
+      <summary>
+        Create a new <see cref="T:Mocassin.UI.Xml.Customization.TransitionModelCustomizationData" /> by pulling all data from the passed
+        <see cref="T:Mocassin.Model.Transitions.IRuleSetterProvider" /> and
+        <see cref="T:Mocassin.UI.Xml.Model.ProjectModelData" /> parent
+      </summary>
+      <param name="ruleSetterProvider"></param>
+      <param name="parent"></param>
+      <returns></returns>
+    </member>
+    <member name="T:Mocassin.UI.Xml.Customization.KineticRuleData">
+      <summary>
+        Serializable data object for <see cref="T:Mocassin.Model.Transitions.IKineticRule" /> model object creation and
+        manipulation
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Customization.KineticRuleData.DefaultAttemptFrequency">
+      <summary>
+        Get or set the default value used for the
+        <see cref="P:Mocassin.UI.Xml.Customization.KineticRuleData.AttemptFrequency" />. Standard ist 1.0e13 Hz
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Customization.KineticRuleData.AttemptFrequency">
+      <summary>
+        Get or set the attempt frequency value of the rule in [Hz]
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Customization.KineticRuleData.RuleFlags">
+      <summary>
+        Get or set the rule flag info string
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Customization.KineticRuleData.RuleIndex">
+      <summary>
+        Get or set the internal index of the affected rule
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Customization.KineticRuleData.StartState">
+      <summary>
+        Get or set the occupation state of the start state
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Customization.KineticRuleData.TransitionState">
+      <summary>
+        Get or set the occupation state of the transition state
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Customization.KineticRuleData.FinalState">
+      <summary>
+        Get or set the occupation state of the final state
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Customization.KineticRuleData.DependencyRuleCount">
+      <summary>
+        Get or set the number of dependency rules
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Customization.KineticRuleData.Duplicate">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.Customization.KineticRuleData.Mocassin#UI#Xml#Base#IDuplicable#Duplicate">
+      <inheritdoc />
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Customization.KineticRuleData.Create(Mocassin.Model.Transitions.IKineticRule,Mocassin.UI.Xml.Model.ProjectModelData,System.Int32)">
+      <summary>
+        Creates a new serializable <see cref="T:Mocassin.UI.Xml.Customization.KineticRuleData" /> by pulling the required data from the passed
+        <see cref="T:Mocassin.Model.Transitions.IKineticRule" /> and
+        <see cref="T:Mocassin.UI.Xml.Model.ProjectModelData" /> parent
+      </summary>
+      <param name="rule"></param>
+      <param name="parent"></param>
+      <param name="localIndex"></param>
+      <returns></returns>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Customization.KineticRuleData.HasEqualStates(Mocassin.UI.Xml.Customization.KineticRuleData)">
+      <summary>
+        Check if all occupation states are equal to the states on the provided
+        <see cref="T:Mocassin.UI.Xml.Customization.KineticRuleSetData" />
+      </summary>
+      <param name="other"></param>
+      <returns></returns>
+    </member>
+    <member name="T:Mocassin.UI.Xml.Customization.KineticRuleSetData">
+      <summary>
+        Serializable object that carries data for customization of
+        <see cref="T:Mocassin.Model.Transitions.IKineticTransition" /> rule settings through
+        the <see cref="T:Mocassin.Model.Transitions.IRuleSetterProvider" /> system
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Customization.KineticRuleSetData.Transition">
+      <summary>
+        Get or set the <see cref="T:Mocassin.UI.Xml.Base.ModelObjectReference`1" /> for the affiliated
+        <see cref="T:Mocassin.Model.Transitions.KineticTransition" />
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Customization.KineticRuleSetData.TransitionIndex">
+      <summary>
+        Get or set the transition index of the affiliated
+        <see cref="T:Mocassin.Model.Transitions.IKineticTransition" />
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Customization.KineticRuleSetData.KineticRules">
+      <summary>
+        Get or set the list of affiliated <see cref="T:Mocassin.UI.Xml.Customization.KineticRuleData" /> objects to customize the rules
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Customization.KineticRuleSetData.Duplicate">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.Customization.KineticRuleSetData.Mocassin#UI#Xml#Base#IDuplicable#Duplicate">
+      <inheritdoc />
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Customization.KineticRuleSetData.PushToModel(Mocassin.Model.ModelProject.IModelProject,Mocassin.Model.Transitions.IKineticRuleSetter)">
+      <summary>
+        Set all data on the passed <see cref="T:Mocassin.Model.Transitions.IKineticRuleSetter" /> and push the values to the affiliated
+        <see cref="T:Mocassin.Model.ModelProject.IModelProject" />
+      </summary>
+      <param name="modelProject"></param>
+      <param name="ruleSetter"></param>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Customization.KineticRuleSetData.Create(Mocassin.Model.Transitions.IKineticRuleSetter,Mocassin.UI.Xml.Model.ProjectModelData)">
+      <summary>
+        Creates a new <see cref="T:Mocassin.UI.Xml.Customization.KineticRuleSetData" /> by pulling all data from the passed
+        <see cref="T:Mocassin.Model.Transitions.IKineticRuleSetter" /> and
+        <see cref="T:Mocassin.UI.Xml.Model.ProjectModelData" /> parent
+      </summary>
+      <param name="ruleSetter"></param>
+      <param name="parent"></param>
+      <returns></returns>
+    </member>
+    <member name="T:Mocassin.UI.Xml.Helper.Migration.MigrationReport">
+      <summary>
+        Stores and provides information about a project data migration operation
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Helper.Migration.MigrationReport.Entries">
+      <summary>
+        Get the <see cref="T:System.Collections.Generic.IList`1" /> of
+        <see cref="T:Mocassin.UI.Xml.Helper.Migration.MigrationReportEntry" /> items that store successful data migrations
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Helper.Migration.MigrationReport.MigrationSource">
+      <summary>
+        Get the <see cref="T:Mocassin.UI.Xml.Base.ProjectDataObject" /> that served as the data source
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Helper.Migration.MigrationReport.MigrationTarget">
+      <summary>
+        Get the <see cref="T:Mocassin.UI.Xml.Base.ProjectDataObject" /> that served as the data target
+      </summary>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Helper.Migration.MigrationReport.#ctor(System.Collections.Generic.IReadOnlyList{Mocassin.UI.Xml.Helper.Migration.MigrationReportEntry},Mocassin.UI.Xml.Base.ProjectDataObject,Mocassin.UI.Xml.Base.ProjectDataObject)">
+      <summary>
+        Creates a new <see cref="T:Mocassin.UI.Xml.Helper.Migration.MigrationReport" />
+      </summary>
+      <param name="reportEntries"></param>
+      <param name="migrationSource"></param>
+      <param name="migrationTarget"></param>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Helper.Migration.MigrationReport.ToString">
+      <inheritdoc />
+    </member>
+    <member name="T:Mocassin.UI.Xml.Helper.Migration.MigrationReportEntry">
+      <summary>
+        Represents a single entry of a <see cref="T:Mocassin.UI.Xml.Helper.Migration.MigrationReport" /> that informs about a single data migration success
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Helper.Migration.MigrationReportEntry.Comment">
+      <summary>
+        Get a comment <see cref="T:System.String" /> that describes what was done in the migration
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Helper.Migration.MigrationReportEntry.SourceParent">
+      <summary>
+        Get the <see cref="T:Mocassin.UI.Xml.Base.ProjectDataObject" /> parent of the migration source if it exists
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Helper.Migration.MigrationReportEntry.TargetParent">
+      <summary>
+        Get the <see cref="T:Mocassin.UI.Xml.Base.ProjectDataObject" /> parent of the migration target if it exists
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Helper.Migration.MigrationReportEntry.DataSource">
+      <summary>
+        Get the migration data source <see cref="T:Mocassin.UI.Xml.Base.ProjectDataObject" />
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Helper.Migration.MigrationReportEntry.DataTarget">
+      <summary>
+        Get the migration data target <see cref="T:Mocassin.UI.Xml.Base.ProjectDataObject" />
+      </summary>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Helper.Migration.MigrationReportEntry.#ctor(Mocassin.UI.Xml.Base.ProjectDataObject,Mocassin.UI.Xml.Base.ProjectDataObject,Mocassin.UI.Xml.Base.ProjectDataObject,Mocassin.UI.Xml.Base.ProjectDataObject,System.String)">
+      <summary>
+        Creates a new <see cref="T:Mocassin.UI.Xml.Helper.Migration.MigrationReportEntry" />
+      </summary>
+      <param name="sourceParent"></param>
+      <param name="targetParent"></param>
+      <param name="dataSource"></param>
+      <param name="dataTarget"></param>
+      <param name="comment"></param>
+    </member>
+    <member name="T:Mocassin.UI.Xml.Helper.Migration.ProjectCustomizationMigrationTool">
+      <summary>
+        Migration tool that partially recycles content of
+        <see cref="T:Mocassin.UI.Xml.Customization.ProjectCustomizationTemplate" /> instances
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Helper.Migration.ProjectCustomizationMigrationTool.VectorComparer">
+      <summary>
+        Get or set the used <see cref="T:Mocassin.Mathematics.Comparer.VectorComparer3D`1" /> for
+        <see cref="T:Mocassin.Mathematics.ValueTypes.Fractional3D" /> information
+      </summary>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Helper.Migration.ProjectCustomizationMigrationTool.#ctor(Mocassin.Mathematics.Comparer.VectorComparer3D{Mocassin.Mathematics.ValueTypes.Fractional3D})">
+      <summary>
+        Creates a new <see cref="T:Mocassin.UI.Xml.Helper.Migration.ProjectCustomizationMigrationTool" />
+      </summary>
+      <param name="vectorComparer"></param>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Helper.Migration.ProjectCustomizationMigrationTool.Migrate(Mocassin.UI.Xml.Customization.ProjectCustomizationTemplate,Mocassin.UI.Xml.Customization.ProjectCustomizationTemplate)">
+      <summary>
+        Overwrites all data of the target <see cref="T:Mocassin.UI.Xml.Customization.ProjectCustomizationTemplate" />
+        by values that also exist on the
+        source
+      </summary>
+      <param name="source"></param>
+      <param name="target"></param>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Helper.Migration.ProjectCustomizationMigrationTool.Migrate(Mocassin.UI.Xml.Customization.EnergyModelCustomizationData,Mocassin.UI.Xml.Customization.EnergyModelCustomizationData)">
+      <summary>
+        Overwrites all data of the target <see cref="T:Mocassin.UI.Xml.Customization.EnergyModelCustomizationData" />
+        by values that also exist on the
+        source
+      </summary>
+      <param name="source"></param>
+      <param name="target"></param>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Helper.Migration.ProjectCustomizationMigrationTool.Migrate(Mocassin.UI.Xml.Customization.TransitionModelCustomizationData,Mocassin.UI.Xml.Customization.TransitionModelCustomizationData)">
+      <summary>
+        Overwrites all data of the target <see cref="T:Mocassin.UI.Xml.Customization.EnergyModelCustomizationData" />
+        by values that also exist on the
+        source
+      </summary>
+      <param name="source"></param>
+      <param name="target"></param>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Helper.Migration.ProjectCustomizationMigrationTool.Migrate(System.Collections.Generic.ICollection{Mocassin.UI.Xml.Customization.KineticRuleSetData},System.Collections.Generic.ICollection{Mocassin.UI.Xml.Customization.KineticRuleSetData})">
+      <summary>
+        Overwrites all data of the target <see cref="T:System.Collections.Generic.ICollection`1" /> by values that also exist on the source
+      </summary>
+      <param name="source"></param>
+      <param name="target"></param>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Helper.Migration.ProjectCustomizationMigrationTool.Migrate(Mocassin.UI.Xml.Customization.KineticRuleSetData,Mocassin.UI.Xml.Customization.KineticRuleSetData)">
+      <summary>
+        Overwrites all data of the target <see cref="T:Mocassin.UI.Xml.Customization.KineticRuleSetData" /> by values that also exist on the source
+      </summary>
+      <param name="source"></param>
+      <param name="target"></param>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Helper.Migration.ProjectCustomizationMigrationTool.Migrate(System.Collections.Generic.ICollection{Mocassin.UI.Xml.Customization.PairEnergySetData},System.Collections.Generic.ICollection{Mocassin.UI.Xml.Customization.PairEnergySetData})">
+      <summary>
+        Overwrites all data of the target <see cref="T:System.Collections.Generic.ICollection`1" /> by values that also exist on the source
+      </summary>
+      <param name="source"></param>
+      <param name="target"></param>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Helper.Migration.ProjectCustomizationMigrationTool.Migrate(Mocassin.UI.Xml.Customization.PairEnergySetData,Mocassin.UI.Xml.Customization.PairEnergySetData)">
+      <summary>
+        Overwrites all data of the target <see cref="T:Mocassin.UI.Xml.Customization.PairEnergySetData" /> by values that also exist on the source
+      </summary>
+      <param name="source"></param>
+      <param name="target"></param>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Helper.Migration.ProjectCustomizationMigrationTool.Migrate(System.Collections.Generic.ICollection{Mocassin.UI.Xml.Customization.GroupEnergySetData},System.Collections.Generic.ICollection{Mocassin.UI.Xml.Customization.GroupEnergySetData})">
+      <summary>
+        Overwrites all data of the target <see cref="T:System.Collections.Generic.ICollection`1" /> by values that also exist on the source
+      </summary>
+      <param name="source"></param>
+      <param name="target"></param>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Helper.Migration.ProjectCustomizationMigrationTool.Migrate(Mocassin.UI.Xml.Customization.GroupEnergySetData,Mocassin.UI.Xml.Customization.GroupEnergySetData)">
+      <summary>
+        Overwrites all data of the target <see cref="T:Mocassin.UI.Xml.Customization.GroupEnergySetData" /> by values that also exist on the source
+      </summary>
+      <param name="source"></param>
+      <param name="target"></param>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Helper.Migration.ProjectCustomizationMigrationTool.Migrate(Mocassin.UI.Xml.Customization.PairEnergyData,Mocassin.UI.Xml.Customization.PairEnergyData,Mocassin.UI.Xml.Helper.Migration.ProjectDataMigrationTool.DataMigrationReporter)">
+      <summary>
+        Overwrites all data of the target <see cref="T:Mocassin.UI.Xml.Customization.PairEnergyData" /> by values that also exist on the source and reports
+        the action with the provided reporter delegate
+      </summary>
+      <param name="source"></param>
+      <param name="target"></param>
+      <param name="reporter"></param>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Helper.Migration.ProjectCustomizationMigrationTool.Migrate(Mocassin.UI.Xml.Customization.GroupEnergyData,Mocassin.UI.Xml.Customization.GroupEnergyData,Mocassin.UI.Xml.Helper.Migration.ProjectDataMigrationTool.DataMigrationReporter)">
+      <summary>
+        Overwrites all data of the target <see cref="T:Mocassin.UI.Xml.Customization.GroupEnergyData" /> by values that also exist on the source and
+        reports the action with the provided reporter delegate
+      </summary>
+      <param name="source"></param>
+      <param name="target"></param>
+      <param name="reporter"></param>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Helper.Migration.ProjectCustomizationMigrationTool.Migrate(Mocassin.UI.Xml.Customization.KineticRuleData,Mocassin.UI.Xml.Customization.KineticRuleData,Mocassin.UI.Xml.Helper.Migration.ProjectDataMigrationTool.DataMigrationReporter)">
+      <summary>
+        Overwrites all data of the target <see cref="T:Mocassin.UI.Xml.Customization.KineticRuleData" /> by values that also exist on the source and
+        reports the action with the provided reporter delegate
+      </summary>
+      <param name="source"></param>
+      <param name="target"></param>
+      <param name="reporter"></param>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Helper.Migration.ProjectCustomizationMigrationTool.MigrateName(Mocassin.UI.Xml.Base.ProjectDataObject,Mocassin.UI.Xml.Base.ProjectDataObject,Mocassin.UI.Xml.Helper.Migration.ProjectDataMigrationTool.DataMigrationReporter)">
+      <summary>
+        Overwrites the name of the source <see cref="T:Mocassin.UI.Xml.Base.ProjectDataObject" /> to the target and reports the action with the
+        provided delegate
+      </summary>
+      <param name="source"></param>
+      <param name="target"></param>
+      <param name="reporter"></param>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Helper.Migration.ProjectCustomizationMigrationTool.FindMigrationTarget(Mocassin.UI.Xml.Customization.PairEnergyData,System.Collections.Generic.ICollection{Mocassin.UI.Xml.Customization.PairEnergyData})">
+      <summary>
+        Searches for a matching <see cref="T:Mocassin.UI.Xml.Customization.PairEnergyData" /> in the provided target
+        <see cref="T:System.Collections.Generic.ICollection`1" />
+      </summary>
+      <param name="source"></param>
+      <param name="targets"></param>
+      <returns></returns>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Helper.Migration.ProjectCustomizationMigrationTool.FindMigrationTarget(Mocassin.UI.Xml.Customization.GroupEnergyData,System.Collections.Generic.ICollection{Mocassin.UI.Xml.Customization.GroupEnergyData})">
+      <summary>
+        Searches for a matching <see cref="T:Mocassin.UI.Xml.Customization.GroupEnergyData" /> in the provided target
+        <see cref="T:System.Collections.Generic.ICollection`1" />
+      </summary>
+      <param name="source"></param>
+      <param name="targets"></param>
+      <returns></returns>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Helper.Migration.ProjectCustomizationMigrationTool.FindMigrationTarget(Mocassin.UI.Xml.Customization.KineticRuleData,System.Collections.Generic.ICollection{Mocassin.UI.Xml.Customization.KineticRuleData})">
+      <summary>
+        Searches for a matching <see cref="T:Mocassin.UI.Xml.Customization.KineticRuleData" /> in the provided target
+        <see cref="T:System.Collections.Generic.ICollection`1" />
+      </summary>
+      <param name="source"></param>
+      <param name="targets"></param>
+      <returns></returns>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Helper.Migration.ProjectCustomizationMigrationTool.AreModelCompatible(Mocassin.UI.Xml.Customization.PairEnergySetData,Mocassin.UI.Xml.Customization.PairEnergySetData)">
+      <summary>
+        Basic check if two sets of <see cref="T:Mocassin.UI.Xml.Customization.PairEnergySetData" /> contain compatible model data that can be migrated
+      </summary>
+      <param name="first"></param>
+      <param name="second"></param>
+      <returns></returns>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Helper.Migration.ProjectCustomizationMigrationTool.AreModelCompatible(Mocassin.UI.Xml.Customization.GroupEnergySetData,Mocassin.UI.Xml.Customization.GroupEnergySetData)">
+      <summary>
+        Basic check if two sets of <see cref="T:Mocassin.UI.Xml.Customization.GroupEnergySetData" /> contain compatible model data that can be migrated
+      </summary>
+      <param name="first"></param>
+      <param name="second"></param>
+      <returns></returns>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Helper.Migration.ProjectCustomizationMigrationTool.AreModelCompatible(Mocassin.UI.Xml.Customization.KineticRuleSetData,Mocassin.UI.Xml.Customization.KineticRuleSetData)">
+      <summary>
+        Basic check if two sets of <see cref="T:Mocassin.UI.Xml.Customization.KineticRuleSetData" /> contain compatible model data that can be migrated
+      </summary>
+      <param name="first"></param>
+      <param name="second"></param>
+      <returns></returns>
+    </member>
+    <member name="T:Mocassin.UI.Xml.Helper.Migration.ProjectDataMigrationTool">
+      <summary>
+        Base class for implementations of project data migration helper tools
+      </summary>
+    </member>
+    <member name="T:Mocassin.UI.Xml.Helper.Migration.ProjectDataMigrationTool.DataMigrationReporter">
+      <summary>
+        Defines the delegate for reporting data migrations of a known
+        <see cref="T:Mocassin.UI.Xml.Base.ProjectDataObject" /> parent pair
+      </summary>
+      <param name="source"></param>
+      <param name="target"></param>
+      <param name="comment"></param>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Helper.Migration.ProjectDataMigrationTool.ReportEntries">
+      <summary>
+        Get the <see cref="T:System.Collections.Generic.List`1" /> of
+        <see cref="T:Mocassin.UI.Xml.Helper.Migration.MigrationReportEntry" /> instances
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Helper.Migration.ProjectDataMigrationTool.IsRedundantReportEnabled">
+      <summary>
+        Get or set a boolean flag if the system should report redundant data migrations where target and source already
+        match
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Helper.Migration.ProjectDataMigrationTool.#ctor">
+      <summary>
+        Creates a new <see cref="T:Mocassin.UI.Xml.Helper.Migration.ProjectDataMigrationTool" /> with empty report list
+      </summary>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Helper.Migration.ProjectDataMigrationTool.GenerateReport(Mocassin.UI.Xml.Base.ProjectDataObject,Mocassin.UI.Xml.Base.ProjectDataObject)">
+      <summary>
+        Generates a new <see cref="T:Mocassin.UI.Xml.Helper.Migration.MigrationReport" /> from the stored report entries and a source and target information
+      </summary>
+      <param name="source"></param>
+      <param name="target"></param>
+      <returns></returns>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Helper.Migration.ProjectDataMigrationTool.Reset">
+      <summary>
+        Resets the tool and empties the stored report information
+      </summary>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Helper.Migration.ProjectDataMigrationTool.AddReportEntry(Mocassin.UI.Xml.Base.ProjectDataObject,Mocassin.UI.Xml.Base.ProjectDataObject,Mocassin.UI.Xml.Base.ProjectDataObject,Mocassin.UI.Xml.Base.ProjectDataObject,System.String)">
+      <summary>
+        Adds information about a migration success to the report entries
+      </summary>
+      <param name="sourceParent"></param>
+      <param name="targetParent"></param>
+      <param name="dataSource"></param>
+      <param name="dataTarget"></param>
+      <param name="comment"></param>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Helper.Migration.ProjectDataMigrationTool.GetMigrationReporter(Mocassin.UI.Xml.Base.ProjectDataObject,Mocassin.UI.Xml.Base.ProjectDataObject)">
+      <summary>
+        Get a reporter delegate associated with a specific pair of
+        <see cref="T:Mocassin.UI.Xml.Base.ProjectDataObject" /> data parents
+      </summary>
+      <param name="sourceParent"></param>
+      <param name="targetParent"></param>
+      <returns></returns>
+    </member>
+    <member name="T:Mocassin.UI.Xml.Helper.ObjectGraphChangeObserver">
+      <summary>
+        Reflective watchdog system to watch all
+        <see cref="T:System.Collections.Specialized.INotifyCollectionChanged" /> and
+        <see cref="T:System.ComponentModel.INotifyPropertyChanged" /> implementing properties of an object tree
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Helper.ObjectGraphChangeObserver.DefaultIgnoredPropertyTypes">
+      <summary>
+        Get the <see cref="T:System.Collections.Immutable.ImmutableHashSet`1" /> of property
+        <see cref="T:System.Type" /> values that are ignored by default
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Helper.ObjectGraphChangeObserver.ChangeEventOccuredEvent">
+      <summary>
+        Get the <see cref="T:Mocassin.Framework.Events.ReactiveEvent`1" /> that relays change event arguments and sender
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Helper.ObjectGraphChangeObserver.ObjectAddedEvent">
+      <summary>
+        Get the <see cref="T:Mocassin.Framework.Events.ReactiveEvent`1" /> for added observed objects
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Helper.ObjectGraphChangeObserver.ObjectRemovedEvent">
+      <summary>
+        Get the <see cref="T:Mocassin.Framework.Events.ReactiveEvent`1" /> for removed observed objects
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Helper.ObjectGraphChangeObserver.Subscriptions">
+      <summary>
+        Get the <see cref="T:System.Collections.Generic.Dictionary`2" /> that holds the
+        <see cref="T:System.IDisposable" /> for each observed item
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Helper.ObjectGraphChangeObserver.RootObject">
+      <summary>
+        Get or set the observed root object
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Helper.ObjectGraphChangeObserver.ChangeEventNotifications">
+      <summary>
+        Get the <see cref="T:System.IObservable`1" /> that relays change event information
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Helper.ObjectGraphChangeObserver.ObjectAddedNotifications">
+      <summary>
+        Get the <see cref="T:System.IObservable`1" /> that provides notifications when an object is added to the subscription
+        system
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Helper.ObjectGraphChangeObserver.ObjectRemovedNotifications">
+      <summary>
+        Get the <see cref="T:System.IObservable`1" /> that provides observation when an object is removed from the subscription
+        system
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Helper.ObjectGraphChangeObserver.IgnoredTypes">
+      <summary>
+        Get a <see cref="T:System.Collections.Generic.HashSet`1" /> of property <see cref="T:System.Type" /> that should be ignored during recursive event
+        search
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Helper.ObjectGraphChangeObserver.IncludeSilentObjects">
+      <summary>
+        Get or set a boolean flag if objects not implementing
+        <see cref="T:System.Collections.Specialized.INotifyCollectionChanged" /> or
+        <see cref="T:System.ComponentModel.INotifyPropertyChanged" /> should be included
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Helper.ObjectGraphChangeObserver.IncludeCollectionProperties">
+      <summary>
+        Get or set a boolean flag if <see cref="T:System.Collections.Specialized.INotifyCollectionChanged" />
+        implementors should also be included as
+        <see cref="T:System.ComponentModel.INotifyPropertyChanged" /> if possible
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Helper.ObjectGraphChangeObserver.IsObserving">
+      <summary>
+        Get a boolean flag indicating if the system is observing an object
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Helper.ObjectGraphChangeObserver.#cctor">
+      <inheritdoc />
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Helper.ObjectGraphChangeObserver.#ctor(System.Collections.Generic.IEnumerable{System.Type})">
+      <summary>
+        Creates a new <see cref="T:Mocassin.UI.Xml.Helper.ObjectGraphChangeObserver" /> with an optional set of ignored property
+        <see cref="T:System.Type" />
+        values
+      </summary>
+      <param name="ignoredTypes"></param>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Helper.ObjectGraphChangeObserver.Dispose">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.Helper.ObjectGraphChangeObserver.SetObservationRoot(System.Object,System.Boolean)">
+      <summary>
+        Sets the provided object as the new observation root and attaches itself the the change notification events if
+        requested
+      </summary>
+      <param name="rootObject"></param>
+      <param name="startObservation"></param>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Helper.ObjectGraphChangeObserver.StopObservation">
+      <summary>
+        Stops observation of the currently set root object
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Helper.ObjectGraphChangeObserver.StartObservation">
+      <summary>
+        Starts the observation of the currently set root object
+      </summary>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Helper.ObjectGraphChangeObserver.SubscribeToAccessibleEvents(System.Object,System.Reflection.BindingFlags)">
+      <summary>
+        Attach to all unknown observable objects on the provided root object and begins to listening to the change events
+      </summary>
+      <param name="root"></param>
+      <param name="bindingFlags"></param>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Helper.ObjectGraphChangeObserver.UnsubscribeFromInaccessibleEvents(System.Object,System.Reflection.BindingFlags)">
+      <summary>
+        Stops to listen to all events that exist in the provided object tree but cannot be accessed through the observed
+        root object
+      </summary>
+      <param name="removedObject"></param>
+      <param name="bindingFlags"></param>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Helper.ObjectGraphChangeObserver.CreateSubscription(System.Object)">
+      <summary>
+        Creates a subscription for the change events of the provided <see cref="T:System.Object" />. Has no effect if the object
+        does not provide change events
+      </summary>
+      <param name="obj"></param>
+      <returns></returns>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Helper.ObjectGraphChangeObserver.RemoveSubscription(System.Object)">
+      <summary>
+        Removes the tracking subscription for the provided object
+      </summary>
+      <param name="obj"></param>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Helper.ObjectGraphChangeObserver.SubscribeToEvent(System.ComponentModel.INotifyPropertyChanged)">
+      <summary>
+        Creates and adds a subscription tracker for a <see cref="T:System.ComponentModel.INotifyPropertyChanged" />
+        object
+      </summary>
+      <param name="notifyPropertyChanged"></param>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Helper.ObjectGraphChangeObserver.SubscribeToEvent(System.Collections.Specialized.INotifyCollectionChanged)">
+      <summary>
+        Creates and adds a subscription tracker for a
+        <see cref="T:System.Collections.Specialized.INotifyCollectionChanged" /> object
+      </summary>
+      <param name="notifyCollectionChanged"></param>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Helper.ObjectGraphChangeObserver.FindIncludedObjectsRecursive(System.Object,System.Reflection.BindingFlags,System.Collections.Generic.HashSet{System.Object})">
+      <summary>
+        Recursively searches the object tree for all included objects while automatically handling cyclic reference
+      </summary>
+      <param name="root"></param>
+      <param name="doneObjects"></param>
+      <param name="bindingFlags"></param>
+      <returns></returns>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Helper.ObjectGraphChangeObserver.FindInaccessibleObjects(System.Object,System.Reflection.BindingFlags)">
+      <summary>
+        Gets the <see cref="T:System.Collections.Generic.HashSet`1" /> of objects that are accessible on the provided object tree but not from the root
+        object
+      </summary>
+      <param name="obj"></param>
+      <param name="bindingFlags"></param>
+      <returns></returns>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Helper.ObjectGraphChangeObserver.FindUnknownEventSuppliers(System.Object,System.Reflection.BindingFlags)">
+      <summary>
+        Gets the <see cref="T:System.Collections.Generic.HashSet`1" /> of objects that are currently unknown to the tracker but are accessible from the
+        provided object
+      </summary>
+      <param name="obj"></param>
+      <param name="bindingFlags"></param>
+      <returns></returns>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Helper.ObjectGraphChangeObserver.DisposeInaccessibleSubscriptions(System.Reflection.BindingFlags)">
+      <summary>
+        Disposes subscriptions that have become inaccessible from the root object
+      </summary>
+      <param name="bindingFlags"></param>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Helper.ObjectGraphChangeObserver.TypeIsSearchIncluded(System.Type)">
+      <summary>
+        Checks if the provided <see cref="T:System.Type" /> is included in the search routine
+      </summary>
+      <param name="type"></param>
+      <returns></returns>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Helper.ObjectGraphChangeObserver.NotifyObservationStarted(System.Object)">
+      <summary>
+        Action that is called when a previously unknown object is now observed
+      </summary>
+      <param name="obj"></param>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Helper.ObjectGraphChangeObserver.NotifyObservationEnded(System.Object)">
+      <summary>
+        Action that is called when a previously known object was removed from the observation
+      </summary>
+      <param name="obj"></param>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Helper.ObjectGraphChangeObserver.AsCollectionInterface(System.Collections.Specialized.INotifyCollectionChanged)">
+      <summary>
+        Converts the provided <see cref="T:System.Collections.Specialized.INotifyCollectionChanged" /> to a
+        <see cref="T:System.Collections.ICollection" /> and throws if the
+        cast cannot be done
+      </summary>
+      <param name="notifyCollectionChanged"></param>
+      <returns></returns>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Helper.ObjectGraphChangeObserver.OnChangeDetected(System.Object,System.EventArgs)">
+      <summary>
+        Action that is attached to all change events of the object tree
+      </summary>
+      <param name="sender"></param>
+      <param name="args"></param>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Helper.ObjectGraphChangeObserver.NotifyEventsCompleted">
+      <summary>
+        Notifies event subscribers that the events completed
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Helper.ObjectGraphChangeObserver.DebugLogEvent(System.Boolean)">
+      <summary>
+        Conditional method that logs the time on DEBUG
+      </summary>
+      <param name="isStart"></param>
+    </member>
+    <member name="T:Mocassin.UI.Xml.Jobs.JobPackageDataProvider">
+      <summary>
+        Adapter class to provide <see cref="T:Mocassin.UI.Xml.Jobs.JobPackageData" /> data as a
+        <see cref="T:Mocassin.Model.Translator.Jobs.IJobCollection" /> object
+        for the database creation system
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Jobs.JobPackageDataProvider.ModelProject">
+      <summary>
+        Get the <see cref="T:Mocassin.Model.ModelProject.IModelProject" /> the source is affiliated with
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Jobs.JobPackageDataProvider.Simulation">
+      <summary>
+        Get the <see cref="T:Mocassin.Model.Simulations.ISimulation" /> object the collection is valid for
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Jobs.JobPackageDataProvider.JobPackageDescription">
+      <summary>
+        Get the <see cref="T:Mocassin.UI.Xml.Jobs.JobPackageData" /> that is used as a
+        <see cref="T:Mocassin.UI.Xml.Jobs.JobPackageData" />
+        source
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Jobs.JobPackageDataProvider.BaseConfiguration">
+      <summary>
+        Get the <see cref="T:Mocassin.Model.Translator.Jobs.JobConfiguration" /> that provides the default parameters
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Jobs.JobPackageDataProvider.Random">
+      <summary>
+        Get or set the random number generator used for the collection
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Jobs.JobPackageDataProvider.CollectionId">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.Jobs.JobPackageDataProvider.GetSimulation">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.Jobs.JobPackageDataProvider.GetPostBuildOptimizers">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.Jobs.JobPackageDataProvider.GetEnumerator">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.Jobs.JobPackageDataProvider.System#Collections#IEnumerable#GetEnumerator">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.Jobs.JobPackageDataProvider.GetJobConfigurations">
+      <summary>
+        Get the sequence of <see cref="T:Mocassin.Model.Translator.Jobs.JobConfiguration" /> instances of the
+        <see cref="T:Mocassin.Model.Translator.Jobs.IJobCollection" />
+      </summary>
+      <returns></returns>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Jobs.JobPackageDataProvider.ExpandToJobCount(Mocassin.Model.Translator.Jobs.JobConfiguration,System.Int32)">
+      <summary>
+        Expands the passed <see cref="T:Mocassin.Model.Translator.Jobs.JobConfiguration" /> to the required job count and sets affiliated random information
+      </summary>
+      <param name="jobConfiguration"></param>
+      <param name="jobCount"></param>
+      <returns></returns>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Jobs.JobPackageDataProvider.Create(Mocassin.Model.ModelProject.IModelProject,Mocassin.UI.Xml.Jobs.KmcJobPackageData)">
+      <summary>
+        Creates a new <see cref="T:Mocassin.UI.Xml.Jobs.JobPackageDataProvider" /> from the passed
+        <see cref="T:Mocassin.Model.ModelProject.IModelProject" /> and
+        <see cref="T:Mocassin.UI.Xml.Jobs.KmcJobPackageData" />
+      </summary>
+      <param name="modelProject"></param>
+      <param name="jobPackageDescription"></param>
+      <returns></returns>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Jobs.JobPackageDataProvider.Create(Mocassin.Model.ModelProject.IModelProject,Mocassin.UI.Xml.Jobs.MmcJobPackageData)">
+      <summary>
+        Creates a new <see cref="T:Mocassin.UI.Xml.Jobs.JobPackageDataProvider" /> from the passed
+        <see cref="T:Mocassin.Model.ModelProject.IModelProject" /> and
+        <see cref="T:Mocassin.UI.Xml.Jobs.MmcJobPackageData" />
+      </summary>
+      <param name="modelProject"></param>
+      <param name="jobPackageDescription"></param>
+      <returns></returns>
+    </member>
+    <member name="T:Mocassin.UI.Xml.Jobs.JobConfigData">
+      <summary>
+        The serializable data object for creation of <see cref="T:Mocassin.Model.Translator.Jobs.JobConfiguration" />
+        objects
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Jobs.JobConfigData.ExecutionFlags">
+      <summary>
+        Get or set additional job info flags
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Jobs.JobConfigData.TargetMcsp">
+      <summary>
+        The number of target MCSP as a string
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Jobs.JobConfigData.TimeLimit">
+      <summary>
+        Get or set the time limit of the simulation as a string
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Jobs.JobConfigData.Temperature">
+      <summary>
+        Get or set the temperature value in [K] as a string
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Jobs.JobConfigData.MinimalSuccessRate">
+      <summary>
+        Get or set the minimal success rate as a string
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Jobs.JobConfigData.LatticeConfiguration">
+      <summary>
+        Get or set the <see cref="T:Mocassin.UI.Xml.Jobs.LatticeConfigData" /> of the job
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Jobs.JobConfigData.Instruction">
+      <summary>
+        Get or set a <see cref="T:System.String" /> that describes additional instructions
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Jobs.JobConfigData.#ctor">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.Jobs.JobConfigData.ToInternal(Mocassin.Model.Simulations.ISimulation)">
+      <summary>
+        Creates a <see cref="T:Mocassin.Model.Translator.Jobs.JobConfiguration" /> populated with specified properties using defaults from the passed
+        <see cref="T:Mocassin.Model.Simulations.ISimulation" /> where required
+      </summary>
+      <param name="baseSimulation"></param>
+      <returns></returns>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Jobs.JobConfigData.ToInternal(Mocassin.Model.Translator.Jobs.JobConfiguration,Mocassin.Model.ModelProject.IModelProject,System.Int32)">
+      <summary>
+        Creates a <see cref="T:Mocassin.Model.Translator.Jobs.JobConfiguration" /> populated with specified properties using defaults from the passed
+        base <see cref="T:Mocassin.Model.Translator.Jobs.JobConfiguration" /> where required
+      </summary>
+      <param name="baseConfiguration"></param>
+      <param name="modelProject"></param>
+      <param name="configIndex"></param>
+      <returns></returns>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Jobs.JobConfigData.CopyBaseDataTo(Mocassin.UI.Xml.Jobs.JobConfigData)">
+      <summary>
+        Copies the base data of the <see cref="T:Mocassin.UI.Xml.Jobs.JobConfigData" /> to the target
+      </summary>
+      <param name="other"></param>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Jobs.JobConfigData.GetPreparedInternal(Mocassin.Model.Simulations.ISimulation)">
+      <summary>
+        Get a prepared <see cref="T:Mocassin.Model.Translator.Jobs.JobConfiguration" /> that has all values of the implementing type set using the defaults
+        from the passed <see cref="T:Mocassin.Model.Simulations.ISimulation" /> where required
+      </summary>
+      <param name="baseSimulation"></param>
+      <returns></returns>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Jobs.JobConfigData.GetPreparedInternal(Mocassin.Model.Translator.Jobs.JobConfiguration)">
+      <summary>
+        Get a prepared <see cref="T:Mocassin.Model.Translator.Jobs.JobConfiguration" /> that has all values of the implementing type set using the defaults
+        from the passed base <see cref="T:Mocassin.Model.Translator.Jobs.JobConfiguration" /> where required
+      </summary>
+      <param name="baseConfiguration"></param>
+      <returns></returns>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Jobs.JobConfigData.ParseTimeString(System.String)">
+      <summary>
+        Parses the passed time string under consideration of both ISO8601 and current culture settings. If both fail a
+        default value is set
+      </summary>
+      <param name="s"></param>
+      <returns></returns>
+    </member>
+    <member name="T:Mocassin.UI.Xml.Jobs.JobPackageData">
+      <summary>
+        Serializable data object base for the creation of
+        <see cref="T:Mocassin.Model.Translator.Jobs.IJobCollection" />
+        database creation instructions
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Jobs.JobPackageData.RngSeed">
+      <summary>
+        Get or set an rng seed string to overwrite the one defined in the affiliated
+        <see cref="T:Mocassin.Model.Simulations.ISimulation" />
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Jobs.JobPackageData.JobCountPerConfig">
+      <summary>
+        Get or set the job count multiplier per <see cref="T:Mocassin.UI.Xml.Jobs.JobConfigData" /> that is defined in the collection
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Jobs.JobPackageData.SelectionOptimizers">
+      <summary>
+        Get or set the list of <see cref="T:Mocassin.UI.Xml.Jobs.SelectionOptimizerData" /> objects
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Jobs.JobPackageData.#ctor">
+      <inheritdoc />
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Jobs.JobPackageData.ToInternal(Mocassin.Model.ModelProject.IModelProject,System.Int32)">
+      <summary>
+        Creates a <see cref="T:Mocassin.Model.Translator.Jobs.IJobCollection" /> for simulation database creation in the context of the passed
+        <see cref="T:Mocassin.Model.ModelProject.IModelProject" /> and assigns the passed collection id
+      </summary>
+      <param name="modelProject"></param>
+      <param name="collectionId"></param>
+      <returns></returns>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Jobs.JobPackageData.GetManualOptimizers">
+      <summary>
+        Get the sequence of defined <see cref="T:Mocassin.UI.Xml.Jobs.ManualOptimizerData" /> objects pof the package
+      </summary>
+      <returns></returns>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Jobs.JobPackageData.GetConfigurations">
+      <summary>
+        Get the sequence of defined <see cref="T:Mocassin.UI.Xml.Jobs.JobConfigData" /> objects of the package
+      </summary>
+      <returns></returns>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Jobs.JobPackageData.GetTotalJobCount(Mocassin.Model.ModelProject.IModelProject)">
+      <summary>
+        Calculate the total number of executable simulations in the context of the passed
+        <see cref="T:Mocassin.Model.ModelProject.IModelProject" />
+        defined by the package
+      </summary>
+      <returns></returns>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Jobs.JobPackageData.CopyBaseDataTo(Mocassin.UI.Xml.Jobs.JobPackageData)">
+      <summary>
+        Copies internal data to the passed <see cref="T:Mocassin.UI.Xml.Jobs.JobPackageData" />
+      </summary>
+      <param name="other"></param>
+    </member>
+    <member name="T:Mocassin.UI.Xml.Jobs.KmcJobConfigData">
+      <summary>
+        Serializable data object to store and create
+        <see cref="T:Mocassin.Model.Translator.Jobs.KmcJobConfiguration" /> objects for the database creation
+        system
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Jobs.KmcJobConfigData.PreRunMcsp">
+      <summary>
+        Get or set the pre run monte carlo steps per particle as a string
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Jobs.KmcJobConfigData.ElectricFieldModulus">
+      <summary>
+        Get or set the modulus of the electric field in [V/m] as a string
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Jobs.KmcJobConfigData.NormalizationProbability">
+      <summary>
+        Get or set the fixed normalization probability as a string
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Jobs.KmcJobConfigData.MaxAttemptFrequency">
+      <summary>
+        Get or set the overwrite max attempt frequency in [Hz] as a string
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Jobs.KmcJobConfigData.Duplicate">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.Jobs.KmcJobConfigData.Mocassin#UI#Xml#Base#IDuplicable#Duplicate">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.Jobs.KmcJobConfigData.GetPreparedInternal(Mocassin.Model.Simulations.ISimulation)">
+      <inheritdoc />
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Jobs.KmcJobConfigData.GetPreparedInternal(Mocassin.Model.Translator.Jobs.JobConfiguration)">
+      <inheritdoc />
+    </member>
+    <member name="T:Mocassin.UI.Xml.Jobs.KmcJobPackageData">
+      <summary>
+        Serializable data object for storage and provision of
+        <see cref="T:Mocassin.Model.Translator.Jobs.KmcJobCollection" /> objects
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Jobs.KmcJobPackageData.Simulation">
+      <summary>
+        Get or set the <see cref="T:Mocassin.UI.Xml.Base.ModelObjectReference`1" /> to the target
+        <see cref="T:Mocassin.Model.Simulations.KineticSimulation" />
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Jobs.KmcJobPackageData.JobBaseDescription">
+      <summary>
+        Get or set the <see cref="T:Mocassin.UI.Xml.Jobs.KmcJobConfigData" /> that provides the default values for the config sequence
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Jobs.KmcJobPackageData.JobConfigurations">
+      <summary>
+        Get or set the list of <see cref="T:Mocassin.UI.Xml.Jobs.KmcJobConfigData" /> objects of the collection
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Jobs.KmcJobPackageData.#ctor">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.Jobs.KmcJobPackageData.Duplicate">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.Jobs.KmcJobPackageData.Mocassin#UI#Xml#Base#IDuplicable#Duplicate">
+      <inheritdoc />
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Jobs.KmcJobPackageData.ToInternal(Mocassin.Model.ModelProject.IModelProject,System.Int32)">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.Jobs.KmcJobPackageData.GetConfigurations">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.Jobs.KmcJobPackageData.GetTotalJobCount(Mocassin.Model.ModelProject.IModelProject)">
+      <inheritdoc />
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Jobs.KmcJobPackageData.GetJobCountPerConfig(Mocassin.Model.ModelProject.IModelProject)">
+      <summary>
+        Get the actual job count per configuration form the first priority level that defines value
+      </summary>
+      <param name="modelProject"></param>
+      <returns></returns>
+    </member>
+    <member name="T:Mocassin.UI.Xml.Jobs.DopingValueData">
+      <summary>
+        Describes an applicable doping by doping logic information and relative amount
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Jobs.DopingValueData.Doping">
+      <summary>
+        Get or set the <see cref="T:Mocassin.UI.Xml.Base.ModelObjectReference`1" /> for the doping information
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Jobs.DopingValueData.Value">
+      <summary>
+        Get or set the value for the doping in the range [0;1]
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Jobs.DopingValueData.Duplicate">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.Jobs.DopingValueData.Mocassin#UI#Xml#Base#IDuplicable#Duplicate">
+      <inheritdoc />
+    </member>
+    <member name="T:Mocassin.UI.Xml.Jobs.LatticeConfigData">
+      <summary>
+        Describes a doped lattice configuration by size and doping information
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Jobs.LatticeConfigData.SizeA">
+      <summary>
+        Get or set the number of unit cells in 'A' direction
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Jobs.LatticeConfigData.SizeB">
+      <summary>
+        Get or set the number of unit cells in 'B' direction
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Jobs.LatticeConfigData.SizeC">
+      <summary>
+        Get or set the number of unit cells in 'C' direction
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Jobs.LatticeConfigData.DopingValues">
+      <summary>
+        Get or set the list of <see cref="T:Mocassin.UI.Xml.Jobs.DopingValueData" /> information
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Jobs.LatticeConfigData.#ctor">
+      <summary>
+        Creates a new <see cref="T:Mocassin.UI.Xml.Jobs.LatticeConfigData" /> with default size
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Jobs.LatticeConfigData.Duplicate">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.Jobs.LatticeConfigData.Mocassin#UI#Xml#Base#IDuplicable#Duplicate">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.Jobs.LatticeConfigData.ToInternal(Mocassin.Model.ModelProject.IModelProject)">
+      <summary>
+        Creates an internal <see cref="T:Mocassin.Model.Translator.Jobs.LatticeConfiguration" /> from the serializable data object
+      </summary>
+      <param name="modelProject"></param>
+      <returns></returns>
+    </member>
+    <member name="T:Mocassin.UI.Xml.Jobs.ProjectJobSetTemplate">
+      <summary>
+        Main serializable data object to provide multiple
+        <see cref="T:Mocassin.Model.Translator.Jobs.IJobCollection" /> objects to the simulation database
+        creation system
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Jobs.ProjectJobSetTemplate.Key">
+      <summary>
+        Get or set a key for the customization
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Jobs.ProjectJobSetTemplate.KmcJobPackageDescriptions">
+      <summary>
+        Get or set the list of <see cref="T:Mocassin.UI.Xml.Jobs.KmcJobPackageData" /> that defines
+        <see cref="T:Mocassin.Model.Simulations.IKineticSimulation" /> database build instructions
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Jobs.ProjectJobSetTemplate.MmcJobPackageDescriptions">
+      <summary>
+        Get or set the list of <see cref="T:Mocassin.UI.Xml.Jobs.MmcJobPackageData" /> that defines
+        <see cref="T:Mocassin.Model.Simulations.IMetropolisSimulation" /> database build instructions
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Jobs.ProjectJobSetTemplate.#ctor">
+      <summary>
+        Creates new <see cref="T:Mocassin.UI.Xml.Jobs.ProjectJobSetTemplate" /> with empty
+        <see cref="T:Mocassin.UI.Xml.Jobs.JobPackageData" />
+        collections
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Jobs.ProjectJobSetTemplate.Duplicate">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.Jobs.ProjectJobSetTemplate.Mocassin#UI#Xml#Base#IDuplicable#Duplicate">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.Jobs.ProjectJobSetTemplate.ToInternals(Mocassin.Model.ModelProject.IModelProject)">
+      <summary>
+        Get the sequence of <see cref="T:Mocassin.Model.Translator.Jobs.IJobCollection" /> objects defined in the object
+      </summary>
+      <param name="modelProject"></param>
+      <returns></returns>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Jobs.ProjectJobSetTemplate.GetTotalJobCount(Mocassin.Model.ModelProject.IModelProject)">
+      <summary>
+        Calculates the total number simulation configurations of the object defined within the context of the passed
+        <see cref="T:Mocassin.Model.ModelProject.IModelProject" />
+      </summary>
+      <param name="modelProject"></param>
+      <returns></returns>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Jobs.ProjectJobSetTemplate.Create(Mocassin.UI.Xml.Main.MocassinProject)">
+      <summary>
+        Creates  anew <see cref="T:Mocassin.UI.Xml.Jobs.ProjectJobSetTemplate" /> that belongs to the passed parent
+        <see cref="T:Mocassin.UI.Xml.Main.MocassinProject" />
+      </summary>
+      <param name="parentProject"></param>
+      <returns></returns>
+    </member>
+    <member name="T:Mocassin.UI.Xml.Jobs.MmcJobConfigData">
+      <summary>
+        Serializable data object to store and create
+        <see cref="T:Mocassin.Model.Translator.Jobs.MmcJobConfiguration" /> objects for the database creation
+        system
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Jobs.MmcJobConfigData.BreakTolerance">
+      <summary>
+        Get or set the abort tolerance value as a string
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Jobs.MmcJobConfigData.BreakSampleLength">
+      <summary>
+        Get or set the abort sequence length as a string
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Jobs.MmcJobConfigData.BreakSampleInterval">
+      <summary>
+        Get or set the abort sample interval as a string
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Jobs.MmcJobConfigData.ResultSampleMcs">
+      <summary>
+        Get or set the result sample mcs as a string
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Jobs.MmcJobConfigData.Duplicate">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.Jobs.MmcJobConfigData.Mocassin#UI#Xml#Base#IDuplicable#Duplicate">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.Jobs.MmcJobConfigData.GetPreparedInternal(Mocassin.Model.Simulations.ISimulation)">
+      <inheritdoc />
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Jobs.MmcJobConfigData.GetPreparedInternal(Mocassin.Model.Translator.Jobs.JobConfiguration)">
+      <inheritdoc />
+    </member>
+    <member name="T:Mocassin.UI.Xml.Jobs.MmcJobPackageData">
+      <summary>
+        Serializable data object for storage and provision of
+        <see cref="T:Mocassin.Model.Translator.Jobs.MmcJobCollection" /> objects
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Jobs.MmcJobPackageData.Simulation">
+      <summary>
+        Get or set the <see cref="T:Mocassin.UI.Xml.Base.ModelObjectReference`1" /> to the target
+        <see cref="T:Mocassin.Model.Simulations.MetropolisSimulation" />
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Jobs.MmcJobPackageData.JobBaseDescription">
+      <summary>
+        Get or set the <see cref="T:Mocassin.UI.Xml.Jobs.MmcJobConfigData" /> that provides the default values for the config sequence
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Jobs.MmcJobPackageData.JobConfigurations">
+      <summary>
+        Get or set the list of <see cref="T:Mocassin.UI.Xml.Jobs.MmcJobConfigData" /> objects of the collection
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Jobs.MmcJobPackageData.#ctor">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.Jobs.MmcJobPackageData.Duplicate">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.Jobs.MmcJobPackageData.Mocassin#UI#Xml#Base#IDuplicable#Duplicate">
+      <inheritdoc />
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Jobs.MmcJobPackageData.ToInternal(Mocassin.Model.ModelProject.IModelProject,System.Int32)">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.Jobs.MmcJobPackageData.GetConfigurations">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.Jobs.MmcJobPackageData.GetTotalJobCount(Mocassin.Model.ModelProject.IModelProject)">
+      <inheritdoc />
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Jobs.MmcJobPackageData.GetJobCountPerConfig(Mocassin.Model.ModelProject.IModelProject)">
+      <summary>
+        Get the actual job count per configuration form the first priority level that defines value
+      </summary>
+      <param name="modelProject"></param>
+      <returns></returns>
+    </member>
+    <member name="T:Mocassin.UI.Xml.Jobs.ManualOptimizerData">
+      <summary>
+        Serializable base class that enables manual definition of
+        <see cref="T:Mocassin.Model.Translator.Optimization.IPostBuildOptimizer" /> interfaces for
+        <see cref="T:Mocassin.UI.Xml.Jobs.JobPackageData" /> objects
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Jobs.ManualOptimizerData.ToInternal(Mocassin.Model.ModelProject.IModelProject)">
+      <summary>
+        Uses the passed <see cref="T:Mocassin.Model.ModelProject.IModelProject" /> to build an
+        <see cref="T:Mocassin.Model.Translator.Optimization.IPostBuildOptimizer" /> from the set data
+      </summary>
+      <param name="modelProject"></param>
+      <returns></returns>
+    </member>
+    <member name="T:Mocassin.UI.Xml.Jobs.SelectionOptimizerData">
+      <summary>
+        Serializable data object that enables manual definition of
+        <see cref="T:Mocassin.Model.Translator.Optimization.JumpSelectionOptimizer" /> objects to speed
+        up simulation
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Jobs.SelectionOptimizerData.StartReferencePosition">
+      <summary>
+        Get or set the <see cref="T:Mocassin.UI.Xml.Base.ModelObjectReference`1" /> to the
+        <see cref="T:Mocassin.Model.Structures.CellSite" /> that the
+        optimizer targets
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Jobs.SelectionOptimizerData.RemovedParticle">
+      <summary>
+        Get or set the <see cref="T:Mocassin.UI.Xml.Base.ModelObjectReference`1" /> to the
+        <see cref="T:Mocassin.Model.Particles.Particle" /> that the optimizers
+        removes
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Jobs.SelectionOptimizerData.Duplicate">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.Jobs.SelectionOptimizerData.Mocassin#UI#Xml#Base#IDuplicable#Duplicate">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.Jobs.SelectionOptimizerData.ToInternal(Mocassin.Model.ModelProject.IModelProject)">
+      <inheritdoc />
+    </member>
+    <member name="T:Mocassin.UI.Xml.Main.MocassinProject">
+      <summary>
+        The main project data root for a Mocassin project data and database creation instructions
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Main.MocassinProject.ProjectGuid">
+      <summary>
+        Get or set a Guid for the project
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Main.MocassinProject.ProjectName">
+      <summary>
+        Get or set a name for the project (Alias property)
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Main.MocassinProject.Json">
+      <summary>
+        Get or set the contents of the object by a json string representation
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Main.MocassinProject.ProjectModelData">
+      <summary>
+        Get or set the <see cref="P:Mocassin.UI.Xml.Main.MocassinProject.ProjectModelData" /> that defines the reference information
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Main.MocassinProject.CustomizationTemplates">
+      <summary>
+        Get or set the list of <see cref="T:Mocassin.UI.Xml.Customization.ProjectCustomizationTemplate" /> that defines parameters for auto generated
+        content
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Main.MocassinProject.JobSetTemplates">
+      <summary>
+        Get or set the list of <see cref="T:Mocassin.UI.Xml.Jobs.ProjectJobSetTemplate" /> that defines
+        <see cref="T:Mocassin.Model.Translator.ISimulationLibrary" /> build instructions
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Main.MocassinProject.SimulationDbBuildTemplates">
+      <summary>
+        Get or set the list of <see cref="T:Mocassin.UI.Xml.Main.SimulationDbBuildTemplate" /> that defines
+        a full translation instruction for projects into databases
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Main.MocassinProject.Resources">
+      <summary>
+        Get or set the <see cref="T:Mocassin.UI.Xml.Base.ResourcesData" /> for the project
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Main.MocassinProject.#ctor">
+      <summary>
+        Create empty <see cref="T:Mocassin.UI.Xml.Main.MocassinProject" />
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Main.MocassinProject.CreateNew">
+      <summary>
+        Creates a new empty default <see cref="T:Mocassin.UI.Xml.Main.MocassinProject" />
+      </summary>
+      <returns></returns>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.Main.MocassinProject.FromJson(System.String,Newtonsoft.Json.JsonSerializerSettings)">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.Main.MocassinProject.RestoreParentReferences">
+      <summary>
+        Restores the internal parent references and other missing references that are not covered though the JSON
+        serialization
+      </summary>
+    </member>
+    <member name="T:Mocassin.UI.Xml.Main.SimulationDbBuildTemplate">
+      <summary>
+        The main project data root for a Mocassin project building and database creation instructions
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Main.SimulationDbBuildTemplate.Json">
+      <inheritdoc />
+    </member>
+    <member name="P:Mocassin.UI.Xml.Main.SimulationDbBuildTemplate.ProjectModelData">
+      <summary>
+        Get or set the <see cref="P:Mocassin.UI.Xml.Main.SimulationDbBuildTemplate.ProjectModelData" />
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Main.SimulationDbBuildTemplate.ModelKey">
+      <summary>
+        Get or set the key of the <see cref="P:Mocassin.UI.Xml.Main.SimulationDbBuildTemplate.ProjectModelData" />
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Main.SimulationDbBuildTemplate.ProjectCustomizationTemplate">
+      <summary>
+        Get or set the <see cref="P:Mocassin.UI.Xml.Main.SimulationDbBuildTemplate.ProjectCustomizationTemplate" />
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Main.SimulationDbBuildTemplate.CustomizationKey">
+      <summary>
+        Get or set the key of the
+        <see cref="P:Mocassin.UI.Xml.Main.SimulationDbBuildTemplate.ProjectCustomizationTemplate" />
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Main.SimulationDbBuildTemplate.ProjectJobSetTemplate">
+      <summary>
+        Get or set the <see cref="P:Mocassin.UI.Xml.Main.SimulationDbBuildTemplate.ProjectJobSetTemplate" />
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Main.SimulationDbBuildTemplate.JobTranslationKey">
+      <summary>
+        Get or set the key of the <see cref="P:Mocassin.UI.Xml.Main.SimulationDbBuildTemplate.ProjectJobSetTemplate" />
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Main.SimulationDbBuildTemplate.RestoreBuildReferences">
+      <summary>
+        Restores the build object references not covered by the JSON serialization
+      </summary>
+    </member>
+    <member name="T:Mocassin.UI.Xml.EnergyModel.EnergyModelData">
+      <summary>
+        Serializable data object to supply all data managed by the
+        <see cref="T:Mocassin.Model.Energies.IEnergyManager" />
+        system
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.EnergyModel.EnergyModelData.StableEnvironment">
+      <summary>
+        Get or set the stable environment info of the energy model
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.EnergyModel.EnergyModelData.UnstableEnvironments">
+      <summary>
+        Get or set the list of unstable environments of the energy model
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.EnergyModel.EnergyModelData.GroupInteractions">
+      <summary>
+        Get or set the list of unstable environments of the energy model
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.EnergyModel.EnergyModelData.#ctor">
+      <summary>
+        Creates new <see cref="T:Mocassin.UI.Xml.EnergyModel.EnergyModelData" /> with empty component lists
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.EnergyModel.EnergyModelData.GetInputParameters">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.EnergyModel.EnergyModelData.GetInputObjects">
+      <inheritdoc />
+    </member>
+    <member name="T:Mocassin.UI.Xml.EnergyModel.GroupInteractionData">
+      <summary>
+        Serializable data object for <see cref="T:Mocassin.Model.Energies.IGroupInteraction" /> model object creation
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.EnergyModel.GroupInteractionData.CenterCellReferencePosition">
+      <summary>
+        Get or set the key of the center unit cell position
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.EnergyModel.GroupInteractionData.GroupGeometry">
+      <summary>
+        Get or seth the list of surrounding position geometry vectors
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.EnergyModel.GroupInteractionData.GetModelObjectInternal">
+      <inheritdoc />
+    </member>
+    <member name="T:Mocassin.UI.Xml.EnergyModel.UnstableEnvironmentData">
+      <summary>
+        Serializable data object for <see cref="T:Mocassin.Model.Energies.IUnstableEnvironment" /> model object creation
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.EnergyModel.UnstableEnvironmentData.MaxInteractionRange">
+      <summary>
+        Get or set the maximum interaction range
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.EnergyModel.UnstableEnvironmentData.CellReferencePosition">
+      <summary>
+        Get or set the key of the center unit cell position
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.EnergyModel.UnstableEnvironmentData.InteractionFilters">
+      <summary>
+        Get or set the list of interaction filters of the environment
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.EnergyModel.UnstableEnvironmentData.GetModelObjectInternal">
+      <inheritdoc />
+    </member>
+    <member name="T:Mocassin.UI.Xml.EnergyModel.DefectBackgroundData">
+      <summary>
+        Serializable data object for storing a defect energy background as a set of
+        <see cref="T:Mocassin.UI.Xml.EnergyModel.DefectEnergyData" />
+        instances
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.EnergyModel.DefectBackgroundData.DefectEnergies">
+      <summary>
+        Get or set the list of <see cref="T:Mocassin.UI.Xml.EnergyModel.DefectEnergyData" /> that describe the defect background
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.EnergyModel.DefectBackgroundData.#ctor">
+      <summary>
+        Create new <see cref="T:Mocassin.UI.Xml.EnergyModel.DefectBackgroundData" /> with empty defect list
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.EnergyModel.DefectBackgroundData.AsDefectList">
+      <summary>
+        Get the defect background as a list of <see cref="T:Mocassin.Model.Energies.DefectEnergy" /> objects for the model input pipeline
+      </summary>
+      <returns></returns>
+    </member>
+    <member name="T:Mocassin.UI.Xml.EnergyModel.DefectEnergyData">
+      <summary>
+        Serializable data object for storing defect energies
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.EnergyModel.DefectEnergyData.Particle">
+      <summary>
+        Get or set the <see cref="T:Mocassin.UI.Xml.Base.ModelObjectReference`1" /> for the defect
+        <see cref="P:Mocassin.UI.Xml.EnergyModel.DefectEnergyData.Particle" />
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.EnergyModel.DefectEnergyData.CellReferencePosition">
+      <summary>
+        Get or set the <see cref="T:Mocassin.UI.Xml.Base.ModelObjectReference`1" /> for the defect
+        <see cref="P:Mocassin.UI.Xml.EnergyModel.DefectEnergyData.CellReferencePosition" />
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.EnergyModel.DefectEnergyData.Energy">
+      <summary>
+        Get or set the energy value in [eV]
+      </summary>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.EnergyModel.DefectEnergyData.CompareTo(Mocassin.UI.Xml.EnergyModel.DefectEnergyData)">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.EnergyModel.DefectEnergyData.GetInputObject">
+      <summary>
+        Get an <see cref="T:Mocassin.Model.Energies.DefectEnergy" /> object for the model input pipeline
+      </summary>
+      <returns></returns>
+    </member>
+    <member name="T:Mocassin.UI.Xml.EnergyModel.StableEnvironmentData">
+      <summary>
+        Serializable data object for <see cref="T:Mocassin.Model.Energies.IStableEnvironmentInfo" /> model parameter creation
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.EnergyModel.StableEnvironmentData.MaxInteractionRange">
+      <summary>
+        Get or set the interaction cutoff range in [Ang]
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.EnergyModel.StableEnvironmentData.InteractionFilters">
+      <summary>
+        Get or set the list of interaction filters for stable environments
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.EnergyModel.StableEnvironmentData.DefectBackground">
+      <summary>
+        Get or set the <see cref="T:Mocassin.UI.Xml.EnergyModel.DefectBackgroundData" /> for stable environments
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.EnergyModel.StableEnvironmentData.#ctor">
+      <summary>
+        Creates new <see cref="T:Mocassin.UI.Xml.EnergyModel.StableEnvironmentData" /> with empty component lists
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.EnergyModel.StableEnvironmentData.GetModelObjectInternal">
+      <inheritdoc />
+    </member>
+    <member name="T:Mocassin.UI.Xml.LatticeModel.LatticeModelData">
+      <summary>
+        Serializable data object to supply all data managed by the
+        <see cref="T:Mocassin.Model.Lattices.ILatticeManager" />
+        system
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.LatticeModel.LatticeModelData.BuildingBlocks">
+      <summary>
+        The list of defines building blocks
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.LatticeModel.LatticeModelData.Dopings">
+      <summary>
+        The list of defines dopings
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.LatticeModel.LatticeModelData.DopingCombination">
+      <summary>
+        The list of defines doping combinations
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.LatticeModel.LatticeModelData.#ctor">
+      <summary>
+        Creates new <see cref="T:Mocassin.UI.Xml.LatticeModel.LatticeModelData" /> with empty component lists
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.LatticeModel.LatticeModelData.GetInputParameters">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.LatticeModel.LatticeModelData.GetInputObjects">
+      <inheritdoc />
+    </member>
+    <member name="T:Mocassin.UI.Xml.LatticeModel.BuildingBlockData">
+      <summary>
+        Serializable data object for <see cref="T:Mocassin.Model.Lattices.IBuildingBlock" /> model object creation
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.LatticeModel.BuildingBlockData.ParticleList">
+      <summary>
+        List of particles which define the building block
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.LatticeModel.BuildingBlockData.GetModelObjectInternal">
+      <inheritdoc />
+    </member>
+    <member name="T:Mocassin.UI.Xml.LatticeModel.DopingAbstractData">
+      <summary>
+        Serializable data object for <see cref="T:Mocassin.Model.Lattices.IDopingCombination" /> model object creation
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.LatticeModel.DopingAbstractData.Dopable">
+      <summary>
+        Particle that is replaced by dopant
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.LatticeModel.DopingAbstractData.Dopant">
+      <summary>
+        Particle that is used as dopant
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.LatticeModel.DopingAbstractData.CellReferencePosition">
+      <summary>
+        Unit cell position on which the doping is applied
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.LatticeModel.DopingAbstractData.GetModelObjectInternal">
+      <inheritdoc />
+    </member>
+    <member name="T:Mocassin.UI.Xml.LatticeModel.DopingData">
+      <summary>
+        Serializable data object for <see cref="T:Mocassin.Model.Lattices.IDoping" /> model object creation
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.LatticeModel.DopingData.PrimaryDoping">
+      <summary>
+        The doping which is applied
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.LatticeModel.DopingData.CounterDoping">
+      <summary>
+        The doping to compensate the primary doping
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.LatticeModel.DopingData.BuildingBlock">
+      <summary>
+        The building block in which the doping is used
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.LatticeModel.DopingData.UseCounterDoping">
+      <summary>
+        Flag to indicate if a counter doping should be used
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.LatticeModel.DopingData.Priority">
+      <summary>
+        The priority order in which the doping is applied
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.LatticeModel.DopingData.GetModelObjectInternal">
+      <inheritdoc />
+    </member>
+    <member name="T:Mocassin.UI.Xml.Model.ModelInputRootAttribute">
+      <summary>
+        Attribute to mark a property as a model input data root that provides a model parameter and object sequence
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Model.ModelInputRootAttribute.Order">
+      <summary>
+        Get the input order of the root
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Model.ModelInputRootAttribute.#ctor(System.Int32)">
+      <summary>
+        Create new attribute with defined input order
+      </summary>
+      <param name="order"></param>
+    </member>
+    <member name="T:Mocassin.UI.Xml.Model.ProjectModelData">
+      <summary>
+        The main root for mocassin project data that targets <see cref="T:Mocassin.Model.Basic.IModelManager" />
+        through the
+        <see cref="T:Mocassin.Model.ModelProject.IProjectInputPipeline" /> interface
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Model.ProjectModelData.Key">
+      <summary>
+        Get or set a key for the customization
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Model.ProjectModelData.ParticleModelData">
+      <summary>
+        Get or set the input particle data
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Model.ProjectModelData.StructureModelData">
+      <summary>
+        Get or set the input structure data
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Model.ProjectModelData.TransitionModelData">
+      <summary>
+        Get or set the input transition data
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Model.ProjectModelData.EnergyModelData">
+      <summary>
+        Get or set the input energy data
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Model.ProjectModelData.LatticeModelData">
+      <summary>
+        Get or set the input lattice data
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.Model.ProjectModelData.SimulationModelData">
+      <summary>
+        Get or set the input simulation data
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Model.ProjectModelData.GetInputSequence">
+      <summary>
+        Get the full input sequence for the <see cref="T:Mocassin.Model.ModelProject.IModelProject" /> input process pipeline
+      </summary>
+      <returns></returns>
+    </member>
+    <member name="M:Mocassin.UI.Xml.Model.ProjectModelData.CreateNew">
+      <summary>
+        Creates a new empty default <see cref="T:Mocassin.UI.Xml.Model.ProjectModelData" /> without setting the parent
+      </summary>
+      <returns></returns>
+    </member>
+    <member name="T:Mocassin.UI.Xml.ParticleModel.ParticleModelData">
+      <summary>
+        Serializable data object to supply all data managed by the
+        <see cref="T:Mocassin.Model.Particles.IParticleManager" />
+        system
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.ParticleModel.ParticleModelData.Particles">
+      <summary>
+        The list of defined particles
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.ParticleModel.ParticleModelData.ParticleSets">
+      <summary>
+        The list of defined particle sets
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.ParticleModel.ParticleModelData.#ctor">
+      <summary>
+        Creates new <see cref="T:Mocassin.UI.Xml.ParticleModel.ParticleModelData" /> with empty component lists
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.ParticleModel.ParticleModelData.GetInputParameters">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.ParticleModel.ParticleModelData.GetInputObjects">
+      <inheritdoc />
+    </member>
+    <member name="T:Mocassin.UI.Xml.ParticleModel.ParticleData">
+      <summary>
+        Serializable data object for <see cref="T:Mocassin.Model.Particles.IParticle" /> model object creation
+      </summary>
+    </member>
+    <member name="F:Mocassin.UI.Xml.ParticleModel.ParticleData.VoidParticle">
+      <summary>
+        Get the <see cref="T:Mocassin.UI.Xml.ParticleModel.ParticleData" /> equivalent to the model
+        <see cref="T:Mocassin.Model.Particles.Particle" /> that represents the void state
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.ParticleModel.ParticleData.Charge">
+      <summary>
+        Get or set the charge value of the particle as a string
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.ParticleModel.ParticleData.Symbol">
+      <summary>
+        Get or set the symbol of the particle
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.ParticleModel.ParticleData.IsVacancy">
+      <summary>
+        Get or set the boolean flag that enables the vacancy behavior of the particle
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.ParticleModel.ParticleData.GetModelObjectInternal">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.ParticleModel.ParticleData.Create(Mocassin.Model.Particles.IParticle)">
+      <summary>
+        Creates a new <see cref="T:Mocassin.UI.Xml.ParticleModel.ParticleData" /> by pulling all required data from the passed
+        <see cref="T:Mocassin.Model.Particles.IParticle" />
+        model object interface
+      </summary>
+      <param name="particle"></param>
+      <returns></returns>
+    </member>
+    <member name="T:Mocassin.UI.Xml.ParticleModel.ParticleSetData">
+      <summary>
+        Serializable data object for <see cref="T:Mocassin.Model.Particles.IParticleSet" /> model object creation
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.ParticleModel.ParticleSetData.Particles">
+      <summary>
+        List of particles contained in the set
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.ParticleModel.ParticleSetData.GetModelObjectInternal">
+      <inheritdoc />
+    </member>
+    <member name="T:Mocassin.UI.Xml.SimulationModel.SimulationModelData">
+      <summary>
+        Serializable data object to supply all data managed by the
+        <see cref="T:Mocassin.Model.Simulations.ISimulationManager" />
+        system
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.SimulationModel.SimulationModelData.MetropolisSimulations">
+      <summary>
+        Get or set the list of metropolis simulations
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.SimulationModel.SimulationModelData.KineticSimulations">
+      <summary>
+        Get or set the list of metropolis simulations
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.SimulationModel.SimulationModelData.#ctor">
+      <summary>
+        Creates new <see cref="T:Mocassin.UI.Xml.SimulationModel.SimulationModelData" /> with empty component lists
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.SimulationModel.SimulationModelData.GetInputParameters">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.SimulationModel.SimulationModelData.GetInputObjects">
+      <inheritdoc />
+    </member>
+    <member name="T:Mocassin.UI.Xml.SimulationModel.KineticSimulationData">
+      <summary>
+        Serializable data object for <see cref="T:Mocassin.Model.Simulations.IKineticSimulation" /> model object creation
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.SimulationModel.KineticSimulationData.PreRunMcsp">
+      <summary>
+        Get or set the pre-run mcsp for normalization and relaxation of the lattice
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.SimulationModel.KineticSimulationData.NormalizationProbability">
+      <summary>
+        Get or set a custom normalization probability for the simulation
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.SimulationModel.KineticSimulationData.ElectricFieldMagnitude">
+      <summary>
+        Get or set the electric field magnitude in [V/m]
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.SimulationModel.KineticSimulationData.ElectricFieldVector">
+      <summary>
+        Get or set the electric field direction vector in fractional coordinates
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.SimulationModel.KineticSimulationData.Transitions">
+      <summary>
+        Get or set the list of active kinetic transitions in this kinetic simulation
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.SimulationModel.KineticSimulationData.GetPreparedSpecifiedSimulation">
+      <inheritdoc />
+    </member>
+    <member name="T:Mocassin.UI.Xml.SimulationModel.MetropolisSimulationData">
+      <summary>
+        Serializable data object for <see cref="T:Mocassin.Model.Simulations.IMetropolisSimulation" /> model object creation
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.SimulationModel.MetropolisSimulationData.RelativeBreakTolerance">
+      <summary>
+        Get or set the relative break tolerance value
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.SimulationModel.MetropolisSimulationData.BreakSampleLength">
+      <summary>
+        Get or set the sample length for the break
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.SimulationModel.MetropolisSimulationData.BreakSampleIntervalMcs">
+      <summary>
+        Get or set the sample interval for the break
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.SimulationModel.MetropolisSimulationData.ResultSampleMcs">
+      <summary>
+        Get or set the result sample mcs
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.SimulationModel.MetropolisSimulationData.Transitions">
+      <summary>
+        Get or set the list of metropolis transitions active in the simulation
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.SimulationModel.MetropolisSimulationData.GetPreparedSpecifiedSimulation">
+      <inheritdoc />
+    </member>
+    <member name="T:Mocassin.UI.Xml.SimulationModel.SimulationBaseData">
+      <summary>
+        Serializable data object base for <see cref="T:Mocassin.Model.Simulations.ISimulation" /> model object creation
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.SimulationModel.SimulationBaseData.CustomRngSeed">
+      <summary>
+        Get or set the custom rng seed for the simulation
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.SimulationModel.SimulationBaseData.Temperature">
+      <summary>
+        Get or set the base simulation temperature in [K]
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.SimulationModel.SimulationBaseData.TargetMcsp">
+      <summary>
+        Get or set the target MCSP value
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.SimulationModel.SimulationBaseData.SimulationBlockCount">
+      <summary>
+        Get or set the number of simulation blocks
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.SimulationModel.SimulationBaseData.SaveRunTimeLimit">
+      <summary>
+        Get or set the hard run limit as a time span
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.SimulationModel.SimulationBaseData.LowerSuccessRateLimit">
+      <summary>
+        Get or set the hard lower success rate limit in [Hz]
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.SimulationModel.SimulationBaseData.JobCount">
+      <summary>
+        Get or set the basic job count multiplier
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.SimulationModel.SimulationBaseData.GetModelObjectInternal">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.SimulationModel.SimulationBaseData.GetPreparedSpecifiedSimulation">
+      <summary>
+        Get the specified simulation object from the implementing instance
+      </summary>
+      <returns></returns>
+    </member>
+    <member name="T:Mocassin.UI.Xml.StructureModel.StructureModelData">
+      <summary>
+        Serializable data object to supply all data managed by the
+        <see cref="T:Mocassin.Model.Structures.IStructureManager" />
+        system
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.StructureModel.StructureModelData.StructureInfo">
+      <summary>
+        Get or set the xml structure info
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.StructureModel.StructureModelData.SpaceGroupInfo">
+      <summary>
+        Get or set the xml space group info
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.StructureModel.StructureModelData.CellParameters">
+      <summary>
+        Get or set the xml cell parameters
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.StructureModel.StructureModelData.CellReferencePositions">
+      <summary>
+        Get or set the list of stable and unstable wyckoff positions
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.StructureModel.StructureModelData.DummyPositions">
+      <summary>
+        Get or set the list of wyckoff dummy positions that are not part of the model
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.StructureModel.StructureModelData.#ctor">
+      <summary>
+        Creates a new <see cref="T:Mocassin.UI.Xml.StructureModel.StructureModelData" /> with empty component lists
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.StructureModel.StructureModelData.GetInputParameters">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.StructureModel.StructureModelData.GetInputObjects">
+      <inheritdoc />
+    </member>
+    <member name="T:Mocassin.UI.Xml.StructureModel.CellReferencePositionData">
+      <summary>
+        Serializable data object for <see cref="T:Mocassin.Model.Structures.ICellSite" /> model object creation
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.StructureModel.CellReferencePositionData.A">
+      <summary>
+        Get or set the coordinate value in A direction in [Ang]
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.StructureModel.CellReferencePositionData.B">
+      <summary>
+        Get or set the coordinate value in B direction in [Ang]
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.StructureModel.CellReferencePositionData.C">
+      <summary>
+        Get or set the coordinate value in C direction in [Ang]
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.StructureModel.CellReferencePositionData.Occupation">
+      <summary>
+        Get or set the occupation set reference key
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.StructureModel.CellReferencePositionData.Stability">
+      <summary>
+        Get or set the position stability status
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.StructureModel.CellReferencePositionData.GetModelObjectInternal">
+      <inheritdoc />
+    </member>
+    <member name="T:Mocassin.UI.Xml.StructureModel.DummyPositionData">
+      <summary>
+        Serializable data object for <see cref="T:Mocassin.Model.Structures.ICellDummyPosition" /> model object creation
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.StructureModel.DummyPositionData.A">
+      <summary>
+        Get or set the coordinate value in A direction in [Ang]
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.StructureModel.DummyPositionData.B">
+      <summary>
+        Get or set the coordinate value in B direction in [Ang]
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.StructureModel.DummyPositionData.C">
+      <summary>
+        Get or set the coordinate value in C direction in [Ang]
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.StructureModel.DummyPositionData.GetModelObjectInternal">
+      <inheritdoc />
+    </member>
+    <member name="T:Mocassin.UI.Xml.StructureModel.CellParametersData">
+      <summary>
+        Serializable data object for <see cref="T:Mocassin.Model.Structures.ICellParameters" /> model parameter creation
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.StructureModel.CellParametersData.IsRadian">
+      <summary>
+        Boolean flag to enable radian based angle definition
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.StructureModel.CellParametersData.ParamA">
+      <summary>
+        The cell parameter A in [Ang]
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.StructureModel.CellParametersData.ParamB">
+      <summary>
+        The cell parameter B in [Ang]
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.StructureModel.CellParametersData.ParamC">
+      <summary>
+        The cell parameter C in [Ang]
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.StructureModel.CellParametersData.Alpha">
+      <summary>
+        The unit cell angle alpha in radian or degree
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.StructureModel.CellParametersData.Beta">
+      <summary>
+        The unit cell angle beta in radian or degree
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.StructureModel.CellParametersData.Gamma">
+      <summary>
+        The unit cell angle gamma in radian or degree
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.StructureModel.CellParametersData.#ctor">
+      <summary>
+        Creates a new <see cref="T:Mocassin.UI.Xml.StructureModel.CellParametersData" /> with default triclinic settings
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.StructureModel.CellParametersData.GetModelObjectInternal">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.StructureModel.CellParametersData.GetParameterSet">
+      <summary>
+        Translates the set properties into a crystal parameter set
+      </summary>
+      <returns></returns>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.StructureModel.CellParametersData.PopulateFrom(Mocassin.Symmetry.CrystalSystems.CrystalParameterSet)">
+      <summary>
+        Populates from the passed <see cref="T:Mocassin.Symmetry.CrystalSystems.CrystalParameterSet" />
+      </summary>
+      <param name="parameterSet"></param>
+    </member>
+    <member name="T:Mocassin.UI.Xml.StructureModel.SpaceGroupInfoData">
+      <summary>
+        Serializable data object for <see cref="T:Mocassin.Model.Structures.ISpaceGroupInfo" /> model parameter creation
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.StructureModel.SpaceGroupInfoData.Number">
+      <summary>
+        Get or set the number of the space group
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.StructureModel.SpaceGroupInfoData.Literal">
+      <summary>
+        Get or set the literal name of the space group
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.StructureModel.SpaceGroupInfoData.CrystalVariation">
+      <summary>
+        Get or set the <see cref="T:Mocassin.Symmetry.CrystalSystems.CrystalSystemVariation" /> of the space group
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.StructureModel.SpaceGroupInfoData.#ctor">
+      <summary>
+        Create default space group info object
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.StructureModel.SpaceGroupInfoData.GetModelObjectInternal">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.StructureModel.SpaceGroupInfoData.GetSpaceGroupEntry">
+      <summary>
+        Get the space group entry object for the set properties
+      </summary>
+      <returns>Space group entry for the current object state or P1 default object if the group number is out of range</returns>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.StructureModel.SpaceGroupInfoData.PopulateFrom(Mocassin.Symmetry.SpaceGroups.SpaceGroupEntry)">
+      <summary>
+        Populates the <see cref="T:Mocassin.UI.Xml.StructureModel.SpaceGroupInfoData" /> from the passed
+        <see cref="T:Mocassin.Symmetry.SpaceGroups.SpaceGroupEntry" />
+      </summary>
+      <param name="entry"></param>
+    </member>
+    <member name="T:Mocassin.UI.Xml.StructureModel.StructureInfoData">
+      <summary>
+        Serializable data object for <see cref="T:Mocassin.Model.Structures.IStructureInfo" /> model parameter creation
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.StructureModel.StructureInfoData.#ctor">
+      <summary>
+        Creates new default <see cref="T:Mocassin.UI.Xml.StructureModel.StructureInfoData" />
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.StructureModel.StructureInfoData.GetModelObjectInternal">
+      <inheritdoc />
+    </member>
+    <member name="T:Mocassin.UI.Xml.TransitionModel.TransitionModelData">
+      <summary>
+        Serializable data object to supply all data managed by the
+        <see cref="T:Mocassin.Model.Transitions.ITransitionManager" />
+        system
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.TransitionModel.TransitionModelData.StateExchangePairs">
+      <summary>
+        Get or set the list of state exchange input objects
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.TransitionModel.TransitionModelData.StateExchangeGroups">
+      <summary>
+        Get or set the list of state exchange input objects
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.TransitionModel.TransitionModelData.AbstractTransitions">
+      <summary>
+        Get or set the list of abstract transition input objects
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.TransitionModel.TransitionModelData.KineticTransitions">
+      <summary>
+        Get or set the list of kinetic transition input objects
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.TransitionModel.TransitionModelData.MetropolisTransitions">
+      <summary>
+        Get or set the list of metropolis transition input objects
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.TransitionModel.TransitionModelData.#ctor">
+      <summary>
+        Creates new <see cref="T:Mocassin.UI.Xml.TransitionModel.TransitionModelData" /> with empty component lists
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.TransitionModel.TransitionModelData.GetInputParameters">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.TransitionModel.TransitionModelData.GetInputObjects">
+      <inheritdoc />
+    </member>
+    <member name="T:Mocassin.UI.Xml.TransitionModel.AbstractTransitionData">
+      <summary>
+        Serializable data object for <see cref="T:Mocassin.Model.Transitions.IAbstractTransition" /> model object creation
+      </summary>
+    </member>
+    <member name="F:Mocassin.UI.Xml.TransitionModel.AbstractTransitionData.ConnectorRegex">
+      <summary>
+        Get the regex for the connector string
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.TransitionModel.AbstractTransitionData.IsAssociation">
+      <summary>
+        Get or set the association/dissociation flag that enables this behavior
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.TransitionModel.AbstractTransitionData.StateExchangeGroups">
+      <summary>
+        Get or set the list of state exchange groups
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.TransitionModel.AbstractTransitionData.ConnectorString">
+      <summary>
+        Get or set the string that describes the connector sequence
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.TransitionModel.AbstractTransitionData.GetModelObjectInternal">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.TransitionModel.AbstractTransitionData.GetConnectorSequence">
+      <summary>
+        Translates the currently set connector string into a connector sequence
+      </summary>
+      <returns></returns>
+    </member>
+    <member name="T:Mocassin.UI.Xml.TransitionModel.KineticTransitionData">
+      <summary>
+        Serializable data object for <see cref="T:Mocassin.Model.Transitions.IKineticTransition" /> model object creation
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.TransitionModel.KineticTransitionData.AbstractTransition">
+      <summary>
+        Get or set the abstract transition key for the transition logic
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.TransitionModel.KineticTransitionData.PathVectors">
+      <summary>
+        Get or set the geometry sequence of the kinetic transition
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.TransitionModel.KineticTransitionData.GetModelObjectInternal">
+      <inheritdoc />
+    </member>
+    <member name="T:Mocassin.UI.Xml.TransitionModel.MetropolisTransitionData">
+      <summary>
+        Serializable data object for <see cref="T:Mocassin.Model.Transitions.IMetropolisTransition" /> model object creation
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.TransitionModel.MetropolisTransitionData.AbstractTransition">
+      <summary>
+        Get or set the abstract transition key for the transition logic
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.TransitionModel.MetropolisTransitionData.FirstCellReferencePosition">
+      <summary>
+        Get or set the unit cell position key for first involved wyckoff position
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.TransitionModel.MetropolisTransitionData.SecondCellReferencePosition">
+      <summary>
+        Get or set the unit cell position key for second involved wyckoff position
+      </summary>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.TransitionModel.MetropolisTransitionData.Equals(Mocassin.UI.Xml.TransitionModel.MetropolisTransitionData)">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.TransitionModel.MetropolisTransitionData.GetModelObjectInternal">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.TransitionModel.MetropolisTransitionData.HasNullKeys">
+      <summary>
+        Checks if one of the key <see cref="T:System.String" /> values is null
+      </summary>
+      <returns></returns>
+    </member>
+    <member name="T:Mocassin.UI.Xml.TransitionModel.StateExchangeGroupData">
+      <summary>
+        Serializable data object for <see cref="T:Mocassin.Model.Transitions.IStateExchangeGroup" /> model object creation
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.TransitionModel.StateExchangeGroupData.StateExchangePairs">
+      <summary>
+        Get or set the list of state exchange pairs contained in the exchange group
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.TransitionModel.StateExchangeGroupData.GetModelObjectInternal">
+      <inheritdoc />
+    </member>
+    <member name="T:Mocassin.UI.Xml.TransitionModel.StateExchangePairData">
+      <summary>
+        Serializable data object for <see cref="T:Mocassin.Model.Transitions.IStateExchangePair" /> model object creation
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.TransitionModel.StateExchangePairData.DonorParticle">
+      <summary>
+        Get or set the donor state particle key
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.TransitionModel.StateExchangePairData.AcceptorParticle">
+      <summary>
+        Get or set the acceptor state particle key
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.TransitionModel.StateExchangePairData.GetModelObjectInternal">
+      <inheritdoc />
+    </member>
+    <member name="T:Mocassin.UI.Xml.ProjectBuilding.LibraryBuildStatus">
+      <summary>
+        The enumeration to signal about the current status of the
+        <see cref="T:Mocassin.Model.Translator.ISimulationLibrary" /> building
+        process
+      </summary>
+    </member>
+    <member name="T:Mocassin.UI.Xml.ProjectBuilding.SimulationLibraryBuilder">
+      <summary>
+        Build system that translates <see cref="T:Mocassin.UI.Xml.Main.SimulationDbBuildTemplate" /> instances into
+        <see cref="T:Mocassin.Model.Translator.ISimulationLibrary" /> interfaces
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.ProjectBuilding.SimulationLibraryBuilder.IsAutoSaveAfterBuild">
+      <summary>
+        Get or set a boolean flag if the builder should save the context after the process
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.ProjectBuilding.SimulationLibraryBuilder.CancellationToken">
+      <summary>
+        Get or set the <see cref="P:Mocassin.UI.Xml.ProjectBuilding.SimulationLibraryBuilder.CancellationToken" /> for the build process
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.ProjectBuilding.SimulationLibraryBuilder.BuildStatusEvent">
+      <summary>
+        Get the <see cref="T:Mocassin.Framework.Events.ReactiveEvent`1" /> for distribution of
+        <see cref="T:Mocassin.UI.Xml.ProjectBuilding.LibraryBuildStatus" /> notifications
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.ProjectBuilding.SimulationLibraryBuilder.JobBuildCounterEvent">
+      <summary>
+        Get the <see cref="T:Mocassin.Framework.Events.ReactiveEvent`1" /> for distribution of job build notifications
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.ProjectBuilding.SimulationLibraryBuilder.LibraryBuildStatusNotifications">
+      <summary>
+        Get the <see cref="T:System.IObservable`1" /> that informs about changes in the
+        <see cref="T:Mocassin.UI.Xml.ProjectBuilding.LibraryBuildStatus" /> and
+        distributes caught <see cref="T:System.Exception" />
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.ProjectBuilding.SimulationLibraryBuilder.JobBuildCounterNotifications">
+      <summary>
+        Get the <see cref="T:System.IObservable`1" /> that informs about changes in the number of successfully build job entities
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.ProjectBuilding.SimulationLibraryBuilder.#ctor">
+      <summary>
+        Creates a new <see cref="T:Mocassin.UI.Xml.ProjectBuilding.SimulationLibraryBuilder" />
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.ProjectBuilding.SimulationLibraryBuilder.Dispose">
+      <inheritdoc />
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.ProjectBuilding.SimulationLibraryBuilder.BuildLibrary(Mocassin.UI.Xml.Main.SimulationDbBuildTemplate,System.String,Mocassin.Model.ModelProject.IModelProject,System.Threading.CancellationToken)">
+      <summary>
+        Executes a full translation cycle of a <see cref="T:Mocassin.UI.Xml.Main.SimulationDbBuildTemplate" /> into a
+        <see cref="T:Mocassin.Model.Translator.ISimulationLibrary" /> using the passed file path
+        <see cref="T:System.String" /> and
+        <see cref="T:Mocassin.Model.ModelProject.IModelProject" /> interface
+      </summary>
+      <param name="simulationDbBuildTemplate"></param>
+      <param name="filePath"></param>
+      <param name="modelProject"></param>
+      <param name="cancellationToken"></param>
+      <returns></returns>
+    </member>
+    <member name="M:Mocassin.UI.Xml.ProjectBuilding.SimulationLibraryBuilder.CheckCancel">
+      <summary>
+        Checks if cancellation is requested and changes the
+        <see cref="T:Mocassin.UI.Xml.ProjectBuilding.LibraryBuildStatus" /> flag if required
+      </summary>
+      <returns></returns>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.ProjectBuilding.SimulationLibraryBuilder.TryPrepareModelProject(Mocassin.UI.Xml.Model.ProjectModelData,Mocassin.Model.ModelProject.IModelProject)">
+      <summary>
+        Tries to prepare a <see cref="T:Mocassin.Model.ModelProject.IModelProject" /> using the
+        <see cref="T:Mocassin.UI.Xml.Model.ProjectModelData" /> data object
+      </summary>
+      <param name="projectModel"></param>
+      <param name="modelProject"></param>
+      <returns></returns>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.ProjectBuilding.SimulationLibraryBuilder.TryPrepareModelCustomization(Mocassin.Model.ModelProject.IModelProject,Mocassin.UI.Xml.Customization.ModelCustomizationData)">
+      <summary>
+        Tries to prepare the customization of a prepared <see cref="T:Mocassin.Model.ModelProject.IModelProject" />
+        using the provided
+        <see cref="T:Mocassin.UI.Xml.Customization.ModelCustomizationData" />
+      </summary>
+      <param name="modelProject"></param>
+      <param name="modelCustomization"></param>
+      <returns></returns>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.ProjectBuilding.SimulationLibraryBuilder.TryBuildModelContext(Mocassin.Model.ModelProject.IModelProject,Mocassin.Model.Translator.ModelContext.IProjectModelContext@)">
+      <summary>
+        Tries to build a symmetry extended <see cref="T:Mocassin.Model.Translator.ModelContext.IProjectModelContext" />
+        for the provided and prepared
+        <see cref="T:Mocassin.Model.ModelProject.IModelProject" />
+      </summary>
+      <param name="modelProject"></param>
+      <param name="modelContext"></param>
+      <returns></returns>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.ProjectBuilding.SimulationLibraryBuilder.TryPrepareLibraryContext(System.String,Mocassin.Model.Translator.SimulationDbContext@)">
+      <summary>
+        Tries to prepare a new <see cref="T:Mocassin.Model.Translator.SimulationDbContext" /> using th provided file path
+        <see cref="T:System.String" />
+      </summary>
+      <param name="filePath"></param>
+      <param name="dbContext"></param>
+      <returns></returns>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.ProjectBuilding.SimulationLibraryBuilder.TryBuildLibraryContent(Mocassin.Model.Translator.ModelContext.IProjectModelContext,Mocassin.UI.Xml.Jobs.ProjectJobSetTemplate,System.Collections.Generic.IList{Mocassin.Model.Translator.SimulationJobPackageModel}@)">
+      <summary>
+        Tries to build the <see cref="T:System.Collections.Generic.IList`1" /> of
+        <see cref="T:Mocassin.Model.Translator.SimulationJobPackageModel" /> defined by a
+        <see cref="T:Mocassin.UI.Xml.Jobs.ProjectJobSetTemplate" /> using the provided
+        <see cref="T:Mocassin.Model.Translator.ModelContext.IProjectModelContext" />
+      </summary>
+      <param name="modelContext"></param>
+      <param name="jobTranslation"></param>
+      <param name="jobPackageModels"></param>
+      <returns></returns>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.ProjectBuilding.SimulationLibraryBuilder.TryAddContentsToLibrary(Mocassin.Model.Translator.SimulationDbContext,System.Collections.Generic.IEnumerable{Mocassin.Model.Translator.SimulationJobPackageModel})">
+      <summary>
+        Tries to save an <see cref="T:System.Collections.Generic.IEnumerable`1" /> sequence of
+        <see cref="T:Mocassin.Model.Translator.SimulationJobPackageModel" /> instances to
+        the passed <see cref="T:Mocassin.Model.Translator.SimulationDbContext" />
+      </summary>
+      <param name="dbContext"></param>
+      <param name="jobPackageModels"></param>
+      <returns></returns>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.ProjectBuilding.SimulationLibraryBuilder.TryAddBuildMetaData(System.Collections.Generic.IEnumerable{Mocassin.Model.Translator.SimulationJobPackageModel},Mocassin.UI.Xml.Main.SimulationDbBuildTemplate)">
+      <summary>
+        Tries to add all meta information of the <see cref="T:Mocassin.UI.Xml.Main.SimulationDbBuildTemplate" /> to the prepared set of
+        <see cref="T:Mocassin.Model.Translator.SimulationJobPackageModel" /> instances
+      </summary>
+      <param name="jobPackageModels"></param>
+      <param name="simulationDbBuildTemplate"></param>
+      <returns></returns>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.ProjectBuilding.SimulationLibraryBuilder.GetPreparedJobBuilder(Mocassin.Model.Translator.ModelContext.IProjectModelContext,Mocassin.Model.Translator.Jobs.IJobCollection,System.Int32)">
+      <summary>
+        Prepares a <see cref="T:Mocassin.Model.Translator.EntityBuilder.IJobDbEntityBuilder" /> that can process the passed combination of
+        <see cref="T:Mocassin.Model.Translator.ModelContext.IProjectModelContext" /> and
+        <see cref="T:Mocassin.Model.Translator.Jobs.IJobCollection" />
+      </summary>
+      <param name="modelContext"></param>
+      <param name="jobCollection"></param>
+      <param name="totalJobCount"></param>
+      <returns></returns>
+    </member>
+    <member name="T:Mocassin.UI.Xml.ProjectLibrary.IMocassinProjectLibrary">
+      <summary>
+        Represents a project library that stores all user defined data belonging to a
+        <see cref="T:Mocassin.Model.ModelProject.IModelProject" />
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.ProjectLibrary.IMocassinProjectLibrary.IsDisposed">
+      <summary>
+        Get a boolean flag if the context is disposed
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.ProjectLibrary.IMocassinProjectLibrary.SourceName">
+      <summary>
+        Get a <see cref="T:System.String" /> that describes the data source (e.g. file location)
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.ProjectLibrary.IMocassinProjectLibrary.MocassinProjectGraphs">
+      <summary>
+        Get the <see cref="T:Microsoft.EntityFrameworkCore.DbSet`1" /> of
+        <see cref="T:Mocassin.UI.Xml.Main.MocassinProject" /> objects stored in the library
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.ProjectLibrary.IMocassinProjectLibrary.ModelChangedNotification">
+      <summary>
+        Get a <see cref="T:System.IObservable`1" /> that informs that a model change happened in the library
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.ProjectLibrary.IMocassinProjectLibrary.Add``1(``0)">
+      <summary>
+        Adds the given entity objects to the <see cref="T:Mocassin.UI.Xml.ProjectLibrary.IMocassinProjectLibrary" />
+      </summary>
+      <typeparam name="TEntity"></typeparam>
+      <param name="entity"></param>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.ProjectLibrary.IMocassinProjectLibrary.AddRange(System.Collections.Generic.IEnumerable{System.Object})">
+      <summary>
+        Adds the given objects to the <see cref="T:Mocassin.UI.Xml.ProjectLibrary.IMocassinProjectLibrary" />
+      </summary>
+      <param name="entities"></param>
+    </member>
+    <member name="M:Mocassin.UI.Xml.ProjectLibrary.IMocassinProjectLibrary.SaveChanges">
+      <summary>
+        Saves the current changes made to the <see cref="T:Mocassin.UI.Xml.ProjectLibrary.IMocassinProjectLibrary" />
+      </summary>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.ProjectLibrary.IMocassinProjectLibrary.SaveChangesAsync(System.Threading.CancellationToken)">
+      <summary>
+        Saves the current changes made to the <see cref="T:Mocassin.UI.Xml.ProjectLibrary.IMocassinProjectLibrary" />
+        asynchronously
+      </summary>
+      <param name="cancellationToken"></param>
+    </member>
+    <member name="M:Mocassin.UI.Xml.ProjectLibrary.IMocassinProjectLibrary.HasUnsavedChanges">
+      <summary>
+        Checks if the project library has unsaved changes
+      </summary>
+      <returns></returns>
+    </member>
+    <member name="M:Mocassin.UI.Xml.ProjectLibrary.IMocassinProjectLibrary.GetProjectModelHash">
+      <summary>
+        Get a hash value for the entire project content
+      </summary>
+      <returns></returns>
+    </member>
+    <member name="M:Mocassin.UI.Xml.ProjectLibrary.IMocassinProjectLibrary.CheckForModelChanges">
+      <summary>
+        Checks if the contents of the library have changed since the last check and triggers affiliated events
+      </summary>
+    </member>
+    <member name="M:Mocassin.UI.Xml.ProjectLibrary.IMocassinProjectLibrary.CheckForModelChangesAsync">
+      <summary>
+        Async checks if the contents of the library have changed since the last check and triggers affiliated events if
+        required
+      </summary>
+      <returns></returns>
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.ProjectLibrary.IMocassinProjectLibrary.LoadDefaultModelProject(System.Linq.Expressions.Expression{System.Func{Mocassin.UI.Xml.Main.MocassinProject,System.Boolean}},Mocassin.Model.ModelProject.ProjectSettings)">
+      <summary>
+        Creates and loads a <see cref="T:Mocassin.UI.Xml.Main.MocassinProject" /> as a default
+        <see cref="T:Mocassin.Model.ModelProject.IModelProject" /> with the provided
+        <see cref="T:Mocassin.Model.ModelProject.ProjectSettings" /> (Default settings if null)
+      </summary>
+      <param name="selectorExpression"></param>
+      <param name="settings"></param>
+      <returns></returns>
+    </member>
+    <member name="T:Mocassin.UI.Xml.ProjectLibrary.MocassinProjectContext">
+      <summary>
+        The <see cref="T:Microsoft.EntityFrameworkCore.DbContext" /> for the
+        <see cref="T:Mocassin.UI.Xml.ProjectLibrary.IMocassinProjectLibrary" /> that stores user project data
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.ProjectLibrary.MocassinProjectContext.IsDisposed">
+      <inheritdoc />
+    </member>
+    <member name="P:Mocassin.UI.Xml.ProjectLibrary.MocassinProjectContext.SourceName">
+      <inheritdoc />
+    </member>
+    <member name="P:Mocassin.UI.Xml.ProjectLibrary.MocassinProjectContext.StateChangedEvent">
+      <summary>
+        Get the <see cref="T:Mocassin.Framework.Events.ReactiveEvent`1" /> that relays internal state change events
+      </summary>
+    </member>
+    <member name="P:Mocassin.UI.Xml.ProjectLibrary.MocassinProjectContext.MocassinProjectGraphs">
+      <inheritdoc />
+    </member>
+    <member name="P:Mocassin.UI.Xml.ProjectLibrary.MocassinProjectContext.ModelChangedNotification">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.ProjectLibrary.MocassinProjectContext.#ctor(System.String)">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.ProjectLibrary.MocassinProjectContext.GetProjectModelHash">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.ProjectLibrary.MocassinProjectContext.CheckForModelChanges">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.ProjectLibrary.MocassinProjectContext.CheckForModelChangesAsync">
+      <inheritdoc />
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.ProjectLibrary.MocassinProjectContext.LoadDefaultModelProject(System.Linq.Expressions.Expression{System.Func{Mocassin.UI.Xml.Main.MocassinProject,System.Boolean}},Mocassin.Model.ModelProject.ProjectSettings)">
+      <inheritdoc />
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.ProjectLibrary.MocassinProjectContext.Mocassin#UI#Xml#ProjectLibrary#IMocassinProjectLibrary#Add``1(``0)">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.ProjectLibrary.MocassinProjectContext.HasUnsavedChanges">
+      <inheritdoc />
+    </member>
+    <member name="M:Mocassin.UI.Xml.ProjectLibrary.MocassinProjectContext.Dispose">
+      <inheritdoc />
+    </member>
+    <member
+      name="M:Mocassin.UI.Xml.ProjectLibrary.MocassinProjectContext.RelayEntityChangeEvent(System.Object,System.EventArgs)">
+      <summary>
+        Relays the <see cref="T:Microsoft.EntityFrameworkCore.DbContext" /> entity changed event to the internal
+        <see cref="T:Mocassin.Framework.Events.ReactiveEvent`1" />
+      </summary>
+    </member>
+  </members>
+</doc>

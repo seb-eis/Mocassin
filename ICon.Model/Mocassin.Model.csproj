@@ -1,0 +1,62 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Platforms>AnyCPU;x64</Platforms>
+    <LangVersion>8</LangVersion>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="MStructure\**" />
+    <Compile Remove="Particles\Modeling\Logic\**" />
+    <Compile Remove="Simulations\Modeling\Logic\**" />
+    <Compile Remove="Simulations\Modeling\ModelParameters\**" />
+    <Compile Remove="Simulation\**" />
+    <Compile Remove="Structures\Modeling\Logic\**" />
+    <Compile Remove="Transitions\Modeling\ModelParameters\**" />
+    <EmbeddedResource Remove="MStructure\**" />
+    <EmbeddedResource Remove="Particles\Modeling\Logic\**" />
+    <EmbeddedResource Remove="Simulations\Modeling\Logic\**" />
+    <EmbeddedResource Remove="Simulations\Modeling\ModelParameters\**" />
+    <EmbeddedResource Remove="Simulation\**" />
+    <EmbeddedResource Remove="Structures\Modeling\Logic\**" />
+    <EmbeddedResource Remove="Transitions\Modeling\ModelParameters\**" />
+    <None Remove="MStructure\**" />
+    <None Remove="Particles\Modeling\Logic\**" />
+    <None Remove="Simulations\Modeling\Logic\**" />
+    <None Remove="Simulations\Modeling\ModelParameters\**" />
+    <None Remove="Simulation\**" />
+    <None Remove="Structures\Modeling\Logic\**" />
+    <None Remove="Transitions\Modeling\ModelParameters\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Energies\Manager\Services\EnergyConflictResolver.cs" />
+    <Compile Remove="Structures\Manager\Services\StructureConflictResolver.cs" />
+    <Compile Remove="Transitions\Manager\Services\TransitionConflictResolver.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ICon.Framework.Mathematics\Mocassin.Mathematics.csproj" />
+    <ProjectReference Include="..\ICon.Framework.Shared\Mocassin.Framework.csproj" />
+    <ProjectReference Include="..\ICon.Framework.Symmetry\Mocassin.Symmetry.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="2.0.3" />
+    <PackageReference Include="System.Memory" Version="4.5.4" />
+    <PackageReference Include="System.Reactive" Version="4.4.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Particles\Manager\ConflictHandling\DataHandlers\" />
+    <Folder Include="Particles\Manager\ConflictHandling\ObjectHandlers\" />
+  </ItemGroup>
+
+  <Target Name="NugetPackAutoVersioning" AfterTargets="Build" Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <Exec Command="dotnet pack -p:PackageVersion=$([System.DateTime]::Now.ToString(&quot;yyyy.MM.dd.HHmm&quot;)) --no-build --configuration $(Configuration) --output &quot;$(SolutionDir)nuget" />
+  </Target>
+
+</Project>

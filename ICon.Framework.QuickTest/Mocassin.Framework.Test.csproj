@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Platforms>AnyCPU;x64</Platforms>
+    <StartupObject>Mocassin.Framework.QuickTest.Program</StartupObject>
+    <LangVersion>8</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'" />
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'" />
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
+
+  <ItemGroup>
+    <PackageReference Include="CoreCLR-NCalc" Version="2.2.80" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="2.0.3" />
+    <PackageReference Include="System.Memory" Version="4.5.4" />
+    <PackageReference Include="System.Reactive" Version="4.4.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ICon.Framework.Mathematics\Mocassin.Mathematics.csproj" />
+    <ProjectReference Include="..\ICon.Framework.Shared\Mocassin.Framework.csproj" />
+    <ProjectReference Include="..\ICon.Framework.Symmetry\Mocassin.Symmetry.csproj" />
+    <ProjectReference Include="..\ICon.Model.Translator\Mocassin.Model.Translator.csproj" />
+    <ProjectReference Include="..\ICon.Model\Mocassin.Model.csproj" />
+    <ProjectReference Include="..\Mocassin.Tools.Evaluation\Mocassin.Tools.Evaluation.csproj" />
+    <ProjectReference Include="..\Mocassin.Tools.UAccess\Mocassin.Tools.UAccess.csproj" />
+    <ProjectReference Include="..\Mocassin.UI.Xml\Mocassin.UI.Xml.csproj" />
+  </ItemGroup>
+
+</Project>

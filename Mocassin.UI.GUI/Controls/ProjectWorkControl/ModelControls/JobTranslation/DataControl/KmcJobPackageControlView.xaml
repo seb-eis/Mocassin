@@ -1,0 +1,125 @@
+﻿<UserControl
+  x:Class="Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslation.DataControl.KmcJobPackageControlView"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslation.DataControl"
+  xmlns:comboBox="clr-namespace:Mocassin.UI.GUI.Base.UiElements.ComboBox"
+  xmlns:gridControl="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslation.GridControl"
+  xmlns:adapter="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslation.GridControl.Adapter"
+  xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
+  xmlns:content="clr-namespace:Mocassin.UI.GUI.Base.UiElements.Content"
+  d:DataContext="{d:DesignInstance local:KmcJobPackageControlViewModel, IsDesignTimeCreatable=True}"
+  mc:Ignorable="d"
+  d:DesignHeight="450" d:DesignWidth="800"
+  Background="Transparent">
+
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*" />
+      <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}" />
+      <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*" />
+      <RowDefinition Height="{StaticResource App.Default.GridLength.Splitter}" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="{StaticResource App.Default.GridLength.Splitter}" />
+      <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+
+    <content:HeaderedGroup Grid.Row="0" Grid.Column="0" Style="{StaticResource App.Style.HeaderedGroup.BoldText}"
+                           Header="Job Collection Definitions:">
+      <DataGrid Name="JobCollectionsDataGrid"
+                ItemsSource="{Binding Items}"
+                SelectedItem="{Binding SelectedItem}"
+                AutoGenerateColumns="False"
+                Background="Transparent"
+                ColumnWidth="*">
+        <DataGrid.ContextMenu>
+          <ContextMenu
+            DataContext="{Binding RelativeSource={RelativeSource Mode=Self}, Path=PlacementTarget.DataContext}">
+            <MenuItem Command="{Binding DuplicateItemCommand}" CommandParameter="{Binding SelectedItem}">
+              <MenuItem.Header>
+                <WrapPanel>
+                  <TextBlock Text="Make Duplicates:" Margin="0,0,5,0" />
+                  <TextBox Text="{Binding Path=DuplicateCount, UpdateSourceTrigger=PropertyChanged}" Width="25" />
+                </WrapPanel>
+              </MenuItem.Header>
+            </MenuItem>
+          </ContextMenu>
+        </DataGrid.ContextMenu>
+
+        <DataGrid.RowHeaderTemplate>
+          <DataTemplate>
+            <views:ObjectRowHeaderLogo x:Name="RowHeaderLogo"
+                                       PreviewMouseLeftButtonDown="RowHeaderLogo_OnPreviewMouseLeftButtonDown"
+                                       PreviewMouseLeftButtonUp="RowHeaderLogo_OnPreviewMouseLeftButtonUp"
+                                       PreviewMouseMove="RowHeaderLogo_OnPreviewMouseMove"
+                                       Cursor="Hand" />
+          </DataTemplate>
+        </DataGrid.RowHeaderTemplate>
+
+        <DataGrid.Columns>
+          <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
+          <DataGridTextColumn Header="RNG Seed" Binding="{Binding RngSeed}" />
+          <DataGridTextColumn Header="Job Multiplier"
+                              Binding="{Binding JobCountPerConfig, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
+          <comboBox:BindableDataGridComboBoxColumn Header="Simulation Base"
+                                                   ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type DataGrid}}, Path=DataContext.SelectableSimulations}"
+                                                   SelectedValueBinding="{Binding Simulation}"
+                                                   SelectedValuePath="."
+                                                   DisplayMemberPath="Name" />
+
+        </DataGrid.Columns>
+
+      </DataGrid>
+    </content:HeaderedGroup>
+
+    <content:HeaderedGroup Grid.Row="2" Grid.Column="0" x:Name="CollectionSettingsGroupBox">
+      <HeaderedContentControl.Header>
+        <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
+          <Run Text="Collection Settings:" />
+          <Run Text="{Binding SelectedItem.Name, StringFormat={}[{0}]}" />
+        </TextBlock>
+      </HeaderedContentControl.Header>
+
+      <gridControl:KmcJobDescriptionControlView
+        DataContext="{Binding SelectedItem.JobBaseDescription, Converter={adapter:KmcJobDescriptionKmcJobDescriptionViewModelConverter}}" />
+    </content:HeaderedGroup>
+
+    <content:HeaderedGroup Grid.Row="4" Grid.Column="0">
+      <HeaderedContentControl.Header>
+        <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
+          <Run Text="Collection Selection Optimizers:" />
+          <Run Text="{Binding SelectedItem.Name, StringFormat={}[{0}]}" />
+        </TextBlock>
+      </HeaderedContentControl.Header>
+
+      <gridControl:SelectionOptimizerSetControlView>
+        <gridControl:SelectionOptimizerSetControlView.DataContext>
+          <MultiBinding Converter="{adapter:JobPackageDescriptionSelectionOptimizerSetViewModelConverter}">
+            <Binding
+              RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type local:KmcJobPackageControlView}}"
+              Path="DataContext.ContentSource.Parent" />
+            <Binding
+              RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type local:KmcJobPackageControlView}}"
+              Path="DataContext.SelectedItem" />
+          </MultiBinding>
+        </gridControl:SelectionOptimizerSetControlView.DataContext>
+      </gridControl:SelectionOptimizerSetControlView>
+    </content:HeaderedGroup>
+
+    <gridControl:KmcJobDescriptionSetControlView Grid.Row="0" Grid.Column="2" Grid.RowSpan="5">
+      <gridControl:KmcJobDescriptionSetControlView.DataContext>
+        <MultiBinding Converter="{adapter:KmcJobPackageKmcJobDescriptionSetViewModelConverter}">
+          <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type local:KmcJobPackageControlView}}"
+                   Path="DataContext.ContentSource.Parent" />
+          <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type local:KmcJobPackageControlView}}"
+                   Path="DataContext.SelectedItem" />
+        </MultiBinding>
+      </gridControl:KmcJobDescriptionSetControlView.DataContext>
+    </gridControl:KmcJobDescriptionSetControlView>
+  </Grid>
+</UserControl>

@@ -1,0 +1,97 @@
+﻿<UserControl
+  x:Class="Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.SimulationModel.GridControl.SimulationBaseControlView"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:simulationModel="clr-namespace:Mocassin.UI.Xml.SimulationModel;assembly=Mocassin.UI.Xml"
+  xmlns:content="clr-namespace:Mocassin.UI.GUI.Base.UiElements.Content"
+  d:DataContext="{d:DesignInstance simulationModel:SimulationBaseData, IsDesignTimeCreatable=True}"
+  mc:Ignorable="d"
+  d:DesignHeight="450" d:DesignWidth="800"
+  Background="Transparent">
+  <Grid>
+
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*" />
+      <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}" />
+      <ColumnDefinition Width="*" />
+      <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}" />
+      <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
+
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*" />
+      <RowDefinition Height="{StaticResource App.Default.GridLength.Splitter}" />
+      <RowDefinition Height="*" />
+      <RowDefinition Height="{StaticResource App.Default.GridLength.Splitter}" />
+      <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+
+    <content:HeaderedGroup Grid.Row="0" Grid.Column="0" Header="Temperature [K]:">
+      <TextBox Text="{Binding Temperature, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
+        <TextBox.InputBindings>
+          <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                      CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
+        </TextBox.InputBindings>
+      </TextBox>
+    </content:HeaderedGroup>
+
+    <content:HeaderedGroup Grid.Row="0" Grid.Column="2" Header="Target Steps per Particle (MCSP):">
+      <TextBox Text="{Binding TargetMcsp, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
+        <TextBox.InputBindings>
+          <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                      CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
+        </TextBox.InputBindings>
+      </TextBox>
+    </content:HeaderedGroup>
+
+    <content:HeaderedGroup Grid.Row="0" Grid.Column="4" Header="Simulation Block Count:">
+      <TextBox Text="{Binding SimulationBlockCount, Converter={StaticResource App.Converter.NumericExpressionToValue}}"
+               IsReadOnly="True">
+        <TextBox.InputBindings>
+          <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                      CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
+        </TextBox.InputBindings>
+      </TextBox>
+    </content:HeaderedGroup>
+
+    <content:HeaderedGroup Grid.Row="2" Grid.Column="0" Header="Random Number Generator Seed:">
+      <TextBox Text="{Binding CustomRngSeed}">
+        <TextBox.InputBindings>
+          <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                      CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
+        </TextBox.InputBindings>
+      </TextBox>
+    </content:HeaderedGroup>
+
+    <content:HeaderedGroup Grid.Row="2" Grid.Column="2" Header="Time Limit (ISO 8601):">
+      <TextBox Text="{Binding SaveRunTimeLimit}">
+        <TextBox.InputBindings>
+          <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                      CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
+        </TextBox.InputBindings>
+      </TextBox>
+    </content:HeaderedGroup>
+
+    <content:HeaderedGroup Grid.Row="2" Grid.Column="4" Header="Minimal Step Rate [Hz]:">
+      <TextBox
+        Text="{Binding LowerSuccessRateLimit, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
+        <TextBox.InputBindings>
+          <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                      CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
+        </TextBox.InputBindings>
+      </TextBox>
+    </content:HeaderedGroup>
+
+    <content:HeaderedGroup Grid.Row="4" Grid.Column="0" Header="Job Duplication Count:">
+      <TextBox Text="{Binding JobCount, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
+        <TextBox.InputBindings>
+          <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                      CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
+        </TextBox.InputBindings>
+      </TextBox>
+    </content:HeaderedGroup>
+
+  </Grid>
+</UserControl>

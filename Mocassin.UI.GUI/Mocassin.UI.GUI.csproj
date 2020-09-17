@@ -1,0 +1,1355 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A285693F-C766-4534-BF8A-66F733550783}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>Mocassin.UI.GUI</RootNamespace>
+    <AssemblyName>Mocassin.UI.GUI</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <TargetFrameworkProfile />
+    <PublishUrl>\\pc1server\allgemein\Sebastian Eisele\Mocassin\1.1.X.X_Current\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Unc</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateMode>Background</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>false</MapFileExtensions>
+    <InstallUrl>\\pc1server\allgemein\Sebastian Eisele\Mocassin\1.1.X.X_Current\</InstallUrl>
+    <SupportUrl>https://git.rwth-aachen.de/ICon.Project.Team/ICon.Program/issues/23</SupportUrl>
+    <ErrorReportUrl>https://git.rwth-aachen.de/ICon.Project.Team/ICon.Program/issues/22</ErrorReportUrl>
+    <TargetCulture>en</TargetCulture>
+    <ProductName>Mocassin</ProductName>
+    <PublisherName>Sebastian Eisele, HIMS, Juelich Research Center IEK-12</PublisherName>
+    <SuiteName>MOCASSIN</SuiteName>
+    <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
+    <WebPage>publish.htm</WebPage>
+    <ApplicationRevision>19</ApplicationRevision>
+    <ApplicationVersion>1.1.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>true</UseApplicationTrust>
+    <CreateDesktopShortcut>true</CreateDesktopShortcut>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <LangVersion>8</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <LangVersion>8</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+    <LangVersion>8</LangVersion>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <DocumentationFile>
+    </DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+    <LangVersion>8</LangVersion>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <DocumentationFile>
+    </DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>5B591E1AA24993CB389792066BE8537E4F384520</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>Mocassin.UI.GUI_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>mocassin.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>
+    </StartupObject>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Cyotek.Drawing.BitmapFont, Version=1.0.0.0, Culture=neutral, PublicKeyToken=58daa28b0b2de221, processorArchitecture=MSIL">
+      <HintPath>..\packages\Cyotek.Drawing.BitmapFont.1.3.4\lib\net47\Cyotek.Drawing.BitmapFont.dll</HintPath>
+    </Reference>
+    <Reference Include="HelixToolkit, Version=2.12.0.0, Culture=neutral, PublicKeyToken=52aa3500039caf0d, processorArchitecture=MSIL">
+      <HintPath>..\packages\HelixToolkit.2.12.0\lib\netstandard1.1\HelixToolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="HelixToolkit.Wpf, Version=2.12.0.0, Culture=neutral, PublicKeyToken=52aa3500039caf0d, processorArchitecture=MSIL">
+      <HintPath>..\packages\HelixToolkit.Wpf.2.12.0\lib\net45\HelixToolkit.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="HelixToolkit.Wpf.SharpDX, Version=2.12.0.0, Culture=neutral, PublicKeyToken=52aa3500039caf0d, processorArchitecture=MSIL">
+      <HintPath>..\packages\HelixToolkit.Wpf.SharpDX.2.12.0\lib\net45\HelixToolkit.Wpf.SharpDX.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.AvalonEdit, Version=6.0.1.278, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
+      <HintPath>..\packages\AvalonEdit.6.0.1\lib\net45\ICSharpCode.AvalonEdit.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.1.1.1\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.HashCode, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.HashCode.1.1.0\lib\net461\Microsoft.Bcl.HashCode.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Data.Sqlite, Version=3.1.6.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Data.Sqlite.Core.3.1.6\lib\netstandard2.0\Microsoft.Data.Sqlite.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.DotNet.PlatformAbstractions, Version=3.1.6.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.DotNet.PlatformAbstractions.3.1.6\lib\net45\Microsoft.DotNet.PlatformAbstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.EntityFrameworkCore, Version=3.1.6.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.EntityFrameworkCore.3.1.6\lib\netstandard2.0\Microsoft.EntityFrameworkCore.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.EntityFrameworkCore.Abstractions, Version=3.1.6.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.EntityFrameworkCore.Abstractions.3.1.6\lib\netstandard2.0\Microsoft.EntityFrameworkCore.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.EntityFrameworkCore.Relational, Version=3.1.6.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.EntityFrameworkCore.Relational.3.1.6\lib\netstandard2.0\Microsoft.EntityFrameworkCore.Relational.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.EntityFrameworkCore.Sqlite, Version=3.1.6.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.EntityFrameworkCore.Sqlite.Core.3.1.6\lib\netstandard2.0\Microsoft.EntityFrameworkCore.Sqlite.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Expression.Interactions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Blend.Interctivity.WPF.v4.0.1.0.3\lib\net40\Microsoft.Expression.Interactions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Caching.Abstractions, Version=3.1.6.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Caching.Abstractions.3.1.6\lib\netstandard2.0\Microsoft.Extensions.Caching.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Caching.Memory, Version=3.1.6.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Caching.Memory.3.1.6\lib\netstandard2.0\Microsoft.Extensions.Caching.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Configuration, Version=3.1.6.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Configuration.3.1.6\lib\netstandard2.0\Microsoft.Extensions.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Configuration.Abstractions, Version=3.1.6.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Configuration.Abstractions.3.1.6\lib\netstandard2.0\Microsoft.Extensions.Configuration.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Configuration.Binder, Version=3.1.6.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Configuration.Binder.3.1.6\lib\netstandard2.0\Microsoft.Extensions.Configuration.Binder.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection, Version=3.1.6.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.3.1.6\lib\net461\Microsoft.Extensions.DependencyInjection.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=3.1.6.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.3.1.6\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyModel, Version=3.1.6.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.DependencyModel.3.1.6\lib\net451\Microsoft.Extensions.DependencyModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Logging, Version=3.1.6.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Logging.3.1.6\lib\netstandard2.0\Microsoft.Extensions.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Logging.Abstractions, Version=3.1.6.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Logging.Abstractions.3.1.6\lib\netstandard2.0\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Options, Version=3.1.6.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Options.3.1.6\lib\netstandard2.0\Microsoft.Extensions.Options.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Primitives, Version=3.1.6.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Primitives.3.1.6\lib\netstandard2.0\Microsoft.Extensions.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="NCalc, Version=3.5.0.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CoreCLR-NCalc.2.2.80\lib\net45\NCalc.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Remotion.Linq, Version=2.2.0.0, Culture=neutral, PublicKeyToken=fee00910d6e5f53b, processorArchitecture=MSIL">
+      <HintPath>..\packages\Remotion.Linq.2.2.0\lib\net45\Remotion.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.4.2.0\lib\net45\SharpDX.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.D3DCompiler, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.D3DCompiler.4.2.0\lib\net45\SharpDX.D3DCompiler.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Direct2D1, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.Direct2D1.4.2.0\lib\net45\SharpDX.Direct2D1.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Direct3D11, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.Direct3D11.4.2.0\lib\net45\SharpDX.Direct3D11.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Direct3D9, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.Direct3D9.4.2.0\lib\net45\SharpDX.Direct3D9.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.DXGI, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.DXGI.4.2.0\lib\net45\SharpDX.DXGI.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Mathematics, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.Mathematics.4.2.0\lib\net45\SharpDX.Mathematics.dll</HintPath>
+    </Reference>
+    <Reference Include="SQLitePCLRaw.batteries_v2, Version=2.0.3.851, Culture=neutral, PublicKeyToken=8226ea5df37bcae9, processorArchitecture=MSIL">
+      <HintPath>..\packages\SQLitePCLRaw.bundle_green.2.0.3\lib\net461\SQLitePCLRaw.batteries_v2.dll</HintPath>
+    </Reference>
+    <Reference Include="SQLitePCLRaw.core, Version=2.0.3.851, Culture=neutral, PublicKeyToken=1488e028ca7ab535, processorArchitecture=MSIL">
+      <HintPath>..\packages\SQLitePCLRaw.core.2.0.3\lib\netstandard2.0\SQLitePCLRaw.core.dll</HintPath>
+    </Reference>
+    <Reference Include="SQLitePCLRaw.nativelibrary, Version=2.0.3.851, Culture=neutral, PublicKeyToken=502ed628492ab262, processorArchitecture=MSIL">
+      <HintPath>..\packages\SQLitePCLRaw.bundle_green.2.0.3\lib\net461\SQLitePCLRaw.nativelibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="SQLitePCLRaw.provider.dynamic_cdecl, Version=2.0.3.851, Culture=neutral, PublicKeyToken=b68184102cba0b3b, processorArchitecture=MSIL">
+      <HintPath>..\packages\SQLitePCLRaw.provider.dynamic_cdecl.2.0.3\lib\netstandard2.0\SQLitePCLRaw.provider.dynamic_cdecl.dll</HintPath>
+    </Reference>
+    <Reference Include="SQLitePCLRaw.provider.e_sqlite3, Version=1.1.14.520, Culture=neutral, PublicKeyToken=9c301db686d0bd12, processorArchitecture=MSIL">
+      <HintPath>..\packages\SQLitePCLRaw.provider.e_sqlite3.net45.1.1.14\lib\net45\SQLitePCLRaw.provider.e_sqlite3.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Collections.Immutable, Version=1.2.5.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Collections.Immutable.1.7.1\lib\net461\System.Collections.Immutable.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.Annotations, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ComponentModel.Annotations.4.7.0\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.7.1\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Interactive.Async, Version=4.1.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Interactive.Async.4.1.1\lib\net461\System.Interactive.Async.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Linq.Async, Version=4.1.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Linq.Async.4.1.1\lib\net461\System.Linq.Async.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive, Version=4.4.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reactive.4.4.1\lib\net46\System.Reactive.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.7.1\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.InteropServices.RuntimeInformation.4.3.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Blend.Interctivity.WPF.v4.0.1.0.3\lib\net40\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="Base\Commands\LazyCommandRelay.cs" />
+    <Compile Include="Base\Loading\ExportWindow.xaml.cs">
+      <DependentUpon>ExportWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Base\Objects\LazyVvmContainer.cs" />
+    <Compile Include="Base\Objects\VvmContainer.cs" />
+    <Compile Include="Base\UiElements\Content\HeaderedGroup.cs" />
+    <Compile Include="Base\UiElements\Popup\ControlOverlay.cs" />
+    <Compile Include="Base\ViewModels\Content\ContentWindow.xaml.cs">
+      <DependentUpon>ContentWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Base\ViewModels\Content\ContentWindowViewModel.cs" />
+    <Compile Include="Base\ViewModels\Tabs\Items\TabMoveData.cs" />
+    <Compile Include="Controls\Base\Commands\OpenDefaultContentWindowCommand.cs" />
+    <Compile Include="Controls\DxVisualizer\Extensions\DxMatrixExtensions.cs" />
+    <Compile Include="Controls\DxVisualizer\Extensions\DxVectorTransformerExtensions.cs" />
+    <Compile Include="Controls\DxVisualizer\ModelViewer\DataControl\Converter\PhongMaterialCoreToStringConverter.cs" />
+    <Compile Include="Controls\DxVisualizer\ModelViewer\DataControl\DxCustomizationControlView.xaml.cs">
+      <DependentUpon>DxCustomizationControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DxVisualizer\ModelViewer\DataControl\DxCustomizationControlViewModel.cs" />
+    <Compile Include="Controls\DxVisualizer\ModelViewer\DataControl\DxModelControlViewModel.cs" />
+    <Compile Include="Controls\DxVisualizer\ModelViewer\DataControl\DxModelControlView.xaml.cs">
+      <DependentUpon>DxModelControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DxVisualizer\ModelViewer\Scene\DxProjectLineObjectSceneConfig.cs" />
+    <Compile Include="Controls\DxVisualizer\ModelViewer\Scene\DxProjectMeshObjectSceneConfig.cs" />
+    <Compile Include="Controls\DxVisualizer\ModelViewer\Scene\DxProjectObjectSceneConfig.cs" />
+    <Compile Include="Controls\DxVisualizer\ModelViewer\Scene\PathSymmetryExtensionMode.cs" />
+    <Compile Include="Controls\DxVisualizer\Viewport\Scene\IDxLineItemConfig.cs" />
+    <Compile Include="Controls\DxVisualizer\Viewport\Scene\IDxMeshItemConfig.cs" />
+    <Compile Include="Controls\DxVisualizer\Viewport\Scene\IDxSceneItemConfig.cs" />
+    <Compile Include="Controls\DxVisualizer\Viewport\Enums\DxSceneBatchingMode.cs" />
+    <Compile Include="Controls\DxVisualizer\Viewport\Base\IDxSceneHost.cs" />
+    <Compile Include="Controls\DxVisualizer\Viewport\Base\IDxSceneController.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\VisualMenu\Commands\OpenProjectWorkTabHostWindow.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\HelpMenu\Commands\CheckApplicationUpdateCommand.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\HelpMenu\HelpMenuView.xaml.cs">
+      <DependentUpon>HelpMenuView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectMenuBar\SubControls\HelpMenu\HelpMenuViewModel.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\ToolMenu\Commands\AddMslToolsTabCommand.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\VisualMenu\Commands\AddDxModelViewportTabCommand.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\VisualMenu\Commands\OpenDxModelViewportWindowCommand.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\Commands\DuplicateCustomizationCommand.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\Commands\DuplicateJobSetTemplateCommand.cs" />
+    <Compile Include="Controls\DxVisualizer\Extensions\DxVectorExtensions.cs" />
+    <Compile Include="Controls\DxVisualizer\Viewport\Attributes\TogglesOverlayAttribute.cs" />
+    <Compile Include="Controls\DxVisualizer\Viewport\Attributes\RaiseInvalidateRenderAttribute.cs" />
+    <Compile Include="Controls\DxVisualizer\Viewport\Commands\ExportDxViewportImageCommand.cs" />
+    <Compile Include="Controls\DxVisualizer\ModelViewer\DxModelSceneView.xaml.cs">
+      <DependentUpon>DxModelSceneView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DxVisualizer\ModelViewer\DxModelSceneViewModel.cs" />
+    <Compile Include="Controls\DxVisualizer\Viewport\DxViewportControlHostView.xaml.cs">
+      <DependentUpon>DxViewportControlHostView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DxVisualizer\Viewport\Enums\DxCameraType.cs" />
+    <Compile Include="Controls\DxVisualizer\Viewport\DxViewportSettingsView.xaml.cs">
+      <DependentUpon>DxViewportSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DxVisualizer\Viewport\DxViewportView.xaml.cs">
+      <DependentUpon>DxViewportView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DxVisualizer\Viewport\DxViewportViewModel.cs" />
+    <Compile Include="Controls\DxVisualizer\Viewport\Enums\DxSceneLightSetting.cs" />
+    <Compile Include="Controls\DxVisualizer\Viewport\Helper\DxLightFactory.cs" />
+    <Compile Include="Controls\DxVisualizer\Extensions\DxMeshBuilderExtensions.cs" />
+    <Compile Include="Controls\DxVisualizer\Viewport\Helper\DxSceneBuilder.cs" />
+    <Compile Include="Controls\DxVisualizer\Extensions\DxViewportExtensions.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\Commands\MigrateCustomizationCommand.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\GridControl\TransitionMechanismViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\Reports\MigrationReportView.xaml.cs">
+      <DependentUpon>MigrationReportView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\Reports\MigrationReportViewModel.cs" />
+    <Compile Include="Controls\Tools\MslTools\MslToolsView.xaml.cs">
+      <DependentUpon>MslToolsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Tools\MslTools\MslToolsViewModel.cs" />
+    <Compile Include="Controls\Tools\MslTools\SubControls\LatticeRecycleToolView.xaml.cs">
+      <DependentUpon>LatticeRecycleToolView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Tools\MslTools\SubControls\LatticeRecycleToolViewModel.cs" />
+    <Compile Include="Controls\Tools\MslTools\SubControls\MmcfeImportToolView.xaml.cs">
+      <DependentUpon>MmcfeImportToolView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Tools\MslTools\SubControls\MmcfeImportToolViewModel.cs" />
+    <Compile Include="Controls\Tools\ToolContainer.cs" />
+    <Compile Include="Controls\Tools\ToolViewModel.cs" />
+    <Compile Include="Controls\Visualizer\Commands\ExportViewportCommand.cs" />
+    <Compile Include="Controls\Visualizer\Commands\ToggleViewportCameraCommand.cs" />
+    <Compile Include="Controls\Visualizer\Objects\Helper\IObjectSceneConfig.cs" />
+    <Compile Include="Controls\Visualizer\Objects\Helper\VisualObjectCategory.cs" />
+    <Compile Include="Resources\Tooltips.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Tooltips.resx</DependentUpon>
+    </Compile>
+    <Compile Include="StartupWindow.xaml.cs">
+      <DependentUpon>StartupWindow.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Base\Loading\ExportWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Base\Loading\LoadingWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Base\ViewModels\Content\ContentWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Base\ViewModels\JsonBrowser\JsonBrowserView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Base\ViewModels\MenuBar\DynamicMenuBarView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Base\ViewModels\Tabs\ControlTabHostView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Base\Views\ContentLoadingView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Base\Views\LoadingSpinnerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Base\Views\ObjectRowHeaderLogo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Base\Views\NoContentView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\DxVisualizer\ModelViewer\DataControl\DxCustomizationControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\DxVisualizer\ModelViewer\DataControl\DxModelControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectBrowser\ProjectBrowserView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectBrowser\SubControls\ComponentBrowser\ProjectComponentBrowserView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectBrowser\SubControls\DataBrowser\ProjectDataBrowserView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectConsole\ProjectConsoleTabControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectConsole\SubControls\MessageConsole\MessageConsoleView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectConsole\SubControls\OperationConsole\OperationReportConsoleView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectMenuBar\ProjectMenuBarView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectMenuBar\SubControls\ControlMenu\ControlMenuView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectMenuBar\SubControls\FileMenu\FileMenuView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\ProjectMenuBar\SubControls\HelpMenu\HelpMenuView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectMenuBar\SubControls\ProjectManager\ProjectManagerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectMenuBar\SubControls\ToolMenu\ProjectToolMenuView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectMenuBar\SubControls\VisualMenu\VisualMenuView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectStatusBar\ProjectStatusBarView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\Base\Content\BasicCustomizationContentControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\Base\Content\BasicJobTranslationContentControlView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\DataControl\DefectEnergyControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\DataControl\KmcJobPackageControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\DataControl\MmcJobPackageControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\BaseJobDescriptionControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\DopingValueControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\KmcJobDescriptionControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\KmcJobDescriptionSetControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\MmcJobDescriptionControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\MmcJobDescriptionSetControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\SelectionOptimizerSetControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\JobTranslationControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\DataControl\BuildingBlockControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>XamlIntelliSenseFileGenerator</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\DataControl\DopingCombinationControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>XamlIntelliSenseFileGenerator</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\DataControl\DopingControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>XamlIntelliSenseFileGenerator</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\GridControl\BuildingBlockContentControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\LatticeModelControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>XamlIntelliSenseFileGenerator</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\DataControl\GroupInteractionControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\DataControl\PairInteractionControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\DataControl\TransitionCustomizationControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\GridControl\GroupEnergySetControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\GridControl\KineticRuleSetControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\GridControl\PairEnergySetControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\ModelCustomizationControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\ProjectBuilding\DataControl\ProjectBuildGraphControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\ProjectBuilding\DataControl\LocalProjectDeployControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\ProjectBuilding\ProjectBuildingControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ProjectWorkTabControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\Base\Content\BasicModelContentControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\Base\ObjectReferences\HostGraphModelObjectBoxSelectionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\Base\ObjectReferences\HostGraphModelObjectDropSelectionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\DataControl\EnergyParameterControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\DataControl\GroupInteractionControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\DataControl\UnstableEnvironmentControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\EnergyModelControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\GridControl\UnstableEnvironmentGridControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\GridControl\InteractionFilterGridControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\ParticleModel\DataControl\ParticleControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\ParticleModel\DataControl\ParticleSetControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\ParticleModel\ParticleModelControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\SimulationModel\DataControl\KineticSimulationControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\SimulationModel\DataControl\MetropolisSimulationControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\SimulationModel\GridControl\SimulationBaseControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\SimulationModel\SimulationModelControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\StructureModel\DataControl\CellPositionControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\StructureModel\DataControl\StructureParameterControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\StructureModel\StructureModelControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\DataControl\AbstractTransitionControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\DataControl\TransitionControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\GridControl\AbstractTransitionGridControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\GridControl\ExchangeGroupGridControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\GridControl\ExchangePairGridControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\GridControl\KineticTransitionGridControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\GridControl\MetropolisTransitionGridControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\TransitionModelControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\WelcomeControl\WelcomeControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\DxVisualizer\ModelViewer\DxModelSceneView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\DxVisualizer\Viewport\DxViewportControlHostView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\DxVisualizer\Viewport\DxViewportSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\DxVisualizer\Viewport\DxViewportView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\Reports\MigrationReportView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Tools\MslTools\MslToolsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Tools\MslTools\SubControls\LatticeRecycleToolView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Tools\MslTools\SubControls\MmcfeImportToolView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Visualizer\DataControl\Viewport3DView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Visualizer\ModelViewport3DView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Base\Commands\CommandAggregation.cs" />
+    <Compile Include="Base\Commands\AsyncCommand.cs" />
+    <Compile Include="Base\Commands\AsyncRelayCommand.cs" />
+    <Compile Include="Base\Commands\Command.cs" />
+    <Compile Include="Base\Commands\CommandDictionary.cs" />
+    <Compile Include="Base\Commands\AsyncVoidParameterCommand.cs" />
+    <Compile Include="Base\Commands\VoidParameterCommand.cs" />
+    <Compile Include="Base\Commands\RelayCommand.cs" />
+    <Compile Include="Base\Commands\UiCommands\UpdateTextBoxSourceCommand.cs" />
+    <Compile Include="Base\Converter\NumericExpressionToValueConverter.cs" />
+    <Compile Include="Base\Converter\Int32ToEnumConverter.cs" />
+    <Compile Include="Base\Converter\MultiValueConverter.cs" />
+    <Compile Include="Base\Converter\EnumToStringConverter.cs" />
+    <Compile Include="Base\Converter\StringToNullableConverter.cs" />
+    <Compile Include="Base\Converter\NullToVisibilityConverter.cs" />
+    <Compile Include="Base\Converter\ValueConverter.cs" />
+    <Compile Include="Base\DataContext\IDataObjectAcceptor.cs" />
+    <Compile Include="Base\DataContext\IProjectAppControl.cs" />
+    <Compile Include="Base\DragHandler.cs" />
+    <Compile Include="Base\Loading\WindowedBackgroundTask.cs" />
+    <Compile Include="Base\Loading\LoadingWindow.xaml.cs">
+      <DependentUpon>LoadingWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Base\UiElements\ComboBox\BindableDataGridComboBoxColumn.cs" />
+    <Compile Include="Base\ViewModels\Collections\IObservableCollectionViewModel.cs" />
+    <Compile Include="Base\ViewModels\JsonBrowser\JsonBrowserView.xaml.cs">
+      <DependentUpon>JsonBrowserView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Base\ViewModels\JsonBrowser\JsonBrowserViewModel.cs" />
+    <Compile Include="Base\ViewModels\MenuBar\DynamicMenuBarView.xaml.cs">
+      <DependentUpon>DynamicMenuBarView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Base\ViewModels\MenuBar\DynamicMenuBarViewModel.cs" />
+    <Compile Include="Base\ViewModels\MenuBar\IDynamicMenuBarViewModel.cs" />
+    <Compile Include="Base\ViewModels\EmptyViewModel.cs" />
+    <Compile Include="Base\ViewModels\Tabs\Items\DynamicControlTabItem.cs" />
+    <Compile Include="Base\ViewModels\Tabs\IControlTabHost.cs" />
+    <Compile Include="Base\ViewModels\Tabs\ControlTabHostView.xaml.cs">
+      <DependentUpon>ControlTabHostView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Base\ViewModels\Tabs\Items\ControlTabItem.cs" />
+    <Compile Include="Base\ViewModels\Tabs\ControlTabHostViewModel.cs" />
+    <Compile Include="Base\ViewModels\ViewModelBase.cs" />
+    <Compile Include="Base\Views\ContentLoadingView.xaml.cs">
+      <DependentUpon>ContentLoadingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Base\Views\LoadingSpinnerView.xaml.cs">
+      <DependentUpon>LoadingSpinnerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Base\Views\ObjectRowHeaderLogo.xaml.cs">
+      <DependentUpon>ObjectRowHeaderLogo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Base\Views\NoContentView.xaml.cs">
+      <DependentUpon>NoContentView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Base\Commands\AddDefaultCustomizationControlTabCommand.cs" />
+    <Compile Include="Controls\Base\Commands\AddDefaultJobTranslationControlTabCommand.cs" />
+    <Compile Include="Controls\Base\Commands\AddDefaultLayoutControlTabCommand.cs" />
+    <Compile Include="Controls\Base\Commands\AddWorkTabCommand.cs" />
+    <Compile Include="Controls\Base\Commands\AsyncProjectControlCommand.cs" />
+    <Compile Include="Controls\Base\Commands\LazyProjectCommandRelay.cs" />
+    <Compile Include="Controls\Base\Commands\DuplicateCollectionItemCommand.cs" />
+    <Compile Include="Controls\Base\Commands\ProjectControlCommandDictionary.cs" />
+    <Compile Include="Controls\Base\Commands\ProjectControlCommand.cs" />
+    <Compile Include="Controls\Base\Interfaces\IContentSupplier.cs" />
+    <Compile Include="Controls\Base\IO\UserFileSelectionSource.cs" />
+    <Compile Include="Controls\Base\ViewModels\CollectionControlViewModel.cs" />
+    <Compile Include="Controls\Base\ViewModels\CustomizationGraphControlViewModel.cs" />
+    <Compile Include="Controls\Base\ViewModels\PrimaryControlViewModel.cs" />
+    <Compile Include="Controls\Base\ViewModels\ProjectGraphControlViewModel.cs" />
+    <Compile Include="Controls\ProjectBrowser\ProjectBrowserView.xaml.cs">
+      <DependentUpon>ProjectBrowserView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectBrowser\SubControls\ComponentBrowser\ProjectComponentBrowserView.xaml.cs">
+      <DependentUpon>ProjectComponentBrowserView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectBrowser\SubControls\ComponentBrowser\ProjectComponentBrowserViewModel.cs" />
+    <Compile Include="Controls\ProjectBrowser\SubControls\DataBrowser\ProjectDataBrowserView.xaml.cs">
+      <DependentUpon>ProjectDataBrowserView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectBrowser\SubControls\DataBrowser\ProjectDataBrowserViewModel.cs" />
+    <Compile Include="Base\ViewModels\JsonBrowser\JsonTreeViewBuilder.cs" />
+    <Compile Include="Controls\ProjectConsole\ProjectConsoleTabControlView.xaml.cs">
+      <DependentUpon>ProjectConsoleTabControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectConsole\ProjectConsoleTabControlViewModel.cs" />
+    <Compile Include="Controls\ProjectConsole\SubControls\MessageConsole\MessageConsoleView.xaml.cs">
+      <DependentUpon>MessageConsoleView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectConsole\SubControls\MessageConsole\MessageConsoleViewModel.cs" />
+    <Compile Include="Controls\ProjectConsole\SubControls\OperationConsole\Commands\SetSoftUpdateStopCommand.cs" />
+    <Compile Include="Controls\ProjectConsole\SubControls\OperationConsole\OperationReportConsoleView.xaml.cs">
+      <DependentUpon>OperationReportConsoleView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectConsole\SubControls\OperationConsole\OperationReportConsoleViewModel.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\ControlMenu\Commands\AddCustomizationControlTabCommand.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\ControlMenu\Commands\AddEnergyControlTabCommand.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\ControlMenu\Commands\AddLatticeControlTabCommand.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\ControlMenu\Commands\AddJobTranslationControlTabCommand.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\ControlMenu\Commands\AddParticleControlTabCommand.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\ControlMenu\Commands\AddSimulationControlTabCommand.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\ControlMenu\Commands\AddStructureControlTabCommand.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\ControlMenu\Commands\AddTransitionControlTabCommand.cs" />
+    <Compile Include="Controls\ProjectMenuBar\ProjectMenuBarView.xaml.cs">
+      <DependentUpon>ProjectMenuBarView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectMenuBar\ProjectMenuBarViewModel.cs" />
+    <Compile Include="Controls\ProjectBrowser\ProjectBrowserViewModel.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\ControlMenu\ControlMenuView.xaml.cs">
+      <DependentUpon>ControlMenuView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectMenuBar\SubControls\ControlMenu\ControlMenuViewModel.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\FileMenu\Commands\SaveExitProgramCommand.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\FileMenu\Commands\ShowProjectFileCreationDialogCommand.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\FileMenu\Commands\ShowProjectFileLoadingDialogCommand.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\FileMenu\FileMenuView.xaml.cs">
+      <DependentUpon>FileMenuView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectMenuBar\SubControls\FileMenu\FileMenuViewModel.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\ProjectManager\Commands\AddNewProjectGraphCommand.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\ProjectManager\Commands\CloseProjectLibraryCommand.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\ProjectManager\Commands\CreateProjectLibraryCommand.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\ProjectManager\Commands\OpenProjectLibraryCommand.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\ProjectManager\Commands\SaveProjectLibraryChangesCommand.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\ProjectManager\ProjectManagerView.xaml.cs">
+      <DependentUpon>ProjectManagerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectMenuBar\SubControls\ProjectManager\ProjectManagerViewModel.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\ToolMenu\Commands\AddLiveOperationConsoleCommand.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\ToolMenu\Commands\AddProjectDeploymentTabCommand.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\ToolMenu\ProjectToolMenuView.xaml.cs">
+      <DependentUpon>ProjectToolMenuView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectMenuBar\SubControls\ToolMenu\ProjectToolMenuViewModel.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\VisualMenu\Commands\AddWpfModelViewportTabCommand.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\VisualMenu\VisualMenuView.xaml.cs">
+      <DependentUpon>VisualMenuView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectMenuBar\SubControls\VisualMenu\VisualMenuViewModel.cs" />
+    <Compile Include="Controls\ProjectStatusBar\ProjectStatusBarView.xaml.cs">
+      <DependentUpon>ProjectStatusBarView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectStatusBar\ProjectStatusBarViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\BasicCustomizationContentControlView.xaml.cs">
+      <DependentUpon>BasicCustomizationContentControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\BasicCustomizationContentControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\BasicJobTranslationContentControlView.xaml.cs">
+      <DependentUpon>BasicJobTranslationContentControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\BasicJobTranslationContentControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\Commands\AddNewCustomizationCommand.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\Commands\AddNewJobSetTemplateCommand.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\Commands\DeleteCustomizationCommand.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\Commands\DeleteJobSetTemplateCommand.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\DataControl\DefectEnergyControlView.xaml.cs">
+      <DependentUpon>DefectEnergyControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\DataControl\DefectEnergyControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\DataControl\KmcJobPackageControlView.xaml.cs">
+      <DependentUpon>KmcJobPackageControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\DataControl\KmcJobPackageControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\DataControl\MmcJobPackageControlView.xaml.cs">
+      <DependentUpon>MmcJobPackageControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\DataControl\MmcJobPackageControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\Adapter\JobPackageDescriptionSelectionOptimizerSetViewModelConverter.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\Adapter\KmcJobPackageKmcJobDescriptionSetViewModelConverter.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\Adapter\KmcJobDescriptionKmcJobDescriptionViewModelConverter.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\Adapter\LatticeConfigurationDopingValueControlViewModelConverter.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\Adapter\MmcJobDescriptionMmcJobDescriptionViewModelConverter.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\Adapter\MmcJobPackageMmcJobDescriptionSetViewModelConverter.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\BaseJobDescriptionControlView.xaml.cs">
+      <DependentUpon>BaseJobDescriptionControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\BaseJobDescriptionControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\DopingValueControlView.xaml.cs">
+      <DependentUpon>DopingValueControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\DopingValueControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\KmcJobDescriptionControlView.xaml.cs">
+      <DependentUpon>KmcJobDescriptionControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\KmcJobDescriptionControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\KmcJobDescriptionSetControlView.xaml.cs">
+      <DependentUpon>KmcJobDescriptionSetControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\KmcJobDescriptionSetControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\MmcJobDescriptionControlView.xaml.cs">
+      <DependentUpon>MmcJobDescriptionControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\MmcJobDescriptionControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\MmcJobDescriptionSetControlView.xaml.cs">
+      <DependentUpon>MmcJobDescriptionSetControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\MmcJobDescriptionSetControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\SelectionOptimizerSetControlView.xaml.cs">
+      <DependentUpon>SelectionOptimizerSetControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\SelectionOptimizerSetControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\JobTranslationControlView.xaml.cs">
+      <DependentUpon>JobTranslationControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\JobTranslationControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\DataControl\BuildingBlockControlView.xaml.cs">
+      <DependentUpon>BuildingBlockControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\DataControl\BuildingBlockControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\DataControl\DopingCombinationControlView.xaml.cs">
+      <DependentUpon>DopingCombinationControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\DataControl\DopingCombinationControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\DataControl\DopingControlView.xaml.cs">
+      <DependentUpon>DopingControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\DataControl\DopingControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\GridControl\Adapter\BuildingBlockBuildingBlockContentViewModelConverter.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\GridControl\BuildingBlockContentControlView.xaml.cs">
+      <DependentUpon>BuildingBlockContentControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\GridControl\BuildingBlockContentControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\LatticeModelControlView.xaml.cs">
+      <DependentUpon>LatticeModelControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\LatticeModelControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\DataControl\GroupInteractionControlView.xaml.cs">
+      <DependentUpon>GroupInteractionControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\DataControl\GroupInteractionControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\DataControl\PairInteractionControlView.xaml.cs">
+      <DependentUpon>PairInteractionControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\DataControl\PairInteractionControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\DataControl\TransitionCustomizationControlView.xaml.cs">
+      <DependentUpon>TransitionCustomizationControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\DataControl\TransitionCustomizationControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\GridControl\GroupEnergySetControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\GridControl\GroupEnergySetControlView.xaml.cs">
+      <DependentUpon>GroupEnergySetControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\GridControl\KineticRuleSetControlView.xaml.cs">
+      <DependentUpon>KineticRuleSetControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\GridControl\KineticRuleSetControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\GridControl\PairEnergySetControlView.xaml.cs">
+      <DependentUpon>PairEnergySetControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\GridControl\PairEnergySetControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\ModelCustomizationControlView.xaml.cs">
+      <DependentUpon>ModelCustomizationControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\ModelCustomizationControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ProjectBuilding\DataControl\Converter\BuildStatusVisibilityConverter.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ProjectBuilding\DataControl\Converter\BuildStatusIsIndeterminateConverter.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ProjectBuilding\DataControl\Objects\LocalProjectDeployData.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ProjectBuilding\DataControl\ProjectBuildGraphControlView.xaml.cs">
+      <DependentUpon>ProjectBuildGraphControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ProjectBuilding\DataControl\ProjectBuildGraphControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ProjectBuilding\DataControl\LocalProjectDeployControlView.xaml.cs">
+      <DependentUpon>LocalProjectDeployControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ProjectBuilding\DataControl\LocalProjectDeployControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ProjectBuilding\ProjectBuildingControlView.xaml.cs">
+      <DependentUpon>ProjectBuildingControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ProjectBuilding\ProjectBuildingControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ProjectWorkTabControlView.xaml.cs">
+      <DependentUpon>ProjectWorkTabControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ProjectWorkTabControlViewModel.cs" />
+    <Compile Include="Base\ViewModels\Collections\ObservableCollectionViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\BasicModelContentControlView.xaml.cs">
+      <DependentUpon>BasicModelContentControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\BasicModelContentControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\ObjectReferences\HostGraphModelObjectBoxSelectionView.xaml.cs">
+      <DependentUpon>HostGraphModelObjectBoxSelectionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\ObjectReferences\HostGraphModelObjectDropSelectionView.xaml.cs">
+      <DependentUpon>HostGraphModelObjectDropSelectionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\ObjectReferences\HostGraphModelObjectSelectionViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\ObjectReferences\HostGraphGuestSelectionVmConverter.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\DataControl\EnergyParameterControlView.xaml.cs">
+      <DependentUpon>EnergyParameterControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\DataControl\EnergyParameterControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\DataControl\GroupInteractionControlView.xaml.cs">
+      <DependentUpon>GroupInteractionControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\DataControl\GroupInteractionControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\DataControl\UnstableEnvironmentControlView.xaml.cs">
+      <DependentUpon>UnstableEnvironmentControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\DataControl\UnstableEnvironmentControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\EnergyModelControlView.xaml.cs">
+      <DependentUpon>EnergyModelControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\EnergyModelControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\GridControl\Adapter\UnstableEnvironmentInteractionFilterVmConverter.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\GridControl\UnstableEnvironmentGridControlView.xaml.cs">
+      <DependentUpon>UnstableEnvironmentGridControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\GridControl\UnstableEnvironmentGridControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\GridControl\InteractionFilterGridControlView.xaml.cs">
+      <DependentUpon>InteractionFilterGridControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\GridControl\InteractionFilterGridControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ParticleModel\DataControl\ParticleControlView.xaml.cs">
+      <DependentUpon>ParticleControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ParticleModel\DataControl\ParticleControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ParticleModel\DataControl\ParticleSetControlView.xaml.cs">
+      <DependentUpon>ParticleSetControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ParticleModel\DataControl\ParticleSetControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ParticleModel\GridControl\ParticleSetParticleSelectionViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ParticleModel\GridControl\ParticleSetParticleSelectionVmConverter.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ParticleModel\ParticleModelControlView.xaml.cs">
+      <DependentUpon>ParticleModelControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ParticleModel\ParticleModelControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\SimulationModel\DataControl\KineticSimulationControlView.xaml.cs">
+      <DependentUpon>KineticSimulationControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\SimulationModel\DataControl\KineticSimulationControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\SimulationModel\DataControl\MetropolisSimulationControlView.xaml.cs">
+      <DependentUpon>MetropolisSimulationControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\SimulationModel\DataControl\MetropolisSimulationControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\SimulationModel\GridControl\Adapter\KineticSimulationTransitionSelectionViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\SimulationModel\GridControl\Adapter\KineticSimulationTransitionSelectionVmConverter.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\SimulationModel\GridControl\Adapter\MetropolisSimulationTransitionSelectionViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\SimulationModel\GridControl\Adapter\MetropolisSimulationTransitionSelectionVmConverter.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\SimulationModel\GridControl\SimulationBaseControlView.xaml.cs">
+      <DependentUpon>SimulationBaseControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\SimulationModel\SimulationModelControlView.xaml.cs">
+      <DependentUpon>SimulationModelControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\SimulationModel\SimulationModelControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\StructureModel\Adapter\CrystalParameterSetter.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\StructureModel\DataControl\CellPositionControlView.xaml.cs">
+      <DependentUpon>CellPositionControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\StructureModel\DataControl\CellPositionControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\StructureModel\DataControl\StructureParameterControlView.xaml.cs">
+      <DependentUpon>StructureParameterControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\StructureModel\DataControl\StructureParameterControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\StructureModel\StructureModelControlView.xaml.cs">
+      <DependentUpon>StructureModelControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\StructureModel\StructureModelControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\DataControl\AbstractTransitionControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\DataControl\AbstractTransitionControlView.xaml.cs">
+      <DependentUpon>AbstractTransitionControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\DataControl\TransitionControlView.xaml.cs">
+      <DependentUpon>TransitionControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\DataControl\TransitionControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\GridControl\AbstractTransitionGridControlView.xaml.cs">
+      <DependentUpon>AbstractTransitionGridControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\GridControl\AbstractTransitionGridControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\GridControl\Adapter\AbstractTransitionExchangeGroupSelectionViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\GridControl\Adapter\AbstractTransitionExchangeGroupSelectionVmConverter.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\GridControl\Adapter\ExchangeGroupExchangePairSelectionViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\GridControl\Adapter\ExchangeGroupExchangePairSelectionVmConverter.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\GridControl\ExchangeGroupGridControlView.xaml.cs">
+      <DependentUpon>ExchangeGroupGridControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\GridControl\ExchangeGroupGridControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\GridControl\ExchangePairGridControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\GridControl\ExchangePairGridControlView.xaml.cs">
+      <DependentUpon>ExchangePairGridControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\GridControl\KineticTransitionGridControlView.xaml.cs">
+      <DependentUpon>KineticTransitionGridControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\GridControl\KineticTransitionGridControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\GridControl\MetropolisTransitionGridControlView.xaml.cs">
+      <DependentUpon>MetropolisTransitionGridControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\GridControl\MetropolisTransitionGridControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\TransitionModelControlView.xaml.cs">
+      <DependentUpon>TransitionModelControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\TransitionModelControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\WelcomeControl\WelcomeControlView.xaml.cs">
+      <DependentUpon>WelcomeControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\WelcomeControl\WelcomeControlViewModel.cs" />
+    <Compile Include="Controls\Visualizer\DataControl\Viewport3DView.xaml.cs">
+      <DependentUpon>Viewport3DView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Visualizer\DataControl\Viewport3DViewModel.cs" />
+    <Compile Include="Controls\Visualizer\ModelViewport3DView.xaml.cs">
+      <DependentUpon>ModelViewport3DView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Visualizer\ModelViewport3DViewModel.cs" />
+    <Compile Include="Controls\Visualizer\Objects\Base\IVisualGroupViewModel.cs" />
+    <Compile Include="Controls\Visualizer\Objects\Base\VisualGroupViewModel.cs" />
+    <Compile Include="Controls\Visualizer\Objects\Extensions\MeshBuilderExtensions.cs" />
+    <Compile Include="Controls\Visualizer\Objects\Extensions\VisualExtensions.cs" />
+    <Compile Include="Controls\Visualizer\Objects\Helper\ColorToPropertyConverter.cs" />
+    <Compile Include="Controls\Visualizer\Objects\Helper\ObjectVisualResourcesViewModel.cs" />
+    <Compile Include="Controls\Visualizer\DataControl\ModelRenderResourcesViewModel.cs" />
+    <Compile Include="Extensions\UserControlExtensions.cs" />
+    <Compile Include="Extensions\VectorExtensions.cs" />
+    <Compile Include="Helper\TypeSearchExtensions.cs" />
+    <Compile Include="Logic\Validation\AsyncRunValidationCommand.cs" />
+    <Compile Include="Logic\Validation\ModelValidatorViewModel.cs" />
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="StartupWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="MainWindowViewModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Tooltips.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Tooltips.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="packages.config" />
+    <None Include="Properties\app.manifest" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Resources\Mocassin.Symmetry.db" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Controls\DxVisualizer\Objects\" />
+    <Folder Include="Controls\ProjectStatusBar\SubControls\" />
+    <Folder Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\InfoControl\" />
+    <Folder Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\VisualControl\" />
+    <Folder Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\GridControl\Adapter\" />
+    <Folder Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\InfoControl\" />
+    <Folder Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\VisualControl\" />
+    <Folder Include="Controls\ProjectWorkControl\ModelControls\ParticleModel\InfoControl\" />
+    <Folder Include="Controls\ProjectWorkControl\ModelControls\ParticleModel\VisualControl\" />
+    <Folder Include="Controls\ProjectWorkControl\ModelControls\ProjectBuilding\GridControl\" />
+    <Folder Include="Controls\ProjectWorkControl\ModelControls\StructureModel\InfoControl\" />
+    <Folder Include="Controls\ProjectWorkControl\ModelControls\StructureModel\VisualControl\" />
+    <Folder Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\InfoControl\" />
+    <Folder Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\VisualControl\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ICon.Framework.Mathematics\Mocassin.Mathematics.csproj">
+      <Project>{1c025f0c-4e11-49ff-88ec-6fcf6314a083}</Project>
+      <Name>Mocassin.Mathematics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ICon.Framework.Shared\Mocassin.Framework.csproj">
+      <Project>{7ff7b23c-2b3b-4d5e-9216-ccf920b3d707}</Project>
+      <Name>Mocassin.Framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ICon.Framework.Symmetry\Mocassin.Symmetry.csproj">
+      <Project>{e7471c43-3340-4ee6-ad34-970fa4f0a94d}</Project>
+      <Name>Mocassin.Symmetry</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ICon.Model.Translator\Mocassin.Model.Translator.csproj">
+      <Project>{98009498-c43f-43ac-ac39-c9cc08d30890}</Project>
+      <Name>Mocassin.Model.Translator</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ICon.Model\Mocassin.Model.csproj">
+      <Project>{f56af1be-fe73-4f4b-bab7-9d72b1ce2b46}</Project>
+      <Name>Mocassin.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mocassin.Tools.Evaluation\Mocassin.Tools.Evaluation.csproj">
+      <Project>{9f90b935-b51b-4e4a-aa5b-b7c84e985158}</Project>
+      <Name>Mocassin.Tools.Evaluation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mocassin.Tools.UAccess\Mocassin.Tools.UAccess.csproj">
+      <Project>{5d8aa57a-a682-48cc-9007-37107bad6929}</Project>
+      <Name>Mocassin.Tools.UAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mocassin.UI.Xml\Mocassin.UI.Xml.csproj">
+      <Project>{0027a849-0a7c-48f6-8575-434e165f10b0}</Project>
+      <Name>Mocassin.UI.Xml</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\MocassinLogoRound3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.8">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.8 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="mocassin.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <FileAssociation Include=".mocprj">
+      <Visible>False</Visible>
+      <Description>Mocassin project file</Description>
+      <Progid>MocassinMbFile</Progid>
+      <DefaultIcon>mocassin.ico</DefaultIcon>
+    </FileAssociation>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.1.14\build\net35\SQLitePCLRaw.lib.e_sqlite3.linux.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.1.14\build\net35\SQLitePCLRaw.lib.e_sqlite3.linux.targets'))" />
+    <Error Condition="!Exists('..\packages\SQLitePCLRaw.lib.e_sqlite3.osx.1.1.14\build\net35\SQLitePCLRaw.lib.e_sqlite3.osx.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SQLitePCLRaw.lib.e_sqlite3.osx.1.1.14\build\net35\SQLitePCLRaw.lib.e_sqlite3.osx.targets'))" />
+    <Error Condition="!Exists('..\packages\SQLitePCLRaw.lib.e_sqlite3.v110_xp.1.1.14\build\net35\SQLitePCLRaw.lib.e_sqlite3.v110_xp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SQLitePCLRaw.lib.e_sqlite3.v110_xp.1.1.14\build\net35\SQLitePCLRaw.lib.e_sqlite3.v110_xp.targets'))" />
+    <Error Condition="!Exists('..\packages\SQLitePCLRaw.lib.e_sqlite3.2.0.3\build\net461\SQLitePCLRaw.lib.e_sqlite3.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SQLitePCLRaw.lib.e_sqlite3.2.0.3\build\net461\SQLitePCLRaw.lib.e_sqlite3.targets'))" />
+  </Target>
+  <Import Project="..\packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.1.14\build\net35\SQLitePCLRaw.lib.e_sqlite3.linux.targets" Condition="Exists('..\packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.1.14\build\net35\SQLitePCLRaw.lib.e_sqlite3.linux.targets')" />
+  <Import Project="..\packages\SQLitePCLRaw.lib.e_sqlite3.osx.1.1.14\build\net35\SQLitePCLRaw.lib.e_sqlite3.osx.targets" Condition="Exists('..\packages\SQLitePCLRaw.lib.e_sqlite3.osx.1.1.14\build\net35\SQLitePCLRaw.lib.e_sqlite3.osx.targets')" />
+  <Import Project="..\packages\SQLitePCLRaw.lib.e_sqlite3.v110_xp.1.1.14\build\net35\SQLitePCLRaw.lib.e_sqlite3.v110_xp.targets" Condition="Exists('..\packages\SQLitePCLRaw.lib.e_sqlite3.v110_xp.1.1.14\build\net35\SQLitePCLRaw.lib.e_sqlite3.v110_xp.targets')" />
+  <Import Project="..\packages\SQLitePCLRaw.lib.e_sqlite3.2.0.3\build\net461\SQLitePCLRaw.lib.e_sqlite3.targets" Condition="Exists('..\packages\SQLitePCLRaw.lib.e_sqlite3.2.0.3\build\net461\SQLitePCLRaw.lib.e_sqlite3.targets')" />
+</Project>

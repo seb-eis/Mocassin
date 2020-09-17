@@ -1,0 +1,111 @@
+﻿<UserControl
+  x:Class="Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureModel.DataControl.CellPositionControlView"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureModel.DataControl"
+  xmlns:system="clr-namespace:System;assembly=mscorlib"
+  xmlns:structures="clr-namespace:Mocassin.Model.Structures;assembly=Mocassin.Model"
+  xmlns:comboBox="clr-namespace:Mocassin.UI.GUI.Base.UiElements.ComboBox"
+  xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
+  xmlns:content="clr-namespace:Mocassin.UI.GUI.Base.UiElements.Content"
+  xmlns:res="clr-namespace:Mocassin.UI.GUI.Resources"
+  mc:Ignorable="d"
+  d:DataContext="{d:DesignInstance local:CellPositionControlViewModel, IsDesignTimeCreatable=True}"
+  d:DesignHeight="450" d:DesignWidth="800"
+  Background="Transparent">
+
+  <UserControl.Resources>
+
+    <ObjectDataProvider MethodName="GetValues"
+                        ObjectType="{x:Type system:Enum}"
+                        x:Key="StabilityEnumValues">
+      <ObjectDataProvider.MethodParameters>
+        <x:Type TypeName="structures:PositionStability" />
+      </ObjectDataProvider.MethodParameters>
+    </ObjectDataProvider>
+    <ToolTip x:Key="Local.ToolTip.UnitCellPosition">
+      <TextBlock Text="{x:Static res:Tooltips.ModelObject_UnitCellPosition}" />
+    </ToolTip>
+  </UserControl.Resources>
+
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*" />
+      <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}" />
+      <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
+    <content:HeaderedGroup Grid.Column="0" x:Name="PositionContentControl"
+                           Style="{StaticResource App.Style.HeaderedGroup.BoldText}"
+                           Header="Cell Position Definitions:"
+                           HeaderToolTip="{StaticResource Local.ToolTip.UnitCellPosition}">
+      <DataGrid Name="PositionDataGrid"
+                ItemsSource="{Binding Items}"
+                SelectedItem="{Binding SelectedItem}"
+                AutoGenerateColumns="False"
+                ColumnWidth="*">
+
+        <DataGrid.RowHeaderTemplate>
+          <DataTemplate>
+            <views:ObjectRowHeaderLogo x:Name="RowHeaderLogo"
+                                       PreviewMouseLeftButtonDown="RowHeaderLogo_OnPreviewMouseLeftButtonDown"
+                                       PreviewMouseLeftButtonUp="RowHeaderLogo_OnPreviewMouseLeftButtonUp"
+                                       PreviewMouseMove="RowHeaderLogo_OnPreviewMouseMove"
+                                       Cursor="Hand" />
+          </DataTemplate>
+        </DataGrid.RowHeaderTemplate>
+
+        <DataGrid.Columns>
+          <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
+          <DataGridTextColumn Header="A"
+                              Binding="{Binding A,Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
+          <DataGridTextColumn Header="B"
+                              Binding="{Binding B,Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
+          <DataGridTextColumn Header="C"
+                              Binding="{Binding C,Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
+
+          <DataGridComboBoxColumn Header="Stability"
+                                  ItemsSource="{Binding Source={StaticResource StabilityEnumValues}}"
+                                  SelectedItemBinding="{Binding Stability}" />
+
+          <comboBox:BindableDataGridComboBoxColumn Header="Occupation"
+                                                   ItemsSource="{Binding ElementName=PositionDataGrid, Path=DataContext.OccupationSetOptions}"
+                                                   DisplayMemberPath="Name"
+                                                   SelectedItemBinding="{Binding Occupation}" />
+        </DataGrid.Columns>
+      </DataGrid>
+
+    </content:HeaderedGroup>
+
+    <GridSplitter Grid.Column="1" />
+
+    <content:HeaderedGroup Grid.Column="2" x:Name="ExpansionContentControl">
+
+      <HeaderedContentControl.Header>
+        <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
+          <Run Text="Equivalent Cell Positions:" />
+          <Run Text="{Binding SelectedItem.Name, StringFormat={}[{0}], TargetNullValue=???}" />
+          <Run Text="{Binding SelectedVectorExpansionCount, Mode=OneWay, StringFormat={}(#{0})}" />
+        </TextBlock>
+      </HeaderedContentControl.Header>
+
+      <DataGrid ItemsSource="{Binding SelectedVectorExpansion}"
+                AutoGenerateColumns="False"
+                IsReadOnly="True"
+                ColumnWidth="*">
+        <DataGrid.RowHeaderTemplate>
+          <DataTemplate>
+            <views:ObjectRowHeaderLogo />
+          </DataTemplate>
+        </DataGrid.RowHeaderTemplate>
+
+        <DataGrid.Columns>
+          <DataGridTextColumn Header="A" Binding="{Binding A, Mode=OneTime}" />
+          <DataGridTextColumn Header="B" Binding="{Binding B, Mode=OneTime}" />
+          <DataGridTextColumn Header="C" Binding="{Binding C, Mode=OneTime}" />
+        </DataGrid.Columns>
+      </DataGrid>
+    </content:HeaderedGroup>
+  </Grid>
+</UserControl>
