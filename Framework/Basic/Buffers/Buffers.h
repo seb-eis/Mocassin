@@ -20,11 +20,14 @@
 
 // Generic type macro for spans of memory enclosed by pointers to begin and end in a cpp style
 // Layout@ggc_x86_64 => 16@[8,8]
-#define Span_t(TYPE, NAMING...) struct NAMING { TYPE* Begin, * End; }
+#define Span_t(TYPE, NAMING...) struct NAMING { TYPE* Begin; TYPE * End; }
 
 // Type for enclosing an undefined buffer. Contains ptr to begin and end in a cpp style
 // Layout@ggc_x86_64 => 16@[8,8]
 typedef Span_t(void, VoidSpan) VoidSpan_t;
+
+// Compares two pointers as 16 byte UUID/GUID values
+int32_t CompareMocuuid(const void* lhs, const void* rhs);
 
 // Allocate a new voi span with the passed number of elements and size of elements
 VoidSpan_t AllocateSpan(size_t numOfElements, size_t sizeOfElement);
@@ -39,13 +42,13 @@ void* ConstructVoidSpan(size_t numOfElements, size_t sizeOfElement, VoidSpan_t *
 void* ConstructSpanFromBlob(const void *restrict buffer, size_t numOfBytes, VoidSpan_t *restrict outSpan);
 
 // Allocates a new span by constructing and casting a nw void type span
-#define new_Span(SPAN, SIZE) *(typeof(SPAN)*) ConstructVoidSpan((size_t)(SIZE), sizeof(typeof(*(SPAN).Begin)), (VoidSpan_t*) &(SPAN))
+#define span_New(SPAN, SIZE) *(typeof(SPAN)*) ConstructVoidSpan((size_t)(SIZE), sizeof(typeof(*(SPAN).Begin)), (VoidSpan_t*) &(SPAN))
 
 // Deletes a span by freeing the dynamic memory the span is addressing (Do not call on a subspan)
-#define delete_Span(SPAN) free((SPAN).Begin)
+#define span_Delete(SPAN) free((SPAN).Begin)
 
 // Get the value type of a span
-#define vtypeof_span(SPAN) typeof(span_Get(SPAN, 0))
+#define span_TypeOfValue(SPAN) typeof(span_Get(SPAN, 0))
 
 // Get the number of elements of the passed span
 #define span_Length(SPAN) ((SPAN).End-(SPAN).Begin)
@@ -69,10 +72,10 @@ void* ConstructSpanFromBlob(const void *restrict buffer, size_t numOfBytes, Void
 #define span_AsVoid(SPAN) { (void*) (SPAN).Begin, (void*) (SPAN).End }
 
 // Macro function that will return true if the passed index value is out of range of the passed span
-#define span_IndexIsOutOfRange(SPAN, INDEX) ((INDEX) >= span_Length(SPAN) || INDEX < 0)
+#define span_IsIndexOutOfRange(SPAN, INDEX) ((INDEX) >= span_Length(SPAN) || INDEX < 0)
 
 // Macro to in-place construct a new span from the passed blob and number of elements information
-#define span_FromBlob(SPAN,BUFFER,SIZE) *(typeof(SPAN)*) ConstructSpanFromBlob((BUFFER), (SIZE)*sizeof(typeof(*(SPAN).Begin)), (VoidSpan_t*) &(SPAN))
+#define span_ConstructFromBlob(SPAN,BUFFER,SIZE) *(typeof(SPAN)*) ConstructSpanFromBlob((BUFFER), (SIZE)*sizeof(typeof(*(SPAN).Begin)), (VoidSpan_t*) &(SPAN))
 
 // Macro to get a span access for a fixed size c-array
 #define span_CArrayToSpan(ARRAY) { .Begin = &(ARRAY)[0], .End = &(ARRAY)[sizeof(ARRAY)/sizeof(typeof((ARRAY)[0]))]}
@@ -84,7 +87,7 @@ void* ConstructSpanFromBlob(const void *restrict buffer, size_t numOfBytes, Void
 typedef Span_t(byte_t, Buffer) Buffer_t;
 
 // Constructs the define buffer in place and returns an error when the request fails
-#define ctor_Buffer(BUFFER, SIZE) TryAllocateSpan((size_t)(SIZE), 1, (VoidSpan_t*) &(BUFFER))
+#define buffer_Allocate(BUFFER, SIZE) TryAllocateSpan((size_t)(SIZE), 1, (VoidSpan_t*) &(BUFFER))
 
 // Copies the passed number of bytes from ten source buffer to the target buffer. Does not check for potential buffer overflow
 void CopyBuffer(byte_t const* source, byte_t* target, size_t size);
@@ -102,13 +105,13 @@ bool_t HaveSameBufferContent(const Buffer_t* lhs, const Buffer_t* rhs);
 /* Foreach macro definitions */
 
 // Defines a CPP style foreach iteration over any access type that defines .Begin and .End pointers
-#define cpp_foreach(ITER, SPAN) for(vtypeof_span(SPAN)* (ITER) = &(SPAN).Begin[0]; (ITER) < (SPAN).End; ++(ITER))
+#define cpp_foreach(ITER, SPAN) for(span_TypeOfValue(SPAN)* (ITER) = &(SPAN).Begin[0]; (ITER) < (SPAN).End; ++(ITER))
 
 // Defines a CPP style foreach iteration with a specified start point over any access type that defines .Begin and .End pointers
-#define cpp_offset_foreach(ITER, SPAN, START) for(vtypeof_span(SPAN)* (ITER) = &(SPAN).Begin[(START)]; (ITER) < (SPAN).End; ++(ITER))
+#define cpp_offset_foreach(ITER, SPAN, START) for(span_TypeOfValue(SPAN)* (ITER) = &(SPAN).Begin[(START)]; (ITER) < (SPAN).End; ++(ITER))
 
 // Defines a CPP style reverse foreach iteration over any access type that defines .Begin and .End pointers
-#define cpp_rforeach(ITER, SPAN) for(vtypeof_span(SPAN)* (ITER) = &(SPAN).End[-1]; (ITER) >= (SPAN).Begin; --(ITER))
+#define cpp_rforeach(ITER, SPAN) for(span_TypeOfValue(SPAN)* (ITER) = &(SPAN).End[-1]; (ITER) >= (SPAN).Begin; --(ITER))
 
 // Defines a CPP style foreach iteration over any fixed size C array
 #define c_foreach(ITER, ARRAY) for(typeof((ARRAY)[0])* (ITER) = &(ARRAY)[0]; (ITER) < &(ARRAY)[sizeof((ARRAY))/sizeof(typeof((ARRAY)[0]))]; ++(ITER))
@@ -121,7 +124,7 @@ bool_t HaveSameBufferContent(const Buffer_t* lhs, const Buffer_t* rhs);
 
 // Generic type macro for 1d lists that are enclosed by pointers and support cpp style push_back/pop_back operations
 // Layout@ggc_x86_64 => 24@[8,8,8]
-#define List_t(TYPE, NAMING...) struct NAMING { TYPE* Begin, * End, * CapacityEnd; }
+#define List_t(TYPE, NAMING...) struct NAMING { TYPE* Begin; TYPE * End; TYPE * CapacityEnd; }
 
 // Defines the undefined list with void ptr to begin, end and end of capacity
 // Layout@ggc_x86_64 => 24@[8,8,8]
@@ -137,10 +140,10 @@ error_t TryAllocateList(size_t capacity, size_t sizeOfElement, VoidList_t*restri
 void* ConstructVoidList(size_t capacity, size_t sizeOfElement, VoidList_t *restrict outList);
 
 // Macro to allocate a new list with the specified capacity and type
-#define new_List(LIST, CAPACITY) *(typeof(LIST)*) ConstructVoidList((size_t)(CAPACITY), sizeof(typeof(*(LIST).Begin)), (VoidList_t*) &(LIST))
+#define list_New(LIST, CAPACITY) *(typeof(LIST)*) ConstructVoidList((size_t)(CAPACITY), sizeof(typeof(*(LIST).Begin)), (VoidList_t*) &(LIST))
 
 // Macro to free the dynamic memory the list access refers to
-#define delete_List(LIST) free((LIST).Begin)
+#define list_Delete(LIST) free((LIST).Begin)
 
 // Get the capacity of the passed list
 #define list_Capacity(LIST) ((LIST).CapacityEnd-(LIST).Begin)
@@ -150,6 +153,9 @@ void* ConstructVoidList(size_t capacity, size_t sizeOfElement, VoidList_t *restr
 
 // Removes the last entry from the by decreasing the current end without checking for underflow
 #define list_PopBack(LIST) *(--(LIST).End)
+
+// Clears a list by resetting its end to the begin, does not free the list or actually delete any values
+#define list_Clear(LIST) (LIST).End = (LIST.Begin)
 
 // Macro to check if the passed list is full
 #define list_IsFull(LIST) (((LIST).End) == (LIST).CapacityEnd)
@@ -164,7 +170,7 @@ void* ConstructVoidList(size_t capacity, size_t sizeOfElement, VoidList_t *restr
 
 // Generic type macro for rectangular array access to a span of data supporting multiple index access
 // Layout@ggc_x86_64 => 24@[8,8,8]
-#define Array_t(TYPE, RANK, NAMING...) struct NAMING { struct { int32_t Rank, Size; int32_t Blocks[(RANK)-1]; }* Header; TYPE* Begin, * End; }
+#define Array_t(TYPE, RANK, NAMING...) struct NAMING { struct { int32_t Rank, Size; int32_t Blocks[(RANK)-1]; }* Header; TYPE* Begin; TYPE * End; }
 
 // Type for the undefined void array access with header access to rank, size and the first block entry
 // Layout@ggc_x86_64 => 24@[8,8,8]
@@ -188,23 +194,34 @@ void MakeArrayBlocks(int32_t rank, const int32_t dimensions[rank], int32_t*restr
 // Constructs a new array from the passed buffer by interpreting it as a previously build array. Does not free the original buffer!
 void* ConstructArrayFromBlob(const void *restrict buffer, size_t sizeOfElements, VoidArray_t *restrict outArray);
 
+// Calculate the array header size based on the rank and ensures 8 byte alignment
+static inline int32_t CalculateArrayHeaderSize(int32_t rank)
+{
+    var numOfBytes = (rank+1) * sizeof(int32_t);
+    numOfBytes += numOfBytes % sizeof(void*);
+    return numOfBytes;
+}
+
 // Macro to construct a new array of the passed type and dimensions
-#define new_Array(ARRAY, ...) *(typeof(ARRAY)*) ConstructVoidArray(sizeof((int32_t[]){__VA_ARGS__})/sizeof(int32_t), sizeof(typeof(*(ARRAY).Begin)), (int32_t[]){ __VA_ARGS__ }, (VoidArray_t*) &(ARRAY))
+#define array_New(ARRAY, ...) *(typeof(ARRAY)*) ConstructVoidArray(sizeof((int32_t[]){__VA_ARGS__})/sizeof(int32_t), sizeof(typeof(*(ARRAY).Begin)), (int32_t[]){ __VA_ARGS__ }, (VoidArray_t*) &(ARRAY))
 
 // Frees the memory of any array
-#define delete_Array(ARRAY) free((ARRAY).Header)
+#define array_Delete(ARRAY) free((ARRAY).Header)
 
 // Get the total number of elements in any type of array
 #define array_Length(ARRAY) ((ARRAY).Header->Size)
+
+// Get the total number of bytes that the array occupies
+#define array_ByteCount(ARRAY) (((void*)(ARRAY).End) - ((void*) (ARRAY).Header))
 
 // Get the rank of any type of array
 #define array_Rank(ARRAY) ((ARRAY).Header->Rank)
 
 // Get the header size in bytes of any array
-#define array_HeaderByteCount(ARRAY) (1 + array_Rank(ARRAY)) * sizeof(int32_t)
+#define array_HeaderByteCount(ARRAY) CalculateArrayHeaderSize(array_Rank(ARRAY))
 
 // Allocates a new array by interpreting the passed buffer pointer as a formatted array and copies the data. Does not free original buffer!
-#define array_FromBlob(ARRAY, BUFFER) *(typeof(ARRAY)*) ConstructArrayFromBlob((BUFFER), sizeof(typeof(*(ARRAY).Begin)), (VoidArray_t*) &(ARRAY))
+#define array_ConstructFromBlob(ARRAY, BUFFER) *(typeof(ARRAY)*) ConstructArrayFromBlob((BUFFER), sizeof(typeof(*(ARRAY).Begin)), (VoidArray_t*) &(ARRAY))
 
 // Get the number of elements that need to be skipped to advance the passed number of steps in the 1. dimension of an array
 #define array_SkipBlock_1(ARRAY, VAL) (VAL)
@@ -233,6 +250,6 @@ void* ConstructArrayFromBlob(const void *restrict buffer, size_t sizeOfElements,
     )
 
 // Get a boolean value indicating if the passed index set is out of the array access range
-#define array_IndicesAreOutOfRange(ARRAY, ...) ((array_Rank(ARRAY) != __VA_NARG(__VA_ARGS__)) || (&array_Get(ARRAY, __VA_ARGS__) > span_Back(ARRAY)))
+#define array_IsIndexOutOfRange(ARRAY, ...) ((array_Rank(ARRAY) != __VA_NARG(__VA_ARGS__)) || (&array_Get(ARRAY, __VA_ARGS__) > span_Back(ARRAY))|| (&array_Get(ARRAY, __VA_ARGS__) < span_Front(ARRAY)))
 
 /* */

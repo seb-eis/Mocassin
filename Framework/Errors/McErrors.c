@@ -11,7 +11,7 @@
 #include "Framework/Errors/McErrors.h"
 #include "Framework/Basic/FileIO/FileIO.h"
 
-const char* ErrorCodeToString(error_t errCode)
+const char* ConvertMocassinErrorCodeToString(error_t errCode)
 {
     // Redirect all non-critical errors to FATAL FAILURE since they should never cause an error string lookup
     errCode = (errCode <= 0) ? 0 : errCode;
@@ -38,7 +38,9 @@ const char* ErrorCodeToString(error_t errCode)
             { ERR_NOTIMPLEMENTED,   "Function is not implemented.\n\t\t(Expected reason: Currently not supported feature)" },
             { ERR_NULLPOINTER,      "Function argument is null.\n\t\t(Expected reason: Implementation error/corrupted model data)" },
             { ERR_ARGUMENT,         "Function argument is invalid.\n\t\t(Expected reason: Implementation error)" },
-            { ERR_DEBUGASSERT,      "Debug assertion failed." }
+            { ERR_DEBUGASSERT,      "Debug assertion failed." },
+            { ERR_ALREADYCOMPLETED, "Done MCS is greater or equal to target MCS.\n\t\t(Expected reason: Simulation is already done!)"},
+            { ERR_NOMOBILES,        "The number of mobile particles is zero.\n\t\t(Expected reason: Missing doping or definition error.)"}
     };
 
     c_foreach(error, errTable)
@@ -69,28 +71,23 @@ static void AwaitErrorResponse(error_t error)
     #endif
 }
 
-void ErrorToStdout(int32_t errCode, const char *errFunc, int32_t errLine, const char *errMsg)
+void DumpErrorToStderrOut(int32_t errCode, const char *errFunc, int32_t errLine, const char *errMsg)
 {
-    fprintf(stderr, ERROR_FORMAT, errCode, errFunc, errLine, ErrorCodeToString(errCode), errMsg);
+    fprintf(stderr, ERROR_FORMAT, errCode, errFunc, errLine, ConvertMocassinErrorCodeToString(errCode), errMsg);
     fflush(stderr);
     AwaitErrorResponse(errCode);
 }
 
-void OnErrorExit(int32_t errCode, const char* errFunc, int32_t errLine, const char* errMsg)
+void MocassinErrorExit(int32_t errCode, const char* errFunc, int32_t errLine, const char* errMsg)
 {
-    var fileStream = fopen(STDERR_PATH, "w");
-    fprintf(fileStream, ERROR_FORMAT, errCode, errFunc, errLine, ErrorCodeToString(errCode), errMsg);
-    fclose(fileStream);
+    fprintf(stderr, ERROR_FORMAT, errCode, errFunc, errLine, ConvertMocassinErrorCodeToString(errCode), errMsg);
     exit(errCode);
 }
 
-void OnErrorExitWithMemDump(int32_t errCode, const char* errFunc, int32_t errLine, const char* errMsg, uint8_t* memStart, uint8_t* memEnd)
+void MocassinErrorExitWithMemDump(int32_t errCode, const char* errFunc, int32_t errLine, const char* errMsg, uint8_t* memStart, uint8_t* memEnd)
 {
-    var fileStream = fopen(STDERR_PATH, "w");
-    fprintf(fileStream, ERROR_FORMAT_WDUMP, errCode, errFunc, errLine, ErrorCodeToString(errCode), errMsg);
-
+    fprintf(stderr, ERROR_FORMAT_WDUMP, errCode, errFunc, errLine, ConvertMocassinErrorCodeToString(errCode), errMsg);
     let buffer = (Buffer_t) {.Begin = memStart, .End = memEnd};
-    WriteBufferHexToStream(fileStream, &buffer, 24);
-    fclose(fileStream);
+    WriteBufferHexToStream(stderr, &buffer, 24);
     exit(errCode);
 }

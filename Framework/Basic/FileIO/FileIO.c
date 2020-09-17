@@ -9,6 +9,51 @@
 //////////////////////////////////////////
 
 #include "Framework/Basic/FileIO/FileIO.h"
+#include <dirent.h>
+
+file_t* utf8fopen(const char* restrict fileName, const char* restrict fileMode)
+{
+#if defined(WIN32)
+    wchar_t * file16 = NULL, * mode16 = NULL;
+    var error = Win32ConvertUtf8ToUtf16(fileName, &file16);
+    return_if(error <= 0, NULL);
+    error = Win32ConvertUtf8ToUtf16(fileMode, &mode16);
+    var file = _wfopen(file16, mode16);
+    return free(file16), free(mode16), file;
+#else
+    return fopen(fileName, fileMode);
+#endif
+}
+
+// Removes a file by an utf8 encoded file name
+error_t utf8remove(const char* restrict fileName)
+{
+#if  defined(WIN32)
+    wchar_t * file16 = NULL;
+    var error = Win32ConvertUtf8ToUtf16(fileName, &file16);
+    return_if(error <= 0, ERR_FILE);
+    error = _wremove(file16);
+    return free(file16), error;
+#else
+    return remove(fileName);
+#endif
+}
+
+// Renames a file by two utf8 encoded file names
+error_t utf8rename(const char* restrict fileName, const char* restrict newFileName)
+{
+#if defined(WIN32)
+    wchar_t * file16 = NULL, * newFile16 = NULL;
+    var error = Win32ConvertUtf8ToUtf16(fileName, &file16);
+    return_if(error <= 0, ERR_FILE);
+    error = Win32ConvertUtf8ToUtf16(newFileName, &newFile16);
+    return_if(error <= 0, ERR_FILE);
+    error = _wrename(file16, newFile16);
+    return free(file16), free(newFile16), error;
+#else
+    return rename(fileName, newFileName);
+#endif
+}
 
 cerror_t CalculateFileSize(file_t *restrict fileStream)
 {
@@ -25,19 +70,46 @@ cerror_t CalculateFileSize(file_t *restrict fileStream)
 
 bool_t IsAccessibleFile(const char* restrict fileName)
 {
-    return access(fileName, F_OK) == 0;
+#if defined(WIN32)
+    wchar_t * file16 = NULL;
+    let error = Win32ConvertUtf8ToUtf16(fileName, &file16);
+    if (error <= 0)
+    {
+        free(file16);
+        return false;
+    }
+    let fileAttributes = GetFileAttributesW(file16);
+    let result = (fileAttributes != INVALID_FILE_ATTRIBUTES) && !(fileAttributes & FILE_ATTRIBUTE_DIRECTORY);
+    free(file16);
+#else
+    let result = access(fileName, F_OK) == 0 && !IsAccessibleDirectory(fileName);
+#endif
+    return result;
 }
 
 bool_t IsAccessibleDirectory(const char* restrict dirName)
 {
+#if defined(WIN32)
+    wchar_t * file16 = NULL;
+    let error = Win32ConvertUtf8ToUtf16(dirName, &file16);
+    if (error <= 0)
+    {
+        free(file16);
+        return false;
+    }
+    let fileAttributes = GetFileAttributesW(file16);
+    let result = (fileAttributes != INVALID_FILE_ATTRIBUTES) && (fileAttributes & FILE_ATTRIBUTE_DIRECTORY);
+    free(file16);
+#else
+    var result = false;
     var dir = opendir(dirName);
     if (dir)
     {
         closedir(dir);
-        return true;
+        result = true;
     }
-
-    return false;
+#endif
+    return result;
 }
 
 error_t WriteBufferToStream(file_t* restrict fileStream, const Buffer_t* restrict buffer)
@@ -59,7 +131,7 @@ error_t WriteBufferToFile(const char* restrict fileName, const char* restrict fi
     if (strcmp(fileMode, "wb") != 0 && strcmp(fileMode, "ab") != 0)
         return ERR_FILEMODE;
 
-    if ((fileStream = fopen(fileName, fileMode)) == NULL)
+    if ((fileStream = utf8fopen(fileName, fileMode)) == NULL)
         return ERR_STREAM;
 
     result = WriteBufferToStream(fileStream, buffer);
@@ -75,8 +147,8 @@ error_t ConcatStrings(const char* lhs, const char* rhs, char** result)
 
     return_if(*result == NULL, ERR_MEMALLOCATION);
 
-    error |= (strncpy(*result, lhs, bufferSize) != NULL) ? ERR_OK : ERR_BUFFEROVERFLOW;
-    error |= (strncat(*result, rhs, bufferSize) != NULL) ? ERR_OK : ERR_BUFFEROVERFLOW;
+    error |= (strcpy(*result, lhs) != NULL) ? ERR_OK : ERR_BUFFEROVERFLOW;
+    error |= (strcat(*result, rhs) != NULL) ? ERR_OK : ERR_BUFFEROVERFLOW;
     return error;
 }
 
@@ -92,7 +164,7 @@ error_t SaveWriteBufferToFile(const char* restrict fileName, const char* restric
             free(tmpName);
             return error;
         }
-        if((error = rename(fileName, tmpName)) != ERR_OK)
+        if((error = utf8rename(fileName, tmpName)) != ERR_OK)
         {
             free(tmpName);
             return error;
@@ -101,7 +173,7 @@ error_t SaveWriteBufferToFile(const char* restrict fileName, const char* restric
 
     if((error = WriteBufferToFile(fileName, fileMode, buffer)) == ERR_OK)
         if(tmpName != NULL)
-            error = remove(tmpName);
+            error = utf8remove(tmpName);
 
     free(tmpName);
     return error;
@@ -120,14 +192,11 @@ error_t LoadBufferFromFile(const char* restrict fileName, Buffer_t* restrict out
     int64_t bufferSize;
     error_t error;
 
-    if ((fileStream = fopen(fileName, "rb")) == NULL || (bufferSize = CalculateFileSize(fileStream)) < 0)
+    if ((fileStream = utf8fopen(fileName, "rb")) == NULL || (bufferSize = CalculateFileSize(fileStream)) < 0)
         return ERR_STREAM;
 
     if (span_Length(*outBuffer) != (size_t)bufferSize)
-    {
-        delete_Span(*outBuffer);
-        *outBuffer = new_Span(*outBuffer, (size_t)bufferSize);
-    }
+        *outBuffer = span_New(*outBuffer, (size_t)bufferSize);
 
     error = LoadBufferFromStream(fileStream, outBuffer);
     fclose(fileStream);
@@ -154,7 +223,7 @@ error_t WriteBufferHexToStream(file_t* restrict fileStream, const Buffer_t* rest
 bool_t EnsureFileIsDeleted(char const * restrict filePath)
 {
     if (IsAccessibleFile(filePath))
-        return remove(filePath) == 0;
+        return utf8remove(filePath) == 0;
 
     return false;
 }
@@ -164,3 +233,106 @@ void ClearStdintBuffer()
     int32_t c;
     while ((c = getchar()) != '\n' && c != EOF) {};
 }
+
+static error_t SaveAddStringEntryToList(StringList_t*restrict list, char * value, bool_t createCopy)
+{
+    var insertValue = createCopy ? strdup(value) : value;
+
+    if (!list_IsFull(*list))
+    {
+        list_PushBack(*list, insertValue);
+        return ERR_OK;
+    }
+
+    var count = list_Capacity(*list);
+    StringList_t newList = list_New(newList, 2 * count);
+    memcpy(newList.Begin, list->Begin, count * sizeof(char*));
+    newList.End += count;
+    list_PushBack(newList, insertValue);
+    list_Delete(*list);
+    *list = newList;
+    return ERR_OK;
+}
+
+#if defined(WIN32)
+error_t ListAllFilesByPattern(const char* root, const char* pattern, bool_t includeSubdirs, StringList_t*restrict outList)
+{
+    *outList = list_New(*outList, 10);
+    wchar_t * root16 = NULL, * pattern16 = NULL;
+    var error = Win32ConvertUtf8ToUtf16(root, &root16);
+    return_if(error <= 0, list_Delete(*outList), ERR_FILE);
+    error = Win32ConvertUtf8ToUtf16(pattern, &pattern16);
+    return_if(error <= 0, list_Delete(*outList), ERR_FILE);
+
+    wchar_t buffer16[260];
+    var directory = _wopendir(root16);
+    struct _wdirent* direntry;
+    return_if(directory == NULL, ERR_FILE);
+
+    error = ERR_OK;
+    for (;(direntry = _wreaddir(directory)) != NULL;)
+    {
+        continue_if(lstrcmpW(direntry->d_name, L".") == 0 || lstrcmpW(direntry->d_name, L"..") == 0);
+
+        wsprintfW(buffer16, L"%s\\%s", root16, direntry->d_name);
+        char * fileName = NULL;
+        error = Win32ConvertUtf16ToUtf8(buffer16, &fileName);
+        return_if(error <= 0, ERR_FILE);
+        error = ERR_OK;
+        var fileAtr = GetFileAttributesW(buffer16);
+
+        if (includeSubdirs && (fileAtr & FILE_ATTRIBUTE_DIRECTORY))
+        {
+            StringList_t subList;
+            error = ListAllFilesByPattern(fileName, pattern, includeSubdirs, &subList);
+            free(fileName);
+            return_if(error, error);
+            cpp_foreach(item, subList) SaveAddStringEntryToList(outList, *item, false);
+            list_Delete(subList);
+        }
+        if ((fileAtr != INVALID_FILE_ATTRIBUTES) && pattern != NULL && wcsstr(buffer16, pattern16) != NULL)
+        {
+            SaveAddStringEntryToList(outList, fileName, false);
+            continue;
+        }
+    }
+
+    _wclosedir(directory);
+    return error;
+}
+#else
+error_t ListAllFilesByPattern(const char* root, const char* pattern, bool_t includeSubdirs, StringList_t*restrict outList)
+{
+    *outList = list_New(*outList, 10);
+
+    char buffer[260];
+    var directory = opendir(root);
+    struct dirent* direntry;
+    return_if(directory == NULL, ERR_FILE);
+
+    var error = ERR_OK;
+    for (;(direntry = readdir(directory)) != NULL;)
+    {
+        continue_if(strcmp(direntry->d_name, ".") == 0 || strcmp(direntry->d_name, "..") == 0);
+
+        sprintf(buffer, "%s/%s", root, direntry->d_name);
+        if (IsAccessibleFile(buffer) && pattern != NULL && strstr(buffer, pattern) != NULL)
+        {
+            SaveAddStringEntryToList(outList, buffer, true);
+            memset(buffer, 0, sizeof(buffer));
+            continue;
+        }
+        if (includeSubdirs && IsAccessibleDirectory(buffer))
+        {
+            StringList_t subList;
+            error = ListAllFilesByPattern(buffer, pattern, includeSubdirs, &subList);
+            cpp_foreach(item, subList) SaveAddStringEntryToList(outList, *item, false);
+            list_Delete(subList);
+        }
+        memset(buffer, 0, sizeof(buffer));
+    }
+
+    closedir(directory);
+    return error;
+}
+#endif

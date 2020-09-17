@@ -58,7 +58,7 @@ static inline error_t GetFormatedTimeStamp(const char *format, char *buffer, siz
 }
 
 // Converts the passed time epoch into an ISO8601 UTC time stamp using the passed buffer
-static inline error_t TimeToTimeStampISO8601UTC(char *restrict buffer, const time_t *restrict time)
+static inline error_t TimeToIs08601UtcTimeStamp(char *restrict buffer, const time_t *restrict time)
 {
     struct tm timeInfo;
     #if defined(linux) || defined(__INTEL_COMPILER)
@@ -73,14 +73,14 @@ static inline error_t TimeToTimeStampISO8601UTC(char *restrict buffer, const tim
 }
 
 // Get the current time as UTC with an ISO8601 format or an error if the creation fails
-static inline error_t GetCurrentTimeStampISO8601UTC(char *restrict buffer)
+static inline error_t GetCurrentIso8601UtcTimeStamp(char *restrict buffer)
 {
     time_t raw = time(NULL);
-    return TimeToTimeStampISO8601UTC(buffer, &raw);
+    return TimeToIs08601UtcTimeStamp(buffer, &raw);
 }
 
-// Converts seconds to an ISO8601 time period "PxxDTxxHxxMxxS"
-static inline error_t SecondsToISO8601TimeSpan(char *restrict buffer, const int64_t totalSeconds)
+// Converts seconds to an ISO8601 time period format "PxxDTxxHxxMxxS"
+static inline error_t SecondsToIso8601FormattedTimePeriod(char *restrict buffer, const int64_t totalSeconds)
 {
     const char format[] = "P" FORMAT_I64(02) "DT" FORMAT_I64(02) "H" FORMAT_I64(02) "M" FORMAT_I64(02) "S";
     let days = totalSeconds / TIME_SECONDS_PER_DAY;

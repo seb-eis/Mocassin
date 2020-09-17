@@ -9,9 +9,10 @@
 //////////////////////////////////////////
 
 #include "Framework/Basic/DlLoading/DlLoading.h"
+#include "Framework/Basic/FileIO/FileIO.h"
 
 #if !defined(MC_USE_PLUGIN_SUPPORT)
-    void* ImportFunction(const char* restrict libraryPath, const char* restrict exportName, error_t* restrict error)
+    void* LibraryLoadingImportFunction(const char* restrict libraryPath, const char* restrict exportName, error_t* restrict error)
     {
         return NULL;
     }
@@ -23,12 +24,12 @@
             fflush(stream);
         }
 
-        void* ImportFunction(const char* restrict libraryPath, const char* restrict exportName, error_t* restrict error)
+        void* LibraryLoadingImportFunction(const char* restrict libraryPath, const char* restrict exportName, error_t* restrict error)
         {
             HMODULE module;
             void* function = NULL;
 
-            if ((module = GetLibraryHandle(libraryPath)) == NULL)
+            if ((module = LibraryLoadingGetLibraryHandle(libraryPath)) == NULL)
             {
                 LogOsApiError(stderr, "Call to 'LoadLibrary(<FILENAME>)' returned NULL. Could not load library.");
                 *error = ERR_LIBRARYLOADING;
@@ -44,19 +45,32 @@
             return function;
         }
 
-        bool_t UnloadDynamicLibrary(const char* restrict libraryName)
+        static wchar_t * GetUnicodeLibraryName(const char* restrict libraryName)
         {
-            HMODULE module = GetModuleHandleA(libraryName);
+            wchar_t * libraryName16 = NULL;
+            var error = Win32ConvertUtf8ToUtf16(libraryName, &libraryName16);
+            return_if(error <= 0, NULL);
+            return libraryName16;
+        }
+
+        bool_t LibraryLoadingUnloadLibrary(const char* restrict libraryName)
+        {
+            var libraryName16 = GetUnicodeLibraryName(libraryName);
+
+            HMODULE module = GetModuleHandleW(libraryName16);
+            free(libraryName16);
+
             return_if(module == NULL, false);
             return (bool_t) FreeLibrary(module);
         }
 
-        LIBHANDLE GetLibraryHandle(const char *restrict libraryPath)
+        LIBHANDLE LibraryLoadingGetLibraryHandle(const char *restrict libraryPath)
         {
+            var libraryName16 = GetUnicodeLibraryName(libraryPath);
             HMODULE module;
-            if ((module = GetModuleHandleA(libraryPath)) == NULL)
-                module = LoadLibraryA(libraryPath);
-
+            if ((module = GetModuleHandleW(libraryName16)) == NULL)
+                module = LoadLibraryW(libraryName16);
+            free(libraryName16);
             return module;
         }
 
@@ -68,11 +82,11 @@
             fflush(stream);
         }
 
-        void* ImportFunction(const char* restrict libraryPath, const char* restrict exportName, error_t* restrict error)
+        void* LibraryLoadingImportFunction(const char* restrict libraryPath, const char* restrict exportName, error_t* restrict error)
         {
             void* dlHandle, *function;
             
-            if ((dlHandle = GetLibraryHandle(libraryPath)) == NULL)
+            if ((dlHandle = LibraryLoadingGetLibraryHandle(libraryPath)) == NULL)
             {
                 LogOsApiError(stderr, "Call to 'dlopen(<FILENAME>, <FLAGS>)' returned NULL. Could not load library.");
                 *error = ERR_LIBRARYLOADING;
@@ -88,7 +102,7 @@
             return function;
         }
 
-        LIBHANDLE GetLibraryHandle(const char *restrict libraryPath)
+        LIBHANDLE LibraryLoadingGetLibraryHandle(const char *restrict libraryPath)
         {
             void* dlHandle;
             if ((dlHandle = dlopen(libraryPath, RTLD_NOLOAD)) == NULL)
@@ -97,12 +111,11 @@
             return dlHandle;
         }
 
-        bool_t UnloadDynamicLibrary(const char* restrict libraryName)
+        bool_t LibraryLoadingUnloadLibrary(const char* restrict libraryName)
         {
-	        void* dlHandle = GetLibraryHandle(libraryName);
+	        void* dlHandle = LibraryLoadingGetLibraryHandle(libraryName);
             return_if(dlHandle == NULL, false);
             return (bool_t) dlclose(dlHandle);
-
         }
     #endif
 #endif
