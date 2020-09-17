@@ -1,0 +1,15 @@
+General usage info:
+- The utility executable requires at least two arguments
+- argv[0] is usually implicitly set and is the execution path
+- argv[1] is used to identify the executed command
+- argv[2] is usually the target '.mcs' file
+- All further arguments are the callback arguments
+- Call the utility system in a shell environment
+    Mocassin.Utility "command name" [Parameters]
+
+Current command list:
+
+Command-Name:               ARGC:   Description:                                Shell usage example:
+
+-print-jump-histograms      2       Prints the jump histogram in the source     Mocassin.Utility -print-jump-histograms "mcs file path"
+                                    'mcs' file in a table style to stdout

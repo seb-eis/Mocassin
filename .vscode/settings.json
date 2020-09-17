@@ -1,0 +1,10 @@
+{
+    "cmake.mingwSearchDirs": [
+        "C:\\msys64\\mingw64\\bin"
+    ],
+    "cmake.generator": "MinGW Makefiles",
+    "cmake.configureSettings": {
+        "CMAKE_MAKE_PROGRAM": "C:\\msys64\\mingw64\\bin\\mingw32-make.exe"
+    },
+    "C_Cpp.default.configurationProvider": "vector-of-bool.cmake-tools"
+}
