@@ -4,6 +4,8 @@ project(Mocassin.Simulator VERSION 0.1.0)
 include(CTest)
 enable_testing()
 
+find_package(Threads REQUIRED)
+
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11")
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
@@ -97,14 +99,14 @@ elseif (UNIX)
     # Advanced gnu compiler settings
     if ("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU")
         message(STATUS "** Compiling with GNU settings **")
-        set(CMAKE_C_FLAGS_RELEASE "-O3 ${COMPILE_FLAGS_SSE_GNU} -w -fno-cx-limited-range -funroll-loops -lm -ldl -pthread -s")
-        set(CMAKE_C_FLAGS_DEBUG "-g ${COMPILE_FLAGS_SSE_GNU} -fno-cx-limited-range -funroll-loops -lm -ldl -pthread")
+        set(CMAKE_C_FLAGS_RELEASE "-O3 ${COMPILE_FLAGS_SSE_GNU} -w -fno-cx-limited-range -Wl,--no-as-needed -lm -ldl -pthread -s")
+        set(CMAKE_C_FLAGS_DEBUG "-g ${COMPILE_FLAGS_SSE_GNU} -fno-cx-limited-range -Wl,--no-as-needed -lm -ldl -pthread")
 
     # Advanced intel compiler settings
     elseif("${CMAKE_C_COMPILER_ID}" STREQUAL "Intel")
         message(STATUS "** Compiling with Intel settings **")
-        set(CMAKE_C_FLAGS_RELEASE "-O3 ${COMPILE_FLAGS_SSE_INTEL} -w -fno-cx-limited-range -funroll-loops -ldl -pthread -s")
-        set(CMAKE_C_FLAGS_DEBUG "-g ${COMPILE_FLAGS_SSE_INTEL} -fno-cx-limited-range -funroll-loops -ldl -pthread")
+        set(CMAKE_C_FLAGS_RELEASE "-O3 ${COMPILE_FLAGS_SSE_INTEL} -w -fno-cx-limited-range -ldl -pthread -s")
+        set(CMAKE_C_FLAGS_DEBUG "-g ${COMPILE_FLAGS_SSE_INTEL} -fno-cx-limited-range -ldl -pthread")
 
     # Fallback settings
     else()
@@ -114,19 +116,19 @@ elseif (UNIX)
 endif ()
 
 # Link main libraries and simulator
-
-target_link_libraries(jobloader sqlite3 framework)
-target_link_libraries(progressprint framework)
-target_link_libraries(simulator framework progressprint)
-target_link_libraries(progressprint.minimal framework simulator)
-target_link_libraries(Mocassin.Simulator jobloader progressprint framework simulator)
+target_link_libraries(sqlite3 ${CMAKE_DL_LIBS} Threads::Threads)
+target_link_libraries(jobloader sqlite3 framework ${CMAKE_DL_LIBS})
+target_link_libraries(progressprint framework ${CMAKE_DL_LIBS})
+target_link_libraries(simulator framework progressprint m ${CMAKE_DL_LIBS})
+target_link_libraries(progressprint.minimal framework simulator ${CMAKE_DL_LIBS})
+target_link_libraries(Mocassin.Simulator jobloader progressprint framework simulator ${CMAKE_DL_LIBS})
 
 # Utility executable links
-target_link_libraries(utility framework simulator sqlite3)
-target_link_libraries(Mocassin.Utility utility)
+target_link_libraries(utility framework simulator sqlite3 ${CMAKE_DL_LIBS})
+target_link_libraries(Mocassin.Utility utility ${CMAKE_DL_LIBS})
 
 # Extension links
-target_link_libraries(mmcfe.mocext sqlite3 framework simulator)
+target_link_libraries(mmcfe.mocext sqlite3 framework simulator ${CMAKE_DL_LIBS})
 
 # Profiling flags
 #target_compile_options(Mocassin.Simulator PUBLIC -pg -no-pie)
