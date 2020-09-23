@@ -1,0 +1,63 @@
+{
+    "Source": {
+        "GuiDirectory": "../src/ModelBuilder",
+        "NugetDirectory": "../src/ModelBuilder/nuget",
+        "SolverDirectory": "../src/McSolver",
+        "DocumentationDirectory": "",
+        "LicensesDirectory": ""
+    },
+    "Deploy": {
+        "RootDirectory": "./deploy",
+        "RelativeNugetPath": "mocassin-nuget",
+        "RelativeGuiPath": "mocassin-win64-gui",
+        "RelativWin64SolverPath": "mocsim-win-x86-64",
+        "RelativeLinuxDeployPath": "mocsim-linux-x86-64"
+    },
+    "Tmp": {
+        "Windows": {
+            "RelativeSolverBuildPath": ".mocsim-build-tmp"
+        },
+        "Linux": {
+            "SolverBuildDirectory": "$HOME/.mocsim-build-tmp"
+        }
+    },
+    "Compilers": {
+        "Windows": {
+            "MinGwMake": "C:/msys64/mingw64/bin/mingw32-make.exe",
+            "MSBuild": ""
+        },
+        "Linux": {
+            "CCompiler": "gcc"
+        }
+    },
+    "Remote": {
+        "CompiledFilesPattern": "*.so Mocassin*",
+        "CopyFolderExcludes": [
+            ".*",
+            "*cmake*",
+            "Scripts",
+            "UnitTesting",
+            "ReadMe",
+            "venv"
+        ],
+        "CopyFileIncludes": [
+            "CMakeLists.txt"
+        ],
+        "LinuxRemotes": [
+            {
+                "Name": "centos",
+                "Host": "se260454@login18-2.hpc.itc.rwth-aachen.de",
+                "PreBuildCommands": [
+                    "module unload gcc",
+                    "module load gcc/10"
+                ]
+            }
+        ]
+    },
+    "Scripts": [
+        "./subscripts/build-solver-local.ps1"
+    ],
+    "Deactivated": [
+        "./subscripts/build-solver-remote.ps1"
+    ]
+}
