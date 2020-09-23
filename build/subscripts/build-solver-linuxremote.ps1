@@ -1,9 +1,9 @@
-param ([object]$Settings)
-
-if ($null -eq $Settings) {
-    Write-Error "The Settings variable is not set."
-    exit
-}
+param (
+    [Parameter(Mandatory=$true)]
+    [ValidateNotNull()]
+    [object]
+    $Settings
+)
 
 # Variables
 $localSourceDir = $Settings.Source.SolverDirectory
@@ -33,7 +33,8 @@ foreach ($remote in $remotes) {
     Write-Host "Setting up directories and copying source data ..."
 
     # Setup tmp build directory
-    ssh $remoteHost "rm -r $remoteSourcePath && mkdir $remoteSourcePath"
+    ssh $remoteHost "rm -r $remoteSourcePath"
+    ssh $remoteHost "mkdir $remoteSourcePath"
     
     # Copy directories and single files of source to remote
     Get-ChildItem $localSourceDir -Exclude $copyExcludes | ForEach-Object {

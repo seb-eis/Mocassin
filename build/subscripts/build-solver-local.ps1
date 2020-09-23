@@ -1,9 +1,9 @@
-param ([object]$Settings)
-
-if ($null -eq $Settings) {
-    Write-Error "The Settings variable is not set."
-    exit
-}
+param (
+    [Parameter(Mandatory=$true)]
+    [ValidateNotNull()]
+    [object]
+    $Settings
+)
 
 # Variables
 $originPath = $PWD
@@ -16,6 +16,7 @@ Write-Host "Building local solver to: " $deployDirPath
 
 # Create the directories
 Write-Host "Creating directories..."
+
 New-Item -Force -Path $tmpBuildPath -ItemType "directory"
 New-Item -Force -Path $deployDirPath -ItemType "directory"
 

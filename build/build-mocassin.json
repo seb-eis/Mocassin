@@ -1,6 +1,6 @@
 {
     "Source": {
-        "GuiDirectory": "../src/ModelBuilder",
+        "ModelBuilderDirectory": "../src/ModelBuilder",
         "NugetDirectory": "../src/ModelBuilder/nuget",
         "SolverDirectory": "../src/McSolver",
         "DocumentationDirectory": "",
@@ -24,7 +24,7 @@
     "Compilers": {
         "Windows": {
             "MinGwMake": "C:/msys64/mingw64/bin/mingw32-make.exe",
-            "MSBuild": ""
+            "MSBuild": "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin/MSBuild.exe"
         },
         "Linux": {
             "CCompiler": "gcc"
@@ -55,9 +55,21 @@
         ]
     },
     "Scripts": [
-        "./subscripts/build-solver-local.ps1"
-    ],
-    "Deactivated": [
-        "./subscripts/build-solver-remote.ps1"
+        {
+            "Path": "./subscripts/build-solver-linuxremote.ps1",
+            "IsActive": false
+        },
+        {
+            "Path": "./subscripts/build-solver-local.ps1",
+            "IsActive": false
+        },
+        {
+            "Path": "./subscripts/build-gui-local.ps1",
+            "IsActive": false
+        },
+        {
+            "Path": "./subscripts/build-nuget-local.ps1",
+            "IsActive": true
+        }
     ]
 }
