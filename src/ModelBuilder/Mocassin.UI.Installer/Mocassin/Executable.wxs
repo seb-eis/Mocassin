@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+    <ComponentGroup Id="GuiBinComponents"
+                    Directory="GuiBinariesDir"
+                    Source="$(var.Mocassin.UI.GUI.TargetDir)">
+      <Component Id="GuiAppExecutable"
+                 Win64="yes"
+                 Guid="8fdac3cf-b935-41f6-926c-1764348ddbc1">
+        <File Id="MocassinGuiEXE"
+              Name="$(var.Mocassin.UI.GUI.TargetFileName)"
+              KeyPath="yes">
+          <Shortcut Id="GuiStartmenuShortcut"
+                    Directory="ProgramMenuDir"
+                    Name="Mocassin"
+                    WorkingDirectory="BinariesFolder"
+                    Icon="Mocassin.ico"
+                    IconIndex="0"
+                    Advertise="yes" />
+          <Shortcut Id="GuiDesktopShortcut"
+                    Directory="DesktopFolder"
+                    Name="Mocassin"
+                    WorkingDirectory="BinariesFolder"
+                    Icon="Mocassin.ico"
+                    IconIndex="0"
+                    Advertise="yes" />
+          <Shortcut Id="InstallFolderShortcut"
+                    Directory="INSTALLDIR"
+                    Name="Mocassin"
+                    WorkingDirectory="BinariesFolder"
+                    Icon="Mocassin.ico"
+                    IconIndex="0"
+                    Advertise="yes" />
+        </File>
+      </Component>
+      <Component Id="GuiAppConfig"
+                 Win64="yes"
+                 Guid="98629508-1f50-4b91-b0de-0a1945166c86">
+        <File Id="MocassinGuiCONFIG"
+              Name="$(var.Mocassin.UI.GUI.TargetFileName).config"
+              KeyPath="yes" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+</Wix>

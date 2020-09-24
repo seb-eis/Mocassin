@@ -1,27 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-	<Product Id="2b52fb87-2fb3-4328-9089-4243bbe8540e" Name="Mocassin.UI.Installer" Language="1033" Version="1.0.0.0" Manufacturer="" UpgradeCode="58642f96-d1ef-4725-a001-f2f813f59fad">
-		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
-		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
-		<MediaTemplate />
+  <Product Id="6a37b403-842c-4ecc-b736-35086568cd9e"
+           Name="Mocassin"
+           Language="1033"
+           Codepage="1252"
+           Version="$(fun.AutoVersion(1.1))"
+           Manufacturer="HIMS"
+           UpgradeCode="58642f96-d1ef-4725-a001-f2f813f59fad">
+    <Package Id="*"
+             Keywords="Installer"
+             Manufacturer="HIMS"
+             Description="Mocassin Model Builder GUI Installer"
+             InstallerVersion="200"
+             Compressed="yes"
+             InstallScope="perMachine"
+             Platform="x64"/>
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+    <MediaTemplate EmbedCab="yes"/>
+    <Icon Id="Mocassin.ico" SourceFile="$(var.Mocassin.UI.GUI.ProjectDir)\mocassin.ico"/>
 
-		<Feature Id="ProductFeature" Title="Mocassin.UI.Installer" Level="1">
-			<ComponentGroupRef Id="ProductComponents" />
-		</Feature>
-	</Product>
+    <Feature Id="ProductFeature" 
+             Title="Mocassin" 
+             Level="1">
+      <ComponentGroupRef Id="GuiBinComponents" />
+      <ComponentGroupRef Id="MocassinFrameworkLibraries"/>
+      <ComponentGroupRef Id="MocassinFrameworkAppData"/>
+      <ComponentGroupRef Id="CyotekLibraries"/>
+      <ComponentGroupRef Id="HelixToolkitLibraries"/>
+      <ComponentGroupRef Id="ICSharpCodeLibraries"/>
+      <ComponentGroupRef Id="MicrosoftLibraries"/>
+      <ComponentGroupRef Id="NCalcLibraries"/>
+      <ComponentGroupRef Id="NewtonsoftLibraries"/>
+      <ComponentGroupRef Id="RemotionLibraries"/>
+      <ComponentGroupRef Id="SharpDXLibraries"/>
+      <ComponentGroupRef Id="SQLitePCLRawLibraries"/>
+      <ComponentGroupRef Id="SQLitePCLRawWin64NativeLibraries"/>
+      <ComponentGroupRef Id="SystemLibraries"/>
+      <ComponentRef Id="ProgramMenuDir"/>
+      <ComponentRef Id="MocassinAppDataDir"/>
+    </Feature>
 
-	<Fragment>
-		<Directory Id="TARGETDIR" Name="SourceDir">
-			<Directory Id="ProgramFilesFolder">
-				<Directory Id="INSTALLFOLDER" Name="Mocassin.UI.Installer" />
-			</Directory>
-		</Directory>
-	</Fragment>
+  </Product>
 
-	<Fragment>
-		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+  <Fragment>
 
-		</ComponentGroup>
-	</Fragment>
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFiles64Folder" Name="PFiles">
+        <Directory Id="MocassinProgramFolder" Name="Mocassin">
+          <Directory Id="INSTALLDIR" Name="ModelBuilder">
+            <Directory Id="GuiBinariesDir" Name="bin">
+              <Directory Id="GuiRuntimesDir" Name="runtimes">
+                <Directory Id="GuiRuntimesWin64Dir" Name="win-x64">
+                  <Directory Id="GuiRuntimesWin64NativeDir" Name="native"/>
+                </Directory>
+              </Directory>
+            </Directory>
+          </Directory>
+        </Directory>
+      </Directory>
+
+      <Directory Id="AppDataFolder" Name="AppData">
+        <Directory Id="MocassinAppDataDir" Name="Mocassin">
+          <Component Id="MocassinAppDataDir" Guid="8c43cf69-d3bf-425c-9a20-8456f3f94c5a">
+            <RemoveFolder Id="MocassinAppDataDir" On="uninstall"/>
+            <RegistryValue Root='HKCU' Key='Software\[Manufacturer]\[ProductName]' Type='string' Value='' KeyPath='yes' />         
+          </Component>
+        </Directory>
+      </Directory>
+
+      <Directory Id="ProgramMenuFolder" Name="Programs">
+        <Directory Id="ProgramMenuDir" Name="Mocassin">
+          <Component Id="ProgramMenuDir" Guid="4e0715d3-49e0-4345-ada3-9253fc46effe">
+            <RemoveFolder Id="ProgramMenuDir" On="uninstall"/>
+            <RegistryValue Root='HKCU' Key='Software\[Manufacturer]\[ProductName]' Type='string' Value='' KeyPath='yes' />
+          </Component>
+        </Directory>
+      </Directory>
+
+      <Directory Id="DesktopFolder" Name="Desktop"/>
+    </Directory>
+  </Fragment>
+
 </Wix>

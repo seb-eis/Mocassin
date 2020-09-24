@@ -12,16 +12,15 @@ $deployDirPath = $Settings.Deploy.RootDirectory + "\" + $Settings.Deploy.Relativ
 $sourceDirPath = $Settings.Source.SolverDirectory
 $pathToMinGwMake = $Settings.Compilers.Windows.MinGWMake
 
-Write-Host "Building local solver to: " $deployDirPath
+Write-Host "Building solver locally ... "
 
 # Create the directories
-Write-Host "Creating directories..."
 
 New-Item -Force -Path $tmpBuildPath -ItemType "directory"
 New-Item -Force -Path $deployDirPath -ItemType "directory"
 
 # Call Cmake and make target
-Write-Host "Calling cmake ..."
+Write-Host "Configurating ..."
 
 $cmakeExpression = "cmake -S $sourceDirPath -B $tmpBuildPath -D`"CMAKE_MAKE_PROGRAM:PATH=$pathToMinGwMake`" -D`"CMAKE_BUILD_TYPE=Release`""
 Invoke-Expression $cmakeExpression
@@ -34,7 +33,7 @@ Set-Location $originPath
 
 # Copy all exe and dll files to target
 
-Write-Host "Copying from temporary: " $tmpBuildPath
+Write-Host "Copying files to deploy & cleaning up"
 
 Get-ChildItem $tmpBuildPath\* -Include *.exe, *.dll |
 ForEach-Object {
@@ -43,9 +42,4 @@ ForEach-Object {
     Copy-Item $copySrc -Destination $copyDst
 }
 
-# Remove the tmp build directory
-Write-Host "Cleaning up"
-
 Remove-Item -Recurse -Path $tmpBuildPath
-
-Write-Host "Local solver build."

@@ -1,7 +1,9 @@
 {
     "Source": {
         "ModelBuilderDirectory": "../src/ModelBuilder",
+        "ModelBuilderWixProject": "../src/ModelBuilder/Mocassin.UI.Installer/Mocassin.UI.Installer.wixproj",
         "NugetDirectory": "../src/ModelBuilder/nuget",
+        "InstallerDirectory": "../src/ModelBuilder/Mocassin.UI.Installer/bin/x64/Release",
         "SolverDirectory": "../src/McSolver",
         "DocumentationDirectory": "",
         "LicensesDirectory": ""
@@ -11,7 +13,8 @@
         "RelativeNugetPath": "mocassin-nuget",
         "RelativeGuiPath": "mocassin-win64-gui",
         "RelativWin64SolverPath": "mocsim-win-x86-64",
-        "RelativeLinuxDeployPath": "mocsim-linux-x86-64"
+        "RelativeLinuxDeployPath": "mocsim-linux-x86-64",
+        "LogFileName": "build.log"
     },
     "Tmp": {
         "Windows": {
@@ -57,19 +60,25 @@
     "Scripts": [
         {
             "Path": "./subscripts/build-solver-linuxremote.ps1",
-            "IsActive": false
+            "IsActive": true
         },
         {
             "Path": "./subscripts/build-solver-local.ps1",
-            "IsActive": false
+            "IsActive": true
         },
         {
-            "Path": "./subscripts/build-gui-local.ps1",
-            "IsActive": false
+            "Path": "./subscripts/build-gui-installer.ps1",
+            "IsActive": true
         },
         {
             "Path": "./subscripts/build-nuget-local.ps1",
             "IsActive": true
         }
-    ]
+    ],
+    "Meta": {
+        "Version" : {
+            "Major" : 1,
+            "Minor" : 1
+        }
+    }
 }

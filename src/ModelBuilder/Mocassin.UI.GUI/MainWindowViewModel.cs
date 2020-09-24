@@ -169,7 +169,7 @@ namespace Mocassin.UI.GUI
             }
 
             var version = Assembly.GetExecutingAssembly().GetName().Version;
-            return $"[{version}, Non-Deploy]{(OpenProjectLibrary?.SourceName == null ? "" : $" - {OpenProjectLibrary.SourceName}")}";
+            return $"[{version}]{(OpenProjectLibrary?.SourceName == null ? "" : $" - {OpenProjectLibrary.SourceName}")}";
         }
 
         /// <summary>

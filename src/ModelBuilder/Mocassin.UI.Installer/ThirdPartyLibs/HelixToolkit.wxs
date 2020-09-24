@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+    <ComponentGroup Id="HelixToolkitLibraries"
+                    Directory="GuiBinariesDir"
+                    Source="$(var.Mocassin.UI.GUI.TargetDir)">
+      <Component Id="HelixToolkit.dll"
+                 Win64="yes"
+                 Guid="bd8ecb13-bf89-4b2e-90e5-3695acfd4bab">
+        <File Id="HelixToolkit.dll"
+              Name="HelixToolkit.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="HelixToolkit.Wpf.dll"
+                 Win64="yes"
+                 Guid="b61610fd-95ff-4763-b005-09b3b2e8f19d">
+        <File Id="HelixToolkit.Wpf.dll"
+              Name="HelixToolkit.Wpf.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="HelixToolkit.Wpf.SharpDX.dll"
+                 Win64="yes"
+                 Guid="b6b4da0b-7853-4a96-8100-25569a653b7f">
+        <File Id="HelixToolkit.Wpf.SharpDX.dll"
+              Name="HelixToolkit.Wpf.SharpDX.dll"
+              KeyPath="yes" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+</Wix>

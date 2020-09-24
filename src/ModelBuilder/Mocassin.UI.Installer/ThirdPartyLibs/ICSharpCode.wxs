@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+    <ComponentGroup Id="ICSharpCodeLibraries" Directory="GuiBinariesDir" Source="$(var.Mocassin.UI.GUI.TargetDir)">
+      <Component Id="ICSharpCode.AvalonEdit.dll"
+                 Win64="yes"
+                 Guid="05262552-60f1-4c22-af02-25e3cac4d513">
+        <File Id="ICSharpCode.AvalonEdit.dll"
+              Name="ICSharpCode.AvalonEdit.dll"
+              KeyPath="yes" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+</Wix>

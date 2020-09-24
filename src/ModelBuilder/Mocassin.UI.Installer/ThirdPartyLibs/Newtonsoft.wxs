@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+    <ComponentGroup Id="NewtonsoftLibraries"
+                    Directory="GuiBinariesDir"
+                    Source="$(var.Mocassin.UI.GUI.TargetDir)">
+      <Component Id="Newtonsoft.Json.dll"
+                 Win64="yes"
+                 Guid="ab248d81-dbf2-4b84-97ef-e0935a1afcbd">
+        <File Id="Newtonsoft.Json.dll"
+              Name="Newtonsoft.Json.dll"
+              KeyPath="yes" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+</Wix>

@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+    <ComponentGroup Id="MicrosoftLibraries"
+                    Directory="GuiBinariesDir"
+                    Source="$(var.Mocassin.UI.GUI.TargetDir)">
+      <Component Id="Microsoft.Bcl.AsyncInterfaces.dll"
+                 Guid="cf7f457f-a6b6-43e2-8091-2f9c34525fed"
+                 Win64="yes">
+        <File Id="Microsoft.Bcl.AsyncInterfaces.dll"
+              Name="Microsoft.Bcl.AsyncInterfaces.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="Microsoft.Bcl.HashCode.dll" 
+                 Guid="634c7713-b82a-4c11-b4b6-174b49ab7308" 
+                 Win64="yes">
+        <File Id="Microsoft.Bcl.HashCode.dll"
+              Name="Microsoft.Bcl.HashCode.dll" 
+              KeyPath="yes" />
+      </Component>
+      <Component Id="Microsoft.Data.Sqlite.dll"
+                 Guid="d52cb958-c939-4b94-94c9-108b3b727e00" 
+                 Win64="yes">
+        <File Id="Microsoft.Data.Sqlite.dll"
+              Name="Microsoft.Data.Sqlite.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="Microsoft.DotNet.PlatformAbstractions.dll"
+                 Guid="8322b946-6147-4fc0-8d2e-186f4df22969"
+                 Win64="yes">
+        <File Id="Microsoft.DotNet.PlatformAbstractions.dll"
+              Name="Microsoft.DotNet.PlatformAbstractions.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="Microsoft.EntityFrameworkCore.Abstractions.dll"
+                 Guid="aa03b599-a4e3-4c5a-8ae3-ebc823d24baf"
+                 Win64="yes">
+        <File Id="Microsoft.EntityFrameworkCore.Abstractions.dll"
+              Name="Microsoft.EntityFrameworkCore.Abstractions.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="Microsoft.EntityFrameworkCore.dll" 
+                 Guid="a3ab6234-0bd5-4186-ba77-72959f4f7395" 
+                 Win64="yes">
+        <File Id="Microsoft.EntityFrameworkCore.dll" 
+              Name="Microsoft.EntityFrameworkCore.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="Microsoft.EntityFrameworkCore.Relational.dll"
+                 Guid="58c06224-d508-4206-8df7-009dc3aed764"
+                 Win64="yes">
+        <File Id="Microsoft.EntityFrameworkCore.Relational.dll"
+              Name="Microsoft.EntityFrameworkCore.Relational.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="Microsoft.EntityFrameworkCore.Sqlite.dll"
+                 Guid="389ae97a-9171-4d8e-ae11-520dae4ec4c0"
+                 Win64="yes">
+        <File Id="Microsoft.EntityFrameworkCore.Sqlite.dll"
+              Name="Microsoft.EntityFrameworkCore.Sqlite.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="Microsoft.Expression.Interactions.dll"
+                 Guid="359125f8-b266-401f-8b54-a4414c3bc85f"
+                 Win64="yes">
+        <File Id="Microsoft.Expression.Interactions.dll" 
+              Name="Microsoft.Expression.Interactions.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="Microsoft.Extensions.Caching.Abstractions.dll"
+                 Guid="e06d7a53-78a8-484b-901a-ae3da3d43db7"
+                 Win64="yes">
+        <File Id="Microsoft.Extensions.Caching.Abstractions.dll"
+              Name="Microsoft.Extensions.Caching.Abstractions.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="Microsoft.Extensions.Caching.Memory.dll"
+                 Guid="24c7420e-3ad9-4dcc-bbcc-afdf633b53ea"
+                 Win64="yes">
+        <File Id="Microsoft.Extensions.Caching.Memory.dll"
+              Name="Microsoft.Extensions.Caching.Memory.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="Microsoft.Extensions.Configuration.Abstractions.dll"
+                 Guid="db64ca9a-cda5-435c-b11b-0bcc448b5eae"
+                 Win64="yes">
+        <File Id="Microsoft.Extensions.Configuration.Abstractions.dll"
+              Name="Microsoft.Extensions.Configuration.Abstractions.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="Microsoft.Extensions.Configuration.Binder.dll" 
+                 Guid="9e6f148d-101b-41d3-8f42-ecea7586b166"
+                 Win64="yes">
+        <File Id="Microsoft.Extensions.Configuration.Binder.dll"
+              Name="Microsoft.Extensions.Configuration.Binder.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="Microsoft.Extensions.Configuration.dll"
+                 Guid="541649ea-6640-4713-917f-161197b21ece" 
+                 Win64="yes">
+        <File Id="Microsoft.Extensions.Configuration.dll"
+              Name="Microsoft.Extensions.Configuration.dll" 
+              KeyPath="yes" />
+      </Component>
+      <Component Id="Microsoft.Extensions.DependencyInjection.Abstractions.dll" 
+                 Guid="50687743-2f29-4815-9ca1-013bbbda2548" 
+                 Win64="yes">
+        <File Id="Microsoft.Extensions.DependencyInjection.Abstractions.dll"
+              Name="Microsoft.Extensions.DependencyInjection.Abstractions.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="Microsoft.Extensions.DependencyInjection.dll"
+                 Guid="c4c49270-bfc0-4c37-88c8-63cdf2bde000" 
+                 Win64="yes">
+        <File Id="Microsoft.Extensions.DependencyInjection.dll"
+              Name="Microsoft.Extensions.DependencyInjection.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="Microsoft.Extensions.DependencyModel.dll"
+                 Guid="a04d8a46-cd3a-4a59-868c-948efacfddff" 
+                 Win64="yes">
+        <File Id="Microsoft.Extensions.DependencyModel.dll"
+              Name="Microsoft.Extensions.DependencyModel.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="Microsoft.Extensions.Logging.Abstractions.dll"
+                 Guid="db05c7a5-9b0a-4356-b678-053cfd9a1396" 
+                 Win64="yes">
+        <File Id="Microsoft.Extensions.Logging.Abstractions.dll" 
+              Name="Microsoft.Extensions.Logging.Abstractions.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="Microsoft.Extensions.Logging.dll"
+                 Guid="4721c4dd-17b9-4b74-b9b3-6b6f26ff44cf"
+                 Win64="yes">
+        <File Id="Microsoft.Extensions.Logging.dll" 
+              Name="Microsoft.Extensions.Logging.dll" 
+              KeyPath="yes" />
+      </Component>
+      <Component Id="Microsoft.Extensions.Options.dll" 
+                 Guid="fca03014-f0a0-4281-935b-b57049eec4e2" 
+                 Win64="yes">
+        <File Id="Microsoft.Extensions.Options.dll"
+              Name="Microsoft.Extensions.Options.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="Microsoft.Extensions.Primitives.dll" 
+                 Guid="db55bc8e-4b5d-4b76-8933-8c44e932b3aa" 
+                 Win64="yes">
+        <File Id="Microsoft.Extensions.Primitives.dll" 
+              Name="Microsoft.Extensions.Primitives.dll" 
+              KeyPath="yes" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+</Wix>

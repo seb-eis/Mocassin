@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Fragment>
+		<ComponentGroup Id="CyotekLibraries" 
+                    Directory="GuiBinariesDir" 
+                    Source="$(var.Mocassin.UI.GUI.TargetDir)">
+      <Component Id="Cyotek.Drawing.BitmapFont.dll" 
+                 Guid="dddfd17d-7e64-4992-b184-6df7acc4cba8">
+        <File Id="Cyotek.Drawing.BitmapFont.dll" 
+              Name="Cyotek.Drawing.BitmapFont.dll" 
+              KeyPath="yes"/>
+      </Component>
+    </ComponentGroup>
+	</Fragment>
+</Wix>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+    <ComponentGroup Id="NCalcLibraries"
+                    Directory="GuiBinariesDir"
+                    Source="$(var.Mocassin.UI.GUI.TargetDir)">
+      <Component Id="NCalc.dll"
+                 Win64="yes"
+                 Guid="5b079e95-17b1-4852-8ea8-a6312abb14f0">
+        <File Id="NCalc.dll"
+              Name="NCalc.dll"
+              KeyPath="yes" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+</Wix>

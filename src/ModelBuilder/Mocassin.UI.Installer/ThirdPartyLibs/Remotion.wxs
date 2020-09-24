@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+    <ComponentGroup Id="RemotionLibraries"
+                    Directory="GuiBinariesDir"
+                    Source="$(var.Mocassin.UI.GUI.TargetDir)">
+      <Component Id="Remotion.Linq.dll"
+                 Win64="yes"
+                 Guid="b7b62af1-7656-40ea-a8f4-fa4fcad0b971">
+        <File Id="Remotion.Linq.dll"
+              Name="Remotion.Linq.dll"
+              KeyPath="yes" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+</Wix>

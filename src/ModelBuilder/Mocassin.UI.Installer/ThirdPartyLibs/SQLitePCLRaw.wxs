@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+    <ComponentGroup Id="SQLitePCLRawLibraries"
+                    Directory="GuiBinariesDir"
+                    Source="$(var.Mocassin.UI.GUI.TargetDir)">
+      <Component Id="SQLitePCLRaw.batteries_v2.dll"
+                 Win64="yes"
+                 Guid="d53bc280-44e8-4b12-977e-3ff30ab9b1e0">
+        <File Id="SQLitePCLRaw.batteries_v2.dll"
+              Name="SQLitePCLRaw.batteries_v2.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="SQLitePCLRaw.core.dll"
+                 Win64="yes"
+                 Guid="2120c9e2-f8af-45c1-9205-d9e4684dc551">
+        <File Id="SQLitePCLRaw.core.dll"
+              Name="SQLitePCLRaw.core.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="SQLitePCLRaw.nativelibrary.dll"
+                 Win64="yes"
+                 Guid="616a9540-2467-4427-84aa-a4beb09da81b">
+        <File Id="SQLitePCLRaw.nativelibrary.dll"
+              Name="SQLitePCLRaw.nativelibrary.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="SQLitePCLRaw.provider.dynamic_cdecl.dll"
+                 Win64="yes"
+                 Guid="d2dd3944-6fa9-4bc6-814d-3e0c208b3456">
+        <File Id="SQLitePCLRaw.provider.dynamic_cdecl.dll"
+              Name="SQLitePCLRaw.provider.dynamic_cdecl.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="SQLitePCLRaw.provider.e_sqlite3.dll"
+                 Win64="yes"
+                 Guid="1da81768-b550-429c-9b8c-634d98ecb5ca">
+        <File Id="SQLitePCLRaw.provider.e_sqlite3.dll"
+              Name="SQLitePCLRaw.provider.e_sqlite3.dll"
+              KeyPath="yes" />
+      </Component>
+    </ComponentGroup>
+    <ComponentGroup Id="SQLitePCLRawWin64NativeLibraries"
+                    Directory="GuiRuntimesWin64NativeDir"
+                    Source="$(var.Mocassin.UI.GUI.TargetDir)runtimes/win-x64/native/">
+      <Component Id="win64.e_sqlite3.dll" 
+                 Win64="yes"
+                 Guid="bc93c2f4-e724-4c37-9058-464374bcf0c5">
+        <File Id="win64.e_sqlite3.dll" 
+              Name="e_sqlite3.dll"
+              KeyPath="yes"/>
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+</Wix>

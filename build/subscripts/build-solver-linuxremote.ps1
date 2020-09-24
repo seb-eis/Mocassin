@@ -29,8 +29,8 @@ foreach ($remote in $remotes) {
     }
     New-Item -Force -Path $localDeployPath -ItemType "directory"
     
-    Write-Host "Building on $remoteHost as $remoteName"
-    Write-Host "Setting up directories and copying source data ..."
+    Write-Host "Building on $remoteHost ($remoteName) to: $localDeployPath"
+    Write-Host "Setting up directories and uploading source files ..."
 
     # Setup tmp build directory
     ssh $remoteHost "rm -r $remoteSourcePath"
@@ -49,7 +49,7 @@ foreach ($remote in $remotes) {
         scp $copySrc $copyDst
     }
 
-    Write-Host "Invoking build commands ..."
+    Write-Host "Configurating & compiling ..."
 
     # Build prerun commands
     $buildCommand = $remote.PreBuildCommands -join " && "
@@ -61,7 +61,7 @@ foreach ($remote in $remotes) {
     ssh $remoteHost $buildCommand
 
     # Copy the compiled files to the local deploy directory
-    Write-Host "Copying compiled files to $localDeployPath and cleaning up ..."
+    Write-Host "Downloading compiled files & cleaning up ..."
 
     $compiledFileNames = (ssh $remoteHost  "cd $remoteSourcePath && ls $copyBackPattern")
     
@@ -74,5 +74,5 @@ foreach ($remote in $remotes) {
     # Remove tmp build directory
     ssh $remoteHost "rm -r $remoteSourcePath"
 
-    Write-Host "Done building on $remoteHost as $remoteName"
+    Write-Host "Done building on $remoteHost as $remoteName!"
 }

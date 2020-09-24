@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+    <ComponentGroup Id="SystemLibraries"
+                    Directory="GuiBinariesDir"
+                    Source="$(var.Mocassin.UI.GUI.TargetDir)">
+      <Component Id="System.Buffers.dll"
+                 Win64="yes"
+                 Guid="938cf8e4-b9f7-4c10-b35b-17f163668bb8">
+        <File Id="System.Buffers.dll"
+              Name="System.Buffers.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="System.Collections.Immutable.dll"
+                 Win64="yes"
+                 Guid="e8e0bac9-09ed-4647-a58d-84fcdb9ba7f2">
+        <File Id="System.Collections.Immutable.dll"
+              Name="System.Collections.Immutable.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="System.ComponentModel.Annotations.dll"
+                 Win64="yes"
+                 Guid="d8d42855-ed25-4084-ab51-0e33127fa6ad">
+        <File Id="System.ComponentModel.Annotations.dll"
+              Name="System.ComponentModel.Annotations.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="System.Diagnostics.DiagnosticSource.dll"
+                 Win64="yes"
+                 Guid="7f4a4d9c-a40c-4403-aa1a-2742ae5b224e">
+        <File Id="System.Diagnostics.DiagnosticSource.dll"
+              Name="System.Diagnostics.DiagnosticSource.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="System.Interactive.Async.dll"
+                 Win64="yes"
+                 Guid="c9d1b934-7dca-4cc8-89a1-cd0224269c44">
+        <File Id="System.Interactive.Async.dll"
+              Name="System.Interactive.Async.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="System.Linq.Async.dll"
+                 Win64="yes"
+                 Guid="3cc0451f-2ee8-4a1c-a251-60903f19ddce">
+        <File Id="System.Linq.Async.dll"
+              Name="System.Linq.Async.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="System.Memory.dll"
+                 Win64="yes"
+                 Guid="c540ce83-506d-4ea0-a5ad-071e419bfc7f">
+        <File Id="System.Memory.dll"
+              Name="System.Memory.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="System.Numerics.Vectors.dll"
+                 Win64="yes"
+                 Guid="8399d928-1fbc-4088-b48f-8e96d1a35350">
+        <File Id="System.Numerics.Vectors.dll"
+              Name="System.Numerics.Vectors.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="System.Reactive.dll"
+                 Win64="yes"
+                 Guid="039b4120-d254-4ab7-8a6c-d65d9ac38b6b">
+        <File Id="System.Reactive.dll"
+              Name="System.Reactive.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="System.Runtime.CompilerServices.Unsafe.dll"
+                 Win64="yes"
+                 Guid="9c7f7051-d543-4fe6-9d02-4453c1a20d46">
+        <File Id="System.Runtime.CompilerServices.Unsafe.dll"
+              Name="System.Runtime.CompilerServices.Unsafe.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="System.Threading.Tasks.Extensions.dll"
+                 Win64="yes"
+                 Guid="ebb2bdad-ba0a-437b-b670-b67aafebe329">
+        <File Id="System.Threading.Tasks.Extensions.dll"
+              Name="System.Threading.Tasks.Extensions.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="System.ValueTuple.dll"
+                 Win64="yes"
+                 Guid="62d6757b-1407-4a7d-85d1-635d2f783faf">
+        <File Id="System.ValueTuple.dll"
+              Name="System.ValueTuple.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="System.Windows.Interactivity.dll"
+                 Win64="yes"
+                 Guid="0e59d26a-d4b3-4a44-bfb1-ae81b118d5c9">
+        <File Id="System.Windows.Interactivity.dll"
+              Name="System.Windows.Interactivity.dll"
+              KeyPath="yes" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+</Wix>

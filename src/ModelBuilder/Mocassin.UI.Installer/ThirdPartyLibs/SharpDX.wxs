@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+    <ComponentGroup Id="SharpDXLibraries" Directory="GuiBinariesDir" Source="$(var.Mocassin.UI.GUI.TargetDir)">
+      <Component Id="SharpDX.D3DCompiler.dll"
+                 Win64="yes"
+                 Guid="1b63fc05-2f2d-4d5c-a15a-505f4e48f135">
+        <File Id="SharpDX.D3DCompiler.dll"
+              Name="SharpDX.D3DCompiler.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="SharpDX.Direct2D1.dll"
+                 Win64="yes"
+                 Guid="408b0abe-0f0d-467d-8864-d6bff02b5856">
+        <File Id="SharpDX.Direct2D1.dll"
+              Name="SharpDX.Direct2D1.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="SharpDX.Direct3D9.dll"
+                 Win64="yes"
+                 Guid="7b884fbe-cc2f-437c-972d-47dcf4088f8c">
+        <File Id="SharpDX.Direct3D9.dll"
+              Name="SharpDX.Direct3D9.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="SharpDX.Direct3D11.dll"
+                 Win64="yes"
+                 Guid="de5837ba-961a-4f15-a7ab-ab2f69546493">
+        <File Id="SharpDX.Direct3D11.dll"
+              Name="SharpDX.Direct3D11.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="SharpDX.dll"
+                 Win64="yes"
+                 Guid="0c711cc5-8c3e-43a2-aafb-5eccd873d473">
+        <File Id="SharpDX.dll"
+              Name="SharpDX.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="SharpDX.DXGI.dll"
+                 Win64="yes"
+                 Guid="c44944b8-77e7-4b84-8a34-f51b619687ea">
+        <File Id="SharpDX.DXGI.dll"
+              Name="SharpDX.DXGI.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="SharpDX.Mathematics.dll"
+                 Win64="yes"
+                 Guid="3bff597f-b846-4416-953e-d3464e88498c">
+        <File Id="SharpDX.Mathematics.dll"
+              Name="SharpDX.Mathematics.dll"
+              KeyPath="yes" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+</Wix>

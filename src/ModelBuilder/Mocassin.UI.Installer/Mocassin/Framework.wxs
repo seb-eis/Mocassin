@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+    <ComponentGroup Id="MocassinFrameworkLibraries"
+                    Directory="GuiBinariesDir"
+                    Source="$(var.Mocassin.UI.GUI.TargetDir)">
+      <Component Id="Mocassin.Framework.dll"
+                 Win64="yes"
+                 Guid="e4d2533b-6860-4820-a6fa-dcc0298fbfee">
+        <File Id="Mocassin.Framework.dll"
+              Name="Mocassin.Framework.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="Mocassin.Mathematics.dll"
+                 Win64="yes"
+                 Guid="f13ddc50-958c-4398-84f2-779959e59b91">
+        <File Id="Mocassin.Mathematics.dll"
+              Name="Mocassin.Mathematics.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="Mocassin.Model.dll"
+                 Win64="yes"
+                 Guid="9517498e-638f-401e-8bda-398c85fd4373">
+        <File Id="Mocassin.Model.dll"
+              Name="Mocassin.Model.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="Mocassin.Model.Translator.dll"
+                 Win64="yes"
+                 Guid="07501dde-700f-45c5-80a3-ad9b3ee9a228">
+        <File Id="Mocassin.Model.Translator.dll"
+              Name="Mocassin.Model.Translator.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="Mocassin.Symmetry.dll"
+                 Win64="yes"
+                 Guid="88d8ea9a-152f-4427-ae36-e5bc43d3ac5d">
+        <File Id="Mocassin.Symmetry.dll"
+              Name="Mocassin.Symmetry.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="Mocassin.Tools.Evaluation.dll"
+                 Win64="yes"
+                 Guid="19a75fc3-417c-449c-90ca-98da641de5f4">
+        <File Id="Mocassin.Tools.Evaluation.dll"
+              Name="Mocassin.Tools.Evaluation.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="Mocassin.Tools.UAccess.dll"
+                 Win64="yes"
+                 Guid="1c2456d5-fdf0-4e5d-ac93-224ae729728b">
+        <File Id="Mocassin.Tools.UAccess.dll"
+              Name="Mocassin.Tools.UAccess.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="Mocassin.UI.Xml.dll" 
+                 Win64="yes" 
+                 Guid="7d1fadf7-b6c7-4a0f-9085-c5e352e1112b">
+        <File Id="Mocassin.UI.Xml.dll" 
+              Name="Mocassin.UI.Xml.dll" 
+              KeyPath="yes"/>
+      </Component>
+    </ComponentGroup>
+
+    <ComponentGroup Id="MocassinFrameworkAppData" Directory="MocassinAppDataDir">
+      <Component Id="Mocassin.Symmetry.db"
+                 Guid="b767409b-6c47-4c48-a5f5-c73a68472613">
+        <File Id="Mocassin.Symmetry.db"
+              Name="Mocassin.Symmetry.db"
+              Source="$(var.Mocassin.UI.GUI.ProjectDir)Resources/Mocassin.Symmetry.db" />
+        <RegistryValue Root="HKCU" Key="Software\[Manufacturer]\[ProductName]" Type="string" Value="" KeyPath="yes" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+</Wix>

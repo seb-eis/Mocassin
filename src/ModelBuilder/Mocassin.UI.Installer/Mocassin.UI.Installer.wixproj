@@ -2,24 +2,123 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" InitialTargets="EnsureWixToolsetInstalled" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProductVersion>3.10</ProductVersion>
+    <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
+    <ProductVersion>1.1.0.0</ProductVersion>
     <ProjectGuid>a7ac55d2-222b-4e50-97fc-ef1486781f90</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
-    <OutputName>Mocassin</OutputName>
+    <OutputName>Mocassin-$(ProductVersion)</OutputName>
     <OutputType>Package</OutputType>
+    <WixVariabl>ProductVersion=$(ProductVersion)</WixVariabl>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <OutputPath>bin\$(Configuration)\</OutputPath>
-    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <DefineConstants>Debug</DefineConstants>
+    <OutputPath>bin\$(Platform)\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <OutputPath>bin\$(Configuration)\</OutputPath>
-    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+    <OutputPath>bin\$(Platform)\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Mocassin\Executable.wxs" />
+    <Compile Include="Mocassin\Framework.wxs" />
     <Compile Include="Product.wxs" />
+    <Compile Include="ThirdPartyLibs\Cyotek.wxs" />
+    <Compile Include="ThirdPartyLibs\HelixToolkit.wxs" />
+    <Compile Include="ThirdPartyLibs\ICSharpCode.wxs" />
+    <Compile Include="ThirdPartyLibs\Microsoft.wxs" />
+    <Compile Include="ThirdPartyLibs\NCalc.wxs" />
+    <Compile Include="ThirdPartyLibs\Newtonsoft.wxs" />
+    <Compile Include="ThirdPartyLibs\Remotion.wxs" />
+    <Compile Include="ThirdPartyLibs\SharpDX.wxs" />
+    <Compile Include="ThirdPartyLibs\SQLitePCLRaw.wxs" />
+    <Compile Include="ThirdPartyLibs\System.wxs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ICon.Framework.Mathematics\Mocassin.Mathematics.csproj">
+      <Name>Mocassin.Mathematics</Name>
+      <Project>{1c025f0c-4e11-49ff-88ec-6fcf6314a083}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\ICon.Framework.QuickTest\Mocassin.Framework.Test.csproj">
+      <Name>Mocassin.Framework.Test</Name>
+      <Project>{775637c2-6419-492e-b69b-9c7fcb7797d6}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\ICon.Framework.Shared\Mocassin.Framework.csproj">
+      <Name>Mocassin.Framework</Name>
+      <Project>{7ff7b23c-2b3b-4d5e-9216-ccf920b3d707}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\ICon.Framework.Symmetry\Mocassin.Symmetry.csproj">
+      <Name>Mocassin.Symmetry</Name>
+      <Project>{e7471c43-3340-4ee6-ad34-970fa4f0a94d}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\ICon.Model.Translator\Mocassin.Model.Translator.csproj">
+      <Name>Mocassin.Model.Translator</Name>
+      <Project>{98009498-c43f-43ac-ac39-c9cc08d30890}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\ICon.Model\Mocassin.Model.csproj">
+      <Name>Mocassin.Model</Name>
+      <Project>{f56af1be-fe73-4f4b-bab7-9d72b1ce2b46}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\Mocassin.Tools.Evaluation\Mocassin.Tools.Evaluation.csproj">
+      <Name>Mocassin.Tools.Evaluation</Name>
+      <Project>{9f90b935-b51b-4e4a-aa5b-b7c84e985158}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\Mocassin.Tools.UAccess\Mocassin.Tools.UAccess.csproj">
+      <Name>Mocassin.Tools.UAccess</Name>
+      <Project>{5d8aa57a-a682-48cc-9007-37107bad6929}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\Mocassin.UI.GUI\Mocassin.UI.GUI.csproj">
+      <Name>Mocassin.UI.GUI</Name>
+      <Project>{a285693f-c766-4534-bf8a-66f733550783}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\Mocassin.UI.Xml\Mocassin.UI.Xml.csproj">
+      <Name>Mocassin.UI.Xml</Name>
+      <Project>{0027a849-0a7c-48f6-8575-434e165f10b0}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Mocassin" />
+    <Folder Include="ThirdPartyLibs" />
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" Condition=" '$(WixTargetsPath)' != '' " />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets" Condition=" '$(WixTargetsPath)' == '' AND Exists('$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets') " />
