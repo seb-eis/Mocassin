@@ -9,13 +9,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Database\InteropEntities\Energy\**" />
     <Compile Remove="Database\Model\**" />
+    <EmbeddedResource Remove="Database\InteropEntities\Energy\**" />
     <EmbeddedResource Remove="Database\Model\**" />
+    <None Remove="Database\InteropEntities\Energy\**" />
     <None Remove="Database\Model\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Database\InteropEntities\Energy\C\" />
   </ItemGroup>
 
   <ItemGroup>

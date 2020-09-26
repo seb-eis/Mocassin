@@ -130,7 +130,6 @@ Global
 		{A7AC55D2-222B-4E50-97FC-EF1486781F90}.Debug|x64.Build.0 = Debug|x64
 		{A7AC55D2-222B-4E50-97FC-EF1486781F90}.Release|Any CPU.ActiveCfg = Release|x86
 		{A7AC55D2-222B-4E50-97FC-EF1486781F90}.Release|x64.ActiveCfg = Release|x64
-		{A7AC55D2-222B-4E50-97FC-EF1486781F90}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
