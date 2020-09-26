@@ -5,7 +5,7 @@ MOCASSIN stands for "Monte Carlo for Solid State Ionics" and is a Markov Chain M
 
 The system was developed as a PhD project by RWTH Aachen University / Germany and Forschungszentrum Jülich GmbH / Germany. Please refer to the affiliated open access publication for further information.
 
-<img src ="./figures/LogoImage.png" width="250">
+<img src ="./docs/figures/LogoImage.png" width="250">
 
 ## What platforms are supported?
 The system is developed for x86-64 as this is the most common processor type in high performance computing (HPC). 32-bit operating systems are not supported.
