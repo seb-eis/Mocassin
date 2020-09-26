@@ -9,7 +9,7 @@
         "LicensesDirectory": ""
     },
     "Deploy": {
-        "RootDirectory": "./deploy",
+        "RootDirectory": "$PWD/deploy",
         "RelativeNugetPath": "mocassin-nuget",
         "RelativeGuiPath": "mocassin-win64-gui",
         "RelativWin64SolverPath": "mocsim-win-x86-64",
@@ -27,7 +27,7 @@
     "Compilers": {
         "Windows": {
             "MinGwMake": "C:/msys64/mingw64/bin/mingw32-make.exe",
-            "MSBuild": "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin/MSBuild.exe"
+            "MSBuild": ""
         },
         "Linux": {
             "CCompiler": "gcc"

@@ -18,7 +18,7 @@ Write-Host "Building windows gui installer ..."
 New-Item -Path $guiDeployPath -ItemType directory
 
 # Invoke MSBuild for Release
-& $pathToMSbuild $pathToWixProject /p:Platform="x64" /p:Configuration="Release" /p:ProductVersion=$version /p:Version=$version /t:Clean,Build /verbosity:quiet
+& $pathToMSbuild $pathToWixProject /p:Platform="x64" /p:Configuration="Release" /p:ProductVersion=$version /p:Version=$version /t:Clean,Build /verbosity:minimal -restore
 
 Write-Host "Completed installer build! Copying files to deploy & cleaning up..."
 

@@ -27,7 +27,7 @@ foreach ($remote in $remotes) {
     if (Test-Path $localDeployPath) {
         Remove-Item -Force -Recurse $localDeployPath
     }
-    New-Item -Force -Path $localDeployPath -ItemType "directory"
+    New-Item -Force -Path $localDeployPath -ItemType "directory" | Out-Null
     
     Write-Host "Building on $remoteHost ($remoteName) to: $localDeployPath"
     Write-Host "Setting up directories and uploading source files ..."
