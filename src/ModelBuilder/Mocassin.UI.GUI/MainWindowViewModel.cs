@@ -217,6 +217,7 @@ namespace Mocassin.UI.GUI
             var parentPath = Directory.GetParent(Assembly.GetExecutingAssembly().Location);
             var dbPath = parentPath + "\\" + Properties.Resources.Path_Relative_Data_Path +
                          Properties.Resources.Filename_Symmetry_Default_Database;
+            if (!File.Exists(dbPath)) throw new InvalidOperationException($"The symmetry database at '{dbPath}' is missing.");
             return dbPath;
         }
 

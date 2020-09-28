@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+    <ComponentGroup Id="SolverBinComponents"
+                    Directory="SolverBinDir"
+                    Source="$(sys.CURRENTDIR)../../McSolver/cmake-build-latest">
+      <Component Id="Mocassin.Simulator.exe"
+                 Guid="b9d32abb-1da2-4d19-b48d-ee8265068fca"
+                 Win64="yes">
+        <File Id="Mocassin.Simulator.exe"
+              Name="Mocassin.Simulator.exe"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="Mocassin.Utility.exe"
+                 Guid="876b646e-73e1-4857-8f1d-9079f5e5e6ec"
+                 Win64="yes">
+        <File Id="Mocassin.Utility.exe"
+              Name="Mocassin.Utility.exe"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="libframework.dll"
+                 Guid="99cf3e19-36af-47b6-a033-d2c7f4e4be1e"
+                 Win64="yes">
+        <File Id="libframework.dll"
+              Name="libframework.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="libjobloader.dll"
+                 Guid="c49d743d-32f4-403f-b2e9-09a531c7f1bb"
+                 Win64="yes">
+        <File Id="libjobloader.dll"
+              Name="libjobloader.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="libmmcfe.mocext.dll"
+                 Guid="9a5090ff-3481-4b94-9836-3105e8da4265"
+                 Win64="yes">
+        <File Id="libmmcfe.mocext.dll"
+              Name="libmmcfe.mocext.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="libprogressprint.dll"
+                 Guid="6d4020a5-422b-44f2-b116-2bfec5313278"
+                 Win64="yes">
+        <File Id="libprogressprint.dll"
+              Name="libprogressprint.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="libsimulator.dll"
+                 Guid="0dcfe3cc-fc6f-44f1-a7de-0b49e0adfb63"
+                 Win64="yes">
+        <File Id="libsimulator.dll"
+              Name="libsimulator.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="libsqlite3.dll"
+                 Guid="1dbc8759-0ccd-4514-98b7-743fffd72f43"
+                 Win64="yes">
+        <File Id="libsqlite3.dll"
+              Name="libsqlite3.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="libutility.dll"
+                 Guid="4a9f746a-2f5d-434b-8e46-ad9e3a795272"
+                 Win64="yes">
+        <File Id="libutility.dll"
+              Name="libutility.dll"
+              KeyPath="yes" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+</Wix>

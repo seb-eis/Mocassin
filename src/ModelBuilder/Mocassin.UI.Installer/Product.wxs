@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-
   <Product Id="6a37b403-842c-4ecc-b736-35086568cd9e"
            Name="Mocassin"
            Language="1033"
@@ -19,78 +18,46 @@
              Platform="x64"/>
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
     <MediaTemplate EmbedCab="yes"/>
-    <Icon Id="Mocassin.ico" SourceFile="$(var.Mocassin.UI.GUI.ProjectDir)\mocassin.ico"/>
+    <UIRef Id="WixUI_FeatureTree" />
+    <UIRef Id="WixUI_ErrorProgressText" />
 
-    <Feature Id="ProductFeature" 
-             Title="Mocassin" 
+    <Feature Id="Complete" 
+             Title="Mocassin"
+             Description="Full Mocassin Win64 package."
+             Display="expand" 
+             ConfigurableDirectory="INSTALLDIR"
              Level="1">
-      <ComponentGroupRef Id="GuiBinComponents" />
-      <ComponentGroupRef Id="MocassinFrameworkLibraries"/>
-      <ComponentGroupRef Id="MocassinFrameworkAppData"/>
-      <ComponentGroupRef Id="CyotekLibraries"/>
-      <ComponentGroupRef Id="HelixToolkitLibraries"/>
-      <ComponentGroupRef Id="ICSharpCodeLibraries"/>
-      <ComponentGroupRef Id="MicrosoftLibraries"/>
-      <ComponentGroupRef Id="NCalcLibraries"/>
-      <ComponentGroupRef Id="NewtonsoftLibraries"/>
-      <ComponentGroupRef Id="RemotionLibraries"/>
-      <ComponentGroupRef Id="SharpDXLibraries"/>
-      <ComponentGroupRef Id="SQLitePCLRawLibraries"/>
-      <ComponentGroupRef Id="SQLitePCLRawWin64NativeLibraries"/>
-      <ComponentGroupRef Id="SystemLibraries"/>
-      <ComponentRef Id="ProgramMenuDir"/>
-      <ComponentRef Id="MocassinAppDataDir"/>
+
+      <Feature Id="ModelBuilderUi" 
+               Title="Model Builder Gui"
+               Description="The graphical model and simulation database builder interface."
+               Display="expand" 
+               Level="1">
+        <ComponentGroupRef Id="GuiBinComponents" />
+        <ComponentGroupRef Id="MocassinFrameworkLibraries"/>
+        <ComponentGroupRef Id="MocassinFrameworkData"/>
+        <ComponentGroupRef Id="CyotekLibraries"/>
+        <ComponentGroupRef Id="HelixToolkitLibraries"/>
+        <ComponentGroupRef Id="ICSharpCodeLibraries"/>
+        <ComponentGroupRef Id="MicrosoftLibraries"/>
+        <ComponentGroupRef Id="NCalcLibraries"/>
+        <ComponentGroupRef Id="NewtonsoftLibraries"/>
+        <ComponentGroupRef Id="RemotionLibraries"/>
+        <ComponentGroupRef Id="SharpDXLibraries"/>
+        <ComponentGroupRef Id="SQLitePCLRawLibraries"/>
+        <ComponentGroupRef Id="SQLitePCLRawWin64NativeLibraries"/>
+        <ComponentGroupRef Id="SystemLibraries"/>
+        <ComponentRef Id="ProgramMenuDir"/>
+        <ComponentRef Id="MocassinAppDataDir"/>
+        <ComponentRef Id="MocassinDocumentsDir"/>
+      </Feature>
+      <Feature Id="SolverBinaries"
+               Title="Solver Program"
+               Description="Solver binaries for Win64 computers."
+               Display="expand" 
+               Level="1">
+        <ComponentGroupRef Id="SolverBinComponents"/>
+      </Feature>
     </Feature>
-
   </Product>
-
-  <Fragment>
-
-    <Directory Id="TARGETDIR" Name="SourceDir">
-      <Directory Id="ProgramFiles64Folder" Name="PFiles">
-        <Directory Id="MocassinProgramFolder" Name="Mocassin">
-          <Directory Id="INSTALLDIR" Name="ModelBuilder">
-            <Directory Id="GuiBinariesDir" Name="bin">
-              <Directory Id="GuiRuntimesDir" Name="runtimes">
-                <Directory Id="GuiRuntimesWin64Dir" Name="win-x64">
-                  <Directory Id="GuiRuntimesWin64NativeDir" Name="native" />
-                </Directory>
-              </Directory>
-              <Directory Id="GuiDataDir" Name="data" />
-            </Directory>
-          </Directory>
-        </Directory>
-      </Directory>
-
-      <Directory Id="AppDataFolder" Name="AppData">
-        <Directory Id="MocassinAppDataDir" Name="Mocassin">
-          <Component Id="MocassinAppDataDir" Guid="8c43cf69-d3bf-425c-9a20-8456f3f94c5a">
-            <RemoveFolder Id="MocassinAppDataDir" On="uninstall"/>
-            <RegistryValue Root='HKCU' Key='Software\[Manufacturer]\[ProductName]' Type='string' Value='' KeyPath='yes' />         
-          </Component>
-        </Directory>
-      </Directory>
-
-      <Directory Id="ProgramMenuFolder" Name="Programs">
-        <Directory Id="ProgramMenuDir" Name="Mocassin">
-          <Component Id="ProgramMenuDir" Guid="4e0715d3-49e0-4345-ada3-9253fc46effe">
-            <RemoveFolder Id="ProgramMenuDir" On="uninstall"/>
-            <RegistryValue Root='HKCU' Key='Software\[Manufacturer]\[ProductName]' Type='string' Value='' KeyPath='yes' />
-          </Component>
-        </Directory>
-      </Directory>
-
-      <Directory Id="PersonalFolder" Name="Documents">
-        <Directory Id="MocassinDocumentsDir" Name="Mocassin">
-          <Component Id="MocassinDocumentsDir" Guid="4ba26e8b-deda-4dd0-8e30-8105ed434adc">
-            <RemoveFolder Id="MocassinDocumentsDir" On="uninstall"/>
-            <RegistryValue Root='HKCU' Key='Software\[Manufacturer]\[ProductName]' Type='string' Value='' KeyPath='yes' />         
-          </Component>
-        </Directory>
-      </Directory>
-
-      <Directory Id="DesktopFolder" Name="Desktop"/>
-    </Directory>
-  </Fragment>
-
 </Wix>

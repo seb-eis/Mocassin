@@ -18,10 +18,13 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <OutputPath>bin\$(Platform)\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
+    <LinkerAdditionalOptions>-ext WixUIExtension</LinkerAdditionalOptions>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Mocassin\Executable.wxs" />
+    <Compile Include="Misc\DirStructure.wxs" />
+    <Compile Include="Mocassin\GuiExe.wxs" />
     <Compile Include="Mocassin\Framework.wxs" />
+    <Compile Include="Mocassin\Solver.wxs" />
     <Compile Include="Product.wxs" />
     <Compile Include="ThirdPartyLibs\Cyotek.wxs" />
     <Compile Include="ThirdPartyLibs\HelixToolkit.wxs" />
@@ -118,6 +121,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Mocassin" />
+    <Folder Include="Misc" />
     <Folder Include="ThirdPartyLibs" />
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" Condition=" '$(WixTargetsPath)' != '' " />

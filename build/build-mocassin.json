@@ -5,6 +5,7 @@
         "NugetDirectory": "../src/ModelBuilder/nuget",
         "InstallerDirectory": "../src/ModelBuilder/Mocassin.UI.Installer/bin/x64/Release",
         "SolverDirectory": "../src/McSolver",
+        "SolverLatestBuildDirectory" : "../src/McSolver/cmake-build-latest",
         "DocumentationDirectory": "",
         "LicensesDirectory": ""
     },
@@ -60,7 +61,7 @@
     "Scripts": [
         {
             "Path": "./subscripts/build-solver-linuxremote.ps1",
-            "IsActive": true
+            "IsActive": false
         },
         {
             "Path": "./subscripts/build-solver-local.ps1",
@@ -68,11 +69,11 @@
         },
         {
             "Path": "./subscripts/build-gui-installer.ps1",
-            "IsActive": true
+            "IsActive": false
         },
         {
             "Path": "./subscripts/build-nuget-local.ps1",
-            "IsActive": true
+            "IsActive": false
         }
     ],
     "Meta": {

@@ -2,37 +2,34 @@
 
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <Fragment>
+    <Icon Id="Mocassin.ico" SourceFile="$(var.Mocassin.UI.GUI.ProjectDir)\mocassin.ico"/>
     <ComponentGroup Id="GuiBinComponents"
                     Directory="GuiBinariesDir"
                     Source="$(var.Mocassin.UI.GUI.TargetDir)">
-      <Component Id="GuiAppExecutable"
+      <Component Id="$(var.Mocassin.UI.GUI.TargetFileName)"
                  Win64="yes"
                  Guid="8fdac3cf-b935-41f6-926c-1764348ddbc1">
-        <File Id="MocassinGuiEXE"
+        <File Id="$(var.Mocassin.UI.GUI.TargetFileName)"
               Name="$(var.Mocassin.UI.GUI.TargetFileName)"
               KeyPath="yes">
           <Shortcut Id="GuiStartmenuShortcut"
                     Directory="ProgramMenuDir"
                     Name="Mocassin"
-                    WorkingDirectory="BinariesFolder"
+                    WorkingDirectory="GuiBinariesDir"
                     Icon="Mocassin.ico"
-                    IconIndex="0"
                     Advertise="yes" />
           <Shortcut Id="GuiDesktopShortcut"
                     Directory="DesktopFolder"
                     Name="Mocassin"
-                    WorkingDirectory="BinariesFolder"
+                    WorkingDirectory="GuiBinariesDir"
                     Icon="Mocassin.ico"
-                    IconIndex="0"
-                    Advertise="yes" />
-          <Shortcut Id="InstallFolderShortcut"
-                    Directory="INSTALLDIR"
-                    Name="Mocassin"
-                    WorkingDirectory="BinariesFolder"
-                    Icon="Mocassin.ico"
-                    IconIndex="0"
                     Advertise="yes" />
         </File>
+        <ProgId Id="Mocassin.mocprjfile" Description="Mocassin UI Project File" Icon="Mocassin.ico" Advertise="yes">
+            <Extension Id="mocprj" ContentType="application/mocprj">
+              <Verb Id="open" Command="Open" Argument='"%1"'/>
+            </Extension>
+        </ProgId>
       </Component>
       <Component Id="GuiAppConfig"
                  Win64="yes"

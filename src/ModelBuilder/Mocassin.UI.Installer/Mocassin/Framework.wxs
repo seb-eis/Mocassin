@@ -63,7 +63,7 @@
       </Component>
     </ComponentGroup>
 
-    <ComponentGroup Id="MocassinFrameworkAppData" Directory="GuiDataDir">
+    <ComponentGroup Id="MocassinFrameworkData" Directory="GuiDataDir">
       <Component Id="Mocassin.Symmetry.db"
                  Guid="b767409b-6c47-4c48-a5f5-c73a68472613">
         <File Id="Mocassin.Symmetry.db"
