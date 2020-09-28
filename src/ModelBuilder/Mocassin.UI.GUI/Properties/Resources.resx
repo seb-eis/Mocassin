@@ -172,9 +172,6 @@
   <data name="ResourceKey_ModelViewport_RenderArea" xml:space="preserve">
     <value>Model_Viewport_Render_Area</value>
   </data>
-  <data name="Symmetry_Database_Default" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Mocassin.Symmetry.db;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="Viewer3D_Error_Box_Caption" xml:space="preserve">
     <value>3D Viewer - Error</value>
   </data>
@@ -192,5 +189,8 @@
   </data>
   <data name="ResourceKey_ModelObject_RenderExtensionMode" xml:space="preserve">
     <value>Render_Extension_Mode</value>
+  </data>
+  <data name="Path_Relative_Data_Path" xml:space="preserve">
+    <value>data/</value>
   </data>
 </root>

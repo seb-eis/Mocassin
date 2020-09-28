@@ -161,6 +161,15 @@ namespace Mocassin.UI.GUI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to data/.
+        /// </summary>
+        public static string Path_Relative_Data_Path {
+            get {
+                return ResourceManager.GetString("Path_Relative_Data_Path", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Render_MeshQuality.
         /// </summary>
         public static string ResourceKey_ModelObject_MeshQuality {
@@ -256,16 +265,6 @@ namespace Mocassin.UI.GUI.Properties {
         public static string ResourceKey_ModelViewport_RenderArea {
             get {
                 return ResourceManager.GetString("ResourceKey_ModelViewport_RenderArea", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        public static byte[] Symmetry_Database_Default {
-            get {
-                object obj = ResourceManager.GetObject("Symmetry_Database_Default", resourceCulture);
-                return ((byte[])(obj));
             }
         }
         

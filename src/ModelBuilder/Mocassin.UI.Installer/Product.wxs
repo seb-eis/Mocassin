@@ -53,9 +53,10 @@
             <Directory Id="GuiBinariesDir" Name="bin">
               <Directory Id="GuiRuntimesDir" Name="runtimes">
                 <Directory Id="GuiRuntimesWin64Dir" Name="win-x64">
-                  <Directory Id="GuiRuntimesWin64NativeDir" Name="native"/>
+                  <Directory Id="GuiRuntimesWin64NativeDir" Name="native" />
                 </Directory>
               </Directory>
+              <Directory Id="GuiDataDir" Name="data" />
             </Directory>
           </Directory>
         </Directory>
@@ -75,6 +76,15 @@
           <Component Id="ProgramMenuDir" Guid="4e0715d3-49e0-4345-ada3-9253fc46effe">
             <RemoveFolder Id="ProgramMenuDir" On="uninstall"/>
             <RegistryValue Root='HKCU' Key='Software\[Manufacturer]\[ProductName]' Type='string' Value='' KeyPath='yes' />
+          </Component>
+        </Directory>
+      </Directory>
+
+      <Directory Id="PersonalFolder" Name="Documents">
+        <Directory Id="MocassinDocumentsDir" Name="Mocassin">
+          <Component Id="MocassinDocumentsDir" Guid="4ba26e8b-deda-4dd0-8e30-8105ed434adc">
+            <RemoveFolder Id="MocassinDocumentsDir" On="uninstall"/>
+            <RegistryValue Root='HKCU' Key='Software\[Manufacturer]\[ProductName]' Type='string' Value='' KeyPath='yes' />         
           </Component>
         </Directory>
       </Directory>

@@ -178,10 +178,11 @@ namespace Mocassin.UI.GUI
         /// <returns></returns>
         public ProjectSettings LoadProjectSettings()
         {
+            ProjectSettings settings;
             try
             {
                 var filePath = GetFullResourceFilePath(Properties.Resources.Filename_Project_Default_Configuration);
-                return ProjectSettings.Deserialize(filePath, PluginAssemblies);
+                settings = ProjectSettings.Deserialize(filePath, PluginAssemblies);
             }
             catch (Exception exception)
             {
@@ -189,8 +190,11 @@ namespace Mocassin.UI.GUI
                 MessageBox.Show("Project settings are corrupt, defaults will be restored.", "Error - Settings", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 EnsureProjectConfigDeployed(true);
-                return ProjectSettings.CreateDefault();
+                settings = ProjectSettings.CreateDefault();
             }
+
+            settings.SymmetrySettings.SpaceGroupDbPath = GetSymmetryDatabasePath();
+            return settings;
         }
 
         /// <summary>
@@ -202,17 +206,18 @@ namespace Mocassin.UI.GUI
         {
             Directory.CreateDirectory(Environment.ExpandEnvironmentVariables(Properties.Resources.Folder_Userprofile_Resources));
             EnsureProjectConfigDeployed(isOverwrite);
-            EnsureSymmetryDatabaseDeployed(isOverwrite);
         }
 
         /// <summary>
-        ///     Ensures that the default symmetry database is deployed to the config directory with optional enforced overwrite
+        ///     Retrieves the path to the symmetry database
         /// </summary>
-        /// <param name="isOverwrite"></param>
-        public void EnsureSymmetryDatabaseDeployed(bool isOverwrite)
+        /// <returns></returns>
+        public string GetSymmetryDatabasePath()
         {
-            var dbPath = GetFullResourceFilePath(Properties.Resources.Filename_Symmetry_Default_Database);
-            if (!File.Exists(dbPath) || isOverwrite) File.WriteAllBytes(dbPath, Properties.Resources.Symmetry_Database_Default);
+            var parentPath = Directory.GetParent(Assembly.GetExecutingAssembly().Location);
+            var dbPath = parentPath + "\\" + Properties.Resources.Path_Relative_Data_Path +
+                         Properties.Resources.Filename_Symmetry_Default_Database;
+            return dbPath;
         }
 
         /// <summary>

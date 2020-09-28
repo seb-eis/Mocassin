@@ -13,7 +13,7 @@ namespace Mocassin.Model.ModelProject
         ///     The full filepath to the space group database
         /// </summary>
         [DataMember]
-        public string SpaceGroupDbPath { get; set; } = $"{Environment.GetEnvironmentVariable("USERPROFILE")}/Documents/Mocassin/Mocassin.Symmetry.db";
+        public string SpaceGroupDbPath { get; set; } = ".\\Mocassin.Symmetry.db";
 
         /// <summary>
         ///     The tolerance value for equality comparisons of the vectors during wyckoff position extension

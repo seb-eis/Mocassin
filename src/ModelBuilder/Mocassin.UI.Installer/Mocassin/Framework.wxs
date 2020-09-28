@@ -63,13 +63,13 @@
       </Component>
     </ComponentGroup>
 
-    <ComponentGroup Id="MocassinFrameworkAppData" Directory="MocassinAppDataDir">
+    <ComponentGroup Id="MocassinFrameworkAppData" Directory="GuiDataDir">
       <Component Id="Mocassin.Symmetry.db"
                  Guid="b767409b-6c47-4c48-a5f5-c73a68472613">
         <File Id="Mocassin.Symmetry.db"
               Name="Mocassin.Symmetry.db"
-              Source="$(var.Mocassin.UI.GUI.ProjectDir)Resources/Mocassin.Symmetry.db" />
-        <RegistryValue Root="HKCU" Key="Software\[Manufacturer]\[ProductName]" Type="string" Value="" KeyPath="yes" />
+              Source="$(var.Mocassin.UI.GUI.ProjectDir)data\Mocassin.Symmetry.db"
+              KeyPath="yes" />
       </Component>
     </ComponentGroup>
   </Fragment>
