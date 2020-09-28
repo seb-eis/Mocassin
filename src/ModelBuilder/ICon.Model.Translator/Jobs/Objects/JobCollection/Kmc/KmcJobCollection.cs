@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Mocassin.Model.ModelProject;
 using Mocassin.Model.Simulations;
 using Mocassin.Model.Translator.Optimization;
 
@@ -17,6 +18,11 @@ namespace Mocassin.Model.Translator.Jobs
         public IKineticSimulation Simulation { get; set; }
 
         /// <summary>
+        ///     Get or set the affiliated <see cref="IModelProject"/>
+        /// </summary>
+        public IModelProject ModelProject { get; set; }
+
+        /// <summary>
         ///     Get or set the list of job configurations
         /// </summary>
         public IList<KmcJobConfiguration> JobConfigurations { get; set; }
@@ -31,6 +37,9 @@ namespace Mocassin.Model.Translator.Jobs
 
         /// <inheritdoc />
         public ISimulation GetSimulation() => Simulation;
+
+        /// <inheritdoc />
+        public IModelProject GetModelProject() => ModelProject;
 
         /// <inheritdoc />
         public IEnumerable<IPostBuildOptimizer> GetPostBuildOptimizers() => PostBuildOptimizers.AsEnumerable();

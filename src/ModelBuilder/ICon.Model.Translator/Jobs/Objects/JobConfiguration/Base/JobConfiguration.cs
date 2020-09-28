@@ -1,4 +1,6 @@
-﻿namespace Mocassin.Model.Translator.Jobs
+﻿using Mocassin.Model.ModelProject;
+
+namespace Mocassin.Model.Translator.Jobs
 {
     /// <summary>
     ///     Abstract base class for job configuration implementations that holds common job information
@@ -115,10 +117,11 @@
             };
 
         /// <summary>
-        ///     Get the job header as an interop object
+        ///     Get the job header as an interop object using the provided <see cref="MocassinConstantsSettings" />
         /// </summary>
+        /// <param name="constantsSettings"></param>
         /// <returns></returns>
-        public abstract InteropObject GetInteropJobHeader();
+        public abstract InteropObject GetInteropJobHeader(MocassinConstantsSettings constantsSettings);
 
         /// <summary>
         ///     Creates a deep copy of the <see cref="JobConfiguration" />

@@ -1,4 +1,6 @@
-﻿namespace Mocassin.Model.Translator.Jobs
+﻿using Mocassin.Model.ModelProject;
+
+namespace Mocassin.Model.Translator.Jobs
 {
     /// <summary>
     ///     A metropolis monte carlo job configuration fo a single simulation
@@ -39,7 +41,7 @@
         }
 
         /// <inheritdoc />
-        public override InteropObject GetInteropJobHeader() =>
+        public override InteropObject GetInteropJobHeader(MocassinConstantsSettings constantsSettings) =>
             new InteropObject<CMmcJobHeader>
             {
                 Structure = new CMmcJobHeader

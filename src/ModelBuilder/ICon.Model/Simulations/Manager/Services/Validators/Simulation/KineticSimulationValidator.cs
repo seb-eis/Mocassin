@@ -33,7 +33,7 @@ namespace Mocassin.Model.Simulations
         /// <param name="report"></param>
         protected void AddPhysicalParameterValidations(IKineticSimulation simulation, ValidationReport report)
         {
-            if (Settings.Normalization.ParseValue(simulation.NormalizationProbability, out var warnings) != 0)
+            if (Settings.Normalization.ParseValue(simulation.NormalizationEnergy, out var warnings) != 0)
                 report.AddWarnings(warnings);
 
             if (Settings.ElectricField.ParseValue(simulation.ElectricFieldMagnitude, out warnings) != 0)

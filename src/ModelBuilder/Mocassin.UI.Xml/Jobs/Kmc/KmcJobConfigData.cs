@@ -16,7 +16,7 @@ namespace Mocassin.UI.Xml.Jobs
     {
         private string electricFieldModulus;
         private string maxAttemptFrequency;
-        private string normalizationProbability;
+        private string normalizationEnergy;
         private string preRunMcsp;
 
         /// <summary>
@@ -43,10 +43,10 @@ namespace Mocassin.UI.Xml.Jobs
         ///     Get or set the fixed normalization probability as a string
         /// </summary>
         [XmlAttribute]
-        public string NormalizationProbability
+        public string NormalizationEnergy
         {
-            get => normalizationProbability;
-            set => SetProperty(ref normalizationProbability, value);
+            get => normalizationEnergy;
+            set => SetProperty(ref normalizationEnergy, value);
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace Mocassin.UI.Xml.Jobs
             {
                 ElectricFieldModulus = ElectricFieldModulus,
                 PreRunMcsp = PreRunMcsp,
-                NormalizationProbability = NormalizationProbability,
+                NormalizationEnergy = NormalizationEnergy,
                 MaxAttemptFrequency = MaxAttemptFrequency
             };
             CopyBaseDataTo(result);
@@ -92,9 +92,9 @@ namespace Mocassin.UI.Xml.Jobs
                     ? kmcBaseSimulation.Transitions.SelectMany(x => x.GetTransitionRules()).Max(rule => rule.AttemptFrequency)
                     : double.Parse(MaxAttemptFrequency),
 
-                FixedNormalizationFactor = string.IsNullOrWhiteSpace(NormalizationProbability)
-                    ? 1.0 / kmcBaseSimulation.NormalizationProbability
-                    : 1.0 / double.Parse(NormalizationProbability),
+                NormalizationEnergy = string.IsNullOrWhiteSpace(NormalizationEnergy)
+                    ? kmcBaseSimulation.NormalizationEnergy
+                    : double.Parse(NormalizationEnergy),
 
                 ElectricFieldModulus = string.IsNullOrWhiteSpace(ElectricFieldModulus)
                     ? kmcBaseSimulation.ElectricFieldMagnitude
@@ -120,9 +120,9 @@ namespace Mocassin.UI.Xml.Jobs
                     ? kmcBaseConfig.BaseFrequency
                     : double.Parse(MaxAttemptFrequency),
 
-                FixedNormalizationFactor = string.IsNullOrWhiteSpace(NormalizationProbability)
-                    ? kmcBaseConfig.FixedNormalizationFactor
-                    : 1.0 / double.Parse(NormalizationProbability),
+                NormalizationEnergy = string.IsNullOrWhiteSpace(NormalizationEnergy)
+                    ? kmcBaseConfig.NormalizationEnergy
+                    : double.Parse(NormalizationEnergy),
 
                 ElectricFieldModulus = string.IsNullOrWhiteSpace(ElectricFieldModulus)
                     ? kmcBaseConfig.ElectricFieldModulus

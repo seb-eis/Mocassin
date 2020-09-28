@@ -155,7 +155,7 @@ namespace Mocassin.Model.Translator.EntityBuilder
             var result = new SimulationJobModel
             {
                 JobInfo = jobConfiguration.GetInteropJobInfo(),
-                JobHeader = jobConfiguration.GetInteropJobHeader(),
+                JobHeader = jobConfiguration.GetInteropJobHeader(jobCollection.GetModelProject().Settings.ConstantsSettings),
                 JobMetaData = GetJobMetaDataEntity(jobConfiguration, jobCollection),
                 JobResultData = new JobResultDataEntity(),
                 SimulationLatticeModel = LatticeDbEntityBuilder.BuildModel(simulationModel, jobConfiguration.LatticeConfiguration)
@@ -220,7 +220,7 @@ namespace Mocassin.Model.Translator.EntityBuilder
 
             jobMetaData.ElectricFieldModulus = kmcConfig?.ElectricFieldModulus ?? 0;
             jobMetaData.BaseFrequency = kmcConfig?.BaseFrequency ?? 0;
-            jobMetaData.NormalizationFactor = kmcConfig?.FixedNormalizationFactor ?? 1.0;
+            jobMetaData.NormalizationFactor = kmcConfig?.GetFixedNormalizationFactor(ProjectModelContext.ModelProject.Settings.ConstantsSettings) ?? 1.0;
             jobMetaData.PreRunMcsp = kmcConfig?.PreRunMcsp ?? 0;
         }
 

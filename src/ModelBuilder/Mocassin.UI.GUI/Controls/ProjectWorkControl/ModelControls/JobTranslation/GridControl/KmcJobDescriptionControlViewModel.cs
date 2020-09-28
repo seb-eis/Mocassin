@@ -32,12 +32,12 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         }
 
         /// <summary>
-        ///     Get or set the fixed normalization probability of the targeted <see cref="KmcJobConfigData" />
+        ///     Get or set the fixed normalization energy of the targeted <see cref="KmcJobConfigData" />
         /// </summary>
-        public double? NormalizationProbability
+        public double? NormalizationEnergy
         {
-            get => double.TryParse(JobDescription.NormalizationProbability, out var x) ? x : (double?) null;
-            set => JobDescription.NormalizationProbability = (value == null ? null : value > 0 && value <= 1 ? value : 1).ToString();
+            get => double.TryParse(JobDescription.NormalizationEnergy, out var x) ? x : (double?) null;
+            set => JobDescription.NormalizationEnergy = (value == null ? null : value > 0 ? value : 0).ToString();
         }
 
         /// <summary>

@@ -10,13 +10,13 @@ namespace Mocassin.Model.ModelProject
     public class MocassinConstantsSettings
     {
         /// <summary>
-        ///     The boltzmann constant in SI units
+        ///     The boltzmann constant in SI units [J / K]
         /// </summary>
         [DataMember, XmlAttribute("BoltzmannConstantSI")]
         public double BoltzmannConstantSi { get; set; } = 1.380649e-23;
 
         /// <summary>
-        ///     Universal gas constant in SI units
+        ///     Universal gas constant in SI units [J / (mol K)]
         /// </summary>
         [DataMember, XmlAttribute("UniversalGasConstantSI")]
         public double UniversalGasConstantSi { get; set; } = 8.31446261815324;

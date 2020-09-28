@@ -28,7 +28,7 @@ namespace Mocassin.Model.ModelProject
         public ValueSetting<double> ElectricField { get; set; }
 
         /// <summary>
-        ///     The value restriction setting for simulation normalization (KMC only)
+        ///     The value restriction setting for simulation energy normalization values (KMC only)
         /// </summary>
         [DataMember]
         public ValueSetting<double> Normalization { get; set; }
@@ -149,7 +149,7 @@ namespace Mocassin.Model.ModelProject
             JobCount = new ValueSetting<int>("Jobs per Simulation", 1, 5, 100, 1000);
             WriteCallCount = new ValueSetting<int>("Write Calls per Simulation", 0, 5, 100, 1000);
             Temperature = new ValueSetting<double>("Temperature", 0.1, 100, 5000, 10000);
-            Normalization = new ValueSetting<double>("Normalization", 0, 0, 1.0, 1.0);
+            Normalization = new ValueSetting<double>("Normalization", 0, -1, 10.0, double.MaxValue);
             SeriesPermutation = new ValueSetting<long>("Series Simulation Count", 0, 0, 1000, 5000);
             SingleValuePermutation = new ValueSetting<int>("Value Series Count", 0, 0, 100, 5000);
             SupercellPositionCount = new ValueSetting<int>("Super-cell Position Count", 1, 100, 100000, 500000);

@@ -16,7 +16,7 @@ namespace Mocassin.UI.Xml.SimulationModel
     {
         private double electricFieldMagnitude = 10e6;
         private VectorData3D electricFieldVector = new VectorData3D {A = 1};
-        private double normalizationProbability = 1.0;
+        private double normalizationEnergy = 1.0;
         private int preRunMcsp = 100;
         private ObservableCollection<ModelObjectReference<KineticTransition>> transitions = new ObservableCollection<ModelObjectReference<KineticTransition>>();
 
@@ -31,13 +31,13 @@ namespace Mocassin.UI.Xml.SimulationModel
         }
 
         /// <summary>
-        ///     Get or set a custom normalization probability for the simulation
+        ///     Get or set a custom normalization energy for the simulation
         /// </summary>
         [XmlAttribute]
-        public double NormalizationProbability
+        public double NormalizationEnergy
         {
-            get => normalizationProbability;
-            set => SetProperty(ref normalizationProbability, value > 0 && value <= 1 ? value : 1);
+            get => normalizationEnergy;
+            set => SetProperty(ref normalizationEnergy, value > 0 ? value : 0);
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace Mocassin.UI.Xml.SimulationModel
         {
             var obj = new KineticSimulation
             {
-                NormalizationProbability = NormalizationProbability,
+                NormalizationEnergy = NormalizationEnergy,
                 ElectricFieldMagnitude = Math.Abs(ElectricFieldMagnitude),
                 ElectricFieldVector = ElectricFieldVector.AsFractional3D(),
                 Transitions = Transitions.Select(x => x.GetInputObject()).Cast<IKineticTransition>().ToList(),

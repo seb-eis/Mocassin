@@ -123,9 +123,9 @@
           </TextBox>
         </content:HeaderedGroup>
 
-        <content:HeaderedGroup Grid.Row="0" Grid.Column="2" Header="Normalization Probability:">
+        <content:HeaderedGroup Grid.Row="0" Grid.Column="2" Header="Normalization Energy:">
           <TextBox
-            Text="{Binding SelectedItem.NormalizationProbability, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
+            Text="{Binding SelectedItem.NormalizationEnergy, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
             <TextBox.InputBindings>
               <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
                           CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />

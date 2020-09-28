@@ -16,7 +16,7 @@ namespace Mocassin.Model.Simulations
         public int PreRunMcsp { get; set; }
 
         /// <inheritdoc />
-        public double NormalizationProbability { get; set; }
+        public double NormalizationEnergy { get; set; }
 
         /// <inheritdoc />
         public double ElectricFieldMagnitude { get; set; }
@@ -42,7 +42,7 @@ namespace Mocassin.Model.Simulations
                 return null;
 
             base.PopulateFrom(obj);
-            NormalizationProbability = simulation.NormalizationProbability;
+            NormalizationEnergy = simulation.NormalizationEnergy;
             ElectricFieldMagnitude = simulation.ElectricFieldMagnitude;
             ElectricFieldVector = simulation.ElectricFieldVector;
             Transitions = (simulation.Transitions ?? new List<IKineticTransition>()).ToList();

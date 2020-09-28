@@ -25,9 +25,9 @@ namespace Mocassin.Model.Simulations
         double ElectricFieldMagnitude { get; }
 
         /// <summary>
-        ///     The normalization probability that is used for in-simulation normalization of all jump attempts
+        ///     The normalization energy that is used for in-simulation normalization of all jump attempts
         /// </summary>
-        double NormalizationProbability { get; }
+        double NormalizationEnergy { get; }
 
         /// <summary>
         ///     Get the list of kinetic transitions affiliated with the simulation

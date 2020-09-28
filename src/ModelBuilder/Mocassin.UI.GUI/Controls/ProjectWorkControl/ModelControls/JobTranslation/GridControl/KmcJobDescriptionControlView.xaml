@@ -46,9 +46,9 @@
       </content:HeaderedGroup>
     </StackPanel>
     <StackPanel Grid.Column="2" Grid.Row="1">
-      <content:HeaderedGroup Header="Normalization Probability:">
+      <content:HeaderedGroup Header="Normalization Energy:">
         <TextBox
-          Text="{Binding NormalizationProbability, Converter={StaticResource App.Converter.NumericExpressionToValue}, TargetNullValue=...}">
+          Text="{Binding NormalizationEnergy, Converter={StaticResource App.Converter.NumericExpressionToValue}, TargetNullValue=...}">
           <TextBox.InputBindings>
             <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
                         CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />

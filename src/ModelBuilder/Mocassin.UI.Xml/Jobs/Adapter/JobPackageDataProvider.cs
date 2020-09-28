@@ -12,8 +12,7 @@ using Mocassin.Model.Translator.Optimization;
 namespace Mocassin.UI.Xml.Jobs
 {
     /// <summary>
-    ///     Adapter class to provide <see cref="JobPackageData" /> data as a <see cref="IJobCollection" /> object
-    ///     for the database creation system
+    ///     Provides <see cref="JobPackageData" /> objects as a <see cref="IJobCollection" /> object for the simulation database creation system
     /// </summary>
     public class JobPackageDataProvider : IJobCollection
     {
@@ -48,6 +47,9 @@ namespace Mocassin.UI.Xml.Jobs
 
         /// <inheritdoc />
         public ISimulation GetSimulation() => Simulation;
+
+        /// <inheritdoc />
+        public IModelProject GetModelProject() => ModelProject;
 
         /// <inheritdoc />
         public IEnumerable<IPostBuildOptimizer> GetPostBuildOptimizers()
