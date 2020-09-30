@@ -5,9 +5,9 @@ Forschungszentrum Jülich & RWTH Aachen University
 ## Contents
 
 ## I. Introduction
-1. ### [Preface](./guide-pages/under-construction.md)
-2. ### [Components & platform compatability](./guide-pages/under-construction.md)
-3. ### [License & legal disclaimer](./guide-pages/under-construction.md)
+1. ### [Preface](./under-construction.md)
+2. ### [Components & platform compatability](./under-construction.md)
+3. ### [License & legal disclaimer](./under-construction.md)
 
 ## II. Theoretical background
 

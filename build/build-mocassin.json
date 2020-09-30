@@ -1,4 +1,5 @@
 {
+    "IsTestMode": false,
     "Source": {
         "ModelBuilderDirectory": "../src/ModelBuilder",
         "ModelBuilderWixProject": "../src/ModelBuilder/Mocassin.UI.Installer/Mocassin.UI.Installer.wixproj",
@@ -6,7 +7,9 @@
         "InstallerDirectory": "../src/ModelBuilder/Mocassin.UI.Installer/bin/x64/Release",
         "SolverDirectory": "../src/McSolver",
         "SolverLatestBuildDirectory" : "../src/McSolver/cmake-build-latest",
-        "DocumentationDirectory": "",
+        "KatexDirectory": "./katex",
+        "DocsDirectory": "../docs",
+        "GuidePagesDirectory": "../docs/userguide-md",
         "LicensesDirectory": ""
     },
     "Deploy": {
@@ -15,6 +18,8 @@
         "RelativeGuiPath": "mocassin-win64-gui",
         "RelativWin64SolverPath": "mocsim-win-x86-64",
         "RelativeLinuxDeployPath": "mocsim-linux-x86-64",
+        "RelativeDocPath": "doc",
+        "RelativeGuidePagesPath" : "doc/guide-pages",
         "LogFileName": "build.log"
     },
     "Tmp": {
@@ -60,20 +65,24 @@
     },
     "Scripts": [
         {
-            "Path": "./subscripts/build-solver-linuxremote.ps1",
+            "Path": "./subscripts/build-documentation.ps1",
             "IsActive": true
+        },
+        {
+            "Path": "./subscripts/build-solver-linuxremote.ps1",
+            "IsActive": false
         },
         {
             "Path": "./subscripts/build-solver-local.ps1",
-            "IsActive": true
+            "IsActive": false
         },
         {
             "Path": "./subscripts/build-gui-installer.ps1",
-            "IsActive": true
+            "IsActive": false
         },
         {
             "Path": "./subscripts/build-nuget-local.ps1",
-            "IsActive": true
+            "IsActive": false
         }
     ],
     "Meta": {

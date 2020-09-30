@@ -90,3 +90,29 @@ function Get-SettingsObject {
 
     return $settings
 }
+
+function Test-Katex {
+    [CmdletBinding()]
+    param (
+        [OutputType([bool])]
+        [Parameter(Mandatory=$true)]
+        [string]
+        $Path
+    )
+
+    $isOk = (Test-Path $Path/katex.min.css) -and (Test-Path $Path/katex.min.js)  
+    return $isOk
+}
+
+function Test-Command {
+    [CmdletBinding()]
+    param (
+        [OutputType([bool])]
+        [Parameter(Mandatory=$true)]
+        [string]
+        $Name
+    )
+    
+    $command = Get-Command $Name 2>$null 3>$null
+    return -not ($null -eq $command)
+}
