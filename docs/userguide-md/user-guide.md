@@ -1,18 +1,21 @@
-# MOCASSIN User Manual Page
+# MOCASSIN User Guide
 Authors: Sebastian Eisele, Steffen Neitzel-Grieshammer
 Forschungszentrum Jülich & RWTH Aachen University
+
 
 ## Contents
 
 ## I. Introduction
-1. ### [Preface](./under-construction.md)
-2. ### [Components & platform compatability](./under-construction.md)
-3. ### [License & legal disclaimer](./under-construction.md)
+- ### [Preface](./under-construction.md)
+- ### [Components & platform compatability](./under-construction.md)
+- ### [License & legal disclaimer](./under-construction.md)
 
 ## II. Theoretical background
 
-## III. Setup
+## III. Program setup
 
+## III. Model building
+- ### [Particle model](./particle-model.md)
 ## IV. Graphical user interface
 
 ## V. Simulation

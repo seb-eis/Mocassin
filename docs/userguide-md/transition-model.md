@@ -1,6 +1,10 @@
 # The transition model
 
-## The MC states and transition model objects
+## Description
+
+The transition model controls the list of symmetry-reduced KMC and MMC reference events that are defined for a model. These transitions describe the possible system change events and where they can occur in the geometry. In contrast to other model objects, transitions form a pool of options for later binding to simulation definitions, that is, defined objects are not automatically active in a simulation. The system supports a variety of transport mechanisms including complex cases such as interstitialcy and vehicle movement.
+
+## The transition model objects
 
 ### [Basics](#basics)
 
@@ -179,7 +183,7 @@ $$
 \tag{8}
 $$
 
-## Transition examples
+## Model examples
 
 ### [2-Site MMC](#2-site-ionic-mmc)
 
