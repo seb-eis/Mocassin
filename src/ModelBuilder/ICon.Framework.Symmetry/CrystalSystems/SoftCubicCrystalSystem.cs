@@ -25,7 +25,7 @@ namespace Mocassin.Symmetry.CrystalSystems
 
         /// <inheritdoc />
         public override bool ValidateSoftParameterCondition(double paramA, double paramB, double paramC) =>
-            paramA.CountMatchesWithParameters(BasicConstraint.Comparer, paramB, paramC) == 3;
+            paramA.CountMatchesWithParameters(BasicConstraint.Comparer, paramB, paramC) == 2;
 
         /// <inheritdoc />
         public override CrystalParameterSet GetDefaultParameterSet() => new CrystalParameterSet(1.0, 1.0, 1.0, Alpha.Value, Beta.Value, Gamma.Value);

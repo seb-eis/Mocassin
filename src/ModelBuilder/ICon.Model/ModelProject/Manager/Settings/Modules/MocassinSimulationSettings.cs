@@ -139,8 +139,8 @@ namespace Mocassin.Model.ModelProject
         public override void InitAsDefault()
         {
             BreakSampleInterval = new ValueSetting<int>("Break Sample Interval", 1, 1, 100, 1000);
-            BreakSampleLength = new ValueSetting<int>("Break Sample Length", 1, 100, 10000, 100000);
-            ResultSampleLength = new ValueSetting<int>("Result Sample Length", 1, 1000, 10000, 1000000);
+            BreakSampleLength = new ValueSetting<int>("Break Sample Length", 0, 0, 10000, 100000);
+            ResultSampleLength = new ValueSetting<int>("Result Sample Length", 0, 0, 10000, 1000000);
             BreakTolerance = new ValueSetting<double>("Break Tolerance", 0, 0, 0.1, 1);
             Doping = new ValueSetting<double>("Doping Concentration", 0, 0, 1, 1);
             ElectricField = new ValueSetting<double>("Electric Field", 0, 1e4, 1e9, double.MaxValue);
@@ -157,7 +157,7 @@ namespace Mocassin.Model.ModelProject
             ForceTerminationTime = new ValueSetting<int>("Forced Termination Time", 0, 1, 48, int.MaxValue);
             TerminationSuccessRate = new ValueSetting<double>("Lower Termination Success Rate", 0, 10, int.MaxValue, int.MaxValue);
             EnergySetCount = new ValueSetting<int>("Energy Set Count", 0, 0, 10, 100);
-            TransitionCount = new ValueSetting<int>("Transitions per Simulation", 1, 5, 10, 100);
+            TransitionCount = new ValueSetting<int>("Transitions per Simulation", 1, 0, 10, 100);
             Seeding = new StringSetting("Seed String", "^.{0,100}$", true);
         }
     }

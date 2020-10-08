@@ -8,18 +8,26 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Model\LatticeData\Parameters\**" />
+    <Compile Remove="Model\ParticleData\Parameters\**" />
+    <Compile Remove="Model\SimulationData\Parameters\**" />
+    <Compile Remove="Model\TransitionData\Parameters\**" />
+    <EmbeddedResource Remove="Model\LatticeData\Parameters\**" />
+    <EmbeddedResource Remove="Model\ParticleData\Parameters\**" />
+    <EmbeddedResource Remove="Model\SimulationData\Parameters\**" />
+    <EmbeddedResource Remove="Model\TransitionData\Parameters\**" />
+    <None Remove="Model\LatticeData\Parameters\**" />
+    <None Remove="Model\ParticleData\Parameters\**" />
+    <None Remove="Model\SimulationData\Parameters\**" />
+    <None Remove="Model\TransitionData\Parameters\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ICon.Framework.Mathematics\Mocassin.Mathematics.csproj" />
     <ProjectReference Include="..\ICon.Framework.Shared\Mocassin.Framework.csproj" />
     <ProjectReference Include="..\ICon.Framework.Symmetry\Mocassin.Symmetry.csproj" />
     <ProjectReference Include="..\ICon.Model.Translator\Mocassin.Model.Translator.csproj" />
     <ProjectReference Include="..\ICon.Model\Mocassin.Model.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Model\LatticeData\Parameters\" />
-    <Folder Include="Model\ParticleData\Parameters\" />
-    <Folder Include="Model\SimulationData\Parameters\" />
-    <Folder Include="Model\TransitionData\Parameters\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,7 +39,7 @@
   </ItemGroup>
 
   <Target Name="NugetPackAutoVersioning" AfterTargets="Build" Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
-    <Exec Command="dotnet pack -p:PackageVersion=$([System.DateTime]::Now.ToString(&quot;yyyy.MM.dd.HHmm&quot;)) --no-build --configuration $(Configuration) --output &quot;$(SolutionDir)nuget" />
+    <Exec Command="dotnet pack -p:PackageVersion=$([System.DateTime]::Now.ToString(&quot;yyyy.MM.dd&quot;)) --no-build --configuration $(Configuration) --output &quot;$(SolutionDir)nuget" />
   </Target>
 
 </Project>

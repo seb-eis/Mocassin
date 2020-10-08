@@ -37,18 +37,19 @@ namespace Mocassin.Model.Structures.Validators
             var crystalSystem = ModelProject.CrystalSystemService.ActiveCrystalSystem;
             if (!crystalSystem.ValidateAngleConditions(parameters.Alpha, parameters.Beta, parameters.Gamma))
             {
-                var message = new WarningMessage(this, "Cell angle validation failure");
-                message.Details.Add($"The {crystalSystem.SystemName} angle constraints are violated");
+                var message = ModelMessageSource.CreateRestrictionViolationWarning(this);
+                message.Details.Add($"The {crystalSystem.SystemName} angle constraints are violated.");
                 message.Details.Add($"Constraint for angle alpha : {crystalSystem.AlphaConstraint}");
                 message.Details.Add($"Constraint for angle beta : {crystalSystem.BetaConstraint}");
                 message.Details.Add($"Constraint for angle gamma : {crystalSystem.GammaConstraint}");
+                message.Details.Add("If your values are within these constraints, you have defined a generally invalid angle set. Ensure that the sum of all angles is between 0 and 360° and that no angle is bigger than the sum of the other two.");
                 report.AddWarning(message);
             }
 
             if (!crystalSystem.ValidateParameterConditions(parameters.ParamA, parameters.ParamB, parameters.ParamC))
             {
-                var message = new WarningMessage(this, "Cell parameter validation failure");
-                message.Details.Add($"The {crystalSystem.SystemName} parameter constraints are violated");
+                var message = ModelMessageSource.CreateRestrictionViolationWarning(this);
+                message.Details.Add($"The {crystalSystem.SystemName} parameter constraints are violated.");
                 message.Details.Add($"General parameter constraint : {crystalSystem.ParameterConstraint}");
                 report.AddWarning(message);
             }

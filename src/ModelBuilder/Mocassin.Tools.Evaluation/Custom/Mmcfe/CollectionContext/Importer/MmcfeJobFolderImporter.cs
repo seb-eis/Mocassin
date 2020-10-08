@@ -117,10 +117,11 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe.Importer
                     IList<object> LocalImport()
                     {
                         var items = TryImportResult(jobMetaData, out var innerException);
-                        if (items != null)
-                            JobImportedEvent.OnNext(jobMetaData.JobModelId);
-                        else
-                            JobImportedEvent.OnError(new Exception($"Failed to import job ({jobMetaData.JobModelId}).", innerException));
+                        JobImportedEvent.OnNext(jobMetaData.JobModelId);
+                        if (items == null)
+                        {
+                            MessageEvent.OnNext($"Failed to import job ({jobMetaData.JobModelId}):\n{innerException.Message}");
+                        }
                         return items ?? new List<object>();
                     }
 
@@ -210,7 +211,7 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe.Importer
         /// <returns></returns>
         protected virtual MmcfeLogEvaluationContext GetEvaluationContext(JobMetaDataEntity metaData)
         {
-            var filePath = $"{JobFolderRootPath}\\Job{metaData.JobModelId:D5}\\mmcfelog.db";
+            var filePath = $"{JobFolderRootPath}//Job{metaData.JobModelId:D5}//mmcfelog.db";
             return MmcfeLogEvaluationContext.OpenFile(filePath);
         }
 
@@ -220,7 +221,7 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe.Importer
         /// <param name="metaData"></param>
         protected void DeleteJobFolder(JobMetaDataEntity metaData)
         {
-            var path = $"{JobFolderRootPath}\\Job{metaData.JobModelId:D5}";
+            var path = $"{JobFolderRootPath}//Job{metaData.JobModelId:D5}";
             Directory.Delete(path, true);
         }
 
@@ -230,8 +231,8 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe.Importer
         /// <param name="zipRawDatabase"></param>
         public void RunImport(bool zipRawDatabase = true)
         {
-            var rawPath = $"{JobFolderRootPath}\\mmcfe.raw.db";
-            var evalPath = $"{JobFolderRootPath}\\mmcfe.eval.db";
+            var rawPath = $"{JobFolderRootPath}//mmcfe.raw.db";
+            var evalPath = $"{JobFolderRootPath}//mmcfe.eval.db";
             using var context = SqLiteContext.OpenDatabase<MmcfeLogCollectionDbContext>(rawPath, true);
             ImportDbContext = context;
             MessageEvent.OnNext($"Starting import for '{SimulationLibraryPath}' using '{JobFolderRootPath}' as root path.");
@@ -241,7 +242,7 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe.Importer
             MessageEvent.OnNext("Eval database created.");
             if (zipRawDatabase)
             {
-                var zipPath = $"{JobFolderRootPath}\\mmcfe.raw.zip";
+                var zipPath = $"{JobFolderRootPath}//mmcfe.raw.zip";
                 ZipFile(rawPath, zipPath);
             }
 
