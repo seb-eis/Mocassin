@@ -46,14 +46,6 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
-    <ProjectReference Include="..\ICon.Framework.QuickTest\Mocassin.Framework.Test.csproj">
-      <Name>Mocassin.Framework.Test</Name>
-      <Project>{775637c2-6419-492e-b69b-9c7fcb7797d6}</Project>
-      <Private>True</Private>
-      <DoNotHarvest>True</DoNotHarvest>
-      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
-      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
-    </ProjectReference>
     <ProjectReference Include="..\ICon.Framework.Shared\Mocassin.Framework.csproj">
       <Name>Mocassin.Framework</Name>
       <Project>{7ff7b23c-2b3b-4d5e-9216-ccf920b3d707}</Project>
