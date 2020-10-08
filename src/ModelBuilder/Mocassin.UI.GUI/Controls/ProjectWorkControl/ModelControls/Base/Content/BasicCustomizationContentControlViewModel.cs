@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content.Commands;
-using Mocassin.UI.Xml.Customization;
+using Mocassin.UI.Data.Customization;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
 {

@@ -6,11 +6,11 @@ using Mocassin.UI.Base.Commands;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
 using Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content.Commands;
-using Mocassin.UI.Xml.Base;
-using Mocassin.UI.Xml.Customization;
-using Mocassin.UI.Xml.Jobs;
-using Mocassin.UI.Xml.Main;
-using Mocassin.UI.Xml.ProjectLibrary;
+using Mocassin.UI.Data.Base;
+using Mocassin.UI.Data.Customization;
+using Mocassin.UI.Data.Jobs;
+using Mocassin.UI.Data.Main;
+using Mocassin.UI.Data.ProjectLibrary;
 
 namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.ComponentBrowser
 {

@@ -4,7 +4,7 @@ using Mocassin.Framework.Extensions;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
 using Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomization.GridControl;
-using Mocassin.UI.Xml.Customization;
+using Mocassin.UI.Data.Customization;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomization.DataControl
 {

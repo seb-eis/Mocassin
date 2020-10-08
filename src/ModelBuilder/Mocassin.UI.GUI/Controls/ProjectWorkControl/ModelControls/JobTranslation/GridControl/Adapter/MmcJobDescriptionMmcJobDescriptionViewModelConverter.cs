@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 using Mocassin.UI.GUI.Base.Converter;
-using Mocassin.UI.Xml.Jobs;
+using Mocassin.UI.Data.Jobs;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslation.GridControl.Adapter
 {

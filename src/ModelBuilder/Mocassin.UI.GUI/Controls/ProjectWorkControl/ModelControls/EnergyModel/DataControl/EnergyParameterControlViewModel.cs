@@ -1,9 +1,9 @@
 ﻿using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
 using Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.GridControl;
-using Mocassin.UI.Xml.Base;
-using Mocassin.UI.Xml.EnergyModel;
-using Mocassin.UI.Xml.Main;
+using Mocassin.UI.Data.Base;
+using Mocassin.UI.Data.EnergyModel;
+using Mocassin.UI.Data.Main;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.DataControl
 {

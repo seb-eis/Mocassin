@@ -3,10 +3,10 @@ using System.Linq;
 using Mocassin.Framework.Extensions;
 using Mocassin.Mathematics.Comparer;
 using Mocassin.Mathematics.ValueTypes;
-using Mocassin.UI.Xml.Base;
-using Mocassin.UI.Xml.Customization;
+using Mocassin.UI.Data.Base;
+using Mocassin.UI.Data.Customization;
 
-namespace Mocassin.UI.Xml.Helper.Migration
+namespace Mocassin.UI.Data.Helper.Migration
 {
     /// <summary>
     ///     Migration tool that partially recycles content of <see cref="ProjectCustomizationTemplate" /> instances

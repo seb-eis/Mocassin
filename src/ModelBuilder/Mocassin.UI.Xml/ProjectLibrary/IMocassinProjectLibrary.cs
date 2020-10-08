@@ -6,9 +6,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Mocassin.Model.ModelProject;
-using Mocassin.UI.Xml.Main;
+using Mocassin.UI.Data.Main;
 
-namespace Mocassin.UI.Xml.ProjectLibrary
+namespace Mocassin.UI.Data.ProjectLibrary
 {
     /// <summary>
     ///     Represents a project library that stores all user defined data belonging to a

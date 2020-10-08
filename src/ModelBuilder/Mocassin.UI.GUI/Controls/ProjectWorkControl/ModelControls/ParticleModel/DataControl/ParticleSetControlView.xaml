@@ -5,7 +5,7 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ParticleModel.DataControl"
-  xmlns:particleModel="clr-namespace:Mocassin.UI.Xml.ParticleModel;assembly=Mocassin.UI.Xml"
+  xmlns:particleModel="clr-namespace:Mocassin.UI.Data.ParticleModel;assembly=Mocassin.UI.Data"
   xmlns:hosting="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.GridControl"
   xmlns:particleGridControl="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ParticleModel.GridControl"
   xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"

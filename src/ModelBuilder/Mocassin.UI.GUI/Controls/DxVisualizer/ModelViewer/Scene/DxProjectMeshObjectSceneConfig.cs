@@ -10,7 +10,7 @@ using Mocassin.Mathematics.Extensions;
 using Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Scene;
 using Mocassin.UI.GUI.Controls.Visualizer.Objects;
 using Mocassin.UI.GUI.Properties;
-using Mocassin.UI.Xml.Base;
+using Mocassin.UI.Data.Base;
 using SharpDX;
 using Color = System.Windows.Media.Color;
 using Matrix = SharpDX.Matrix;

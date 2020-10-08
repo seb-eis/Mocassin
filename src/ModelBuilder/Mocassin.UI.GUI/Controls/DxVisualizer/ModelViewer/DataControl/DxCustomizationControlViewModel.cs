@@ -7,8 +7,8 @@ using Mocassin.UI.GUI.Base.ViewModels.Collections;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
 using Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.DataControl.Converter;
 using Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Scene;
-using Mocassin.UI.Xml.Customization;
-using Mocassin.UI.Xml.Main;
+using Mocassin.UI.Data.Customization;
+using Mocassin.UI.Data.Main;
 
 namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.DataControl
 {

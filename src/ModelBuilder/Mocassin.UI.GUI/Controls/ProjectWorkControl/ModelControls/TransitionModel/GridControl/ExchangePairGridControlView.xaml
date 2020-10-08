@@ -7,7 +7,7 @@
   xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionModel.GridControl"
   xmlns:comboBox="clr-namespace:Mocassin.UI.GUI.Base.UiElements.ComboBox"
   xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
-  xmlns:transitionModel="clr-namespace:Mocassin.UI.Xml.TransitionModel;assembly=Mocassin.UI.Xml"
+  xmlns:transitionModel="clr-namespace:Mocassin.UI.Data.TransitionModel;assembly=Mocassin.UI.Data"
   mc:Ignorable="d"
   d:DataContext="{d:DesignInstance local:ExchangePairGridControlViewModel, IsDesignTimeCreatable=True}"
   d:DesignHeight="450" d:DesignWidth="800"

@@ -1,4 +1,4 @@
-﻿using Mocassin.UI.Xml.Jobs;
+﻿using Mocassin.UI.Data.Jobs;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslation.GridControl
 {

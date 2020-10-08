@@ -6,10 +6,10 @@ using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Particles;
 using Mocassin.UI.GUI.Controls.Base.Interfaces;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
-using Mocassin.UI.Xml.Base;
-using Mocassin.UI.Xml.Main;
-using Mocassin.UI.Xml.ParticleModel;
-using Mocassin.UI.Xml.StructureModel;
+using Mocassin.UI.Data.Base;
+using Mocassin.UI.Data.Main;
+using Mocassin.UI.Data.ParticleModel;
+using Mocassin.UI.Data.StructureModel;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureModel.DataControl
 {

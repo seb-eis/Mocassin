@@ -10,7 +10,7 @@ using Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.DataControl.Converter;
 using Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene;
 using Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Scene;
 using Mocassin.UI.GUI.Controls.Visualizer.DataControl;
-using Mocassin.UI.Xml.Main;
+using Mocassin.UI.Data.Main;
 
 namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.DataControl
 {

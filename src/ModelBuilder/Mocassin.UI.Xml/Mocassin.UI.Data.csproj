@@ -1,0 +1,45 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Platforms>AnyCPU;x64</Platforms>
+    <LangVersion>8</LangVersion>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="LatticeModel\Parameters\**" />
+    <Compile Remove="ParticleModel\Parameters\**" />
+    <Compile Remove="SimulationModel\Parameters\**" />
+    <Compile Remove="TransitionModel\Parameters\**" />
+    <EmbeddedResource Remove="LatticeModel\Parameters\**" />
+    <EmbeddedResource Remove="ParticleModel\Parameters\**" />
+    <EmbeddedResource Remove="SimulationModel\Parameters\**" />
+    <EmbeddedResource Remove="TransitionModel\Parameters\**" />
+    <None Remove="LatticeModel\Parameters\**" />
+    <None Remove="ParticleModel\Parameters\**" />
+    <None Remove="SimulationModel\Parameters\**" />
+    <None Remove="TransitionModel\Parameters\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ICon.Framework.Mathematics\Mocassin.Mathematics.csproj" />
+    <ProjectReference Include="..\ICon.Framework.Shared\Mocassin.Framework.csproj" />
+    <ProjectReference Include="..\ICon.Framework.Symmetry\Mocassin.Symmetry.csproj" />
+    <ProjectReference Include="..\ICon.Model.Translator\Mocassin.Model.Translator.csproj" />
+    <ProjectReference Include="..\ICon.Model\Mocassin.Model.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="3.1.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.6" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="System.Memory" Version="4.5.4" />
+  </ItemGroup>
+
+  <Target Name="NugetPackAutoVersioning" AfterTargets="Build" Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <Exec Command="dotnet pack -p:PackageVersion=$([System.DateTime]::Now.ToString(&quot;yyyy.MM.dd&quot;)) --no-build --configuration $(Configuration) --output &quot;$(SolutionDir)nuget" />
+  </Target>
+
+</Project>

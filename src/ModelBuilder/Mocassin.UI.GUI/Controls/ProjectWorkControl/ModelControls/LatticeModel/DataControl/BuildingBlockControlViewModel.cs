@@ -8,10 +8,10 @@ using Mocassin.Model.Structures;
 using Mocassin.Symmetry.Analysis;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
-using Mocassin.UI.Xml.Base;
-using Mocassin.UI.Xml.LatticeModel;
-using Mocassin.UI.Xml.Main;
-using Mocassin.UI.Xml.ParticleModel;
+using Mocassin.UI.Data.Base;
+using Mocassin.UI.Data.LatticeModel;
+using Mocassin.UI.Data.Main;
+using Mocassin.UI.Data.ParticleModel;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel.DataControl
 {

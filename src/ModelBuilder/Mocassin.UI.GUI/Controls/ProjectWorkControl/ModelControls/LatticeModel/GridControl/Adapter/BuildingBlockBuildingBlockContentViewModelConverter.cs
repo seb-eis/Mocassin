@@ -2,7 +2,7 @@
 using System.Globalization;
 using Mocassin.UI.GUI.Base.Converter;
 using Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel.DataControl;
-using Mocassin.UI.Xml.LatticeModel;
+using Mocassin.UI.Data.LatticeModel;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel.GridControl.Adapter
 {

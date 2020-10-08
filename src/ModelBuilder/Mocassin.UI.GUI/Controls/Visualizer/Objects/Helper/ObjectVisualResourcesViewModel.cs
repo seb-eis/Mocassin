@@ -3,7 +3,7 @@ using System.Windows.Media;
 using Mocassin.Framework.Constraints;
 using Mocassin.UI.GUI.Base.ViewModels;
 using Mocassin.UI.GUI.Properties;
-using Mocassin.UI.Xml.Base;
+using Mocassin.UI.Data.Base;
 
 namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
 {

@@ -5,7 +5,7 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.GridControl"
-  xmlns:base="clr-namespace:Mocassin.UI.Xml.Base;assembly=Mocassin.UI.Xml"
+  xmlns:base="clr-namespace:Mocassin.UI.Data.Base;assembly=Mocassin.UI.Data"
   xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
   xmlns:converter="clr-namespace:Mocassin.UI.GUI.Base.Converter"
   d:DataContext="{d:DesignInstance Type={x:Type local:HostGraphModelObjectSelectionViewModel`2}}"

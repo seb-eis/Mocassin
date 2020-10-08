@@ -1,7 +1,7 @@
 ﻿using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
 using Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuilding.DataControl;
-using Mocassin.UI.Xml.Main;
+using Mocassin.UI.Data.Main;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuilding
 {

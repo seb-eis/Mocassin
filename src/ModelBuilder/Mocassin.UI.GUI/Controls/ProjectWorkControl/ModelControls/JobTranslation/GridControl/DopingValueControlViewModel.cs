@@ -4,9 +4,9 @@ using Mocassin.Framework.Extensions;
 using Mocassin.Model.Lattices;
 using Mocassin.UI.GUI.Controls.Base.Interfaces;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
-using Mocassin.UI.Xml.Base;
-using Mocassin.UI.Xml.Jobs;
-using Mocassin.UI.Xml.Main;
+using Mocassin.UI.Data.Base;
+using Mocassin.UI.Data.Jobs;
+using Mocassin.UI.Data.Main;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslation.GridControl
 {

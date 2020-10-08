@@ -32,12 +32,11 @@ using Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper;
 using Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Scene;
 using Mocassin.UI.GUI.Controls.Visualizer.Objects;
 using Mocassin.UI.GUI.Properties;
-using Mocassin.UI.Xml.Base;
-using Mocassin.UI.Xml.Customization;
-using Mocassin.UI.Xml.Main;
-using Mocassin.UI.Xml.Model;
-using Mocassin.UI.Xml.StructureModel;
-using Mocassin.UI.Xml.TransitionModel;
+using Mocassin.UI.Data.Base;
+using Mocassin.UI.Data.Customization;
+using Mocassin.UI.Data.Main;
+using Mocassin.UI.Data.StructureModel;
+using Mocassin.UI.Data.TransitionModel;
 using SharpDX;
 using SharpDX.Direct3D11;
 

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using Mocassin.Framework.Extensions;
-using Mocassin.UI.Xml.Base;
+using Mocassin.UI.Data.Base;
 
-namespace Mocassin.UI.Xml.Helper.Migration
+namespace Mocassin.UI.Data.Helper.Migration
 {
     /// <summary>
     ///     Base class for implementations of project data migration helper tools

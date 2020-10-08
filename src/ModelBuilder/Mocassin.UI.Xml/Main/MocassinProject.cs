@@ -1,15 +1,17 @@
-﻿using System;
+﻿using Mocassin.Model.Translator;
+using Mocassin.UI.Data.Base;
+using Mocassin.UI.Data.Customization;
+using Mocassin.UI.Data.Jobs;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Reflection;
+using System.Runtime.Serialization;
 using System.Xml.Serialization;
-using Mocassin.Model.Translator;
-using Mocassin.UI.Xml.Base;
-using Mocassin.UI.Xml.Customization;
-using Mocassin.UI.Xml.Jobs;
-using Mocassin.UI.Xml.Model;
-using Newtonsoft.Json;
 
-namespace Mocassin.UI.Xml.Main
+namespace Mocassin.UI.Data.Main
 {
     /// <summary>
     ///     The main project data root for a Mocassin project data and database creation instructions
@@ -24,6 +26,7 @@ namespace Mocassin.UI.Xml.Main
         private ProjectModelData projectModelData;
         private ResourcesData resources;
         private ObservableCollection<SimulationDbBuildTemplate> simulationDbBuildTemplates;
+        private string version = "0.0.0.0";
 
         /// <summary>
         ///     Get or set a Guid for the project
@@ -33,6 +36,16 @@ namespace Mocassin.UI.Xml.Main
         {
             get => projectGuid;
             set => SetProperty(ref projectGuid, value);
+        }
+
+        /// <summary>
+        ///     Get or set the affiliated GUI version string
+        /// </summary>
+        [XmlAttribute, NotMapped]
+        public string Version
+        {
+            get => version;
+            set => SetProperty(ref version, value);
         }
 
         /// <summary>
@@ -144,6 +157,7 @@ namespace Mocassin.UI.Xml.Main
             {
                 ProjectGuid = guid,
                 ProjectName = "New project",
+                Version = Assembly.GetCallingAssembly().GetName().Version.ToString(),
                 ProjectModelData = ProjectModelData.CreateNew()
             };
 
@@ -155,6 +169,8 @@ namespace Mocassin.UI.Xml.Main
         /// <inheritdoc />
         public override void FromJson(string json, JsonSerializerSettings serializerSettings = null)
         {
+            serializerSettings ??= GetDefaultJsonSerializerSettings();
+            serializerSettings.SerializationBinder = new MocassinProjectSerializationBinder();
             base.FromJson(json, serializerSettings);
             RestoreParentReferences();
         }

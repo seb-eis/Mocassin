@@ -2,8 +2,8 @@
 using Mocassin.UI.GUI.Controls.Base.Interfaces;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
 using Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomization.DataControl;
-using Mocassin.UI.Xml.Customization;
-using Mocassin.UI.Xml.Main;
+using Mocassin.UI.Data.Customization;
+using Mocassin.UI.Data.Main;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomization
 {

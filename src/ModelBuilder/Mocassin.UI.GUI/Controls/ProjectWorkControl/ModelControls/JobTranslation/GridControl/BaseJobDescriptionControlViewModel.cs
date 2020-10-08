@@ -5,7 +5,7 @@ using Mocassin.Model.Translator;
 using Mocassin.Model.Translator.Jobs;
 using Mocassin.UI.Base.Commands;
 using Mocassin.UI.GUI.Base.ViewModels;
-using Mocassin.UI.Xml.Jobs;
+using Mocassin.UI.Data.Jobs;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslation.GridControl
 {

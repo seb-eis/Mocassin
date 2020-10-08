@@ -12,8 +12,8 @@ using Mocassin.UI.GUI.Base.ViewModels;
 using Mocassin.UI.GUI.Base.ViewModels.Collections;
 using Mocassin.UI.GUI.Controls.Base.IO;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
-using Mocassin.UI.Xml.Main;
-using Mocassin.UI.Xml.ProjectBuilding;
+using Mocassin.UI.Data.Helper;
+using Mocassin.UI.Data.Main;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuilding.DataControl
 {

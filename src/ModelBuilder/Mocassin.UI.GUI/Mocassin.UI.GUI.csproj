@@ -1306,9 +1306,9 @@
       <Project>{5d8aa57a-a682-48cc-9007-37107bad6929}</Project>
       <Name>Mocassin.Tools.UAccess</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mocassin.UI.Xml\Mocassin.UI.Xml.csproj">
+    <ProjectReference Include="..\Mocassin.UI.Xml\Mocassin.UI.Data.csproj">
       <Project>{0027a849-0a7c-48f6-8575-434e165f10b0}</Project>
-      <Name>Mocassin.UI.Xml</Name>
+      <Name>Mocassin.UI.Data</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

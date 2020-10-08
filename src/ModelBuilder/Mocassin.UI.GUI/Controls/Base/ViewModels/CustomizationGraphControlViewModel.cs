@@ -1,6 +1,6 @@
 ﻿using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Controls.Base.Interfaces;
-using Mocassin.UI.Xml.Customization;
+using Mocassin.UI.Data.Customization;
 
 namespace Mocassin.UI.GUI.Controls.Base.ViewModels
 {

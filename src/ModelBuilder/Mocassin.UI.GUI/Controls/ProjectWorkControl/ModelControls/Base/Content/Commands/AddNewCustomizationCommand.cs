@@ -4,8 +4,8 @@ using System.Windows;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Controls.Base.Commands;
 using Mocassin.UI.GUI.Logic.Validation;
-using Mocassin.UI.Xml.Customization;
-using Mocassin.UI.Xml.Main;
+using Mocassin.UI.Data.Customization;
+using Mocassin.UI.Data.Main;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content.Commands
 {

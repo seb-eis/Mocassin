@@ -7,10 +7,10 @@ using Mocassin.Model.Structures;
 using Mocassin.UI.GUI.Controls.Base.Interfaces;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
 using Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel.DataControl;
-using Mocassin.UI.Xml.Base;
-using Mocassin.UI.Xml.LatticeModel;
-using Mocassin.UI.Xml.ParticleModel;
-using Mocassin.UI.Xml.StructureModel;
+using Mocassin.UI.Data.Base;
+using Mocassin.UI.Data.LatticeModel;
+using Mocassin.UI.Data.ParticleModel;
+using Mocassin.UI.Data.StructureModel;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel.GridControl
 {

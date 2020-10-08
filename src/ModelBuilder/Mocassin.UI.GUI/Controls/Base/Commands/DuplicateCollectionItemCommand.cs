@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Mocassin.UI.Base.Commands;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
-using Mocassin.UI.Xml.Base;
+using Mocassin.UI.Data.Base;
 
 namespace Mocassin.UI.GUI.Controls.Base.Commands
 {

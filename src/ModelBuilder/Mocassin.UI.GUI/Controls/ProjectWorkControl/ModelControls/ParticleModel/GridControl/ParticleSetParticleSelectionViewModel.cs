@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using Mocassin.Model.Particles;
 using Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.GridControl;
-using Mocassin.UI.Xml.Base;
-using Mocassin.UI.Xml.Main;
-using Mocassin.UI.Xml.ParticleModel;
+using Mocassin.UI.Data.Base;
+using Mocassin.UI.Data.Main;
+using Mocassin.UI.Data.ParticleModel;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ParticleModel.GridControl
 {

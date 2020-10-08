@@ -1,7 +1,7 @@
 ﻿using System;
 using Mocassin.Symmetry.CrystalSystems;
 using Mocassin.UI.GUI.Base.ViewModels;
-using Mocassin.UI.Xml.StructureModel;
+using Mocassin.UI.Data.StructureModel;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureModel.Adapter
 {

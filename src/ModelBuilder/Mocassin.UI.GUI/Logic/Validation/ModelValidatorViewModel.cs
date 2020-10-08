@@ -6,10 +6,10 @@ using Mocassin.Framework.Operations;
 using Mocassin.Model.ModelProject;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
-using Mocassin.UI.Xml.Customization;
-using Mocassin.UI.Xml.Helper;
-using Mocassin.UI.Xml.Main;
-using Mocassin.UI.Xml.Model;
+using Mocassin.UI.Data.Base;
+using Mocassin.UI.Data.Customization;
+using Mocassin.UI.Data.Helper;
+using Mocassin.UI.Data.Main;
 
 namespace Mocassin.UI.GUI.Logic.Validation
 {

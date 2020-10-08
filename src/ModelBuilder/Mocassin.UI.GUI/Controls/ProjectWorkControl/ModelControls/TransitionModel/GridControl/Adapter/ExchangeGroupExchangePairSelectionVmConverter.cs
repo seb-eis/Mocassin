@@ -1,7 +1,7 @@
 ﻿using Mocassin.UI.GUI.Controls.Base.Interfaces;
 using Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.GridControl;
-using Mocassin.UI.Xml.Main;
-using Mocassin.UI.Xml.TransitionModel;
+using Mocassin.UI.Data.Main;
+using Mocassin.UI.Data.TransitionModel;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionModel.GridControl.Adapter
 {

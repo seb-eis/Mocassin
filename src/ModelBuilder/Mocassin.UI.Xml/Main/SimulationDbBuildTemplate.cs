@@ -1,13 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Xml.Serialization;
-using Mocassin.UI.Xml.Base;
-using Mocassin.UI.Xml.Customization;
-using Mocassin.UI.Xml.Jobs;
-using Mocassin.UI.Xml.Model;
+using Mocassin.UI.Data.Base;
+using Mocassin.UI.Data.Customization;
+using Mocassin.UI.Data.Jobs;
 using Newtonsoft.Json;
 
-namespace Mocassin.UI.Xml.Main
+namespace Mocassin.UI.Data.Main
 {
     /// <summary>
     ///     The main project data root for a Mocassin project building and database creation instructions

@@ -6,7 +6,7 @@ using HelixToolkit.Wpf.SharpDX.Model.Scene;
 using Mocassin.Mathematics.Extensions;
 using Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Scene;
 using Mocassin.UI.GUI.Controls.Visualizer.Objects;
-using Mocassin.UI.Xml.Base;
+using Mocassin.UI.Data.Base;
 
 namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
 {

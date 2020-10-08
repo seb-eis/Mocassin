@@ -1,5 +1,5 @@
 ﻿using Mocassin.UI.GUI.Base.ViewModels;
-using Mocassin.UI.Xml.Helper.Migration;
+using Mocassin.UI.Data.Helper.Migration;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.Reports
 {

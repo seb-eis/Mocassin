@@ -9,9 +9,9 @@ using Mocassin.UI.GUI.Base.ViewModels.Collections;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
 using Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.OperationConsole.Commands;
 using Mocassin.UI.GUI.Logic.Validation;
-using Mocassin.UI.Xml.Main;
-using Mocassin.UI.Xml.Model;
-using Mocassin.UI.Xml.ProjectLibrary;
+using Mocassin.UI.Data.Base;
+using Mocassin.UI.Data.Main;
+using Mocassin.UI.Data.ProjectLibrary;
 
 namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.OperationConsole
 {

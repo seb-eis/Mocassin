@@ -11,8 +11,8 @@ using Mocassin.UI.GUI.Controls.ProjectMenuBar;
 using Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager;
 using Mocassin.UI.GUI.Controls.ProjectStatusBar;
 using Mocassin.UI.GUI.Controls.ProjectWorkControl;
-using Mocassin.UI.Xml.Main;
-using Mocassin.UI.Xml.ProjectLibrary;
+using Mocassin.UI.Data.Main;
+using Mocassin.UI.Data.ProjectLibrary;
 
 namespace Mocassin.UI.GUI.Base.DataContext
 {

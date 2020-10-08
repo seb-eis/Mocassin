@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mocassin.Model.Translator",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{D5294D0A-1EA9-48C4-8C3C-7D74EEDEC5C1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mocassin.UI.Xml", "Mocassin.UI.Xml\Mocassin.UI.Xml.csproj", "{0027A849-0A7C-48F6-8575-434E165F10B0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mocassin.UI.Data", "Mocassin.UI.Xml\Mocassin.UI.Data.csproj", "{0027A849-0A7C-48F6-8575-434E165F10B0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mocassin.UI.GUI", "Mocassin.UI.GUI\Mocassin.UI.GUI.csproj", "{A285693F-C766-4534-BF8A-66F733550783}"
 EndProject

@@ -3,9 +3,9 @@ using System.Linq;
 using Mocassin.Model.Transitions;
 using Mocassin.UI.GUI.Controls.Base.Interfaces;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
-using Mocassin.UI.Xml.Base;
-using Mocassin.UI.Xml.Main;
-using Mocassin.UI.Xml.TransitionModel;
+using Mocassin.UI.Data.Base;
+using Mocassin.UI.Data.Main;
+using Mocassin.UI.Data.TransitionModel;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionModel.GridControl
 {

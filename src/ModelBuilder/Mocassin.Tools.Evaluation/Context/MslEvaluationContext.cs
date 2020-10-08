@@ -9,8 +9,8 @@ using Mocassin.Model.ModelProject;
 using Mocassin.Model.Translator;
 using Mocassin.Model.Translator.ModelContext;
 using Mocassin.Tools.Evaluation.Queries;
-using Mocassin.UI.Xml.Base;
-using Mocassin.UI.Xml.Main;
+using Mocassin.UI.Data.Base;
+using Mocassin.UI.Data.Main;
 
 namespace Mocassin.Tools.Evaluation.Context
 {

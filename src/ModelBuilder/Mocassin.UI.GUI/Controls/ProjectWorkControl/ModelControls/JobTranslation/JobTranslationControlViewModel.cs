@@ -2,8 +2,8 @@
 using Mocassin.UI.GUI.Controls.Base.Interfaces;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
 using Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslation.DataControl;
-using Mocassin.UI.Xml.Jobs;
-using Mocassin.UI.Xml.Main;
+using Mocassin.UI.Data.Jobs;
+using Mocassin.UI.Data.Main;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslation
 {

@@ -11,7 +11,7 @@ using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Base.ViewModels;
 using Mocassin.UI.GUI.Base.ViewModels.JsonBrowser;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
-using Mocassin.UI.Xml.ProjectLibrary;
+using Mocassin.UI.Data.ProjectLibrary;
 using Newtonsoft.Json;
 
 namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.DataBrowser

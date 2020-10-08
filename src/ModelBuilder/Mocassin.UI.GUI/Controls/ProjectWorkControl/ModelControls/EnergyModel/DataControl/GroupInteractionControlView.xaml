@@ -6,7 +6,7 @@
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.DataControl"
   xmlns:comboBox="clr-namespace:Mocassin.UI.GUI.Base.UiElements.ComboBox"
-  xmlns:energyModel="clr-namespace:Mocassin.UI.Xml.EnergyModel;assembly=Mocassin.UI.Xml"
+  xmlns:energyModel="clr-namespace:Mocassin.UI.Data.EnergyModel;assembly=Mocassin.UI.Data"
   xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
   d:DataContext="{d:DesignInstance local:GroupInteractionControlViewModel, IsDesignTimeCreatable=True}"
   mc:Ignorable="d"

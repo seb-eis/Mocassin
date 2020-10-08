@@ -3,7 +3,7 @@ using Mocassin.UI.GUI.Base.ViewModels.Tabs;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
 using Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.ComponentBrowser;
 using Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.DataBrowser;
-using Mocassin.UI.Xml.Main;
+using Mocassin.UI.Data.Main;
 
 namespace Mocassin.UI.GUI.Controls.ProjectBrowser
 {

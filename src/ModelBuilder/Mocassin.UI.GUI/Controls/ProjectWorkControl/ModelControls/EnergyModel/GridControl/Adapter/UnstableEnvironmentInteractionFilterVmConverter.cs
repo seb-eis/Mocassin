@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Globalization;
 using Mocassin.UI.GUI.Base.Converter;
-using Mocassin.UI.Xml.EnergyModel;
-using Mocassin.UI.Xml.Main;
+using Mocassin.UI.Data.EnergyModel;
+using Mocassin.UI.Data.Main;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.GridControl.Adapter
 {

@@ -7,7 +7,7 @@ using Mocassin.Framework.Extensions;
 using Mocassin.Mathematics.Extensions;
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.UI.GUI.Base.ViewModels;
-using Mocassin.UI.Xml.Base;
+using Mocassin.UI.Data.Base;
 
 namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
 {

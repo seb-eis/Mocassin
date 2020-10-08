@@ -2,8 +2,8 @@
 using System.Globalization;
 using Mocassin.UI.GUI.Base.Converter;
 using Mocassin.UI.GUI.Controls.Base.Interfaces;
-using Mocassin.UI.Xml.Base;
-using Mocassin.UI.Xml.Main;
+using Mocassin.UI.Data.Base;
+using Mocassin.UI.Data.Main;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.GridControl
 {

@@ -1,6 +1,6 @@
-﻿using Mocassin.UI.Xml.Base;
+﻿using Mocassin.UI.Data.Base;
 
-namespace Mocassin.UI.Xml.Helper.Migration
+namespace Mocassin.UI.Data.Helper.Migration
 {
     /// <summary>
     ///     Represents a single entry of a <see cref="MigrationReport" /> that informs about a single data migration success

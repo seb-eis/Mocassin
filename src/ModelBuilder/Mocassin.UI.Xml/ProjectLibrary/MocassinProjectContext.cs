@@ -8,9 +8,9 @@ using Mocassin.Framework.Events;
 using Mocassin.Framework.SQLiteCore;
 using Mocassin.Model.DataManagement;
 using Mocassin.Model.ModelProject;
-using Mocassin.UI.Xml.Main;
+using Mocassin.UI.Data.Main;
 
-namespace Mocassin.UI.Xml.ProjectLibrary
+namespace Mocassin.UI.Data.ProjectLibrary
 {
     /// <summary>
     ///     The <see cref="DbContext" /> for the <see cref="IMocassinProjectLibrary" /> that stores user project data

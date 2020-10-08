@@ -4,8 +4,8 @@ using System.Windows;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Controls.Base.Commands;
 using Mocassin.UI.GUI.Controls.ProjectWorkControl.Reports;
-using Mocassin.UI.Xml.Customization;
-using Mocassin.UI.Xml.Helper.Migration;
+using Mocassin.UI.Data.Customization;
+using Mocassin.UI.Data.Helper.Migration;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content.Commands
 {
