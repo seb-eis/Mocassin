@@ -384,6 +384,7 @@
     <Compile Include="Controls\DxVisualizer\Viewport\Helper\DxSceneBuilder.cs" />
     <Compile Include="Controls\DxVisualizer\Extensions\DxViewportExtensions.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\Commands\MigrateCustomizationCommand.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ProjectBuilding\DataControl\SimulationDbDeployMode.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\GridControl\TransitionMechanismViewModel.cs" />
     <Compile Include="Controls\ProjectWorkControl\Reports\MigrationReportView.xaml.cs">
       <DependentUpon>MigrationReportView.xaml</DependentUpon>
@@ -1056,7 +1057,6 @@
     <Compile Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\ModelCustomizationControlViewModel.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\ProjectBuilding\DataControl\Converter\BuildStatusVisibilityConverter.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\ProjectBuilding\DataControl\Converter\BuildStatusIsIndeterminateConverter.cs" />
-    <Compile Include="Controls\ProjectWorkControl\ModelControls\ProjectBuilding\DataControl\Objects\LocalProjectDeployData.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\ProjectBuilding\DataControl\ProjectBuildGraphControlView.xaml.cs">
       <DependentUpon>ProjectBuildGraphControlView.xaml</DependentUpon>
     </Compile>

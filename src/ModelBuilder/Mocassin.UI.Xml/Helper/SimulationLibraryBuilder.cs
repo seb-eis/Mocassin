@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using Mocassin.Framework.Events;
+using Mocassin.Framework.Extensions;
 using Mocassin.Framework.SQLiteCore;
 using Mocassin.Model.ModelProject;
 using Mocassin.Model.Translator;
@@ -29,7 +30,12 @@ namespace Mocassin.UI.Data.Helper
         /// <summary>
         ///     Get or set a boolean flag if the builder should save the context after the process
         /// </summary>
-        public bool IsAutoSaveAfterBuild { get; set; }
+        public bool IsSaveAfterBuildActive { get; set; }
+
+        /// <summary>
+        ///     Get or set a boolean flag if the data should be appended to an existing database
+        /// </summary>
+        public bool IsAppendModeActive { get; set; }
 
         /// <summary>
         ///     Get or set the <see cref="CancellationToken" /> for the build process
@@ -102,7 +108,7 @@ namespace Mocassin.UI.Data.Helper
                     return null;
                 if (CheckCancel() || !TryBuildModelContext(modelProject, out var modelContext))
                     return null;
-                if (CheckCancel() || !TryBuildLibraryContent(modelContext, simulationDbBuildTemplate.ProjectJobSetTemplate, out var jobPackageModels))
+                if (CheckCancel() || !TryBuildLibraryContent(modelContext, simulationDbBuildTemplate.ProjectJobSetTemplate, simulationDbBuildTemplate.Name, out var jobPackageModels))
                     return null;
                 if (CheckCancel() || !TryAddBuildMetaData(jobPackageModels, simulationDbBuildTemplate))
                     return null;
@@ -221,7 +227,9 @@ namespace Mocassin.UI.Data.Helper
 
             try
             {
-                dbContext = SqLiteContext.OpenDatabase<SimulationDbContext>(filePath, true);
+                dbContext = IsAppendModeActive 
+                    ? SqLiteContext.OpenOrCreateDatabase<SimulationDbContext>(filePath) 
+                    : SqLiteContext.OpenDatabase<SimulationDbContext>(filePath, true);
                 return true;
             }
             catch (Exception exception)
@@ -239,10 +247,11 @@ namespace Mocassin.UI.Data.Helper
         ///     <see cref="ProjectJobSetTemplate" /> using the provided <see cref="IProjectModelContext" />
         /// </summary>
         /// <param name="modelContext"></param>
-        /// <param name="jobTranslation"></param>
+        /// <param name="jobSetTemplate"></param>
+        /// <param name="description"></param>
         /// <param name="jobPackageModels"></param>
         /// <returns></returns>
-        private bool TryBuildLibraryContent(IProjectModelContext modelContext, ProjectJobSetTemplate jobTranslation,
+        private bool TryBuildLibraryContent(IProjectModelContext modelContext, ProjectJobSetTemplate jobSetTemplate, string description,
             out IList<SimulationJobPackageModel> jobPackageModels)
         {
             BuildStatusEvent.OnNext(LibraryBuildStatus.BuildingLibrary);
@@ -250,12 +259,12 @@ namespace Mocassin.UI.Data.Helper
             try
             {
                 BuildCounter = 0;
-                var totalJobCount = jobTranslation.GetTotalJobCount(modelContext.ModelProject);
-                jobPackageModels = jobTranslation.ToInternals(modelContext.ModelProject)
+                var totalJobCount = jobSetTemplate.GetTotalJobCount(modelContext.ModelProject);
+                jobPackageModels = jobSetTemplate.ToInternals(modelContext.ModelProject)
                                                  .Select(jobs => GetPreparedJobBuilder(modelContext, jobs, totalJobCount)
                                                      .BuildJobPackageModel(jobs, CancellationToken))
                                                  .ToList();
-
+                jobPackageModels.Action(model => model.Description = description).Load();
                 return true;
             }
             catch (Exception exception)
@@ -283,7 +292,7 @@ namespace Mocassin.UI.Data.Helper
             try
             {
                 dbContext.AddRange(jobPackageModels);
-                if (!IsAutoSaveAfterBuild) return true;
+                if (!IsSaveAfterBuildActive) return true;
                 dbContext.SaveChanges();
                 return true;
             }

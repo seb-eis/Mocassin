@@ -69,7 +69,7 @@ From this data, the system automatically creates a list off all existing pair in
 
 ### [Unstable environments](#unstable-environments)
 
-Unstable environments provide the same model information as the stable environment. However, it is possible to define one environment per unstable site as *unstable-stable* interactions exist only as a purely additive component to the [transition state energy](./transition-model.md) $E_1$.
+Unstable environments provide the same model information as the stable environment. However, it is possible to define one environment per unstable site as *unstable-stable* interactions exist only as a purely additive component to the [transition state energy](./transition-model.md) $E_1$ as shown in (4).
 
 ### [Interaction cluster](#group-interaction)
 

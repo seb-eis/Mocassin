@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -67,6 +68,24 @@ namespace Mocassin.Framework.SQLiteCore
                 throw new InvalidOperationException("Requested database does not exist.");
 
             return context;
+        }
+
+        /// <summary>
+        ///     Opens an existing <see cref="DbContext"/> or creates the database if required
+        /// </summary>
+        /// <typeparam name="TContext"></typeparam>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        public static TContext OpenOrCreateDatabase<TContext>(string filePath) where TContext : SqLiteContext
+        {
+            if (filePath == null) throw new ArgumentNullException(nameof(filePath));
+
+            var context = (TContext) Activator.CreateInstance(typeof(TContext), $"Filename={filePath}");
+            context.FileName = filePath;
+
+            if (context.GetService<IRelationalDatabaseCreator>().Exists()) return context;
+            context.Dispose();
+            return OpenDatabase<TContext>(filePath, true);
         }
 
         /// <summary>

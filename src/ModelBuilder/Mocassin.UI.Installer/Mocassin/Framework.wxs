@@ -54,11 +54,11 @@
               Name="Mocassin.Tools.UAccess.dll"
               KeyPath="yes" />
       </Component>
-      <Component Id="Mocassin.UI.Xml.dll" 
+      <Component Id="Mocassin.UI.Data.dll" 
                  Win64="yes" 
                  Guid="7d1fadf7-b6c7-4a0f-9085-c5e352e1112b">
-        <File Id="Mocassin.UI.Xml.dll" 
-              Name="Mocassin.UI.Xml.dll" 
+        <File Id="Mocassin.UI.Data.dll" 
+              Name="Mocassin.UI.Data.dll" 
               KeyPath="yes"/>
       </Component>
     </ComponentGroup>

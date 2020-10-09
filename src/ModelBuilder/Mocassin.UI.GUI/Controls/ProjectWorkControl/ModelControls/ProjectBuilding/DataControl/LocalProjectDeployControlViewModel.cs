@@ -26,8 +26,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
         private LibraryBuildStatus buildStatus;
         private string buildTargetFilePath;
         private int doneJobs;
-        private bool isManualLibrarySaving;
         private int maxJobs;
+        private SimulationDbDeployMode deployMode;
 
         /// <summary>
         ///     Get or set the last build <see cref="ISimulationLibrary" />
@@ -104,12 +104,12 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
         }
 
         /// <summary>
-        ///     Get or set a boolean flag if the library saving should be done manually
+        ///     Get or set the <see cref="SimulationDbDeployMode"/>
         /// </summary>
-        public bool IsManualLibrarySaving
+        public SimulationDbDeployMode DeployMode
         {
-            get => isManualLibrarySaving;
-            set => SetProperty(ref isManualLibrarySaving, value);
+            get => deployMode;
+            set => SetProperty(ref deployMode, value);
         }
 
         /// <summary>
@@ -134,7 +134,6 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
             JobMetaDataCollectionControlViewModel = new ObservableCollectionViewModel<JobMetaDataEntity>();
             PropertyChanged += OnLibraryStatusChanged;
             CancelCurrentBuildCommand = GetCancelBuildCommand();
-            ManualSaveLastLibraryCommand = GetManualSaveLibraryCommand();
             AddConsoleMessage(GetStartupMessage());
         }
 
@@ -143,41 +142,6 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
         {
             ContentSource = contentSource;
             ProjectBuildGraphCollectionViewModel.SetCollection(contentSource?.SimulationDbBuildTemplates);
-        }
-
-        /// <summary>
-        ///     Get a <see cref="AsyncRelayCommand" /> to manually save the last <see cref="ISimulationLibrary" /> to its target
-        ///     file
-        /// </summary>
-        /// <returns></returns>
-        private AsyncRelayCommand GetManualSaveLibraryCommand()
-        {
-            void Execute()
-            {
-                BuildStatus = LibraryBuildStatus.SavingLibraryContents;
-                try
-                {
-                    AddConsoleMessage("Changing database journal mode to WAL.");
-                    BuildSimulationLibrary.SetJournalMode(DbJournalMode.Wal);
-                    BuildSimulationLibrary.SaveChanges();
-                    AddConsoleMessage("Reloading meta information table.");
-                    JobMetaDataCollectionControlViewModel.Clear();
-                    JobMetaDataCollectionControlViewModel.AddItems(BuildSimulationLibrary.JobMetaData.Local);
-                    AddConsoleMessage("Changing database journal mode to DELETE.");
-                    BuildSimulationLibrary.SetJournalMode(DbJournalMode.Delete);
-                }
-                catch (Exception exception)
-                {
-                    Console.WriteLine(exception);
-                    AddConsoleError(exception);
-                }
-
-                BuildStatus = LibraryBuildStatus.Unknown;
-            }
-
-            bool CanExecute() => BuildSimulationLibrary != null;
-
-            return new AsyncRelayCommand(() => Task.Run(Execute), CanExecute);
         }
 
         /// <summary>
@@ -224,7 +188,11 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
         {
             BuildCancellationTokenSource = new CancellationTokenSource();
             AddConsoleMessage($"Deployment start: {BuildTargetFilePath}");
-            using var builder = new SimulationLibraryBuilder {IsAutoSaveAfterBuild = !IsManualLibrarySaving};
+            using var builder = new SimulationLibraryBuilder
+            {
+                IsSaveAfterBuildActive = true, 
+                IsAppendModeActive = DeployMode == SimulationDbDeployMode.Append
+            };
             EnsureBuildLibraryUnloaded();
             JobMetaDataCollectionControlViewModel.Clear();
 
@@ -239,10 +207,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
             {
                 AddConsoleMessage("Loading meta information table.");
                 JobMetaDataCollectionControlViewModel.AddItems(BuildSimulationLibrary.JobMetaData.Local.Action(x => x.JobModel = null));
-                AddConsoleMessage($"Successfully created at [{(IsManualLibrarySaving ? "MEMORY" : BuildTargetFilePath)}]");
-
-                if (IsManualLibrarySaving) return;
-
+                AddConsoleMessage($"Successfully modified [{BuildTargetFilePath}] ({DeployMode})");
                 AddConsoleMessage("Changing database journal mode to DELETE and cleaning up.");
                 BuildSimulationLibrary.SetJournalMode(DbJournalMode.Delete);
                 EnsureBuildLibraryUnloaded();
