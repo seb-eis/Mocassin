@@ -15,7 +15,7 @@ namespace Mocassin.UI.Data.ProjectLibrary
     /// <summary>
     ///     The <see cref="DbContext" /> for the <see cref="IMocassinProjectLibrary" /> that stores user project data
     /// </summary>
-    public sealed class MocassinProjectContext : SqLiteContext<MocassinProjectContext>, IMocassinProjectLibrary
+    public sealed class MocassinProjectContext : SqLiteContext, IMocassinProjectLibrary
     {
         private readonly object lockObject = new object();
         private bool isDisposed;

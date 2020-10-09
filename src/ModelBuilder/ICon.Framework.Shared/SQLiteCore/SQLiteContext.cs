@@ -133,18 +133,4 @@ namespace Mocassin.Framework.SQLiteCore
         public static ReadOnlyDbContext OpenDatabaseAsReadOnly<TContext>(string filePath) where TContext : SqLiteContext =>
             OpenDatabase<TContext>(filePath).AsReadOnly();
     }
-
-    /// <summary>
-    ///     An abstract generic SQLite EFCore context class that supports the ICon context provider system and ensures that the
-    ///     database is created
-    /// </summary>
-    /// <typeparam name="T1"></typeparam>
-    public abstract class SqLiteContext<T1> : SqLiteContext where T1 : SqLiteContext
-    {
-        /// <inheritdoc />
-        protected SqLiteContext(string optionsBuilderParameterString)
-            : base(optionsBuilderParameterString)
-        {
-        }
-    }
 }

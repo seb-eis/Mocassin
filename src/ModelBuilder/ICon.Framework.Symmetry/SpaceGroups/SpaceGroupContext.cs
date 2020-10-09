@@ -4,9 +4,9 @@ using Mocassin.Framework.SQLiteCore;
 namespace Mocassin.Symmetry.SpaceGroups
 {
     /// <summary>
-    ///     The <see cref="SqLiteContext{T1}" /> for a <see cref="SpaceGroupEntity" /> database
+    ///     The <see cref="SqLiteContext" /> for a <see cref="SpaceGroupEntity" /> database
     /// </summary>
-    public sealed class SpaceGroupContext : SqLiteContext<SpaceGroupContext>
+    public sealed class SpaceGroupContext : SqLiteContext
     {
         /// <summary>
         ///     The <see cref="DbSet{TEntity}" /> of <see cref="SpaceGroupEntity" /> instances

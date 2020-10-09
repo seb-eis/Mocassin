@@ -3,7 +3,7 @@
 namespace Mocassin.Framework.SQLiteCore
 {
     /// <inheritdoc />
-    public abstract class SqLiteContextSource<T1> : ISqLiteContextSource<T1> where T1 : SqLiteContext<T1>
+    public abstract class SqLiteContextSource<T1> : ISqLiteContextSource<T1> where T1 : SqLiteContext
     {
         /// <summary>
         ///     The default filepath for the context database

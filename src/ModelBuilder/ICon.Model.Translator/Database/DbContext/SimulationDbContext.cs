@@ -6,7 +6,7 @@ using Mocassin.Model.Translator.Database.Entities.Other.Meta;
 namespace Mocassin.Model.Translator
 {
     /// <inheritdoc cref="ISimulationLibrary" />
-    public sealed class SimulationDbContext : SqLiteContext<SimulationDbContext>, ISimulationLibrary
+    public sealed class SimulationDbContext : SqLiteContext, ISimulationLibrary
     {
         /// <inheritdoc />
         public DbSet<SimulationJobPackageModel> SimulationPackages { get; set; }

@@ -4,9 +4,9 @@ using Mocassin.Framework.SQLiteCore;
 namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
 {
     /// <summary>
-    ///     The <see cref="SqLiteContext{T1}" /> for MMCFE routine log databases
+    ///     The <see cref="SqLiteContext" /> for MMCFE routine log databases
     /// </summary>
-    public class MmcfeLogDbContext : SqLiteContext<MmcfeLogDbContext>
+    public class MmcfeLogDbContext : SqLiteContext
     {
         /// <summary>
         ///     Get or set the <see cref="DbSet{TEntity}" /> of <see cref="MmcfeLogEntry" />

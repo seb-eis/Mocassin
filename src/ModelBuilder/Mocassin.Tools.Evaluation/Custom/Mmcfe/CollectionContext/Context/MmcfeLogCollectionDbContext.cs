@@ -6,9 +6,9 @@ using Mocassin.Framework.SQLiteCore;
 namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
 {
     /// <summary>
-    ///     Represents a <see cref="SqLiteContext{T1}" /> for large MMCFE log collection databases with result and meta data
+    ///     Represents a <see cref="SqLiteContext" /> for large MMCFE log collection databases with result and meta data
     /// </summary>
-    public class MmcfeLogCollectionDbContext : SqLiteContext<MmcfeLogCollectionDbContext>
+    public class MmcfeLogCollectionDbContext : SqLiteContext
     {
         /// <summary>
         ///     Get or set the <see cref="DbSet{TEntity}" /> of <see cref="MmcfeExtendedLogEntry" /> that store the routine results
