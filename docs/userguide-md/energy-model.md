@@ -71,10 +71,20 @@ From this data, the system automatically creates a list off all existing pair in
 
 Unstable environments provide the same model information as the stable environment. However, it is possible to define one environment per unstable site as *unstable-stable* interactions exist only as a purely additive component to the [transition state energy](./transition-model.md) $E_1$ as shown in (4).
 
-### [Interaction cluster](#group-interaction)
+### [Interaction clusters](#group-interaction)
+
+Interaction clusters describe complex multi-body interactions with an origin point, also called center, and up-to eight "surrounding" positions. The origin point must be any of the reference sites added to the [structure model](./structure-model.md) and the surrounding positions are defined as a list of absolute $(a,b,c)$ vectors. The geometry of a cluster is symmetry extended and permuted as an entity. Thus, cluster occupation permutations that can be mapped onto each other using the symmetry operations of the selected space group are treated as equivalent, that is, they cannot have distinct energy contributions.
+
+It is important to note that clusters only affect the energy of the site that is defined as the origin point. To get the same cluster from any of the surrounding positions, it is required to define the cluster with that position as the new origin site.
 
 ### [Site energies](#site-energies)
+
+Site energies allow to offset the energy of a positions based on the occupation, by default all site energies are set to 0 eV. The most basic usage is to define a fixed migration barrier by setting a mobile species on an unstable site to the barrier energy.
 
 ## Model examples
 
 ### [Ceria](#ceria)
+
+To define a very simple energy landscape for oxygen migration KMC in ceria, the following steps are required:
+1. Define a non-zero interaction range for the stable environment that is at least the closest distance between a cerium and an oxygen position
+2. An example for a valid cluster uses the previously defined unstable oxygen migration site as the origin point with $(0.5, 0.5, 0)$ and $(0.5, 0, 0.5)$ as the surrounding positions. This gives the "migration edge" as desribed in the [original publication](http://dx.doi.org/10.1002/jcc.26418).

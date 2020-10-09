@@ -29,7 +29,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mocassin.Tools.UAccess", "M
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mocassin.Tools.Evaluation", "Mocassin.Tools.Evaluation\Mocassin.Tools.Evaluation.csproj", "{9F90B935-B51B-4E4A-AA5B-B7C84E985158}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Installer", "Installer", "{ED2C8388-53D5-483D-9D42-47C79E569266}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Publish", "Publish", "{ED2C8388-53D5-483D-9D42-47C79E569266}"
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Mocassin.UI.Installer", "Mocassin.UI.Installer\Mocassin.UI.Installer.wixproj", "{A7AC55D2-222B-4E50-97FC-EF1486781F90}"
 EndProject
