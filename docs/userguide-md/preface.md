@@ -1,4 +1,4 @@
-# Introduction: Preface
+# Introduction - Preface
 
 ## What is Mocassin?
 
@@ -20,17 +20,20 @@ The model system supports multiple complex components in mostly arbitrary combin
 
 - Up to 63 custom mobile species per model
 - Multiple mechanisms per model (vacancy, interstitialcy, vehicle movement, small polar hopping)
-- Automatic detection and reduction of pair interactions based on a cutoff radius and filters
+- Automatic detection and symmetry reduction of pair interactions based on a cutoff radius and filters
 - Custom multi-body interactions clusters with up to 9 positions
 - Local site energies
 - Custom attempt rates for each symmetry reduced migration event in KMC
 - ...
 
 In combination with a job template system that allows to define an build simulations databases containing thousands of simulations in quickly and allowing direct modelling of interactions with data from first principles energy calculations, Mocassin especially targets use for large parameter studies of common variation parameters, such as doping fractions or temperature, or material screenings on HPC computing clusters where molecular dynamics simulations are either too expensive or proper potential sets are not available please refer to one of the affiliated publications for example use cases:
-- http://dx.doi.org/10.1002/jcc.26418 (Original release paper)
+
+- http://dx.doi.org/10.1002/jcc.26418 (Mocassin release paper)
+- https://doi.org/10.1038/s41563-019-0561-7 (Proton conduction in BZY)
+- https://doi.org/10.1021/acs.chemmater.9b04599 (Oxygen conductivity in Sr/La Melilites)
 
 ## License and legal disclaimer
 
-Mocassin is distributed as free software under the MIT license without any warranties. The original copyright of the source code lies with Forschungszentrum Jülich GmbH Germany.
+Mocassin is distributed as free software under the [MIT license](https://en.wikipedia.org/wiki/MIT_License) without any warranties. The original copyright of the source code lies with Forschungszentrum Jülich GmbH Germany.
 
 The original authors request that any use of Mocassin in scientific publications acknowledges the work of the original authors by an appropriate citation of http://dx.doi.org/10.1002/jcc.26418 without abbreviated author names.
