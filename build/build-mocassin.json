@@ -66,7 +66,7 @@
     "Scripts": [
         {
             "Path": "./subscripts/build-documentation.ps1",
-            "IsActive": true
+            "IsActive": false
         },
         {
             "Path": "./subscripts/build-solver-linuxremote.ps1",
@@ -78,11 +78,11 @@
         },
         {
             "Path": "./subscripts/build-gui-installer.ps1",
-            "IsActive": false
+            "IsActive": true
         },
         {
             "Path": "./subscripts/build-nuget-local.ps1",
-            "IsActive": false
+            "IsActive": true
         }
     ],
     "Meta": {
