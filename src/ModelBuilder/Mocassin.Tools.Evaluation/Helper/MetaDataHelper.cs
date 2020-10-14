@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Linq;
+using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Translator.Database.Entities.Other.Meta;
 
 namespace Mocassin.Tools.Evaluation.Helper
 {
     /// <summary>
-    ///     Provides static methods that help with
+    ///     Provides static methods that help with <see cref="IJobMetaData"/>
     /// </summary>
     public static class MetaDataHelper
     {
