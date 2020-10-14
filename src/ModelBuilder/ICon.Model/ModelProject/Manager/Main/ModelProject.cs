@@ -61,9 +61,6 @@ namespace Mocassin.Model.ModelProject
         public ICrystalSystemService CrystalSystemService { get; protected set; }
 
         /// <inheritdoc />
-        public ISymmetryAnalysisService SymmetryAnalysisService { get; protected set; }
-
-        /// <inheritdoc />
         public IModelDataTracker DataTracker { get; protected set; }
 
         /// <summary>
@@ -197,10 +194,7 @@ namespace Mocassin.Model.ModelProject
             var validationServices = new ValidationServiceProvider(modelProject);
             var dataAccessLocker = new AccessLockSource(settings.ConcurrencySettings.MaxAttempts, settings.ConcurrencySettings.AttemptInterval);
             var messageSystem = new AsyncMessageSystem();
-            var symmetryService = new SymmetryAnalysisService(SymmetryIndicator.MakeComparer(geometryNumeric.RelativeComparer),
-                ObjectProvider.Create(() => crystalSystemService.VectorTransformer));
 
-            modelProject.SymmetryAnalysisService = symmetryService;
             modelProject.Settings = settings;
             modelProject.GeometryNumeric = geometryNumeric;
             modelProject.CommonNumeric = commonNumeric;

@@ -73,11 +73,6 @@ namespace Mocassin.Model.ModelProject
         IValidationServiceProvider ValidationServices { get; }
 
         /// <summary>
-        ///     Symmetry analysis service that supplies methods for symmetry comparisons and transformation sequence calculation
-        /// </summary>
-        ISymmetryAnalysisService SymmetryAnalysisService { get; }
-
-        /// <summary>
         ///     Tries to lock the project for input and creates a disposable input lock on success, returns false if failed
         /// </summary>
         /// <param name="projectLocker"></param>
