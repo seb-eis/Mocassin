@@ -24,6 +24,11 @@ namespace Mocassin.UI.Data.Helper
     /// </summary>
     public class SimulationLibraryBuilder : IDisposable
     {
+        /// <summary>
+        ///     Get the maximum supported number of jobs per database
+        /// </summary>
+        public static int MaxJobCountPerContext { get; } = 99999;
+
         private readonly object lockObject = new object();
         private int BuildCounter { get; set; }
 
@@ -108,7 +113,7 @@ namespace Mocassin.UI.Data.Helper
                     return null;
                 if (CheckCancel() || !TryBuildModelContext(modelProject, out var modelContext))
                     return null;
-                if (CheckCancel() || !TryBuildLibraryContent(modelContext, simulationDbBuildTemplate.ProjectJobSetTemplate, simulationDbBuildTemplate.Name, out var jobPackageModels))
+                if (CheckCancel() || !TryBuildLibraryContent(modelContext, libraryContext, simulationDbBuildTemplate, out var jobPackageModels))
                     return null;
                 if (CheckCancel() || !TryAddBuildMetaData(jobPackageModels, simulationDbBuildTemplate))
                     return null;
@@ -244,27 +249,29 @@ namespace Mocassin.UI.Data.Helper
 
         /// <summary>
         ///     Tries to build the <see cref="IList{T}" /> of <see cref="SimulationJobPackageModel" /> defined by a
-        ///     <see cref="ProjectJobSetTemplate" /> using the provided <see cref="IProjectModelContext" />
+        ///     <see cref="SimulationDbBuildTemplate" /> using the provided <see cref="IProjectModelContext" />
         /// </summary>
         /// <param name="modelContext"></param>
-        /// <param name="jobSetTemplate"></param>
-        /// <param name="description"></param>
+        /// <param name="dbContext"></param>
+        /// <param name="dbBuildTemplate"></param>
         /// <param name="jobPackageModels"></param>
         /// <returns></returns>
-        private bool TryBuildLibraryContent(IProjectModelContext modelContext, ProjectJobSetTemplate jobSetTemplate, string description,
-            out IList<SimulationJobPackageModel> jobPackageModels)
+        private bool TryBuildLibraryContent(IProjectModelContext modelContext, SimulationDbContext dbContext, SimulationDbBuildTemplate dbBuildTemplate, out IList<SimulationJobPackageModel> jobPackageModels)
         {
             BuildStatusEvent.OnNext(LibraryBuildStatus.BuildingLibrary);
 
             try
             {
                 BuildCounter = 0;
-                var totalJobCount = jobSetTemplate.GetTotalJobCount(modelContext.ModelProject);
-                jobPackageModels = jobSetTemplate.ToInternals(modelContext.ModelProject)
-                                                 .Select(jobs => GetPreparedJobBuilder(modelContext, jobs, totalJobCount)
-                                                     .BuildJobPackageModel(jobs, CancellationToken))
-                                                 .ToList();
-                jobPackageModels.Action(model => model.Description = description).Load();
+                var totalJobCount = dbBuildTemplate.ProjectJobSetTemplate.GetTotalJobCount(modelContext.ModelProject);
+
+                ThrowIfAddWouldExceedMaxJobCount(totalJobCount, dbContext);
+
+                jobPackageModels = dbBuildTemplate.ProjectJobSetTemplate.ToInternals(modelContext.ModelProject)
+                                                  .Select(jobs => GetPreparedJobBuilder(modelContext, jobs, totalJobCount)
+                                                      .BuildJobPackageModel(jobs, CancellationToken))
+                                                  .ToList();
+                jobPackageModels.Action(model => model.Description = MakeJobPackageDescription(dbBuildTemplate)).Load();
                 return true;
             }
             catch (Exception exception)
@@ -363,6 +370,28 @@ namespace Mocassin.UI.Data.Helper
             foreach (var optimizer in jobCollection.GetPostBuildOptimizers()) builder.AddPostBuildOptimizer(optimizer);
 
             return builder;
+        }
+
+        /// <summary>
+        ///     Creates a description string for a <see cref="SimulationJobPackageModel"/>
+        /// </summary>
+        /// <param name="dbBuildTemplate"></param>
+        /// <returns></returns>
+        private string MakeJobPackageDescription(SimulationDbBuildTemplate dbBuildTemplate)
+        {
+            return $"Build=[{dbBuildTemplate.Name}]";
+        }
+
+        /// <summary>
+        ///     Throws if adding a number of jobs to the provided <see cref="SimulationDbContext"/> would exceed the maximum job index limitation
+        /// </summary>
+        /// <param name="newJobsCount"></param>
+        /// <param name="simLibrary"></param>
+        private void ThrowIfAddWouldExceedMaxJobCount(int newJobsCount, ISimulationLibrary simLibrary)
+        {
+            var totalCount = newJobsCount + simLibrary.JobModels.Count();
+            if (totalCount <= MaxJobCountPerContext) return;
+            throw new InvalidOperationException($"Adding all jobs exceeds the job limit of the database ({totalCount} / {MaxJobCountPerContext})!");
         }
     }
 }

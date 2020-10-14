@@ -248,7 +248,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
         /// <param name="exception"></param>
         private void AddConsoleError(Exception exception)
         {
-            AddConsoleMessage($"Exception: {exception.GetType()}");
+            AddConsoleMessage($"Error: {exception.Message}");
         }
 
         /// <summary>
