@@ -5,16 +5,17 @@
     <Platforms>AnyCPU;x64</Platforms>
     <LangVersion>8</LangVersion>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <!--<TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>-->
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ICon.Framework.Mathematics\Mocassin.Mathematics.csproj" />
-    <ProjectReference Include="..\ICon.Framework.Shared\Mocassin.Framework.csproj" />
-    <ProjectReference Include="..\ICon.Framework.Symmetry\Mocassin.Symmetry.csproj" />
-    <ProjectReference Include="..\ICon.Model.Translator\Mocassin.Model.Translator.csproj" />
-    <ProjectReference Include="..\ICon.Model\Mocassin.Model.csproj" />
-    <ProjectReference Include="..\Mocassin.Tools.UAccess\Mocassin.Tools.UAccess.csproj" />
-    <ProjectReference Include="..\Mocassin.UI.Xml\Mocassin.UI.Data.csproj" />
+    <ProjectReference Include="..\ICon.Framework.Shared\Mocassin.Framework.csproj"/>
+    <ProjectReference Include="..\ICon.Framework.Symmetry\Mocassin.Symmetry.csproj"/>
+    <ProjectReference Include="..\ICon.Model.Translator\Mocassin.Model.Translator.csproj"/>
+    <ProjectReference Include="..\ICon.Model\Mocassin.Model.csproj"/>
+    <ProjectReference Include="..\Mocassin.Tools.UAccess\Mocassin.Tools.UAccess.csproj"/>
+    <ProjectReference Include="..\Mocassin.UI.Xml\Mocassin.UI.Data.csproj"/>
   </ItemGroup>
 
   <ItemGroup>
@@ -24,5 +25,58 @@
   <Target Name="NugetPackAutoVersioning" AfterTargets="Build" Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <Exec Command="dotnet pack -p:PackageVersion=$([System.DateTime]::Now.ToString(&quot;yyyy.MM.dd&quot;)) --no-build --configuration $(Configuration) --output &quot;$(SolutionDir)nuget" />
   </Target>
+
+  <!--
+  <Target Name="CopyProjectReferencesToPackage" DependsOnTargets="ResolveReferences">
+    <ItemGroup>
+      <BuildOutputInPackage Include="@(ReferenceCopyLocalPaths->WithMetadataValue('ReferenceSourceTarget', 'ProjectReference'))" />
+    </ItemGroup>
+  </Target>
+  -->
+  <ItemGroup>
+    <!-- This is a workaround to ensure that the symmetry database is also copied to the output path if Mocassin.Symmetry is not added as a package reference -->
+    <Content Include="$(OutputPath)Data/Mocassin.Symmetry.db">
+      <Pack>true</Pack>
+      <PackagePath>contentFiles/any/any/Data</PackagePath>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+    </Content>
+    <!--
+    <Content Include="$(OutputPath)Mocassin.Framework.dll">
+      <Pack>true</Pack>
+      <PackagePath>lib\$(TargetFramework)</PackagePath>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+    </Content>
+    <Content Include="$(OutputPath)Mocassin.Mathematics.dll">
+      <Pack>true</Pack>
+      <PackagePath>lib\$(TargetFramework)</PackagePath>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+    </Content>
+    <Content Include="$(OutputPath)Mocassin.Symmetry.dll">
+      <Pack>true</Pack>
+      <PackagePath>lib\$(TargetFramework)</PackagePath>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+    </Content>
+    <Content Include="$(OutputPath)Mocassin.Model.dll">
+      <Pack>true</Pack>
+      <PackagePath>lib\$(TargetFramework)</PackagePath>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+    </Content>
+    <Content Include="$(OutputPath)Mocassin.Model.Translator.dll">
+      <Pack>true</Pack>
+      <PackagePath>lib\$(TargetFramework)</PackagePath>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+    </Content>
+    <Content Include="$(OutputPath)Mocassin.Tools.UAccess.dll">
+      <Pack>true</Pack>
+      <PackagePath>lib\$(TargetFramework)</PackagePath>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+    </Content>
+    <Content Include="$(OutputPath)Mocassin.UI.Data.dll">
+      <Pack>true</Pack>
+      <PackagePath>lib\$(TargetFramework)</PackagePath>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+    </Content>
+      -->
+  </ItemGroup>
 
 </Project>

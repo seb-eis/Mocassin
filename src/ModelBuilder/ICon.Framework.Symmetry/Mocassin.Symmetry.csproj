@@ -22,8 +22,22 @@
     <ProjectReference Include="..\ICon.Framework.Shared\Mocassin.Framework.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Data\Mocassin.Symmetry.db">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
   <Target Name="NugetPackAutoVersioning" AfterTargets="Build" Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <Exec Command="dotnet pack -p:PackageVersion=$([System.DateTime]::Now.ToString(&quot;yyyy.MM.dd&quot;)) --no-build --configuration $(Configuration) --output &quot;$(SolutionDir)nuget" />
   </Target>
+
+  <ItemGroup>
+    <Content Include="$(OutputPath)Data/Mocassin.Symmetry.db">
+      <Pack>true</Pack>
+      <PackagePath>contentFiles\any\any\Data</PackagePath>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+    </Content>
+  </ItemGroup>
 
 </Project>
