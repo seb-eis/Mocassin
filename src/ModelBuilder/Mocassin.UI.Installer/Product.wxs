@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-  <Product Id="6a37b403-842c-4ecc-b736-35086568cd9e"
+  <!--<Product Id="6a37b403-842c-4ecc-b736-35086568cd9e"/>-->
+  <?define TheProductVersion = "$(fun.AutoVersion(1.1))" ?>
+  <?define TheUpgradeCode = "58642f96-d1ef-4725-a001-f2f813f59fad" ?>
+  <Product Id="*"
            Name="Mocassin"
            Language="1033"
            Codepage="1252"
-           Version="$(fun.AutoVersion(1.1))"
+           Version="$(var.TheProductVersion)"
            Manufacturer="HIMS"
-           UpgradeCode="58642f96-d1ef-4725-a001-f2f813f59fad">
+           UpgradeCode="$(var.TheUpgradeCode)">
     <Package Id="*"
              Keywords="Installer"
              Manufacturer="HIMS"
@@ -15,48 +18,68 @@
              InstallerVersion="200"
              Compressed="yes"
              InstallScope="perMachine"
-             Platform="x64"/>
-    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
-    <MediaTemplate EmbedCab="yes"/>
+             Platform="x64" />
+
+    <!-- Major upgrade -->
+    <Upgrade Id="$(var.TheUpgradeCode)">
+      <!-- Downgrade Protection -->
+      <UpgradeVersion Minimum="$(var.TheProductVersion)" OnlyDetect="yes" IncludeMinimum="no"
+                      Property="DOWNGRADE_DETECTED" />
+      <!-- Major Upgrade Configuration -->
+      <UpgradeVersion IncludeMinimum="no" Maximum="$(var.TheProductVersion)" IncludeMaximum="no" MigrateFeatures="yes"
+                      Property="UPGRADE_DETECTED" />
+    </Upgrade>
+
+    <!-- Major Upgrade: Schedule RemoveExistingProducts -->
+    <InstallExecuteSequence>
+      <!-- Potential scheduling (after): InstallValidate, InstallInitialize, InstallExecute, InstallExecuteAgain, InstallFinalize -->
+      <RemoveExistingProducts After="InstallInitialize" /> 
+    </InstallExecuteSequence>
+
+    <!--Launch Condition: Abort setup if higher version found-->
+    <Condition Message="A newer version is already installed.">
+      NOT DOWNGRADE_DETECTED
+    </Condition>
+
+    <MediaTemplate EmbedCab="yes" />
     <UIRef Id="WixUI_FeatureTree" />
     <UIRef Id="WixUI_ErrorProgressText" />
 
-    <Feature Id="Complete" 
+    <Feature Id="Complete"
              Title="Mocassin"
              Description="Full Mocassin Win64 package."
-             Display="expand" 
+             Display="expand"
              ConfigurableDirectory="INSTALLDIR"
              Level="1">
 
-      <Feature Id="ModelBuilderUi" 
+      <Feature Id="ModelBuilderUi"
                Title="Model Builder Gui"
                Description="The graphical model and simulation database builder interface."
-               Display="expand" 
+               Display="expand"
                Level="1">
         <ComponentGroupRef Id="GuiBinComponents" />
-        <ComponentGroupRef Id="MocassinFrameworkLibraries"/>
-        <ComponentGroupRef Id="MocassinFrameworkData"/>
-        <ComponentGroupRef Id="CyotekLibraries"/>
-        <ComponentGroupRef Id="HelixToolkitLibraries"/>
-        <ComponentGroupRef Id="ICSharpCodeLibraries"/>
-        <ComponentGroupRef Id="MicrosoftLibraries"/>
-        <ComponentGroupRef Id="NCalcLibraries"/>
-        <ComponentGroupRef Id="NewtonsoftLibraries"/>
-        <ComponentGroupRef Id="RemotionLibraries"/>
-        <ComponentGroupRef Id="SharpDXLibraries"/>
-        <ComponentGroupRef Id="SQLitePCLRawLibraries"/>
-        <ComponentGroupRef Id="SQLitePCLRawWin64NativeLibraries"/>
-        <ComponentGroupRef Id="SystemLibraries"/>
-        <ComponentRef Id="ProgramMenuDir"/>
-        <ComponentRef Id="MocassinAppDataDir"/>
-        <ComponentRef Id="MocassinDocumentsDir"/>
+        <ComponentGroupRef Id="MocassinFrameworkLibraries" />
+        <ComponentGroupRef Id="MocassinFrameworkData" />
+        <ComponentGroupRef Id="CyotekLibraries" />
+        <ComponentGroupRef Id="HelixToolkitLibraries" />
+        <ComponentGroupRef Id="ICSharpCodeLibraries" />
+        <ComponentGroupRef Id="MicrosoftLibraries" />
+        <ComponentGroupRef Id="NCalcLibraries" />
+        <ComponentGroupRef Id="NewtonsoftLibraries" />
+        <ComponentGroupRef Id="RemotionLibraries" />
+        <ComponentGroupRef Id="SharpDXLibraries" />
+        <ComponentGroupRef Id="SQLitePCLRawLibraries" />
+        <ComponentGroupRef Id="SQLitePCLRawWin64NativeLibraries" />
+        <ComponentGroupRef Id="SystemLibraries" />
+        <ComponentRef Id="ProgramMenuDir" />
+        <ComponentRef Id="MocassinAppDataDir" />
       </Feature>
       <Feature Id="SolverBinaries"
                Title="Solver Program"
                Description="Solver binaries for Win64 computers."
-               Display="expand" 
+               Display="expand"
                Level="1">
-        <ComponentGroupRef Id="SolverBinComponents"/>
+        <ComponentGroupRef Id="SolverBinComponents" />
       </Feature>
     </Feature>
   </Product>

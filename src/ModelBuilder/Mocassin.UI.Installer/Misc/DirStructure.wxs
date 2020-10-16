@@ -40,15 +40,6 @@
         </Directory>
       </Directory>
 
-      <Directory Id="PersonalFolder" Name="Documents">
-        <Directory Id="MocassinDocumentsDir" Name="Mocassin">
-          <Component Id="MocassinDocumentsDir" Guid="74834072-8ac3-41b0-bc2b-7041d62e55d7">
-            <RemoveFolder Id="MocassinDocumentsDir" On="uninstall"/>
-            <RegistryValue Root='HKCU' Key='Software\[Manufacturer]\[ProductName]' Type='string' Name='DocumentsDir' Value='[MocassinDocumentsDir]' KeyPath='yes' /> 
-          </Component>
-        </Directory>
-      </Directory>
-
       <Directory Id="DesktopFolder" Name="Desktop"/>
     </Directory>
 
