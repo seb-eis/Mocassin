@@ -34,6 +34,7 @@ The first particle of a particle set is the default state of that set if applied
 ### [Reduced ceria](#reduced-ceria)
 
 The following model definitions are required to define reduced ceria $\mathrm{CeO_2}$ and later allow both oxygen migration and polaron hopping:
+
 1. A $\mathrm{Ce^{4+}}$ particle, e.g. *symbol* = "Ce", $z=+4$
 2. A $\mathrm{Ce^{3+}}$ particle, e.g. *symbol* = "Ce", $z=+3$
 3. A $\mathrm{O^{2-}}$ particle, e.g *symbol* = "O", $z=-2$

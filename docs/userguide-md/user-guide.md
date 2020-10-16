@@ -19,6 +19,8 @@ Forschungszentrum Jülich & RWTH Aachen University
 - ### [The structure model](./structure-model.md)
 - ### [The transition model](./transition-model.md)
 - ### [The energy model](./energy-model.md)
+- ### [The simulation model](./simulation-model.md)
+- ### [The lattice model](./lattice-model.md)
 ## IV. Graphical user interface
 
 ## V. Simulation

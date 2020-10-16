@@ -20,8 +20,12 @@ if (-not (Test-Command pandoc)) {
 $pathToKatex = $Settings.Source.KatexDirectory
 $pathToGuidePagesSource = $Settings.Source.GuidePagesDirectory
 $pathToGuidePagesDeploy = $Settings.Deploy.RootDirectory, $Settings.Deploy.RelativeGuidePagesPath -join "/"
+$pathToStylesDeploy = $pathToGuidePagesDeploy, "styles" -join "/"
+$pandocCss = $Settings.Source.StylesDirectory, $Settings.Deploy.PandocCss -join "/"
+$deployCss = "styles/style.css"
 
 New-Item $pathToGuidePagesDeploy -ItemType Directory
+New-Item $pathToStylesDeploy -ItemType Directory
 
 if (-not (Test-Katex $pathToKatex)) {
     throw "Katex is missing at $pathToKatex. Cannot build html documentation."
@@ -29,7 +33,8 @@ if (-not (Test-Katex $pathToKatex)) {
 
 foreach ($mdFile in (Get-ChildItem $pathToGuidePagesSource\* -Include *.md)) {
     $outFile = $pathToGuidePagesDeploy + "/" + $mdFile.BaseName + ".html"
-    pandoc -s --katex="$pathToKatex/" -f markdown -t html -o $outFile $mdFile.FullName --lua-filter=./subscripts/md-to-html-link.lua
+    pandoc -s --katex="$pathToKatex/" -f markdown -t html -o $outFile $mdFile.FullName --lua-filter=./subscripts/md-to-html-link.lua --css=$deployCss
 }
 
 Copy-Item -Recurse $pathToKatex -Destination $pathToGuidePagesDeploy
+Copy-Item $pandocCss -Destination $pathToStylesDeploy/style.css

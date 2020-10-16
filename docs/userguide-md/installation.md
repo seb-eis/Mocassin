@@ -56,7 +56,7 @@ After that, the entire Mocassin API and affiliated dependencies can be added to 
 dotnet add Myproject.csproj package Mocassin.Tools.Evaluation
 ```
 
-**Important:** The vast majority of API features require the space group database "Mocassin.Symmetry.db" which is available separately from the repository. To verify that everything is setup correctly, make sure that the following simple program runs to completion without an error after \<PathToSymmetryDb\> is replaced by the correct path string.
+**Important:** The vast majority of API features require the space group database "Mocassin.Symmetry.db" which is contained in the packages. If you require to use the DLLs without the packages, it is required to set the database path on the appropriate settings object when creating model projects.
 
 ```csharp
 using System;
@@ -69,10 +69,13 @@ namespace Test
     {
         static void Main(string[] args)
         {
+            // Using the nuget packages
+            var project = ModelProjectFactory.CreateDefault();
+
+            // With symmetry db redirect
             var settings = ProjectSettings.CreateDefault();
             settings.SymmetrySettings.SpaceGroupDbPath = "<PathToSymmetryDb>";
-            var project = ModelProjectFactory.Create(settings);
-            var allGroups = project.SpaceGroupService.GetFullGroupList();
+            project = ModelProjectFactory.Create(settings);
         }
     }
 }

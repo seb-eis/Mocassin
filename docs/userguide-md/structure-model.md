@@ -94,6 +94,7 @@ It is important to avoid unnecessary site definitions as even though Mocassin wi
 ### [Ceria](#ceria)
 
 The following model definitions are required to define ceria $\mathrm{CeO_2}$ and later allow oxygen migration by KMC:
+
 1. Select space group 225, i.e. $Fm \overline{3} m$
 2. Set the cell parameter $a$, e.g. to $5.41~\mathrm{\mathring{A}}$
 3. A stable cerium site, e.g. at $(0,0,0)$

@@ -5,6 +5,7 @@
 
 # Ignore the katex directory
 [Kk]atex
+build-mocassin-active.json
 
 # User-specific files
 *.rsuser

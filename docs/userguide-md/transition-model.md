@@ -188,6 +188,7 @@ $$
 ### [2-Site MMC](#2-site-ionic-mmc)
 
 To define an MMC exchange of two species $A,B$ between two sites, the following steps are required:
+
 1. Define a $[A,B]$ state change object
 2. Define a $\{[A,B]\}$ state change group
 3. Define a state change chain with the '2-Site Metropolis' connection pattern and set the state change group list to $\{[A,B]\},\{[A,B]\}$
@@ -196,6 +197,7 @@ To define an MMC exchange of two species $A,B$ between two sites, the following 
 ### [3-Site vacancy KMC](#3-site-vacancy-kmc)
 
 To define a KMC vacancy migration of a species $A$ between two sites, the following steps are required:
+
 1. Define a $[A,V_A]$ and a $[A,\empty]$ state change object
 2. Define the $\{[A,B]\}$ and $\{[A,\empty]\}$ state change groups
 3. Define a state change chain with the '3-Site Migration' connection pattern and set the state change group list to $\{[A,B]\},\{[A,\empty]\},\{[A,B]\}$
@@ -204,6 +206,7 @@ To define a KMC vacancy migration of a species $A$ between two sites, the follow
 ### [5-Site vehicle KMC](#5-site-vehicle-kmc)
 
 To define a parallel KMC vehicle migration of two species $A$ and $B$ with a shared unstable transition position that will be occupied by a combined pseudoparticle $C=AB$, the following steps are required:
+
 1. Define a $[A,V_A],[B,V_A],[C,\empty]$ state change objects
 2. Define a $\{[A,V_A]\},\{[B,V_A]\},\{[C,\empty]\}$ state change objects
 3. Define a state change chain with the '5-Site 2-Species Vehicle' connection pattern and set the state change group list to $\{[A,V_A]\},\{[A,V_A]\},\{[C,\empty]\},\{[B,V_A]\},\{[B,V_A]\}$

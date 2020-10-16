@@ -6,7 +6,7 @@ catch {
     throw "Failed to source helper functions."
 }
 
-$Settings = Get-SettingsObject "./build-mocassin.json"
+$Settings = Get-SettingsObject "./build-mocassin-active.json"
 $deployRootPath = $Settings.Deploy.RootDirectory
 $deployLogFile = $Settings.Deploy.LogFile
 $version = $Settings.Meta.Version.Full

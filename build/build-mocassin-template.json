@@ -8,6 +8,7 @@
         "SolverDirectory": "../src/McSolver",
         "SolverLatestBuildDirectory" : "../src/McSolver/cmake-build-latest",
         "KatexDirectory": "./katex",
+        "StylesDirectory": "./styles",
         "DocsDirectory": "../docs",
         "GuidePagesDirectory": "../docs/userguide-md",
         "LicensesDirectory": ""
@@ -20,6 +21,7 @@
         "RelativeLinuxDeployPath": "mocsim-linux-x86-64",
         "RelativeDocPath": "doc",
         "RelativeGuidePagesPath" : "doc/guide-pages",
+        "PandocCss": "github-pandoc.css",
         "LogFileName": "build.log"
     },
     "Tmp": {
@@ -55,7 +57,7 @@
         "LinuxRemotes": [
             {
                 "Name": "centos",
-                "Host": "se260454@login18-2.hpc.itc.rwth-aachen.de",
+                "Host": "user@examplehost.com",
                 "PreBuildCommands": [
                     "module unload gcc",
                     "module load gcc/10"
@@ -78,11 +80,11 @@
         },
         {
             "Path": "./subscripts/build-gui-installer.ps1",
-            "IsActive": true
+            "IsActive": false
         },
         {
             "Path": "./subscripts/build-nuget-local.ps1",
-            "IsActive": true
+            "IsActive": false
         }
     ],
     "Meta": {

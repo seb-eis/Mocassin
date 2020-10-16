@@ -28,12 +28,12 @@ The model system supports multiple complex components in mostly arbitrary combin
 
 In combination with a job template system that allows to define an build simulations databases containing thousands of simulations in quickly and allowing direct modelling of interactions with data from first principles energy calculations, Mocassin especially targets use for large parameter studies of common variation parameters, such as doping fractions or temperature, or material screenings on HPC computing clusters where molecular dynamics simulations are either too expensive or proper potential sets are not available please refer to one of the affiliated publications for example use cases:
 
-- http://dx.doi.org/10.1002/jcc.26418 (Mocassin release paper)
-- https://doi.org/10.1038/s41563-019-0561-7 (Proton conduction in BZY)
-- https://doi.org/10.1021/acs.chemmater.9b04599 (Oxygen conductivity in Sr/La Melilites)
+- [MOCASSIN release paper](http://dx.doi.org/10.1002/jcc.26418)
+- [Proton conduction in BZY](https://doi.org/10.1038/s41563-019-0561-7)
+- [Oxygen conduction in Sr/La Melilites](https://doi.org/10.1021/acs.chemmater.9b04599)
 
 ## License and legal disclaimer
 
 Mocassin is distributed as free software under the [MIT license](https://en.wikipedia.org/wiki/MIT_License) without any warranties. The original copyright of the source code lies with Forschungszentrum Jülich GmbH Germany.
 
-The original authors request that any use of Mocassin in scientific publications acknowledges the work of the original authors by an appropriate citation of http://dx.doi.org/10.1002/jcc.26418 without abbreviated author names.
+The original authors request that any use of Mocassin in scientific publications acknowledges the work of the original authors by an appropriate citation of the [release paper](http://dx.doi.org/10.1002/jcc.26418) without abbreviated author names.
