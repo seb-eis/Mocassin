@@ -378,7 +378,7 @@ error_t RunOneKmcExecutionBlock(SCONTEXT_PARAMETER)
 error_t RunOneKmcAutoOptimizationExecutionBlock(SCONTEXT_PARAMETER)
 {
     var counters = getMainCycleCounters(simContext);
-    for (;counters->McsCount < counters->NextExecutionPhaseGoalMcsCount;)
+    for (;counters->McsCount < counters->PrerunGoalMcs;)
     {
         let countPerLoop = counters->CycleCountPerExecutionLoop;
         for (int64_t i = 0; i < countPerLoop; ++i)
@@ -407,7 +407,10 @@ void ExecuteSharedMcBlockFinisher(SCONTEXT_PARAMETER)
 
 error_t FinishKmcExecutionBlock(SCONTEXT_PARAMETER)
 {
-    AdvanceMainCycleCounterToNextStepGoal(simContext);
+    if (!StateFlagsAreSet(simContext, STATE_FLG_PRERUN))
+    {
+        AdvanceMainCycleCounterToNextStepGoal(simContext);
+    }
     ExecuteSharedMcBlockFinisher(simContext);
     return SIMERROR;
 }

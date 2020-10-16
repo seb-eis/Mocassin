@@ -34,27 +34,27 @@
 /* Job info flag values */
 
 #define INFO_FLG_KMC                1ULL        // Flag that marks a job as KMC
-#define INFO_FLG_MMC                1ULL << 1U   // Flag that marks a job as MMC
-#define INFO_FLG_USEPRERUN          1ULL << 2U   // Flag that marks a job to contain pre-run
-#define INFO_FLG_SKIPSAVE           1ULL << 3U   // Flag that marks a job as unsaved with no state saving
-#define INFO_FLG_DUALDOF            1ULL << 4U   // Flag that marks a job as non-optimized with twice the actually existing degrees of freedom
-#define INFO_FLG_NOJUMPLOGGING      1ULL << 5U   // Flag that marks a job as non histogram creating where the histograms will not be populated during simulation
-#define INFO_FLG_USEFASTEXP         1ULL << 6U   // Flag that marks a job for fast exponential approximation usage
+#define INFO_FLG_MMC                (1ULL << 1U)   // Flag that marks a job as MMC
+#define INFO_FLG_USEPRERUN          (1ULL << 2U)   // Flag that marks a job to contain pre-run
+#define INFO_FLG_SKIPSAVE           (1ULL << 3U)   // Flag that marks a job as unsaved with no state saving
+#define INFO_FLG_DUALDOF            (1ULL << 4U)   // Flag that marks a job as non-optimized with twice the actually existing degrees of freedom
+#define INFO_FLG_NOJUMPLOGGING      (1ULL << 5U)   // Flag that marks a job as non histogram creating where the histograms will not be populated during simulation
+#define INFO_FLG_USEFASTEXP         (1ULL << 6U)   // Flag that marks a job for fast exponential approximation usage
 
 /* Main state flag values */
 
 #define STATE_FLG_PRERUN        1ULL
-#define STATE_FLG_CONTINUE      1ULL << 1U
-#define STATE_FLG_COMPLETED     1ULL << 2U
-#define STATE_FLG_TIMEOUT       1ULL << 3U
-#define STATE_FLG_SIMABORT      1ULL << 4U
-#define STATE_FLG_CONDABORT     1ULL << 5U
-#define STATE_FLG_RATEABORT     1ULL << 6U
-#define STATE_FLG_FIRSTCYCLE    1ULL << 7U
-#define STATE_FLG_INITIALIZED   1ULL << 8U
-#define STATE_FLG_SIMERROR      1ULL << 9U
-#define STATE_FLG_PRERUN_RESET  1ULL << 10U
-#define STATE_FLG_ENERGYABORT   1ULL << 11U
+#define STATE_FLG_CONTINUE      (1ULL << 1U)
+#define STATE_FLG_COMPLETED     (1ULL << 2U)
+#define STATE_FLG_TIMEOUT       (1ULL << 3U)
+#define STATE_FLG_SIMABORT      (1ULL << 4U)
+#define STATE_FLG_CONDABORT     (1ULL << 5U)
+#define STATE_FLG_RATEABORT     (1ULL << 6U)
+#define STATE_FLG_FIRSTCYCLE    (1ULL << 7U)
+#define STATE_FLG_INITIALIZED   (1ULL << 8U)
+#define STATE_FLG_SIMERROR      (1ULL << 9U)
+#define STATE_FLG_PRERUN_RESET  (1ULL << 10U)
+#define STATE_FLG_ENERGYABORT   (1ULL << 11U)
 
 /* Monte Carlo constants */
 

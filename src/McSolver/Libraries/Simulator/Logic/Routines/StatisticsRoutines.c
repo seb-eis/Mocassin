@@ -42,7 +42,7 @@ error_t SetCycleCounterStateToDefault(SCONTEXT_PARAMETER, CycleCounterState_t *c
 
     counters->CycleCountPerExecutionLoop = counters->McsCountPerExecutionPhase * CYCLE_BLOCKSIZE_MUL;
     counters->CycleCountPerExecutionLoop = getMinOfTwo(counters->CycleCountPerExecutionLoop, CYCLE_BLOCKSIZE_MAX);
-    counters->CycleCountPerExecutionLoop = getMinOfTwo(counters->CycleCountPerExecutionLoop, CYCLE_BLOCKSIZE_MIN);
+    counters->CycleCountPerExecutionLoop = getMaxOfTwo(counters->CycleCountPerExecutionLoop, CYCLE_BLOCKSIZE_MIN);
 
     return ERR_OK;
 }
