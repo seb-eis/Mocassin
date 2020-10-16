@@ -244,7 +244,10 @@ namespace Mocassin.Tools.Evaluation.Context
             if (SimulationModelCache.TryGetValue(jobModel.SimulationPackageId, out var result)) return result;
 
             var buildGraph = ProjectDataObject.CreateFromXml<SimulationDbBuildTemplate>(jobModel.SimulationJobPackageModel.ProjectXml);
-            var simulation = buildGraph.ProjectJobSetTemplate.ToInternals(modelContext.ModelProject).First().GetSimulation();
+            var simulation = buildGraph.ProjectJobSetTemplate
+                                       .ToInternals(modelContext.ModelProject)
+                                       .First(x => x.CollectionId == jobModel.JobMetaData.CollectionIndex)
+                                       .GetSimulation();
             var simulationModel = modelContext.SimulationModelContext.FindSimulationModel(simulation);
 
             lock (lockObject)
