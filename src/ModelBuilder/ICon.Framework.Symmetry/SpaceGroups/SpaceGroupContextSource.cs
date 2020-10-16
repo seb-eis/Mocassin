@@ -1,4 +1,6 @@
-﻿using Mocassin.Framework.SQLiteCore;
+﻿using System.IO;
+using System.Reflection;
+using Mocassin.Framework.SQLiteCore;
 
 namespace Mocassin.Symmetry.SpaceGroups
 {
@@ -8,12 +10,23 @@ namespace Mocassin.Symmetry.SpaceGroups
     public class SpaceGroupContextSource : SqLiteContextSource<SpaceGroupContext>
     {
         /// <inheritdoc />
-        public override string DefaultFilepath { get; } = ".\\";
+        public override string DefaultFilepath { get; } = MakeDefaultFilepath();
 
         /// <inheritdoc />
         public SpaceGroupContextSource(string filepath)
             : base(filepath)
         {
+        }
+
+        /// <summary>
+        ///     Creates the default filepath where to look for the symmetry database
+        /// </summary>
+        /// <returns></returns>
+        public static string MakeDefaultFilepath()
+        {
+            var assemblyDirectory = Directory.GetParent(Assembly.GetExecutingAssembly().Location);
+            var filepath = assemblyDirectory + "/Data/Mocassin.Symmetry.db";
+            return filepath;
         }
     }
 }
