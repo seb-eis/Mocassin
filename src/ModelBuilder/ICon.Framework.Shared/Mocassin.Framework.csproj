@@ -6,6 +6,7 @@
     <LangVersion>8</LangVersion>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <RepositoryUrl>https://github.com/scrollrad/Mocassin</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>

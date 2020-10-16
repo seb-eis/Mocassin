@@ -5,6 +5,7 @@
     <Platforms>AnyCPU;x64</Platforms>
     <LangVersion>8</LangVersion>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <RepositoryUrl>https://github.com/scrollrad/Mocassin</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
