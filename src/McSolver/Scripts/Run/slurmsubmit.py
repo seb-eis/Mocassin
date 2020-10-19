@@ -175,6 +175,7 @@ class SlurmJob:
             if not self.TestMode:
                 self._SubmitInternal(script)
             index = index+1
+        print("submit: Completed!", flush=True)
 
     def OverwriteCookie(self, tag, value, sender=None):
         if tag is None or str(tag).isspace():

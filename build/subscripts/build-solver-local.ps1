@@ -29,15 +29,7 @@ Invoke-Expression $cmakeExpression
 
 Write-Host "Compiling ..."
 
-$lastLocation = $PWD
-try {
-    Set-Location $tmpBuildPath
-    Invoke-Expression $pathToMinGwMake
-    Set-Location $originPath   
-}
-finally {
-    Set-Location $lastLocation
-}
+Invoke-Expression "$pathToMinGwMake -C $tmpBuildPath"
 
 # Copy all exe and dll files to target
 

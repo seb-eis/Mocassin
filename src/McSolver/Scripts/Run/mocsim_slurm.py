@@ -1,12 +1,14 @@
 import re
 import os
 import sqlite3
+from pathlib import Path
 
 class ArgumentProvider:
 
     def ArgumentSet(self, slurmJob):
         db = self.GetDatabase(slurmJob.ExeArguments)
         jobs = self.GetJobIndices(slurmJob.ExeArguments)
+        jobs = self.FilterJobIndicesByCompletionTag(jobs, db)
         groups = self.GroupByTaskAndCores(jobs, self.TargetJobCountPerScript(slurmJob))
         for jobIds in groups.values():
             self.OverwriteMpi(slurmJob, jobIds)
@@ -26,13 +28,52 @@ class ArgumentProvider:
         dbStr = self.FindParameterValue("db", argString)
         return dbStr
 
+    def FilterJobIndicesByCompletionTag(self, jobIds, dbPath):
+        submitList = list()
+        filtered = list()
+        basePath = str(Path(dbPath).parent)
+        for jobId in jobIds:
+            logPath = "{0:s}/Job{1:05d}/stdout.log".format(basePath, jobId)
+            if not os.path.exists(logPath):
+                submitList.append(jobId)
+                continue
+            with open(logPath) as logFile:
+                if "ABORT_REASON" not in logFile.read():
+                    submitList.append(jobId)
+                else:
+                    filtered.append(jobId)
+        if len(filtered) is not 0:
+            print("submit: Found incomplete jobs [{}]".format(self.CompressJobIndexSequenceToString(submitList)), flush=True)
+            print("submit: Found completed jobs  [{}]".format(self.CompressJobIndexSequenceToString(filtered)), flush=True)     
+        return submitList
+
+    def CompressJobIndexSequenceToString(self, jobIds):
+        if len(jobIds) is 0:
+            return
+        if len(jobIds) is 1:
+            return str(jobIds[0])
+        result = ""
+        firstId = jobIds[0]
+        secondId = jobIds[0]
+        for id in jobIds[1:]:
+            if id is (secondId + 1):
+                secondId = id
+                if secondId is not jobIds[-1]:
+                    continue
+            if firstId is secondId:
+                    result = result + ("," if result is not "" else "") + str(firstId)
+            else:
+                result = result + ("," if result is not "" else "") + str(firstId) + "-" + str(secondId)
+            firstId = secondId = id
+
+        return result
+
     def GetJobIndices(self, argString):
         valueStr = self.FindParameterValue("jobs", argString)
         if re.match(r"[Aa]ll", valueStr):
-            db = sqlite3.connect(self.GetDatabase(argString))
-            values = db.cursor().execute("select Id from JobModels").fetchall()
-            db.close()
-            return [int(x[0]) for x in values]
+            with sqlite3.connect(self.GetDatabase(argString)) as db:
+                values = db.cursor().execute("select Id from JobModels order by Id").fetchall()
+                return [int(x[0]) for x in values]
         return self.ParseJobIdString(valueStr)
 
     def FindParameterValue(self, name, string):
