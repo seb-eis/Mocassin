@@ -24,12 +24,12 @@ New-Item -Force -Path $deployDirPath -ItemType directory
 # Call Cmake and make target
 Write-Host "Configurating ..."
 
-$cmakeExpression = "cmake -S $sourceDirPath -B $tmpBuildPath -D`"CMAKE_MAKE_PROGRAM:PATH=$pathToMinGwMake`" -D`"CMAKE_BUILD_TYPE=Release`""
+$cmakeExpression = "cmake -S $sourceDirPath -B $tmpBuildPath -G `"MinGW Makefiles`" -D`"CMAKE_MAKE_PROGRAM:PATH=$pathToMinGwMake`" -D`"CMAKE_BUILD_TYPE=Release`""
 Invoke-Expression $cmakeExpression
 
 Write-Host "Compiling ..."
 
-Invoke-Expression "$pathToMinGwMake -C $tmpBuildPath"
+Invoke-Expression "cmake --build $tmpBuildPath --config Release"
 
 # Copy all exe and dll files to target
 

@@ -11,6 +11,7 @@ $deployRootPath = $Settings.Deploy.RootDirectory
 $deployLogFile = $Settings.Deploy.LogFile
 $version = $Settings.Meta.Version.Full
 $isTestMode = $Settings.IsTestMode
+$zipAfterBuild = $Settings.Deploy.ZipAfterBuild
 
 # Delte and recreate the deploy folder
 Write-Host "Build version  : " $version
@@ -35,6 +36,17 @@ foreach ($script in $Settings.Scripts) {
     }
 }
 
+if ($zipAfterBuild) {
+    Write-Host "Zipping build ... " -NoNewline
+    $zipArchivePath = "$deployRootPath.zip"
+    Get-ChildItem -Path $deployRootPath -Exclude "*.log" | Compress-Archive -DestinationPath $zipArchivePath
+    Get-ChildItem -Path $deployRootPath -Exclude "*.log" | ForEach-Object { Remove-Item $_ -Recurse }
+    Move-Item $zipArchivePath -Destination $deployRootPath
+    Write-Host "done!"
+}
+
 if ($isTestMode) {
     Remove-Item -Recurse $deployRootPath
 }
+
+Write-Host "Build process reached end!"
