@@ -56,7 +56,7 @@ After that, the entire Mocassin API and affiliated dependencies can be added to 
 dotnet add Myproject.csproj package Mocassin.Tools.Evaluation
 ```
 
-**Important:** The vast majority of API features require the space group database "Mocassin.Symmetry.db" which is contained in the packages. If you require to use the DLLs without the packages, it is required to set the database path on the appropriate settings object when creating model projects.
+**Important:** The vast majority of API features require the space group database "Mocassin.Symmetry.db" which is contained in the package and is automatically deployed to the output folder on build. If you use the DLLs without the packages, it is required to set the database path on the appropriate settings object when creating model projects or ensure that the database can be found in "./Data/Mocassin.Symmetry.db" relative to the location of "Mocassin.Model.dll".
 
 ```csharp
 using System;

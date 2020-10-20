@@ -34,7 +34,38 @@ Each metropolis simulation is defined by assigning one or more [Metropolis trans
   - The simulation wide random number generator seed. This should be left empty in all cases
 - *Time limit*
   - Sets a hard time limit after which the solver automatically terminates the simulation.
+- *Minimal step rate*
+  - Sets a lower limit for successful steps per second a simulation has to reach or it is automatically terminated due to inactivity
+- *Job duplication count*
+  - Sets how many implicit duplicates with different random number seeds of each simulation will be created to enable a proper statistical evaluation
+
+Additionally, the MMC simulation provides specific settings:
+
+- *Break check sample*
+  - Sets a break check sample length in MCS which is used to verify if the MMC simulation has reached thermal equilibrium
+- *Relative energy break tolerance*
+  - Sets the relative tolerance for two mean energy values from consecutive break samples to be considered equal 
+
 
 ### [Kinetic simulation](#kinetic-simulation-base)
 
+Each kinetic simulation is defined by assigning one or more [kinetic transitions](./transition-model.md) objects and a set of fallback settings. It is usually recommended to leave the settings at the defaults defined by Mocassin as the common variation parameters are overwritten in the job collection anyway. The same general settings as for MMC can be set. Additionally, the KMC simulation provides specific settings:
+
+- *Relaxation steps per particle (MCSP)*
+  - Set the number of steps per particle that are performed during the autonormalization and relaxation prerun
+- *Normalization energy*
+  - Set an energy value that will be used as the new upper acceptance limit instead of the default 0 eV (no normalization). This value can be used to deliberately overnormalize a simulation in cases where a few low barrier jumps prevent proper autonormalization
+- *Electric field modulus*
+  - Set the electric field strength in V/m
+- *Electric field vector*
+  - Set the direction of the electric field as an $(a,b,c)$ vector. This value cannot be changed later
+
 ## Model examples
+
+### [Ceria](#ceria)
+
+Using the previously defined oxygen migration and polaron hopping for, it is possible to defined three types of KMC simulation bases for ceria:
+
+1. Create an oxygen migration only simulation
+2. Create a polaron only simulation
+3. Create a simulation where both oxygen migration and polaron hopping are active simultaneously

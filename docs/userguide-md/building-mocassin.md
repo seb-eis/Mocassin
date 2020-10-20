@@ -1,4 +1,4 @@
-# Introduction - Technical info
+# Introduction - Building Mocassin
 
 ## Software components
 
@@ -6,6 +6,8 @@ Mocassin consists of three main components and is mostly written is C#. The solv
 - Model builder API (.NET Standard 2.0)
 - Model building GUI (.NET Framework 4.8)
 - Monte Carlo solver (C11)
+
+**Note:** The Github repository is marked as consisting mainly of C code. This results from the [SQLite amalgamation](https://www.sqlite.org/download.html) beeing included in the repository, which is a 7 MB plain C source code file. The actual C simulator code is only a small fraction of the repository.
 
 ## Platform compatibility
 
@@ -25,9 +27,8 @@ Building the Linux solver requires "CMake" and "make" to be installed. First cre
 
 ```sh
 mkdir build
-cmake -B ./build -D"CMAKE_BUILD_TYPE=Release"
-cd build
-make
+cmake -B ./build -DCMAKE_BUILD_TYPE=Release
+cmake --build ./build --config Release
 ```
 
 ### [Compiling the solver for Win64](#compiling-the-solver-for-win64)
@@ -35,10 +36,9 @@ make
 The C solver source code requires modern C features not supported by the MSVC compiler. Thus, compilation for a Win64 systems requires an active MinGW toolchain installation (e.g. with [MSYS2](https://www.msys2.org/)) and [CMake](https://cmake.org/) for Windows. After the toolchain is installed, ensure that the MinGW is added to the PATH variable and compile the solver from the Powershell:
 
 ```powershell
-mkdir -Force "./build"
-cmake -B "./build" -G "MinGW Makefiles" -D"CMAKE_MAKE_PROGRAM:PATH=C:\msys64\mingw64\bin\mingw32-make.exe" -D"CMAKE_BUILD_TYPE=Release"
-cd "./build"
-Invoke-Expression "<PathToMinGW64>\bin\mingw32-make.exe"
+mkdir ./build
+cmake -B ./build -G "MinGW Makefiles" -DCMAKE_MAKE_PROGRAM:PATH=C:\msys64\mingw64\bin\mingw32-make.exe -DCMAKE_BUILD_TYPE=Release
+cmake --build ./build --config Release
 ```
 
 ### [Compiling the Win64 GUI](#compiling-the-win64-gui)
