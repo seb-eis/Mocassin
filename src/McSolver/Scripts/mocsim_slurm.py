@@ -26,7 +26,11 @@ class ArgumentProvider:
 
     def GetDatabase(self, argString):
         dbStr = self.FindParameterValue("db", argString)
+        dbStr = self.GetAbsolutePath(dbStr)
         return dbStr
+
+    def GetAbsolutePath(self, dbPath):
+        return Path(dbPath).absolute
 
     def FilterJobIndicesByCompletionTag(self, jobIds, dbPath):
         submitList = list()

@@ -43,10 +43,20 @@ static inline uint32_t Pcg32NextCeiledRandom(Pcg32_t* restrict rng, uint32_t cei
     }
 }
 
-// Get next random double from range [0.0,1.0] using the passed pcg32 rng
+// Get next random double from range [0.0,1.0) using the passed pcg32 rng
+static inline double Pcg32NextRandomDoubleQuick(Pcg32_t* restrict rng)
+{
+	return ((double) Pcg32NextRandom(rng) / (double) (UINT32_MAX - 1));
+}
+
+// Get next random double from range [0.0,1.0) using the passed pcg32 rng
 static inline double Pcg32NextRandomDouble(Pcg32_t* restrict rng)
 {
-	return ((double) Pcg32NextRandom(rng) / (double)UINT32_MAX);
+    union { struct { uint32_t u0, u1; } u32; uint64_t u64; double f64; } random;
+    random.u32.u0 = Pcg32NextRandom(rng);
+    random.u32.u1 = Pcg32NextRandom(rng);
+    random.u64 = 0x3FF0000000000000u | (random.u64 >> 12u);
+    return random.f64 - 1.0;
 }
 
 // Seed the rng with state and increase value

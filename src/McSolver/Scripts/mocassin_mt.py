@@ -110,6 +110,9 @@ class MocsimExecutionController:
 
     def EnsureJobFolderCreated(self, jobId):
         basePath = os.path.dirname(self.Parameters["db"])
+        if basePath is "" or basePath is None:
+            print("Warning: The database was provided without directory information, defaulting to $PWD.", flush=True)
+            basePath = os.path.expandvars("$PWD")
         jobDir = "{0:s}/Job{1:05d}".format(basePath, int(jobId))
         if not os.path.exists(jobDir):
             os.makedirs(jobDir)

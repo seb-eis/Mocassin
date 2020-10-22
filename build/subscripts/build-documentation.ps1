@@ -21,6 +21,8 @@ $pathToKatex = $Settings.Source.KatexDirectory
 $pathToGuidePagesSource = $Settings.Source.GuidePagesDirectory
 $pathToGuidePagesDeploy = $Settings.Deploy.RootDirectory, $Settings.Deploy.RelativeGuidePagesPath -join "/"
 $pathToStylesDeploy = $pathToGuidePagesDeploy, "styles" -join "/"
+$pathToFiguresSource = $pathToGuidePagesSource, "figures/png" -join "/"
+$pathToFiguresDeploy = $pathToGuidePagesDeploy, "figures/png" -join "/"
 $pandocCss = $Settings.Source.StylesDirectory, $Settings.Deploy.PandocCss -join "/"
 $deployCss = "styles/style.css"
 
@@ -36,5 +38,6 @@ foreach ($mdFile in (Get-ChildItem $pathToGuidePagesSource\* -Include *.md)) {
     pandoc -s --katex="$pathToKatex/" -f markdown -t html -o $outFile $mdFile.FullName --lua-filter=./subscripts/md-to-html-link.lua --css=$deployCss
 }
 
+Copy-Item -Recurse $pathToFiguresSource -Destination $pathToFiguresDeploy
 Copy-Item -Recurse $pathToKatex -Destination $pathToGuidePagesDeploy
 Copy-Item $pandocCss -Destination $pathToStylesDeploy/style.css
