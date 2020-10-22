@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
+   sodipodi:docname="MmcFlowDiagram.svg"
+   id="svg137"
+   version="1.1"
+   overflow="hidden"
+   height="293"
+   width="316">
+  <metadata
+     id="metadata141">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     inkscape:current-layer="g135"
+     inkscape:window-maximized="1"
+     inkscape:window-y="-8"
+     inkscape:window-x="2552"
+     inkscape:cy="146.5"
+     inkscape:cx="158"
+     inkscape:zoom="3.440273"
+     showgrid="false"
+     id="namedview139"
+     inkscape:window-height="1377"
+     inkscape:window-width="2560"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0"
+     guidetolerance="10"
+     gridtolerance="10"
+     objecttolerance="10"
+     borderopacity="1"
+     bordercolor="#666666"
+     pagecolor="#ffffff" />
+  <defs
+     id="defs5">
+    <clipPath
+       id="clip0">
+      <path
+         id="path2"
+         clip-rule="evenodd"
+         fill-rule="evenodd"
+         d="M395 190 711 190 711 483 395 483Z" />
+    </clipPath>
+  </defs>
+  <g
+     id="g135"
+     transform="translate(-395,-190)"
+     clip-path="url(#clip0)">
+    <path
+       id="path7"
+       transform="matrix(1,0,0,-1,572.5,260.892)"
+       fill="#a5a5a5"
+       d="M 0,-0.666667 H 89.5418 V 20.725 H 88.2085 V 0 l 0.6667,0.666667 H 0 Z m 92.8752,20.058367 -4,8 -4,-8 z" />
+    <path
+       id="path9"
+       transform="matrix(1,0,0,-1,572.5,372.26)"
+       fill="#a5a5a5"
+       d="M 0,-0.666667 H 89.5414 V 7.09354 H 88.2081 V 0 l 0.6666,0.666667 H 0 Z m 92.8747,6.426877 -4,7.99999 -4,-7.99999 z" />
+    <path
+       id="path11"
+       transform="matrix(1,0,0,-1,572.5,428.61)"
+       fill="#a5a5a5"
+       d="M 0,-0.666667 H 89.5414 V 19.4437 H 88.2081 V 0 l 0.6666,0.666667 H 0 Z m 92.8747,18.776967 -4,8 -4,-8 z" />
+    <rect
+       style="fill:none"
+       id="rect13"
+       fill="#ffffff"
+       stroke-dasharray="3, 1"
+       stroke-miterlimit="8"
+       stroke="#525252"
+       height="23"
+       width="98"
+       y="210.5"
+       x="612.5" />
+    <text
+       id="text27"
+       transform="translate(621.531,225)"
+       font-size="11px"
+       font-weight="400"
+       font-family="'Times New Roman', 'Times New Roman_MSFontService', sans-serif"
+       fill="#525252">SITE BLOCKED<tspan
+   id="tspan15"
+   y="29"
+   x="-45.9589"
+   font-weight="700"
+   font-style="italic"
+   fill="#000000">None</tspan><tspan
+   id="tspan17"
+   y="64"
+   x="-128.092"
+   font-weight="700"
+   font-style="italic"
+   fill="#000000">Exists</tspan><tspan
+   id="tspan19"
+   y="140"
+   x="-44.020302"
+   font-weight="700"
+   font-style="italic"
+   fill="#000000">True</tspan><tspan
+   id="tspan21"
+   y="176"
+   x="-126.867"
+   font-weight="700"
+   font-style="italic"
+   fill="#000000">False</tspan><tspan
+   id="tspan23"
+   y="232"
+   x="-129.709"
+   font-weight="700"
+   font-style="italic"
+   fill="#000000">False</tspan><tspan
+   id="tspan25"
+   y="194"
+   x="-44.020302"
+   font-weight="700"
+   font-style="italic"
+   fill="#000000">True</tspan></text>
+    <rect
+       id="rect29"
+       fill="none"
+       stroke-miterlimit="10"
+       stroke-linejoin="round"
+       stroke="#000000"
+       height="28"
+       width="176"
+       y="191.5"
+       x="396.5" />
+    <text
+       id="text31"
+       transform="translate(416.172,209)"
+       font-weight="400"
+       font-family="'Times New Roman', 'Times New Roman_MSFontService', sans-serif">Select Transition Uniformly</text>
+    <rect
+       id="rect33"
+       fill="none"
+       stroke-miterlimit="10"
+       stroke-linejoin="round"
+       stroke="#000000"
+       height="27"
+       width="176"
+       y="247.5"
+       x="396.5" />
+    <text
+       id="text35"
+       transform="translate(426.172,265)"
+       font-weight="400"
+       font-family="'Times New Roman', 'Times New Roman_MSFontService', sans-serif">Lookup Transition Rule</text>
+    <path
+       id="path37"
+       d="m 484.833,219.5 v 21.36 h -0.666 V 219.5 Z m 3.667,20.026 -4,8 -4,-8 z" />
+    <rect
+       id="rect39"
+       fill="none"
+       stroke-miterlimit="10"
+       stroke-linejoin="round"
+       stroke="#000000"
+       height="28"
+       width="176"
+       y="302.5"
+       x="396.5" />
+    <text
+       id="text43"
+       transform="translate(442.169,321)"
+       font-weight="400"
+       font-family="'Times New Roman', 'Times New Roman_MSFontService', sans-serif">Get <tspan
+   id="tspan41"
+   y="0"
+   x="20.3333"
+   font-family="'Cambria Math', 'Cambria Math_MSFontService', sans-serif">𝐸</tspan></text>
+    <path
+       id="path45"
+       fill-rule="evenodd"
+       d="m 487.136,312.041 c 1.141,0.301 2.017,0.95 2.628,1.948 0.612,0.998 0.917,2.202 0.917,3.612 0,1.414 -0.304,2.619 -0.914,3.613 -0.609,0.994 -1.486,1.641 -2.631,1.942 l -0.14,-0.451 c 0.902,-0.301 1.573,-0.895 2.013,-1.781 0.439,-0.887 0.659,-2.014 0.659,-3.381 0,-1.32 -0.219,-2.417 -0.657,-3.29 -0.437,-0.873 -1.115,-1.46 -2.033,-1.761 z m -12.067,0 0.158,0.451 c -0.914,0.301 -1.591,0.888 -2.031,1.761 -0.439,0.873 -0.659,1.97 -0.659,3.29 0,1.367 0.22,2.494 0.659,3.381 0.44,0.886 1.111,1.48 2.013,1.781 l -0.14,0.451 c -1.145,-0.301 -2.022,-0.948 -2.631,-1.942 -0.61,-0.994 -0.914,-2.199 -0.914,-3.613 0,-1.41 0.305,-2.614 0.917,-3.612 0.611,-0.998 1.487,-1.647 2.628,-1.948 z" />
+    <text
+       id="text59"
+       transform="translate(475.449,321)"
+       font-weight="400"
+       font-family="'Cambria Math', 'Cambria Math_MSFontService', sans-serif">𝑆<tspan
+   id="tspan47"
+   y="2"
+   x="5.8066702"
+   font-size="9px">0</tspan><tspan
+   id="tspan49"
+   y="0"
+   x="16.286699">,</tspan><tspan
+   id="tspan51"
+   y="0"
+   x="20.786699">𝐸</tspan><tspan
+   id="tspan53"
+   y="0"
+   x="28.753401">(</tspan>𝑆<tspan
+   id="tspan55"
+   y="2"
+   x="39.560001"
+   font-size="9px">2</tspan><tspan
+   id="tspan57"
+   y="0"
+   x="45.060001">)</tspan></text>
+    <path
+       id="path61"
+       d="m 484.833,274.5 v 21.36 h -0.666 V 274.5 Z m 3.667,20.026 -4,8 -4,-8 z" />
+    <path
+       id="path63"
+       d="m 484.833,330.5 v 21.36 h -0.666 V 330.5 Z m 3.667,20.026 -4,8 -4,-8 z" />
+    <rect
+       id="rect65"
+       fill="none"
+       stroke-miterlimit="10"
+       stroke-linejoin="round"
+       stroke="#000000"
+       height="28"
+       width="176"
+       y="358.5"
+       x="396.5" />
+    <text
+       id="text83"
+       transform="translate(445.232,377)"
+       font-weight="400"
+       font-family="'Cambria Math', 'Cambria Math_MSFontService', sans-serif">𝐸<tspan
+   id="tspan67"
+   y="0"
+   x="7.96667">(</tspan>𝑆<tspan
+   id="tspan69"
+   y="2"
+   x="18.7733"
+   font-size="9px">2</tspan><tspan
+   id="tspan71"
+   y="0"
+   x="24.2733">)</tspan><tspan
+   id="tspan73"
+   y="0"
+   x="32.606701">&lt;</tspan><tspan
+   id="tspan75"
+   y="0"
+   x="44.939999">𝐸</tspan><tspan
+   id="tspan77"
+   y="0"
+   x="52.906601">(</tspan>𝑆<tspan
+   id="tspan79"
+   y="2"
+   x="63.713299"
+   font-size="9px">0</tspan><tspan
+   id="tspan81"
+   y="0"
+   x="69.213303">)</tspan></text>
+    <rect
+       id="rect85"
+       fill="none"
+       stroke-dasharray="3, 1"
+       stroke-miterlimit="10"
+       stroke-linejoin="round"
+       stroke="#525252"
+       height="35"
+       width="98"
+       y="323.5"
+       x="612.5" />
+    <text
+       id="text89"
+       transform="translate(621.53,337)"
+       font-size="11px"
+       font-weight="400"
+       font-family="'Times New Roman', 'Times New Roman_MSFontService', sans-serif"
+       fill="#525252">ACCEPTED<tspan
+   id="tspan87"
+   y="13"
+   x="0">[+MCS]</tspan></text>
+    <path
+       id="path91"
+       d="m 484.833,386.5 v 21.468 h -0.666 V 386.5 Z m 3.667,20.135 -4,8 -4,-8 z" />
+    <rect
+       id="rect93"
+       fill="none"
+       stroke-miterlimit="10"
+       stroke-linejoin="round"
+       stroke="#000000"
+       height="28"
+       width="176"
+       y="414.5"
+       x="396.5" />
+    <text
+       id="text121"
+       transform="translate(425.282,431)"
+       font-weight="400"
+       font-family="'Cambria Math', 'Cambria Math_MSFontService', sans-serif">𝑃<tspan
+   id="tspan95"
+   y="2"
+   x="5.8733201"
+   font-size="9px">𝑆</tspan><tspan
+   id="tspan97"
+   y="4"
+   x="10.32"
+   font-size="7px">0</tspan><tspan
+   id="tspan99"
+   y="2"
+   x="15.0133"
+   font-size="9px">→</tspan><tspan
+   id="tspan101"
+   y="2"
+   x="22.346701"
+   font-size="9px">𝑆</tspan><tspan
+   id="tspan103"
+   y="4"
+   x="26.793301"
+   font-size="7px">2</tspan><tspan
+   id="tspan105"
+   y="0"
+   x="35.32">&lt;</tspan><tspan
+   id="tspan107"
+   y="0"
+   x="47.653301">𝑅𝑁</tspan><tspan
+   id="tspan109"
+   y="0"
+   x="67.779999">∈</tspan><tspan
+   id="tspan111"
+   y="0"
+   x="78.613297">[</tspan><tspan
+   id="tspan113"
+   y="0"
+   x="82.779999">0</tspan><tspan
+   id="tspan115"
+   y="0"
+   x="91.446701">…</tspan><tspan
+   id="tspan117"
+   y="0"
+   x="102.447">1</tspan><tspan
+   id="tspan119"
+   y="0"
+   x="109.113">)</tspan></text>
+    <rect
+       id="rect123"
+       fill="none"
+       stroke-dasharray="3, 1"
+       stroke-miterlimit="10"
+       stroke-linejoin="round"
+       stroke="#525252"
+       height="23"
+       width="98"
+       y="379.5"
+       x="612.5" />
+    <text
+       id="text125"
+       transform="translate(621.53,394)"
+       font-size="11px"
+       font-weight="400"
+       font-family="'Times New Roman', 'Times New Roman_MSFontService', sans-serif"
+       fill="#525252">REJECTED</text>
+    <rect
+       id="rect127"
+       fill="none"
+       stroke-dasharray="3, 1"
+       stroke-miterlimit="10"
+       stroke-linejoin="round"
+       stroke="#525252"
+       height="35"
+       width="98"
+       y="446.5"
+       x="612.5" />
+    <text
+       id="text131"
+       transform="translate(621.53,460)"
+       font-size="11px"
+       font-weight="400"
+       font-family="'Times New Roman', 'Times New Roman_MSFontService', sans-serif"
+       fill="#525252">ACCEPTED<tspan
+   id="tspan129"
+   y="13"
+   x="0">[+MCS]</tspan></text>
+    <path
+       id="path133"
+       transform="matrix(-4.37114e-8,1,1,4.37114e-8,484.5,442.5)"
+       fill="#a5a5a5"
+       d="M 0,-0.666667 H 22.3429 V 121.425 H 21.0096 V 0 l 0.6666,0.666667 H 0 Z M 25.6762,120.091 l -4,8 -4,-8 z" />
+  </g>
+</svg>

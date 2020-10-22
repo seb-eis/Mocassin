@@ -1,0 +1,607 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
+   inkscape:export-ydpi="512"
+   inkscape:export-xdpi="512"
+   inkscape:export-filename="C:\Users\Sebastian\source\repos\Mocassin\docs\figures\png\KmcFlowDiagram.png"
+   sodipodi:docname="KmcFlowDiagram.svg"
+   id="svg231"
+   version="1.1"
+   overflow="hidden"
+   height="405"
+   width="317">
+  <metadata
+     id="metadata235">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     inkscape:current-layer="g229"
+     inkscape:window-maximized="1"
+     inkscape:window-y="-8"
+     inkscape:window-x="2552"
+     inkscape:cy="202.5"
+     inkscape:cx="158.5"
+     inkscape:zoom="2.4888889"
+     showgrid="false"
+     id="namedview233"
+     inkscape:window-height="1377"
+     inkscape:window-width="2560"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0"
+     guidetolerance="10"
+     gridtolerance="10"
+     objecttolerance="10"
+     borderopacity="1"
+     bordercolor="#666666"
+     pagecolor="#ffffff" />
+  <defs
+     id="defs5">
+    <clipPath
+       id="clip0">
+      <path
+         id="path2"
+         clip-rule="evenodd"
+         fill-rule="evenodd"
+         d="M802 120 1119 120 1119 525 802 525Z" />
+    </clipPath>
+  </defs>
+  <g
+     id="g229"
+     transform="translate(-802,-120)"
+     clip-path="url(#clip0)">
+    <path
+       id="path7"
+       transform="matrix(1,0,0,-1,980.5,190.967)"
+       fill="#a5a5a5"
+       d="M 0,-0.666667 H 89.5418 V 7.8001 H 88.2085 V 0 l 0.6667,0.666667 H 0 Z m 92.8752,7.133437 -4,8.00003 -4,-8.00003 z" />
+    <path
+       id="path9"
+       transform="matrix(1,0,0,-1,980.5,246.895)"
+       fill="#a5a5a5"
+       d="M 0,-0.666667 H 89.5418 V 7.7285 H 88.2085 V 0 l 0.6667,0.666667 H 0 Z m 92.8752,7.061837 -4,8.00003 -4,-8.00003 z" />
+    <path
+       id="path11"
+       transform="matrix(1,0,0,-1,980.5,358.26)"
+       fill="#a5a5a5"
+       d="M 0,-0.666667 H 89.5414 V 7.09323 H 88.2081 V 0 l 0.6666,0.666667 H 0 Z m 92.8747,6.426557 -4,8.00001 -4,-8.00001 z" />
+    <path
+       id="path13"
+       transform="matrix(1,0,0,-1,980.5,414.26)"
+       fill="#a5a5a5"
+       d="M 0,-0.666667 H 89.5415 V 7.09324 H 88.2082 V 0 l 0.6667,0.666667 H 0 Z m 92.8749,6.426567 -4,8 -4,-8 z" />
+    <path
+       id="path15"
+       transform="matrix(1,0,0,-1,980.5,469.685)"
+       fill="#a5a5a5"
+       d="M 0,-0.666667 H 89.5414 V 6.51874 H 88.2081 V 0 l 0.6666,0.666667 H 0 Z m 92.8747,5.852077 -4,7.99999 -4,-7.99999 z" />
+    <rect
+       style="fill:none"
+       id="rect17"
+       fill="#ffffff"
+       stroke-dasharray="3, 1"
+       stroke-miterlimit="8"
+       stroke="#525252"
+       height="35"
+       width="97.999901"
+       y="141.5"
+       x="1020.5" />
+    <text
+       id="text41"
+       transform="translate(1029.31,156)"
+       font-size="11px"
+       font-weight="400"
+       font-family="'Times New Roman', 'Times New Roman_MSFontService', sans-serif"
+       fill="#525252">SITE BLOCKED<tspan
+   id="tspan19"
+   y="13"
+   x="0">[+TIME]</tspan><tspan
+   id="tspan21"
+   y="28"
+   x="-45.959"
+   font-weight="700"
+   font-style="italic"
+   fill="#000000">None</tspan><tspan
+   id="tspan23"
+   y="120"
+   x="-125.439"
+   font-weight="700"
+   font-style="italic"
+   fill="#000000">True</tspan><tspan
+   id="tspan25"
+   y="84"
+   x="-46.3671"
+   font-weight="700"
+   font-style="italic"
+   fill="#000000">False</tspan><tspan
+   id="tspan27"
+   y="64"
+   x="-128.092"
+   font-weight="700"
+   font-style="italic"
+   fill="#000000">Exists</tspan><tspan
+   id="tspan29"
+   y="195"
+   x="-44.020401"
+   font-weight="700"
+   font-style="italic"
+   fill="#000000">True</tspan><tspan
+   id="tspan31"
+   y="232"
+   x="-126.867"
+   font-weight="700"
+   font-style="italic"
+   fill="#000000">False</tspan><tspan
+   id="tspan33"
+   y="249"
+   x="-44.020401"
+   font-weight="700"
+   font-style="italic"
+   fill="#000000">True</tspan><tspan
+   id="tspan35"
+   y="287"
+   x="-128.522"
+   font-weight="700"
+   font-style="italic"
+   fill="#000000">False</tspan><tspan
+   id="tspan37"
+   y="342"
+   x="-129.709"
+   font-weight="700"
+   font-style="italic"
+   fill="#000000">False</tspan><tspan
+   id="tspan39"
+   y="305"
+   x="-44.020401"
+   font-weight="700"
+   font-style="italic"
+   fill="#000000">True</tspan></text>
+    <rect
+       id="rect43"
+       fill="none"
+       stroke-miterlimit="10"
+       stroke-linejoin="round"
+       stroke="#000000"
+       height="28"
+       width="177"
+       y="121.5"
+       x="803.5" />
+    <text
+       id="text45"
+       transform="translate(823.947,140)"
+       font-weight="400"
+       font-family="'Times New Roman', 'Times New Roman_MSFontService', sans-serif">Select Transition Uniformly</text>
+    <rect
+       id="rect47"
+       fill="none"
+       stroke-miterlimit="10"
+       stroke-linejoin="round"
+       stroke="#000000"
+       height="28"
+       width="177"
+       y="177.5"
+       x="803.5" />
+    <text
+       id="text49"
+       transform="translate(833.947,196)"
+       font-weight="400"
+       font-family="'Times New Roman', 'Times New Roman_MSFontService', sans-serif">Lookup Transition Rule</text>
+    <path
+       id="path51"
+       d="m 892.833,149.5 v 21.36 h -0.666 V 149.5 Z m 3.667,20.026 -4,8 -4,-8 z" />
+    <rect
+       id="rect53"
+       fill="none"
+       stroke-miterlimit="10"
+       stroke-linejoin="round"
+       stroke="#000000"
+       height="27"
+       width="177"
+       y="233.5"
+       x="803.5" />
+    <text
+       id="text57"
+       transform="translate(846.077,249)"
+       font-weight="400"
+       font-family="'Cambria Math', 'Cambria Math_MSFontService', sans-serif">𝑅𝑁<tspan
+   id="tspan55"
+   y="0"
+   x="20.1266">∈</tspan></text>
+    <path
+       id="path59"
+       fill-rule="evenodd"
+       d="m 907.822,240.055 h 2.614 v 11.174 h -2.614 v -0.451 h 1.641 v -10.271 h -1.641 z m -29.449,0 h 2.613 v 0.452 h -1.64 v 10.271 h 1.64 v 0.451 h -2.613 z" />
+    <text
+       id="text75"
+       transform="translate(881.237,249)"
+       font-weight="400"
+       font-family="'Cambria Math', 'Cambria Math_MSFontService', sans-serif">0<tspan
+   id="tspan61"
+   y="0"
+   x="8.6666899">…</tspan><tspan
+   id="tspan63"
+   y="0"
+   x="19.6667">1</tspan><tspan
+   id="tspan65"
+   y="0"
+   x="33.866699">&lt;</tspan><tspan
+   id="tspan67"
+   y="-7"
+   x="47.033298"
+   font-size="9px">𝜈</tspan><tspan
+   id="tspan69"
+   y="-5"
+   x="52.053299"
+   font-size="7px">𝑖</tspan><tspan
+   id="tspan71"
+   y="6"
+   x="46.200001"
+   font-size="9px">𝜈</tspan><tspan
+   id="tspan73"
+   y="8"
+   x="51.220001"
+   font-size="7px">0</tspan></text>
+    <path
+       id="path77"
+       fill-rule="evenodd"
+       d="m 927.117,245.066 h 10 v 1 h -10 z" />
+    <rect
+       style="fill:none"
+       id="rect79"
+       fill="#ffffff"
+       stroke-dasharray="3, 1"
+       stroke-miterlimit="8"
+       stroke="#525252"
+       height="35"
+       width="97.999901"
+       y="197.5"
+       x="1020.5" />
+    <text
+       id="text83"
+       transform="translate(1029.31,211)"
+       font-size="11px"
+       font-weight="400"
+       font-family="'Times New Roman', 'Times New Roman_MSFontService', sans-serif"
+       fill="#525252">SKIP EVENT<tspan
+   id="tspan81"
+   y="13"
+   x="0">[+TIME]</tspan></text>
+    <rect
+       id="rect85"
+       fill="none"
+       stroke-miterlimit="10"
+       stroke-linejoin="round"
+       stroke="#000000"
+       height="28"
+       width="177"
+       y="288.5"
+       x="803.5" />
+    <text
+       id="text89"
+       transform="translate(833.197,307)"
+       font-weight="400"
+       font-family="'Times New Roman', 'Times New Roman_MSFontService', sans-serif">Get <tspan
+   id="tspan87"
+   y="0"
+   x="20.3333"
+   font-family="'Cambria Math', 'Cambria Math_MSFontService', sans-serif">𝐸</tspan></text>
+    <path
+       id="path91"
+       fill-rule="evenodd"
+       d="m 878.165,298.173 c 1.14,0.301 2.016,0.95 2.628,1.948 0.611,0.999 0.917,2.203 0.917,3.613 0,1.414 -0.305,2.618 -0.915,3.612 -0.609,0.994 -1.486,1.642 -2.63,1.942 l -0.141,-0.451 c 0.902,-0.3 1.573,-0.894 2.013,-1.781 0.439,-0.887 0.659,-2.014 0.659,-3.381 0,-1.32 -0.219,-2.417 -0.656,-3.29 -0.438,-0.873 -1.116,-1.46 -2.034,-1.761 z m -12.068,0 0.158,0.451 c -0.914,0.301 -1.591,0.888 -2.03,1.761 -0.44,0.873 -0.66,1.97 -0.66,3.29 0,1.367 0.22,2.494 0.66,3.381 0.439,0.887 1.11,1.481 2.012,1.781 l -0.14,0.451 c -1.145,-0.3 -2.022,-0.948 -2.631,-1.942 -0.61,-0.994 -0.914,-2.198 -0.914,-3.612 0,-1.41 0.305,-2.614 0.917,-3.613 0.611,-0.998 1.487,-1.647 2.628,-1.948 z" />
+    <text
+       id="text113"
+       transform="translate(866.477,307)"
+       font-weight="400"
+       font-family="'Cambria Math', 'Cambria Math_MSFontService', sans-serif">𝑆<tspan
+   id="tspan93"
+   y="3"
+   x="5.8067002"
+   font-size="9px">0</tspan><tspan
+   id="tspan95"
+   y="0"
+   x="16.286699">,</tspan><tspan
+   id="tspan97"
+   y="0"
+   x="20.786699">𝐸</tspan><tspan
+   id="tspan99"
+   y="0"
+   x="28.753401">(</tspan>𝑆<tspan
+   id="tspan101"
+   y="3"
+   x="39.279999"
+   font-size="9px">1</tspan><tspan
+   id="tspan103"
+   y="0"
+   x="44.779999">)</tspan>,<tspan
+   id="tspan105"
+   y="0"
+   x="54.279999">𝐸</tspan><tspan
+   id="tspan107"
+   y="0"
+   x="62.2467">(</tspan>𝑆<tspan
+   id="tspan109"
+   y="3"
+   x="73.053299"
+   font-size="9px">2</tspan><tspan
+   id="tspan111"
+   y="0"
+   x="78.553299">)</tspan></text>
+    <path
+       id="path115"
+       d="m 892.833,205.5 v 21.36 h -0.666 V 205.5 Z m 3.667,20.026 -4,8 -4,-8 z" />
+    <path
+       id="path117"
+       d="m 892.833,260.5 v 21.36 h -0.666 V 260.5 Z m 3.667,20.026 -4,8 -4,-8 z" />
+    <rect
+       id="rect119"
+       fill="none"
+       stroke-miterlimit="10"
+       stroke-linejoin="round"
+       stroke="#000000"
+       height="28"
+       width="177"
+       y="344.5"
+       x="803.5" />
+    <text
+       id="text137"
+       transform="translate(853.147,363)"
+       font-weight="400"
+       font-family="'Cambria Math', 'Cambria Math_MSFontService', sans-serif">𝐸<tspan
+   id="tspan121"
+   y="0"
+   x="7.96667">(</tspan>𝑆<tspan
+   id="tspan123"
+   y="2"
+   x="18.493299"
+   font-size="9px">1</tspan><tspan
+   id="tspan125"
+   y="0"
+   x="23.993299">)</tspan><tspan
+   id="tspan127"
+   y="0"
+   x="32.326698">&lt;</tspan><tspan
+   id="tspan129"
+   y="0"
+   x="44.66">𝐸</tspan><tspan
+   id="tspan131"
+   y="0"
+   x="52.626598">(</tspan>𝑆<tspan
+   id="tspan133"
+   y="2"
+   x="63.4333"
+   font-size="9px">0</tspan><tspan
+   id="tspan135"
+   y="0"
+   x="68.933296">)</tspan></text>
+    <path
+       id="path139"
+       d="m 892.833,316.5 v 21.36 h -0.666 V 316.5 Z m 3.667,20.026 -4,8 -4,-8 z" />
+    <rect
+       id="rect141"
+       fill="none"
+       stroke-dasharray="3, 1"
+       stroke-miterlimit="10"
+       stroke-linejoin="round"
+       stroke="#525252"
+       height="35"
+       width="96.999901"
+       y="309.5"
+       x="1020.5" />
+    <text
+       id="text149"
+       transform="translate(1029.3,324)"
+       font-size="11px"
+       font-weight="400"
+       font-family="'Cambria Math', 'Cambria Math_MSFontService', sans-serif"
+       fill="#525252">𝑆<tspan
+   id="tspan143"
+   y="2"
+   x="5.2000699"
+   font-size="8px">0</tspan><tspan
+   id="tspan145"
+   y="0"
+   x="12.8068"
+   font-family="'Times New Roman', 'Times New Roman_MSFontService', sans-serif">UNSTABLE</tspan><tspan
+   id="tspan147"
+   y="13"
+   x="0"
+   font-family="'Times New Roman', 'Times New Roman_MSFontService', sans-serif">[+MCS]</tspan></text>
+    <rect
+       id="rect151"
+       fill="none"
+       stroke-miterlimit="10"
+       stroke-linejoin="round"
+       stroke="#000000"
+       height="28"
+       width="177"
+       y="400.5"
+       x="803.5" />
+    <text
+       id="text169"
+       transform="translate(853.147,419)"
+       font-weight="400"
+       font-family="'Cambria Math', 'Cambria Math_MSFontService', sans-serif">𝐸<tspan
+   id="tspan153"
+   y="0"
+   x="7.96667">(</tspan>𝑆<tspan
+   id="tspan155"
+   y="2"
+   x="18.493299"
+   font-size="9px">1</tspan><tspan
+   id="tspan157"
+   y="0"
+   x="23.993299">)</tspan><tspan
+   id="tspan159"
+   y="0"
+   x="32.326698">&lt;</tspan><tspan
+   id="tspan161"
+   y="0"
+   x="44.66">𝐸</tspan><tspan
+   id="tspan163"
+   y="0"
+   x="52.626598">(</tspan>𝑆<tspan
+   id="tspan165"
+   y="2"
+   x="63.4333"
+   font-size="9px">2</tspan><tspan
+   id="tspan167"
+   y="0"
+   x="68.933296">)</tspan></text>
+    <path
+       id="path171"
+       d="m 892.833,372.5 v 21.36 h -0.666 V 372.5 Z m 3.667,20.026 -4,8 -4,-8 z" />
+    <rect
+       id="rect173"
+       fill="none"
+       stroke-dasharray="3, 1"
+       stroke-miterlimit="10"
+       stroke-linejoin="round"
+       stroke="#525252"
+       height="35"
+       width="96.999901"
+       y="365.5"
+       x="1020.5" />
+    <text
+       id="text181"
+       transform="translate(1029.31,379)"
+       font-size="11px"
+       font-weight="400"
+       font-family="'Cambria Math', 'Cambria Math_MSFontService', sans-serif"
+       fill="#525252">𝑆<tspan
+   id="tspan175"
+   y="3"
+   x="5.2000699"
+   font-size="8px">2</tspan><tspan
+   id="tspan177"
+   y="0"
+   x="12.8066"
+   font-family="'Times New Roman', 'Times New Roman_MSFontService', sans-serif">UNSTABLE</tspan><tspan
+   id="tspan179"
+   y="13"
+   x="0"
+   font-family="'Times New Roman', 'Times New Roman_MSFontService', sans-serif">[+TIME]</tspan></text>
+    <rect
+       id="rect183"
+       fill="none"
+       stroke-miterlimit="10"
+       stroke-linejoin="round"
+       stroke="#000000"
+       height="28"
+       width="177"
+       y="456.5"
+       x="803.5" />
+    <text
+       id="text211"
+       transform="translate(833.057,473)"
+       font-weight="400"
+       font-family="'Cambria Math', 'Cambria Math_MSFontService', sans-serif">𝑃<tspan
+   id="tspan185"
+   y="2"
+   x="5.8733501"
+   font-size="9px">𝑆</tspan><tspan
+   id="tspan187"
+   y="4"
+   x="10.32"
+   font-size="7px">0</tspan><tspan
+   id="tspan189"
+   y="2"
+   x="15.0133"
+   font-size="9px">→</tspan><tspan
+   id="tspan191"
+   y="2"
+   x="22.346701"
+   font-size="9px">𝑆</tspan><tspan
+   id="tspan193"
+   y="4"
+   x="26.793301"
+   font-size="7px">2</tspan><tspan
+   id="tspan195"
+   y="0"
+   x="35.32">&lt;</tspan><tspan
+   id="tspan197"
+   y="0"
+   x="47.653301">𝑅𝑁</tspan><tspan
+   id="tspan199"
+   y="0"
+   x="67.779999">∈</tspan><tspan
+   id="tspan201"
+   y="0"
+   x="78.613297">[</tspan><tspan
+   id="tspan203"
+   y="0"
+   x="82.779999">0</tspan><tspan
+   id="tspan205"
+   y="0"
+   x="91.446701">…</tspan><tspan
+   id="tspan207"
+   y="0"
+   x="102.447">1</tspan><tspan
+   id="tspan209"
+   y="0"
+   x="109.113">)</tspan></text>
+    <path
+       id="path213"
+       d="m 892.833,428.5 v 21.36 h -0.666 V 428.5 Z m 3.667,20.026 -4,8 -4,-8 z" />
+    <rect
+       id="rect215"
+       fill="none"
+       stroke-dasharray="3, 1"
+       stroke-miterlimit="10"
+       stroke-linejoin="round"
+       stroke="#525252"
+       height="35"
+       width="96.999901"
+       y="421.5"
+       x="1020.5" />
+    <text
+       id="text219"
+       transform="translate(1029.31,436)"
+       font-size="11px"
+       font-weight="400"
+       font-family="'Times New Roman', 'Times New Roman_MSFontService', sans-serif"
+       fill="#525252">REJECTED<tspan
+   id="tspan217"
+   y="13"
+   x="0">[+TIME]</tspan></text>
+    <rect
+       id="rect221"
+       fill="none"
+       stroke-dasharray="3, 1"
+       stroke-miterlimit="10"
+       stroke-linejoin="round"
+       stroke="#525252"
+       height="36"
+       width="96.999901"
+       y="487.5"
+       x="1020.5" />
+    <text
+       id="text225"
+       transform="translate(1029.3,502)"
+       font-size="11px"
+       font-weight="400"
+       font-family="'Times New Roman', 'Times New Roman_MSFontService', sans-serif"
+       fill="#525252">ACCEPTED<tspan
+   id="tspan223"
+   y="13"
+   x="0">[+TIME] [+MCS]</tspan></text>
+    <path
+       id="path227"
+       transform="matrix(-4.37114e-8,1,1,4.37114e-8,892.5,484.5)"
+       fill="#a5a5a5"
+       d="M 0,-0.666667 H 22.3429 V 121.425 H 21.0096 V 0 l 0.6666,0.666667 H 0 Z M 25.6762,120.091 l -4,8 -4,-8 z" />
+  </g>
+</svg>
