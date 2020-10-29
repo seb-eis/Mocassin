@@ -1,6 +1,6 @@
 # MOCASSIN - User guide
 Authors: Sebastian Eisele, Steffen Neitzel-Grieshammer
-Forschungszentrum Jülich & RWTH Aachen University
+(Forschungszentrum Jülich GmbH & RWTH Aachen University)
 
 **This guide is still a work in progress. Several pages are missing or incomplete.**
 
@@ -20,12 +20,13 @@ Forschungszentrum Jülich & RWTH Aachen University
 - ### [The lattice model](./lattice-model.md)
 - ### [Parameterization templates](./parameterization-templates.md)
 - ### [Job templates](./job-templates.md)
+
 ## III. The graphical user interface
 
 ## IV. Simulation
+- ### [The simulation database](./the-simulation-database.md)
 - ### [The simulator](./the-simulator.md)
-- ### [Using the simulator]()
-- ### [Movement tracking]()
+- ### [Movement tracking](./movement-tracking.md)
 - ### [The simulation state file](./simulation-state-file.md)
 
 ## V. Advanced data evaluation

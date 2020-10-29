@@ -103,6 +103,7 @@ It should be noted that defining and using them as an all-in-one state change gr
 A state change chain or 'abstract transition' is a linearized, geometry-independent abstraction of an MMC or KMC transition event that defines a sequence of state change groups with linkers. The only geometric information it contains is how many positions $p_0,...,p_n$ are part of the transition process and in which order the state change groups appear, no 3D geometry is specified. Two types of linking between two consecutive state change groups exist: 'dynamic' ($\rightarrow$) and 'static' ($\bullet$) which denote dependent or non-dependent occurrence of state changes. The processing system automatically infers possible state changes rules - known as 'transition rules' - from these chains definitions, which contain the path occupations during $S_0,S_1,S_2$ as previously shown in the matrix notations (3) and (4), by applying several boundary conditions such as mass conservation and charge conservation.
 
 For practical reasons, there is no need to manually define the linker/connection pattern . The system is rather abstract and there is a limited number of meaningful transitions that can be described with the current linkers and limit of 8 positions per transition. While not all theoretically possible cases are available, the most important mechanisms can be selected:
+
 - 2-Site Metropolis
   - Description: A regular MMC exchange between two stable sites
   - Site chain : *stable, stable*
@@ -226,10 +227,12 @@ $$
 ### [Charge transport](#charge-transport)
 
 Defining a charge transport or small-polar hopping is done analogously to ionic vacancy migration. However, the species $A,B$ must fulfill a set of requirements for the model builder to correctly recognize and process a charge transport, namely:
+
 - $A$ and $B$ must have a charge differnce $\Delta q \ne 0$
 - $A$ and $B$ must have different element symbols if they are not the same species or the mass conservation rules will not be applied and rule generation will create physically invalid rules
 
 It is further highly recommended to follow some guidelines in order to allow the solver system to directly output correct conductivity and mobility values in the text dump. Otherwise, these quantities will be calculated using the wrong charge values as in contrast to the model builder, the solver system does not differ between a physical ion migration and a charge transport.
+
 - Define a special pseudoparticle $C$ that has the charge value $\Delta q$ to describe the occupation of the unstable position during $S_1$
 - Define relative charges for your 'donor' and 'acceptor' particles, that is, for modelling a polaron hopping between $\mathrm{Ce}^{3+}$ and $\mathrm{Ce}^{4+}$ in ceria the particles $\mathrm{Ce^0,Ce^{-1}}$ should be defined similar to the Kröger-Vink notation $\mathrm{Ce^x,Ce'}$.
 

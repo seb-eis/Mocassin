@@ -3,6 +3,7 @@
 ## Software components
 
 Mocassin consists of three main components and is mostly written is C#. The solver code for HPC systems is written in C conforming to the 2011 standard. It was a primary goal to write most of the functionality in managed code and keep the performance critical and usually unsafe HPC code to a minimum.
+
 - Model builder API (.NET Standard 2.0)
 - Model building GUI (.NET Framework 4.8)
 - Monte Carlo solver (C11)
@@ -56,6 +57,7 @@ The Mocassin API projects automatically create auto-versioned nuget packages whe
 ## Scripted deploy
 
 The repository contains a set of Powershell scripts to build an auto-versioned release. This also includes building on multiple remote Linux hosts via ssh connections. Using the system requires several components and dependencies to be present:
+
 - Documentation
   - A current version of [Katex](https://github.com/KaTeX/KaTeX)
   - A current version of [Pandoc](https://pandoc.org/) that is added to PATH
@@ -71,6 +73,7 @@ The repository contains a set of Powershell scripts to build an auto-versioned r
   - WiX Toolset 3.11.2+
 
 The main script executes a set of subscripts that perform the individual build tasks. Scripts can be added, removed, or deactivated in the "build-mocassin.json" config file:
+
 ```json
 {
     ...
@@ -107,6 +110,7 @@ The main script executes a set of subscripts that perform the individual build t
 **Note:** *This script requires "build-solver-local.ps1" to have run at least once so that a compiled Win64 solver for packing exists!*
 
 Building and packing the Win64 GUI + solver installer with the build scripts requires the following components to be installed:
+
 - MSBuild
 - WIX Toolset 3.11 or later
 
@@ -128,6 +132,7 @@ Within the configuration, file the path to MSBuild has to be configured. The fav
 *Script: build-solver-local.ps1*
 
 Building the simulator requires a GNU GCC or Intel ICC compiler, the MSVC compiler is not supported. The following programs are required to build with GCC from MSYS2:
+
 - CMake for Windows (CMake has to be added to PATH)
 - MSYS2 + MinGW toolchain. ("mingw64/bin" directory has to be added to PATH)
 
@@ -149,6 +154,7 @@ Within the configuration file the path to the mingw make (usually mingw32-make.e
 *Script: build-solver-linuxremote.ps1*
 
 Building on Linux remotes with the build scripts requires the following components to be installed on the target Linux machine:
+
 - GCC 9+ (Older versions may work as well)
 - CMake
 
@@ -179,6 +185,7 @@ The target remotes can be configured in the configuration file. This also allows
 *Script: build-nuget-local.ps1*
 
 Building and packing the .NET Standard 2.0 API libraries with the build scripts requires the following components to be installed:
+
 - MSBuild
 
 Within the configuration file the path to MSBuild has to be configured or the VSSetup method described above has to be used.
@@ -199,6 +206,7 @@ Within the configuration file the path to MSBuild has to be configured or the VS
 *Script: build-documentation.ps1*
 
 Building the documentation converts the user guide markdown pages into a standalone set of static HTML pages. The following programs are required:
+
 - Katex API (for Latex math support)
 - Pandoc (for markdown to html conversion)
 

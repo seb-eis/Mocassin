@@ -4,9 +4,23 @@
 
 The Mocassin simulator is a Monte Carlo solver that processes both KMC and MMC data in a mostly unified fashion. It simulates the evolution of the system according to a MMC or rejection KMC principle in a 4D integer transformed supercell and is designed to handle even strongly interacting systems with acceptable performance.
 
+## Information
+
+### [Using the simulator](#using-the-simulator)
+
+The simulator is started from the command line by calling "Mocassin.Simulator.exe" (Windows) or "Mocassin.Simulator" (Linux). The mandatory set of arguments includes the path to the simulation database by "-dbPath", the id of the job to process by "-jobId", and the path to the directory that should be used for I/O operations by "-ioPath". Its is additionally recommended to define "-stdout" to redirect the stdout stream to a file inside the I/O directory.
+
+```sh
+Mocassin.Simulator -dbPath <database> -jobId <jobnumber> -ioPath <directory> [-stdout <filename>]
+```
+
+The meta information to identify jobs can be found in the "JobMetaData" table of the simulation database (SQLite 3). The "JobMetaData" table has a "JobModelId" column containing the indices that are identical to the ones provided to "-jobId" on simulation startup. Further information on accessing the simulation database cam be found on the affiliated [documentation page](./the-simulation-database.md). 
+
+**Note:** For advanced information on how to do scripted startups with parallel execution using multithreading or MPI on HPC clusters, consult the affiliated readme and source code in the solver [scripts directory](https://github.com/scrollrad/Mocassin/tree/master/src/McSolver/Scripts) of the Mocassin repository.
+
 ### [Random number generation](#random-number-generation)
 
-Random number generation in Mocassin is based on the 32-bit version of the [Permuted Congruential Generator](https://www.pcg-random.org/index.html) (PCG) with 128 bit of state as introduces by M.E. O'Neill. The most basic function to generate a 32 bit unsigned integers is based on the minimal C implementation of a PCG32:
+Random number generation in Mocassin is based on the 32-bit version of the [Permuted Congruential Generator](https://www.pcg-random.org/index.html) (PCG) with 64 bit of state as introduces by M.E. O'Neill. The most basic function to generate a 32 bit unsigned integers is based on the minimal C implementation of a PCG32:
 
 ```cpp
 // *Really* minimal PCG32 code / (c) 2014 M.E. O'Neill / pcg-random.org
@@ -59,7 +73,7 @@ static inline double Pcg32NextRandomDouble(Pcg32_t* rng)
 
 The MMC routine simulates the time and space independent system evolution by particle swaps between sublattices as defined by the allowed set of Metropolis transitions of the used simulation model object. This process approaches the thermal equilibrium and minimizes the free energy of the system. The general routine cycle is shown in figure 1, where *+MCS* means that the system state is advanced by $S_0 \rightarrow S_2$. In contrast to the KMC routine, the MMC routine does not support a prerun as there is no automatic normalization.
 
-<figure align="center">
+<figure style="text-align: center">
     <img src="./figures/png/MmcFlowDiagram.png" width="400">
     <figcaption>Figure 1: The basic MMC simulation routine cycle with conditions and possible cycle outcomes.</figcaption>
 </figure>
@@ -73,7 +87,7 @@ $$
 \tag{1} 
 $$
 
-<figure align="center">
+<figure style="text-align: center">
     <img src="./figures/png/KmcFlowDiagram.png" width="400">
     <figcaption>Figure 2: The basic KMC simulation routine cycle with conditions and possible cycle outcomes.</figcaption>
 </figure>
@@ -108,7 +122,7 @@ $$
 
 The overnormalization using $K_\mathrm{fix}$ usually introduces a very small bias as transitions with low energies are usually only a small fraction of the energy landscape as illustrated in the energy histograms in figure 3.
 
-<figure align="center">
+<figure style="text-align: center">
     <img src="./figures/png/JumphistogramCeria.png" width="400">
     <figcaption>Figure 3: Energy barrier histograms of KMC simulations of oxygen 1NN migration in doped ceria at different yttrium fractions as created with Mocassin.</figcaption>
 </figure>

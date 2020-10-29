@@ -8,7 +8,7 @@ After installation, the solver can be found in "\<InstallDir\>/Solver/bin" and t
 
 ## Solver installation (Linux)
 
-It is usually recommended to [compile the solver](./technical-info.md) on your Linux target machine to ensure maximized performance. If you are using precompiled binaries make sure that at least the following ".so" files and components are located in your deploy directory:
+It is usually recommended to [compile the solver](./building-mocassin.md) on your Linux target machine to ensure maximized performance. If you are using precompiled binaries make sure that at least the following ".so" files and components are located in your deploy directory:
 
 - libframework
 - libjobloader
@@ -18,11 +18,13 @@ It is usually recommended to [compile the solver](./technical-info.md) on your L
 - Mocassin.Simulator (Solver exe)
 
 Optional components are:
+
 - libmmcfe.mocext (Simulated annealing MMC extension)
 - libutility (Utility library)
 - Mocassin.Utility (Utility exe)
 
 You can test if the simulator works by calling "Mocassin.Simulator" without any arguments, this should create console output that looks similar to:
+
 ```text
 [FAILURE]: Missing input. Make sure all required command line arguments are defined:
 [REQUIRED]: -dbPath     <value>
