@@ -79,7 +79,7 @@ namespace Mocassin.Symmetry.SpaceGroups
             && CrystalType == other.CrystalType;
 
         /// <inheritdoc />
-        public SpaceGroupEntry GetGroupEntry() => new SpaceGroupEntry(InternationalIndex, MauguinNotation, CrystalVariation);
+        public SpaceGroupEntry GetGroupEntry() => new SpaceGroupEntry(InternationalIndex, MauguinNotation, VariationName, CrystalVariation);
 
         /// <summary>
         ///     Compares to other space group interface by index and specifier index
@@ -89,7 +89,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         public int CompareTo(ISpaceGroup other)
         {
             var indexCompare = InternationalIndex.CompareTo(other.InternationalIndex);
-            return indexCompare == 0 ? CrystalVariation.CompareTo(other.CrystalVariation) : indexCompare;
+            return indexCompare != 0 ? indexCompare : string.CompareOrdinal(VariationName, other.VariationName);
         }
 
         /// <summary>

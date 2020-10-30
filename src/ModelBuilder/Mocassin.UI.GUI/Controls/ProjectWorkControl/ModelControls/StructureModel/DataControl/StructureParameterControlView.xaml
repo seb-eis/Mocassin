@@ -62,7 +62,6 @@
             <DataGridTextColumn Binding="{Binding MauguinNotation, Mode=OneTime}" Header="Mauguin" />
             <DataGridTextColumn Binding="{Binding CrystalType, Mode=OneTime}" Header="Crystal Type" />
             <DataGridTextColumn Binding="{Binding VariationName, Mode=OneTime}" Header="Variation Name" />
-            <DataGridTextColumn Binding="{Binding CrystalVariation, Mode=OneTime}" Header="Variation Type" />
 
           </DataGrid.Columns>
         </DataGrid>

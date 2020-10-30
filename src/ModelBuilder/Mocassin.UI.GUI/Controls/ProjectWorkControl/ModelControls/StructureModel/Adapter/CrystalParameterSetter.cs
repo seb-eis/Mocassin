@@ -154,6 +154,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureMod
         {
             CrystalSystem = crystalSystem ?? throw new ArgumentNullException(nameof(crystalSystem));
             ParametersData = parametersData ?? throw new ArgumentNullException(nameof(parametersData));
+            OnParameterChanged();
         }
 
         /// <summary>

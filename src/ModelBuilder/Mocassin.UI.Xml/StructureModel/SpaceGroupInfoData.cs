@@ -17,6 +17,7 @@ namespace Mocassin.UI.Data.StructureModel
         private CrystalSystemVariation crystalVariation;
         private string literal;
         private int number;
+        private string variationName;
 
         /// <summary>
         ///     Get or set the number of the space group
@@ -39,6 +40,16 @@ namespace Mocassin.UI.Data.StructureModel
         }
 
         /// <summary>
+        ///     Get or set the variation name of the space group
+        /// </summary>
+        [XmlAttribute]
+        public string VariationName
+        {
+            get => variationName;
+            set => SetProperty(ref variationName, value);
+        }
+
+        /// <summary>
         ///     Get or set the <see cref="CrystalSystemVariation" /> of the space group
         /// </summary>
         [XmlAttribute]
@@ -55,6 +66,7 @@ namespace Mocassin.UI.Data.StructureModel
         {
             Number = 1;
             Literal = "P1";
+            VariationName = "None";
             CrystalVariation = CrystalSystemVariation.NoneOrOriginChoice;
         }
 
@@ -73,7 +85,7 @@ namespace Mocassin.UI.Data.StructureModel
         {
             try
             {
-                return new SpaceGroupEntry(Number, Literal ?? "", CrystalVariation);
+                return new SpaceGroupEntry(Number, Literal ?? "", VariationName ?? "None", CrystalVariation);
             }
             catch (Exception e)
             {
@@ -91,6 +103,7 @@ namespace Mocassin.UI.Data.StructureModel
             entry ??= SpaceGroupEntry.CreateDefault();
             Number = entry.GroupNumber;
             Literal = entry.Literal;
+            VariationName = entry.VariationName;
             CrystalVariation = entry.CrystalVariation;
         }
     }

@@ -119,7 +119,7 @@ namespace Mocassin.Symmetry.SpaceGroups
             if (!HasDbConnection) return false;
             if (groupEntry == null) throw new ArgumentNullException(nameof(groupEntry));
             if (LoadedGroup != null && groupEntry.Equals(LoadedGroup.GetGroupEntry())) return true;
-            return TryLoadGroup(group => group.InternationalIndex == groupEntry.GroupNumber && group.CrystalVariation == groupEntry.CrystalVariation);
+            return TryLoadGroup(group => group.InternationalIndex == groupEntry.GroupNumber && group.CrystalVariation == groupEntry.CrystalVariation && groupEntry.VariationName == group.VariationName);
         }
 
         /// <inheritdoc />

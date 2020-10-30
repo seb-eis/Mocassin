@@ -123,12 +123,12 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureMod
         public CrystalParameterSetter CreateParameterSetter(ISpaceGroup spaceGroup)
         {
             var crystalSystem = ProjectControl.ServiceModelProject.CrystalSystemService.GetSystem(spaceGroup);
-            var parameterGraph = StructureModelData?.CellParameters;
-            if (parameterGraph != null) return new CrystalParameterSetter(crystalSystem, parameterGraph);
+            var cellParametersData = StructureModelData?.CellParameters;
+            if (cellParametersData != null) return new CrystalParameterSetter(crystalSystem, cellParametersData);
 
-            parameterGraph = new CellParametersData();
-            parameterGraph.PopulateFrom(crystalSystem.GetDefaultParameterSet());
-            return new CrystalParameterSetter(crystalSystem, parameterGraph);
+            cellParametersData = new CellParametersData();
+            cellParametersData.PopulateFrom(crystalSystem.GetDefaultParameterSet());
+            return new CrystalParameterSetter(crystalSystem, cellParametersData);
         }
     }
 }

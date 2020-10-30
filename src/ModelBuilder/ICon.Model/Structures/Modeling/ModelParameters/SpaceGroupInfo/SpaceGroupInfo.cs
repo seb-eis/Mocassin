@@ -16,7 +16,7 @@ namespace Mocassin.Model.Structures
         public string GroupLiteral => GroupEntry.Literal;
 
         /// <inheritdoc />
-        public string SpecifierName => GroupEntry.CrystalVariation.ToString();
+        public string SpecifierName => GroupEntry.VariationName;
 
         /// <inheritdoc />
         public override string GetParameterName() => "Space Group Info";
@@ -46,7 +46,7 @@ namespace Mocassin.Model.Structures
             if (!(modelParameter is ISpaceGroupInfo groupInfo))
                 return null;
 
-            GroupEntry = new SpaceGroupEntry(groupInfo.GroupNumber, groupInfo.GroupLiteral, groupInfo.GroupEntry.CrystalVariation);
+            GroupEntry = new SpaceGroupEntry(groupInfo.GroupNumber, groupInfo.GroupLiteral, groupInfo.SpecifierName, groupInfo.GroupEntry.CrystalVariation);
             return this;
         }
     }
