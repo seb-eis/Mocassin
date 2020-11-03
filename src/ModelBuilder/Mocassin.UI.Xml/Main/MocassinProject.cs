@@ -165,6 +165,14 @@ namespace Mocassin.UI.Data.Main
             return project;
         }
 
+        /// <inheritdoc />
+        public override ProjectDataObject DeepCopy(PreserveReferencesHandling referencesHandling = PreserveReferencesHandling.All)
+        {
+            var copy = (MocassinProject) base.DeepCopy(referencesHandling);
+            copy.RestoreParentReferences();
+            return copy;
+        }
+
 
         /// <inheritdoc />
         public override void FromJson(string json, JsonSerializerSettings serializerSettings = null)

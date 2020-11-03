@@ -171,11 +171,6 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.ComponentBrowser
                 projectCopy.JobSetTemplates.Clear();
                 projectCopy.SimulationDbBuildTemplates.Clear();
             }
-            else
-            {
-                foreach (var item in projectCopy.CustomizationTemplates.Cast<ProjectChildEntity<MocassinProject>>()
-                                                .Concat(projectCopy.JobSetTemplates).Concat(projectCopy.SimulationDbBuildTemplates)) item.Parent = projectCopy;
-            }
 
             ExecuteOnAppThread(() => MocassinProjects.Add(projectCopy));
             PushInfoMessage($"Project {project.ProjectName} (ID = {project.ProjectGuid}) was copied.");
