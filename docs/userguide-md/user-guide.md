@@ -7,11 +7,13 @@ Authors: Sebastian Eisele, Steffen Neitzel-Grieshammer
 ## Contents
 
 ## I. Introduction
+
 - ### [Preface](./preface.md)
 - ### [Building Mocassin](./building-mocassin.md)
 - ### [Installation](./installation.md)
 
 ## II. Model components
+
 - ### [The particle model](./particle-model.md)
 - ### [The structure model](./structure-model.md)
 - ### [The transition model](./transition-model.md)
@@ -22,11 +24,15 @@ Authors: Sebastian Eisele, Steffen Neitzel-Grieshammer
 - ### [Job templates](./job-templates.md)
 
 ## III. The graphical user interface
+- ### [Creating and managing projects](./ui-managing-projects.md)
+- ### [The particle model control](./ui-particle-control.md)
 
 ## IV. Simulation
+
 - ### [The simulation database](./the-simulation-database.md)
 - ### [The simulator](./the-simulator.md)
 - ### [Movement tracking](./movement-tracking.md)
-- ### [The simulation state file](./simulation-state-file.md)
 
 ## V. Advanced data evaluation
+
+- ### [The simulation state file](./simulation-state-file.md)
