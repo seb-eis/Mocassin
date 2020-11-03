@@ -30,7 +30,7 @@ class ArgumentProvider:
         return dbStr
 
     def GetAbsolutePath(self, dbPath):
-        return Path(dbPath).absolute
+        return Path(dbPath).absolute().as_posix()
 
     def FilterJobIndicesByCompletionTag(self, jobIds, dbPath):
         submitList = list()
@@ -60,11 +60,11 @@ class ArgumentProvider:
         firstId = jobIds[0]
         secondId = jobIds[0]
         for id in jobIds[1:]:
-            if id is (secondId + 1):
+            if id == (secondId + 1):
                 secondId = id
-                if secondId is not jobIds[-1]:
+                if secondId != jobIds[-1]:
                     continue
-            if firstId is secondId:
+            if firstId == secondId:
                     result = result + ("," if result is not "" else "") + str(firstId)
             else:
                 result = result + ("," if result is not "" else "") + str(firstId) + "-" + str(secondId)

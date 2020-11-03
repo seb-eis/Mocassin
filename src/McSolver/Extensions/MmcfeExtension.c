@@ -11,6 +11,8 @@
 #include "MmcfeExtension.h"
 #include "Libraries/Framework/Math/Approximation.h"
 #include <math.h>
+#include <Libraries/ProgressPrint/ProgressPrint.h>
+#include <Libraries/Simulator/Data/SimContext/SimulationContextAccess.h>
 
 #define MMCFE_RELAXBUFFER_SIZE  100000
 #define MMCFE_LOGTABLE_NAME     "LogEntries"
@@ -93,7 +95,7 @@ static error_t EnsureLogDbCreated(sqlite3* db, MmcfeLog_t*restrict outLog)
 }
 
 // Opens an sqlite3 MMCFE-Log database and ensures its existance. If the database existed, the last log entry row is provided as an out parameter
-sqlite3* MMCFE_OpenLogDb(const char* dbPath, MmcfeLog_t*restrict outLog)
+sqlite3* OpenMmcfeLogDatabase(const char* dbPath, MmcfeLog_t*restrict outLog)
 {
     debug_assert(outLog != NULL);
 
@@ -233,9 +235,10 @@ static int64_t CalculateEtaAtCurrentRateInSeconds(SCONTEXT_PARAMETER, const Mmcf
     let alphaStep = (log->ParamsState.AlphaMax - log->ParamsState.AlphaMin) / log->ParamsState.AlphaCount;
     let remainingAlphaCount = (int32_t) round((log->ParamsState.AlphaMax - log->ParamsState.AlphaCurrent) / alphaStep);
 
-    let runSeconds = (log->RunInfo.PhaseEndClock - log->RunInfo.PhaseStartClock) / CLOCKS_PER_SEC;
+    let runSeconds = (log->RunInfo.PhaseEndClock - log->RunInfo.PhaseStartClock) / (double) CLOCKS_PER_SEC;
+    if (!isfinite(runSeconds)) return 0;
     let avgCycleRate = cycleCountPerBlock / runSeconds;
-    return (cycleCountPerBlock * remainingAlphaCount) / (int64_t) avgCycleRate;
+    return (int64_t) ((double)(cycleCountPerBlock * remainingAlphaCount) / avgCycleRate);
 }
 
 // Prints the progress of the MMCFE routine
@@ -337,7 +340,7 @@ static error_t StartRoutineInternal(SCONTEXT_PARAMETER)
     nullStructContent(routineLog);
 
     let logPath = BuildDefaultLogDbFilePath(simContext);
-    var db = MMCFE_OpenLogDb(logPath, &routineLog);
+    var db = OpenMmcfeLogDatabase(logPath, &routineLog);
     return_if(RoutineIsAlreadyCompleted(&routineLog.ParamsState), (sqlite3_close(db), ERR_ALREADYCOMPLETED));
 
     let logLoaded = RoutineParametersAreValid(&routineLog.ParamsState);
@@ -358,6 +361,9 @@ static error_t StartRoutineInternal(SCONTEXT_PARAMETER)
 
 void StartMmcfeRoutine(void* context)
 {
-    let error = StartRoutineInternal((SimulationContext_t *) context);
+    var simContext = (SimulationContext_t *) context;
+    let error = StartRoutineInternal(simContext);
     assert_success(error, "Unhandled internal error in MMCFE execution routine.");
+    setMainStateFlags(simContext, STATE_FLG_COMPLETED);
+    PrintMocassinSimulationFinishInfo(simContext, stdout);
 }

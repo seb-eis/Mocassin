@@ -128,7 +128,7 @@ target_link_libraries(utility framework simulator sqlite3 ${CMAKE_DL_LIBS})
 target_link_libraries(Mocassin.Utility utility ${CMAKE_DL_LIBS})
 
 # Extension links
-target_link_libraries(mmcfe.mocext sqlite3 framework simulator ${CMAKE_DL_LIBS})
+target_link_libraries(mmcfe.mocext sqlite3 framework simulator progressprint ${CMAKE_DL_LIBS})
 
 # Profiling flags
 #target_compile_options(Mocassin.Simulator PUBLIC -pg -no-pie)
