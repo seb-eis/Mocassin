@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Mocassin.Framework.Extensions;
 using Mocassin.Model.Basic;
 using Mocassin.Model.Particles;
@@ -111,5 +112,28 @@ namespace Mocassin.Model.Transitions
         /// </summary>
         /// <param name="rule"></param>
         public abstract void AddDependentRule(TransitionRule rule);
+
+        /// <inheritdoc />
+        public override string ToString()
+        {
+            var builder = new StringBuilder(100);
+            builder.Append(AbstractTransition.IsMetropolis ? "MMC-Rule [" : "KMC-Rule [");
+            foreach (var particle in StartState)
+            {
+                builder.Append($"{particle.Symbol}{(int) particle.Charge}-");
+            }
+            builder.PopBack(1,"]-[");
+            foreach (var particle in TransitionState)
+            {
+                builder.Append($"{particle.Symbol}{(int) particle.Charge}-");
+            }
+            builder.PopBack(1,"]-[");
+            foreach (var particle in FinalState)
+            {
+                builder.Append($"{particle.Symbol}{(int) particle.Charge}-");
+            }
+            builder.PopBack(1,"]");
+            return builder.ToString();
+        }
     }
 }

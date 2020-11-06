@@ -302,6 +302,26 @@ namespace Mocassin.Framework.Extensions
         }
 
         /// <summary>
+        ///     Removes the duplicates from a list based upon the passed compare function
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="compareFunc"></param>
+        public static void RemoveDuplicates<T1>(this IList<T1> list, Func<T1, T1, bool> compareFunc)
+        {
+            for (var i = 0; i < list.Count - 1; i++)
+            {
+                for (var j = list.Count - 1; j > i; j--)
+                {
+                    if (!compareFunc.Invoke(list[i], list[j]))
+                        continue;
+
+                    list.RemoveAt(j);
+                }
+            }
+        }
+
+        /// <summary>
         ///     Removes the duplicates from a list based upon the passed equality comparer
         /// </summary>
         /// <typeparam name="T1"></typeparam>

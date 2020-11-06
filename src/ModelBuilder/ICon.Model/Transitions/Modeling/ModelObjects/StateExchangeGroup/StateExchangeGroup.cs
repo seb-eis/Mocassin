@@ -42,7 +42,7 @@ namespace Mocassin.Model.Transitions
                                       .Select(a => a.Index)
                                       .All(index => other.GetStateExchangePairs().Select(a => a.Index).Contains(index));
 
-            return firstContainsSecond || secondContainsFirst;
+            return firstContainsSecond && secondContainsFirst;
         }
 
         /// <inheritdoc />

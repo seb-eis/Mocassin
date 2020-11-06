@@ -207,7 +207,7 @@ namespace Mocassin.UI.Data.Customization
 
             var obj = new PairEnergySetData
             {
-                Name = $"Pair.Energy.Set.{energySetter.PairInteraction.Index}",
+                Name = "Pair.Energy.Set",
                 ModelIndex = energySetter.PairInteraction.Index,
                 ChiralPartnerModelIndex = energySetter.PairInteraction.ChiralPartner?.Index ?? -1,
                 CenterPosition = new ModelObjectReference<CellSite>(centerPosition),

@@ -1,289 +1,552 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Mocassin.Framework.Collections;
 using Mocassin.Framework.Extensions;
+using Mocassin.Mathematics.Comparer;
 using Mocassin.Mathematics.Permutation;
 using Mocassin.Model.Particles;
-using Mocassin.Model.Structures;
 
 namespace Mocassin.Model.Transitions
 {
-    /// <summary>
-    ///     Generic rule generator to create tha basic information of new transition rules
-    /// </summary>
-    public class TransitionRuleGenerator<TRule> where TRule : TransitionRule, new()
+    /// <inheritdoc />
+    public class TransitionRuleGenerator<TRule> : ITransitionRuleGenerator<TRule> where TRule : TransitionRule, new()
     {
-        /// <summary>
-        ///     The particle pool dictionary to translate the indexing into actual particle references
-        /// </summary>
-        protected SortedDictionary<int, IParticle> ParticleDictionary { get; set; }
+        protected IParticle[] Particles { get; }
 
         /// <summary>
-        ///     Create new quick rule generator that uses the provided set of particles
+        ///     Creates a new rule generator that uses the passed array of index mapped <see cref="IParticle"/> instances
         /// </summary>
-        /// <param name="particlePool"></param>
-        public TransitionRuleGenerator(IEnumerable<IParticle> particlePool)
+        /// <param name="particles"></param>
+        public TransitionRuleGenerator(IParticle[] particles)
         {
-            ParticleDictionary = new SortedDictionary<int, IParticle>();
-            foreach (var item in particlePool)
-                ParticleDictionary.Add(item.Index, item);
+            Particles = particles ?? throw new ArgumentNullException(nameof(particles));
+            if (particles.Select((x, i) => (x, i)).Any(y => y.x.Index != y.i))
+                throw new InvalidOperationException("Particles are not mapped according to their indices.");
         }
 
-        /// <summary>
-        ///     Makes the unique rule sequence for each passed abstract transition. With option flag to control if the system
-        ///     should automatically filter out rules
-        ///     that are not supported
-        /// </summary>
-        /// <param name="abstractTransitions"></param>
-        /// <param name="onlySupported"></param>
-        /// <returns></returns>
-        /// <remarks> Unsupported rules are typically physically meaningless e.g. they violate matter conservation rules </remarks>
+        /// <inheritdoc />
         public IEnumerable<IEnumerable<TRule>> MakeUniqueRules(IEnumerable<IAbstractTransition> abstractTransitions, bool onlySupported)
         {
-            var abstractCollection = abstractTransitions.ToCollection();
-            var statePairGroups =
-                new StatePairGroupCreator().MakeGroupsWithBlanks(abstractCollection.SelectMany(value => value.GetStateExchangeGroups()));
-
-            var results = MakeUniqueRules(abstractCollection, statePairGroups);
-            return onlySupported
-                ? results.Select(FilterByCommonBehaviorAndInversionRules)
-                : results;
+            foreach (var abstractTransition in abstractTransitions)
+            {
+                if (abstractTransition.IsMetropolis)
+                {
+                    var rules = GenerateMmcTypeRules(abstractTransition);
+                    yield return FlagAndLinkMmcTypeRules(rules);
+                }
+                else
+                {
+                    var rules = GenerateKmcTypeRules(abstractTransition);
+                    yield return FlagAndLinkKmcTypeRules(rules);
+                }
+            }
         }
 
         /// <summary>
-        ///     Creates the unique for a sequence of abstract transitions and a general list of state pair groups
-        /// </summary>
-        /// <param name="abstractTransitions"></param>
-        /// <param name="statePairGroups"></param>
-        /// <returns></returns>
-        public IEnumerable<IEnumerable<TRule>> MakeUniqueRules(IEnumerable<IAbstractTransition> abstractTransitions,
-            IList<StatePairGroup> statePairGroups)
-        {
-            return abstractTransitions.Select(transition => MakeUniqueRules(transition, statePairGroups));
-        }
-
-        /// <summary>
-        ///     Creates the unique rules for an abstract transition with the provided statePairGroup list
+        ///     Generates a <see cref="IList{T}"/> of MMC type rules for the provided <see cref="IAbstractTransition"/>
         /// </summary>
         /// <param name="abstractTransition"></param>
-        /// <param name="statePairGroups"></param>
         /// <returns></returns>
-        public IEnumerable<TRule> MakeUniqueRules(IAbstractTransition abstractTransition, IList<StatePairGroup> statePairGroups)
+        protected IList<TRule> GenerateMmcTypeRules(IAbstractTransition abstractTransition)
         {
-            var stateDescription = abstractTransition.GetStateExchangeGroups()
-                                                     .Select(value => statePairGroups[value.Index].AutoChangeStatus());
+            var result = new List<TRule>();
+            var (connectors, exchangeGroups) = GetConnectorsAndExchangeGroups(abstractTransition);
+            var startStatePermutationSource = GetStartStatePermutationSource(exchangeGroups);
+            var possibleStartStates = GetStartStatePermutations(exchangeGroups);
+            var movementCode = GetMovementCode(connectors, exchangeGroups);
 
-            foreach (var rule in MakeUniqueRules(stateDescription, abstractTransition.GetConnectorSequence()))
+            foreach (var startState in startStatePermutationSource)
             {
-                rule.AbstractTransition = abstractTransition;
-                yield return rule;
-            }
-        }
+                if (!TryGetMmcEndState(startState, exchangeGroups, out var endState)) continue;
 
-        /// <summary>
-        ///     Creates the unique rules that can be derived from the passes state group and pattern description of a transition
-        ///     path
-        ///     (No abstract transition is set on the rules)
-        /// </summary>
-        /// <param name="pairGroups"></param>
-        /// <param name="connectorTypes"></param>
-        /// <returns></returns>
-        public IEnumerable<TRule> MakeUniqueRules(IEnumerable<StatePairGroup> pairGroups, IEnumerable<ConnectorType> connectorTypes) =>
-            GetValidTransitionRules(pairGroups.ToArray(), connectorTypes.ToArray());
-
-        /// <summary>
-        ///     Creates a state pair permutation source for the possible state pair configurations of the transition sequence
-        /// </summary>
-        /// <param name="statePairGroups"></param>
-        /// <returns></returns>
-        protected IPermutationSource<StatePair> MakeStateSetPermutationSource(StatePairGroup[] statePairGroups)
-        {
-            var objectSet = statePairGroups
-                            .Select(group =>
-                                group.StatePairs.Select(value => StatePair.CreateForStatus(value.Donor, value.Acceptor, group.PositionStability)))
-                            .ToArray();
-
-            return new PermutationSlotMachine<StatePair>(objectSet);
-        }
-
-        /// <summary>
-        ///     Takes a state pair permutation and creates a permutation source that can create all possible states of the path
-        ///     allowed by
-        ///     this state pair permutation
-        /// </summary>
-        /// <param name="statePairs"></param>
-        /// <returns></returns>
-        protected IPermutationSource<int> MakePathStatePermutationSource(StatePair[] statePairs)
-        {
-            return new PermutationSlotMachine<int>(statePairs.Select(pair => new List<int> {pair.DonorIndex, pair.AcceptorIndex}).ToList());
-        }
-
-        /// <summary>
-        ///     Creates a set of transition rules which are filtered for inversions and physically impossible state changes
-        /// </summary>
-        /// <param name="statePairGroups"></param>
-        /// <param name="connectorTypes"></param>
-        /// <returns></returns>
-        protected IEnumerable<TRule> GetValidTransitionRules(StatePairGroup[] statePairGroups, ConnectorType[] connectorTypes)
-        {
-            var movementCode = GetMovementCode(connectorTypes, statePairGroups);
-            var results = new SetList<TRule>(Comparer<TRule>.Create((a, b) => a.CompareTo(b)));
-
-            foreach (var stateSet in MakeStateSetPermutationSource(statePairGroups))
-            {
-                foreach (var pathState in MakePathStatePermutationSource(stateSet))
-                {
-                    var rule = new TRule
-                    {
-                        StartState = new OccupationState {Particles = pathState.Select(a => ParticleDictionary[a]).ToList()}
-                    };
-
-                    if (!TrySetFinalState(rule, stateSet, connectorTypes))
-                        continue;
-
-                    SetTransitionState(rule, stateSet, connectorTypes);
-                    rule.MovementCode = movementCode;
-                    results.Add(rule);
-                }
+                var rule = CreateMmcTypeRule(startState, endState, abstractTransition, movementCode);
+                result.Add(rule);
             }
 
-            return results;
+            AddMissingInversesToRules(result);
+            return result;
         }
 
         /// <summary>
-        ///     Takes a list interface of transition rules and filters out both inverted and reversed duplicate rules. The filtered
-        ///     rules are added
-        ///     as dependent rules to a parent rule
+        ///     Factory method to create a new rule of the MMC type with the provided data
         /// </summary>
-        /// <remarks>
-        ///     Possibly requires changes in the future since correct definition of "meaningful and duplicate" in all cases
-        ///     is tricky
-        /// </remarks>
-        /// <param name="rules"></param>
-        protected void FilterInvertedAndReversedDuplicateRules(IList<TRule> rules)
+        /// <param name="startState"></param>
+        /// <param name="endState"></param>
+        /// <param name="abstractTransition"></param>
+        /// <param name="movementCode"></param>
+        /// <returns></returns>
+        protected TRule CreateMmcTypeRule(IParticle[] startState, IParticle[] endState, IAbstractTransition abstractTransition,
+            MovementCode movementCode)
         {
-            var analyzer = new TransitionAnalyzer();
-            for (var i = 0; i < rules.Count - 1; i++)
+            var rule = new TRule
             {
-                var parentRule = rules[i];
-                for (var j = i + 1; j < rules.Count;)
-                {
-                    var checkRule = rules[j];
-                    var isRemovable = analyzer.IsSymmetricRulePair(parentRule, checkRule)
-                                      || analyzer.IsBackjumpRulePair(parentRule, checkRule)
-                                      || analyzer.IsTwistedRulePair(parentRule, checkRule);
-
-                    if (isRemovable)
-                    {
-                        parentRule.AddDependentRule(checkRule);
-                        rules.RemoveAt(j);
-                        continue;
-                    }
-
-                    j++;
-                }
-            }
-        }
-
-        /// <summary>
-        ///     Sets the transition state of the rule. Default state is 0 for all stables and donor on all unstable positions
-        /// </summary>
-        /// <param name="rule"></param>
-        /// <param name="statePairs"></param>
-        /// <param name="connectorTypes"></param>
-        protected void SetTransitionState(TRule rule, StatePair[] statePairs, ConnectorType[] connectorTypes)
-        {
-            rule.TransitionState = new OccupationState
-            {
-                Particles = new List<IParticle>(statePairs.Length)
+                StartState = new OccupationState {Particles = startState.ToList()},
+                FinalState = new OccupationState {Particles = endState.ToList()},
+                TransitionState = new OccupationState {Particles = new List<IParticle>().Populate(() => Particles[0], 2)},
+                AbstractTransition = abstractTransition,
+                MovementCode = movementCode
             };
-
-            foreach (var pair in statePairs)
-            {
-                var index = pair.PositionStability == PositionStability.Unstable ? pair.DonorIndex : 0;
-                rule.TransitionState.Particles.Add(ParticleDictionary[index]);
-            }
+            return rule;
         }
 
         /// <summary>
-        ///     Tries to set the final state of a rule. Aborts if a physically meaningless state change is detected and returns
-        ///     false in this case
+        ///     Generates a <see cref="IList{T}"/> of KMC type rules for the provided <see cref="IAbstractTransition"/>
         /// </summary>
-        /// <param name="rule"></param>
-        /// <param name="statePairs"></param>
-        /// <param name="connectorTypes"></param>
+        /// <param name="abstractTransition"></param>
         /// <returns></returns>
-        protected bool TrySetFinalState(TRule rule, StatePair[] statePairs, ConnectorType[] connectorTypes)
+        protected IList<TRule> GenerateKmcTypeRules(IAbstractTransition abstractTransition)
         {
-            if (!CanHaveValidEndState(rule, statePairs))
+            var result = new List<TRule>();
+            var (connectors, exchangeGroups) = GetConnectorsAndExchangeGroups(abstractTransition);
+            var startStatePermutationSource = GetStartStatePermutationSource(exchangeGroups);
+            var possibleStartStates = GetStartStatePermutations(exchangeGroups);
+            var movementCode = GetMovementCode(connectors, exchangeGroups);
+
+            foreach (var startState in startStatePermutationSource)
             {
-                rule.TransitionRuleFlags |= TransitionRuleFlags.PhysicallyInvalid;
-                return false;
+                if (!TryGetKmcEndState(startState, exchangeGroups, connectors, out var endState)) continue;
+
+                if (!TryGetKmcTransitionState(startState, endState, exchangeGroups, connectors, out var transitionState)) continue;
+
+                var rule = CreateKmcTypeRule(startState, transitionState, endState, abstractTransition, movementCode);
+                result.Add(rule);
             }
 
-            rule.FinalState = new OccupationState {Particles = new List<IParticle>(statePairs.Length)};
-            rule.FinalState = rule.StartState.DeepCopy();
+            AddMissingInversesToRules(result);
+            return result;
+        }
 
-            for (var i = 0; i < connectorTypes.Length; i++)
+        /// <summary>
+        ///     Factory method to create a new rule of the KMC type with the provided data
+        /// </summary>
+        /// <param name="startState"></param>
+        /// <param name="transitionState"></param>
+        /// <param name="endState"></param>
+        /// <param name="abstractTransition"></param>
+        /// <param name="movementCode"></param>
+        /// <returns></returns>
+        protected TRule CreateKmcTypeRule(IParticle[] startState, IParticle[] transitionState, IParticle[] endState,
+            IAbstractTransition abstractTransition,
+            MovementCode movementCode)
+        {
+            var rule = new TRule
             {
-                var lastIndex = i;
-                while (statePairs[i + 1].PositionStability == PositionStability.Unstable)
-                    i++;
+                StartState = new OccupationState {Particles = startState.ToList()},
+                FinalState = new OccupationState {Particles = endState.ToList()},
+                TransitionState = new OccupationState {Particles = transitionState.ToList()},
+                AbstractTransition = abstractTransition,
+                MovementCode = movementCode
+            };
+            return rule;
+        }
 
-                var states = (rule.FinalState[lastIndex].Index, rule.FinalState[i + 1].Index);
-                if (!TryChangeStateStep(ref states, (statePairs[lastIndex], statePairs[i + 1]), connectorTypes[lastIndex]))
+        /// <summary>
+        ///     Adds all missing inverse transition rules to a <see cref="IList{T}"/> of rules
+        /// </summary>
+        /// <param name="rules"></param>
+        protected void AddMissingInversesToRules(IList<TRule> rules)
+        {
+            var rulesWithoutInversion = new List<TRule>();
+            for (var i = 0; i < rules.Count; i++)
+            {
+                var hasInversion = false;
+                for (var j = i + 1; j < rules.Count; j++)
                 {
-                    rule.TransitionRuleFlags |= TransitionRuleFlags.PhysicallyInvalid;
-                    return false;
+                    if (rules[i].StartState.LexicographicCompare(rules[j].FinalState) != 0) continue;
+                    hasInversion = true;
+                    break;
                 }
 
-                rule.FinalState[lastIndex] = ParticleDictionary[states.Item1];
-                rule.FinalState[i + 1] = ParticleDictionary[states.Item2];
+                if (!hasInversion) rulesWithoutInversion.Add(rules[i]);
             }
 
-            return true;
+            rules.AddRange(rulesWithoutInversion.Select(CreateInverseRule));
         }
 
         /// <summary>
-        ///     Checks if a combination of rule start occupation and state pairs can result in a meaningful transition end state
+        ///     Factory method that creates the inverse of a transition rule
         /// </summary>
         /// <param name="rule"></param>
-        /// <param name="statePairs"></param>
         /// <returns></returns>
-        protected bool CanHaveValidEndState(TRule rule, StatePair[] statePairs)
+        protected TRule CreateInverseRule(TRule rule)
         {
-            var (donors, stables) = (0, rule.StartState.StateLength);
-            for (var i = 0; i < rule.PathLength; i++)
+            var result = new TRule
             {
-                if (statePairs[i].PositionStability == PositionStability.Unstable)
-                {
-                    if (rule.StartState[i].Index != 0) return false;
-                    stables--;
-                }
-
-                if (statePairs[i].PositionStability != PositionStability.Unstable)
-                    donors += rule.StartState[i].Index == statePairs[i].DonorIndex ? 1 : 0;
-            }
-
-            return donors >= stables - donors;
+                TransitionRuleFlags = rule.TransitionRuleFlags,
+                AbstractTransition = rule.AbstractTransition,
+                StartState = rule.FinalState.DeepCopy(),
+                TransitionState = rule.TransitionState.DeepCopy(),
+                FinalState = rule.StartState.DeepCopy(),
+                MovementCode = rule.MovementCode.GetInverse()
+            };
+            return result;
         }
 
         /// <summary>
-        ///     Creates the tracker reorder instruction pairs for the connector pattern
+        ///     Flags and links a set of completely build MMC type transition rules
         /// </summary>
-        /// <param name="connectorTypes"></param>
-        /// <param name="pairGroups"></param>
-        protected MovementCode GetMovementCode(ConnectorType[] connectorTypes, StatePairGroup[] pairGroups)
+        /// <param name="rules"></param>
+        /// <returns></returns>
+        protected IList<TRule> FlagAndLinkMmcTypeRules(IList<TRule> rules)
+        {
+            rules.Action(x => x.MovementFlags = GetMovementFlags(x)).Load();
+            MoveDependentRulesToParentRules(rules);
+            return rules;
+        }
+
+        /// <summary>
+        ///     Flags and links a set of completely build KMC type rules
+        /// </summary>
+        /// <param name="rules"></param>
+        /// <returns></returns>
+        protected IList<TRule> FlagAndLinkKmcTypeRules(IList<TRule> rules)
+        {
+            rules.Action(x => x.MovementFlags = GetMovementFlags(x)).Load();
+            MoveDependentRulesToParentRules(rules);
+            return rules;
+        }
+
+        /// <summary>
+        ///     Tries to create the KMC transition state based on the initial and final state. Returns false if the method fails to create a transition state
+        /// </summary>
+        /// <param name="startState"></param>
+        /// <param name="endState"></param>
+        /// <param name="exchangeGroups"></param>
+        /// <param name="connectors"></param>
+        /// <param name="transitionState"></param>
+        /// <returns></returns>
+        protected bool TryGetKmcTransitionState(IParticle[] startState, IParticle[] endState, IStateExchangeGroup[] exchangeGroups, ConnectorType[] connectors, out IParticle[] transitionState)
+        {
+            transitionState = CreateRawKmcTransitionState(startState);
+
+            for (var i = 0; i < exchangeGroups.Length; i++)
+            {
+                if (!exchangeGroups[i].IsUnstablePositionGroup) continue;
+
+                if (connectors[i - 1] == ConnectorType.Static && connectors[i] == ConnectorType.Static)
+                {
+                    if (exchangeGroups[i].StatePairCount != 1)
+                        throw new InvalidOperationException("Combined transition sites between two static connectors require one unique non-void particle option.");
+                    var exchange = exchangeGroups[i].GetStateExchangePairs().First();
+                    transitionState[i] = GetExchangeParticle(Particles[0], exchange);
+                    continue;
+                }
+
+                if (connectors[i - 1] != ConnectorType.Dynamic || connectors[i] != ConnectorType.Dynamic) throw new InvalidOperationException("A unexpected lhs-rhs connector pair was encountered.");
+
+                if (startState[i - 1].Symbol == endState[i - 1].Symbol && startState[i + 1].Symbol == endState[i + 1].Symbol)
+                {
+                    var chargeTransfer = Math.Abs(endState[i - 1].Charge - startState[i - 1].Charge);
+                    var exchangeMatch = exchangeGroups[i]
+                                        .GetStateExchangePairs()
+                                        .SingleOrDefault(x => NumericComparer.Default().Equals(Math.Abs(GetExchangeParticle(Particles[0], x).Charge), chargeTransfer))
+                                        ?? exchangeGroups[i]
+                                           .GetStateExchangePairs()
+                                           .SingleOrDefault(x => GetExchangeParticle(Particles[0], x).Equals(startState[i - 1]));
+                    if (exchangeMatch == null) throw new InvalidOperationException("Failed to find transition state for either charge transfer or push-like mechanism type.");
+                    transitionState[i] = GetExchangeParticle(Particles[0], exchangeMatch);
+                }
+                else
+                {
+                    var exchangeMatch = exchangeGroups[i]
+                                        .GetStateExchangePairs()
+                                        .SingleOrDefault(x => GetExchangeParticle(Particles[0], x).Equals(startState[i - 1]));
+                    if (exchangeMatch == null) throw new InvalidOperationException("The ion move process has an ambiguous transition state definition.");
+                    transitionState[i] = GetExchangeParticle(Particles[0], exchangeMatch);
+                }
+            }
+
+            return transitionState.All(x => x != null);
+        }
+
+        /// <summary>
+        ///     Tries to determine a valid KMC end state based on a start state, exchange groups, and connector types
+        /// </summary>
+        /// <param name="startState"></param>
+        /// <param name="exchangeGroups"></param>
+        /// <param name="connectors"></param>
+        /// <param name="endState"></param>
+        /// <returns></returns>
+        protected bool TryGetKmcEndState(IParticle[] startState, IStateExchangeGroup[] exchangeGroups, ConnectorType[] connectors, out IParticle[] endState)
+        {
+            endState = CreateRawKmcEndState(startState);
+
+            for (var lhsId = 0; lhsId < startState.Length - 1;)
+            {
+                if (connectors[lhsId] == ConnectorType.Static)
+                {
+                    lhsId++;
+                    continue;
+                }
+
+                var rhsId = lhsId + 1;
+                while (connectors[rhsId - 1] == ConnectorType.Dynamic && exchangeGroups[rhsId].IsUnstablePositionGroup) rhsId++;
+
+                var lhsExchanges = GetApplicableStateExchanges(startState[lhsId], exchangeGroups[lhsId]);
+                var rhsExchanges = GetApplicableStateExchanges(startState[rhsId], exchangeGroups[rhsId]);
+
+                foreach (var lhsExchange in lhsExchanges)
+                {
+                    foreach (var rhsExchange in rhsExchanges)
+                    {
+                        var conDoIonMove = CanDoKmcTypeIonMove(startState[lhsId], startState[rhsId], lhsExchange, rhsExchange);
+                        var canDoChargeMove = CanDoKmcTypeChargeMove(startState[lhsId], startState[rhsId], lhsExchange, rhsExchange);
+                        var canDoIonPush = lhsId >= 2
+                                           && connectors[lhsId - 1] == ConnectorType.Dynamic
+                                           && CanDoKmcTypeIonPush(startState[lhsId], startState[rhsId], lhsExchange, rhsExchange,
+                                               startState[lhsId - 2]);
+
+                        if (!conDoIonMove && !canDoChargeMove && !canDoIonPush) continue;
+                        endState[lhsId] = GetExchangeParticle(startState[lhsId], lhsExchange);
+                        endState[rhsId] = GetExchangeParticle(startState[rhsId], rhsExchange);
+                    }
+                }
+
+                lhsId = rhsId;
+            }
+
+            return endState.All(x => x != null) && StatesPreserveMass(startState, endState);
+        }
+
+        /// <summary>
+        ///     Checks if the mass between two states is conserved
+        /// </summary>
+        /// <param name="lhs"></param>
+        /// <param name="rhs"></param>
+        /// <returns></returns>
+        protected bool StatesPreserveMass(IParticle[] lhs, IParticle[] rhs)
+        {
+            if (lhs.Length != rhs.Length) return false;
+
+            var counters = new int[Particles.Length];
+            var vacancyCount = 0;
+
+            for (var i = 0; i < lhs.Length; i++)
+            {
+                if (lhs[i].IsVacancy)
+                    vacancyCount++;
+                else
+                    counters[lhs[i].Index]++;
+
+                if (rhs[i].IsVacancy)
+                    vacancyCount--;
+                else
+                    counters[rhs[i].Index]--;
+            }
+
+            return vacancyCount == 0 && counters.All(x => x == 0);
+        }
+
+        /// <summary>
+        ///     Creates an <see cref="IParticle"/> array that represents a raw KMC end state that matches the start state
+        /// </summary>
+        /// <param name="startState"></param>
+        /// <returns></returns>
+        protected IParticle[] CreateRawKmcEndState(IParticle[] startState)
+        {
+            var result = new IParticle[startState.Length];
+            for (var i = 0; i < result.Length; i++)
+            {
+                if (startState[i].IsVoid)
+                    result[i] = Particles[0];
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        ///     Creates an <see cref="IParticle"/> array that represents a raw KMC transition state that matches the start state
+        /// </summary>
+        /// <param name="startState"></param>
+        /// <returns></returns>
+        protected IParticle[] CreateRawKmcTransitionState(IParticle[] startState)
+        {
+            var result = new IParticle[startState.Length];
+            for (var i = 0; i < result.Length; i++)
+            {
+                if (!startState[i].IsVoid)
+                    result[i] = Particles[0];
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        ///     Tries to determine the end state of an MMC type rule by start state and exchange groups. Returns false if no valid end state is found
+        /// </summary>
+        /// <param name="startState"></param>
+        /// <param name="exchangeGroups"></param>
+        /// <param name="endState"></param>
+        /// <returns></returns>
+        protected bool TryGetMmcEndState(IParticle[] startState, IStateExchangeGroup[] exchangeGroups, out IParticle[] endState)
+        {
+            endState = null;
+            var lhsExchanges = GetApplicableStateExchanges(startState[0], exchangeGroups[0]);
+            var rhsExchanges = GetApplicableStateExchanges(startState[1], exchangeGroups[1]);
+
+            foreach (var lhsExchange in lhsExchanges)
+            {
+                foreach (var rhsExchange in rhsExchanges)
+                {
+                    if (!CanDoMmcTypeExchange(startState[0], startState[1], lhsExchange, rhsExchange)) continue;
+                    if (endState != null) throw new InvalidOperationException("More than one end state matched the start state.");
+                    var lhsParticleNew = GetExchangeParticle(startState[0], lhsExchange);
+                    var rhsParticleNew = GetExchangeParticle(startState[1], rhsExchange);
+                    endState = new[] {lhsParticleNew, rhsParticleNew};
+                }
+            }
+
+            return endState != null;
+        }
+
+        /// <summary>
+        ///     Checks if the passed <see cref="IStateExchangePair"/> instances support an MMC type exchange based on the passed original <see cref="IParticle"/> objects
+        /// </summary>
+        /// <param name="lhsParticleOld"></param>
+        /// <param name="rhsParticleOld"></param>
+        /// <param name="lhsExchange"></param>
+        /// <param name="rhsExchange"></param>
+        /// <returns></returns>
+        protected bool CanDoMmcTypeExchange(IParticle lhsParticleOld, IParticle rhsParticleOld, IStateExchangePair lhsExchange, IStateExchangePair rhsExchange)
+        {
+            if (lhsParticleOld.Equals(rhsParticleOld)) return false;
+            var lhsParticleNew = GetExchangeParticle(lhsParticleOld, lhsExchange);
+            var rhsParticleNew = GetExchangeParticle(rhsParticleOld, rhsExchange);
+            var massIsOk = !ExchangeViolatesMassConservation(lhsParticleOld, lhsParticleNew, rhsParticleOld, rhsParticleNew);
+            var chargeIsOk = !ExchangeViolatesChargeConservation(lhsParticleOld, lhsParticleNew, rhsParticleOld, rhsParticleNew);
+            var isNoHybrid = !ExchangesViolatesMmcHybridRule(lhsParticleOld, lhsParticleNew, rhsParticleOld, rhsParticleNew);
+            return massIsOk && chargeIsOk && isNoHybrid;
+        }
+
+        /// <summary>
+        ///     Checks if the passed <see cref="IStateExchangePair"/> instances support a KMC type ion move based on the passed original <see cref="IParticle"/> objects
+        /// </summary>
+        /// <param name="lhsParticleOld"></param>
+        /// <param name="rhsParticleOld"></param>
+        /// <param name="lhsExchange"></param>
+        /// <param name="rhsExchange"></param>
+        protected bool CanDoKmcTypeIonMove(IParticle lhsParticleOld, IParticle rhsParticleOld, IStateExchangePair lhsExchange, IStateExchangePair rhsExchange)
+        {
+            var lhsParticleNew = GetExchangeParticle(lhsParticleOld, lhsExchange);
+            var rhsParticleNew = GetExchangeParticle(rhsParticleOld, rhsExchange);
+            var lhsMovesToRhs = rhsParticleNew.Equals(lhsParticleOld);
+            var lhsToVacancy = lhsParticleNew.IsVacancy;
+            return lhsToVacancy && lhsMovesToRhs;
+        }
+
+        /// <summary>
+        ///     Checks if the passed <see cref="IStateExchangePair"/> instances support a KMC type charge move based on the passed original <see cref="IParticle"/> objects
+        /// </summary>
+        /// <param name="lhsParticleOld"></param>
+        /// <param name="rhsParticleOld"></param>
+        /// <param name="lhsExchange"></param>
+        /// <param name="rhsExchange"></param>
+        protected bool CanDoKmcTypeChargeMove(IParticle lhsParticleOld, IParticle rhsParticleOld, IStateExchangePair lhsExchange, IStateExchangePair rhsExchange)
+        {
+            if (lhsParticleOld.Equals(rhsParticleOld)) return false;
+            var lhsParticleNew = GetExchangeParticle(lhsParticleOld, lhsExchange);
+            var rhsParticleNew = GetExchangeParticle(rhsParticleOld, rhsExchange);
+            var lhsIsDonor = lhsParticleNew.Equals(lhsExchange.DonorParticle);
+            var chargeIsOk = !ExchangeViolatesChargeConservation(lhsParticleOld, lhsParticleNew, rhsParticleOld, rhsParticleNew);
+            var noMovement = lhsParticleOld.Symbol == lhsParticleNew.Symbol && rhsParticleOld.Symbol == rhsParticleNew.Symbol;
+            return lhsIsDonor && chargeIsOk && noMovement;
+        }
+
+        /// <summary>
+        ///     Checks if the passed <see cref="IStateExchangePair"/> instances support a KMC type ion push based on the passed original <see cref="IParticle"/> objects
+        /// </summary>
+        /// <param name="lhsParticleOld"></param>
+        /// <param name="rhsParticleOld"></param>
+        /// <param name="lhsExchange"></param>
+        /// <param name="rhsExchange"></param>
+        protected bool CanDoKmcTypeIonPush(IParticle lhsParticleOld, IParticle rhsParticleOld, IStateExchangePair lhsExchange, IStateExchangePair rhsExchange, IParticle pushingParticle)
+        {
+            var lhsParticleNew = GetExchangeParticle(lhsParticleOld, lhsExchange);
+            var rhsParticleNew = GetExchangeParticle(rhsParticleOld, rhsExchange);
+            var lhsMovesToRhs = rhsParticleNew.Equals(lhsParticleOld);
+            var lhsToPushParticle = lhsParticleNew.Equals(pushingParticle);
+            return lhsMovesToRhs && lhsToPushParticle;
+        }
+
+        /// <summary>
+        ///     Gets all <see cref="IStateExchangePair"/> objects that can be applied to the passed start <see cref="IParticle"/>
+        /// </summary>
+        /// <param name="startParticle"></param>
+        /// <param name="exchangeGroup"></param>
+        /// <returns></returns>
+        protected IList<IStateExchangePair> GetApplicableStateExchanges(IParticle startParticle, IStateExchangeGroup exchangeGroup)
+        {
+            return exchangeGroup.GetStateExchangePairs()
+                                .Where(x => x.DonorParticle.Equals(startParticle) || x.AcceptorParticle.Equals(startParticle))
+                                .ToList();
+        }
+
+        /// <summary>
+        ///     Get the <see cref="ConnectorType"/> and <see cref="IStateExchangeGroup"/> arrays from an <see cref="IAbstractTransition"/>
+        /// </summary>
+        /// <param name="abstractTransition"></param>
+        /// <returns></returns>
+        protected (ConnectorType[], IStateExchangeGroup[]) GetConnectorsAndExchangeGroups(IAbstractTransition abstractTransition)
+        {
+            var connectors = abstractTransition.GetConnectorSequence().ToArray(abstractTransition.ConnectorCount);
+            var exchangeGroups = abstractTransition.GetStateExchangeGroups().ToArray(abstractTransition.StateCount);
+            return (connectors, exchangeGroups);
+        }
+
+        /// <summary>
+        ///     Gets a <see cref="IList{T}"/> of <see cref="IParticle"/> arrays that represent all possible start state permutations possible in the passed <see cref="IStateExchangeGroup"/> array
+        /// </summary>
+        /// <param name="exchangeGroups"></param>
+        /// <returns></returns>
+        protected IList<IParticle[]> GetStartStatePermutations(IStateExchangeGroup[] exchangeGroups)
+        {
+            var startStates = GetStartStatePermutationSource(exchangeGroups).ToList();
+            startStates.RemoveDuplicates((a, b) => a.LexicographicCompare(b) == 0);
+            return startStates;
+        }
+
+        /// <summary>
+        ///     Creates a <see cref="IPermutationSource{T1}"/> of <see cref="IParticle"/> arrays that represent all possible start state permutations possible in the passed <see cref="IStateExchangeGroup"/> array
+        /// </summary>
+        /// <param name="exchangeGroups"></param>
+        /// <remarks> The permutation source can yields duplicates </remarks>
+        /// <returns></returns>
+        protected IPermutationSource<IParticle> GetStartStatePermutationSource(IStateExchangeGroup[] exchangeGroups)
+        {
+            var optionSets = new IEnumerable<IParticle>[exchangeGroups.Length];
+            for (var i = 0; i < exchangeGroups.Length; i++)
+            {
+                if (exchangeGroups[i].IsUnstablePositionGroup)
+                {
+                    optionSets[i] = Particles[0].AsSingleton();
+                    continue;
+                }
+
+                var donors = exchangeGroups[i].GetStateExchangePairs().Select(x => x.DonorParticle);
+                var acceptors = exchangeGroups[i].GetStateExchangePairs().Select(x => x.AcceptorParticle);
+                var union = donors.Union(acceptors);
+                optionSets[i] = union;
+            }
+
+            return new PermutationSlotMachine<IParticle>(optionSets);
+        }
+
+        /// <summary>
+        ///     Converts an <see cref="ConnectorType"/> and <see cref="IStateExchangeGroup"/> array pair to a <see cref="MovementCode"/>
+        /// </summary>
+        /// <param name="connectors"></param>
+        /// <param name="exchangeGroups"></param>
+        /// <returns></returns>
+        protected MovementCode GetMovementCode(ConnectorType[] connectors, IStateExchangeGroup[] exchangeGroups)
         {
             var exchangeList = new List<int>();
-            for (var i = 0; i < connectorTypes.Length; i++)
+            for (var i = 0; i < connectors.Length; i++)
             {
                 var current = i;
-                if (connectorTypes[current] != ConnectorType.Dynamic)
+                if (connectors[current] != ConnectorType.Dynamic)
                     continue;
 
-                while (pairGroups[i + 1].PositionStability == PositionStability.Unstable)
+                while (exchangeGroups[i + 1].IsUnstablePositionGroup)
                     i++;
 
                 exchangeList.Add(current);
@@ -294,269 +557,133 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <summary>
-        ///     Tries to change the state of the passed states with the state pairs according to the operation define by the
-        ///     connector type
+        ///     Get the affiliated exchange <see cref="IParticle"/> if an <see cref="IStateExchangePair"/> is applied to the provided <see cref="IParticle"/>
         /// </summary>
-        /// <param name="states"></param>
-        /// <param name="statePairs"></param>
-        /// <param name="connectorType"></param>
+        /// <param name="oldParticle"></param>
+        /// <param name="stateExchangePair"></param>
         /// <returns></returns>
-        protected bool TryChangeStateStep(ref (int, int) states, in (StatePair, StatePair) statePairs, ConnectorType connectorType)
+        protected IParticle GetExchangeParticle(IParticle oldParticle, IStateExchangePair stateExchangePair)
         {
-            switch (connectorType)
-            {
-                case ConnectorType.Dynamic:
-                    return TryChangeStepDynamic(ref states, statePairs);
-
-                case ConnectorType.Static:
-                    return true;
-
-                default:
-                    return false;
-            }
+            if (oldParticle.Equals(stateExchangePair.DonorParticle)) return stateExchangePair.AcceptorParticle;
+            if (oldParticle.Equals(stateExchangePair.AcceptorParticle)) return stateExchangePair.DonorParticle;
+            throw new InvalidOperationException("Particle and state exchange pair do not match");
         }
 
         /// <summary>
-        ///     Tries to change the state for a dynamically linked step
+        ///     Checks if the four <see cref="IParticle"/> objects describe an not supported hybrid MMC exchange, that is, both charge transfer and physical ion transfer happen simultaneously
         /// </summary>
-        /// <param name="states"></param>
-        /// <param name="statePairs"></param>
+        /// <param name="lhsOld"></param>
+        /// <param name="lhsNew"></param>
+        /// <param name="rhsOld"></param>
+        /// <param name="rhsNew"></param>
         /// <returns></returns>
-        protected bool TryChangeStepDynamic(ref (int, int) states, in (StatePair, StatePair) statePairs)
+        protected bool ExchangesViolatesMmcHybridRule(IParticle lhsOld, IParticle lhsNew, IParticle rhsOld, IParticle rhsNew)
         {
-            var (value0, direction0) = ChangeState(states.Item1, statePairs.Item1);
-            var (value1, direction1) = ChangeState(states.Item2, statePairs.Item2);
-
-            if (direction0 + direction1 != 0)
-                return false;
-
-            states = (value0, value1);
-            return true;
+            if (lhsOld.IsVoid || rhsOld.IsVoid) return false;
+            var condition0 = lhsNew.Symbol != lhsOld.Symbol && rhsNew.Symbol != rhsOld.Symbol;
+            var condition1 = lhsNew.Symbol == rhsOld.Symbol && rhsNew.Symbol == lhsOld.Symbol;
+            var condition2 = !NumericComparer.Default().Equals(lhsNew.Charge, lhsOld.Charge);
+            var condition3 = !NumericComparer.Default().Equals(rhsNew.Charge, rhsOld.Charge);
+            return condition0 && condition1 && condition2 && condition3;
         }
 
         /// <summary>
-        ///     Changes the state using the provided state and returns value and change direction (+1 for D-A, -1 for A-D)
+        ///     Checks if the four <see cref="IParticle"/> objects describe an exchange that violates mass conservation
         /// </summary>
-        /// <param name="current"></param>
-        /// <param name="statePair"></param>
+        /// <param name="lhsOld"></param>
+        /// <param name="lhsNew"></param>
+        /// <param name="rhsOld"></param>
+        /// <param name="rhsNew"></param>
         /// <returns></returns>
-        protected (int value, int direction) ChangeState(int current, in StatePair statePair)
+        protected bool ExchangeViolatesMassConservation(IParticle lhsOld, IParticle lhsNew, IParticle rhsOld, IParticle rhsNew)
         {
-            if (current == statePair.AcceptorIndex)
-                return (statePair.DonorIndex, 1);
-
-            if (current == statePair.DonorIndex)
-                return (statePair.AcceptorIndex, -1);
-
-            throw new ArgumentException("Index not found in state pair", nameof(current));
+            var option0 = lhsOld.Symbol == rhsNew.Symbol && lhsNew.Symbol == rhsOld.Symbol;
+            var option1 = lhsOld.Symbol == lhsNew.Symbol && rhsOld.Symbol == rhsNew.Symbol;
+            return !option0 && !option1;
         }
 
         /// <summary>
-        ///     Filters a set of rules by assigning common movement tags and removing all rules that can be generated from each
-        ///     other and are therefore equivalent
+        ///     Checks if the four <see cref="IParticle"/> objects describe an exchange that violates charge conservation
         /// </summary>
-        /// <param name="unfilteredRules"></param>
-        /// <remarks> Equivalent rules are; Back-jump rules, Symmetric rules or twisted symmetric rules  </remarks>
-        /// <returns></returns>
-        protected IEnumerable<TRule> FilterByCommonBehaviorAndInversionRules(IEnumerable<TRule> unfilteredRules)
-        {
-            var results = new List<TRule>(10);
-            foreach (var rule in DetermineAndSetRuleMovementTypes(unfilteredRules))
-            {
-                // If the rule determination detects not supported, try to handle the rule as a chained migration
-                if (rule.MovementFlags.HasFlag(RuleMovementFlags.HasUnsupportedMovement))
-                    continue;
-
-                // Handle the push like case (intersticialcy) where the inverse rule was not created
-                if (rule.MovementFlags.HasFlag(RuleMovementFlags.HasChainedMovement))
-                {
-                    HandleIntersticialcyLikeRule(rule);
-                    results.Add(rule);
-                    continue;
-                }
-
-                // Migration that contain physical migrations without a vacancy are possible but basically meaningless
-                if (rule.MovementFlags.HasFlag(RuleMovementFlags.IsMigration | RuleMovementFlags.HasPhysicalMovement) &&
-                    !rule.MovementFlags.HasFlag(RuleMovementFlags.HasVacancyMovement))
-                    continue;
-
-                // Handle association/dissociation case where one has to be selected
-                if (!(!rule.AbstractTransition.IsAssociation ^ rule.MovementFlags.HasFlag(RuleMovementFlags.IsAssociation)))
-                    continue;
-
-                results.Add(rule);
-            }
-
-            FilterInvertedAndReversedDuplicateRules(results);
-            return results;
-        }
+        /// <param name="lhsOld"></param>
+        /// <param name="lhsNew"></param>
+        /// <param name="rhsOld"></param>
+        /// <param name="rhsNew"></param>
+        protected bool ExchangeViolatesChargeConservation(IParticle lhsOld, IParticle lhsNew, IParticle rhsOld, IParticle rhsNew) =>
+            !NumericComparer.Default().Equals(lhsNew.Charge - lhsOld.Charge, rhsOld.Charge - rhsNew.Charge);
 
         /// <summary>
-        ///     Tries to handle the passed rule as a chained/vehicle migration and creates the missing inverse rule if possible
-        /// </summary>
-        /// <param name="rule"></param>
-        /// <returns></returns>
-        protected void HandleIntersticialcyLikeRule(TRule rule)
-        {
-            if (!rule.MovementFlags.HasFlag(RuleMovementFlags.HasChainedMovement))
-                throw new InvalidOperationException("Rule does not have the valid flags for this operation");
-
-            var inverseRule = new TRule
-            {
-                TransitionRuleFlags = rule.TransitionRuleFlags,
-                AbstractTransition = rule.AbstractTransition,
-                StartState = rule.FinalState.DeepCopy(),
-                TransitionState = rule.TransitionState.DeepCopy(),
-                FinalState = rule.StartState.DeepCopy(),
-                MovementCode = rule.MovementCode.GetInverse()
-            };
-
-            rule.AddDependentRule(inverseRule);
-        }
-
-        /// <summary>
-        ///     Determines the combination of rule movement flags for each rule and sets the values
+        ///     Determines one parent rule for all dependent rules and moves the dependent rules from the main list to the affiliated list on the parent rule
         /// </summary>
         /// <param name="rules"></param>
-        /// <returns></returns>
-        protected IEnumerable<TRule> DetermineAndSetRuleMovementTypes(IEnumerable<TRule> rules)
+        protected void MoveDependentRulesToParentRules(IList<TRule> rules)
         {
-            foreach (var rule in rules)
+            var analyzer = new TransitionAnalyzer();
+            for (var i = 0; i < rules.Count - 1; i++)
             {
-                var moveType = rule.AbstractTransition.ConnectorCount == 1 ? RuleMovementFlags.IsExchange : RuleMovementFlags.IsMigration;
-                moveType |= GetRequiredVehicleFlags(rule);
-
-                var movement = rule.GetMovementDescription().ToList();
-                var zipped = rule.GetStartStateOccupation().Zip(rule.GetFinalStateOccupation(), (a, b) => (a, b)).ToList();
-                for (var i = 0; i < movement.Count - 1; i += 2)
-                    moveType |= GetStepMovementType(zipped[movement[i]], zipped[movement[i + 1]]);
-
-                if (IsIntersticialyLikeMovement(movement))
+                for (var j = i + 1; j < rules.Count;)
                 {
-                    moveType -= moveType & RuleMovementFlags.HasUnsupportedMovement;
-                    moveType |= RuleMovementFlags.HasChainedMovement;
+                    if (analyzer.RulePairIsDependentPair(rules[i], rules[j]))
+                    {
+                        rules[i].AddDependentRule(rules[j]);
+                        rules.RemoveAt(j);
+                        continue;
+                    }
+
+                    j++;
                 }
-
-                rule.MovementFlags = moveType;
-                yield return rule;
             }
         }
 
         /// <summary>
-        ///     Checks if a rule movement description is like the intersticialcy type mechanism
-        /// </summary>
-        /// <param name="movement"></param>
-        /// <returns></returns>
-        protected bool IsIntersticialyLikeMovement(IList<int> movement)
-        {
-            if (movement.Count <= 2)
-                return false;
-
-            for (var i = 1; i < movement.Count - 2; i++)
-            {
-                if (movement[i] != movement[i + 1])
-                    return false;
-            }
-
-            return true;
-        }
-
-        /// <summary>
-        ///     Get the required vehicle flags for the passed transition rule or none if the rule does not describe a vehicle
-        ///     mechanism
+        ///     Gets all <see cref="RuleMovementFlags"/> that describe the passed rule
         /// </summary>
         /// <param name="rule"></param>
         /// <returns></returns>
-        protected RuleMovementFlags GetRequiredVehicleFlags(TRule rule)
+        protected RuleMovementFlags GetMovementFlags(TRule rule)
         {
-            RuleMovementFlags result = 0;
-            if (rule.PathLength <= 3)
-                return result;
+            var flags = rule.PathLength == 2 ? RuleMovementFlags.IsExchange : RuleMovementFlags.IsMigration;
 
-            result |= RuleMovementFlags.HasVehicleMovement;
-            result |= MovementIsAssociationDissociation(rule) ? RuleMovementFlags.IsAssociation : 0;
-            return result;
-        }
+            if (rule.AbstractTransition.GetConnectorSequence().Any(x => x == ConnectorType.Static))
+                flags |= RuleMovementFlags.HasVehicleMovement;
 
-        /// <summary>
-        ///     Check if the movement description of the passed transition rule conforms to association/dissociation behavior
-        ///     independent of what is defined in its set abstract transition
-        /// </summary>
-        /// <param name="rule"></param>
-        /// <returns></returns>
-        protected bool MovementIsAssociationDissociation(TRule rule)
-        {
-            if (rule.PathLength <= 3)
-                return false;
-
-            var (forwardCount, backwardCount) = (0, 0);
-            var statePairMap = rule.AbstractTransition.GetStateExchangeGroups().Select(x => x.GetStateExchangePairs().ToList()).ToList();
-            var movement = rule.MovementCode.AsExchangePairs().ToList();
+            if (ContainsPushChain(rule.AbstractTransition)) flags |= RuleMovementFlags.HasChainedMovement;
 
             for (var i = 0; i < rule.PathLength; i++)
             {
-                if (rule.StartState[i].IsVoid)
-                    continue;
+                var (particle0, particle1) = (rule.StartState[i], rule.FinalState[i]);
+                if (particle0.Symbol != particle1.Symbol) flags |= RuleMovementFlags.HasPhysicalMovement;
 
-                if (statePairMap[i].Count(x => x.DonorParticle == rule.StartState[i]) == 0)
-                    continue;
+                if (particle0.Symbol == particle1.Symbol && !NumericComparer.Default().Equals(particle0.Charge, particle1.Charge))
+                    flags |= RuleMovementFlags.HasPropertyMovement;
 
-                var firstMovement = movement.FirstOrDefault(x => x.Item1 == i || x.Item2 == i);
-                var direction = firstMovement.Item1 == i ? 1 : -1;
-
-                if (direction < 0)
-                    backwardCount++;
-                if (direction > 0)
-                    forwardCount++;
+                if (particle0.IsVacancy ^ particle1.IsVacancy) flags |= RuleMovementFlags.HasVacancyMovement;
             }
 
-            return forwardCount > 0 && backwardCount > 0;
+            return flags;
         }
 
         /// <summary>
-        ///     Determines the specific rule movement type of a single type step based upon the characteristics the involve
-        ///     particles provide
+        ///     Checks if an <see cref="IAbstractTransition"/> contains a push chain (interstitialcy mechanism)
         /// </summary>
-        /// <param name="lhs"></param>
-        /// <param name="rhs"></param>
+        /// <param name="abstractTransition"></param>
         /// <returns></returns>
-        protected RuleMovementFlags GetStepMovementType(in (IParticle start, IParticle end) lhs, in (IParticle start, IParticle end) rhs)
+        protected bool ContainsPushChain(IAbstractTransition abstractTransition)
         {
-            var isVacancyExchange = IsValidVacancyExchange(lhs, rhs);
-            var isPropertyExchange = lhs.start.Symbol == lhs.end.Symbol && rhs.start.Symbol == rhs.end.Symbol;
-            var isPhysicalExchange = lhs.start.Index == rhs.end.Index && lhs.end.Index == rhs.start.Index;
-            var isSameTypeExchange = lhs.start.Symbol == rhs.start.Symbol;
+            var dynamicSequenceLength = 0;
+            foreach (var connectorType in abstractTransition.GetConnectorSequence())
+            {
+                if (connectorType == ConnectorType.Dynamic)
+                {
+                    dynamicSequenceLength++;
+                    if (dynamicSequenceLength > 2) return true;
+                    continue;
+                }
 
-            if (isVacancyExchange)
-                return RuleMovementFlags.HasPhysicalMovement | RuleMovementFlags.HasVacancyMovement;
+                dynamicSequenceLength = 0;
+            }
 
-            if (isPropertyExchange && isPhysicalExchange && isSameTypeExchange)
-                return RuleMovementFlags.HasPropertyMovement;
-
-            if (isPhysicalExchange)
-                return RuleMovementFlags.HasPhysicalMovement;
-
-            return isPropertyExchange
-                ? RuleMovementFlags.HasPropertyMovement
-                : RuleMovementFlags.HasUnsupportedMovement;
-        }
-
-        /// <summary>
-        ///     Checks if two particle tuples describing the start and end states of two dynamically exchanging positions describe
-        ///     a valid vacancy exchange that does not violated matter conservation
-        /// </summary>
-        /// <param name="lhs"></param>
-        /// <param name="rhs"></param>
-        /// <returns> True if the exchange is valid in the sense of a vacancy mechanism step </returns>
-        protected bool IsValidVacancyExchange(in (IParticle start, IParticle end) lhs, in (IParticle start, IParticle end) rhs)
-        {
-            if (!lhs.start.IsVacancy && !lhs.end.IsVacancy || lhs.start.IsVacancy && lhs.end.IsVacancy)
-                return false;
-
-            if (!rhs.start.IsVacancy && !rhs.end.IsVacancy || rhs.start.IsVacancy && rhs.end.IsVacancy)
-                return false;
-
-            return lhs.start.Index == rhs.end.Index && lhs.end.Index == rhs.start.Index;
+            return false;
         }
     }
 }

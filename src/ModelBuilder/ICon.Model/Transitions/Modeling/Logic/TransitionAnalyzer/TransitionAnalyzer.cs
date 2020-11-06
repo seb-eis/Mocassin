@@ -71,6 +71,19 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <summary>
+        ///     Checks if two rules form a dependent pair that cannot be modeled independently
+        /// </summary>
+        /// <param name="lhs"></param>
+        /// <param name="rhs"></param>
+        /// <returns></returns>
+        public bool RulePairIsDependentPair(ITransitionRule lhs, ITransitionRule rhs)
+        {
+            return RulePairIsSymmetricPair(lhs, rhs)
+                || RulePairIsBackjumpPair(lhs, rhs)
+                || RulePairIsTwistedPair(lhs, rhs);
+        }
+
+        /// <summary>
         ///     Check if two rules form a symmetric rule pair meaning one rule is exactly the other but for the inverted case of
         ///     the underlying abstract transition
         /// </summary>
@@ -78,7 +91,7 @@ namespace Mocassin.Model.Transitions
         /// <param name="rhs"></param>
         /// <remarks> Rules are symmetric when the abstract is symmetric and the following is true: S_0 == E_1 and S_1 == E_0 </remarks>
         /// <returns></returns>
-        public bool IsSymmetricRulePair(ITransitionRule lhs, ITransitionRule rhs)
+        public bool RulePairIsSymmetricPair(ITransitionRule lhs, ITransitionRule rhs)
         {
             if (lhs.MovementFlags != rhs.MovementFlags) return false;
             return lhs.GetStartStateOccupation().Select(a => a.Index).SequenceEqual(rhs.GetFinalStateOccupation().Select(a => a.Index))
@@ -93,7 +106,7 @@ namespace Mocassin.Model.Transitions
         /// <param name="rhs"></param>
         /// <remarks> Rules form back-jump pair when the following is true. S_0 == S_1.Reverse and E_0 == E_1.Reverse </remarks>
         /// <returns></returns>
-        public bool IsBackjumpRulePair(ITransitionRule lhs, ITransitionRule rhs)
+        public bool RulePairIsBackjumpPair(ITransitionRule lhs, ITransitionRule rhs)
         {
             if (lhs.MovementFlags != rhs.MovementFlags)
                 return false;
@@ -111,7 +124,7 @@ namespace Mocassin.Model.Transitions
         /// <param name="lhs"></param>
         /// <param name="rhs"></param>
         /// <returns></returns>
-        public bool IsTwistedRulePair(ITransitionRule lhs, ITransitionRule rhs)
+        public bool RulePairIsTwistedPair(ITransitionRule lhs, ITransitionRule rhs)
         {
             if (lhs.MovementFlags != rhs.MovementFlags)
                 return false;

@@ -31,7 +31,7 @@ namespace Mocassin.Model.Transitions
         /// <returns></returns>
         [ValidationOperation(ValidationType.Object)]
         protected IValidationReport ValidateStateExchangePair(IStateExchangePair pair, IDataReader<ITransitionDataPort> dataReader) =>
-            new PropertyStatePairValidator(ModelProject, Settings, dataReader).Validate(pair);
+            new StateExchangePairValidator(ModelProject, Settings, dataReader).Validate(pair);
 
         /// <summary>
         ///     Validates a new state exchange group in terms of content and potential conflicts with existing data
@@ -41,7 +41,7 @@ namespace Mocassin.Model.Transitions
         /// <returns></returns>
         [ValidationOperation(ValidationType.Object)]
         protected IValidationReport ValidateStateExchangeGroup(IStateExchangeGroup group, IDataReader<ITransitionDataPort> dataReader) =>
-            new PropertyGroupValidator(ModelProject, Settings, dataReader).Validate(group);
+            new StateExchangeGroupValidator(ModelProject, Settings, dataReader).Validate(group);
 
         /// <summary>
         ///     Validates a new abstract transition in terms of content and potential conflicts with existing data

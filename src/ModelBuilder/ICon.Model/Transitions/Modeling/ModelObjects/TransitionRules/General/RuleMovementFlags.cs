@@ -19,7 +19,7 @@ namespace Mocassin.Model.Transitions
         HasPhysicalMovement = 1 << 1,
 
         /// <summary>
-        ///     Movement contains property exchange movement
+        ///     Movement contains charge exchange movement
         /// </summary>
         HasPropertyMovement = 1 << 2,
 

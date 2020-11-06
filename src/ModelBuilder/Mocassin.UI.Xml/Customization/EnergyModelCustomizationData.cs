@@ -6,6 +6,7 @@ using Mocassin.Framework.Extensions;
 using Mocassin.Model.Energies;
 using Mocassin.Model.ModelProject;
 using Mocassin.UI.Data.Base;
+using Mocassin.UI.Data.Helper;
 
 namespace Mocassin.UI.Data.Customization
 {
@@ -122,6 +123,9 @@ namespace Mocassin.UI.Data.Customization
                                            .ToObservableCollection()
             };
 
+            var pairNameGenerator = new PairInteractionNameGenerator();
+            pairNameGenerator.NameSet(obj.UnstablePairEnergyParameterSets);
+            pairNameGenerator.NameSet(obj.StablePairEnergyParameterSets);
             return obj;
         }
     }

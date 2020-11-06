@@ -81,6 +81,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.
             }
 
             defectBackground.DefectEnergies = newList;
+            DefectEnergiesControlViewModel.SetCollection(newList);
         }
     }
 }

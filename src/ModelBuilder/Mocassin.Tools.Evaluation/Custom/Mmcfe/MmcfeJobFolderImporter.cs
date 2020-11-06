@@ -12,7 +12,7 @@ using Mocassin.Model.Translator;
 using Mocassin.Model.Translator.Database.Entities.Other.Meta;
 using Mocassin.Tools.Evaluation.Helper;
 
-namespace Mocassin.Tools.Evaluation.Custom.Mmcfe.Importer
+namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
 {
     /// <summary>
     ///     Default <see cref="IMmcfeResultImporter" /> implementation that imports from the default simulation job folder

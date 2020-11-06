@@ -25,7 +25,7 @@ namespace Mocassin.Model.Transitions.ConflictHandling
         /// <returns></returns>
         protected IEnumerable<KineticRule> CreateTransitionRules(KineticTransition transition)
         {
-            var particles = ModelProject.Manager<IParticleManager>().DataAccess.Query(port => port.GetParticles());
+            var particles = ModelProject.DataTracker.MapObjects<IParticle>();
             var creator = new TransitionRuleGenerator<KineticRule>(particles);
             return creator.MakeUniqueRules(transition.AbstractTransition.AsSingleton(), true)
                           .SingleOrDefault()

@@ -8,10 +8,10 @@ namespace Mocassin.Model.Transitions.Validators
     ///     Validator for new state exchange pairs that checks for compatibility with existing data and general object
     ///     constraints
     /// </summary>
-    public class PropertyStatePairValidator : DataValidator<IStateExchangePair, MocassinTransitionSettings, ITransitionDataPort>
+    public class StateExchangePairValidator : DataValidator<IStateExchangePair, MocassinTransitionSettings, ITransitionDataPort>
     {
         /// <inheritdoc />
-        public PropertyStatePairValidator(IModelProject modelProject, MocassinTransitionSettings settings,
+        public StateExchangePairValidator(IModelProject modelProject, MocassinTransitionSettings settings,
             IDataReader<ITransitionDataPort> dataReader)
             : base(modelProject, settings, dataReader)
         {
@@ -22,7 +22,7 @@ namespace Mocassin.Model.Transitions.Validators
         {
             var report = new ValidationReport();
             AddGenericObjectDuplicateValidation(obj, DataReader.Access.GetStateExchangePairs(), report);
-            AddStateExchangeValidation(obj, report);
+            //AddStateExchangeValidation(obj, report);
             return report;
         }
 
