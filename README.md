@@ -3,7 +3,9 @@
 ## What is MOCASSIN?
 MOCASSIN stands for "Monte Carlo for Solid State Ionics" and is a Markov Chain Monte Carlo program for simulations of defects in crystalline solids, primarily solid electrolytes. It supports both Kinetic (KMC) and Metropolis Monte Carlo (MMC) simulations in a unified manner based on ideal crystal structures with fixed positions and symmetry processing with space groups. This allows MOCASSIN to process arbitrary crystal geometries and greatly reduces the input effort by reducing the data to a symmetry reduced set. It is intended for highly customizable energy models where pair and cluster interactions can be directly modelled using first principles energy calculations.
 
-The system was developed as a PhD project at RWTH Aachen University / Germany and Forschungszentrum Jülich GmbH / Germany. Please refer to the affiliated [open access publication](http://dx.doi.org/10.1002/jcc.26418) or the HTML documentation pages in release versions for further information. If you intend to use Mocassin for a research project and publish your work, we request/recommend that you cite [http://dx.doi.org/10.1002/jcc.26418](http://dx.doi.org/10.1002/jcc.26418) with all authors in full name.
+The program was developed by Sebastian Eisele and Steffen Grieshammer at Helmholtz-Institute Münster (IEK-12) of Forschungs Zentrum Jülich GmbH / Germany and Institute of Physical Chemistry (Prof. M. Martin) of RWTH Aachen University / Germany. The authors thank John P. Arnold (Prof. Dr. Manfred Martin's group, RWTH Aachen University, Germany) and Lukas Eisele (Artiso Solutions GmbH, Blaustein, Germany) for their contributions.  
+
+Please refer to the affiliated [open access publication](http://dx.doi.org/10.1002/jcc.26418) or the HTML documentation pages in release versions for further information. If you intend to use Mocassin for a research project and publish your work, we request/recommend that you cite [http://dx.doi.org/10.1002/jcc.26418](http://dx.doi.org/10.1002/jcc.26418) with all authors in full name.
 
 <figure style="text-align: center">
     <img src ="./docs/userguide-md/figures/png/Logo.png" width="250">
