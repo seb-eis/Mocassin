@@ -127,10 +127,20 @@ error_t FinishKmcPreRunRoutine(SCONTEXT_PARAMETER)
     return ERR_OK;
 }
 
+static void AdvanceStepGoalMcsBeyondCurrentMcs(SCONTEXT_PARAMETER)
+{
+    var counters = getMainCycleCounters(simContext);
+    while (counters->McsCount > counters->NextExecutionPhaseGoalMcsCount)
+    {
+        AdvanceMainCycleCounterToNextStepGoal(simContext);
+    }
+}
+
 // Starts the main kinetic simulation routine
 error_t StartKmcMainRoutine(SCONTEXT_PARAMETER)
 {
     var abortFlag = UpdateAndEvaluateKmcAbortConditions(simContext);
+    AdvanceStepGoalMcsBeyondCurrentMcs(simContext);
     while(abortFlag == STATE_FLG_CONTINUE)
     {
         SIMERROR = RunOneKmcExecutionBlock(simContext);
@@ -378,9 +388,9 @@ error_t RunOneKmcExecutionBlock(SCONTEXT_PARAMETER)
 error_t RunOneKmcAutoOptimizationExecutionBlock(SCONTEXT_PARAMETER)
 {
     var counters = getMainCycleCounters(simContext);
+    let countPerLoop = counters->PrerunGoalMcs / CYCLE_BLOCKCOUNT;
     for (;counters->McsCount < counters->PrerunGoalMcs;)
     {
-        let countPerLoop = counters->CycleCountPerExecutionLoop;
         for (int64_t i = 0; i < countPerLoop; ++i)
         {
             ExecuteKmcAutoOptimizingSimulationCycle(simContext);

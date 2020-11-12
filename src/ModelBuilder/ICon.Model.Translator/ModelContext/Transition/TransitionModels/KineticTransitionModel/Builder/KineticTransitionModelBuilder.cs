@@ -38,7 +38,7 @@ namespace Mocassin.Model.Translator.ModelContext
             foreach (var transitionModel in resultModels)
             {
                 if (TryLinkTransitionModelToExistingSets(transitionModel, resultModels)) continue;
-
+                if (transitionModel.RuleModels.Any(x => (x.KineticRule.MovementFlags & RuleMovementFlags.HasChainedMovement) != 0)) continue;
                 var inverseModel = CreateGeometricModelInversion(transitionModel);
 
                 inverseModel.ModelId = index++;
@@ -56,8 +56,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        ///     Checks if the user has accidentally defined a <see cref="IKineticTransitionModel" /> that can be used as the
-        ///     inverse
+        ///     Checks if the user has defined a <see cref="IKineticTransitionModel" /> that can be used as the inverse
         /// </summary>
         /// <param name="transitionModel"></param>
         /// <param name="models"></param>
@@ -71,7 +70,7 @@ namespace Mocassin.Model.Translator.ModelContext
                 return true;
             }
 
-            foreach (var otherModel in models.Where(x => x.InverseTransitionModel == null && x != transitionModel))
+            foreach (var otherModel in models.Where(x => x.InverseTransitionModel == null && x != transitionModel && x.Transition.GeometryStepCount == transitionModel.Transition.GeometryStepCount))
             {
                 var pseudoSet = transitionModel.MappingModels.Concat(otherModel.MappingModels).ToList();
                 var linkSuccess = TryLinkSelfConsistentMappingModels(pseudoSet);

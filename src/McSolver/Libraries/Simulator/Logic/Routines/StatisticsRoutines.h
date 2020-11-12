@@ -177,6 +177,9 @@ Vector3_t CalculateMobileTrackerEnsembleShift(SCONTEXT_PARAMETER, byte_t particl
 // Get the linear displacement vector of the static tracker ensemble of the passed particle
 Vector3_t CalculateStaticTrackerEnsembleShift(SCONTEXT_PARAMETER, byte_t particleId);
 
+// Get the linear displacement vector of the global tracker ensemble of the passed particle
+Vector3_t CalculateGlobalTrackerEnsembleShift(SCONTEXT_PARAMETER, byte_t particleId);
+
 // Get the linear displacement vector of the global tracker ensemble of the passed particle and jump collection
 Vector3_t GetGlobalTrackerEnsembleShift(SCONTEXT_PARAMETER, JumpCollection_t *jumpCollection, byte_t particleId);
 

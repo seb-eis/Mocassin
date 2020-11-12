@@ -22,7 +22,7 @@ namespace Mocassin.Model.Particles
         public bool IsVacancy { get; set; }
 
         /// <inheritdoc />
-        public bool IsVoid { get; private set; }
+        public bool IsVoid => Index == VoidIndex;
 
         /// <inheritdoc />
         public override string ObjectName => "Particle";
@@ -59,7 +59,7 @@ namespace Mocassin.Model.Particles
         /// </summary>
         /// <returns></returns>
         public static Particle CreateVoid() => new Particle
-            {Name = "Void", Symbol = "Void", Key = "Particle.Void", Charge = 0.0, Index = VoidIndex, IsVoid = true};
+            {Name = "Void", Symbol = "Void", Key = "Particle.Void", Charge = 0.0, Index = VoidIndex};
 
 
         /// <inheritdoc />

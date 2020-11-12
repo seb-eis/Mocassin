@@ -15,11 +15,12 @@
 // Updates the mobile tracker index on path environment state by path id using the previously set backup data
 static inline void UpdateMobileTrackerMappingByPathId(SCONTEXT_PARAMETER, const int32_t pathId, const JumpRule_t*restrict jumpRule, const EnvironmentBackup_t*restrict envBackup)
 {
-    let pullId = jumpRule->TrackerOrderCode[pathId];
+    let newId = jumpRule->TrackerOrderCode[pathId];
 
     // On debug assert that no immobile particle has a tracker reorder instruction
-    debug_assert(!((pullId != pathId) && !JUMPPATH[pathId]->IsMobile));
-    JUMPPATH[pathId]->MobileTrackerId = envBackup->PathMobileMappings[pullId];
+    debug_assert(!((newId != pathId) && !JUMPPATH[pathId]->IsMobile));
+
+    JUMPPATH[newId]->MobileTrackerId = envBackup->PathMobileMappings[pathId];
 }
 
 // Updates the mobile tracker index on all used path environment states using the previously set backup data
@@ -141,21 +142,22 @@ void AddCurrentKmcTransitionDataToHistograms(SCONTEXT_PARAMETER)
     return_if(simContext->IsJumpLoggingDisabled);
     let length = getActiveJumpDirection(simContext)->JumpLength;
 
-    // Fallthrough switch of possible jump lengths, path id 0 and 2 are always mobile and 1 never is
+    // Fallthrough switch of possible jump lengths
     switch(length)
     {
         case 8:
-            if (JUMPPATH[7]->IsMobile) UpdatePathEnvironmentJumpStatistics(simContext, 7);
+            if (JUMPPATH[7]->IsMobile && JUMPPATH[7]->IsStable) UpdatePathEnvironmentJumpStatistics(simContext, 7);
         case 7:
-            if (JUMPPATH[6]->IsMobile) UpdatePathEnvironmentJumpStatistics(simContext, 6);
+            if (JUMPPATH[6]->IsMobile && JUMPPATH[6]->IsStable) UpdatePathEnvironmentJumpStatistics(simContext, 6);
         case 6:
-            if (JUMPPATH[5]->IsMobile) UpdatePathEnvironmentJumpStatistics(simContext, 5);
+            if (JUMPPATH[5]->IsMobile && JUMPPATH[5]->IsStable) UpdatePathEnvironmentJumpStatistics(simContext, 5);
         case 5:
-            if (JUMPPATH[4]->IsMobile) UpdatePathEnvironmentJumpStatistics(simContext, 4);
+            if (JUMPPATH[4]->IsMobile && JUMPPATH[4]->IsStable) UpdatePathEnvironmentJumpStatistics(simContext, 4);
         case 4:
-            if (JUMPPATH[3]->IsMobile) UpdatePathEnvironmentJumpStatistics(simContext, 3);
+            if (JUMPPATH[3]->IsMobile && JUMPPATH[3]->IsStable) UpdatePathEnvironmentJumpStatistics(simContext, 3);
         case 3:
             UpdatePathEnvironmentJumpStatistics(simContext, 2);
+            if (JUMPPATH[1]->IsMobile && JUMPPATH[1]->IsStable) UpdatePathEnvironmentJumpStatistics(simContext, 1);
             UpdatePathEnvironmentJumpStatistics(simContext, 0);
         default:
             break;

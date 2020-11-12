@@ -40,9 +40,7 @@ error_t SetCycleCounterStateToDefault(SCONTEXT_PARAMETER, CycleCounterState_t *c
     if (rem != 0) counters->TotalSimulationGoalMcsCount += CYCLE_BLOCKCOUNT - rem;
     counters->McsCountPerExecutionPhase = counters->TotalSimulationGoalMcsCount / CYCLE_BLOCKCOUNT;
 
-    counters->CycleCountPerExecutionLoop = counters->McsCountPerExecutionPhase * CYCLE_BLOCKSIZE_MUL;
-    counters->CycleCountPerExecutionLoop = getMinOfTwo(counters->CycleCountPerExecutionLoop, CYCLE_BLOCKSIZE_MAX);
-    counters->CycleCountPerExecutionLoop = getMaxOfTwo(counters->CycleCountPerExecutionLoop, CYCLE_BLOCKSIZE_MIN);
+    counters->CycleCountPerExecutionLoop = counters->McsCountPerExecutionPhase;
 
     return ERR_OK;
 }
@@ -96,6 +94,20 @@ Vector3_t CalculateStaticTrackerEnsembleShift(SCONTEXT_PARAMETER, byte_t particl
         continue_if(envState->MobileTrackerId <= INVALID_INDEX);
 
         let tracker = *getStaticMovementTrackerAt(simContext, &envState->LatticeVector, particleId);
+        vector3VectorOp(result, tracker, +=);
+    }
+
+    return result;
+}
+
+Vector3_t CalculateGlobalTrackerEnsembleShift(SCONTEXT_PARAMETER, byte_t particleId)
+{
+    Vector3_t result = {.A = 0, .B = 0, .C = 0};
+    let jumpCollections = getJumpCollections(simContext);
+
+    cpp_foreach(jumpCollection, *jumpCollections)
+    {
+        let tracker = GetGlobalTrackerEnsembleShift(simContext, jumpCollection, particleId);
         vector3VectorOp(result, tracker, +=);
     }
 

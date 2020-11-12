@@ -262,7 +262,7 @@ static error_t ConstructPreparedLinkingSystem(SCONTEXT_PARAMETER)
         #if defined(OPT_LINK_ONLY_MOBILES)
         if((!environment->IsMobile && environment->IsStable) || (isMMC && !environment->IsStable))
         {
-            mobilityIgnoredCount++;
+            mobilityIgnoredCount += span_Length(environment->EnvironmentDefinition->PairInteractions);
             continue;
         }
         #endif

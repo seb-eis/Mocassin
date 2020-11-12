@@ -151,21 +151,22 @@ namespace Mocassin.Model.Translator.ModelContext
                 {
                     for (var i = 0; i < mappingAssignMatrix.GetLength(2); i++)
                     {
-                        if (mappingAssignMatrix[positionId, particleId, i] != null)
-                        {
-                            jumpCountTable[positionId, particleId]++;
-                            continue;
-                        }
+                        if (mappingAssignMatrix[positionId, particleId, i] == null) continue;
+                        jumpCountTable[positionId, particleId]++;
+                    }
+                }
+            }
 
-                        if (jumpCountTable[positionId, particleId] == 0)
-                        {
-                            jumpCountTable[positionId, particleId] =
-                                jumpModels.Any(x => x.GetMobilityType(positionId, particleId) != MobilityType.Immobile)
-                                    ? SimulationConstants.JumpCountIfPassivelyMobile
-                                    : SimulationConstants.JumpCountIfNotMobile;
-                        }
-
-                        break;
+            for (var positionId = 0; positionId < rows; positionId++)
+            {
+                for (var particleId = 0; particleId < cols; particleId++)
+                {
+                    if (jumpCountTable[positionId, particleId] == 0)
+                    {
+                        jumpCountTable[positionId, particleId] =
+                            jumpModels.Any(x => x.GetMobilityType(positionId, particleId) != MobilityType.Immobile)
+                                ? SimulationConstants.JumpCountIfPassivelyMobile
+                                : SimulationConstants.JumpCountIfNotMobile;
                     }
                 }
             }

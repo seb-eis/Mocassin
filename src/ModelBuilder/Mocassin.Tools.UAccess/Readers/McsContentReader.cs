@@ -106,7 +106,7 @@ namespace Mocassin.Tools.UAccess.Readers
         public ReadOnlySpan<int> ReadMobileTrackerMapping() =>
             IsReadingMmcState
                 ? ReadOnlySpan<int>.Empty
-                : BinaryReader.ReadAreaAs<int>(Header.MobileTrackerIndexingOffset, Header.JumpStatisticsOffset);
+                : BinaryReader.ReadAreaAs<int>(Header.MobileTrackerIndexingOffset, Header.JumpStatisticsOffset == -1 ? BinaryReader.ByteCount : Header.JumpStatisticsOffset);
 
         /// <summary>
         ///     Get a <see cref="ReadOnlySpan{T}" /> of <see cref="McsJumpStatistic" /> that store the jump histogram system

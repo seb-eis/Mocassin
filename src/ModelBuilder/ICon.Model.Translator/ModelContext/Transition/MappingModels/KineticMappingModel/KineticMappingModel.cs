@@ -53,9 +53,8 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <inheritdoc />
         public bool LinkIfGeometricInversion(IKineticMappingModel inverseModel)
         {
+            if (inverseModel.PathLength != PathLength) return false;
             if (PositionSequence4D.Select(x => x.P).Zip(inverseModel.PositionSequence4D.Reverse().Select(x => x.P), (x, y) => x - y).Any(x => x != 0))
-                return false;
-            if (!GetGeometricInversionMovementMatrix().Equals(inverseModel.PositionMovementMatrix))
                 return false;
 
             InverseMapping = inverseModel;
@@ -66,6 +65,10 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <inheritdoc />
         public IKineticMappingModel CreateGeometricInversion()
         {
+            if (TransitionModel.Transition.GetExtendedTransitionRules().Any(x => x.MovementFlags.HasFlag(RuleMovementFlags.HasChainedMovement)))
+            {
+                throw new InvalidOperationException("It is not supported to create geometric inversions of chained movement with this function.");
+            }
             var result = new KineticMappingModel
             {
                 TransitionModel = TransitionModel.InverseTransitionModel ?? throw new InvalidOperationException("Inverse transition model is unknown!"),

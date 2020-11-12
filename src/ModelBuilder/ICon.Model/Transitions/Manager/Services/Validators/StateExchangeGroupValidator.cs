@@ -55,7 +55,7 @@ namespace Mocassin.Model.Transitions.Validators
         /// <returns></returns>
         protected void AddContainsHybridExchangeDefinitions(IStateExchangeGroup group, ValidationReport report)
         {
-            var condition0 = group.GetStateExchangePairs().All(x => x.DonorParticle.Symbol == x.AcceptorParticle.Symbol);
+            var condition0 = group.GetStateExchangePairs().All(x => x.DonorParticle.Symbol == x.AcceptorParticle.Symbol && !x.DonorParticle.Equals(x.AcceptorParticle));
             var condition1 = group.GetStateExchangePairs().All(x => x.DonorParticle.Symbol != x.AcceptorParticle.Symbol || x.DonorParticle.Equals(x.AcceptorParticle));
             if (condition0 ^ condition1) return;
 

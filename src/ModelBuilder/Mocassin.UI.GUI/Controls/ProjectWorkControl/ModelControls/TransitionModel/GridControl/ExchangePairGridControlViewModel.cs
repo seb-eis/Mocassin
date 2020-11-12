@@ -104,8 +104,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
         private bool PairIsAlreadyDefined(ICollection<StateExchangePairData> defined, string donorKey, string acceptorKey)
         {
             if (donorKey == null || acceptorKey == null) return false;
-            return donorKey == acceptorKey
-                   || defined != null && defined
+            return defined != null && defined
                                          .Where(x => x != SelectedItem)
                                          .Any(x => x.AcceptorParticle?.Key == acceptorKey && x.DonorParticle?.Key == donorKey);
         }

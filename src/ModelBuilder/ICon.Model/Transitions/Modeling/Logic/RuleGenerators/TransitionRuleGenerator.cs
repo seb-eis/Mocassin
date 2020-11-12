@@ -11,6 +11,9 @@ namespace Mocassin.Model.Transitions
     /// <inheritdoc />
     public class TransitionRuleGenerator<TRule> : ITransitionRuleGenerator<TRule> where TRule : TransitionRule, new()
     {
+        /// <summary>
+        ///     The index mapped array of available <see cref="IParticle"/>
+        /// </summary>
         protected IParticle[] Particles { get; }
 
         /// <summary>
@@ -113,6 +116,7 @@ namespace Mocassin.Model.Transitions
             }
 
             AddMissingInversesToRules(result);
+            if (ContainsPushChain(abstractTransition)) result.RemoveAll(x => x.SelectableParticle.IsVacancy);
             return result;
         }
 
