@@ -12,7 +12,7 @@ Please refer to the affiliated [open access publication](http://dx.doi.org/10.10
 </figure>
 
 ## What platforms are supported?
-The system is developed for x86_64 only, the currently most common processor type in high performance computing (HPC). 32-bit operating systems are not supported.
+The system is developed for x86_64 only. 32-bit operating systems are not supported.
 
 The C# model builder source code targets .NET Standard 2.0 and is Windows/Linux/MacOS portable. The C source is written for GNU GCC and Intel ICC compilers and can also be compiled for Windows/Linux using the MinGW64 toolchain, the MSVC compiler is not supported. The current graphical user interface (GUI) uses WPF and is Win64 only.
 
