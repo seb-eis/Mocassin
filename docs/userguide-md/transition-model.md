@@ -129,7 +129,7 @@ For practical reasons, there is no need to manually define the linker/connection
   - Position chain : *stable, unstable, stable, stable, unstable, stable*
   - Linking chain : $p_0 \rightarrow p_1 \rightarrow p_2 \bullet p_3 \rightarrow p_4 \rightarrow p_5$
 
-Aside from the position chain and the selection of a linking pattern, state change chains also allow to set an "association/dissociation" flag. This flag has an effect only if it is used with vehicle connection patterns and instructs the processing system to generate association/dissociation transition rules based on the linear chain instead of the default unidirectional movement behavior. As an example, using a 5-site 2-species vehicle with a parallel $A$ and $B$ migration by vacancy mechanism, the matrix notations in (6) and (7) illustrate the different results for unidirectional (default) transport and association/dissociation behavior, respectively. It should be obvious that the two cases are different processes with distinct net absolute charge transports in the general case when applied to a 3D geometry, thus Mocassin allows to define and model them independently.
+It should be noted that a vehicle movement linearization may be association/dissociation or unidirectional behavior. As an example, using a 5-site 2-species vehicle with a parallel $A$ and $B$ migration by vacancy mechanism, the matrix notations in (6) and (7) illustrate the different results for unidirectional (default) transport and association/dissociation behavior, respectively. It should be obvious that the two cases are different processes with distinct net absolute charge transports in the general case when applied to a 3D geometry. Mocassin only generates unidirectional movement rules as shown in (6), that means that generating association/dissociation behavior requires to link the state change chain to a geometry where the unidirectional rule yields the association/dissociation case.
 
 $$
 \begin{aligned}
@@ -166,6 +166,8 @@ $$
 \end{aligned}
 \tag{7}
 $$
+
+Another important restriction
 
 ### [MMC and KMC transitions](#mmc-and-kmc-transitions)
 
@@ -214,7 +216,7 @@ To define a parallel KMC vehicle migration of two species $A$ and $B$ with a sha
 4. (Optional) Activate the 'association/dissociation' flag if this behavior is required
 5. Define a Kinetic transition using the created chain and define a reference path for the migration where the position stability of targeted positions is *stable, stable, unstable, stable, stable*
 
-**Warning:** It should be kept in mind that 'association/dissociation' is defined in the context of the abstract, linearized state change chain object rather than the 3D binding geometry. That is, depending on how the order of the binding positions is chosen, the behavior in 3D space can be inverted as shown in (9).
+**Warning:** It should be kept in mind that 'association/dissociation' or 'unidirectional' movement of the vehicle depends on how the order of the binding positions is chosen. Thus, the behavior in 3D space can be influenced as shown in (9).
 
 $$
 \begin{aligned}

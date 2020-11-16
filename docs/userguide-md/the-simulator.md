@@ -14,6 +14,13 @@ The simulator is started from the command line by calling "Mocassin.Simulator.ex
 Mocassin.Simulator -dbPath <database> -jobId <jobnumber> -ioPath <directory> [-stdout <filename>]
 ```
 
+Other important optional parameters include:
+
+- -extDir \<directory\>
+  - Defines a directory from which the simulator should load extension routines
+- -jumpLogMaxEv \<energy in ev\>
+  - Overwrites the maximum energy value for the KMC jump histogram logging. The default is 10 eV
+
 The meta information to identify jobs can be found in the "JobMetaData" table of the simulation database (SQLite 3). The "JobMetaData" table has a "JobModelId" column containing the indices that are identical to the ones provided to "-jobId" on simulation startup. Further information on accessing the simulation database cam be found on the affiliated [documentation page](./the-simulation-database.md). 
 
 **Note:** For advanced information on how to do scripted startups with parallel execution using multithreading or MPI on HPC clusters, consult the affiliated readme and source code in the solver [scripts directory](https://github.com/scrollrad/Mocassin/tree/master/src/McSolver/Scripts) of the Mocassin repository.

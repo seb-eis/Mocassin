@@ -26,7 +26,15 @@ Authors: Sebastian Eisele, Steffen Neitzel-Grieshammer
 ## III. The graphical user interface
 - ### [Creating and managing projects](./ui-managing-projects.md)
 - ### [The particle model control](./ui-particle-control.md)
-
+- ### [The structure model control](./ui-structure-control.md)
+- ### [The transition model control](./ui-transition-control.md)
+- ### [The energy model control](./ui-energy-control.md)
+- ### [The simulation model control](./ui-simulation-control.md)
+- ### [The lattice model control](./ui-lattice-control.md)
+- ### [The parameterization template control](./ui-parameterization-control.md)
+- ### [The job template control](./ui-job-template-control.md)
+- ### [The simulation build control](./ui-simulation-build-control.md)
+- ### [The 3D viewer (DX10+)](./ui-3d10-viewer.md)
 ## IV. Simulation
 
 - ### [The simulation database](./the-simulation-database.md)
@@ -35,4 +43,5 @@ Authors: Sebastian Eisele, Steffen Neitzel-Grieshammer
 
 ## V. Advanced data evaluation
 
-- ### [The simulation state file](./simulation-state-file.md)
+- ### [Collecting results]()
+- ### [The MslEvaluationContext class]()

@@ -2,7 +2,7 @@
 
 ## Description
 
-The structure model control is the UI access to the [transition model](./transition-model.md) and allows to define the state changes, abstract process chains, and MMC or KMC transitions. MMC and KMC definitions can be generated in the same model but cannot be combined in a single simulation later.
+The transition model control is the UI access to the [transition model](./transition-model.md) and allows to define the state changes, abstract process chains, and MMC or KMC transitions. MMC and KMC definitions can be generated in the same model but cannot be combined in a single simulation later.
 
 ## Usage
 
