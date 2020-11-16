@@ -65,11 +65,6 @@
                           <LineBreak />
                           <Run Text="Link Pattern:&#09;" />
                           <Run Text="{Binding ConnectionPattern}" />
-                          <LineBreak />
-                          <Run Text="Two Options:&#09;" />
-                          <Run Text="{Binding HasAssociationFlagSupport}" />
-                          <Run
-                            Text="(If TRUE, association/dissociation and unidirectional movement (default) are distinct mechanisms.)" />
                         </TextBlock>
                       </Setter.Value>
                     </Setter>
@@ -80,7 +75,7 @@
           </comboBox:BindableDataGridComboBoxColumn.EditingElementStyle>
         </comboBox:BindableDataGridComboBoxColumn>
 
-        <DataGridCheckBoxColumn Header="Association/Dissociation" Binding="{Binding IsAssociation}" />
+        <!--<DataGridCheckBoxColumn Header="Association/Dissociation" Binding="{Binding IsAssociation}" />-->
 
         <DataGridTemplateColumn Header="State Change Groups">
           <DataGridTemplateColumn.CellTemplate>

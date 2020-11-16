@@ -126,12 +126,17 @@ class ResultCollector:
         self.DbConnection.execute(r"pragma journal_mode=wal")
         sys.stdout.write("Writing ({0}) found jobs ... _____".format(len(jobResults)))
         jobResults.sort(key=lambda job: job.JobId)
+        counter = 0
         for jobResult in jobResults:
             sys.stdout.write("\b\b\b\b\b{0:05d}".format(jobResult.JobId))
             sys.stdout.flush()
             jobResult.LoadData()
             self.DbConnection.execute(self.Sql, self.FormatUpdateArg(jobResult))
             jobResult.NullData()
+            counter = counter + 1
+            if counter == 20:
+                self.CommitChanges()
+                counter = 0
         sys.stdout.write("\b\b\b\b\bDone!\n")
         sys.stdout.write("Setting database to DELETE.\n")
         self.DbConnection.execute(r"pragma journal_mode=delete")

@@ -16,6 +16,7 @@ using Mocassin.Mathematics.Coordinates;
 using Mocassin.Mathematics.Extensions;
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.ModelProject;
+using Mocassin.Model.Transitions;
 using Mocassin.Symmetry.SpaceGroups;
 using Mocassin.UI.Base.Commands;
 using Mocassin.UI.GUI.Base.DataContext;
@@ -657,7 +658,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
 
             var path = transitionData.PathVectors.Select(x => new Fractional3D(x.A, x.B, x.C)).ToList();
             var matrices = GetPathSceneItemTransforms(path, renderBox, false, out var anyFlipsOrientation);
-            var geometry = CreateTransitionGeometry(itemConfig, path);
+            var connectors = ((IAbstractTransition) transitionData.AbstractTransition.Target.GetInputObject()).GetConnectorSequence().ToList();
+            var geometry = CreateTransitionGeometry(itemConfig, path, connectors);
             var material = itemConfig.CreateMaterial();
             var configurator = GetSceneNodeConfigurator(itemConfig, !anyFlipsOrientation);
             AddMeshElementsToScene(sceneBuilder, geometry, material, matrices, configurator);
@@ -876,9 +878,10 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         /// </summary>
         /// <param name="itemConfig"></param>
         /// <param name="path"></param>
+        /// <param name="connectors"></param>
         /// <param name="checkAtoms"></param>
         /// <returns></returns>
-        private MeshGeometry3D CreateTransitionGeometry(IDxMeshItemConfig itemConfig, IList<Fractional3D> path, bool checkAtoms = true)
+        private MeshGeometry3D CreateTransitionGeometry(IDxMeshItemConfig itemConfig, IList<Fractional3D> path, IList<ConnectorType> connectors, bool checkAtoms = true)
         {
             var meshBuilder = new MeshBuilder();
             var diameter = itemConfig.MeshScaling;
@@ -896,7 +899,17 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
                     point2 -= (float) sizeCorrections[i] * directionToSecond;
                 }
 
-                meshBuilder.AddTwoHeadedArrow(point1, point2, diameter, headLength, thetaDiv);
+                switch (connectors[i-1])
+                {
+                    case ConnectorType.Dynamic:
+                        meshBuilder.AddTwoHeadedArrow(point1, point2, diameter, headLength, thetaDiv);
+                        break;
+                    case ConnectorType.Static:
+                        meshBuilder.AddCylinder(point1, point2, diameter / 4, thetaDiv, true, true);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
             }
 
             return meshBuilder.ToMesh();

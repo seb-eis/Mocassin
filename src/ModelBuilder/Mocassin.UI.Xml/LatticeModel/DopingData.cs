@@ -72,7 +72,7 @@ namespace Mocassin.UI.Data.LatticeModel
         {
             var obj = new Doping
             {
-                CounterDoping = new DopingCombination {Key = CounterDoping.Key},
+                CounterDoping = new DopingCombination {Key = CounterDoping?.Key ?? PrimaryDoping.Key},
                 PrimaryDoping = new DopingCombination {Key = PrimaryDoping.Key},
                 BuildingBlock = new BuildingBlock {Key = BuildingBlock.Key},
                 UseCounterDoping = UseCounterDoping,
