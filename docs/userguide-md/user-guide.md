@@ -2,7 +2,7 @@
 Authors: Sebastian Eisele, Steffen Neitzel-Grieshammer
 (Forschungszentrum Jülich GmbH & RWTH Aachen University)
 
-**This guide is still a work in progress. Several pages are missing or incomplete.**
+**This guide is still a work in progress. Some pages are missing or incomplete.**
 
 ## Contents
 
@@ -41,7 +41,6 @@ Authors: Sebastian Eisele, Steffen Neitzel-Grieshammer
 - ### [The simulator](./the-simulator.md)
 - ### [Movement tracking](./movement-tracking.md)
 
-## V. Advanced data evaluation
-
-- ### [Collecting results]()
-- ### [The MslEvaluationContext class]()
+## V. API-based result evaluation
+- ### [Preparing for API-based result evaluation](./api-preparing-for-analysis.md)
+- ### [The MslEvaluationContext class](./api-msl-evaluation-context.md)
