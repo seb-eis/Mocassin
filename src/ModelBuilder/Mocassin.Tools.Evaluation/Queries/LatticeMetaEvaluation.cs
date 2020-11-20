@@ -40,7 +40,7 @@ namespace Mocassin.Tools.Evaluation.Queries
         protected Vector4I GetLatticeSizeInfo(JobContext jobContext, IUnitCellVectorEncoder vectorEncoder)
         {
             var split = jobContext.JobModel.JobMetaData.LatticeInfo.Split(',');
-            if (split.Length != 3) throw new InvalidOperationException("Invalid format of lattice size string.");
+            if (split.Length < 3) throw new InvalidOperationException("Invalid format of lattice size string.");
             return new Vector4I(int.Parse(split[0]), int.Parse(split[1]), int.Parse(split[2]), vectorEncoder.PositionCount);
         }
     }

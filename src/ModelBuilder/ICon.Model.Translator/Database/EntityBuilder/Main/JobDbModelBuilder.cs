@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Mocassin.Framework.Events;
 using Mocassin.Framework.Extensions;
+using Mocassin.Model.Structures;
 using Mocassin.Model.Translator.Database.Entities.Other.Meta;
 using Mocassin.Model.Translator.Jobs;
 using Mocassin.Model.Translator.ModelContext;
@@ -189,6 +190,9 @@ namespace Mocassin.Model.Translator.EntityBuilder
         /// <returns></returns>
         protected JobMetaDataEntity GetJobMetaDataEntity(JobConfiguration jobConfiguration, IJobCollection jobCollection)
         {
+            var positionCountPerCell = ProjectModelContext.ModelProject
+                                                          .Manager<IStructureManager>().DataAccess
+                                                          .Query(x => x.GetLinearizedExtendedPositionCount());
             var entity = new JobMetaDataEntity
             {
                 CollectionName = jobConfiguration.CollectionName,
@@ -200,7 +204,7 @@ namespace Mocassin.Model.Translator.EntityBuilder
                 Mcsp = jobConfiguration.TargetMcsp,
                 TimeLimit = jobConfiguration.TimeLimit,
                 DopingInfo = jobConfiguration.LatticeConfiguration.GetDopingString(),
-                LatticeInfo = jobConfiguration.LatticeConfiguration.GetSizeString()
+                LatticeInfo = jobConfiguration.LatticeConfiguration.GetSizeString(positionCountPerCell)
             };
 
             AddKineticMetaData(entity, jobConfiguration);

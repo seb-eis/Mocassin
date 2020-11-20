@@ -56,6 +56,13 @@ namespace Mocassin.Model.Translator.Jobs
         public string GetSizeString() => $"{SizeA},{SizeB},{SizeC}";
 
         /// <summary>
+        ///     Get set size as a default formatted <see cref="string" /> including the position count
+        /// </summary>
+        /// <param name="sizeP"></param>
+        /// <returns></returns>
+        public string GetSizeString(int sizeP) => $"{SizeA},{SizeB},{SizeC},{sizeP}";
+
+        /// <summary>
         ///     Get the set dopings as a default formatted <see cref="string" />
         /// </summary>
         /// <returns></returns>

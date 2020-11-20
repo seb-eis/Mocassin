@@ -48,5 +48,11 @@ namespace Mocassin.Model.Translator.ModelContext
         /// </summary>
         /// <returns></returns>
         Task<IProjectModelContext> BuildContextAsync();
+
+        /// <summary>
+        ///     Builds a new project model context from the current model project
+        /// </summary>
+        /// <returns></returns>
+        IProjectModelContext Build();
     }
 }

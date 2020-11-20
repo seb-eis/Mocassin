@@ -10,6 +10,7 @@ using Mocassin.Model.Translator;
 using Mocassin.Model.Translator.ModelContext;
 using Mocassin.Tools.Evaluation.Queries;
 using Mocassin.UI.Data.Base;
+using Mocassin.UI.Data.Helper;
 using Mocassin.UI.Data.Main;
 
 namespace Mocassin.Tools.Evaluation.Context
@@ -149,21 +150,6 @@ namespace Mocassin.Tools.Evaluation.Context
         }
 
         /// <summary>
-        ///     Restores the <see cref="IProjectModelContext" /> from a passed project xml <see cref="string" />
-        /// </summary>
-        /// <param name="projectXml"></param>
-        /// <returns></returns>
-        public IProjectModelContext RestoreProjectModelContext(string projectXml)
-        {
-            var dbBuildTemplate = ProjectDataObject.CreateFromXml<SimulationDbBuildTemplate>(projectXml);
-            var modelProject = ModelProjectProvider.Invoke();
-            modelProject.InputPipeline.PushToProject(dbBuildTemplate.ProjectModelData.GetInputSequence());
-            dbBuildTemplate.ProjectCustomizationTemplate.PushToModel(modelProject);
-            var builder = new ProjectModelContextBuilder(modelProject);
-            return builder.BuildContextAsync().Result;
-        }
-
-        /// <summary>
         ///     Takes an <see cref="IQueryable{T}" /> of <see cref="SimulationJobPackageModel" /> and builds the sequence of
         ///     <see cref="IProjectModelContext" /> instances
         /// </summary>
@@ -173,7 +159,7 @@ namespace Mocassin.Tools.Evaluation.Context
         {
             return jobPackageModels
                    .Include(x => x.ProjectXml)
-                   .Select(x => RestoreProjectModelContext(x.ProjectXml));
+                   .Select(x => MslHelper.RestoreModelContext(x));
         }
 
         /// <summary>
@@ -188,7 +174,7 @@ namespace Mocassin.Tools.Evaluation.Context
             if (ProjectContextCache.TryGetValue(contextId, out var context)) return context;
 
             var packageModel = LoadJobPackageModel(contextId);
-            var context2 = RestoreProjectModelContext(packageModel.ProjectXml);
+            var context2 = MslHelper.RestoreModelContext(packageModel);
             lock (lockObject)
             {
                 ProjectContextCache[contextId] = context2;
@@ -243,8 +229,8 @@ namespace Mocassin.Tools.Evaluation.Context
             var modelContext = GetProjectModelContext(jobModel);
             if (SimulationModelCache.TryGetValue(jobModel.SimulationPackageId, out var result)) return result;
 
-            var buildGraph = ProjectDataObject.CreateFromXml<SimulationDbBuildTemplate>(jobModel.SimulationJobPackageModel.ProjectXml);
-            var simulation = buildGraph.ProjectJobSetTemplate
+            var buildTemplate = ProjectDataObject.CreateFromXml<SimulationDbBuildTemplate>(jobModel.SimulationJobPackageModel.ProjectXml);
+            var simulation = buildTemplate.ProjectJobSetTemplate
                                        .ToInternals(modelContext.ModelProject)
                                        .First(x => x.CollectionId == jobModel.JobMetaData.CollectionIndex)
                                        .GetSimulation();

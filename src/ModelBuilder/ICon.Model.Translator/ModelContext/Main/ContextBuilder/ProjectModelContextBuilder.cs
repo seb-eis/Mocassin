@@ -59,6 +59,9 @@ namespace Mocassin.Model.Translator.ModelContext
             return projectModelContext;
         }
 
+        /// <inheritdoc />
+        public IProjectModelContext Build() => BuildContextAsync().Result;
+
         /// <summary>
         ///     Creates all context components independently and awaits their completion
         /// </summary>

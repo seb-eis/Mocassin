@@ -436,7 +436,7 @@ static void AddStaticEnvBackgroundStateEnergies(SCONTEXT_PARAMETER, EnvironmentS
     {
         let vector = environment->LatticeVector;
         let particleId = environment->EnvironmentDefinition->PositionParticleIds[j];
-        let cellEntry = cellBackground->Begin == NULL? 0.0 : array_Get(*cellBackground, vector.D, particleId);
+        let cellEntry = cellBackground->Begin == NULL ? 0.0 : array_Get(*cellBackground, vector.D, particleId);
         let latticeEntry = latticeBackground->Begin == NULL ? 0.0 : array_Get(*latticeBackground, vecCoorSet4(vector), particleId);
         span_Get(environment->EnergyStates, particleId) += cellEntry + latticeEntry;
     }

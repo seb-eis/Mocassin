@@ -84,6 +84,13 @@ namespace Mocassin.Mathematics.Coordinates
         public bool TryDecode(in Vector4I encoded, out Fractional3D decoded) => TryDecodeFractional(encoded.Coordinates, out decoded);
 
         /// <inheritdoc />
+        public void DecodeUnchecked(in Vector4I encoded, out Fractional3D decoded)
+        {
+            var offset = PositionList[encoded.P];
+            decoded = new Fractional3D(encoded.A + offset.A, encoded.B + offset.B, encoded.C + offset.C);
+        }
+
+        /// <inheritdoc />
         public bool TryDecode(IEnumerable<Vector4I> encoded, out List<Fractional3D> decoded)
         {
             var result = new List<Fractional3D>();
@@ -113,6 +120,13 @@ namespace Mocassin.Mathematics.Coordinates
 
             decoded = Transformer.ToCartesian(fractional);
             return true;
+        }
+
+        /// <inheritdoc />
+        public void DecodeUnchecked(in Vector4I encoded, out Cartesian3D decoded)
+        {
+            DecodeUnchecked(encoded, out Fractional3D fractional3D);
+            decoded = Transformer.ToCartesian(fractional3D);
         }
 
         /// <inheritdoc />

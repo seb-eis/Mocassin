@@ -18,7 +18,7 @@ namespace Mocassin.Tools.Evaluation.Helper
         public static int GetNumberOfUnitCells(IJobMetaData metaData)
         {
             var split = metaData.LatticeInfo.Split(',');
-            if (split.Length != 3) throw new InvalidOperationException("The lattice info in the database is corrupt.");
+            if (split.Length < 3) throw new InvalidOperationException("The lattice info in the database is corrupt.");
             return split.Sum(int.Parse);
         }
     }

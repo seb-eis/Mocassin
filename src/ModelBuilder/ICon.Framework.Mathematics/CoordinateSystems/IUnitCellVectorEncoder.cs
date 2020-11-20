@@ -110,6 +110,13 @@ namespace Mocassin.Mathematics.Coordinates
         bool TryDecode(in Vector4I encoded, out Fractional3D decoded);
 
         /// <summary>
+        ///     Decodes a 4D encoded vector into absolute fractional vector starting at the unit cell origin without performing bound checks
+        /// </summary>
+        /// <param name="encoded"></param>
+        /// <param name="decoded"></param>
+        void DecodeUnchecked(in Vector4I encoded, out Fractional3D decoded);
+
+        /// <summary>
         ///     Tries to decode multiple 4D vectors into a list of fractional vectors (Returns false if not possible)
         /// </summary>
         /// <param name="encoded"></param>
@@ -125,6 +132,13 @@ namespace Mocassin.Mathematics.Coordinates
         /// <param name="decoded"></param>
         /// <returns></returns>
         bool TryDecode(in Vector4I encoded, out Cartesian3D decoded);
+
+        /// <summary>
+        ///     Decodes a 4D encoded vector into absolute cartesian vector starting at the unit cell origin without performing bound checks
+        /// </summary>
+        /// <param name="encoded"></param>
+        /// <param name="decoded"></param>
+        void DecodeUnchecked(in Vector4I encoded, out Cartesian3D decoded);
 
         /// <summary>
         ///     Tries to decoded 4D encoded vector into a spherical vector from unit cell origin (Returns false if not possible)
