@@ -151,17 +151,22 @@ namespace Mocassin.Model.Transitions
         protected void AddMissingInversesToRules(IList<TRule> rules)
         {
             var rulesWithoutInversion = new List<TRule>();
-            for (var i = 0; i < rules.Count; i++)
+            var inverseSet = new bool[rules.Count];
+            for (var i = 0; i < rules.Count - 1; i++)
             {
-                var hasInversion = false;
                 for (var j = i + 1; j < rules.Count; j++)
                 {
+                    if (inverseSet[j]) continue;
                     if (rules[i].StartState.LexicographicCompare(rules[j].FinalState) != 0) continue;
-                    hasInversion = true;
+                    inverseSet[i] = inverseSet[j] = true;
                     break;
                 }
 
-                if (!hasInversion) rulesWithoutInversion.Add(rules[i]);
+            }
+
+            for (var i = 0; i < inverseSet.Length; i++)
+            {
+                if (!inverseSet[i]) rulesWithoutInversion.Add(rules[i]);
             }
 
             rules.AddRange(rulesWithoutInversion.Select(CreateInverseRule));
@@ -584,6 +589,7 @@ namespace Mocassin.Model.Transitions
         protected bool ExchangesViolatesMmcHybridRule(IParticle lhsOld, IParticle lhsNew, IParticle rhsOld, IParticle rhsNew)
         {
             if (lhsOld.IsVoid || rhsOld.IsVoid) return false;
+            if (lhsNew.Equals(rhsOld) && rhsNew.Equals(lhsOld)) return false;
             var condition0 = lhsNew.Symbol != lhsOld.Symbol && rhsNew.Symbol != rhsOld.Symbol;
             var condition1 = lhsNew.Symbol == rhsOld.Symbol && rhsNew.Symbol == lhsOld.Symbol;
             var condition2 = !NumericComparer.Default().Equals(lhsNew.Charge, lhsOld.Charge);

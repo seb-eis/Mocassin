@@ -120,17 +120,17 @@ namespace Mocassin.Model.Transitions
             builder.Append(AbstractTransition.IsMetropolis ? "MMC-Rule [" : "KMC-Rule [");
             foreach (var particle in StartState)
             {
-                builder.Append($"{particle.Symbol}{(int) particle.Charge}-");
+                builder.Append($"{particle.Symbol}{(int) particle.Charge}/");
             }
             builder.PopBack(1,"]-[");
             foreach (var particle in TransitionState)
             {
-                builder.Append($"{particle.Symbol}{(int) particle.Charge}-");
+                builder.Append($"{particle.Symbol}{(int) particle.Charge}/");
             }
             builder.PopBack(1,"]-[");
             foreach (var particle in FinalState)
             {
-                builder.Append($"{particle.Symbol}{(int) particle.Charge}-");
+                builder.Append($"{particle.Symbol}{(int) particle.Charge}/");
             }
             builder.PopBack(1,"]");
             return builder.ToString();
