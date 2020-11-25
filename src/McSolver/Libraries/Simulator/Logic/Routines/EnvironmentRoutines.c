@@ -21,7 +21,11 @@
 static inline int32_t LinearSearchClusterCodeId(const ClusterTable_t *restrict clusterTable, const OccupationCode64_t occupationCode)
 {
     int32_t index = 0;
-    while (span_Get(clusterTable->OccupationCodes, index).Value != occupationCode.Value) index++;
+    while (span_Get(clusterTable->OccupationCodes, index).Value != occupationCode.Value)
+    {
+        debug_assert(span_Length(clusterTable->OccupationCodes) > index);
+        index++;
+    }
     return index;
 }
 
@@ -75,7 +79,7 @@ static int32_t CompareClusterLinks(const ClusterLink_t* lhs, const ClusterLink_t
 static error_t SortAndBuildClusterLinks(ClusterLink_t* restrict linkBuffer, const size_t count, ClusterLinks_t* restrict clusterLinks)
 {
     let byteCount = count * sizeof(ClusterLink_t);
-    *clusterLinks = span_New(*clusterLinks, byteCount);
+    *clusterLinks = span_New(*clusterLinks, count);
 
     qsort(linkBuffer, count, sizeof(ClusterLink_t), (FComparer_t) CompareClusterLinks);
     memcpy(clusterLinks->Begin, linkBuffer, byteCount);
@@ -87,19 +91,20 @@ static error_t SortAndBuildClusterLinks(ClusterLink_t* restrict linkBuffer, cons
 static error_t BuildClusterLinkingByPairId(const EnvironmentDefinition_t* environmentDefinition, const int32_t pairId, ClusterLinks_t* restrict clusterLinks)
 {
     ClusterLink_t tmpLinkBuffer[sizeof(ClusterLink_t) * CLUSTER_MAXLINK_COUNT];
-    byte_t clusterId = 0, relativeId = 0;
+    byte_t clusterId = 0, codeByteId = 0;
     size_t linkCount = 0;
 
     cpp_foreach(clusterDefinition, environmentDefinition->ClusterInteractions)
     {
-        relativeId = 0;
+        codeByteId = 0;
         c_foreach(environmentPairId, clusterDefinition->PairInteractionIds)
         {
             if (*environmentPairId == pairId)
             {
-                tmpLinkBuffer[linkCount] = (ClusterLink_t) { clusterId , relativeId++ };
+                tmpLinkBuffer[linkCount] = (ClusterLink_t) {clusterId , codeByteId };
                 linkCount++;
             }
+            codeByteId++;
         }
         clusterId++;
     }
