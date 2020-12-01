@@ -389,7 +389,8 @@ error_t RunOneKmcAutoOptimizationExecutionBlock(SCONTEXT_PARAMETER)
 {
     var counters = getMainCycleCounters(simContext);
     let countPerLoop = counters->PrerunGoalMcs / CYCLE_BLOCKCOUNT;
-    for (;counters->McsCount < counters->PrerunGoalMcs;)
+    let stepGoalMcs = counters->McsCount + counters->McsCountPerExecutionPhase;
+    for (;(counters->McsCount < counters->PrerunGoalMcs) && (counters->McsCount < stepGoalMcs);)
     {
         for (int64_t i = 0; i < countPerLoop; ++i)
         {

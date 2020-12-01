@@ -156,9 +156,9 @@ void AddCurrentKmcTransitionDataToHistograms(SCONTEXT_PARAMETER)
         case 4:
             if (JUMPPATH[3]->IsMobile && JUMPPATH[3]->IsStable) UpdatePathEnvironmentJumpStatistics(simContext, 3);
         case 3:
-            UpdatePathEnvironmentJumpStatistics(simContext, 2);
+            if (JUMPPATH[2]->IsMobile && JUMPPATH[2]->IsStable) UpdatePathEnvironmentJumpStatistics(simContext, 2);
             if (JUMPPATH[1]->IsMobile && JUMPPATH[1]->IsStable) UpdatePathEnvironmentJumpStatistics(simContext, 1);
-            UpdatePathEnvironmentJumpStatistics(simContext, 0);
+            if (JUMPPATH[0]->IsMobile && JUMPPATH[0]->IsStable) UpdatePathEnvironmentJumpStatistics(simContext, 0);
         default:
             break;
     }
