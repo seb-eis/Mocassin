@@ -47,20 +47,23 @@ typedef struct ParticleMobilityData
     // The total mobility in [m^2/(V s)]
     double      TotalMobility;
 
-    // The total conductivity in [S/m]
+    // The total conductivity in [S/m] in field direction
     double      TotalConductivity;
-
-    // The normalized conductivity per positive charge number [S/(m*z)]
-    double      TotalConductivityPerCharge;
 
     //   The actual migration rate in [Hz]
     double      MigrationRate;
 
     // The total diffusion coefficient components in [m^2/s] in (x,y,z) direction
-    Vector3_t   DiffusionCoefficient;
+    Vector3_t   DiffusionCoefficientVector;
 
-    // The conductivity components in [S/m] as calculated using the Stokes-Einstein relation (Fluctuation dissipation theorem)
-    Vector3_t   NernstEinsteinConductivity;
+    // The sigma diffusion coefficient components in [m^2/s] in (x,y,z) direction as calculated from the conductivity
+    Vector3_t   DSigmaVector;
+
+    // The conductivity vector in [m^2/(V s)]
+    Vector3_t   ConductivityVector;
+
+    // The conductivity vector in [m^2/(V s)] for a pseudo charge of +1
+    Vector3_t   NormalizedConductivityVector;
 
     // The mobility vector in [m^2/(V s)]
     Vector3_t   MobilityVector;
@@ -186,9 +189,19 @@ Vector3_t GetGlobalTrackerEnsembleShift(SCONTEXT_PARAMETER, JumpCollection_t *ju
 // Calculates a mobility vector in [m^2/(V s)] using the provided mean displacement and normalized field vector
 Vector3_t CalculateMobilityVector(SCONTEXT_PARAMETER, const Vector3_t *displacement, const Vector3_t *normFieldVector);
 
+// Calculates a conductivity vector in [m^2/(V s)] using the provided mean displacement and particle density and charge z
+Vector3_t CalculateConductivityVector(SCONTEXT_PARAMETER, const Vector3_t *mobility, double charge, double particleDensity);
+
 // Calculates the conductivity components (x,y,z) for the passed particle id in [S/m] from diffusion components and particle density
-// using the fluctuation dissipation theorem
+// using the nernst einstein relation
 Vector3_t CalculateNernstEinsteinConductivity(SCONTEXT_PARAMETER, const Vector3_t *diffusionVector, byte_t particleId, double particleDensity);
+
+// Calculates the conductivity components (x,y,z) for the passed particle id in [S/m] from diffusion components and particle density
+// using the nernst einstein relation (normalized to a charge of +1)
+Vector3_t CalculateNormalizedNernstEinsteinConductivity(SCONTEXT_PARAMETER, const Vector3_t *diffusionVector, double particleDensity);
+
+//  Calculates the diffusion coefficients [m^2 / s] as defined by the Nernst-Einstein relation
+Vector3_t CalculateDiffusionCoefficientsSigma(SCONTEXT_PARAMETER, const Vector3_t *conductivities, byte_t particleId, double particleDensity);
 
 // Calculates the total mobility in [m^2/(V s)] using the provided mean displacement and normalized field vector
 double CalculateFieldProjectedMobility(SCONTEXT_PARAMETER, const Vector3_t *displacement, const Vector3_t *normFieldVector);

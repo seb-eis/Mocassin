@@ -557,8 +557,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
             var matrix = VectorTransformer.FractionalSystem.ToCartesianMatrix.ToDxMatrix();
 
             var lineBuilder = new LineBuilder();
-            var (aMax, bMax, cMax) = (renderBox.End.A.FloorToInt(), renderBox.End.B.FloorToInt(), renderBox.End.C.FloorToInt());
-            var (aMin, bMin, cMin) = (renderBox.Start.A.CeilToInt(), renderBox.Start.B.CeilToInt(), renderBox.Start.C.CeilToInt());
+            var (aMax, bMax, cMax) = (renderBox.End.A.CeilToInt(), renderBox.End.B.CeilToInt(), renderBox.End.C.CeilToInt());
+            var (aMin, bMin, cMin) = (renderBox.Start.A.FloorToInt(), renderBox.Start.B.FloorToInt(), renderBox.Start.C.FloorToInt());
             for (var a = aMin; a <= aMax; a++)
             {
                 for (var b = bMin; b <= bMax; b++)

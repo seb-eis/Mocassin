@@ -101,14 +101,17 @@ static void PrintParticleStatistics(const ParticleStatistics_t* restrict statist
 // Prints the passed particle mobility data to the stream
 static void PrintParticleMobility(const ParticleMobilityData_t* restrict data, file_t*restrict fstream)
 {
+    fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTVEC_FORMAT), "Conductivity => Components", "S m^-1",
+            data->ConductivityVector.A, data->ConductivityVector.B, data->ConductivityVector.C);
+
+    fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTVEC_FORMAT), "Conductivity => Normalized (z=+1)", "S m^-1",
+            data->NormalizedConductivityVector.A, data->NormalizedConductivityVector.B, data->NormalizedConductivityVector.C);
+
     fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTF64_FORMAT), "Conductivity => Field direction", "S m^-1",
             data->TotalConductivity);
 
-    fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTF64_FORMAT), "Conductivity => Normalized (z=+1)", "S m^-1",
-            data->TotalConductivityPerCharge);
-
-    fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTVEC_FORMAT), "Conductivity => FDT components", "S m^-1",
-            data->NernstEinsteinConductivity.A, data->NernstEinsteinConductivity.B, data->NernstEinsteinConductivity.C);
+    fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTVEC_FORMAT), "Mobility => D_Sigma", "m^2 s^-1",
+            data->DSigmaVector.A, data->DSigmaVector.B, data->DSigmaVector.C);
 
     fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTF64_FORMAT), "Mobility => Average migration rate", "Hz",
             data->MigrationRate);
@@ -120,7 +123,7 @@ static void PrintParticleMobility(const ParticleMobilityData_t* restrict data, f
             data->MobilityVector.A, data->MobilityVector.B, data->MobilityVector.C);
 
     fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTVEC_FORMAT), "Movement => Diffusion coefficient", "m^2 s^-1",
-            data->DiffusionCoefficient.A, data->DiffusionCoefficient.B, data->DiffusionCoefficient.C);
+            data->DiffusionCoefficientVector.A, data->DiffusionCoefficientVector.B, data->DiffusionCoefficientVector.C);
 
     fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTVEC_FORMAT), "Movement => Ensemble R", "m^2",
             data->EnsembleMoveR1.A, data->EnsembleMoveR1.B, data->EnsembleMoveR1.C);

@@ -57,7 +57,7 @@ void PrintMocassinSimulationFinishInfo(SCONTEXT_PARAMETER, file_t *fstream)
 
         let moveR1 = mobilityData.EnsembleMoveR1;
         let moveR2 = mobilityData.EnsembleMoveR2;
-        let dCoef = mobilityData.DiffusionCoefficient;
+        let dCoef = mobilityData.DiffusionCoefficientVector;
         let counters = statisticsData.CounterCollection;
 
         fprintf(fstream, "P:%i:Counters(Success:"FORMAT_I64(012)"|Reject:"FORMAT_I64(012)"|Block:"FORMAT_I64(012)"|EndUnstable:"FORMAT_I64(012)"|StartUnstable:"FORMAT_I64(012)")\n", i,

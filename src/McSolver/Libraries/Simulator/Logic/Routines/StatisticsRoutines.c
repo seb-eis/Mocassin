@@ -149,6 +149,15 @@ Vector3_t CalculateMobilityVector(SCONTEXT_PARAMETER, const Vector3_t *displacem
     return result;
 }
 
+Vector3_t CalculateConductivityVector(SCONTEXT_PARAMETER, const Vector3_t *mobility, double charge, double particleDensity)
+{
+    Vector3_t result;
+    result.A = CalculateTotalConductivity(mobility->A, charge, particleDensity);
+    result.B = CalculateTotalConductivity(mobility->B, charge, particleDensity);
+    result.C = CalculateTotalConductivity(mobility->C, charge, particleDensity);
+    return result;
+}
+
 double CalculateParticleDensity(SCONTEXT_PARAMETER, byte_t particleId)
 {
     let volume = CalculateSuperCellVolume(simContext);
@@ -186,10 +195,28 @@ static inline double CalculateAverageMigrationRate(double simulatedTime, int64_t
 Vector3_t CalculateNernstEinsteinConductivity(SCONTEXT_PARAMETER, const Vector3_t *diffusionVector, const byte_t particleId, const double particleDensity)
 {
     let charge = getDbStructureModelMetaData(simContext)->ParticleCharges[particleId] * NATCONST_ELMCHARGE;
+    let normValues = CalculateNormalizedNernstEinsteinConductivity(simContext, diffusionVector, particleDensity);
+
+    let result = ScalarMultiplyVector3(&normValues, charge * charge);
+    return result;
+}
+
+Vector3_t CalculateNormalizedNernstEinsteinConductivity(SCONTEXT_PARAMETER, const Vector3_t *diffusionVector, double particleDensity)
+{
+    let charge = 1.0;
     let tempFactor = getDbModelJobInfo(simContext)->Temperature * NATCONST_BLOTZMANN * NATCONST_ELMCHARGE;
     let factor = charge * charge * particleDensity / tempFactor;
 
     let result = ScalarMultiplyVector3(diffusionVector, factor);
+    return result;
+}
+
+Vector3_t CalculateDiffusionCoefficientsSigma(SCONTEXT_PARAMETER, const Vector3_t *conductivities, byte_t particleId, double particleDensity)
+{
+    let charge = getDbStructureModelMetaData(simContext)->ParticleCharges[particleId] * NATCONST_ELMCHARGE;
+    let tempFactor = getDbModelJobInfo(simContext)->Temperature * NATCONST_BLOTZMANN * NATCONST_ELMCHARGE;
+    let factor = tempFactor / (particleDensity * charge * charge);
+    let result = ScalarMultiplyVector3(conductivities, factor);
     return result;
 }
 
@@ -214,13 +241,15 @@ void PopulateMobilityData(SCONTEXT_PARAMETER, ParticleMobilityData_t *restrict d
     vector3ScalarOp(data->MeanMoveR2, count, /=);
 
     data->MigrationRate = CalculateAverageMigrationRate(simulatedTime, data->ParticleStatistics->CounterCollection->McsCount, count);
-    data->DiffusionCoefficient = CalculateDiffusionCoefficient(&data->MeanMoveR2, simulatedTime);
+    data->DiffusionCoefficientVector = CalculateDiffusionCoefficient(&data->MeanMoveR2, simulatedTime);
     data->MobilityVector = CalculateMobilityVector(simContext, &data->MeanMoveR1, &meta->NormElectricFieldVector);
     data->TotalMobility = CalculateFieldProjectedMobility(simContext, &data->MeanMoveR1, &meta->NormElectricFieldVector);
-    data->NernstEinsteinConductivity = CalculateNernstEinsteinConductivity(simContext, &data->DiffusionCoefficient, id, density);
 
+    data->ConductivityVector = CalculateConductivityVector(simContext, &data->MobilityVector, meta->ParticleCharges[id], density);
     data->TotalConductivity = CalculateTotalConductivity(data->TotalMobility, meta->ParticleCharges[id], density);
-    data->TotalConductivityPerCharge = CalculateTotalConductivity(data->TotalMobility, 1, density);
+    data->NormalizedConductivityVector = CalculateConductivityVector(simContext, &data->MobilityVector, 1.0, density);
+
+    data->DSigmaVector = CalculateDiffusionCoefficientsSigma(simContext, &data->ConductivityVector, id, density);
 }
 
 void PopulateParticleStatistics(SCONTEXT_PARAMETER, ParticleStatistics_t *restrict statistics)
