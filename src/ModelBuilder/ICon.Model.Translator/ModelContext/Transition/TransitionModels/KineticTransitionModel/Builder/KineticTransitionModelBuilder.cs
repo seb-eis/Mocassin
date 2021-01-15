@@ -383,7 +383,7 @@ namespace Mocassin.Model.Translator.ModelContext
                 if (mappingModels[i].InverseIsSet)
                     continue;
 
-                for (var j = i; j < mappingModels.Count; j++)
+                for (var j = i + 1; j < mappingModels.Count; j++)
                 {
                     if (mappingModels[j].InverseIsSet)
                         continue;
