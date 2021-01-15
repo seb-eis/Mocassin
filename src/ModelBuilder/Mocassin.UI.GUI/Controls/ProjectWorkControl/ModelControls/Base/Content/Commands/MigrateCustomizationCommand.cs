@@ -46,8 +46,15 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
             ProjectCustomizationTemplate target = null;
             var command = new AddNewCustomizationCommand(ProjectControl, () => source.Parent, x => target = x);
             await command.ExecuteAsync(null);
-            Migrate(source, target);
-            OnSuccessAction?.Invoke(target);
+            try
+            {
+                Migrate(source, target);
+                OnSuccessAction?.Invoke(target);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("An error occured during the migration attempt: {0}", e);
+            }
         }
 
         /// <summary>
@@ -58,6 +65,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         /// <returns></returns>
         private void Migrate(ProjectCustomizationTemplate source, ProjectCustomizationTemplate target)
         {
+            if (target is null) return;
             target.Name = $"{source.Name} (Migrated)";
             var promptResult = GetRedundantReportUserPromptResult(source);
             var isRedundantReportEnabled = promptResult == MessageBoxResult.Yes;

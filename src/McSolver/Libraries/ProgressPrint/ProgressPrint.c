@@ -47,16 +47,28 @@ static inline int64_t  GetCounterCollectionCycleCount(const StateCounterCollecti
            + counters->SiteBlockingCount;
 }
 
-// Checks if a particle id is potentially marked as mobile in any environment definition
+// Checks if a particle id is potentially marked as mobile in any stable environment definition
 static inline bool_t ParticleIsMarkedAsMobile(SCONTEXT_PARAMETER, const byte_t particleId)
 {
+    let envDefinitions = &getDbStructureModel(simContext)->EnvironmentDefinitions;
     let jumpCountTable = getJumpCountMapping(simContext);
     int32_t dimensions[] = {0, 0};
     GetArrayDimensions((VoidArray_t*) jumpCountTable, dimensions);
     for (int32_t posId = 0; posId < dimensions[0]; ++posId)
     {
-        let jumpCount = array_Get(*jumpCountTable, posId, particleId);
-        if (jumpCount != JPOOL_DIRCOUNT_STATIC) return true;
+        let env = &span_Get(*envDefinitions, posId);
+        var canExistOnPosition = false;
+        c_foreach(id, env->PositionParticleIds)
+        {
+            if (*id == PARTICLE_NULL) break;
+            if (*id != particleId) continue;
+            canExistOnPosition = true;
+        }
+        if (canExistOnPosition)
+        {
+            let jumpCount = array_Get(*jumpCountTable, posId, particleId);
+            if (jumpCount != JPOOL_DIRCOUNT_STATIC) return true;
+        }
     }
 
     return false;
