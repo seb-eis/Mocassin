@@ -171,7 +171,7 @@ typedef struct JumpSelectionInfo
 } JumpSelectionInfo_t;
 
 // Type for the transition energy information
-// Layout@ggc_x86_64 => 80@[8,8,8,8,8,8,8,8,8,8]
+// Layout@ggc_x86_64 => 88@[8,8,8,8,8,8,8,8,8,8,8]
 typedef struct JumpEnergyInfo
 {
     // The S0 energy in units of [kT]
@@ -182,6 +182,9 @@ typedef struct JumpEnergyInfo
 
     // The S2 energy in units of [kT]
     double S2Energy;
+
+    // The S1 energy in units of [kT] without the S0 and S2 influence
+    double RawS1Energy;
 
     // The electric field influence energy in units of [kT]
     double ElectricFieldEnergy;
@@ -275,7 +278,7 @@ typedef struct JumpStatus
 typedef Array_t(JumpStatus_t, 4, JumpStatusArray) JumpStatusArray_t;
 
 // Type for the cycle state storage. Contains all information manipulated and buffered during simulation cycles
-// Layout@ggc_x86_64 => 248@[48,8,16,80,8,8,8,8,8,8,8,8,8]
+// Layout@ggc_x86_64 => 256@[48,8,16,88,8,8,8,8,8,8,8,8,8]
 typedef struct CycleState
 {
     // The main counter state. Controls the cycle loop settings

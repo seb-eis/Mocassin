@@ -830,20 +830,21 @@ void SetKmcJumpProbabilitiesOnContext(SCONTEXT_PARAMETER)
 }
 
 // Default internal S1 calculation function that uses the 0.5 * (S_2 - S_0) interpolation method
-static inline void SetDefaultKmcTransitionStateEnergy(double* restrict states)
+static inline void SetDefaultKmcTransitionStateEnergy(JumpEnergyInfo_t* restrict energyInfo)
 {
-    let deltaConf = states[2] - states[0];
-    states[4] = deltaConf;
-    states[1] += states[0] + 0.5 * deltaConf;
+    let deltaConf = energyInfo->S2Energy - energyInfo->S0Energy;
+    energyInfo->ConformationDeltaEnergy = deltaConf;
+    energyInfo->S1Energy = energyInfo->S0Energy + energyInfo->RawS1Energy + 0.5 * deltaConf;
 }
 
 // Alternate internal S1 calculation function that uses the factor interpolation method with a shift alpha
-static void SetKmcTransitionStateEnergyAlphaMethod(double* restrict states, const double alpha)
+static void SetKmcTransitionStateEnergyAlphaMethod(JumpEnergyInfo_t* restrict energyInfo, const double alpha)
 {
-    let deltaConf = states[2] - states[0];
+    let deltaConf = energyInfo->S2Energy - energyInfo->S0Energy;
     let deltaAbs = fabs(deltaConf);
-    states[4] = deltaConf;
-    states[1] += states[0] + 0.5 * (deltaConf - deltaAbs) + alpha * deltaAbs;
+    energyInfo->ConformationDeltaEnergy = deltaConf;
+    energyInfo->S1Energy = energyInfo->S0Energy + energyInfo->RawS1Energy + 0.5 * deltaConf;
+    energyInfo->S1Energy = energyInfo->S0Energy + energyInfo->RawS1Energy + 0.5 * (deltaConf - deltaAbs) + alpha * deltaAbs;
 }
 
 void SetEnergeticKmcEventEvaluationOnContext(SCONTEXT_PARAMETER)
@@ -854,11 +855,11 @@ void SetEnergeticKmcEventEvaluationOnContext(SCONTEXT_PARAMETER)
     // Use the internal energy function of no plugin is set
     if (plugins->OnSetTransitionStateEnergy == NULL)
     {
-        SetDefaultKmcTransitionStateEnergy(&energyInfo->S0Energy);
+        SetDefaultKmcTransitionStateEnergy(energyInfo);
     }
     else
     {
-        plugins->OnSetTransitionStateEnergy(&energyInfo->S0Energy);
+        plugins->OnSetTransitionStateEnergy(energyInfo);
     }
 
     // Calculates the probabilities from the set state energies

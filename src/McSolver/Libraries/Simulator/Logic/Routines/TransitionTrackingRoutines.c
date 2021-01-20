@@ -112,7 +112,7 @@ static inline void UpdatePathEnvironmentJumpStatistics(SCONTEXT_PARAMETER, const
     let energyInfo = getJumpEnergyInfo(simContext);
     var jumpStatistic = getJumpStatisticAt(simContext, getActiveJumpCollection(simContext)->ObjectId, JUMPPATH[pathId]->ParticleId);
 
-    let energyS1 = energyInfo->S1Energy * toEvFactor;
+    let energyS1 = energyInfo->RawS1Energy * toEvFactor;
     AddEnergyValueToJumpHistogram(&jumpStatistic->EdgeEnergyHistogram, energyS1);
 
     let energyConf = energyInfo->ConformationDeltaEnergy * toEvFactor;

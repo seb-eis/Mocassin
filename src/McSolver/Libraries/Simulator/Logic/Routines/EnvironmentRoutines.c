@@ -783,7 +783,7 @@ static inline void AddPathStateS0AndS1EnergyByPathId(SCONTEXT_PARAMETER, const i
     var particleId = GetOccupationCodeByteAt(&jumpRule->StateCode0, pathId);
     energyInfo->S0Energy += *getPathStateEnergyByIds(simContext, pathId, particleId);
     particleId = GetOccupationCodeByteAt(&jumpRule->StateCode1, pathId);
-    energyInfo->S1Energy += *getPathStateEnergyByIds(simContext, pathId, particleId);
+    energyInfo->RawS1Energy += *getPathStateEnergyByIds(simContext, pathId, particleId);
 }
 
 void SetKmcStartTransitionBaseAndFieldEnergyStatesOnContext(SCONTEXT_PARAMETER)
@@ -798,7 +798,7 @@ void SetKmcStartTransitionBaseAndFieldEnergyStatesOnContext(SCONTEXT_PARAMETER)
 
     // Set the values of the first entry, the first transition state energy is always zero
     energyInfo->S0Energy = *getPathStateEnergyByIds(simContext, 0, particleId);
-    energyInfo->S1Energy = 0;
+    energyInfo->RawS1Energy = 0;
 
     //  Fallthrough switch of jump length cases
     switch (jumpDirection->JumpLength)
