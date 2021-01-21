@@ -113,7 +113,7 @@ static void PrintParticleStatistics(const ParticleStatistics_t* restrict statist
 // Prints the passed particle mobility data to the stream
 static void PrintParticleMobility(const ParticleMobilityData_t* restrict data, file_t*restrict fstream)
 {
-    fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTVEC_FORMAT), "Conductivity => Components", "S m^-1",
+    fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTVEC_FORMAT), "Conductivity => Components (x,y,z)", "S m^-1",
             data->ConductivityVector.A, data->ConductivityVector.B, data->ConductivityVector.C);
 
     fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTVEC_FORMAT), "Conductivity => Normalized (z=+1)", "S m^-1",
@@ -122,20 +122,32 @@ static void PrintParticleMobility(const ParticleMobilityData_t* restrict data, f
     fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTF64_FORMAT), "Conductivity => Field direction", "S m^-1",
             data->TotalConductivity);
 
-    fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTVEC_FORMAT), "Mobility => D_Sigma", "m^2 s^-1",
-            data->DSigmaVector.A, data->DSigmaVector.B, data->DSigmaVector.C);
-
     fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTF64_FORMAT), "Mobility => Average migration rate", "Hz",
             data->MigrationRate);
 
     fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTF64_FORMAT), "Mobility => Field direction", "m^2 V^-1 s^-1",
             data->TotalMobility);
 
-    fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTVEC_FORMAT), "Mobility => Components", "m^2 V^-1 s^-1",
+    fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTVEC_FORMAT), "Mobility => Components (x,y,z)", "m^2 V^-1 s^-1",
             data->MobilityVector.A, data->MobilityVector.B, data->MobilityVector.C);
 
-    fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTVEC_FORMAT), "Movement => Diffusion coefficient", "m^2 s^-1",
+    fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTVEC_FORMAT), "Diffusion => D_Sigma (x,y,z)", "m^2 s^-1",
+            data->DSigmaVector.A, data->DSigmaVector.B, data->DSigmaVector.C);
+
+    fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTVEC_FORMAT), "Diffusion => D_Tracer (x,y,z)", "m^2 s^-1",
             data->DiffusionCoefficientVector.A, data->DiffusionCoefficientVector.B, data->DiffusionCoefficientVector.C);
+
+    fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTF64_FORMAT), "Diffusion => D_Sigma (R^3)", "m^2 s^-1",
+            data->TotalDSigma);
+
+    fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTF64_FORMAT), "Diffusion => D_Tracer (R^3)", "m^2 s^-1",
+            data->TotalDTracer);
+
+    fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTF64_FORMAT), "Movement => Mean <R> (R^3)", "m",
+            data->TotalMeanMoveR1);
+
+    fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTF64_FORMAT), "Movement => Mean <R^2> (R^3)", "m^2",
+            data->TotalMeanMoveR2);
 
     fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTVEC_FORMAT), "Movement => Ensemble R", "m^2",
             data->EnsembleMoveR1.A, data->EnsembleMoveR1.B, data->EnsembleMoveR1.C);
@@ -148,6 +160,7 @@ static void PrintParticleMobility(const ParticleMobilityData_t* restrict data, f
 
     fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTVEC_FORMAT), "Movement => Mean <R^2>", "m^2",
             data->MeanMoveR2.A, data->MeanMoveR2.B, data->MeanMoveR2.C);
+
     fprintf(fstream, "\n");
     fflush(fstream);
 }

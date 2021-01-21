@@ -53,6 +53,18 @@ typedef struct ParticleMobilityData
     //   The actual migration rate in [Hz]
     double      MigrationRate;
 
+    // The total R^3 ensembles movement in [m]
+    double      TotalMeanMoveR1;
+
+    // The total R^3 squared movement in [m^2]
+    double      TotalMeanMoveR2;
+
+    // The total R^3 diffusion coefficient in [m^2/s]
+    double      TotalDTracer;
+
+    // The total sigma diffusion coefficient in [m^2/s] as calculated from the conductivity
+    double      TotalDSigma;
+
     // The total diffusion coefficient components in [m^2/s] in (x,y,z) direction
     Vector3_t   DiffusionCoefficientVector;
 
@@ -174,8 +186,8 @@ error_t SetCycleCounterStateToDefault(SCONTEXT_PARAMETER, CycleCounterState_t *c
 // Calculates the physical simulation factors and sets them on the passed factor collection
 error_t SetPhysicalSimulationFactorsToDefault(SCONTEXT_PARAMETER, PhysicalInfo_t *factors);
 
-// Get the linear (fractional) or square displacement (cartesian) vector of the mobile tracker ensemble of the passed particle in [Ang]/[Ang^2]
-Vector3_t CalculateMobileTrackerEnsembleShift(SCONTEXT_PARAMETER, byte_t particleId, bool_t isSquared);
+// Get the linear or square displacement (cartesian) vector of the mobile tracker ensemble of the passed particle in [Ang]/[Ang^2]
+Vector3_t CalculateMobileTrackerEnsembleShift(SCONTEXT_PARAMETER, byte_t particleId, bool_t isSquared, double* r3value);
 
 // Get the linear displacement vector of the static tracker ensemble of the passed particle
 Vector3_t CalculateStaticTrackerEnsembleShift(SCONTEXT_PARAMETER, byte_t particleId);

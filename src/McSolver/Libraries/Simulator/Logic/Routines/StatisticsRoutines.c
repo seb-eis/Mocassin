@@ -64,21 +64,30 @@ error_t SetPhysicalSimulationFactorsToDefault(SCONTEXT_PARAMETER, PhysicalInfo_t
     return ERR_OK;
 }
 
-Vector3_t CalculateMobileTrackerEnsembleShift(SCONTEXT_PARAMETER, byte_t particleId, bool_t isSquared)
+Vector3_t CalculateMobileTrackerEnsembleShift(SCONTEXT_PARAMETER, byte_t particleId, bool_t isSquared, double* r3value)
 {
+    debug_assert(r3value != NULL);
     Vector3_t result = {.A = 0, .B = 0, .C = 0};
     let meta = getDbStructureModelMetaData(simContext);
 
+    *r3value = 0.0;
     cpp_foreach(envState, *getEnvironmentLattice(simContext))
     {
         continue_if((envState->ParticleId != particleId) || (envState->MobileTrackerId <= INVALID_INDEX));
 
         var tracker = *getMobileTrackerAt(simContext, envState->MobileTrackerId);
+        tracker = TransformFractionalToCartesian(&tracker, &meta->CellVectors);
+        let length = CalcVector3Length(&tracker);
         if (isSquared)
         {
-            tracker = TransformFractionalToCartesian(&tracker, &meta->CellVectors);
             vector3VectorOp(tracker, tracker, *=);
+            length *= length;
         }
+        else
+        {
+
+        }
+        *r3value += length;
         vector3VectorOp(result, tracker, +=);
     }
 
@@ -220,6 +229,20 @@ Vector3_t CalculateDiffusionCoefficientsSigma(SCONTEXT_PARAMETER, const Vector3_
     return result;
 }
 
+static inline double CalculateTotalDiffusionCoefficient(const double meanR2, const double time)
+{
+    return meanR2 / (6.0 * time);
+}
+
+static inline double CalculateTotalDSigma(SCONTEXT_PARAMETER, const double conductivity, byte_t particleId, double particleDensity)
+{
+    let charge = getDbStructureModelMetaData(simContext)->ParticleCharges[particleId] * NATCONST_ELMCHARGE;
+    let tempFactor = getDbModelJobInfo(simContext)->Temperature * NATCONST_BLOTZMANN * NATCONST_ELMCHARGE;
+    let factor = tempFactor / (particleDensity * charge * charge);
+    let result = conductivity * factor;
+    return result;
+}
+
 void PopulateMobilityData(SCONTEXT_PARAMETER, ParticleMobilityData_t *restrict data)
 {
     let meta = getDbStructureModelMetaData(simContext);
@@ -228,13 +251,13 @@ void PopulateMobilityData(SCONTEXT_PARAMETER, ParticleMobilityData_t *restrict d
     let density = data->ParticleStatistics->ParticleDensity;
     let simulatedTime = getMainStateMetaData(simContext)->SimulatedTime;
 
-    data->EnsembleMoveR1 = CalculateMobileTrackerEnsembleShift(simContext, id, false);
-    data->EnsembleMoveR2 = CalculateMobileTrackerEnsembleShift(simContext, id, true);
+    data->EnsembleMoveR1 = CalculateMobileTrackerEnsembleShift(simContext, id, false, &data->TotalMeanMoveR1);
+    data->EnsembleMoveR2 = CalculateMobileTrackerEnsembleShift(simContext, id, true, &data->TotalMeanMoveR2);
     vector3ScalarOp(data->EnsembleMoveR1, CONV_LENGTH_ANG_TO_M, *=);
     vector3ScalarOp(data->EnsembleMoveR2, CONV_LENGTH_ANG_TO_M*CONV_LENGTH_ANG_TO_M, *=);
 
-    data->EnsembleMoveR1 = TransformFractionalToCartesian(&data->EnsembleMoveR1, &meta->CellVectors);
-
+    data->TotalMeanMoveR1 *= CONV_LENGTH_ANG_TO_M / count;
+    data->TotalMeanMoveR2 *= CONV_LENGTH_ANG_TO_M * CONV_LENGTH_ANG_TO_M / count;
     data->MeanMoveR1 = data->EnsembleMoveR1;
     data->MeanMoveR2 = data->EnsembleMoveR2;
     vector3ScalarOp(data->MeanMoveR1, count, /=);
@@ -250,6 +273,9 @@ void PopulateMobilityData(SCONTEXT_PARAMETER, ParticleMobilityData_t *restrict d
     data->NormalizedConductivityVector = CalculateConductivityVector(simContext, &data->MobilityVector, 1.0, density);
 
     data->DSigmaVector = CalculateDiffusionCoefficientsSigma(simContext, &data->ConductivityVector, id, density);
+
+    data->TotalDTracer = CalculateTotalDiffusionCoefficient(data->TotalMeanMoveR2, simulatedTime);
+    data->TotalDSigma = CalculateTotalDSigma(simContext, data->TotalConductivity, id, density);
 }
 
 void PopulateParticleStatistics(SCONTEXT_PARAMETER, ParticleStatistics_t *restrict statistics)
