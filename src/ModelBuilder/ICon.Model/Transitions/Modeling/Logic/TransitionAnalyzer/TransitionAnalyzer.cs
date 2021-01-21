@@ -71,7 +71,7 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <summary>
-        ///     Checks if two rules form a dependent pair that cannot be modeled independently
+        ///     Checks if two rules form a dependent pair that cannot be modeled independently if full detailed balanced is required
         /// </summary>
         /// <param name="lhs"></param>
         /// <param name="rhs"></param>

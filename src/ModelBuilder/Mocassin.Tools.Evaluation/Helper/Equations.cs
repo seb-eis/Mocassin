@@ -77,7 +77,15 @@ namespace Mocassin.Tools.Evaluation.Helper
             /// <param name="shift"></param>
             /// <param name="time"></param>
             /// <returns></returns>
-            public static double MeanSquareToCoefficient(double shift, double time) => shift / (2 * time);
+            public static double MeanSquareToCoefficient1D(double shift, double time) => shift / (2.0 * time);
+
+            /// <summary>
+            ///     Get the diffusion coefficient through mean square displacement and time in 3 dimensions
+            /// </summary>
+            /// <param name="shift"></param>
+            /// <param name="time"></param>
+            /// <returns></returns>
+            public static double MeanSquareToCoefficient3D(double shift, double time) => shift / (6.0 * time);
 
             /// <summary>
             ///     Get the diffusion coefficient by mean square displacement vector and time in X,Y,Z directions
@@ -85,10 +93,10 @@ namespace Mocassin.Tools.Evaluation.Helper
             /// <param name="vector"></param>
             /// <param name="time"></param>
             /// <returns></returns>
-            public static (double X, double Y, double Z) MeanSquareToCoefficient(in Cartesian3D vector, double time) =>
-                (MeanSquareToCoefficient(vector.X, time),
-                    MeanSquareToCoefficient(vector.Y, time),
-                    MeanSquareToCoefficient(vector.Z, time));
+            public static (double X, double Y, double Z) MeanSquareToCoefficient1D(in Cartesian3D vector, double time) =>
+                (MeanSquareToCoefficient1D(vector.X, time),
+                    MeanSquareToCoefficient1D(vector.Y, time),
+                    MeanSquareToCoefficient1D(vector.Z, time));
         }
 
         /// <summary>

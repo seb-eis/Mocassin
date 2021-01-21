@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore.Sqlite.Query.Internal;
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Tools.Evaluation.Context;
 using Mocassin.Tools.Evaluation.Queries.Data;
@@ -26,10 +27,15 @@ namespace Mocassin.Tools.Evaluation.Queries
         }
 
         /// <inheritdoc />
-        protected override void GetMovementVectors(Cartesian3D[] vectors, JobContext jobContext)
+        protected override void PopulateRawDisplacementData(Cartesian3D[] vectors, double[] displacements, JobContext jobContext)
         {
             foreach (var trackingData in MobileTrackingEvaluation[jobContext.DataId])
-                vectors[trackingData.Particle.Index] += trackingData.Displacement.GetSquared();
+            {
+                var length = trackingData.Displacement.GetLength();
+                var vector = trackingData.Displacement.GetSquared();
+                vectors[trackingData.Particle.Index] += vector;
+                displacements[trackingData.Particle.Index] += length * length;
+            }
         }
 
         /// <inheritdoc />

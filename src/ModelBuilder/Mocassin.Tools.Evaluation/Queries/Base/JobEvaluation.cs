@@ -56,10 +56,8 @@ namespace Mocassin.Tools.Evaluation.Queries
         /// <returns></returns>
         protected abstract T GetValue(JobContext jobContext);
 
-        /// <summary>
-        ///     Get the query result task or generates and invokes the task if required
-        /// </summary>
-        /// <returns></returns>
+
+        /// <inheritdoc />
         public Task<IReadOnlyList<T>> Run()
         {
             lock (lockObject)

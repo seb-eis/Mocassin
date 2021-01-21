@@ -28,6 +28,6 @@ namespace Mocassin.Tools.Evaluation.Queries.Data
 
         /// <inheritdoc />
         public override string ToString() =>
-            $"[{TrackerModel.KineticTransitionModel.Transition.Name}]:[{DisplacementData.Particle.Name}][{DisplacementData.Vector}]";
+            $"[{TrackerModel.KineticTransitionModel.Transition.Name}]:[{DisplacementData.Particle.Name}][{DisplacementData.VectorR}]";
     }
 }

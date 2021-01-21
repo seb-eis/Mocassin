@@ -25,24 +25,31 @@ namespace Mocassin.Tools.Evaluation.Queries.Data
         public IParticle Particle { get; }
 
         /// <summary>
-        ///     Get the <see cref="Cartesian3D" /> that describes the displacement
+        ///     Get the <see cref="Cartesian3D" /> that describes the displacement as either [x] or [x^2] for (x,y,z) directions
         /// </summary>
-        public Cartesian3D Vector { get; }
+        public Cartesian3D VectorR { get; }
+
+        /// <summary>
+        ///     Get the displacement in [x] or [x^2] for all directions
+        /// </summary>
+        public double DisplacementR { get; }
 
         /// <summary>
         ///     Get a boolean flag if the displacement is the mean displacement
         /// </summary>
-        public bool IsMean => EnsembleSize == 1;
+        public bool IsMean { get; }
 
         /// <inheritdoc />
-        public EnsembleDisplacement(bool isSquared, int ensembleSize, IParticle particle, Cartesian3D vector)
+        public EnsembleDisplacement(bool isSquared, bool isMean, int ensembleSize, IParticle particle, double displacementR, Cartesian3D vectorR)
             : this()
         {
             if (ensembleSize == 0) throw new ArgumentException("Ensemble size cannot be 0", nameof(ensembleSize));
+            IsMean = isMean;
             IsSquared = isSquared;
             EnsembleSize = ensembleSize;
             Particle = particle ?? throw new ArgumentNullException(nameof(particle));
-            Vector = vector;
+            VectorR = vectorR;
+            DisplacementR = displacementR;
         }
 
         /// <summary>
@@ -50,6 +57,6 @@ namespace Mocassin.Tools.Evaluation.Queries.Data
         ///     behavior
         /// </summary>
         /// <returns></returns>
-        public EnsembleDisplacement AsMean() => new EnsembleDisplacement(IsSquared, 1, Particle, Vector / EnsembleSize);
+        public EnsembleDisplacement AsMean() => IsMean ? this : new EnsembleDisplacement(IsSquared, true, EnsembleSize, Particle, DisplacementR / EnsembleSize, VectorR / EnsembleSize);
     }
 }

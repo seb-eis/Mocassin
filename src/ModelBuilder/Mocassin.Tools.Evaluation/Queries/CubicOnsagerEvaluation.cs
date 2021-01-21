@@ -67,7 +67,7 @@ namespace Mocassin.Tools.Evaluation.Queries
                 {
                     var dis1 = displacements[i];
                     var dis2 = displacements[j];
-                    var value = Equations.Statistics.CubicOnsagerKuboGreen(dis1.Vector, dis2.Vector, volume, time, temperature);
+                    var value = Equations.Statistics.CubicOnsagerKuboGreen(dis1.VectorR, dis2.VectorR, volume, time, temperature);
                     result[dis1.Particle.Index, dis2.Particle.Index] = result[dis2.Particle.Index, dis1.Particle.Index] = value;
                 }
             }

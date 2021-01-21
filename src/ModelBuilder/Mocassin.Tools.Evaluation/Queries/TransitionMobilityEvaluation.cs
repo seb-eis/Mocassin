@@ -42,7 +42,7 @@ namespace Mocassin.Tools.Evaluation.Queries
             {
                 var particle = trackerResult.TrackerModel.TrackedParticle;
                 var density = metaData[particle.Index].ParticleDensity;
-                var displacement = trackerResult.DisplacementData.AsMean().Vector;
+                var displacement = trackerResult.DisplacementData.AsMean().VectorR;
                 var mobility = Equations.Mobility.DisplacementToMobility(displacement, normField, fieldModulus, time);
                 var conductivity = Equations.Mobility.MobilityToConductivity(mobility, particle.Charge, density);
                 var normConductivity = Equations.Mobility.MobilityToConductivity(mobility, 1, density);

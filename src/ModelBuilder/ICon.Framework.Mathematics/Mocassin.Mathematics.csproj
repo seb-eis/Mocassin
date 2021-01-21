@@ -21,7 +21,7 @@
     <ProjectReference Include="..\ICon.Framework.Shared\Mocassin.Framework.csproj" />
   </ItemGroup>
 
-  <Target Name="NugetPackAutoVersioning" AfterTargets="Build" Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+  <Target Name="NugetPackAutoVersioning" AfterTargets="Build" Condition="'$(Configuration)|$(Platform)false' == 'Release|AnyCPU|true'">
     <Exec Command="dotnet pack -p:PackageVersion=$([System.DateTime]::Now.ToString(&quot;yyyy.MM.dd&quot;)) --no-build --configuration $(Configuration) --output &quot;$(SolutionDir)nuget" />
   </Target>
 

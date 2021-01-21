@@ -13,9 +13,9 @@ namespace Mocassin.Tools.Evaluation.Queries
     public class EnsembleDiffusionEvaluation : JobEvaluation<IReadOnlyList<EnsembleDiffusion>>
     {
         /// <summary>
-        ///     Get or set the <see cref="IJobEvaluation{T}" /> that supplies the <see cref="EnsembleDisplacement" /> set
+        ///     Get or set the <see cref="IJobEvaluation{T}" /> that supplies the squared <see cref="EnsembleDisplacement" /> set
         /// </summary>
-        public IJobEvaluation<IReadOnlyCollection<EnsembleDisplacement>> EnsembleDisplacementEvaluation { get; set; }
+        public IJobEvaluation<IReadOnlyList<EnsembleDisplacement>> SquaredDisplacementEvaluation { get; set; }
 
         /// <inheritdoc />
         public EnsembleDiffusionEvaluation(IEvaluableJobSet jobSet)
@@ -23,38 +23,19 @@ namespace Mocassin.Tools.Evaluation.Queries
         {
         }
 
-        /// <summary>
-        ///     Gets the set average and standard deviation of the entire internal result collection
-        /// </summary>
-        /// <returns></returns>
-        public IReadOnlyList<(EnsembleDiffusion Average, EnsembleDiffusion Deviation)> GetSetAverage()
-        {
-            var result = new List<(EnsembleDiffusion, EnsembleDiffusion)>();
-            for (var i = 0; i < Result.First().Count; i++)
-            {
-                var (cX, dX) = Equations.Statistics.AverageWithDeviation(Result.Select(x => x[i]), y => y.CoefficientX);
-                var (cY, dY) = Equations.Statistics.AverageWithDeviation(Result.Select(x => x[i]), y => y.CoefficientY);
-                var (cZ, dZ) = Equations.Statistics.AverageWithDeviation(Result.Select(x => x[i]), y => y.CoefficientZ);
-                var avg = new EnsembleDiffusion(Result[0][i].Particle, cX, cY, cZ);
-                var dev = new EnsembleDiffusion(Result[0][i].Particle, dX, dY, dZ);
-                result.Add((avg, dev));
-            }
-
-            return result;
-        }
-
         /// <inheritdoc />
         protected override IReadOnlyList<EnsembleDiffusion> GetValue(JobContext jobContext)
         {
-            var displacements = EnsembleDisplacementEvaluation[jobContext.DataId];
-            var time = jobContext.McsReader.ReadMetaData().SimulatedTime;
-            var result = new List<EnsembleDiffusion>(displacements.Count);
+            var r2displacements = SquaredDisplacementEvaluation[jobContext.DataId];
 
-            foreach (var displacement in displacements.Select(x => x.IsMean ? x : x.AsMean()))
+            var time = jobContext.McsReader.ReadMetaData().SimulatedTime;
+            var result = new List<EnsembleDiffusion>(r2displacements.Count);
+
+            foreach (var displacement in r2displacements.Select(x => x.AsMean()))
             {
                 if (!displacement.IsSquared) throw new InvalidOperationException("Displacement data is not squared.");
-                var (compX, compY, compZ) = Equations.Diffusion.MeanSquareToCoefficient(displacement.Vector, time);
-                result.Add(new EnsembleDiffusion(displacement.Particle, compX, compY, compZ));
+                var msdComponents = (displacement.VectorR.X, displacement.VectorR.Y, displacement.VectorR.Z, displacement.DisplacementR);
+                result.Add(new EnsembleDiffusion(displacement.Particle, displacement.EnsembleSize, time, msdComponents));
             }
 
             return result.AsReadOnly();
@@ -63,10 +44,10 @@ namespace Mocassin.Tools.Evaluation.Queries
         /// <inheritdoc />
         protected override void PrepareForExecution()
         {
-            EnsembleDisplacementEvaluation ??= new SquaredDisplacementEvaluation(JobSet);
+            SquaredDisplacementEvaluation ??= new SquaredDisplacementEvaluation(JobSet);
 
-            if (!EnsembleDisplacementEvaluation.JobSet.CompatibleTo(JobSet))
-                throw new InvalidOperationException("Ensemble displacement evaluation is not compatible.");
+            if (!SquaredDisplacementEvaluation.JobSet.CompatibleTo(JobSet))
+                throw new InvalidOperationException("Squared ensemble displacement evaluation is not compatible.");
             base.PrepareForExecution();
         }
     }

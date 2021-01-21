@@ -468,6 +468,7 @@ namespace Mocassin.Model.Transitions
         /// <param name="rhsParticleOld"></param>
         /// <param name="lhsExchange"></param>
         /// <param name="rhsExchange"></param>
+        /// <param name="pushingParticle"></param>
         protected bool CanDoKmcTypeIonPush(IParticle lhsParticleOld, IParticle rhsParticleOld, IStateExchangePair lhsExchange, IStateExchangePair rhsExchange, IParticle pushingParticle)
         {
             var lhsParticleNew = GetExchangeParticle(lhsParticleOld, lhsExchange);
@@ -631,6 +632,7 @@ namespace Mocassin.Model.Transitions
             var analyzer = new TransitionAnalyzer();
             for (var i = 0; i < rules.Count - 1; i++)
             {
+                if ((rules[i].MovementFlags & RuleMovementFlags.HasChainedMovement) != 0) continue;
                 for (var j = i + 1; j < rules.Count;)
                 {
                     if (analyzer.RulePairIsDependentPair(rules[i], rules[j]))

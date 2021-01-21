@@ -20,7 +20,7 @@ namespace Mocassin.Tools.Evaluation.Queries.Data
         public IParticle Particle { get; }
 
         /// <summary>
-        ///     Get the <see cref="Cartesian3D" /> that describes the displacement
+        ///     Get the <see cref="Cartesian3D" /> that describes the displacement in [m] in x,y,z directions
         /// </summary>
         public Cartesian3D Displacement { get; }
 
