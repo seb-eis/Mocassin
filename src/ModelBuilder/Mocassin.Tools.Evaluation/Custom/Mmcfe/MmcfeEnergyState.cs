@@ -101,7 +101,7 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
             builder.Append(separator);
             builder.Append(FreeEnergy.ToString(doubleFormat, formatProvider));
             builder.Append(separator);
-            var entropy = entropyInKb ? Entropy / Equations.Constants.BlotzmannEv : Entropy;
+            var entropy = entropyInKb ? Entropy / Equations.Constants.BoltzmannEv : Entropy;
             builder.Append(entropy.ToString(doubleFormat, formatProvider));
             return builder.ToString();
         }

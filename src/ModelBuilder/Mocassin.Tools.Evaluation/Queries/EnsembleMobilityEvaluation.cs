@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Mocassin.Framework.Collections.Mocassin.Tools.Evaluation.Queries;
+using Mocassin.Framework.Extensions;
 using Mocassin.Tools.Evaluation.Context;
 using Mocassin.Tools.Evaluation.Helper;
 using Mocassin.Tools.Evaluation.Queries.Data;
@@ -10,17 +12,17 @@ namespace Mocassin.Tools.Evaluation.Queries
     /// <summary>
     ///     Query to extract the <see cref="EnsembleMobility" /> data from an <see cref="IEvaluableJobSet" />
     /// </summary>
-    public class EnsembleMobilityEvaluation : JobEvaluation<IReadOnlyList<EnsembleMobility>>
+    public class EnsembleMobilityEvaluation : JobEvaluation<ReadOnlyList<EnsembleMobility>>
     {
         /// <summary>
         ///     Get or set the <see cref="IJobEvaluation{T}" /> that supplies the <see cref="EnsembleDisplacement" /> set
         /// </summary>
-        public IJobEvaluation<IReadOnlyList<EnsembleDisplacement>> EnsembleDisplacementEvaluation { get; set; }
+        public EnsembleDisplacementEvaluation EnsembleDisplacementEvaluation { get; set; }
 
         /// <summary>
         ///     Get or set the <see cref="IJobEvaluation{T}" /> that supplies the <see cref="EnsembleMetaData" /> set
         /// </summary>
-        public IJobEvaluation<IReadOnlyList<EnsembleMetaData>> EnsembleMetaEvaluation { get; set; }
+        public EnsembleMetaEvaluation EnsembleMetaEvaluation { get; set; }
 
         /// <inheritdoc />
         public EnsembleMobilityEvaluation(IEvaluableJobSet jobSet)
@@ -29,12 +31,13 @@ namespace Mocassin.Tools.Evaluation.Queries
         }
 
         /// <inheritdoc />
-        protected override IReadOnlyList<EnsembleMobility> GetValue(JobContext jobContext)
+        protected override ReadOnlyList<EnsembleMobility> GetValue(JobContext jobContext)
         {
             var displacements = EnsembleDisplacementEvaluation[jobContext.DataId];
             var metaData = EnsembleMetaEvaluation[jobContext.DataId];
             var normField = jobContext.SimulationModel.NormalizedElectricFieldVector;
             var fieldModulus = jobContext.JobModel.JobMetaData.ElectricFieldModulus;
+            var temperature = jobContext.JobModel.JobMetaData.Temperature;
             var time = jobContext.McsReader.ReadMetaData().SimulatedTime;
 
             var result = new List<EnsembleMobility>(displacements.Count);
@@ -45,10 +48,11 @@ namespace Mocassin.Tools.Evaluation.Queries
                 var mobility = Equations.Mobility.DisplacementToMobility(displacement.VectorR, normField, fieldModulus, time);
                 var conductivity = Equations.Mobility.MobilityToConductivity(mobility, particle.Charge, density);
                 var normConductivity = Equations.Mobility.MobilityToConductivity(mobility, 1, density);
-                result.Add(new EnsembleMobility(particle, mobility, conductivity, normConductivity));
+                var diffCoefficient = Equations.Mobility.MobilityToEffectiveDiffusionCoefficient(mobility, temperature, particle.Charge);
+                result.Add(new EnsembleMobility(particle, mobility, conductivity, normConductivity, diffCoefficient));
             }
 
-            return result.AsReadOnly();
+            return result.AsReadOnlyList();
         }
 
         /// <inheritdoc />

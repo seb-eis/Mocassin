@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using Mocassin.Framework.Collections.Mocassin.Tools.Evaluation.Queries;
+using Mocassin.Framework.Extensions;
 using Mocassin.Model.Particles;
 using Mocassin.Tools.Evaluation.Context;
 using Mocassin.Tools.Evaluation.Extensions;
@@ -10,7 +12,7 @@ namespace Mocassin.Tools.Evaluation.Queries
     /// <summary>
     ///     Query to extract the the <see cref="MobileTrackerResult" /> list from a <see cref="JobContext" /> sequence
     /// </summary>
-    public class MobileTrackingEvaluation : JobEvaluation<IReadOnlyList<MobileTrackerResult>>
+    public class MobileTrackingEvaluation : JobEvaluation<ReadOnlyList<MobileTrackerResult>>
     {
         /// <inheritdoc />
         public MobileTrackingEvaluation(IEvaluableJobSet jobSet)
@@ -20,7 +22,7 @@ namespace Mocassin.Tools.Evaluation.Queries
         }
 
         /// <inheritdoc />
-        protected override IReadOnlyList<MobileTrackerResult> GetValue(JobContext context)
+        protected override ReadOnlyList<MobileTrackerResult> GetValue(JobContext context)
         {
             var lattice = context.McsReader.ReadLattice();
             var trackerMapping = context.McsReader.ReadMobileTrackerMapping();
@@ -36,7 +38,7 @@ namespace Mocassin.Tools.Evaluation.Queries
                 result.Add(new MobileTrackerResult(particle, positionId, vector * UnitConversions.Length.AngstromToMeter));
             }
 
-            return result;
+            return result.AsReadOnlyList();
         }
     }
 }

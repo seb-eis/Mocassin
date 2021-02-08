@@ -5,6 +5,7 @@
     <Platforms>AnyCPU;x64</Platforms>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <RepositoryUrl>https://github.com/scrollrad/Mocassin</RepositoryUrl>
+    <AutoPack>false</AutoPack>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,7 +22,7 @@
     <ProjectReference Include="..\ICon.Framework.Shared\Mocassin.Framework.csproj" />
   </ItemGroup>
 
-  <Target Name="NugetPackAutoVersioning" AfterTargets="Build" Condition="'$(Configuration)|$(Platform)false' == 'Release|AnyCPU|true'">
+  <Target Name="NugetPackAutoVersioning" AfterTargets="Build" Condition="'$(Configuration)|$(Platform)|$(AutoPack)' == 'Release|AnyCPU|true'">
     <Exec Command="dotnet pack -p:PackageVersion=$([System.DateTime]::Now.ToString(&quot;yyyy.MM.dd&quot;)) --no-build --configuration $(Configuration) --output &quot;$(SolutionDir)nuget" />
   </Target>
 

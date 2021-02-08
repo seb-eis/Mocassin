@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Mocassin.Framework.Collections.Mocassin.Tools.Evaluation.Queries;
+using Mocassin.Framework.Extensions;
 using Mocassin.Tools.Evaluation.Context;
 using Mocassin.Tools.Evaluation.Extensions;
 using Mocassin.Tools.Evaluation.Helper;
@@ -11,12 +13,12 @@ namespace Mocassin.Tools.Evaluation.Queries
     ///     Query to extract the <see cref="GlobalTrackerResult" /> list from a sequence of <see cref="JobContext" />
     ///     instances
     /// </summary>
-    public class GlobalTrackingEvaluation : JobEvaluation<IReadOnlyList<GlobalTrackerResult>>
+    public class GlobalTrackingEvaluation : JobEvaluation<ReadOnlyList<GlobalTrackerResult>>
     {
         /// <summary>
         ///     Get or set the <see cref="IJobEvaluation{T}" /> that provides the particle counts
         /// </summary>
-        public IJobEvaluation<IReadOnlyList<int>> ParticleCountEvaluation { get; set; }
+        public ParticleCountEvaluation ParticleCountEvaluation { get; set; }
 
         /// <inheritdoc />
         public GlobalTrackingEvaluation(IEvaluableJobSet jobSet)
@@ -25,7 +27,7 @@ namespace Mocassin.Tools.Evaluation.Queries
         }
 
         /// <inheritdoc />
-        protected override IReadOnlyList<GlobalTrackerResult> GetValue(JobContext context)
+        protected override ReadOnlyList<GlobalTrackerResult> GetValue(JobContext context)
         {
             var globalTrackerModels = context.SimulationModel.SimulationTrackingModel.GlobalTrackerModels;
             var trackingData = context.McsReader.ReadGlobalTrackers();
@@ -37,12 +39,14 @@ namespace Mocassin.Tools.Evaluation.Queries
             {
                 var shift = vectorTransformer.ToCartesian(trackingData[trackerModel.ModelId].AsVector());
                 var particleCount = ParticleCountEvaluation[context.DataId][trackerModel.TrackedParticle.Index];
+                if (particleCount == 0) continue;
+
                 var displacement = new EnsembleDisplacement(false, false, particleCount, trackerModel.TrackedParticle, shift.GetLength() * UnitConversions.Length.AngstromToMeter,
                     shift * UnitConversions.Length.AngstromToMeter);
                 result.Add(new GlobalTrackerResult(trackerModel, displacement));
             }
 
-            return result.AsReadOnly();
+            return result.AsReadOnlyList();
         }
 
         /// <inheritdoc />

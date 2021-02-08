@@ -15,12 +15,12 @@ namespace Mocassin.Tools.Evaluation.Queries
         /// <summary>
         ///     Get or set the <see cref="IJobEvaluation{T}" /> that supplies the particle count data
         /// </summary>
-        public IJobEvaluation<IReadOnlyList<int>> ParticleCountEvaluation { get; set; }
+        public ParticleCountEvaluation ParticleCountEvaluation { get; set; }
 
         /// <summary>
         ///     Get or set the <see cref="IJobEvaluation{T}" /> that supplies the <see cref="LatticeMetaData" />
         /// </summary>
-        public IJobEvaluation<LatticeMetaData> LatticeMetaEvaluation { get; set; }
+        public LatticeMetaEvaluation LatticeMetaEvaluation { get; set; }
 
         /// <inheritdoc />
         public EnsembleMetaEvaluation(IEvaluableJobSet jobSet)

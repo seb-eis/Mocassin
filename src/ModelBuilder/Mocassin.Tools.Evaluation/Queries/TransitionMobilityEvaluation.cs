@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Mocassin.Framework.Collections.Mocassin.Tools.Evaluation.Queries;
+using Mocassin.Framework.Extensions;
 using Mocassin.Tools.Evaluation.Context;
 using Mocassin.Tools.Evaluation.Helper;
 using Mocassin.Tools.Evaluation.Queries.Data;
@@ -9,17 +11,17 @@ namespace Mocassin.Tools.Evaluation.Queries
     /// <summary>
     ///     Query that extracts <see cref="TransitionMobility" /> data from a <see cref="IEvaluableJobSet" />
     /// </summary>
-    public class TransitionMobilityEvaluation : JobEvaluation<IReadOnlyList<TransitionMobility>>
+    public class TransitionMobilityEvaluation : JobEvaluation<ReadOnlyList<TransitionMobility>>
     {
         /// <summary>
         ///     Get or set the <see cref="IJobEvaluation{T}" /> that supplies the <see cref="GlobalTrackerResult" /> set
         /// </summary>
-        public IJobEvaluation<IReadOnlyList<GlobalTrackerResult>> GlobalTrackerEvaluation { get; set; }
+        public GlobalTrackingEvaluation GlobalTrackerEvaluation { get; set; }
 
         /// <summary>
         ///     Get or set the <see cref="IJobEvaluation{T}" /> that supplies the <see cref="EnsembleMetaData" /> set
         /// </summary>
-        public IJobEvaluation<IReadOnlyList<EnsembleMetaData>> EnsembleMetaEvaluation { get; set; }
+        public EnsembleMetaEvaluation EnsembleMetaEvaluation { get; set; }
 
         /// <inheritdoc />
         public TransitionMobilityEvaluation(IEvaluableJobSet jobSet)
@@ -28,13 +30,14 @@ namespace Mocassin.Tools.Evaluation.Queries
         }
 
         /// <inheritdoc />
-        protected override IReadOnlyList<TransitionMobility> GetValue(JobContext jobContext)
+        protected override ReadOnlyList<TransitionMobility> GetValue(JobContext jobContext)
         {
             var globalTrackerResults = GlobalTrackerEvaluation[jobContext.DataId];
             var metaData = EnsembleMetaEvaluation[jobContext.DataId];
             var normField = jobContext.SimulationModel.NormalizedElectricFieldVector;
             var fieldModulus = jobContext.JobModel.JobMetaData.ElectricFieldModulus;
             var time = jobContext.McsReader.ReadMetaData().SimulatedTime;
+            var temperature = jobContext.JobModel.JobMetaData.Temperature;
 
             var result = new List<TransitionMobility>(globalTrackerResults.Count);
 
@@ -46,10 +49,11 @@ namespace Mocassin.Tools.Evaluation.Queries
                 var mobility = Equations.Mobility.DisplacementToMobility(displacement, normField, fieldModulus, time);
                 var conductivity = Equations.Mobility.MobilityToConductivity(mobility, particle.Charge, density);
                 var normConductivity = Equations.Mobility.MobilityToConductivity(mobility, 1, density);
-                result.Add(new TransitionMobility(trackerResult.TrackerModel, new EnsembleMobility(particle, mobility, conductivity, normConductivity)));
+                var diffCoefficient = Equations.Mobility.MobilityToEffectiveDiffusionCoefficient(mobility, temperature, particle.Charge);
+                result.Add(new TransitionMobility(trackerResult.TrackerModel, new EnsembleMobility(particle, mobility, conductivity, normConductivity, diffCoefficient)));
             }
 
-            return result.AsReadOnly();
+            return result.AsReadOnlyList();
         }
 
         /// <inheritdoc />

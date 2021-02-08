@@ -18,7 +18,7 @@ namespace Mocassin.Tools.Evaluation.Queries
         /// <summary>
         ///     Get or set the <see cref="IJobEvaluation{T}" /> of <see cref="MobileTrackerResult" />
         /// </summary>
-        public IJobEvaluation<IReadOnlyList<MobileTrackerResult>> MobileTrackingEvaluation { get; set; }
+        public MobileTrackingEvaluation MobileTrackingEvaluation { get; set; }
 
         /// <inheritdoc />
         public SquaredDisplacementEvaluation(IEvaluableJobSet jobSet)

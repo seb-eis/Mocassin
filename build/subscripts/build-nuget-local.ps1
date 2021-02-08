@@ -22,7 +22,7 @@ if (Test-Path $pathToNugetTmp) {
 New-Item -Force -Path $pathToNugetDeploy -ItemType "directory"
 
 # Invoke MSBuild for Release and Any CPU to trigger project auto nuget building
-& $pathToMSbuild $pathToSource /property:Platform="Any CPU" /property:Configuration="Release" /verbosity:minimal -restore
+& $pathToMSbuild $pathToSource /property:AutoPack="true" /property:Platform="Any CPU" /property:Configuration="Release" /verbosity:minimal -restore
 
 Write-Host "Completed nuget packages! Copying files to deploy & cleaning up..."
 

@@ -214,7 +214,7 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         {
             if (File.Exists(filePath)) File.Delete(filePath);
             using var writer = File.AppendText(filePath);
-            var entropyFactor = entropyInKb ? 1.0 / Equations.Constants.BlotzmannEv : 1.0;
+            var entropyFactor = entropyInKb ? 1.0 / Equations.Constants.BoltzmannEv : 1.0;
             writer.WriteLine("c u error-u f error-f s error-s");
             foreach (var point in plotData.Skip(skipLineCount))
             {

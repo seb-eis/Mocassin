@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Mocassin.Framework.Collections;
+using Mocassin.Framework.Collections.Mocassin.Tools.Evaluation.Queries;
 
 namespace Mocassin.Framework.Extensions
 {
@@ -432,5 +433,13 @@ namespace Mocassin.Framework.Extensions
         {
             return indices.Select(index => list[index]);
         }
+
+        /// <summary>
+        ///     Wraps a generic <see cref="List{T}"/> as a <see cref="ReadOnlyList{T}"/>
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="self"></param>
+        /// <returns></returns>
+        public static ReadOnlyList<T> AsReadOnlyList<T>(this List<T> self) => new ReadOnlyList<T>(self); 
     }
 }

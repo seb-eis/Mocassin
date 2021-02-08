@@ -8,7 +8,7 @@ namespace Mocassin.Tools.Evaluation.Queries.Data
     /// <summary>
     ///     Stores the simulation diffusion data of an <see cref="IParticle" /> ensemble
     /// </summary>
-    public readonly struct EnsembleDiffusion
+    public class EnsembleDiffusion
     {
         /// <summary>
         ///     Get the <see cref="IParticle" /> of the ensemble
@@ -35,9 +35,14 @@ namespace Mocassin.Tools.Evaluation.Queries.Data
         /// </summary>
         public (double X, double Y, double Z, double R) DiffusionCoefficient { get; }
 
-        /// <inheritdoc />
+        /// <summary>
+        ///     Creates a new <see cref="EnsembleDiffusion"/> for a <see cref="IParticle"/>
+        /// </summary>
+        /// <param name="particle"></param>
+        /// <param name="ensembleSize"></param>
+        /// <param name="simulatedTime"></param>
+        /// <param name="msd"></param>
         public EnsembleDiffusion(IParticle particle, int ensembleSize, double simulatedTime, (double, double, double, double) msd)
-            : this()
         {
             Particle = particle ?? throw new ArgumentNullException(nameof(particle));
             EnsembleSize = ensembleSize;

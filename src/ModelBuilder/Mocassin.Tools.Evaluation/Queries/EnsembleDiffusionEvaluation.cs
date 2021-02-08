@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Mocassin.Framework.Collections.Mocassin.Tools.Evaluation.Queries;
 using Mocassin.Tools.Evaluation.Context;
 using Mocassin.Tools.Evaluation.Helper;
 using Mocassin.Tools.Evaluation.Queries.Data;
@@ -10,12 +11,12 @@ namespace Mocassin.Tools.Evaluation.Queries
     /// <summary>
     ///     Query to extract <see cref="EnsembleDiffusion" /> form a <see cref="IEvaluableJobSet" />
     /// </summary>
-    public class EnsembleDiffusionEvaluation : JobEvaluation<IReadOnlyList<EnsembleDiffusion>>
+    public class EnsembleDiffusionEvaluation : JobEvaluation<ReadOnlyList<EnsembleDiffusion>>
     {
         /// <summary>
         ///     Get or set the <see cref="IJobEvaluation{T}" /> that supplies the squared <see cref="EnsembleDisplacement" /> set
         /// </summary>
-        public IJobEvaluation<IReadOnlyList<EnsembleDisplacement>> SquaredDisplacementEvaluation { get; set; }
+        public SquaredDisplacementEvaluation SquaredDisplacementEvaluation { get; set; }
 
         /// <inheritdoc />
         public EnsembleDiffusionEvaluation(IEvaluableJobSet jobSet)
@@ -24,7 +25,7 @@ namespace Mocassin.Tools.Evaluation.Queries
         }
 
         /// <inheritdoc />
-        protected override IReadOnlyList<EnsembleDiffusion> GetValue(JobContext jobContext)
+        protected override ReadOnlyList<EnsembleDiffusion> GetValue(JobContext jobContext)
         {
             var r2displacements = SquaredDisplacementEvaluation[jobContext.DataId];
 
@@ -38,7 +39,7 @@ namespace Mocassin.Tools.Evaluation.Queries
                 result.Add(new EnsembleDiffusion(displacement.Particle, displacement.EnsembleSize, time, msdComponents));
             }
 
-            return result.AsReadOnly();
+            return new ReadOnlyList<EnsembleDiffusion>(result);
         }
 
         /// <inheritdoc />

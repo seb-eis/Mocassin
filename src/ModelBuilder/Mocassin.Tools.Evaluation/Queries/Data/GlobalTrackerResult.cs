@@ -6,7 +6,7 @@ namespace Mocassin.Tools.Evaluation.Queries.Data
     /// <summary>
     ///     Struct that contains the <see cref="EnsembleDisplacement" /> of a <see cref="IGlobalTrackerModel" />
     /// </summary>
-    public readonly struct GlobalTrackerResult
+    public class GlobalTrackerResult
     {
         /// <summary>
         ///     Get the <see cref="IGlobalTrackerModel" /> that the data belongs to
@@ -18,9 +18,12 @@ namespace Mocassin.Tools.Evaluation.Queries.Data
         /// </summary>
         public EnsembleDisplacement DisplacementData { get; }
 
-        /// <inheritdoc />
+        /// <summary>
+        ///     Creates a new <see cref="GlobalTrackerResult"/> for an <see cref="IGlobalTrackerModel"/>
+        /// </summary>
+        /// <param name="trackerModel"></param>
+        /// <param name="displacementData"></param>
         public GlobalTrackerResult(IGlobalTrackerModel trackerModel, in EnsembleDisplacement displacementData)
-            : this()
         {
             TrackerModel = trackerModel ?? throw new ArgumentNullException(nameof(trackerModel));
             DisplacementData = displacementData;

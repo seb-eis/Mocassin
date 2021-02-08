@@ -6,7 +6,7 @@ namespace Mocassin.Tools.Evaluation.Queries.Data
     /// <summary>
     ///     Stores the transition resolved mobility data for a <see cref="IGlobalTrackerModel" />
     /// </summary>
-    public readonly struct TransitionMobility
+    public class TransitionMobility
     {
         /// <summary>
         ///     Get the <see cref="IGlobalTrackerModel" /> the mobility data belongs to
@@ -18,9 +18,12 @@ namespace Mocassin.Tools.Evaluation.Queries.Data
         /// </summary>
         public EnsembleMobility EnsembleMobility { get; }
 
-        /// <inheritdoc />
+        /// <summary>
+        ///     Creates a new <see cref="TransitionMobility"/> for a <see cref="IGlobalTrackerModel"/>
+        /// </summary>
+        /// <param name="trackerModel"></param>
+        /// <param name="ensembleMobility"></param>
         public TransitionMobility(IGlobalTrackerModel trackerModel, in EnsembleMobility ensembleMobility)
-            : this()
         {
             TrackerModel = trackerModel ?? throw new ArgumentNullException(nameof(trackerModel));
             EnsembleMobility = ensembleMobility;

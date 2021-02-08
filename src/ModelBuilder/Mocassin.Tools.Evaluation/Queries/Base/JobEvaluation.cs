@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Mocassin.Framework.Collections.Mocassin.Tools.Evaluation.Queries;
+using Mocassin.Framework.Extensions;
 using Mocassin.Tools.Evaluation.Context;
 
 namespace Mocassin.Tools.Evaluation.Queries
@@ -14,13 +16,14 @@ namespace Mocassin.Tools.Evaluation.Queries
     public abstract class JobEvaluation<T> : IJobEvaluation<T>
     {
         private readonly object lockObject = new object();
-        private Task<IReadOnlyList<T>> ResultTask { get; set; }
+
+        private Task<ReadOnlyList<T>> ResultTask { get; set; }
 
         /// <inheritdoc />
         public IEvaluableJobSet JobSet { get; }
 
         /// <inheritdoc />
-        public IReadOnlyList<T> Result => ResultTask?.Result ?? Run().Result;
+        public ReadOnlyList<T> Result => ResultTask?.Result ?? Run().Result;
 
         /// <inheritdoc />
         public int Count => Result.Count;
@@ -58,7 +61,7 @@ namespace Mocassin.Tools.Evaluation.Queries
 
 
         /// <inheritdoc />
-        public Task<IReadOnlyList<T>> Run()
+        public Task<ReadOnlyList<T>> Run()
         {
             lock (lockObject)
             {
@@ -71,14 +74,14 @@ namespace Mocassin.Tools.Evaluation.Queries
         ///     Runs the query on the thread pool in sequential mode
         /// </summary>
         /// <returns></returns>
-        private async Task<IReadOnlyList<T>> RunSequential()
+        private async Task<ReadOnlyList<T>> RunSequential()
         {
-            IReadOnlyList<T> ExecuteLocal()
+            ReadOnlyList<T> ExecuteLocal()
             {
                 PrepareForExecution();
                 var resultList = new List<T>(JobSet.Count);
                 resultList.AddRange(JobSet.Select(GetValue));
-                return resultList.AsReadOnly();
+                return resultList.AsReadOnlyList();
             }
 
             return await Task.Run(ExecuteLocal);
@@ -88,9 +91,9 @@ namespace Mocassin.Tools.Evaluation.Queries
         ///     Runs the query on the thread pool in parallel mode
         /// </summary>
         /// <returns></returns>
-        private Task<IReadOnlyList<T>> RunParallel()
+        private Task<ReadOnlyList<T>> RunParallel()
         {
-            IReadOnlyList<T> ExecuteLocal()
+            ReadOnlyList<T> ExecuteLocal()
             {
                 PrepareForExecution();
                 var resultList = new List<T>(JobSet.Count);
@@ -98,7 +101,7 @@ namespace Mocassin.Tools.Evaluation.Queries
                 taskList.AddRange(JobSet.Select(x => Task.Run(() => GetValue(x))));
                 Task.WhenAll(taskList).Wait();
                 resultList.AddRange(taskList.Select(x => x.Result));
-                return resultList.AsReadOnly();
+                return resultList.AsReadOnlyList();
             }
 
             return Task.Run(ExecuteLocal);

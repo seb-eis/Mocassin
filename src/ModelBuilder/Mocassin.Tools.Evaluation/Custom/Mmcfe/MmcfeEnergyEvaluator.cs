@@ -60,7 +60,7 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
                 {
                     index++;
                     var energy = lowHeader.MinValue + index * lowHeader.Stepping;
-                    var weighting = Math.Exp(energy * dAlpha * energyNormalization / (baseTemperature * Equations.Constants.BlotzmannEv));
+                    var weighting = Math.Exp(energy * dAlpha * energyNormalization / (baseTemperature * Equations.Constants.BoltzmannEv));
                     denominator += weighting * counter;
                 }
 
@@ -72,7 +72,7 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
                 sumOfLnMij += lnOfMij;
                 var temperature = baseTemperature / lowParams.AlphaCurrent;
                 var innerEnergy = CalculateInnerEnergy(lowReader);
-                var freeEnergy = -temperature * Equations.Constants.BlotzmannEv * sumOfLnMij / energyNormalization;
+                var freeEnergy = -temperature * Equations.Constants.BoltzmannEv * sumOfLnMij / energyNormalization;
                 result.Add(new MmcfeEnergyState(lowParams.AlphaCurrent, temperature, freeEnergy, innerEnergy));
             }
 

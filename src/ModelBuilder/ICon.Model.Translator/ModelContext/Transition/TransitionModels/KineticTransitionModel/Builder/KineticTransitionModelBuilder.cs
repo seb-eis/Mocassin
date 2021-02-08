@@ -38,7 +38,8 @@ namespace Mocassin.Model.Translator.ModelContext
             foreach (var transitionModel in resultModels)
             {
                 if (TryLinkTransitionModelToExistingSets(transitionModel, resultModels)) continue;
-                if (transitionModel.RuleModels.Any(x => (x.KineticRule.MovementFlags & RuleMovementFlags.HasChainedMovement) != 0)) continue;
+                if (!IsForcedTransitionInversionRequired(transitionModel)) continue;
+
                 var inverseModel = CreateGeometricModelInversion(transitionModel);
 
                 inverseModel.ModelId = index++;
@@ -53,6 +54,18 @@ namespace Mocassin.Model.Translator.ModelContext
             }
 
             return resultModels;
+        }
+
+        /// <summary>
+        ///     Checks if a <see cref="IKineticTransitionModel"/> requires an auto generated inversion to fulfill detailed balance
+        /// </summary>
+        /// <param name="transitionModel"></param>
+        /// <returns></returns>
+        protected bool IsForcedTransitionInversionRequired(IKineticTransitionModel transitionModel)
+        {
+            // Note: Currently only regular 3-Site migrations require a forced inversion.
+            // Push-chains or vehicles should either contain their inversion or have an explicitly defined one
+            return transitionModel.Transition.GeometryStepCount == 3;
         }
 
         /// <summary>

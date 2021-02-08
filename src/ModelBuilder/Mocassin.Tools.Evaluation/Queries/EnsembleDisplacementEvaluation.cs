@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Mocassin.Framework.Collections.Mocassin.Tools.Evaluation.Queries;
+using Mocassin.Framework.Extensions;
 using Mocassin.Mathematics.Comparer;
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Particles;
@@ -15,12 +17,12 @@ namespace Mocassin.Tools.Evaluation.Queries
     ///     Query to extract the <see cref="EnsembleDisplacement" /> for each <see cref="IParticle" /> from a
     ///     <see cref="JobContext" /> sequence
     /// </summary>
-    public class EnsembleDisplacementEvaluation : JobEvaluation<IReadOnlyList<EnsembleDisplacement>>
+    public class EnsembleDisplacementEvaluation : JobEvaluation<ReadOnlyList<EnsembleDisplacement>>
     {
         /// <summary>
         ///     Get or set a <see cref="IJobEvaluation{T}" /> that provides the particle counts
         /// </summary>
-        public IJobEvaluation<IReadOnlyList<int>> ParticleCountEvaluation { get; set; }
+        public ParticleCountEvaluation ParticleCountEvaluation { get; set; }
 
         /// <summary>
         ///     Get or set a boolean flag if the evaluation should return the mean result
@@ -49,13 +51,13 @@ namespace Mocassin.Tools.Evaluation.Queries
         }
 
         /// <inheritdoc />
-        protected override IReadOnlyList<EnsembleDisplacement> GetValue(JobContext context)
+        protected override ReadOnlyList<EnsembleDisplacement> GetValue(JobContext context)
         {
             var vectors = new Cartesian3D[context.ModelContext.GetModelObjects<IParticle>().Count()];
             var displacements = new double[vectors.Length];
             PopulateRawDisplacementData(vectors, displacements, context);
 
-            return CreateDisplacementData(vectors, displacements, context).AsReadOnly();
+            return CreateDisplacementData(vectors, displacements, context).AsReadOnlyList();
         }
 
         /// <inheritdoc />

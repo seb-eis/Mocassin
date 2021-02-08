@@ -136,13 +136,18 @@ namespace Mocassin.Model.Translator.EntityBuilder
         /// <returns></returns>
         protected JumpDirectionEntity GetJumpDirectionEntity(ITransitionMappingModel mappingModel, ISimulationModel simulationModel)
         {
+            var invObjId = mappingModel.InverseMappingBase != null
+                ? simulationModel.SimulationEncodingModel.TransitionMappingToJumpDirectionId.TryGetValue(mappingModel.InverseMappingBase, out var invId) 
+                    ? invId : -1 
+                : -1;
+
             var entity = new JumpDirectionEntity
             {
                 PathLength = mappingModel.PathLength,
                 PositionId = mappingModel.StartVector4D.P,
                 CollectionId = simulationModel.SimulationEncodingModel.TransitionModelToJumpCollectionId[mappingModel.GetTransitionModel()],
                 ObjectId = simulationModel.SimulationEncodingModel.TransitionMappingToJumpDirectionId[mappingModel],
-                InvObjectId = simulationModel.SimulationEncodingModel.TransitionMappingToJumpDirectionId.TryGetValue(mappingModel.InverseMappingBase, out var invId) ? invId : -1,
+                InvObjectId = invObjId,
                 FieldProjectionFactor = simulationModel.SimulationEncodingModel.TransitionMappingToElectricFieldFactors[mappingModel],
                 JumpSequence = GetJumpSequenceEntity(mappingModel.GetTransitionSequence()),
                 MovementSequence = GetMovementSequenceEntity(mappingModel)

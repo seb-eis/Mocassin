@@ -7,6 +7,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <!--<TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>-->
     <RepositoryUrl>https://github.com/scrollrad/Mocassin</RepositoryUrl>
+    <AutoPack>false</AutoPack>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,7 +24,7 @@
     <PackageReference Include="System.Memory" Version="4.5.4" />
   </ItemGroup>
 
-  <Target Name="NugetPackAutoVersioning" AfterTargets="Build" Condition="'$(Configuration)|$(Platform)|false' == 'Release|AnyCPU|true'">
+  <Target Name="NugetPackAutoVersioning" AfterTargets="Build" Condition="'$(Configuration)|$(Platform)|$(AutoPack)' == 'Release|AnyCPU|true'">
     <Exec Command="dotnet pack -p:PackageVersion=$([System.DateTime]::Now.ToString(&quot;yyyy.MM.dd&quot;)) --no-build --configuration $(Configuration) --output &quot;$(SolutionDir)nuget" />
   </Target>
 

@@ -5,7 +5,7 @@ namespace Mocassin.Tools.Evaluation.Queries.Data
     /// <summary>
     ///     Stores the meta information for a single the simulation lattice
     /// </summary>
-    public readonly struct LatticeMetaData
+    public class LatticeMetaData
     {
         /// <summary>
         ///     Get a <see cref="Vector4I" /> that stores the 4D size information
@@ -17,9 +17,12 @@ namespace Mocassin.Tools.Evaluation.Queries.Data
         /// </summary>
         public double Volume { get; }
 
-        /// <inheritdoc />
+        /// <summary>
+        ///     Creates a new <see cref="LatticeMetaData"/>
+        /// </summary>
+        /// <param name="sizeInfo"></param>
+        /// <param name="volume"></param>
         public LatticeMetaData(in Vector4I sizeInfo, double volume)
-            : this()
         {
             SizeInfo = sizeInfo;
             Volume = volume;

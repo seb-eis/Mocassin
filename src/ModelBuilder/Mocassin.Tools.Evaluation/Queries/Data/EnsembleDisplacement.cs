@@ -7,7 +7,7 @@ namespace Mocassin.Tools.Evaluation.Queries.Data
     /// <summary>
     ///     Struct that describes the movement of a <see cref="IParticle" /> ensemble in cartesian coordinates
     /// </summary>
-    public readonly struct EnsembleDisplacement
+    public class EnsembleDisplacement
     {
         /// <summary>
         ///     Get a boolean flag if the displacement is squared
@@ -39,9 +39,16 @@ namespace Mocassin.Tools.Evaluation.Queries.Data
         /// </summary>
         public bool IsMean { get; }
 
-        /// <inheritdoc />
+        /// <summary>
+        ///     Creates a new <see cref="EnsembleDisplacement"/> for an <see cref="IParticle"/>
+        /// </summary>
+        /// <param name="isSquared"></param>
+        /// <param name="isMean"></param>
+        /// <param name="ensembleSize"></param>
+        /// <param name="particle"></param>
+        /// <param name="displacementR"></param>
+        /// <param name="vectorR"></param>
         public EnsembleDisplacement(bool isSquared, bool isMean, int ensembleSize, IParticle particle, double displacementR, Cartesian3D vectorR)
-            : this()
         {
             if (ensembleSize == 0) throw new ArgumentException("Ensemble size cannot be 0", nameof(ensembleSize));
             IsMean = isMean;

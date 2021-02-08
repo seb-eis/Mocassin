@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Mocassin.Framework.Collections.Mocassin.Tools.Evaluation.Queries;
 
 namespace Mocassin.Tools.Evaluation.Queries
 {
@@ -17,12 +18,12 @@ namespace Mocassin.Tools.Evaluation.Queries
         /// <summary>
         ///     Get the <see cref="IReadOnlyList{T}" /> of results
         /// </summary>
-        IReadOnlyList<T> Result { get; }
+        ReadOnlyList<T> Result { get; }
 
         /// <summary>
         ///     Get the query result task or generates and invokes the task if required
         /// </summary>
         /// <returns></returns>
-        Task<IReadOnlyList<T>> Run();
+        Task<ReadOnlyList<T>> Run();
     }
 }

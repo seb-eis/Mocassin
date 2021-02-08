@@ -24,7 +24,12 @@ namespace Mocassin.Tools.Evaluation.Helper
             /// <summary>
             ///     The boltzmann constant in [eV/K]
             /// </summary>
-            public static double BlotzmannEv = 8.617333262145e-05;
+            public static double BoltzmannEv = 8.617333262145e-05;
+
+            /// <summary>
+            ///     The boltzmann constant in [J/K]
+            /// </summary>
+            public static double BoltzmannSi = BoltzmannEv * ElementalCharge;
         }
 
         /// <summary>
@@ -64,6 +69,17 @@ namespace Mocassin.Tools.Evaluation.Helper
             /// <returns></returns>
             public static double MobilityToConductivity(double mobility, double chargeNumber, double particleDensity) =>
                 mobility * chargeNumber * particleDensity * Constants.ElementalCharge;
+
+            /// <summary>
+            ///     Calculates the effective diffusion coefficient froma mobility using the Nernst-Einstein formalism
+            /// </summary>
+            /// <param name="mobility"></param>
+            /// <param name="temperature"></param>
+            /// <param name="chargeNumber"></param>
+            /// <param name="correlationFactor"></param>
+            /// <returns></returns>
+            public static double MobilityToEffectiveDiffusionCoefficient(double mobility, double temperature, double chargeNumber, double correlationFactor = 1.0)
+                => mobility * temperature * Constants.BoltzmannEv * correlationFactor * chargeNumber;
         }
 
         /// <summary>
@@ -97,6 +113,45 @@ namespace Mocassin.Tools.Evaluation.Helper
                 (MeanSquareToCoefficient1D(vector.X, time),
                     MeanSquareToCoefficient1D(vector.Y, time),
                     MeanSquareToCoefficient1D(vector.Z, time));
+
+            /// <summary>
+            ///     Calculates the tracer correlation factor using the mean r_i * r_i correlation for a specific average jump length
+            /// </summary>
+            /// <param name="meanRiRi"></param>
+            /// <param name="avgMigrationRate"></param>
+            /// <param name="time"></param>
+            /// <param name="avgJumpLength"></param>
+            /// <returns></returns>
+            public static double CalculateTracerCorrelationFactor(double meanRiRi, double avgMigrationRate, double time, double avgJumpLength)
+            {
+                return meanRiRi / (avgMigrationRate * time * avgJumpLength * avgJumpLength);
+            }
+
+            /// <summary>
+            ///     Calculates the tracer correlation factor using the mean r_j * r_i correlation for a specific average jump length
+            /// </summary>
+            /// <param name="meanRiRj"></param>
+            /// <param name="avgMigrationRate"></param>
+            /// <param name="time"></param>
+            /// <param name="ensembleSize"></param>
+            /// <param name="avgJumpLength"></param>
+            /// <returns></returns>
+            public static double CalculateTwoParticleCorrelationFactor(double meanRiRj, double avgMigrationRate, double time, int ensembleSize, double avgJumpLength) =>
+                ensembleSize * CalculateTracerCorrelationFactor(meanRiRj, avgMigrationRate, time, avgJumpLength);
+
+            /// <summary>
+            ///     Calculates the collective correlation factor from r_i * r_j of two ensembles and an average jump length
+            /// </summary>
+            /// <param name="riRj"></param>
+            /// <param name="avgMigrationRate"></param>
+            /// <param name="time"></param>
+            /// <param name="ensembleSize"></param>
+            /// <param name="avgJumpLength"></param>
+            /// <returns></returns>
+            public static double CalculateCollectiveCorrelationFactors(double riRj, double avgMigrationRate, double time, int ensembleSize, double avgJumpLength)
+            {
+                return riRj / (ensembleSize * avgMigrationRate * time * avgJumpLength * avgJumpLength);
+            }
         }
 
         /// <summary>
@@ -152,17 +207,45 @@ namespace Mocassin.Tools.Evaluation.Helper
             }
 
             /// <summary>
-            ///     Calculates an onsager coefficient utilizing the Kubo-Green formalism for cubic systems
+            ///     Calculates an onsager coefficient for all directions utilizing the Kubo-Green formalism for cubic systems
             /// </summary>
-            /// <param name="lhs"></param>
-            /// <param name="rhs"></param>
+            /// <param name="ri"></param>
+            /// <param name="rj"></param>
             /// <param name="volume"></param>
             /// <param name="time"></param>
             /// <param name="temperature"></param>
             /// <returns></returns>
-            public static double CubicOnsagerKuboGreen(in Cartesian3D lhs, in Cartesian3D rhs, double volume, double time,
+            public static double CalcOnsagerR3FromTotalEnsembleShift(in Cartesian3D ri, in Cartesian3D rj, double volume, double time,
                 double temperature) =>
-                lhs.GetLength() * rhs.GetLength() / (6 * volume * temperature * time * Constants.BlotzmannEv);
+                ri * rj / (6.0 * volume * temperature * time * Constants.BoltzmannSi);
+
+            /// <summary>
+            ///     Calculates the Lij onsager coefficient for R^3 utilizing the movement correlation of a simulation (different
+            ///     ensembles)
+            /// </summary>
+            /// <param name="riRj"></param>
+            /// <param name="time"></param>
+            /// <param name="temperature"></param>
+            /// <param name="cellVolume"></param>
+            /// <returns></returns>
+            public static double CalcOnsagerR3FromCorrelationLij(double riRj, double time, double temperature, double cellVolume) =>
+                riRj / (6.0 * time * cellVolume * Constants.BoltzmannSi * temperature);
+
+            /// <summary>
+            ///     Calculates the Lii onsager coefficient for R^3 utilizing the movement correlation of a simulation (same ensemble)
+            /// </summary>
+            /// <param name="riRi"></param>
+            /// <param name="riRj"></param>
+            /// <param name="time"></param>
+            /// <param name="temperature"></param>
+            /// <param name="cellVolume"></param>
+            /// <returns></returns>
+            public static double CalcOnsagerR3FromCorrelationLii(double riRi, double riRj, double time, double temperature, double cellVolume)
+            {
+                var snd = 1.0 / (cellVolume * Constants.BoltzmannSi * temperature) * riRi / (6.0 * time);
+                var fst = 1.0 / (cellVolume * Constants.BoltzmannSi * temperature) * riRj / (6.0 * time);
+                return fst + snd;
+            }
         }
     }
 }
