@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <metadata>
+        <id>Mocassin</id>
+        <version>$version</version>
+        <authors>Sebastian Eisele, Steffen Grieshammer</authors>
+        <owners>seb-eis</owners>
+        <projectUrl>http://github.com/seb-eis/mocassin</projectUrl>
+        <license type="expression">GPL-3.0-or-later</license>
+        <icon>icon.png</icon>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Mocassin core package</description>
+        <copyright>Copyright ©2021 S. Eisele, S. Grieshammer, Forschungszentrum Juelich GmbH</copyright>
+        <dependencies>
+            <dependency id="Mocassin.Framework" version="$version" />
+            <dependency id="Mocassin.Mathematics" version="$version" />
+            <dependency id="Mocassin.Model" version="$version" />
+            <dependency id="Mocassin.Model.Translator" version="$version" />
+            <dependency id="Mocassin.Symmetry" version="$version" />
+            <dependency id="Mocassin.Tools.UAccess" version="$version" />
+            <dependency id="Mocassin.Tools.Evaluation" version="$version" />
+            <dependency id="Mocassin.UI.Data" version="$version" />
+        </dependencies>
+    </metadata>
+</package>

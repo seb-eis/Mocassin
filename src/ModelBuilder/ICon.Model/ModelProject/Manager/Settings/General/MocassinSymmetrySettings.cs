@@ -14,7 +14,7 @@ namespace Mocassin.Model.ModelProject
         ///     The full filepath to the space group database
         /// </summary>
         [DataMember]
-        public string SpaceGroupDbPath { get; set; } = SpaceGroupContextSource.MakeDefaultFilepath();
+        public string SpaceGroupDbPath { get; set; } = SpaceGroupContextSource.DefaultDbPath;
 
         /// <summary>
         ///     The tolerance value for equality comparisons of the vectors during wyckoff position extension

@@ -6,6 +6,8 @@ Advanced data evaluation using the Mocassin API evolves around a context class f
 
 **Note:** The simulation database file (.msl) is an SQLite database that is accessed from .NET via the object relation mapper Entity Framework Core. The MslEvaluationContext has the database context in the background but is not itself an EF Core DbContext class and opens the database as readonly to prevent accidental manipulation of raw data.
 
+**Important: EF core does not use lazy loading by default. If C# is used to query data from a DbContext then `Microsoft.EntityFrameworkCore` is required as a `using` to have the `Include(...)` extension method for loading navigation properties when buidling an `IQueryable<T>`. The F# `query {...}` computation expression automatically includes navigation properties if required.**
+
 ## Usage
 
 ### [Creating a context and loading a jobset](#creating-a-context-and-loading-a-jobset)
@@ -14,6 +16,7 @@ Creating a `MslEvaluationContext` instance to load job sets is straightforward. 
 
 ```csharp
 using Mocassin.Tools.Evaluation.Context;
+using Microsoft.EntityFrameworkCore; // Important when IQueryable<T>.Include(...) is required
 
 namespace TestProject
 {
@@ -38,6 +41,18 @@ namespace TestProject
 
 **Important:** Always use the `mslContext.MakeEvaluableSet(...)` method to load the data. This causes the context to register the provided job context information and disposes them once the `MslEvaluationContext` is disposed. Failing to do so will cause severe memory leaking as the binary state readers pin data in memory to prevent the data from being moved by the garbage collector. This is done to prevent memory access violations observed in multithreading scenarios when using the `ReadonlySpan<T>` reference structure with frequent garbage collection.
 
+The `MslEvaluationContext` also provides a convenience wrapper that combines building the query using `EvaluationJobSet()` and `MakeEvaluableSet()` into a single functions that takes an expression to manipulate the query. The call above then becomes:
+
+```csharp
+// Open a context that will be disposed if the scope is left
+using var mslContext = MslEvaluationContext.Create("./myproject.msl");
+
+// Load the jobs as a set of JobContext instances
+var jobSet = mslContext.LoadJobsAsEvaluable(query => query
+                            .Where(x => x.JobMetaData.Temperature > 1000.0)
+                            .OrderBy(x => x.JobMetaData.Temperature));
+```
+
 ### [Using an evaluation class](#using-an-evaluation)
 
 The `IEvaluableJobSet` is intended for usage with implementation of the `JobEvaluation<TResult>` class. Mocassin provides ready implementations for some of the basic tasks, e.g. evaluating the conductivity, diffusion, or displacements of ensembles.
@@ -45,7 +60,7 @@ The `IEvaluableJobSet` is intended for usage with implementation of the `JobEval
 **Note:** Careful, some of the evaluations, such as coordination number analysis for each lattice position, create huge amounts of data and evaluating thousands of jobs at once may cause memory issues.
 
 ```csharp
-using var mslContext = MslEvaluationContext.Create("PathToMsl");
+using var mslContext = MslEvaluationContext.Create("./myproject.msl");
 var jobQuery = mslContext.EvaluationJobSet()
     .Where(x => x.JobMetaData.Temperature > 1000.0)
     .OrderBy(x => x.JobMetaData.Temperature);

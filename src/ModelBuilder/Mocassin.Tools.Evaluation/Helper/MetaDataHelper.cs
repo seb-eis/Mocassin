@@ -19,7 +19,7 @@ namespace Mocassin.Tools.Evaluation.Helper
         {
             var split = metaData.LatticeInfo.Split(',');
             if (split.Length < 3) throw new InvalidOperationException("The lattice info in the database is corrupt.");
-            return split.Sum(int.Parse);
+            return split.Take(3).Sum(int.Parse);
         }
     }
 }

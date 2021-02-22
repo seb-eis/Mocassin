@@ -24,6 +24,7 @@ Authors: Sebastian Eisele, Steffen Neitzel-Grieshammer
 - ### [Job templates](./job-templates.md)
 
 ## III. The graphical user interface
+
 - ### [Creating and managing projects](./ui-managing-projects.md)
 - ### [The particle model control](./ui-particle-control.md)
 - ### [The structure model control](./ui-structure-control.md)
@@ -35,6 +36,7 @@ Authors: Sebastian Eisele, Steffen Neitzel-Grieshammer
 - ### [The job template control](./ui-job-template-control.md)
 - ### [The simulation build control](./ui-simulation-build-control.md)
 - ### [The 3D viewer (DX10+)](./ui-3d10-viewer.md)
+
 ## IV. Simulation
 
 - ### [The simulation database](./the-simulation-database.md)
@@ -42,5 +44,7 @@ Authors: Sebastian Eisele, Steffen Neitzel-Grieshammer
 - ### [Movement tracking](./movement-tracking.md)
 
 ## V. API-based result evaluation
+
 - ### [Preparing for API-based result evaluation](./api-preparing-for-analysis.md)
 - ### [The MslEvaluationContext class](./api-msl-evaluation-context.md)
+- ### [The ModelContext and ModelProject classes](./api-model-project-and-context.md)

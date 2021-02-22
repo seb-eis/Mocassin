@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Reflection;
 using Mocassin.Framework.SQLiteCore;
 
@@ -9,8 +10,13 @@ namespace Mocassin.Symmetry.SpaceGroups
     /// </summary>
     public class SpaceGroupContextSource : SqLiteContextSource<SpaceGroupContext>
     {
+        /// <summary>
+        ///     Sets the global default database path
+        /// </summary>
+        public static string DefaultDbPath { get; set; } = MakeDefaultFilepath();
+
         /// <inheritdoc />
-        public override string DefaultFilepath { get; } = MakeDefaultFilepath();
+        public override string DefaultFilepath { get; } = DefaultDbPath;
 
         /// <inheritdoc />
         public SpaceGroupContextSource(string filepath)
@@ -26,7 +32,15 @@ namespace Mocassin.Symmetry.SpaceGroups
         {
             var assemblyDirectory = Directory.GetParent(Assembly.GetExecutingAssembly().Location);
             var filepath = assemblyDirectory + "/Data/Mocassin.Symmetry.db";
-            return filepath;
+            if (File.Exists(filepath)) return filepath;
+
+            // Try to relay based on nuget package structure
+            var packageDirectory = assemblyDirectory!.Parent!.Parent;
+            filepath = packageDirectory + "/contentFiles/any/any/Data/Mocassin.Symmetry.db";
+            if (File.Exists(filepath)) return filepath;
+            Console.WriteLine(
+                $"Warning! None of the default symmetry database locations is defined. The property '{nameof(SpaceGroupContextSource)}.${nameof(DefaultDbPath)}' should be be set manually.");
+            return null;
         }
     }
 }
