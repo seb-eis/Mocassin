@@ -201,7 +201,7 @@ PublishScripts/
 *.nuget.targets
 
 # Microsoft Azure Build Output
-csx/
+#csx/
 *.build.csdef
 
 # Microsoft Azure Emulator
