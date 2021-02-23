@@ -4,7 +4,7 @@
 
 Many common properties, such as conductivity, mobility, and diffusion, can be extracted from the text dumps created by the simulator during processing. However, the raw data these results are calculated from are dumped as binary simulation state files (.mcs) which cannot be interpreted out of context due to their cryptic nature. Thus, Mocassin provides an API to help with advanced data evaluation that can be added to a .NET project using the Mocassin nuget packages. The MOCASSIN API is entirely written in C# and can well be accesses from both C# and F#.
 
-**It is generally recommended to use an F# or C# .NET Core 3.1/.NET 5 project or an F# 5.0 script file ".fsx" for data evaluation as these can be used platform independently and fully support all required nuget packages. The required SDKs can be downloaded from [here](https://dotnet.microsoft.com/download). C# script files ".csx" for use with the [dotnet script tool](https://github.com/filipw/dotnet-script) are not working properly as the "#r" directive seems to not correctly handle the "e_sqlite" native SQLite library and crashes when trying to use EF Core functionalities and SQLite.**
+**It is generally recommended to use an F# or C# .NET Core 3.1/.NET 5 project or an F# 5.0 script file ".fsx" for data evaluation as these can be used platform independently and fully support all required nuget packages. The required SDKs can be downloaded from [here](https://dotnet.microsoft.com/download). C# script files ".csx" for use with the [dotnet script tool](https://github.com/filipw/dotnet-script) are not working properly as the "#r" directive seems to not correctly handle the "e_sqlite" native SQLite library and cannot find it.**
 
 ## Usage
 

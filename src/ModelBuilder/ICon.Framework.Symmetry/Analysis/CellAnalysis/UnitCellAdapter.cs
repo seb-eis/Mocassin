@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Mocassin.Mathematics.Coordinates;
 using Mocassin.Mathematics.ValueTypes;
-using Moccasin.Mathematics.ValueTypes;
 
 namespace Mocassin.Symmetry.Analysis
 {

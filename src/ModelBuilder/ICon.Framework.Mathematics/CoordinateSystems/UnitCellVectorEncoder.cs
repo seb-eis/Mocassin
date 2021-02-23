@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Mocassin.Framework.Collections;
 using Mocassin.Mathematics.Extensions;
 using Mocassin.Mathematics.ValueTypes;
-using Moccasin.Mathematics.ValueTypes;
 
 namespace Mocassin.Mathematics.Coordinates
 {

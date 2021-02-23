@@ -7,7 +7,7 @@ using Mocassin.Model.ModelProject;
 using Mocassin.Model.Particles;
 using Mocassin.Model.Structures;
 using Mocassin.Symmetry.Analysis;
-using Moccasin.Mathematics.ValueTypes;
+using Mocassin.Mathematics.ValueTypes;
 
 namespace Mocassin.Model.Lattices
 {

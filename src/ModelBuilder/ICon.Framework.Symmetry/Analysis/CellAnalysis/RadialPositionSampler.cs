@@ -6,7 +6,6 @@ using Mocassin.Mathematics.Comparer;
 using Mocassin.Mathematics.Constraints;
 using Mocassin.Mathematics.Coordinates;
 using Mocassin.Mathematics.ValueTypes;
-using Moccasin.Mathematics.ValueTypes;
 
 namespace Mocassin.Symmetry.Analysis
 {

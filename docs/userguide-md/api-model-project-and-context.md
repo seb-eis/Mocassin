@@ -10,7 +10,7 @@ While it is not necessary to understand how the `ModelProject` class manages the
 
 ### [The object and the indexed world](#working-with-the-model-and-model-context-instances)
 
-When working with `IModelProject` and `IProjectModelContext` it is fundamental to understand that the C simulator uses indices to identify and access unmanaged data structures while the C# model system works with objects and interfaces. The `IProjectModelContext` creates the bridge between these two worlds and allows to translate between the two representations. In the following guide pages terms like `ParticleId` or `PositionId` will refer to the index of a `IParticle` model object or `Position` definitions.
+When working with `IModelProject` and `IProjectModelContext` it is fundamental to understand that the C simulator uses indices to identify and access unmanaged data structures while the C# model system works with objects and interfaces. The `IProjectModelContext` creates the bridge between these two worlds and allows to translate between the two representations. In the following guide pages terms like `ParticleId` or `PositionId` will for example refer to the index of a `IParticle` model object or `Position` definitions.
 
 The most important indexing principle to understand is the `Vector4I` structure that encodes 3D coordinate information (`Cartesian3D` or `Fractional3D` structures) as a 4D integer tuple $(z_a,z_b,z_c,z_p)$. Here, $z_a,z_b,z_c$ are the integer unit cell offsets in $a,b,c$ direction and $z_p$ is the `PositionId` (or id delta) within the unit cell. The index $z_p$ is defined by a sorted set $\{p_0,p_1,...,p_n\}$ of all positions $i$ and their fractional coordinates $\vec{x}_{0,i}(z_i)$ that exist within a $P1$ extended unit cell. Thus, any `Vector4I` can be trivially converted into a `Fractional3D` according to (1).
 
@@ -21,7 +21,9 @@ $$
 
 The backwards conversion is more complex. In general, the Mocassin API provides two interfaces for transforming between different coordinate systems and encoding/decoding the `Vector4I` information as described [below](#getting-the-most-relevant-manager-functionalities).
 
-Additionally, since computer memory is linear the `Vector4I` actually maps to a 1D buffer of a 4D row-major array implementation using the dimension mappings $(z_a,z_b,z_c,z_p)\rightarrow(d_0,d_1,d_2,d_3)$ where all indices $\in\N$. The ".mcs" file lattice is thus provided as an 1D array and must be decoded before usage. While the Mocassin API again provides helpers to decode the 1D lattice representation, it is important to understand how to covert the `Vector4I` to a linear index and how to translate $(z_a,z_b,z_c)$ into its `UnitCellId` within a supercell:
+Additionally, since computer memory is linear the `Vector4I` actually maps to a 1D buffer of a 4D row-major array implementation using the dimension mappings $(z_a,z_b,z_c,z_p)\rightarrow(d_0,d_1,d_2,d_3)$ where all indices $\in\N$. The ".mcs" file lattice is thus provided as an 1D array and must be decoded before usage. While the Mocassin API again provides helpers to decode the 1D lattice representation, it is important to understand how to covert the `Vector4I` to a linear index and how to translate $(z_a,z_b,z_c)$ into its `UnitCellId` within a supercell.
+
+The C# code:
 
 ```csharp
 public Vector4I MapIndexToVector4(int index, in Vector4I latticeSize)
@@ -33,8 +35,8 @@ public Vector4I MapIndexToVector4(int index, in Vector4I latticeSize)
 
     // Stepwise decode of the index to the 4D components using `index` to store the division remainder
     var a = Math.DivRem(index, blockLengthA, out index);
-    var b = Math.DivRem(index, blockSLength, out index);
-    var c = Math.DivRem(index, blockSLength, out index);
+    var b = Math.DivRem(index, blockLengthB, out index);
+    var c = Math.DivRem(index, blockLengthC, out index);
     return new Vector4I(a, b, c, index);
 }
 
@@ -47,11 +49,36 @@ public int MapVector4ToUnitCellIndex(in Vector4I vector, in Vector4I latticeSize
 }
 ```
 
+The F# code:
+
+```fsharp
+let mapIndexToVector4 (index: int) (latticeSize: Vector4I) =
+    // Calculate the block sizes of the row-mayor 4D array, the block size of dim3 is 1
+    let blockLengthC = latticeSize.P
+    let blockLengthB = blockLengthC * latticeSize.C
+    let blockLengthA = blockLengthB * latticeSize.B
+
+    // Stepwise decode of the index to the 4D components using `index` to store the division remainder
+    let mutable rest = index
+    let a = Math.DivRem(rest, blockLengthA, &rest)
+    let b = Math.DivRem(rest, blockLengthB, &rest)
+    let c = Math.DivRem(rest, blockLengthC, &rest)
+    Vector4I(a, b, c, rest)
+
+let mapVector4ToUnitCellIndex (vector: Vector4I) (latticeSize: Vector4I) =
+    // Calculate the skip lengths and return the offset
+    let lengthA = latticeSize.B * latticeSize.C
+    let lengthB = latticeSize.C
+    vector.A * lengthA + vector.B * lengthB + vector.C;
+```
+
 ### [Restoring the context instance from a simulation database](#restoring-the-context-instance-from-a-simulation-database)
 
 There are usually two scenarios in which the `IProjectModelContext` must be restored from an ".msl" file: (i) for data evaluation; and (ii) for manipulating simulation databases after deploy, e.g. to inject a custom simulation lattice.
 
-Assuming that a `MslEvaluationContext` is created to generate `JobContext` instances for evaluation, the affiliated `IProjectModelContext` instances are automatically restored when data is loaded since they are needed for most evaluations. Thus, the `IProjectModelContext` is a public property of each `JobContext` and can be accessed directly:
+Assuming that a `MslEvaluationContext` is created to generate `JobContext` instances for evaluation, the affiliated `IProjectModelContext` instances are automatically restored when data is loaded since they are needed for most evaluations. Thus, the `IProjectModelContext` is a public property of each `JobContext` and can be accessed directly.
+
+The C# code:
 
 ```csharp
 // Open a context that will be disposed if the scope is left
@@ -65,23 +92,52 @@ var modelContext = jobContext.ModelContext;
 var modelProject = jobContext.ModelContext.ModelProject
 ```
 
-Sometimes, it is required to access a simulation database that has no result data yet. Here, querying against the `MslEvaluationContext` using `EvaluationJobSet()` yields no results. In these cases the simulation database can be accessed using the `SimulationDbContext` and the `IProjectModelContext` can be restored manually. The `SimulationDbContext` context also allows to manipulate the job data stored in the database so it can be used to inject data into the database when required. The access is simple but requires additional `using` includes:
+The F# code:
+
+```fsharp
+let mslContext = MslEvaluationContext.Create "./myproject.msl"
+let jobContext = mslContext.LoadJobsAsEvaluable(fun xs -> xs) |> Seq.head
+
+// Get the IProjectModelContext and IModelProject interfaces for the job
+let modelContext = jobContext.ModelContext;
+let modelProject = jobContext.ModelContext.ModelProject
+```
+
+Sometimes, it is required to access a simulation database that has no result data yet. Here, querying against the `MslEvaluationContext` using `EvaluationJobSet()` yields no results. In these cases the simulation database can be accessed using the `SimulationDbContext` and the `IProjectModelContext` can be restored manually. The `SimulationDbContext` context also allows to manipulate the job data stored in the database so it can be used to inject data into the database when required. The access is simple but requires additional `using/open` directives.
+
+The C# code:
 
 ```csharp
-// Some usings are required here (place outside namespace!)
 using Microsoft.EntityFrameworkCore;
 using Mocassin.Framework.SQLiteCore;
 using Mocassin.Model.Translator;
 using Mocassin.UI.Data.Helper;
 
 // Open the database
-using var dbContext = SqLiteContext.OpenDatabase<SimulationDbContext>(mslPath);
+using var dbContext = SqLiteContext.OpenDatabase<SimulationDbContext>("./myproject.msl");
 
 // Load a SimulationJobModel from the context
-var jobModel = dbContext.JobModels.Include(x => x.SimulationJobPackageModel)
+var jobModel = dbContext.JobModels.Include(x => x.SimulationJobPackageModel).First();
 
 // Call the helper method to restore the IProjectModelContext
 var modelContext = MslHelper.RestoreModelContext(jobModel.SimulationJobPackageModel);
+```
+
+The F# code (uses the `Ef.Include` helper from [here](./api-msl-evaluation-context.md)):
+
+```fsharp
+
+open Mocassin.Framework.SQLiteCore
+open Mocassin.Model.Translator
+open Mocassin.UI.Data.Helper
+
+// Open the database
+let dbContext: SimulationDbContext = SqLiteContext.OpenDatabase "./myproject.msl"
+
+// Load a SimulationJobModel from the context
+let jobModel = dbContext.JobModels |> Ef.Include (fun x -> x.SimulationJobPackageModel) |> Seq.head
+
+let modelContext = MslHelper.RestoreModelContext jobModel.SimulationJobPackageModel
 ```
 
 ### [Accessing services and the model managers](#accessing-model-managers)

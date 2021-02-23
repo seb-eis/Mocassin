@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Moccasin.Mathematics.ValueTypes;
+using Mocassin.Mathematics.ValueTypes;
 
 namespace Mocassin.Model.Lattices
 {

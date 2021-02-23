@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Moccasin.Mathematics.ValueTypes
+namespace Mocassin.Mathematics.ValueTypes
 {
     /// <summary>
     ///     Represents a readonly set of A,B,C offset integers in a 3D translation invariant coordinate system

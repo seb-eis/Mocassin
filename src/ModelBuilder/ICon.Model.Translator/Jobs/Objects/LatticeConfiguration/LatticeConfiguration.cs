@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using Mocassin.Model.Lattices;
-using Moccasin.Mathematics.ValueTypes;
+using Mocassin.Mathematics.ValueTypes;
 
 namespace Mocassin.Model.Translator.Jobs
 {
