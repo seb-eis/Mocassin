@@ -4,7 +4,12 @@
 
 Many common properties, such as conductivity, mobility, and diffusion, can be extracted from the text dumps created by the simulator during processing. However, the raw data these results are calculated from are dumped as binary simulation state files (.mcs) which cannot be interpreted out of context due to their cryptic nature. Thus, Mocassin provides an API to help with advanced data evaluation that can be added to a .NET project using the Mocassin nuget packages. The MOCASSIN API is entirely written in C# and can well be accesses from both C# and F#.
 
-**It is generally recommended to use an F# or C# .NET Core 3.1/.NET 5 project or an F# 5.0 script file ".fsx" for data evaluation as these can be used platform independently and fully support all required nuget packages. The required SDKs can be downloaded from [here](https://dotnet.microsoft.com/download). C# script files ".csx" for use with the [dotnet script tool](https://github.com/filipw/dotnet-script) are not working properly as the "#r" directive seems to not correctly handle the "e_sqlite" native SQLite library and cannot find it.**
+**Note:** Only a part of the example source code is provided for both C# and F# since they are often similar. As Mocassin is written in C#, the F# code is omitted for later examples.
+
+**Important:**
+
+- It is generally recommended to use an F# or C# .NET Core 3.1/.NET 5 project or an F#/C# script file for data evaluation as these can be used platform independently and fully support all required nuget packages. The required SDKs can be downloaded from [here](https://dotnet.microsoft.com/download). C# script files ".csx" for use with the [dotnet script tool](https://github.com/filipw/dotnet-script) require the provided hotfix package `Mocassin.Csx` and a manual `Mocassin.Symmetry.db` location definition to work.
+- You can get F# and C# Intellisense and debugging in Visual Studio Code for both projects and script files using the [Microsoft C#](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csharp) and [ionide-fsharp](https://marketplace.visualstudio.com/items?itemName=Ionide.Ionide-fsharp) extensions.
 
 ## Usage
 
@@ -57,14 +62,14 @@ Then add a package source the `nuget.config` and configurate a local source. The
 
 ### [Creating an F# script file](#creating-an-f-script-file)
 
-For many purposes of working with the Mocassin API it s sufficient and the most convenient to use F# 5.0 script files ".fsx" to use with the dotnet F# script interface. These have the advantga of beeing a single file that is easily portable to every system where the Mocassin nuget packages are properly configured. An F# ".fsx" script example that accesses the Mocassin API looks like this:
+Adding the Mocassin API to F# 5.0 script files ".fsx" to use with the dotnet F# script interface requires to add a package reference to `Mocassin` using the `#r nuget: name` syntax. Additionally, the interpreter can be defined to `dotnet fsi` using "shebang" for systems that support it:
 
 ```fsharp
-// Reference Mocassin and System.Reactive (all other packages are implicitly referenced correctly)
+// Reference to Mocassin nuget package and set the linux interpreter to dotnet fsi
+#!dotnet fsi
 #r "nuget: Mocassin"
-#r "nuget: System.Reactive"
 
-// Lets load all space groups and print their Mauguin notation to the console
+// Example: Lets load all space groups and print their Mauguin notation to the console
 open System
 open Mocassin.Model.DataManagement
 open Mocassin.Symmetry.SpaceGroups
@@ -76,7 +81,55 @@ groups |> Seq.iter (fun x -> printfn "%A" x.MauguinNotation)
 
 ```
 
-### [Setting up a full project](#setting-up-a-full-project)
+### [Creating a C# script file](#creating-a-c-script-file)
+
+Using the C# script interface requires to first install the system as a global dotnet tool for all operating systems:
+
+```shell
+### Install the script tool
+dotnet tool install -g dotnet-script
+
+### Init a folder to be a csx script folder to get intellisense and debugging in vscode
+dotnet script init
+
+### Run the script interface with a script file
+dotnet script [script.csx]
+```
+
+Adding the Mocassin API to the C# script files ".csx" to use with the dotnet C# script interface requires to add a package reference to `Mocassin` and `Mocassin.Csx` using the `#r nuget: name, version` syntax and to load the script package using the `#load "nuget: Mocassin.Csx, 1.0.0"`. Additionally, the interpreter can be defined to `dotnet script` using "shebang" for systems that support it:
+
+**Important:** 
+
+- The symmetry database has to be redirected manually as dotnet-script does not correctly handle the unpacking of additional content. The database can be downloaded [here](https://github.com/seb-eis/Mocassin/blob/master/src/ModelBuilder/ICon.Framework.Symmetry/Data/Mocassin.Symmetry.db).
+- The dotnet-script execution cache can only work if the exact versions of the nuget packages are specified. If not specified no execution cache is used which significantly increases the startup time on sequential runs.
+
+
+```csharp
+// Reference to Mocassin, Mocassin.Csx and load Mocassin.Csx, replace X.X.X by correct package version
+#!dotnet script
+#r "nuget: Mocassin, X.X.X"
+#r "nuget: Mocassin.Csx, 1.0.0"
+#load "nuget: Mocassin.Csx, 1.0.0"
+
+// Globally set the default path to the symmetry db
+Mocassin.Symmetry.SpaceGroups.SpaceGroupContextSource.DefaultDbPath = "<Path to Mocassin.Symmetry.db>"
+
+// Example: Lets load all space groups and print their Mauguin notation to the console
+using System;
+using Mocassin.Model.DataManagement;
+using Mocassin.Symmetry.SpaceGroups;
+
+var project = ModelProjectFactory.CreateDefault();
+var groups = project.SpaceGroupService.GetFullGroupList();
+
+foreach (var item in groups)
+{
+    Console.WriteLine("{0}", item.MauguinNotation);
+}
+
+```
+
+### [Setting up a full C#/F# project](#setting-up-a-full-project)
 
 If a full project is required, F# or C# projects (usually console application) can be created as follows:
 
@@ -91,10 +144,10 @@ dotnet new console
 dotnet new console --language F#
 ```
 
-The last step is to add the Mocassin nuget packages to your project as shown below. Installing the 'Mocassin' package will cause all Mocassin packages and affiliated dependencies to be installed, including the symmetry database. The 'ProjectFile' parameter is optional and defaults to the project file found in the current working directory of not specified.
+The last step is to add the Mocassin nuget packages to your project as shown below. Installing the `Mocassin` package will cause all other packages and affiliated dependencies to be installed, including the symmetry database. The 'ProjectFile' parameter is optional and defaults to the project file found in the current working directory of not specified.
 
 ```shell
 dotnet add [[ProjectFile]] package Mocassin
 ```
 
-**Note: In older versions of the packages the 'Mocassin' package does not exist. Use 'Mocassin.Tools.Evaluation' instead if 'Mocassin' does not exist.**
+**Note**: In older versions of the packages the `Mocassin` package does not exist. Use `Mocassin.Tools.Evaluation` instead if `Mocassin` does not exist.

@@ -4,9 +4,9 @@
 
 Advanced data evaluation using the Mocassin API evolves around a context class for msl files that contain simulation results. From this context, job context instances can be queried that provides a reader for the binary state file (run.mcs or prerun.mcs).
 
-**Note:** The simulation database file (.msl) is an SQLite database that is accessed from .NET via the object relation mapper Entity Framework Core. The MslEvaluationContext has the database context in the background but is not itself an EF Core DbContext class and opens the database as readonly to prevent accidental manipulation of raw data.
+The simulation database file (.msl) is an SQLite database that is accessed from .NET via the object relation mapper Entity Framework Core. The MslEvaluationContext has the database context in the background but is not itself an EF Core DbContext class and opens the database as readonly to prevent accidental manipulation of raw data.
 
-**Important: EF core does not use lazy loading by default. To query data from a DbContext, `Microsoft.EntityFrameworkCore` is required as a `using/open` to have the `Include(...)` extension method for loading navigation properties when building an `IQueryable<T>`. The F# `query {...}` computation expression does not provide a native construct for this to the `Linq` style include has to be used. However, in F# using unloaded navigation properties in the query expression itself is fine.**
+**Important:** EF core does not use lazy loading by default. To query data from a DbContext, `Microsoft.EntityFrameworkCore` is required as a `using/open` to have the `Include(...)` extension method for loading navigation properties when building an `IQueryable<T>`. The F# `query {...}` computation expression does not provide a native construct for this to the `Linq` style include has to be used. However, in F# using unloaded navigation properties in the query expression itself is fine.
 
 A C# LINQ example include:
 

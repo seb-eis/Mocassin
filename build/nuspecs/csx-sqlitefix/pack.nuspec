@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <metadata>
+        <id>Mocassin.Csx</id>
+        <version>1.0.0.0</version>
+        <authors>Sebastian Eisele, Steffen Grieshammer</authors>
+        <owners>seb-eis</owners>
+        <projectUrl>http://github.com/seb-eis/mocassin</projectUrl>
+        <license type="expression">GPL-3.0-or-later</license>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Fixes e_sqlite.dll lookup of Mocassin for dotnet script</description>
+        <copyright>Copyright ©2021 S. Eisele, S. Grieshammer, Forschungszentrum Juelich GmbH</copyright>
+    </metadata>
+</package>

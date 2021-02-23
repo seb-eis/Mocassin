@@ -24,21 +24,23 @@ New-Item -Force -Path $pathToNugetDeploy -ItemType "directory"
 # Invoke MSBuild for Release and Any CPU to trigger project auto nuget building
 & $pathToMSbuild $pathToSource /property:AutoPack="true" /property:Platform="Any CPU" /property:Configuration="Release" /verbosity:minimal -restore
 
-# Build the references only package "Mocassin" with the nuspec file using nuget
-Write-Host "Building refernce nuget package ..."
+# Build the references and fix packages only package "Mocassin" and "Mocassin.Csx" with the nuspec file using nuget
+Write-Host "Building additional nuget packages ..."
 if ((Test-Path "./raw.nuspec") && (Test-Command nuget)) {
-    $rawNuspecFile = "./raw.nuspec"
-    $tmpNuspecDir = "./.tmpnuspec/"
-    $tmpNuspecFile = "$tmpNuspecDir/mocassin.nuspec"
-    $date = [System.DateTime]::Now
-    $version = $date.Year, $date.Month, $date.Day -join "."
-    $nuspecXml = (Get-Content -Path $rawNuspecFile).Replace("`$version",$version)
 
-    New-Item -ItemType Directory $tmpNuspecDir -Force
-    Copy-Item "./icon.png" "$tmpNuspecDir/icon.png"
-    Out-File -FilePath $tmpNuspecFile -InputObject $nuspecXml -Encoding utf8
-    & nuget pack $tmpNuspecFile -OutputDirectory $pathToNugetDeploy
-    Remove-Item -Recurse $tmpNuspecDir
+    $nuspecDir = "./nuspecs"
+
+    Get-ChildItem $nuspecDir/* -Recurse -Include "*.nuspec" | ForEach-Object {
+        $rawNuspecFile = $_.FullName
+        $tmpNuspecFile = $_.Directory, "tmp.nuspec" -join "/"
+        $date = [System.DateTime]::Now
+        $version = $date.Year, $date.Month, $date.Day -join "."
+        $nuspecXml = (Get-Content -Path $rawNuspecFile).Replace("`$version",$version)
+
+        Out-File -FilePath $tmpNuspecFile -InputObject $nuspecXml -Encoding utf8
+        & nuget pack $tmpNuspecFile -OutputDirectory $pathToNugetDeploy
+        Remove-Item -Recurse $tmpNuspecFile
+    } 
 }
 else {
     Write-Host "Either raw nuspec or nuget command is missing. Cannot build refernce package."

@@ -126,7 +126,6 @@ var modelContext = MslHelper.RestoreModelContext(jobModel.SimulationJobPackageMo
 The F# code (uses the `Ef.Include` helper from [here](./api-msl-evaluation-context.md)):
 
 ```fsharp
-
 open Mocassin.Framework.SQLiteCore
 open Mocassin.Model.Translator
 open Mocassin.UI.Data.Helper
@@ -142,7 +141,9 @@ let modelContext = MslHelper.RestoreModelContext jobModel.SimulationJobPackageMo
 
 ### [Accessing services and the model managers](#accessing-model-managers)
 
-The model data objects, such as, `IParticle` or `ICellSite`, that store the user-provided data and their affiliated functionality can be found on a set of `IModelManager` interfaces that are registered with the `IModelProject`. There are currently six managers registered with a default `ModelProject`:
+The model data objects, such as, `IParticle` or `ICellSite`, that store the user-provided data and their affiliated functionality can be found on a set of `IModelManager` interfaces that are registered with the `IModelProject`. There are currently six managers registered with a default `ModelProject`.
+
+The C# code:
 
 ```csharp
 using Mocassin.Model.Particles;
@@ -158,6 +159,16 @@ var transitionManager = modelProject.Manager<ITransitionManager>();
 var simulationManager = modelProject.Manager<ISimulationManager>();
 var energyManager = modelProject.Manager<IEnergyManager>();
 var latticeManager = modelProject.Manager<ILatticeManager>();
+```
+
+The F# code:
+
+```fsharp
+open Mocassin.Model.Particles
+...
+
+let particleManager: IParticleManager = modelProject.Manager();
+...
 ```
 
 In the vast majority of cases, a user will only require the data access port of the manager to query stored data and functionalities:
@@ -183,15 +194,28 @@ var commonComparers = modelProject.CommonNumeric
 
 The most commonly required data from the `IModelProject` are the `IModelObject` implementations, such as, `IParticle`, `ICellSite`, etc., which have been created based on the user input and are managed by different `IModelManager` instances registered on the `IModelProject`. One way to get the model objects is to get the affiliated manager and then query data from it directly. This is done in the following for an `IParticle` and `IParticleSet` by locating the `IParticleManager`.
 
+The C# code:
+
 ```csharp
 var dataAccess = modelProject.Manager<IParticleManager>().DataAccess;
 var particles = dataAccess.Query(x => x.GetParticles());
 var particleSets = dataAccess.Query(x => x.GetParticleSets());
 ```
 
+The F# code:
+
+```fsharp
+// F# type inference does not work well with standard .NET types, thus a type annotation for the port is needed
+let dataAccess = modelProject.Manager<IParticleManager>().DataAccess
+let particles = dataAccess.Query(fun (x: IParticleDataPort) -> x.GetParticles())
+let particleSets = dataAccess.Query(fun (x: IParticleDataPort) -> x.GetParticles())
+```
+
 Since this approach is tedious and requires to first locate the affiliated `IModelManager`, there is a more convenient approach that uses the `IModelDataTracker` interface of the `IModelProject`. This service manages the location of all `IModelObject` types that any manager registers and allows to directly lookup any model object. This is especially useful since the objects are indexed within a simulation and these functions directly provide an array `T[]` that can be accessed by this index or allow to lookup a specific index/key:
 
-*Note: Key based lookup of dynamically created `IModelObject` instances is usually not feasible if the model was created using the GUI as the keys will be `GUIDs`.*
+**Note:** Key based lookup of dynamically created `IModelObject` instances is usually not feasible if the model was created using the GUI as the keys will be `GUID` values.
+
+The C# code:
 
 ```csharp
 // Get the data tracker interface
@@ -208,9 +232,28 @@ var particle1 = dataTracker.FindObject<IParticle>(1); // Get the particle with i
 var particle0 = dataTracker.FindObject<IParticle>("Particle.Void"); // Get the 'void' particle by its key
 ```
 
+The F# code:
+
+```fsharp
+// Get the data tracker interface
+let dataTracker = modelProject.DataTracker
+
+// Enumerates all IModelObject of a type T
+let particlesEnum = dataTracker.Objects<IParticle>()
+
+// Maps all IModelObject of a type T to an array T[] where each entry is placed at the index of the object 
+let particles = dataTracker.MapObjects<IParticle>()
+
+// Find an IModelObject of a type T by index or key
+let particle1: IParticle = dataTracker.FindObject 1; // Get the particle with index 1
+let particle0: IParticle = dataTracker.FindObject "Particle.Void"
+```
+
 ### [Getting the most relevant manager functionalities](#getting-the-most-relevant-manager-functionalities)
 
-A common data evaluation will not require many functionalities of the `IModelManager` objects aside from the `IModelObject` instances. There are however a two key exceptions to this rule when it comes to handling structural information: (i) getting the `IUnitCellVectorEncoder` and `IVectorTransformer` that handle conversions between `Vector4I`, `Cartesian3D`, `FRactional3D`, and `Spherical3D` coordinate representation; and (ii) the `IUnitCellProvider<ICellSite>` that serves as a $1\times1\times1$ dummy supercell. The can be obtained from the `IStructureManager` data access:
+A common data evaluation will not require many functionalities of the `IModelManager` objects aside from the `IModelObject` instances. There are however a two key exceptions to this rule when it comes to handling structural information: (i) getting the `IUnitCellVectorEncoder` and `IVectorTransformer` that handle conversions between `Vector4I`, `Cartesian3D`, `FRactional3D`, and `Spherical3D` coordinate representation; and (ii) the `IUnitCellProvider<ICellSite>` that serves as a $1\times1\times1$ dummy supercell. The can be obtained from the `IStructureManager` data access.
+
+The C# code:
 
 ```csharp
 var dataAccess = modelProject.Manager<IStructureManager>().DataAccess;
@@ -223,7 +266,23 @@ var transformer = encoder.Transformer; // Handles the cartesian, fractional, and
 var ucp = dataAccess.Query(x => x.GetFullUnitCellProvider());
 ```
 
-Again, since these are important and needed for many evaluation purposes, there are two extension methods for the `IProjectModelContext` that look them up directly:
+The F# code:
+
+```fsharp
+let dataAccess = modelProject.Manager<IStructureManager>().DataAccess
+
+// Get the unit cell vector encoder and transformer that handles coordinate transformations
+// This is a cached information so the IStructureCachePort has to be used
+let encoder = dataAccess.Query(fun (x: IStructureCachePort) -> x.GetVectorEncoder())
+let transformer = encoder.Transformer
+
+// Get the unit cell provider that serves as an 1x1x1 supercell dummy of ICellSites
+let ucp = dataAccess.Query(fun (x: IStructureCachePort) -> x.GetFullUnitCellProvider())
+```
+
+Again, since these are important and needed for many evaluation purposes, there are two extension methods for the `IProjectModelContext` that look them up directly.
+
+The C# code:
 
 ```csharp
 using Mocassin.Tools.Evaluation.Extensions; // Provides the extension methods
@@ -233,6 +292,18 @@ var ucp = modelContext.GetUnitCellProvider();
 
 // Get the vector encoder
 var encoder = modelContext.GetUnitCellVectorEncoder();
+```
+
+The F# code:
+
+```fsharp
+open Mocassin.Tools.Evaluation.Extensions // Provides the extension methods
+
+// Get the unit cell provider
+let ucp = modelContext.GetUnitCellProvider()
+
+// Get the vector encoder
+let encoder = modelContext.GetUnitCellVectorEncoder()
 ```
 
 ### [Using the model context components](#using-the-model-context-components)
@@ -249,7 +320,7 @@ What the properties and sub-models of these contexts describe is well documented
 - `ISimulationEncodingModel`: Contains encoding and indexing information for transition collections and transition directions
 - `ISimulationTrackingModel`: Contains the information which global and static trackers exist and how they are indexed
 
-The can be accessed as follows:
+The C# code:
 
 ```csharp
 // Get the first KMC and MMC simulation model
@@ -261,7 +332,9 @@ var encodingModel = kmcSimModel.SimulationEncodingModel
 var trackingModel = kmcSimModel.SimulationTrackingModel
 ```
 
-Properties of the the `ISImulationEncdoingModel` potentially important for a user writing an evaluation are the index mappings of the `ITransitionModel` instances (describing the user defined transition collection) and their affiliated relative index mappings for `ITransitionMappingModel` instances (describing the individual directions). They are simple dictionaries that can be accessed by:
+Properties of the the `ISImulationEncdoingModel` potentially important for a user writing an evaluation are the index mappings of the `ITransitionModel` instances (describing the user defined transition collection) and their affiliated relative index mappings for `ITransitionMappingModel` instances (describing the individual directions). They are simple dictionaries that can be accessed directly.
+
+The C# code:
 
 ```csharp
 // Get a dictionary that maps ITransitionModel instances to their jump collection index
@@ -271,7 +344,9 @@ var jumpCollectionIdMapping = encodingModel.TransitionModelToJumpCollectionId;
 var jumpDirectionIdMapping = encodingModel.TransitionMappingToJumpDirectionId;
 ```
 
-The `ISimulationTrackingModel` will be required more often as it is required to process the static and global tracking information of the simulation. Aside from the information what they track, the also provide a `ModelId` property which is their index in the simulation code:
+The `ISimulationTrackingModel` will be required more often as it is required to process the static and global tracking information of the simulation. Aside from the information what they track, the also provide a `ModelId` property which is their index in the simulation code.
+
+The C# code:
 
 ```csharp
 // Get the first of each tracker model from the ISImulationTrackingModel

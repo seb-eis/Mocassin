@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using Mocassin.Framework.SQLiteCore;
@@ -38,8 +39,8 @@ namespace Mocassin.Symmetry.SpaceGroups
             var packageDirectory = assemblyDirectory!.Parent!.Parent;
             filepath = packageDirectory + "/contentFiles/any/any/Data/Mocassin.Symmetry.db";
             if (File.Exists(filepath)) return filepath;
-            Console.WriteLine(
-                $"Warning! None of the default symmetry database locations is defined. The property '{nameof(SpaceGroupContextSource)}.${nameof(DefaultDbPath)}' should be be set manually.");
+            var message = $"No default symmetry db location is valid. The property '{nameof(SpaceGroupContextSource)}.${nameof(DefaultDbPath)}' should be be set manually.";
+            Debug.Write(message);
             return null;
         }
     }
