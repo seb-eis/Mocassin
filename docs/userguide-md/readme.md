@@ -1,8 +1,6 @@
-# MOCASSIN - User guide
+# MOCASSIN - Readme & User Guide
 Authors: Sebastian Eisele, Steffen Neitzel-Grieshammer
 (Forschungszentrum Jülich GmbH & RWTH Aachen University)
-
-**This guide is still a work in progress. Some pages are missing or incomplete.**
 
 ## Contents
 
@@ -48,3 +46,5 @@ Authors: Sebastian Eisele, Steffen Neitzel-Grieshammer
 - ### [Preparing for API-based result evaluation](./api-preparing-for-analysis.md)
 - ### [The MslEvaluationContext class](./api-msl-evaluation-context.md)
 - ### [The ModelContext and ModelProject classes](./api-model-project-and-context.md)
+- ### [Reading and understanding the "mcs" file](./api-mcs-file-contents.md)
+- ### [Prebuild evaluation classes](./api-ready-evaluation-classes.md)

@@ -192,7 +192,7 @@ static bool_t TryFindConstVirtualJumpCorrection(SCONTEXT_PARAMETER, JumpCollecti
         energy += getPairEnergyAt(pairTable, receiverParticleId, newSenderParticle) - getPairEnergyAt(pairTable, receiverParticleId, oldSenderParticle);
     }
     *outValue = -energy;
-    return *outValue != NAN;
+    return true;
 }
 
 //  Compares the jump status collection with available jumprules and sets static correction values where possible
