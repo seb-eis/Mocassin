@@ -10,9 +10,9 @@ namespace Mocassin.Tools.Evaluation.Queries.Data
     public readonly struct MobileTrackerResult
     {
         /// <summary>
-        ///     Get the index of the original position id
+        ///     Get the index of the current position id
         /// </summary>
-        public int OriginalPositionId { get; }
+        public int PositionId { get; }
 
         /// <summary>
         ///     Get the <see cref="IParticle" /> that the movement belongs to
@@ -25,11 +25,11 @@ namespace Mocassin.Tools.Evaluation.Queries.Data
         public Cartesian3D Displacement { get; }
 
         /// <inheritdoc />
-        public MobileTrackerResult(IParticle particle, int originalPositionId, in Cartesian3D displacement)
+        public MobileTrackerResult(IParticle particle, int positionId, in Cartesian3D displacement)
             : this()
         {
             Particle = particle ?? throw new ArgumentNullException(nameof(particle));
-            OriginalPositionId = originalPositionId;
+            PositionId = positionId;
             Displacement = displacement;
         }
     }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Mocassin.Model.Translator.ModelContext;
 using Mocassin.Tools.Evaluation.Helper;
 using Mocassin.Tools.UAccess.Readers;
@@ -71,7 +72,17 @@ namespace Mocassin.Tools.Evaluation.Queries.Data
         public long CountAttempts()
         {
             var histogram = GetMcsJumpStatistic().JumpEnergyHistogram;
-            var count = histogram.AboveMaxCount + histogram.BelowMinCount;
+            return histogram.AboveMaxCount + histogram.BelowMinCount + CountNonOverflowAttempts();
+        }
+
+        /// <summary>
+        ///     Count the number of jump attempts that are not above or below the histogram range
+        /// </summary>
+        /// <returns></returns>
+        public long CountNonOverflowAttempts()
+        {
+            var histogram = GetMcsJumpStatistic().JumpEnergyHistogram;
+            var count = 0L;
             foreach (var counter in histogram.Counters) count += counter;
 
             return count;
@@ -88,6 +99,7 @@ namespace Mocassin.Tools.Evaluation.Queries.Data
             var energyStep = 1.0 / histogram.InverseStepping;
             var normFactor = McsReader.ReadMetaData().JumpNormalization;
             var count = (double) histogram.BelowMinCount;
+            
             foreach (var counter in histogram.Counters)
             {
                 var corrected = normFactor * counter * Math.Exp(-energy / (Temperature * Equations.Constants.BoltzmannEv));
@@ -103,5 +115,51 @@ namespace Mocassin.Tools.Evaluation.Queries.Data
         /// </summary>
         /// <returns></returns>
         public double EstimateMigrationRate() => EstimateJumpCount() / (SimulatedTime * EnsembleSize);
+
+        /// <summary>
+        ///     Enumerates all entries from the edge energy histogram excluding the overflow counters
+        /// </summary>
+        /// <returns></returns>
+        public (double Energy, long Count)[] GetEdgeEntries() => GetHistogramValues(GetMcsJumpStatistic().EdgeEnergyHistogram);
+
+        /// <summary>
+        ///     Enumerates all entries from the positive configuration contribution histogram excluding the overflow counters
+        /// </summary>
+        /// <returns></returns>
+        public (double Energy, long Count)[] GetPositiveConfigurationsEntries() => GetHistogramValues(GetMcsJumpStatistic().PositiveConformationEnergyHistogram);
+
+        /// <summary>
+        ///     Enumerates all entries from the negative configuration contribution histogram excluding the overflow counters
+        /// </summary>
+        /// <returns></returns>
+        public (double Energy, long Count)[] GetNegativeConfigurationEntries() => GetHistogramValues(GetMcsJumpStatistic().NegativeConformationEnergyHistogram, true);
+
+        /// <summary>
+        ///     Enumerates all entries from the total migration barrier histogram excluding the overflow counters
+        /// </summary>
+        /// <returns></returns>
+        public (double Energy, long Count)[] GetMigrationBarrierEntries() => GetHistogramValues(GetMcsJumpStatistic().JumpEnergyHistogram);
+
+        /// <summary>
+        ///     Enumerates the energy and counter pairs of a <see cref="McsJumpHistogram" />
+        /// </summary>
+        /// <param name="histogram"></param>
+        /// <param name="isNegative"></param>
+        /// <returns></returns>
+        private (double Energy, long Count)[] GetHistogramValues(McsJumpHistogram histogram, bool isNegative = false)
+        {
+            var energyStep = 1.0 / histogram.InverseStepping;
+            var factor = (isNegative) ? -1.0 : 1.0;
+
+            var result = new (double, long)[histogram.Counters.Length];
+            for (var i = 0; i < histogram.Counters.Length; i++)
+            {
+                var count = histogram[i];
+                var energy = histogram.MinEnergyValue + i * energyStep;
+                result[i] = (energy * factor, count);
+            }
+
+            return result;
+        }
     }
 }
