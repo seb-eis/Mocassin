@@ -110,17 +110,25 @@ namespace Mocassin.Symmetry.Analysis
             var normVectorToPlainAc = baseVectors.A.GetCrossProduct(baseVectors.C).GetNormalized();
             var normVectorToPlainBc = baseVectors.B.GetCrossProduct(baseVectors.C).GetNormalized();
 
-            DistanceToAbPlain = Math.Abs(start * normVectorToPlainAb);
-            DistanceToAcPlain = Math.Abs(start * normVectorToPlainAc);
-            DistanceToBcPlain = Math.Abs(start * normVectorToPlainBc);
+            var distanceToAbPlain1 = Math.Abs(start * normVectorToPlainAb);
+            var distanceToAcPlain1 = Math.Abs(start * normVectorToPlainAc);
+            var distanceToBcPlain1 = Math.Abs(start * normVectorToPlainBc);
 
-            DistanceToAbPlain = Math.Min(Math.Abs(baseVectors.C * normVectorToPlainAb - DistanceToAbPlain), DistanceToAbPlain);
-            DistanceToAcPlain = Math.Min(Math.Abs(baseVectors.B * normVectorToPlainAc - DistanceToAcPlain), DistanceToAcPlain);
-            DistanceToBcPlain = Math.Min(Math.Abs(baseVectors.A * normVectorToPlainBc - DistanceToBcPlain), DistanceToBcPlain);
+            var distanceToAbPlain2 = Math.Abs(baseVectors.C * normVectorToPlainAb - distanceToAbPlain1);
+            var distanceToAcPlain2 = Math.Abs(baseVectors.B * normVectorToPlainAc - distanceToAcPlain1);
+            var distanceToBcPlain2 = Math.Abs(baseVectors.A * normVectorToPlainBc - distanceToBcPlain1);
 
-            PlainToPlainDistanceAb = baseVectors.C.GetLength();
-            PlainToPlainDistanceAc = baseVectors.B.GetLength();
-            PlainToPlainDistanceBc = baseVectors.A.GetLength();
+            DistanceToAbPlain = Math.Min(distanceToAbPlain2, distanceToAbPlain1);
+            DistanceToAcPlain = Math.Min(distanceToAcPlain2, distanceToAcPlain1);
+            DistanceToBcPlain = Math.Min(distanceToBcPlain2, distanceToBcPlain1);
+
+            var plainToPlainAb = distanceToAbPlain1 + distanceToAbPlain2;
+            var plainToPlainAc = distanceToAcPlain1 + distanceToAcPlain2;
+            var plainToPlaneBc = distanceToBcPlain1 + distanceToBcPlain2;
+            
+            PlainToPlainDistanceAb = plainToPlainAb;
+            PlainToPlainDistanceAc = plainToPlainAc;
+            PlainToPlainDistanceBc = plainToPlaneBc;
         }
     }
 }
