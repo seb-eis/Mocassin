@@ -16,7 +16,7 @@ namespace Mocassin.Tools.Evaluation.Extensions
         /// <param name="value"></param>
         /// <returns></returns>
         public static Vector4I GetLatticeSizes(this JobContext value)
-        {
+        {                   
             if (value.JobModel.SimulationLatticeModel.LatticeInfo == null)
             {
                 var marshalService = new MarshalService();

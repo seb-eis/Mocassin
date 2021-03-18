@@ -104,10 +104,10 @@ namespace Mocassin.Symmetry.Analysis
             for (var offset = 0;; offset++)
             {
                 SearchCellSet(results, provider, predicate, offset);
-                if (CheckAndUpdateBoundaryInfo(offset, constraint))
+                if (CheckAndUpdateBoundaryInfo(constraint))
                     break;
             }
-
+            results.TrimExcess();
             return results;
         }
 
@@ -135,10 +135,10 @@ namespace Mocassin.Symmetry.Analysis
             for (var offset = 0;; offset++)
             {
                 SearchCellSet(results, provider, predicate, offset);
-                if (CheckAndUpdateBoundaryInfo(offset, constraint))
+                if (CheckAndUpdateBoundaryInfo(constraint))
                     break;
             }
-
+            results.TrimExcess();
             return results;
         }
 
@@ -219,26 +219,22 @@ namespace Mocassin.Symmetry.Analysis
             StartShift = new Fractional3D(0, 0, 0) - start;
             StartVector = VectorEncoder.Transformer.ToCartesian(start);
             BaseOffset = VectorEncoder.GetTargetCellOffset(start);
-            BoundaryInfo = new SearchBoundaryProvider(StartVector, VectorEncoder.GetBaseVectors());
 
-            BoundaryInfo.ChangeDistanceToAbPlain(-BaseOffset.C);
-            BoundaryInfo.ChangeDistanceToAcPlain(-BaseOffset.B);
-            BoundaryInfo.ChangeDistanceToBcPlain(-BaseOffset.A);
+            var trimmedStartVector = VectorEncoder.Transformer.ToCartesian(start.TrimToUnitCell(constraint.Comparer));
+            BoundaryInfo = new SearchBoundaryProvider(trimmedStartVector, VectorEncoder.GetBaseVectors());
         }
 
         /// <summary>
         ///     Updates the boundaries by one step. Returns true if the boundary break condition (Search radius is smaller than
         ///     current boundaries) is reached
         /// </summary>
-        /// <param name="offset"></param>
         /// <param name="constraint"></param>
         /// <returns></returns>
-        protected bool CheckAndUpdateBoundaryInfo(int offset, NumericConstraint constraint)
+        protected bool CheckAndUpdateBoundaryInfo(NumericConstraint constraint)
         {
-            if (offset != 0)
-                BoundaryInfo.ChangeAllDistances(1);
-
-            return BoundaryInfo.DistanceWithinBoundaries(constraint.MaxValue, constraint.Comparer);
+            var isReached = BoundaryInfo.DistanceWithinBoundaries(constraint.MaxValue, constraint.Comparer);
+            BoundaryInfo.ChangeAllDistances(1);
+            return isReached;
         }
 
 

@@ -42,7 +42,7 @@ namespace Mocassin.Symmetry.Analysis
         public double PlainToPlainDistanceBc { get; protected set; }
 
         /// <summary>
-        ///     Create new boundary info for provided start and base vectors of the unit cell
+        ///     Create new boundary info for provided start and base vectors of the unit cell. It is important that the start vector lies within the (0,0,0) origin cell
         /// </summary>
         /// <param name="start"></param>
         /// <param name="baseVectors"></param>
