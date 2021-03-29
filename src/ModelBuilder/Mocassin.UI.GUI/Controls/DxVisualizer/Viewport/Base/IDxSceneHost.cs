@@ -12,9 +12,9 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Base
     public interface IDxSceneHost : INotifyPropertyChanged, IDisposable
     {
         /// <summary>
-        ///     Get the <see cref="DxSceneBatchingMode" /> preference the scene host has
+        ///     Get the <see cref="DxInstanceRenderMode" /> preference the scene host has
         /// </summary>
-        DxSceneBatchingMode SceneBatchingMode { get; }
+        DxInstanceRenderMode InstanceRenderMode { get; }
 
         /// <summary>
         ///     Get the <see cref="IDxSceneController" /> that manages the scene

@@ -345,7 +345,7 @@
     <Compile Include="Controls\DxVisualizer\Viewport\Scene\IDxLineItemConfig.cs" />
     <Compile Include="Controls\DxVisualizer\Viewport\Scene\IDxMeshItemConfig.cs" />
     <Compile Include="Controls\DxVisualizer\Viewport\Scene\IDxSceneItemConfig.cs" />
-    <Compile Include="Controls\DxVisualizer\Viewport\Enums\DxSceneBatchingMode.cs" />
+    <Compile Include="Controls\DxVisualizer\Viewport\Enums\DxInstanceRenderMode.cs" />
     <Compile Include="Controls\DxVisualizer\Viewport\Base\IDxSceneHost.cs" />
     <Compile Include="Controls\DxVisualizer\Viewport\Base\IDxSceneController.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\VisualMenu\Commands\OpenProjectWorkTabHostWindow.cs" />
@@ -1262,7 +1262,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Controls\DxVisualizer\Objects\" />
     <Folder Include="Controls\ProjectStatusBar\SubControls\" />
     <Folder Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\InfoControl\" />
     <Folder Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\VisualControl\" />

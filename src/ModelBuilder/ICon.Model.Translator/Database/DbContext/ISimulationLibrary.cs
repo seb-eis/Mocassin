@@ -85,5 +85,15 @@ namespace Mocassin.Model.Translator
         /// </summary>
         /// <param name="journalMode"></param>
         void SetJournalMode(DbJournalMode journalMode);
+
+        /// <summary>
+        ///     Ensures that all <see cref="InteropEntityBase"/> instances of the context are in the object state
+        /// </summary>
+        void EnsureInteropObjectsAreInObjectState();
+
+        /// <summary>
+        ///     Ensures that all <see cref="InteropEntityBase"/> instances of the context are in the binary state
+        /// </summary>
+        void EnsureInteropObjectsAreInBinaryState();
     }
 }

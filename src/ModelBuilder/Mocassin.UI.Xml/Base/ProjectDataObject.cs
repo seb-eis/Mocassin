@@ -48,19 +48,6 @@ namespace Mocassin.UI.Data.Base
             XmlSerializationHelper.Serialize(this, DefaultEncoding, xmlEventHandlers ?? GetDefaultXmlEventHandlers());
 
         /// <summary>
-        ///     Populates the <see cref="ProjectDataObject" /> from its xml representation
-        /// </summary>
-        /// <param name="xml"></param>
-        /// <param name="xmlEventHandlers"></param>
-        /// <remarks> Warning currently requires two serialization steps and is slow! </remarks>
-        public void FromXml(string xml, XmlEventHandlers xmlEventHandlers = null)
-        {
-            if (xml == null) throw new ArgumentNullException(nameof(xml));
-            var obj = (ProjectDataObject) XmlSerializationHelper.Deserialize(xml, GetType(), xmlEventHandlers);
-            FromJson(obj.ToJson());
-        }
-
-        /// <summary>
         ///     Creates a <see cref="ProjectDataObject" /> from an xml representation
         /// </summary>
         /// <typeparam name="T"></typeparam>

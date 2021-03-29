@@ -134,7 +134,7 @@
               Margin="{StaticResource App.Margin.VerticalStack}"
               IsChecked="{Binding EnableInfiniteSpin}" />
 
-    <TextBlock Grid.Row="13" Grid.Column="0" Text="Camera Type" VerticalAlignment="Center"
+    <TextBlock Grid.Row="13" Grid.Column="0" Text="Camera type" VerticalAlignment="Center"
                Margin="{StaticResource App.Margin.VerticalStack}" />
     <ComboBox Grid.Row="13" Grid.Column="2" IsEditable="True" Margin="{StaticResource App.Margin.VerticalStack}"
               ItemsSource="{Binding CameraTypes}" SelectedItem="{Binding DxCameraType}" />
@@ -214,19 +214,10 @@
       </TextBox.InputBindings>
     </TextBox>
 
-    <TextBlock Grid.Row="22" Grid.Column="0" Text="Batching mode" VerticalAlignment="Center"
-               Margin="{StaticResource App.Margin.VerticalStack}">
-      <TextBlock.ToolTip>
-        <TextBlock TextAlignment="Justify" TextWrapping="Wrap" Width="500">
-          <Run
-            Text="Set how much model batching the scene controller can do to reduce draw-calls and scene management time." />
-          <Run
-            Text="Recommendation: Use 'None/Low' for GPUs with a very small VRAM size (e.g. iGPUs) and avoid using 'None' when displaying 1000+ objects." />
-        </TextBlock>
-      </TextBlock.ToolTip>
-    </TextBlock>
+    <TextBlock Grid.Row="22" Grid.Column="0" Text="Draw mode" VerticalAlignment="Center"
+               Margin="{StaticResource App.Margin.VerticalStack}"/>
     <ComboBox Grid.Row="22" Grid.Column="2" IsEditable="True" Margin="{StaticResource App.Margin.VerticalStack}"
-              ItemsSource="{Binding SceneBatchingModes}" SelectedItem="{Binding SceneBatchingMode}" />
+              ItemsSource="{Binding SceneBatchingModes}" SelectedItem="{Binding InstanceRenderMode}" />
 
     <TextBlock Grid.Row="23" Grid.Column="0" Text="Manual camera" VerticalAlignment="Center"
                Margin="{StaticResource App.Margin.VerticalStack}"

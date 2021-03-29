@@ -50,7 +50,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
         private Color lightColor = Colors.White;
         private DxSceneLightSetting lightSetting = DxSceneLightSetting.None;
         private MSAALevel msaaLevel = MSAALevel.Four;
-        private DxSceneBatchingMode sceneBatchingMode = DxSceneBatchingMode.Low;
+        private DxInstanceRenderMode instanceRenderMode = DxInstanceRenderMode.Instanced;
         private bool showCoordinateSystem = true;
         private bool showRenderInformation;
         private bool showViewCube = true;
@@ -108,13 +108,13 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
         }
 
         /// <inheritdoc />
-        public DxSceneBatchingMode SceneBatchingMode
+        public DxInstanceRenderMode InstanceRenderMode
         {
-            get => sceneBatchingMode;
+            get => instanceRenderMode;
             set
             {
-                if (sceneBatchingMode == value) return;
-                SetProperty(ref sceneBatchingMode, value);
+                if (instanceRenderMode == value) return;
+                SetProperty(ref instanceRenderMode, value);
                 InvalidateSceneCommand?.Execute(null);
             }
         }
@@ -404,9 +404,9 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
         public IEnumerable<DxSceneLightSetting> SceneLightSettings => EnumerateLightSettings();
 
         /// <summary>
-        ///     Get the selectable <see cref="SceneBatchingMode" />
+        ///     Get the selectable <see cref="InstanceRenderMode" />
         /// </summary>
-        public IEnumerable<DxSceneBatchingMode> SceneBatchingModes => EnumerateBatchingModes();
+        public IEnumerable<DxInstanceRenderMode> SceneBatchingModes => EnumerateInstanceRenderModes();
 
         /// <summary>
         ///     Get the <see cref="ObservableElement3DCollection" /> that supplies the <see cref="Element3D" /> containing light
@@ -751,17 +751,14 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
         }
 
         /// <summary>
-        ///     Enumerates the selectable <see cref="DxSceneBatchingMode" /> preferences
+        ///     Enumerates the selectable <see cref="DxInstanceRenderMode" /> preferences
         /// </summary>
         /// <returns></returns>
-        protected virtual IEnumerable<DxSceneBatchingMode> EnumerateBatchingModes()
+        protected virtual IEnumerable<DxInstanceRenderMode> EnumerateInstanceRenderModes()
         {
-            yield return DxSceneBatchingMode.None;
-            yield return DxSceneBatchingMode.Low;
-            yield return DxSceneBatchingMode.Moderate;
-            yield return DxSceneBatchingMode.High;
-            yield return DxSceneBatchingMode.Extreme;
-            yield return DxSceneBatchingMode.Unlimited;
+            yield return DxInstanceRenderMode.Instanced;
+            yield return DxInstanceRenderMode.Individual;
+            yield return DxInstanceRenderMode.Batched;
         }
 
         /// <summary>

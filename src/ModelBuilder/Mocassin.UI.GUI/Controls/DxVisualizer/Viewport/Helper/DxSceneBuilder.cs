@@ -196,6 +196,20 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
         }
 
         /// <summary>
+        ///     Adds a new <see cref="MeshNode"/> of mesh transforms sharing a common <see cref="MeshGeometry3D"/> and <see cref="MaterialCore"/> using instanced rendering
+        /// </summary>
+        /// <param name="geometry"></param>
+        /// <param name="material"></param>
+        /// <param name="transforms"></param>
+        /// <param name="callback"></param>
+        public void AddInstancedMeshTransforms(MeshGeometry3D geometry, MaterialCore material, IList<Matrix> transforms, Action<MeshNode> callback = null)
+        {
+            var node = new MeshNode {Material = material, Geometry = geometry, Instances = transforms};
+            callback?.Invoke(node);
+            AddNode(node);
+        }
+
+        /// <summary>
         ///     Begins the <see cref="AddBatchedMeshTransforms" /> as a background task
         /// </summary>
         /// <param name="geometry"></param>
@@ -207,6 +221,20 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
             Action<BatchedMeshNode> callback = null)
         {
             return RunBuildTask(() => AddBatchedMeshTransforms(geometry, material, transforms, callback));
+        }
+        
+        /// <summary>
+        ///     Begins the <see cref="AddInstancedMeshTransforms"/> as background task
+        /// </summary>
+        /// <param name="geometry"></param>
+        /// <param name="material"></param>
+        /// <param name="transforms"></param>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public Task BeginAddInstancingMeshTransforms(MeshGeometry3D geometry, MaterialCore material, IList<Matrix> transforms,
+            Action<MeshNode> callback = null)
+        {
+            return RunBuildTask(() => AddInstancedMeshTransforms(geometry, material, transforms, callback));
         }
 
         /// <summary>

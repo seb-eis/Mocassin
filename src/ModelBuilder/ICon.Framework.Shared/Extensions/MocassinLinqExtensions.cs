@@ -268,5 +268,29 @@ namespace Mocassin.Framework.Extensions
 
             enumerator.Dispose();
         }
+        
+        /// <summary>
+        ///     Splits an <see cref="IEnumerable{T}"/> into multiple sub enumerations of specified size where the last entry may me smaller
+        /// </summary>
+        /// <param name="self"></param>
+        /// <param name="size"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static IEnumerable<IEnumerable<T>> ToChunks<T>(this IEnumerable<T> self, int size)
+        {
+            IEnumerable<T> EnumerateChunk(IEnumerator<T> value)
+            {
+                for (var i = 0; i < size; i++)
+                {
+                    yield return value.Current;
+                    if (!value.MoveNext()) yield break;
+                }
+            }
+            using var enumerator = self.GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                yield return EnumerateChunk(enumerator);
+            }
+        }
     }
 }

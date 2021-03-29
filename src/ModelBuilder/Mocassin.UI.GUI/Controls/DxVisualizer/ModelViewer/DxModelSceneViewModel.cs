@@ -972,7 +972,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
 
         /// <summary>
         ///     Adds multiple mesh transforms to a <see cref="DxSceneBuilder" /> and performs batching based on the
-        ///     <see cref="DxSceneBatchingMode" /> preference of the scene host
+        ///     <see cref="DxInstanceRenderMode" /> preference of the scene host
         /// </summary>
         /// <param name="sceneBuilder"></param>
         /// <param name="geometry"></param>
@@ -982,49 +982,27 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         protected virtual void AddMeshElementsToScene(DxSceneBuilder sceneBuilder, MeshGeometry3D geometry, MaterialCore material, IList<Matrix> matrices,
             Action<SceneNode> callback = null)
         {
-            if (matrices.Count == 1)
+            switch (SceneHost.InstanceRenderMode)
             {
-                sceneBuilder.AddMeshTransforms(geometry, material, matrices, callback);
-                return;
-            }
-
-            var batchSize = GetMeshBatchSize(SceneHost.SceneBatchingMode);
-            switch (batchSize)
-            {
-                case 1:
+                case DxInstanceRenderMode.Individual:
                     sceneBuilder.AddMeshTransforms(geometry, material, matrices, callback);
-                    return;
-                case int.MaxValue:
-                    sceneBuilder.AddBatchedMeshTransforms(geometry, material, matrices, callback);
-                    return;
-            }
+                    break;
+                case DxInstanceRenderMode.Instanced:
+                    sceneBuilder.AddInstancedMeshTransforms(geometry, material, matrices, callback);
+                    break;
+                case DxInstanceRenderMode.Batched:
+                    var tmp = new List<Matrix>();
+                    foreach (var chunk in matrices.ToChunks(1024))
+                    {
+                        tmp.AddRange(chunk);
+                        sceneBuilder.AddBatchedMeshTransforms(geometry, material, tmp, callback);
+                        tmp.Clear();
+                    }
 
-            var tmpMatrices = new List<Matrix>(batchSize);
-            for (var i = 0; i < matrices.Count; i += batchSize)
-            {
-                for (var j = i; j < matrices.Count && tmpMatrices.Count < batchSize; j++) tmpMatrices.Add(matrices[j]);
-                sceneBuilder.AddBatchedMeshTransforms(geometry, material, tmpMatrices, callback);
-                tmpMatrices.Clear();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
-        }
-
-        /// <summary>
-        ///     Translates the <see cref="DxSceneBatchingMode" /> setting of the scene host to an actual model count
-        /// </summary>
-        /// <param name="batchingMode"></param>
-        /// <returns></returns>
-        protected virtual int GetMeshBatchSize(DxSceneBatchingMode batchingMode)
-        {
-            return batchingMode switch
-            {
-                DxSceneBatchingMode.None => 1,
-                DxSceneBatchingMode.Low => 64,
-                DxSceneBatchingMode.Moderate => 256,
-                DxSceneBatchingMode.High => 1024,
-                DxSceneBatchingMode.Extreme => 2048,
-                DxSceneBatchingMode.Unlimited => int.MaxValue,
-                _ => throw new ArgumentOutOfRangeException(nameof(batchingMode), batchingMode, null)
-            };
         }
 
         /// <summary>
@@ -1063,15 +1041,15 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
             {
                 switch (sceneNode)
                 {
-                    case BatchedMeshNode batchedMeshNode:
-                        batchedMeshNode.CullMode = cullMode;
-                        batchedMeshNode.WireframeColor = wireframeColor;
-                        batchedMeshNode.RenderWireframe = isWireFrameVisible;
-                        break;
                     case MeshNode meshNode:
                         meshNode.CullMode = cullMode;
                         meshNode.WireframeColor = wireframeColor;
                         meshNode.RenderWireframe = isWireFrameVisible;
+                        break;
+                    case BatchedMeshNode batchedMeshNode:
+                        batchedMeshNode.CullMode = cullMode;
+                        batchedMeshNode.WireframeColor = wireframeColor;
+                        batchedMeshNode.RenderWireframe = isWireFrameVisible;
                         break;
                 }
 

@@ -235,7 +235,24 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
             switch (sceneNode)
             {
                 case MeshNode meshNode:
-                    meshNode.ModelMatrix = RescaleModelMatrixAtOrigin(meshNode.ModelMatrix, ref rescalingMatrix);
+                    if (meshNode.Instances?.Count == 0)
+                    {
+                        meshNode.ModelMatrix = RescaleModelMatrixAtOrigin(meshNode.ModelMatrix, ref rescalingMatrix);   
+                    }
+                    else
+                    {
+                        if (meshNode.Instances is { })
+                        {
+                            var instances = meshNode.Instances;
+                            meshNode.Instances = null;
+                            for (var i = 0; i < instances.Count; i++)
+                            {
+                                instances[i] = RescaleModelMatrixAtOrigin(instances[i], ref rescalingMatrix);
+                            }
+
+                            meshNode.Instances = instances;
+                        }
+                    }
                     break;
                 case BatchedMeshNode batchedNode:
                     var geometries = new BatchedMeshGeometryConfig[batchedNode.Geometries.Length];

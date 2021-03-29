@@ -56,8 +56,7 @@ namespace Mocassin.Model.Translator
         /// <inheritdoc cref="ISimulationLibrary.SaveChanges" />
         public override int SaveChanges()
         {
-            using var marshalService = new MarshalService();
-            MutateTrackedInteropEntities(interopEntity => interopEntity.ChangePropertyStatesToBinaries(marshalService));
+            EnsureInteropObjectsAreInBinaryState();
             return base.SaveChanges();
         }
 
@@ -87,6 +86,20 @@ namespace Mocassin.Model.Translator
                 default:
                     throw new ArgumentOutOfRangeException(nameof(journalMode), journalMode, null);
             }
+        }
+
+        /// <inheritdoc />
+        public void EnsureInteropObjectsAreInObjectState()
+        {
+            using var marshalService = new MarshalService();
+            MutateTrackedInteropEntities(interopEntity => interopEntity.ChangePropertyStatesToObjects(marshalService));
+        }
+
+        /// <inheritdoc />
+        public void EnsureInteropObjectsAreInBinaryState()
+        {
+            using var marshalService = new MarshalService();
+            MutateTrackedInteropEntities(interopEntity => interopEntity.ChangePropertyStatesToBinaries(marshalService));
         }
 
         /// <summary>
