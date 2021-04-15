@@ -45,9 +45,12 @@ bool_t CheckPairInteractionIsLinkIrrelevantByIndex(SCONTEXT_PARAMETER, const Env
         bool_t isDependent = false;
         c_foreach(value, clusterInteraction->PairInteractionIds)
         {
-            isDependent |= (bool_t) (*value == pairId);
+            isDependent = (bool_t) (*value == pairId);
             break_if(isDependent);
         }
+
+        continue_if(!isDependent);
+
         let clusterTable = getClusterEnergyTableAt(simContext, clusterInteraction->EnergyTableId);
         let isFixedClusterTable = flagsAreTrue(clusterTable->Padding, ENERGY_FLG_CONST_TABLE);
         return_if(!isFixedClusterTable, false);

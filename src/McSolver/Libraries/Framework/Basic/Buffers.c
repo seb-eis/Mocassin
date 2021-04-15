@@ -12,6 +12,18 @@
 #include <stdlib.h>
 #include "Buffers.h"
 
+// Get the empty span that ensures that no additional memory is allocated
+static VoidSpan_t GetEmptySpan()
+{
+    static VoidSpan_t EmptySpan = {.Begin = NULL, .End = NULL};
+    if (EmptySpan.Begin == NULL)
+    {
+        let ptr = malloc(0);
+        EmptySpan = (VoidSpan_t) { .Begin = ptr, .End = ptr };
+    }
+    return EmptySpan;
+}
+
 int32_t CompareMocuuid(const void* lhs, const void* rhs)
 {
     var comp = compareLhsToRhs(*(int64_t*)lhs, *(int64_t*)rhs);
@@ -22,6 +34,7 @@ int32_t CompareMocuuid(const void* lhs, const void* rhs)
 VoidSpan_t AllocateSpan(const size_t numOfElements, const size_t sizeOfElement)
 {
     let numOfBytes = numOfElements*sizeOfElement;
+    if (numOfBytes == 0) return GetEmptySpan();
     let ptr = malloc(numOfBytes);
     return (VoidSpan_t) { .Begin = ptr, .End = ptr +  numOfBytes };
 }

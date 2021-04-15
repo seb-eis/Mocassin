@@ -179,8 +179,8 @@ typedef struct PairTable
     // The object id of the pair table
     int32_t         ObjectId;
 
-    // Padding
-    uint32_t         Padding;
+    // Padding, used for temporary flags during initialization
+    uint32_t        Padding;
 
 } PairTable_t;
 
@@ -202,8 +202,8 @@ typedef struct ClusterTable
     // Access by [ParticleId]
     byte_t                  ParticleTableMapping[PARTICLE_IDLIMIT];
 
-    // Padding
-    uint32_t                 Padding;
+    // Padding, used for temporary flags during initialization
+    uint32_t                Padding;
     
 } ClusterTable_t;
 

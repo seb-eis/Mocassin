@@ -112,6 +112,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.DataControl
             yield return PathSymmetryExtensionMode.None;
             yield return PathSymmetryExtensionMode.Local;
             yield return PathSymmetryExtensionMode.Full;
+            yield return PathSymmetryExtensionMode.FullWithClip;
         }
 
         /// <summary>

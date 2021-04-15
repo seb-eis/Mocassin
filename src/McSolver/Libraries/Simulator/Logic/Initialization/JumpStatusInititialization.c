@@ -28,7 +28,7 @@ static int64_t DeleteJumpStatusArray(SCONTEXT_PARAMETER)
     var byteCount = 0LL;
     cpp_foreach(item, *statusArray)
     {
-        byteCount += sizeof(typeof(*item)) + span_ByteCount(item->JumpLinks);
+        byteCount += (int64_t) sizeof(typeof(*item)) + span_ByteCount(item->JumpLinks);
         span_Delete(item->JumpLinks);
     }
     array_Delete(*statusArray);

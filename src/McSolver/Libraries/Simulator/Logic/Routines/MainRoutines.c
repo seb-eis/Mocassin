@@ -409,8 +409,11 @@ void ExecuteSharedMcBlockFinisher(SCONTEXT_PARAMETER)
     SIMERROR = SyncSimulationStateToRunStatus(simContext);
     assert_success(SIMERROR, "Simulation aborted due to failed synchronization between dynamic model and state object.");
 
-    SIMERROR = SaveCurrentSimulationStateToOutDirectory(simContext);
-    assert_success(SIMERROR, "Simulation aborted due to error during serialization of the state object.");
+    if (!JobInfoFlagsAreSet(simContext, INFO_FLG_SKIPSAVE))
+    {
+        SIMERROR = SaveCurrentSimulationStateToOutDirectory(simContext);
+        assert_success(SIMERROR, "Simulation aborted due to error during serialization of the state object.");
+    }
 
     SIMERROR = TryCallOutputPlugin(simContext);
     assert_success(SIMERROR, "Simulation aborted due to error in the external output plugin.");
@@ -655,7 +658,6 @@ error_t SyncSimulationStateToRunStatus(SCONTEXT_PARAMETER)
 
 error_t SaveCurrentSimulationStateToOutDirectory(SCONTEXT_PARAMETER)
 {
-    return_if(JobInfoFlagsAreSet(simContext, INFO_FLG_SKIPSAVE), ERR_OK);
     let stateBuffer = getMainStateBuffer(simContext);
     let targetFile = StateFlagsAreSet(simContext, STATE_FLG_PRERUN)
             ? getPreRunStateFile(simContext)

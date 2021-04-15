@@ -19,6 +19,11 @@
         /// <summary>
         ///     Full extension to the entire super-cell
         /// </summary>
-        Full
+        Full,
+        
+        /// <summary>
+        ///     Full extension mode with boundary checks
+        /// </summary>
+        FullWithClip
     }
 }

@@ -46,7 +46,7 @@ class ArgumentProvider:
                     submitList.append(jobId)
                 else:
                     filtered.append(jobId)
-        if len(filtered) is not 0:
+        if len(filtered) != 0:
             print("submit: Found incomplete jobs [{}]".format(self.CompressJobIndexSequenceToString(submitList)), flush=True)
             print("submit: Found completed jobs  [{}]".format(self.CompressJobIndexSequenceToString(filtered)), flush=True)     
         return submitList

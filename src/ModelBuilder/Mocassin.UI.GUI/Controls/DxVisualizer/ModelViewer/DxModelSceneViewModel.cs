@@ -491,14 +491,14 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
                 var cleanTime = watch.Elapsed.TotalMilliseconds;
                 watch.Restart();
 
-                var sceneModel = await BuildSceneAsync();
+                var (sceneModel, objectCount) = await BuildSceneAsync();
                 var buildTime = watch.Elapsed.TotalMilliseconds;
                 watch.Restart();
 
                 SceneHost.AddSceneItem(sceneModel);
                 var setupTime = watch.Elapsed.TotalMilliseconds;
                 PushInfoMessage(
-                    $"Scene Rebuilt Report: {cleanTime:0.0} ms for cleanup; {buildTime:0.0} ms for building new models; {setupTime:0.0} ms for viewport setup;");
+                    $"Build scene with ({objectCount}) models - Times: {cleanTime:0.0} ms for cleanup; {buildTime:0.0} ms for building new models; {setupTime:0.0} ms for viewport setup;");
                 IsInvalidScene = false;
             }
             catch (Exception exception)
@@ -517,11 +517,11 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         ///     Asynchronously builds the 3D scene <see cref="SceneNodeGroupModel3D" /> instance that holds the complete scene
         /// </summary>
         /// <returns></returns>
-        private async Task<SceneNodeGroupModel3D> BuildSceneAsync()
+        private async Task<(SceneNodeGroupModel3D model, int objectCount)> BuildSceneAsync()
         {
             var sceneBuilder = StartSceneBuilder();
             var result = await sceneBuilder.ToModelAsync();
-            return result;
+            return (result, sceneBuilder.MeshInstanceCount);
         }
 
         /// <summary>
@@ -675,15 +675,16 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         /// <param name="filterGeometricDuplicates"></param>
         /// <param name="anyFlipsOrientation"></param>
         /// <returns></returns>
-        private Matrix[] GetPathSceneItemTransforms(IEnumerable<Fractional3D> path, in FractionalBox3D renderBox, bool filterGeometricDuplicates,
+        private List<Matrix> GetPathSceneItemTransforms(IEnumerable<Fractional3D> path, in FractionalBox3D renderBox, bool filterGeometricDuplicates,
             out bool anyFlipsOrientation)
         {
             anyFlipsOrientation = false;
             return ModelControlViewModel.PathSymmetryExtensionMode switch
             {
-                PathSymmetryExtensionMode.None => new[] {Matrix.Identity},
+                PathSymmetryExtensionMode.None => new List<Matrix> {Matrix.Identity},
                 PathSymmetryExtensionMode.Local => GetPathSceneItemTransformsLocal(path, filterGeometricDuplicates, out anyFlipsOrientation),
-                PathSymmetryExtensionMode.Full => GetPathSceneItemTransformsFull(path, renderBox, out anyFlipsOrientation),
+                PathSymmetryExtensionMode.Full => GetPathSceneItemTransformsFull(path, renderBox, false, out anyFlipsOrientation),
+                PathSymmetryExtensionMode.FullWithClip  => GetPathSceneItemTransformsFull(path, renderBox, true, out anyFlipsOrientation),
                 _ => throw new ArgumentOutOfRangeException()
             };
         }
@@ -696,7 +697,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         /// <param name="filterGeometricDuplicates"></param>
         /// <param name="anyFlipsOrientation"></param>
         /// <returns></returns>
-        private Matrix[] GetPathSceneItemTransformsLocal(IEnumerable<Fractional3D> path, bool filterGeometricDuplicates, out bool anyFlipsOrientation)
+        private List<Matrix> GetPathSceneItemTransformsLocal(IEnumerable<Fractional3D> path, bool filterGeometricDuplicates, out bool anyFlipsOrientation)
         {
             var pathList = path.AsList();
             var cartesianMatrix = VectorTransformer.FractionalSystem.ToCartesianMatrix.ToDxMatrix();
@@ -707,8 +708,9 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
                                           .Where(x => vectorComparer.Compare(x.Transform(firstVector).TrimToUnitCell(vectorComparer.ValueComparer),
                                               firstVector) == 0)
                                           .Select(x => fractionalMatrix * x.ToDxMatrix() * cartesianMatrix)
-                                          .ToArray();
+                                          .ToList();
 
+            result.TrimExcess();
             anyFlipsOrientation = result.Any(x => x.FlipsOrientation());
             return result;
         }
@@ -720,19 +722,25 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         /// </summary>
         /// <param name="path"></param>
         /// <param name="renderBox"></param>
+        /// <param name="checkBounds"></param>
         /// <param name="anyFlipsOrientation"></param>
         /// <returns></returns>
-        private Matrix[] GetPathSceneItemTransformsFull(IEnumerable<Fractional3D> path, in FractionalBox3D renderBox, out bool anyFlipsOrientation)
+        private List<Matrix> GetPathSceneItemTransformsFull(IEnumerable<Fractional3D> path, FractionalBox3D renderBox, bool checkBounds, out bool anyFlipsOrientation)
         {
+            var pathList = path.AsList();
+            var dxPath = pathList.Select(x => x.ToDxVector()).ToList();
+
             var toCartesianMatrix = VectorTransformer.FractionalSystem.ToCartesianMatrix.ToDxMatrix();
             var toFractionalMatrix = VectorTransformer.FractionalSystem.ToFractionalMatrix.ToDxMatrix();
-            var baseMatrices = SpaceGroupService.GetMinimalUnitCellP1PathExtensionOperations(path, true).Select(x => x.ToDxMatrix()).ToList();
+            var baseMatrices = SpaceGroupService.GetMinimalUnitCellP1PathExtensionOperations(pathList, true).Select(x => x.ToDxMatrix()).ToList();
             var baseSetSize = baseMatrices.Count;
 
             var (aMax, bMax, cMax) = (renderBox.End.A.FloorToInt(), renderBox.End.B.FloorToInt(), renderBox.End.C.FloorToInt());
             var (aMin, bMin, cMin) = (renderBox.Start.A.CeilToInt(), renderBox.Start.B.CeilToInt(), renderBox.Start.C.CeilToInt());
-            var result = new Matrix[baseSetSize * (aMax - aMin) * (bMax - bMin) * (cMax - cMin)];
-            var index = 0;
+
+            if (checkBounds) (aMax, bMax, cMax) = (aMax + 1, bMax + 1, cMax + 1);
+            
+            var result = new List<Matrix>(baseSetSize * (aMax - aMin) * (bMax - bMin) * (cMax - cMin));
             for (var baseIndex = 0; baseIndex < baseSetSize; baseIndex++)
             {
                 for (var a = aMin; a < aMax; a++)
@@ -745,14 +753,15 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
                             baseMatrix.M41 += a;
                             baseMatrix.M42 += b;
                             baseMatrix.M43 += c;
-                            result[index] = toFractionalMatrix * baseMatrix * toCartesianMatrix;
-                            index++;
+                            if (checkBounds && !dxPath.All(x => renderBox.IsWithinBounds(Vector3.Transform(x, baseMatrix).ToFractional3D()))) continue;
+                            result.Add(toFractionalMatrix * baseMatrix * toCartesianMatrix);
                         }
                     }
                 }
             }
 
             anyFlipsOrientation = baseMatrices.Any(x => x.FlipsOrientation());
+            result.TrimExcess();
             return result;
         }
 
@@ -982,6 +991,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         protected virtual void AddMeshElementsToScene(DxSceneBuilder sceneBuilder, MeshGeometry3D geometry, MaterialCore material, IList<Matrix> matrices,
             Action<SceneNode> callback = null)
         {
+            if (matrices.Count == 0) return;
             switch (SceneHost.InstanceRenderMode)
             {
                 case DxInstanceRenderMode.Individual:

@@ -287,7 +287,7 @@ static error_t ConstructPreparedLinkingSystem(SCONTEXT_PARAMETER)
 }
 
 // Checks all pair interactions and cluster interactions for constant tables and sets the required flags if required
-static error_t DetectAndTagConstantInteractionDefinitions(SCONTEXT_PARAMETER)
+static error_t DetectAndTagConstantInteractionTables(SCONTEXT_PARAMETER)
 {
     error_t error = ERR_OK;
     let energyModel = getDbEnergyModel(simContext);
@@ -321,7 +321,7 @@ void InitializeEnvironmentLinkingSystem(SCONTEXT_PARAMETER)
 {
     error_t error;
 
-    error = DetectAndTagConstantInteractionDefinitions(simContext);
+    error = DetectAndTagConstantInteractionTables(simContext);
     assert_success(error, "Failed to detect and tag constant energy tables.");
 
     error = PrepareLinkingSystemConstruction(simContext);

@@ -32,6 +32,11 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
         ///     Get the <see cref="HashSet{T}" /> of <see cref="SceneNode" /> instances
         /// </summary>
         private HashSet<SceneNode> SceneNodes { get; }
+        
+        /// <summary>
+        ///     Get the number of added mesh transforms
+        /// </summary>
+        public int MeshInstanceCount { get; private set; }
 
         /// <summary>
         ///     Creates a new <see cref="DxSceneBuilder" /> with the provided initial capacity
@@ -47,12 +52,14 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
         ///     Adds a <see cref="SceneNode" /> to the <see cref="DxSceneBuilder" />. This call is thread save
         /// </summary>
         /// <param name="node"></param>
-        public void AddNode(SceneNode node)
+        /// <param name="meshInstanceCount"></param>
+        public void AddNode(SceneNode node, int meshInstanceCount = 0)
         {
             if (node == null) throw new ArgumentNullException(nameof(node));
             lock (NodeCollectionLock)
             {
                 SceneNodes.Add(node);
+                MeshInstanceCount += meshInstanceCount;
             }
         }
 
@@ -155,7 +162,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
             {
                 var node = new MeshNode {Geometry = geometry, Material = material, ModelMatrix = matrix};
                 callback?.Invoke(node);
-                AddNode(node);
+                AddNode(node, transforms.Count);
             }
         }
 
@@ -192,7 +199,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
             for (var i = 0; i < transforms.Count; i++) geometries[i] = new BatchedMeshGeometryConfig(geometry, transforms[i], 0);
             var batchedNode = new BatchedMeshNode {Material = material, Geometries = geometries};
             callback?.Invoke(batchedNode);
-            AddNode(batchedNode);
+            AddNode(batchedNode, transforms.Count);
         }
 
         /// <summary>
@@ -206,7 +213,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
         {
             var node = new MeshNode {Material = material, Geometry = geometry, Instances = transforms};
             callback?.Invoke(node);
-            AddNode(node);
+            AddNode(node, transforms.Count);
         }
 
         /// <summary>
