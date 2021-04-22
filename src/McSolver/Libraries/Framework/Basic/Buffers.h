@@ -32,6 +32,9 @@ int32_t CompareMocuuid(const void* lhs, const void* rhs);
 // Allocate a new voi span with the passed number of elements and size of elements
 VoidSpan_t AllocateSpan(size_t numOfElements, size_t sizeOfElement);
 
+// Frees the memory of a span by passing the begin ptr
+void _FreeSpanMemory(void* begin);
+
 // Tries to allocate a new void span with the passed parameters and returns an error code about the success
 error_t TryAllocateSpan(size_t numOfElements, size_t sizeOfElement, VoidSpan_t*restrict outSpan);
 
@@ -45,7 +48,7 @@ void* ConstructSpanFromBlob(const void *restrict buffer, size_t numOfBytes, Void
 #define span_New(SPAN, SIZE) *(typeof(SPAN)*) ConstructVoidSpan((size_t)(SIZE), sizeof(typeof(*(SPAN).Begin)), (VoidSpan_t*) &(SPAN))
 
 // Deletes a span by freeing the dynamic memory the span is addressing (Do not call on a subspan)
-#define span_Delete(SPAN) free((SPAN).Begin)
+#define span_Delete(SPAN) _FreeSpanMemory((SPAN).Begin)
 
 // Get the value type of a span
 #define span_TypeOfValue(SPAN) typeof(span_Get(SPAN, 0))
@@ -143,7 +146,7 @@ void* ConstructVoidList(size_t capacity, size_t sizeOfElement, VoidList_t *restr
 #define list_New(LIST, CAPACITY) *(typeof(LIST)*) ConstructVoidList((size_t)(CAPACITY), sizeof(typeof(*(LIST).Begin)), (VoidList_t*) &(LIST))
 
 // Macro to free the dynamic memory the list access refers to
-#define list_Delete(LIST) free((LIST).Begin)
+#define list_Delete(LIST) _FreeSpanMemory((LIST).Begin)
 
 // Get the capacity of the passed list
 #define list_Capacity(LIST) ((LIST).CapacityEnd-(LIST).Begin)

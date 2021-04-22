@@ -39,6 +39,11 @@ VoidSpan_t AllocateSpan(const size_t numOfElements, const size_t sizeOfElement)
     return (VoidSpan_t) { .Begin = ptr, .End = ptr +  numOfBytes };
 }
 
+void _FreeSpanMemory(void* begin)
+{
+    if (begin != GetEmptySpan().Begin) free(begin);
+}
+
 error_t TryAllocateSpan(const size_t numOfElements, const size_t sizeOfElement, VoidSpan_t*restrict outSpan)
 {
     *outSpan = AllocateSpan(numOfElements, sizeOfElement);
