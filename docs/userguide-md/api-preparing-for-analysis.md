@@ -8,8 +8,9 @@ Many common properties, such as conductivity, mobility, and diffusion, can be ex
 
 **Important:**
 
-- It is generally recommended to use an F# or C# .NET Core 3.1/.NET 5 project or an F#/C# script file for data evaluation as these can be used platform independently and fully support all required nuget packages. The required SDKs can be downloaded from [here](https://dotnet.microsoft.com/download). C# script files ".csx" for use with the [dotnet script tool](https://github.com/filipw/dotnet-script) require the provided hotfix package `Mocassin.Csx` and a manual `Mocassin.Symmetry.db` location definition to work.
+- It is generally recommended to use an F# or C# .NET 5 project or an F#/C# script file for data evaluation as these can be used platform independently and fully support all required nuget packages. The required SDKs can be downloaded from [here](https://dotnet.microsoft.com/download). C# script files ".csx" for use with the [dotnet script tool](https://github.com/filipw/dotnet-script) require the provided hotfix package `Mocassin.Csx` and a manual `Mocassin.Symmetry.db` location definition to work.
 - You can get F# and C# Intellisense and debugging in Visual Studio Code for both projects and script files using the [Microsoft C#](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csharp) and [ionide-fsharp](https://marketplace.visualstudio.com/items?itemName=Ionide.Ionide-fsharp) extensions.
+- **With the latest MOCASSIN versions after march of 2021, .NET Core 3.1 is no longer supported. If you encounter any issues with the API please use .NET 5 or later instead.**
 
 ## Usage
 
@@ -65,8 +66,9 @@ Then add a package source the `nuget.config` and configurate a local source. The
 Adding the Mocassin API to F# 5.0 script files ".fsx" to use with the dotnet F# script interface requires to add a package reference to `Mocassin` using the `#r nuget: name` syntax. Additionally, the interpreter can be defined to `dotnet fsi` using "shebang" for systems that support it:
 
 ```fsharp
-// Reference to Mocassin nuget package and set the linux interpreter to dotnet fsi
 #!dotnet fsi
+
+// Reference to Mocassin nuget package
 #r "nuget: Mocassin"
 
 // Example: Lets load all space groups and print their Mauguin notation to the console
@@ -105,19 +107,20 @@ Adding the Mocassin API to the C# script files ".csx" to use with the dotnet C# 
 
 
 ```csharp
-// Reference to Mocassin, Mocassin.Csx and load Mocassin.Csx, replace X.X.X by correct package version
 #!dotnet script
+
+// Reference to Mocassin, Mocassin.Csx and load Mocassin.Csx, replace X.X.X by correct package version
 #r "nuget: Mocassin, X.X.X"
 #r "nuget: Mocassin.Csx, 1.0.0"
 #load "nuget: Mocassin.Csx, 1.0.0"
-
-// Globally set the default path to the symmetry db
-Mocassin.Symmetry.SpaceGroups.SpaceGroupContextSource.DefaultDbPath = "<Path to Mocassin.Symmetry.db>"
 
 // Example: Lets load all space groups and print their Mauguin notation to the console
 using System;
 using Mocassin.Model.DataManagement;
 using Mocassin.Symmetry.SpaceGroups;
+
+// Globally set the default path to the symmetry db
+Mocassin.Symmetry.SpaceGroups.SpaceGroupContextSource.DefaultDbPath = "<Path to Mocassin.Symmetry.db>"
 
 var project = ModelProjectFactory.CreateDefault();
 var groups = project.SpaceGroupService.GetFullGroupList();

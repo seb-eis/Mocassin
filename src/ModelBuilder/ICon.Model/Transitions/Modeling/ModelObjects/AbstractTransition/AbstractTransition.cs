@@ -48,15 +48,10 @@ namespace Mocassin.Model.Transitions
             if (IsAssociation != other.IsAssociation)
                 return false;
 
-            var indices = StateExchangeGroups.Select(a => a.Index).ToList();
-            var otherIndices = other.GetStateExchangeGroups().Select(a => a.Index).ToList();
+            var indices = StateExchangeGroups.Select(a => a.Index);
+            var otherIndices = other.GetStateExchangeGroups().Select(a => a.Index);
 
-            if (indices.SequenceEqual(otherIndices) && Connectors.SequenceEqual(other.GetConnectorSequence()))
-                return true;
-
-            otherIndices.Reverse();
-            return indices.SequenceEqual(otherIndices)
-                   && Connectors.SequenceEqual(other.GetConnectorSequence().Reverse());
+            return indices.SequenceEqual(otherIndices) && Connectors.SequenceEqual(other.GetConnectorSequence());
         }
 
         /// <inheritdoc />
