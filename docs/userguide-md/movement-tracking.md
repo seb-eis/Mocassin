@@ -39,3 +39,25 @@ $$
 ### [Position-based tracking](#position-based-tracking)
 
 The position-based or "static" tracking assigns each stable $(a,b,c,p)$ position of the lattice a displacement vector $\Delta \vec{x}_{pi}$ for each possible particle type $i$ that can occupy the position. During simulation, when a transition is executed and a particle type $i$ moves away from a position, its displacement vector due to that transition $\Delta x_i$ is added to the affiliated $\Delta \vec{x}_{pi}$. That means, at the end of the simulation the static tracking system contains the absolute displacement of each particle type $i$ performed on each position $p$. By including the simulated time span $t$, this allows to calculate the magnitude and direction of the outgoing particle flow of each position in the supercell. Thus, fast and slow transport paths in the supercell can be identified and then, for example, affiliated environments can be analyzed or fast migration pathways can be visualized. 
+
+## Important notes
+
+### [Mobile tracking in mixed conduction systems](#mobile-tracking-in-mixed-conduction-systems)
+
+Mobile tracking is done on a particle basis and the simulator program performs only state changes as described by the transition rules. Consequently, the [particle-based tracking](#particle-based-tracking) system cannot distinguish between a polaron movement and a vacancy movement as soon as both options exist for a given species, that is, there is an overlap of the mechanisms. For example, consider a KMC simulation where oxygen ions $\mathrm{O_O^\times}$, oxygen polarons $\mathrm{O_O^\bullet}$, and oxygen vacancies $\mathrm{v_O^{\bullet\bullet}}$ exist. Both the ions and the polaron can move according to the the state changes (5), (6), and (7).
+
+$$
+\mathrm{(O_O^\times \quad \emptyset \quad v_O^{\bullet\bullet}) \quad \rightarrow \quad (v_O^{\bullet\bullet} \quad \emptyset \quad O_O^\times)}\tag{5}
+$$
+
+$$
+\mathrm{(O_O^\bullet \quad \emptyset \quad v_O^{\bullet\bullet}) \quad \rightarrow \quad (v_O^{\bullet\bullet} \quad \emptyset \quad O_O^\bullet)}\tag{6}
+$$
+
+$$
+\mathrm{(O_O^\bullet \quad \emptyset \quad O_O^{\times}) \quad \rightarrow \quad (O_O^{\times} \quad \emptyset \quad O_O^\bullet)}\tag{7}
+$$
+
+Mocassin cannot distinguish the movement of the $\mathrm{O_O^\bullet}$ due to the state changes (6) or (7) within the particle-based or position-based tracking system. It can only distinguish the components when writing to the [transition-based tracking](#transition-based-tracking) system which distinguishes for each particle and transition combination. Both cases (6) and (7) simply move the affiliated particles and add the movement vector to the affiliated tracer, that is, they behave if as both particles moved to the position of the other. This is obiously not physically correct in terms of polaron movement where a charge is echanged. While this is not important in terms of the total conductivity, that is, the summation of all species conductivities of the system yields the same result, it implies that the $\mathrm{O_O^\bullet}$ movement data will be a mix of the state changes (6) and (7) and the $\mathrm{O_O^\times}$ movement will be a mix of the state changes (5) and (7).
+
+Consequently, evaluation of the conductivity and mobility in these mixed conduction cases with overlapping mechanisms should only be done using the [transition-based tracking](#transition-based-tracking) system and the evaluation of mean squared displacement data is usually possible for the vacancy species only as soon as charge transfer and ionic movement cases overlap.
