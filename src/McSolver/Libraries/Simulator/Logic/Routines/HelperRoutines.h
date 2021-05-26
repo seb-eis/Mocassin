@@ -65,13 +65,15 @@ static inline byte_t GetEnvironmentMaxParticleId(EnvironmentDefinition_t *restri
     return_if(envDef->PositionParticleIds[0] == PARTICLE_NULL, PARTICLE_NULL);
 
     byte_t maxId = 0;
-    for(byte_t i = 0;; i++)
+    for(byte_t i = 0; i < PARTICLE_IDLIMIT ; i++)
     {
         if(envDef->PositionParticleIds[i] != PARTICLE_NULL)
             maxId = getMaxOfTwo(maxId, envDef->PositionParticleIds[i]);
         else
             return maxId;
     }
+    error_exit(ERR_UNKNOWN, "The search for the highest particle ID of an environment yielded no result.");
+    return PARTICLE_NULL;
 }
 
 // Check if the job info has the passed flags set to true

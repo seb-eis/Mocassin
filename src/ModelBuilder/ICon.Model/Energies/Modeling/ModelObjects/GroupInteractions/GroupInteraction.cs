@@ -12,7 +12,7 @@ namespace Mocassin.Model.Energies
     public class GroupInteraction : ModelObject, IGroupInteraction
     {
         /// <inheritdoc />
-        public int GroupSize => GeometryVectors.Count + 1;
+        public int GroupSize => GeometryVectors.Count;
 
         /// <inheritdoc />
         [UseTrackedData]

@@ -379,7 +379,7 @@ static void AddEnvPairEnergyByOccupation(SCONTEXT_PARAMETER, EnvironmentState_t*
     {
         let tableId = span_Get(environment->EnvironmentDefinition->PairInteractions, i).EnergyTableId;
         let pairTable = getPairEnergyTableAt(simContext, tableId);
-        for (size_t j = 0; environment->EnvironmentDefinition->PositionParticleIds[j] != PARTICLE_NULL; j++)
+        for (size_t j = 0; environment->EnvironmentDefinition->PositionParticleIds[j] != PARTICLE_NULL && j < PARTICLE_IDLIMIT; j++)
         {
             let positionParticleId = environment->EnvironmentDefinition->PositionParticleIds[j];
             let partnerParticleId = span_Get(*occupationBuffer, i);
@@ -411,7 +411,7 @@ static error_t AddEnvClusterEnergyByOccupation(SCONTEXT_PARAMETER, EnvironmentSt
     {
         return_if(clusterState == clusterStateEnd, ERR_DATACONSISTENCY);
         let clusterTable = getClusterEnergyTableAt(simContext, clusterDefinition->EnergyTableId);
-        for (byte_t i = 0; clusterDefinition->PairInteractionIds[i] != POSITION_NULL; i++)
+        for (byte_t i = 0; clusterDefinition->PairInteractionIds[i] != POSITION_NULL && i < CLUSTER_MAX_SIZE; i++)
         {
             let codeByteId = clusterDefinition->PairInteractionIds[i];
             SetOccupationCodeByteAt(&clusterState->OccupationCode, i, span_Get(*occupationBuffer, codeByteId));
@@ -419,7 +419,7 @@ static error_t AddEnvClusterEnergyByOccupation(SCONTEXT_PARAMETER, EnvironmentSt
         error = InitializeClusterStateStatus(simContext, clusterState, clusterTable);
         return_if(error != ERR_OK, ERR_DATACONSISTENCY);
 
-        for (int32_t j = 0; environment->EnvironmentDefinition->PositionParticleIds[j] != PARTICLE_NULL; j++)
+        for (int32_t j = 0; environment->EnvironmentDefinition->PositionParticleIds[j] != PARTICLE_NULL && j < PARTICLE_IDLIMIT; j++)
         {
             let positionParticleId = environment->EnvironmentDefinition->PositionParticleIds[j];
             let energy = getClusterEnergyAt(clusterTable, positionParticleId, clusterState->CodeId);
@@ -437,7 +437,7 @@ static void AddStaticEnvBackgroundStateEnergies(SCONTEXT_PARAMETER, EnvironmentS
     let cellBackground = getDefectBackground(simContext);
     let latticeBackground = getLatticeEnergyBackground(simContext);
 
-    for (size_t j = 0; environment->EnvironmentDefinition->PositionParticleIds[j] != PARTICLE_NULL; j++)
+    for (size_t j = 0; environment->EnvironmentDefinition->PositionParticleIds[j] != PARTICLE_NULL && j < PARTICLE_IDLIMIT; j++)
     {
         let vector = environment->LatticeVector;
         let particleId = environment->EnvironmentDefinition->PositionParticleIds[j];

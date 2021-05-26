@@ -97,6 +97,7 @@
 
 /* Cluster and energy defines */
 #define CLUSTER_MAXLINK_COUNT           256
+#define CLUSTER_MAX_SIZE                8
 #define CLUSTER_MAXSIZE_LINEAR_SEARCH   8
 #define ENERGY_FLG_CONST_TABLE          1U
 

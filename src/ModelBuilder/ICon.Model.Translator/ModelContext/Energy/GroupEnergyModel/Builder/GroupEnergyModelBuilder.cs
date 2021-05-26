@@ -118,7 +118,7 @@ namespace Mocassin.Model.Translator.ModelContext
                 codes.Add(code);
                 mapping.Add(code, state);
 
-                for (var i = 0; i < index; i++) buffer[i] = 0;
+                Array.Clear(buffer, 0, buffer.Length);
             }
 
             groupEnergyModel.GroupLookupCodes = codes;
