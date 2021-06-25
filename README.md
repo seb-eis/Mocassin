@@ -5,7 +5,13 @@ MOCASSIN stands for "Monte Carlo for Solid State Ionics" and is a Markov Chain M
 
 The program was developed by Sebastian Eisele and Steffen Grieshammer at Helmholtz-Institute Münster (IEK-12) of Forschungs Zentrum Jülich GmbH / Germany and Institute of Physical Chemistry (Prof. M. Martin) of RWTH Aachen University / Germany. The authors thank John P. Arnold (Prof. Dr. Manfred Martin's group, RWTH Aachen University, Germany) and Lukas Eisele (Artiso Solutions GmbH, Blaustein, Germany) for their contributions.  
 
-Please refer to the affiliated [open access publication](http://dx.doi.org/10.1002/jcc.26418) or the HTML documentation pages in release versions for further information. If you intend to use Mocassin for a research project and publish your work, we request/recommend that you cite [http://dx.doi.org/10.1002/jcc.26418](http://dx.doi.org/10.1002/jcc.26418) with all authors in full name.
+Please refer to the affiliated [open access publication](http://dx.doi.org/10.1002/jcc.26418) or the HTML documentation pages in release versions for further information. If you intend to use Mocassin for a research project and publish your work, we request/recommend that you cite [http://dx.doi.org/10.1002/jcc.26418](http://dx.doi.org/10.1002/jcc.26418) with all authors in full name. Example usages of MOCASSIN can be found in the following publications:
+
+- [https://doi.org/10.4028/www.scientific.net/DF.29.117](https://doi.org/10.4028/www.scientific.net/DF.29.117)
+- [https://doi.org/10.1038/s41563-019-0561-7](https://doi.org/10.1038/s41563-019-0561-7)
+- [https://doi.org/10.1021/acs.chemmater.9b04599](https://doi.org/10.1021/acs.chemmater.9b04599)
+- [https://doi.org/10.1039/D0CP06587K](https://doi.org/10.1039/D0CP06587K)
+- [https://doi.org/10.1039/D1CP00925G](https://doi.org/10.1039/D1CP00925G)
 
 <figure style="text-align: center">
     <img src ="./docs/userguide-md/figures/png/Logo.png" width="250">
