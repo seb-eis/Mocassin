@@ -38,8 +38,10 @@
 
       <DataGrid.Columns>
         <DataGridTextColumn Header="Name" Binding="{Binding KineticRuleSet.Name}" />
-        <DataGridTextColumn Header="Unique Rules" Binding="{Binding KineticRuleSet.KineticRules.Count}"
+        <DataGridTextColumn Header="#Unique Rules" Binding="{Binding KineticRuleSet.KineticRules.Count}"
                             IsReadOnly="True" />
+        <DataGridTextColumn Header="#Transition paths per cell" Binding="{Binding KineticRuleSet.TransitionCount}"
+                            IsReadOnly="True"/>
         <DataGridTextColumn Header="Source Transition" Binding="{Binding KineticRuleSet.Transition.Name}"
                             IsReadOnly="True" />
       </DataGrid.Columns>

@@ -19,6 +19,7 @@ namespace Mocassin.UI.Data.Customization
         private ObservableCollection<KineticRuleData> kineticRules;
         private ModelObjectReference<KineticTransition> transition;
         private int transitionIndex;
+        private int transitionCount;
 
         /// <summary>
         ///     Get or set the <see cref="ModelObjectReference{T}" /> for the affiliated <see cref="KineticTransition" />
@@ -28,6 +29,16 @@ namespace Mocassin.UI.Data.Customization
         {
             get => transition;
             set => SetProperty(ref transition, value);
+        }
+
+        /// <summary>
+        ///     Get or set the number of transitions per unit cell
+        /// </summary>
+        [XmlElement("TransitionCount")]
+        public int TransitionCount
+        {
+            get => transitionCount;
+            set => SetProperty(ref transitionCount, value);
         }
 
         /// <summary>
@@ -86,20 +97,23 @@ namespace Mocassin.UI.Data.Customization
         ///     Creates a new <see cref="KineticRuleSetData" /> by pulling all data from the passed
         ///     <see cref="IKineticRuleSetter" /> and <see cref="ProjectModelData" /> parent
         /// </summary>
+        /// <param name="modelProject"></param>
         /// <param name="ruleSetter"></param>
         /// <param name="parent"></param>
         /// <returns></returns>
-        public static KineticRuleSetData Create(IKineticRuleSetter ruleSetter, ProjectModelData parent)
+        public static KineticRuleSetData Create(IModelProject modelProject, IKineticRuleSetter ruleSetter, ProjectModelData parent)
         {
             if (ruleSetter == null) throw new ArgumentNullException(nameof(ruleSetter));
             if (parent == null) throw new ArgumentNullException(nameof(parent));
 
             var transitionData = parent.TransitionModelData.KineticTransitions.Single(x => x.Key == ruleSetter.KineticTransition.Key);
-
+            var transitionCount = modelProject.Manager<ITransitionManager>().DataAccess.Query(x => x.GetKineticMappingList(ruleSetter.KineticTransition.Index)).Count;
+            
             var obj = new KineticRuleSetData
             {
                 Name = $"Kinetic.Rule.Set.{transitionData}",
                 TransitionIndex = ruleSetter.KineticTransition.Index,
+                TransitionCount = transitionCount,
                 Transition = new ModelObjectReference<KineticTransition> {Target = transitionData},
                 KineticRules = ruleSetter.KineticRules.Select((x, i) => KineticRuleData.Create(x, parent, i)).ToObservableCollection()
             };

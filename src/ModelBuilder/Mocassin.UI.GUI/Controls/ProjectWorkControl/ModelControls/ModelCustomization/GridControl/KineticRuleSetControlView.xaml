@@ -47,7 +47,7 @@
         <Run Text="and describes" />
         <Run Text="{Binding SelectedItem.DependencyRuleCount, Mode=OneWay}"
              Style="{StaticResource App.Style.Run.Keyword}" />
-        <Run Text="hidden rule(s) that will receive the same settings." />
+        <Run Text="hidden rule(s) that will receive the same settings. If the hidden rule count is one, then the dependent rule is the inverse rule." />
         <Run Text="The reference state change behavior is:" />
         <LineBreak />
         <Run Text="(State-0) &#x2794;" />

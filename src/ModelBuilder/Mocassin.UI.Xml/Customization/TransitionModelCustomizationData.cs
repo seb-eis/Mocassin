@@ -57,21 +57,23 @@ namespace Mocassin.UI.Data.Customization
 
         /// <summary>
         ///     Create a new <see cref="TransitionModelCustomizationData" /> by pulling all data from the passed
-        ///     <see cref="IRuleSetterProvider" /> and <see cref="ProjectModelData" /> parent
+        ///     <see cref="IModelProject" /> and <see cref="ProjectModelData" /> parent
         /// </summary>
-        /// <param name="ruleSetterProvider"></param>
+        /// <param name="modelProject"></param>
         /// <param name="parent"></param>
         /// <returns></returns>
-        public static TransitionModelCustomizationData Create(IRuleSetterProvider ruleSetterProvider, ProjectModelData parent)
+        public static TransitionModelCustomizationData Create(IModelProject modelProject, ProjectModelData parent)
         {
-            if (ruleSetterProvider == null) throw new ArgumentNullException(nameof(ruleSetterProvider));
+            if (modelProject == null) throw new ArgumentNullException(nameof(modelProject));
             if (parent == null) throw new ArgumentNullException(nameof(parent));
 
+            var ruleSetterProvider = modelProject.Manager<ITransitionManager>().DataAccess.Query(x => x.GetRuleSetterProvider());
+            
             var obj = new TransitionModelCustomizationData
             {
                 KineticTransitionParameterSets = ruleSetterProvider
                                                  .GetRuleSetters()
-                                                 .Select(x => KineticRuleSetData.Create(x, parent))
+                                                 .Select(x => KineticRuleSetData.Create(modelProject, x, parent))
                                                  .ToObservableCollection()
             };
 

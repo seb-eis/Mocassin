@@ -99,13 +99,12 @@ namespace Mocassin.UI.Data.Customization
             if (parent == null) throw new ArgumentNullException(nameof(parent));
 
             var energySetterProvider = modelProject.Manager<IEnergyManager>().DataAccess.Query(x => x.GetEnergySetterProvider());
-            var ruleSetterProvider = modelProject.Manager<ITransitionManager>().DataAccess.Query(x => x.GetRuleSetterProvider());
 
             var obj = new ProjectCustomizationTemplate
             {
                 Parent = parent.Parent,
                 EnergyModelCustomization = EnergyModelCustomizationData.Create(energySetterProvider, parent),
-                TransitionModelCustomization = TransitionModelCustomizationData.Create(ruleSetterProvider, parent)
+                TransitionModelCustomization = TransitionModelCustomizationData.Create(modelProject, parent)
             };
             obj.Name = $"New Customization [{obj.Parent.ProjectName}]";
 

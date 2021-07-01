@@ -108,26 +108,32 @@ For practical reasons, there is no need to manually define the linker/connection
   - Description: A regular MMC exchange between two stable sites
   - Site chain : *stable, stable*
   - Link chain : $p_0 \rightarrow p_1$
+  - Generation of backwards transition: YES
 - 3-Site Migration
   - Description: A simple KMC migration where $p_1$ is the unstable transition sites of the migrating species
   - Position chain : *stable, unstable, stable*
   - Linking chain : $p_0 \rightarrow p_1 \rightarrow p_2$
+  - Generation of backwards transition: YES (also for chiral cases!)
 - 5-Site Interstitialcy
   - Description: An interstitialcy mechanism where one species pushes another and $p_1,p_3$ are the unstable transition sites
   - Position chain : *stable, unstable, stable, unstable, stable*
   - Linking chain : $p_0 \rightarrow p_1 \rightarrow p_2 \rightarrow p_3 \rightarrow p_4$
+  - Generation of backwards transition: NO
 - 7-Site Interstitialcy
   - Description: An interstitialcy mechanism where one species pushes two other species and $p_1,p_3,p_5$ are the unstable transition sites
   - Position chain :*stable, unstable, stable, unstable, stable, unstable, stable*
   - Linking chain : $p_0 \rightarrow p_1 \rightarrow p_2 \rightarrow p_3 \rightarrow p_4 \rightarrow p_5 \rightarrow p_6$
+  - Generation of backwards transition: NO
 - 5-Site 2-Species Vehicle
   - Description: A transport of two parallel 3-site migrations where both migrating species $A,B$ are modelled to share a common unstable transition site with a custom species that represents the $AB$ pseudoparticle at $p_2$
   - Position chain : *stable, stable, unstable, stable, stable*
   - Linking chain : $p_0 \rightarrow p_1 \bullet p_2 \bullet p_3 \rightarrow p_4$
+  - Generation of backwards transition: NO
 - 6-Site 2-Species Vehicle
   - Description: A transport of two parallel 3-site migrations where both migrating species $A,B$ are modelled to have unstable transition sites $p_1,p_3$
   - Position chain : *stable, unstable, stable, stable, unstable, stable*
   - Linking chain : $p_0 \rightarrow p_1 \rightarrow p_2 \bullet p_3 \rightarrow p_4 \rightarrow p_5$
+  - Generation of backwards transition: NO
 
 It should be noted that a vehicle movement linearization may be association/dissociation or unidirectional behavior. As an example, using a 5-site 2-species vehicle with a parallel $A$ and $B$ migration by vacancy mechanism, the matrix notations in (6) and (7) illustrate the different results for unidirectional (default) transport and association/dissociation behavior, respectively. It should be obvious that the two cases are different processes with distinct net absolute charge transports in the general case when applied to a 3D geometry. Mocassin only generates unidirectional movement rules as shown in (6), that means that generating association/dissociation behavior requires to link the state change chain to a geometry where the unidirectional rule yields the association/dissociation case.
 
@@ -167,7 +173,7 @@ $$
 \tag{7}
 $$
 
-Another important restriction
+**Important**: Automatic generation of inverse transitions is never done for complex transitions with more than three involved positions. Due to the fact that only forwards rules are generated, vacancies can never be the selected particle for interstitialcy and vehicle transitions!
 
 ### [MMC and KMC transitions](#mmc-and-kmc-transitions)
 
