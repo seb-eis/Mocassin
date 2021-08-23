@@ -13,6 +13,8 @@ namespace Mocassin.UI.Data.Helper
         Unknown,
         Error,
         Cancel,
+        CheckingTemplates,
+        IncompatibleCustomizationTemplateError,
         BuildProcessCompleted,
         BuildProcessStarted,
         PreparingModelProject,
