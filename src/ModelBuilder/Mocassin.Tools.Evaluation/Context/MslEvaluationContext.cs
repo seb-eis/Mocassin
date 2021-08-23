@@ -159,7 +159,7 @@ namespace Mocassin.Tools.Evaluation.Context
         {
             return jobPackageModels
                    .Include(x => x.ProjectXml)
-                   .Select(x => MslHelper.RestoreModelContext(x));
+                   .Select(x => MslHelper.RestoreModelContext(x, ModelProjectProvider));
         }
 
         /// <summary>
@@ -174,7 +174,7 @@ namespace Mocassin.Tools.Evaluation.Context
             if (ProjectContextCache.TryGetValue(contextId, out var context)) return context;
 
             var packageModel = LoadJobPackageModel(contextId);
-            var context2 = MslHelper.RestoreModelContext(packageModel);
+            var context2 = MslHelper.RestoreModelContext(packageModel, ModelProjectProvider);
             lock (lockObject)
             {
                 ProjectContextCache[contextId] = context2;

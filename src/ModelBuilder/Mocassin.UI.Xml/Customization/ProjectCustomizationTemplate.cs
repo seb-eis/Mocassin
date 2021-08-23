@@ -18,6 +18,7 @@ namespace Mocassin.UI.Data.Customization
         private EnergyModelCustomizationData energyModelCustomization;
         private string key;
         private TransitionModelCustomizationData transitionModelCustomization;
+        private int modelHash;
 
         /// <summary>
         ///     Get the <see cref="ProjectCustomizationTemplate" /> that represents an empty customization
@@ -32,6 +33,16 @@ namespace Mocassin.UI.Data.Customization
         {
             get => key;
             set => SetProperty(ref key, value);
+        }
+
+        /// <summary>
+        ///     Get or set the hash value of the model data this template is valid for
+        /// </summary>
+        [XmlAttribute("ModelHash"), NotMapped]
+        public int ModelHash
+        {
+            get => modelHash;
+            set => SetProperty(ref modelHash, value);
         }
 
         /// <summary>
@@ -99,10 +110,12 @@ namespace Mocassin.UI.Data.Customization
             if (parent == null) throw new ArgumentNullException(nameof(parent));
 
             var energySetterProvider = modelProject.Manager<IEnergyManager>().DataAccess.Query(x => x.GetEnergySetterProvider());
-
+            var hash = parent.Json.GetHashCode();
+            
             var obj = new ProjectCustomizationTemplate
             {
                 Parent = parent.Parent,
+                ModelHash = hash,
                 EnergyModelCustomization = EnergyModelCustomizationData.Create(energySetterProvider, parent),
                 TransitionModelCustomization = TransitionModelCustomizationData.Create(modelProject, parent)
             };

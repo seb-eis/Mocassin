@@ -105,6 +105,8 @@ namespace Mocassin.UI.Data.Helper
 
             try
             {
+                if (CheckCancel() || !CheckCustomizationTemplateIsCompatibleToModel(simulationDbBuildTemplate.ProjectModelData, simulationDbBuildTemplate.ProjectCustomizationTemplate))
+                    return null;
                 if (CheckCancel() || !TryPrepareLibraryContext(filePath, out libraryContext))
                     return null;
                 if (CheckCancel() || !TryPrepareModelProject(simulationDbBuildTemplate.ProjectModelData, modelProject))
@@ -139,6 +141,21 @@ namespace Mocassin.UI.Data.Helper
             if (!CancellationToken.IsCancellationRequested) return false;
             BuildStatusEvent.OnNext(LibraryBuildStatus.Cancel);
             return true;
+        }
+
+        /// <summary>
+        ///     Verifies if the passed <see cref="ProjectModelData"/> is compatible to the passed <see cref="ProjectCustomizationTemplate"/>
+        /// </summary>
+        /// <param name="projectModelData"></param>
+        /// <param name="customizationTemplate"></param>
+        /// <returns></returns>
+        private bool CheckCustomizationTemplateIsCompatibleToModel(ProjectModelData projectModelData, ProjectCustomizationTemplate customizationTemplate)
+        {
+            BuildStatusEvent.OnNext(LibraryBuildStatus.CheckingTemplates);
+            var hash = projectModelData.Json.GetHashCode();
+            var isOk = hash == customizationTemplate.ModelHash;
+            if (!isOk) BuildStatusEvent.OnNext(LibraryBuildStatus.IncompatibleCustomizationTemplateError);
+            return isOk;
         }
 
         /// <summary>
