@@ -9,54 +9,40 @@
 **Important: Execute the following steps in the host machine or the VM as instructed. All other chapters are execute on the VM only.**
 
 - Download the [Windows Media Creation Tool](https://www.microsoft.com/de-de/software-download/windows10)
-  - Start the tool and follow the displayed steps to download a Windows 10 x64 ISO to a local drive
-
-
+- Start the tool and follow the displayed steps to download a Windows 10 x64 ISO to a local drive
 - Download and install [Virtual Box](https://www.virtualbox.org/) for your host system
-  - Start Virtual Box and select the **New** dialog from the tools menu
-  - Name the new VM and select **Microsoft Windows** as the operating system and **Windows 10 (64-bit)** as the version
-  - Follow the instructions of the setup dialog and select **4 GB** of virtual RAM and the recommended **50 GB** as the virtual hard drive size
-  - Select the newly created machine on the selection menu on the left and and click on the **optical drive (SATA Port 1)** and select the **Win10 ISO** downloaded earlier as shown below
+- Start Virtual Box and select the **New** dialog from the tools menu
+- Name the new VM and select **Microsoft Windows** as the operating system and **Windows 10 (64-bit)** as the version
+- Follow the instructions of the setup dialog and select **4 GB** of virtual RAM and the recommended **50 GB** as the virtual hard drive size
+- Select the newly created machine on the selection menu on the left and and click on the **optical drive (SATA Port 1)** and select the **Win10 ISO** downloaded earlier as shown below
 
-  <figure style="text-align: center; margin: 10">
+  <figure>
     <img src="./figures/insert-win10-image.PNG"/>
-    <figcaption>
-    Figure: Insert an ISO from a local disk into the optical drive of the VM.
-    </figcaption>
   </figure>
 
-  - Start the VM and follow the **Windows 10 (64-bit)** installation process. Create and installation of **Windows 10 Pro** without a product key. It is recommended to create an **Offline-Account** with a **User** without a password.
-  - Close the VM when the installation process of the OS is completed and remove the ISO from the virtual optical drive of the VM.
-  - Open the **Settings** dialog of the VM and go to **System > Processor** and set the number of processors available to the VM to at least **two cores** as shown below.
+- Start the VM and follow the **Windows 10 (64-bit)** installation process. Create and installation of **Windows 10 Pro** without a product key. It is recommended to create an **Offline-Account** with a **User** without a password.
+- Close the VM when the installation process of the OS is completed and remove the ISO from the virtual optical drive of the VM.
+- Open the **Settings** dialog of the VM and go to **System > Processor** and set the number of processors available to the VM to at least **two cores** as shown below.
 
   <figure style="text-align: center; margin: 10">
     <img src="./figures/set-cpu-count.PNG"/>
-    <figcaption>
-    Figure: Set the available number of CPU cores for the VM.
-    </figcaption>
   </figure>
 
-  - **Optional for VPN login:** Open the **Settings** dialog of the VM and go to **Network > Adapter 1** and switch the adapter type from **NAT** to **Bridged Adapter** as shown below (Leave all settings at the default value for wired connections or set the **Adapter type** to **MT Server** for WLAN connections). This setting allows the VM to enter a VPN without the host system having to enter the same network.
+- **Optional for VPN login:** Open the **Settings** dialog of the VM and go to **Network > Adapter 1** and switch the adapter type from **NAT** to **Bridged Adapter** as shown below (Leave all settings at the default value for wired connections or set the **Adapter type** to **MT Server** for WLAN connections). This setting allows the VM to enter a VPN without the host system having to enter the same network.
 
   <figure style="text-align: center; margin: 10">
     <img src="./figures/network-adapter-settings.PNG"/>
-    <figcaption>
-    Figure: Change the network adapter of the VM to a bridged adapter.
-    </figcaption>
   </figure>
 
-  - Start the VM and from the **Virtual Box Menu Bar** at the top select **Devices > Insert Guest Addition CD Image** as shown below.
+- Start the VM and from the **Virtual Box Menu Bar** at the top select **Devices > Insert Guest Addition CD Image** as shown below.
 
   <figure style="text-align: center; margin: 10">
     <img src="./figures/insert-guest-additions-image.PNG"/>
-    <figcaption>
-    Figure: Insert the guest additions image into the optical drive.
-    </figcaption>
   </figure>
 
-  - Go to **This PC** in the running VM and install the **Guest Additions** by double-clicking the CD drive. Use the default settings during installation and reboot the VM.
-  - Eject the **Guest Additions Disk** and set the display resolution of the VM to your liking.
-  - **Optional:** Set the **User Account Control** in the VM's Windows 10 to the lowest setting to prevent constant confirmation prompts by the system.
+- Go to **This PC** in the running VM and install the **Guest Additions** by double-clicking the CD drive. Use the default settings during installation and reboot the VM.
+- Eject the **Guest Additions Disk** and set the display resolution of the VM to your liking.
+- **Optional:** Set the **User Account Control** in the VM's Windows 10 to the lowest setting to prevent constant confirmation prompts by the system.
 
 ## Installing PowerShell 7+ and setting up SSH for the VM & remote hosts
 
@@ -67,12 +53,9 @@
   iex "& { $(irm https://aka.ms/install-powershell.ps1) } -UseMSI"
   ```
 
-<figure style="text-align: center; margin: 10">
-    <img src="./figures/install-pwsh-7.PNG"/>
-    <figcaption>
-    Figure: Install the PowerShell 7+ from the Windows PowerShell.
-    </figcaption>
-</figure>
+  <figure style="text-align: center; margin: 10">
+      <img src="./figures/install-pwsh-7.PNG"/>
+  </figure>
 
 - Start a **PowerShell 7+** session as an administrator and enable the **ssh-agent** service to start automatically, start the service, and check if its running by executing the following commands:
 
@@ -82,12 +65,9 @@
   Get-Service "ssh-agent"
   ```
 
-<figure style="text-align: center; margin: 10">
-    <img src="./figures/enable-ssh-agent.PNG"/>
-    <figcaption>
-    Figure: Set the "ssh-agent" service to start automatically and check if the service starts correctly.
-    </figcaption>
-</figure>
+  <figure style="text-align: center; margin: 10">
+      <img src="./figures/enable-ssh-agent.PNG"/>
+  </figure>
 
 - Create the default **SSH folder**, generate a new **SSH Key** for the VM, and add it to the **ssh-agent** executing the following commands (you have to choose and input a passphrase for the key multiple times):
 
@@ -99,12 +79,9 @@
   ssh-add.exe "$HOME/.ssh/id_rsa"
   ```
 
-<figure style="text-align: center; margin: 10">
-    <img src="./figures/generate-ssh-key.PNG"/>
-    <figcaption>
-    Figure: Generate a new ssh key and choose a passphrase.
-    </figcaption>
-</figure>
+  <figure style="text-align: center; margin: 10">
+      <img src="./figures/generate-ssh-key.PNG"/>
+  </figure>
 
 - **Execute this step for all remote Linux hosts you want to create simulator compilations for:** Register your machine as a known host to the remote Linux build target by running the following commands. Replace **[HOSTNAME]** by the address of the target machine and **[USERNAME]** by your login name for that machine (you will be prompted for a password):
 
