@@ -18,7 +18,7 @@
   - Follow the instructions of the setup dialog and select **4 GB** of virtual RAM and the recommended **50 GB** as the virtual hard drive size
   - Select the newly created machine on the selection menu on the left and and click on the **optical drive (SATA Port 1)** and select the **Win10 ISO** downloaded earlier as shown below
 
-  <figure>
+  <figure style="text-align: center; margin: 10">
     <img src="./figures/insert-win10-image.PNG"/>
     <figcaption>
     Figure: Insert an ISO from a local disk into the optical drive of the VM.
@@ -29,7 +29,7 @@
   - Close the VM when the installation process of the OS is completed and remove the ISO from the virtual optical drive of the VM.
   - Open the **Settings** dialog of the VM and go to **System > Processor** and set the number of processors available to the VM to at least **two cores** as shown below.
 
-  <figure>
+  <figure style="text-align: center; margin: 10">
     <img src="./figures/set-cpu-count.PNG"/>
     <figcaption>
     Figure: Set the available number of CPU cores for the VM.
@@ -38,7 +38,7 @@
 
   - **Optional for VPN login:** Open the **Settings** dialog of the VM and go to **Network > Adapter 1** and switch the adapter type from **NAT** to **Bridged Adapter** as shown below (Leave all settings at the default value for wired connections or set the **Adapter type** to **MT Server** for WLAN connections). This setting allows the VM to enter a VPN without the host system having to enter the same network.
 
-  <figure>
+  <figure style="text-align: center; margin: 10">
     <img src="./figures/network-adapter-settings.PNG"/>
     <figcaption>
     Figure: Change the network adapter of the VM to a bridged adapter.
@@ -47,7 +47,7 @@
 
   - Start the VM and from the **Virtual Box Menu Bar** at the top select **Devices > Insert Guest Addition CD Image** as shown below.
 
-  <figure>
+  <figure style="text-align: center; margin: 10">
     <img src="./figures/insert-guest-additions-image.PNG"/>
     <figcaption>
     Figure: Insert the guest additions image into the optical drive.
@@ -67,7 +67,7 @@
   iex "& { $(irm https://aka.ms/install-powershell.ps1) } -UseMSI"
   ```
 
-<figure>
+<figure style="text-align: center; margin: 10">
     <img src="./figures/install-pwsh-7.PNG"/>
     <figcaption>
     Figure: Install the PowerShell 7+ from the Windows PowerShell.
@@ -82,7 +82,7 @@
   Get-Service "ssh-agent"
   ```
 
-<figure>
+<figure style="text-align: center; margin: 10">
     <img src="./figures/enable-ssh-agent.PNG"/>
     <figcaption>
     Figure: Set the "ssh-agent" service to start automatically and check if the service starts correctly.
@@ -99,7 +99,7 @@
   ssh-add.exe "$HOME/.ssh/id_rsa"
   ```
 
-<figure>
+<figure style="text-align: center; margin: 10">
     <img src="./figures/generate-ssh-key.PNG"/>
     <figcaption>
     Figure: Generate a new ssh key and choose a passphrase.
