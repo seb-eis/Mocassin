@@ -24,7 +24,7 @@ The C# model builder source code targets .NET Standard 2.0 and is Windows/Linux/
 
 ## How to build?
 
-**Note: The full information on how to build can be found in the [documentation](./docs/userguide-md/building-mocassin.md).**
+**Note: The full information on how to build can be found in the [documentation](./docs/userguide-md/building-mocassin.md). A complete step-by-step guide on setting up virtual machine for automated building can be found [here](./docs/build-vm-setup/readme.md)**
 
 The WPF GUI comes with a Visual Studio solution file and should be compiled with Visual Studio or another appropriate IDE. The .NET Standard 2.0 libraries can also be compiled using the dotnet CLI command.
 
