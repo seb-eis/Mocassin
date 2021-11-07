@@ -32,7 +32,7 @@ namespace Mocassin.UI.Data.Main
         /// <summary>
         ///     Get or set the <see cref="ProjectModelData" />
         /// </summary>
-        [XmlElement, JsonIgnore]
+        [XmlIgnore, JsonIgnore]
         public ProjectModelData ProjectModelData
         {
             get => projectModelData;
@@ -55,7 +55,7 @@ namespace Mocassin.UI.Data.Main
         /// <summary>
         ///     Get or set the <see cref="ProjectCustomizationTemplate" />
         /// </summary>
-        [XmlElement, JsonIgnore]
+        [XmlIgnore, JsonIgnore]
         public ProjectCustomizationTemplate ProjectCustomizationTemplate
         {
             get => projectCustomizationTemplate;
@@ -78,7 +78,7 @@ namespace Mocassin.UI.Data.Main
         /// <summary>
         ///     Get or set the <see cref="ProjectJobSetTemplate" />
         /// </summary>
-        [XmlElement, JsonIgnore]
+        [XmlIgnore, JsonIgnore]
         public ProjectJobSetTemplate ProjectJobSetTemplate
         {
             get => projectJobSetTemplate;

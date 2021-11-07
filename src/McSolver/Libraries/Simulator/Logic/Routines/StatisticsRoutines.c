@@ -97,30 +97,32 @@ Vector3_t CalculateMobileTrackerEnsembleShift(SCONTEXT_PARAMETER, byte_t particl
 Vector3_t CalculateStaticTrackerEnsembleShift(SCONTEXT_PARAMETER, byte_t particleId)
 {
     Vector3_t result = {.A = 0, .B = 0, .C = 0};
+    let meta = getDbStructureModelMetaData(simContext);
 
     cpp_foreach(envState, *getEnvironmentLattice(simContext))
     {
         continue_if(envState->MobileTrackerId <= INVALID_INDEX);
 
-        let tracker = *getStaticMovementTrackerAt(simContext, &envState->LatticeVector, particleId);
-        vector3VectorOp(result, tracker, +=);
+        let tracker = tryGetStaticMovementTrackerAt(simContext, &envState->LatticeVector, particleId);
+        continue_if(tracker == NULL);
+        vector3VectorOp(result, *tracker, +=);
     }
 
-    return result;
+    return TransformFractionalToCartesian(&result, &meta->CellVectors);
 }
 
 Vector3_t CalculateGlobalTrackerEnsembleShift(SCONTEXT_PARAMETER, byte_t particleId)
 {
     Vector3_t result = {.A = 0, .B = 0, .C = 0};
     let jumpCollections = getJumpCollections(simContext);
+    let meta = getDbStructureModelMetaData(simContext);
 
     cpp_foreach(jumpCollection, *jumpCollections)
     {
         let tracker = GetGlobalTrackerEnsembleShift(simContext, jumpCollection, particleId);
         vector3VectorOp(result, tracker, +=);
     }
-
-    return result;
+    return TransformFractionalToCartesian(&result, &meta->CellVectors);
 }
 
 Vector3_t GetGlobalTrackerEnsembleShift(SCONTEXT_PARAMETER, JumpCollection_t *jumpCollection, byte_t particleId)
@@ -253,6 +255,7 @@ void PopulateMobilityData(SCONTEXT_PARAMETER, ParticleMobilityData_t *restrict d
 
     data->EnsembleMoveR1 = CalculateMobileTrackerEnsembleShift(simContext, id, false, &data->TotalMeanMoveR1);
     data->EnsembleMoveR2 = CalculateMobileTrackerEnsembleShift(simContext, id, true, &data->TotalMeanMoveR2);
+
     vector3ScalarOp(data->EnsembleMoveR1, CONV_LENGTH_ANG_TO_M, *=);
     vector3ScalarOp(data->EnsembleMoveR2, CONV_LENGTH_ANG_TO_M*CONV_LENGTH_ANG_TO_M, *=);
 
@@ -276,6 +279,20 @@ void PopulateMobilityData(SCONTEXT_PARAMETER, ParticleMobilityData_t *restrict d
 
     data->TotalDTracer = CalculateTotalDiffusionCoefficient(data->TotalMeanMoveR2, simulatedTime);
     data->TotalDSigma = CalculateTotalDSigma(simContext, data->TotalConductivity, id, density);
+
+    // Uncomment this for a check if the three tracking systems accumulate identical ensemble movement data
+    /*
+    let mobileEnsembleR1 = data->EnsembleMoveR1;
+    let globalEnsembleR1 = CalculateGlobalTrackerEnsembleShift(simContext, id);
+    let staticEnsembleR1 = CalculateStaticTrackerEnsembleShift(simContext, id);
+    printf("\n");
+    printf("Movement data of ensemble %i:\n", id);
+    printf("DYN: %+.7e %+.7e %.7e\n", vecCoorSet3(mobileEnsembleR1));
+    printf("GLO: %+.7e %+.7e %.7e\n", vecCoorSet3(globalEnsembleR1));
+    printf("STA: %+.7e %+.7e %.7e\n", vecCoorSet3(staticEnsembleR1));
+    printf("\n");
+    fflush(stdout);
+     */
 }
 
 void PopulateParticleStatistics(SCONTEXT_PARAMETER, ParticleStatistics_t *restrict statistics)

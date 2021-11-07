@@ -606,11 +606,17 @@ static inline JumpStatisticsState_t* getJumpStatistics(SCONTEXT_PARAMETER)
 }
 
 // Get the mapped static movement tracker id offset for the passed combination of [positionId] and [particleId]
-static inline int32_t  getStaticMovementTrackerIdOffsetAt(SCONTEXT_PARAMETER, const int32_t positionId,
-                                                          const byte_t particleId)
+static inline int32_t getStaticMovementTrackerIdOffsetAt(SCONTEXT_PARAMETER, const int32_t positionId, const byte_t particleId)
 {
     debug_assert(!array_IsIndexOutOfRange(*getStaticTrackerMappingTable(simContext), positionId, particleId));
     return array_Get(*getStaticTrackerMappingTable(simContext), positionId, particleId);
+}
+
+// Tries to get the mapped static movement tracker id offset for the passed combination of [positionId] and [particleId], else returns INVALID_INDEX
+static inline int32_t  tryGetStaticMovementTrackerIdOffsetAt(SCONTEXT_PARAMETER, const int32_t positionId, const byte_t particleId)
+{
+    let exists = !array_IsIndexOutOfRange(*getStaticTrackerMappingTable(simContext), positionId, particleId);
+    return exists ? array_Get(*getStaticTrackerMappingTable(simContext), positionId, particleId) : INVALID_INDEX;
 }
 
 // Get the cell index of the passed [a,b,c] coordinate set
@@ -633,6 +639,16 @@ static inline Tracker_t* getStaticMovementTrackerAt(SCONTEXT_PARAMETER, const Ve
     index += getCellIndexByVector4(simContext, vector) * getDbStructureModel(simContext)->StaticTrackersPerCellCount;
     debug_assert(!span_IsIndexOutOfRange(*getStaticMovementTrackers(simContext), index));
     return &span_Get(*getStaticMovementTrackers(simContext), index);
+}
+
+// Tries to get a static movement tracker that belongs to the passed vector 4 and particle id if it exists, else returns NULL
+static inline Tracker_t * tryGetStaticMovementTrackerAt(SCONTEXT_PARAMETER, const Vector4_t* vector, const byte_t particleId)
+{
+    var index = tryGetStaticMovementTrackerIdOffsetAt(simContext, vector->D, particleId);
+    return_if(index == INVALID_INDEX, NULL);
+    index += getCellIndexByVector4(simContext, vector) * getDbStructureModel(simContext)->StaticTrackersPerCellCount;
+    var exists = !span_IsIndexOutOfRange(*getStaticMovementTrackers(simContext), index);
+    return exists ? &span_Get(*getStaticMovementTrackers(simContext), index) : NULL;
 }
 
 // Get the mapped global tracker id from the affiliated tracker mapping that belongs to the passed set of [jumpCollectionId] and [particleId]
