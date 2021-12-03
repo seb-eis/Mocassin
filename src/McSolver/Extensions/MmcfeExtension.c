@@ -216,7 +216,7 @@ static inline void CycleSimulationTillNextLogEvent(SCONTEXT_PARAMETER, const Mmc
     // Update energy if required and count the cycle
     if (simContext->CycleResult == MC_ACCEPTED_CYCLE)
     {
-        let delta = factors->EnergyFactorKtToEv * jumpInfo->S0toS2DeltaEnergy;
+        let delta = factors->EnergyFactorKtToEv * jumpInfo->S0toS2EnergyBarrier;
         *latticeEnergy += delta;
     }
     counters->CycleCount++;
