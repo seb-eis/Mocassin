@@ -171,7 +171,7 @@ typedef struct JumpSelectionInfo
 } JumpSelectionInfo_t;
 
 // Type for the transition energy information
-// Layout@ggc_x86_64 => 88@[8,8,8,8,8,8,8,8,8,8,8]
+// Layout@ggc_x86_64 => 104@[8,8,8,8,8,8,8,8,8,8,8,8,8]
 typedef struct JumpEnergyInfo
 {
     // The S0 energy in units of [kT]
@@ -192,20 +192,26 @@ typedef struct JumpEnergyInfo
     // The conformation delta energy in units of [kT]
     double ConformationDeltaEnergy;
 
-    // The state energy change from S0 to S2 energy in units of [kT]
-    double S0toS2DeltaEnergy;
+    // The state energy change from S0 to S2 energy in units of [kT] (This is a KMC only field)
+    double S0toS2EnergyBarrierWithoutField;
 
-    // The state energy change from S2 to S0 energy in units of [kT]
-    double S2toS0DeltaEnergy;
+    // The state energy change from S2 to S0 energy in units of [kT] (This is a KMC only field)
+    double S2toS0EnergyBarrierWithoutField;
+
+    // The state change energy barrier to change from S2 to S0 energy in units of [kT] (total barrier for KMC and MMC)
+    double S2toS0EnergyBarrier;
+
+    // The state change energy barrier to change from S0 to S2 energy in units of [kT] (total barrier for KMC and MMC)
+    double S0toS2EnergyBarrier;
 
     // The non-normalized state change probability from S0 to S2
-    double RawS0toS2Probability;
+    double RawS0toS2TransitionProbability;
 
     // The non-normalized state change probability from S2 to S0
-    double RawS2toS0Probability;
+    double RawS2toS0TransitionProbability;
 
     // The normalized compare state change probability from S0 to S2
-    double NormalizedS0toS2Probability;
+    double NormalizedS0toS2TransitionProbability;
     
 } JumpEnergyInfo_t;
 
@@ -278,7 +284,7 @@ typedef struct JumpStatus
 typedef Array_t(JumpStatus_t, 4, JumpStatusArray) JumpStatusArray_t;
 
 // Type for the cycle state storage. Contains all information manipulated and buffered during simulation cycles
-// Layout@ggc_x86_64 => 256@[48,8,16,88,8,8,8,8,8,8,8,8,8]
+// Layout@ggc_x86_64 => 248@[48,8,16,104,8,8,8,8,8,8,8,8,8]
 typedef struct CycleState
 {
     // The main counter state. Controls the cycle loop settings

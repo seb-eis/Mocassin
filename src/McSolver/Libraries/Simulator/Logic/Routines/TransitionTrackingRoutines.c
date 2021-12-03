@@ -121,7 +121,7 @@ static inline void UpdatePathEnvironmentJumpStatistics(SCONTEXT_PARAMETER, const
     else
         AddEnergyValueToJumpHistogram(&jumpStatistic->PosConfEnergyHistogram, energyConf);
 
-    let totEnergy = energyInfo->S0toS2DeltaEnergy * toEvFactor;
+    let totEnergy = energyInfo->S0toS2EnergyBarrier * toEvFactor;
     AddEnergyValueToJumpHistogram(&jumpStatistic->TotalEnergyHistogram, totEnergy);
 }
 

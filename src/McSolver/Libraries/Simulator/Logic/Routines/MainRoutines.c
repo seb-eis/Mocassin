@@ -215,7 +215,7 @@ static inline void WriteMmcJumpEnergyToAbortBuffer(SCONTEXT_PARAMETER)
         return;
     }
 
-    list_PushBack(*buffer, energyInfo->S0toS2DeltaEnergy);
+    list_PushBack(*buffer, energyInfo->S0toS2EnergyBarrier);
 }
 
 // Action for cases where the MMC jump selection leads to an unstable end state
@@ -247,8 +247,8 @@ static inline void UpdateMaxJumpProbabilityBackjumpUnsafe(SCONTEXT_PARAMETER)
     let energyInfo = getJumpEnergyInfo(simContext);
     var metaData = getMainStateMetaData(simContext);
 
-    return_if(energyInfo->RawS0toS2Probability > MC_CONST_JUMPLIMIT_MAX);
-    metaData->RawMaxJumpProbability = getMaxOfTwo(metaData->RawMaxJumpProbability, energyInfo->RawS0toS2Probability);
+    return_if(energyInfo->RawS0toS2TransitionProbability > MC_CONST_JUMPLIMIT_MAX);
+    metaData->RawMaxJumpProbability = getMaxOfTwo(metaData->RawMaxJumpProbability, energyInfo->RawS0toS2TransitionProbability);
 }
 
 // Updates the maximum jump probability to a new value if required (Skips values above the jump-limit value & does a backjump check)
@@ -257,12 +257,12 @@ static inline void UpdateMaxJumpProbabilityBackjumpSafe(SCONTEXT_PARAMETER)
     let energyInfo = getJumpEnergyInfo(simContext);
     var metaData = getMainStateMetaData(simContext);
 
-    return_if(energyInfo->RawS0toS2Probability > MC_CONST_JUMPLIMIT_MAX);
-    metaData->RawMaxJumpProbability = getMaxOfTwo(metaData->RawMaxJumpProbability, energyInfo->RawS0toS2Probability);
+    return_if(energyInfo->RawS0toS2TransitionProbability > MC_CONST_JUMPLIMIT_MAX);
+    metaData->RawMaxJumpProbability = getMaxOfTwo(metaData->RawMaxJumpProbability, energyInfo->RawS0toS2TransitionProbability);
 
     // Note: This is a safety check for the backjump to prevent the normalization system from accidentally over-normalizing
-    return_if(energyInfo->S0toS2DeltaEnergy >= energyInfo->S2toS0DeltaEnergy);
-    metaData->RawMaxJumpProbability = getMaxOfTwo(metaData->RawMaxJumpProbability, CalculateExp(simContext, -energyInfo->S2toS0DeltaEnergy));
+    return_if(energyInfo->S0toS2EnergyBarrier >= energyInfo->S2toS0EnergyBarrier);
+    metaData->RawMaxJumpProbability = getMaxOfTwo(metaData->RawMaxJumpProbability, CalculateExp(simContext, -energyInfo->S2toS0EnergyBarrier));
 }
 
 // Action for cases where the jump selection has been statistically accepted
@@ -824,11 +824,14 @@ void SetKmcJumpProbabilitiesOnContext(SCONTEXT_PARAMETER)
     var energyInfo = getJumpEnergyInfo(simContext);
     let preFactor = GetCurrentProbabilityPreFactor(simContext);
 
-    energyInfo->S0toS2DeltaEnergy = energyInfo->S1Energy - energyInfo->S0Energy + energyInfo->ElectricFieldEnergy;
-    energyInfo->S2toS0DeltaEnergy = energyInfo->S1Energy - energyInfo->S2Energy - energyInfo->ElectricFieldEnergy;
+    energyInfo->S0toS2EnergyBarrierWithoutField = energyInfo->S1Energy - energyInfo->S0Energy;
+    energyInfo->S2toS0EnergyBarrierWithoutField = energyInfo->S1Energy - energyInfo->S2Energy;
 
-    energyInfo->RawS0toS2Probability = CalculateExp(simContext, -energyInfo->S0toS2DeltaEnergy);
-    energyInfo->NormalizedS0toS2Probability = energyInfo->RawS0toS2Probability * preFactor;
+    energyInfo->S0toS2EnergyBarrier = energyInfo->S0toS2EnergyBarrierWithoutField + energyInfo->ElectricFieldEnergy;
+    energyInfo->S2toS0EnergyBarrier = energyInfo->S2toS0EnergyBarrierWithoutField - energyInfo->ElectricFieldEnergy;
+
+    energyInfo->RawS0toS2TransitionProbability = CalculateExp(simContext, -energyInfo->S0toS2EnergyBarrier);
+    energyInfo->NormalizedS0toS2TransitionProbability = energyInfo->RawS0toS2TransitionProbability * preFactor;
 }
 
 // Default internal S1 calculation function that uses the 0.5 * (S_2 - S_0) interpolation method
@@ -868,20 +871,20 @@ void SetEnergeticKmcEventEvaluationOnContext(SCONTEXT_PARAMETER)
     SetKmcJumpProbabilitiesOnContext(simContext);
 
     // Unstable end: Do not advance system, update counter and simulated time
-    if (energyInfo->S2toS0DeltaEnergy < MC_CONST_JUMPLIMIT_MIN)
+    if (energyInfo->S2toS0EnergyBarrierWithoutField <= MC_CONST_JUMPLIMIT_MIN)
     {
         OnKmcEventEndStateIsUnstable(simContext);
         return;
     }
     // Unstable start: Advance system, update counter but not simulated time, do pool update
-    if (energyInfo->NormalizedS0toS2Probability > MC_CONST_JUMPLIMIT_MAX)
+    if (energyInfo->S0toS2EnergyBarrierWithoutField <= MC_CONST_JUMPLIMIT_MIN)
     {
         OnKmcEventStartStateIsUnstable(simContext);
         return;
     }
     // Successful jump: Advance system, update counters and simulated time, do pool update
     let random = GetNextRandomDoubleFromContextRng(simContext);
-    if (energyInfo->NormalizedS0toS2Probability >= random)
+    if (energyInfo->NormalizedS0toS2TransitionProbability >= random)
     {
         OnKmcEventIsAccepted(simContext);
         return;
@@ -930,9 +933,9 @@ void SetMmcJumpProbabilitiesOnContext(SCONTEXT_PARAMETER)
 {
     var energyInfo = getJumpEnergyInfo(simContext);
 
-    energyInfo->S0toS2DeltaEnergy = energyInfo->S2Energy - energyInfo->S0Energy;
-    energyInfo->RawS0toS2Probability = CalculateExp(simContext, -energyInfo->S0toS2DeltaEnergy);
-    energyInfo->NormalizedS0toS2Probability = energyInfo->RawS0toS2Probability;
+    energyInfo->S0toS2EnergyBarrier = energyInfo->S2Energy - energyInfo->S0Energy;
+    energyInfo->RawS0toS2TransitionProbability = CalculateExp(simContext, -energyInfo->S0toS2EnergyBarrier);
+    energyInfo->NormalizedS0toS2TransitionProbability = energyInfo->RawS0toS2TransitionProbability;
 }
 
 void SetEnergeticMmcEventEvaluationOnContext(SCONTEXT_PARAMETER)
@@ -943,7 +946,7 @@ void SetEnergeticMmcEventEvaluationOnContext(SCONTEXT_PARAMETER)
 
     // Handle case where the jump is statistically accepted
     let random = GetNextRandomDoubleFromContextRng(simContext);
-    if (energyInfo->NormalizedS0toS2Probability >= random)
+    if (energyInfo->NormalizedS0toS2TransitionProbability >= random)
     {
         OnMmcEventIsAccepted(simContext);
         return;
@@ -973,8 +976,8 @@ void SetMmcJumpProbabilitiesOnContextWithAlpha(SCONTEXT_PARAMETER, double alpha)
 {
     var energyInfo = getJumpEnergyInfo(simContext);
 
-    energyInfo->S0toS2DeltaEnergy = energyInfo->S2Energy - energyInfo->S0Energy;
-    energyInfo->RawS0toS2Probability = CalculateExp(simContext, -energyInfo->S0toS2DeltaEnergy * alpha);
+    energyInfo->S0toS2EnergyBarrier = energyInfo->S2Energy - energyInfo->S0Energy;
+    energyInfo->RawS0toS2TransitionProbability = CalculateExp(simContext, -energyInfo->S0toS2EnergyBarrier * alpha);
 }
 
 void OnEnergeticMmcJumpEvaluationWithAlpha(SCONTEXT_PARAMETER, double alpha)
@@ -985,7 +988,7 @@ void OnEnergeticMmcJumpEvaluationWithAlpha(SCONTEXT_PARAMETER, double alpha)
 
     // Handle case where the jump is statistically accepted
     let random = GetNextRandomDoubleFromContextRng(simContext);
-    if (energyInfo->RawS0toS2Probability >= random)
+    if (energyInfo->RawS0toS2TransitionProbability >= random)
     {
         OnMmcEventIsAccepted(simContext);
         return;
